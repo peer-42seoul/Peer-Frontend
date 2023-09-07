@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: '18'
       - name: install packages
-        run: npm ci
+        run: npm i
       - name: Prettier
         run: npm run format
       - name: Lint
