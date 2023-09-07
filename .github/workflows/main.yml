@@ -7,8 +7,7 @@ jobs:
   test:
     name: Check Code Convention
     runs-on: ubuntu-latest
-    permissions: 
-      pull-request: write
+    permissions: write-all
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
