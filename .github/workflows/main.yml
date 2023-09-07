@@ -2,7 +2,8 @@ name: Check Code Convention
 
 on:
   pull_request:
-    types: [opened]
+    branches:
+      - develop
 
 jobs:
   test:
@@ -31,11 +32,11 @@ jobs:
       - name: Lint
         working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
         run: npm run lint
-      - name: random_reviwer
-        uses: hkusu/review-assign-action@v1.2.0
-        with:
-          configuration-path: ".github/auto_assign.yml"
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: random_reviwer
+      #   uses: hkusu/review-assign-action@v1.2.0
+      #   with:
+      #     configuration-path: ".github/auto_assign.yml"
+          # token: ${{ secrets.GITHUB_TOKEN }}
       # - name: pick_random_reviwer
       #   id: pick_random_reviwer
       #   uses: actions/github-script@v3
@@ -55,8 +56,8 @@ jobs:
       #       ${{ steps.pick_random_reviwer.outputs.comment }}
       #     repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Add Pull Request Reviewer
-        uses: madrapps/add-reviewers@v1
-        with:
-          reviewers: ${{ steps.pick_random_reviwer.outputs.reviewer }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Add Pull Request Reviewer
+      #   uses: madrapps/add-reviewers@v1
+      #   with:
+      #     reviewers: ${{ steps.pick_random_reviwer.outputs.reviewer }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
