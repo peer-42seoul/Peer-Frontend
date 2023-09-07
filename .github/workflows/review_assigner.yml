@@ -1,7 +1,3 @@
 addReviewers: true
-numberOfAssignees: 2 
-useReviewGroups: false 
-reviewGroups:
-  groupA:
-    - alice 
-    - bob
+numberOfAssignees: 2
+reviewers: HiHoi, asroq1, KRimwoo, SaltySalt77, hyeon81, heehoh, joonseong11
