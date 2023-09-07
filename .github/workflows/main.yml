@@ -45,7 +45,7 @@ jobs:
             core.setOutput('reviewer', randomReviewer) // core.setOutput(이름, 값)
 
       - name: comment PR
-        uses: mshick/add-pr-comment@v1
+        uses: mshick/add-pr-comment@v2
         with:
           message: |
             ${{ steps.pick_random_reviwer.outputs.comment }}
