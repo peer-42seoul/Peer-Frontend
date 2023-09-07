@@ -21,7 +21,7 @@ jobs:
       - name: Change to project dic
         run: cd /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
         working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
-      - name: install packages
+      - name: Install packages
         run: npm i /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
       - name: Prettier
         run: npm run format
