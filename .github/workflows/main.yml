@@ -1,9 +1,10 @@
 name: Check Code Convention
 
 on:
-  pull_request:
-    branches:
-      - develop
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
 
 jobs:
   test:
@@ -49,7 +50,7 @@ jobs:
         with:
           message: |
             ${{ steps.pick_random_reviwer.outputs.comment }}
-          repo-token: ${{ secrets.HOSLIM }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add Pull Request Reviewer
         uses: madrapps/add-reviewers@v1
