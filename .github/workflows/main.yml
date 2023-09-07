@@ -2,8 +2,7 @@ name: Check Code Convention
 
 on:
   pull_request:
-    branches:
-      - develop
+    types: [opened]
 
 jobs:
   test:
@@ -33,10 +32,10 @@ jobs:
         working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
         run: npm run lint
       - name: random_reviwer
-        uses: hkusu/review-assign-action@v1
+        uses: hkusu/review-assign-action@v1.2.0
         with:
-          assignees: ${{ github.actor }} # assign pull request author
-          reviewers: joonseong11, HiHoi, asroq1, KRimwoo, SaltySalt77, hyeon81, heehoh
+          configuration-path: ".github/auto_assign.yml"
+          token: ${{ secrets.GITHUB_TOKEN }}
       # - name: pick_random_reviwer
       #   id: pick_random_reviwer
       #   uses: actions/github-script@v3
