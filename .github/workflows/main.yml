@@ -34,7 +34,7 @@ jobs:
         id: pick_random_reviwer
         uses: actions/github-script@v3
         with:
-          github-token: ${{secrets.HOSLIM}}
+          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const candidate = ['joonseong11', 'HiHoi', 'asroq1', 'KRimwoo', 'SaltySalt77', 'hyeon81', 'heehoh'];
             const randomReviewer = candidate[Math.floor(Math.random() * candidate.length)];
