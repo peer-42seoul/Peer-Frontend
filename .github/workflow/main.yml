@@ -21,7 +21,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const candidate = ['reviewer1', 'reviewer2', 'reviewer3'];
+            const candidate = ['joonseong11', 'HiHoi', 'asroq1', 'KRimwoo', 'SaltySalt77', 'hyeon81', 'heehoh'];
             const randomReviewer = candidate[Math.floor(Math.random() * candidate.length)];
             const comment = `🎉 @${randomReviewer} 님 랜덤 리뷰어로 당첨되셨습니다! 리뷰를 부탁드립니다. 🙏`
             core.setOutput('comment', comment) 
