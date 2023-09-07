@@ -49,6 +49,7 @@ jobs:
         with:
           message: |
             ${{ steps.pick_random_reviwer.outputs.comment }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add Pull Request Reviewer
         uses: madrapps/add-reviewers@v1
