@@ -9,8 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      - name: Check current directory
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Directory content:"
+          ls -la
+      - name: Change to project dic
+        run: cd /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
+        working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
       - name: install packages
-        run: npm ci
+        run: npm i /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
       - name: Prettier
         run: npm run format
       - name: Lint
