@@ -46,13 +46,11 @@ jobs:
 
       - name: comment PR
         uses: mshick/add-pr-comment@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           message: |
             ${{ steps.pick_random_reviwer.outputs.comment }}
-          repo-token: ${{secrets.GITHUB_TOKEN}}
-          repo-token-user-login: 'github-actions[bot]'
+          # repo-token: ${{secrets.GITHUB_TOKEN}}
+          # repo-token-user-login: 'github-actions[bot]'
 
       - name: Add Pull Request Reviewer
         uses: madrapps/add-reviewers@v1
