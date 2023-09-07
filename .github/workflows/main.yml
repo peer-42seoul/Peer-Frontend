@@ -12,6 +12,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '18'
+      - name: Change to project dic
+        run: cd /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
       - name: install packages
         run: npm i
       - name: Prettier
