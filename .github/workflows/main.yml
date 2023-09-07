@@ -42,6 +42,7 @@ jobs:
 
       - name: comment PR
         uses: mshick/add-pr-comment@v1
+        permissions: write-all
         with:
           message: |
             ${{ steps.pick_random_reviwer.outputs.comment }}
