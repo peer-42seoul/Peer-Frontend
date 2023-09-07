@@ -7,6 +7,8 @@ jobs:
   test:
     name: Check Code Convention
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -42,7 +44,6 @@ jobs:
 
       - name: comment PR
         uses: mshick/add-pr-comment@v1
-        permissions: write-all
         with:
           message: |
             ${{ steps.pick_random_reviwer.outputs.comment }}
