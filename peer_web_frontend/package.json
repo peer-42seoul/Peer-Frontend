@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "node_modules/.bin/prettier --write '**/*.{js,ts,tsx,jsx}'"
+    "format": "/home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend/node_modules/.bin/prettier --write '**/*.{js,ts,tsx,jsx}'"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
