@@ -1,13 +1,16 @@
 name: Check Code Convention
+
 on:
   pull_request:
     branches:
       - develop
+
 jobs:
   test:
     name: Check Code Convention
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -43,6 +46,8 @@ jobs:
 
       - name: comment PR
         uses: mshick/add-pr-comment@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           message: |
             ${{ steps.pick_random_reviwer.outputs.comment }}
@@ -53,4 +58,4 @@ jobs:
         uses: madrapps/add-reviewers@v1
         with:
           reviewers: ${{ steps.pick_random_reviwer.outputs.reviewer }}
-          token: ${{ secrets.HOSLIM }}
+          token: ${{ secrets.GITHUB_TOKEN }}
