@@ -46,7 +46,7 @@ jobs:
         with:
           message: |
             ${{ steps.pick_random_reviwer.outputs.comment }}
-          repo-token: ${{ secrets.HOSLIM }}
+          repo-token: ${{ secrets.REPO_TOKEN.HOSLIM }}
           repo-token-user-login: 'github-actions[bot]'
 
       - name: Add Pull Request Reviewer
