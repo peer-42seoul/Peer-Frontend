@@ -1,0 +1,7 @@
+addReviewers: true
+numberOfAssignees: 2 
+useReviewGroups: false 
+reviewGroups:
+  groupA:
+    - alice 
+    - bob
