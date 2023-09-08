@@ -7,15 +7,9 @@ import {
   Tab,
   Tabs,
   useMediaQuery,
-  useTheme,
 } from '@mui/material'
 
 import { useState } from 'react'
-interface TabPanelProps {
-  children?: React.ReactNode
-  index: number
-  value: number
-}
 
 interface NavProps {
   value: number
@@ -71,13 +65,13 @@ const NavBar = () => {
   const [value, setValue] = useState(0)
 
   return (
-    <>
+    <div>
       {isPc ? (
         <PcNav value={value} setValue={setValue} />
       ) : (
         <MobileNav value={value} setValue={setValue} />
       )}
-    </>
+    </div>
   )
 }
 

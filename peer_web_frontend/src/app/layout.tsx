@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import NavBar from './component/NavBar'
-import '/styles/global.css'
+import "../../styles/global.css"
 
 export const metadata: Metadata = {
   title: 'peer',
