@@ -21,7 +21,7 @@ const MessageList = () => {
       <Box>
         {data.map((user: UserInformation) => {
           return (
-            <Box>
+            <Box key={data.id}>
               <Typography>{user.nickname}</Typography>
               <Image src={user.profileImage} alt="user_profile" />
             </Box>
