@@ -1,0 +1,13 @@
+@media (min-width: 0) {
+  .layout {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 361px) {
+  .layout {
+    display: flex;
+    flex-direction: row;
+  }
+}

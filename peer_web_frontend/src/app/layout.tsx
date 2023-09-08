@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import NavBar from './component/NavBar'
+import '/styles/global.css'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -13,7 +15,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head />
-      <body>{children}</body>
+      <body>
+        <div className="layout">
+          <NavBar />
+          {children}
+        </div>
+      </body>
     </html>
   )
 }
