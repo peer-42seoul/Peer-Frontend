@@ -1,13 +1,21 @@
 {
+  "parser": "@typescript-eslint/parser",
   "env": {
     "browser": true,
     "es2021": true
   },
-  "extends": ["airbnb", "airbnb/hooks", "airbnb-typescript", "prettier"],
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "airbnb-typescript",
+    "prettier",
+    "next"
+  ],
   "parserOptions": {
+    "project": "./tsconfig.json",
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "@next/next"],
   "rules": {}
 }
