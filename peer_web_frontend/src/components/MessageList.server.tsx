@@ -4,7 +4,7 @@ import Image from 'next/image'
 import React from 'react'
 import useSWR from 'swr'
 
-interface UserInformation {
+interface IUserInformation {
   nickname: string
   profileImage: string
 }
