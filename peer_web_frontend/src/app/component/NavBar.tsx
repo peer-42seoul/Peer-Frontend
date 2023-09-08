@@ -11,12 +11,13 @@ import {
 
 import { useState } from 'react'
 
-interface NavProps {
+const PcNav = ({
+  value,
+  setValue,
+}: {
   value: number
   setValue: (value: number) => void
-}
-
-const PcNav = ({ value, setValue }: NavProps) => (
+}) => (
   <Tabs
     orientation="vertical"
     value={value}
@@ -32,7 +33,13 @@ const PcNav = ({ value, setValue }: NavProps) => (
   </Tabs>
 )
 
-const MobileNav = ({ value, setValue }: NavProps) => (
+const MobileNav = ({
+  value,
+  setValue,
+}: {
+  value: number
+  setValue: (value: number) => void
+}) => (
   <Paper
     sx={{
       width: '100vw',
