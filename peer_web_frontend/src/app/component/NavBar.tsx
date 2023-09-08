@@ -9,15 +9,14 @@ import {
   useMediaQuery,
 } from '@mui/material'
 
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
-const PcNav = ({
-  value,
-  setValue,
-}: {
+interface NavProps {
   value: number
-  setValue: (value: number) => void
-}) => (
+  setValue: Dispatch<SetStateAction<number>>
+}
+
+const PcNav = ({ value, setValue }: NavProps) => (
   <Tabs
     orientation="vertical"
     value={value}
@@ -33,13 +32,7 @@ const PcNav = ({
   </Tabs>
 )
 
-const MobileNav = ({
-  value,
-  setValue,
-}: {
-  value: number
-  setValue: (value: number) => void
-}) => (
+const MobileNav = ({ value, setValue }: NavProps) => (
   <Paper
     sx={{
       width: '100vw',
