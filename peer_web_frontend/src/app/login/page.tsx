@@ -26,12 +26,12 @@ const Login = () => {
     setIsLoading(true)
     axios
       .post(`${API_URL}/login/`, {
-      userEmail: data.userEmail,
-      password: data.password,
+        userEmail: data.userEmail,
+        password: data.password,
       })
       .then((res) => {
         console.log(res)
-        //로그인 상태 관리 로직
+        // 로그인 상태 관리 로직
       })
       .catch((error) => {
         console.log(error.message)
@@ -44,7 +44,6 @@ const Login = () => {
       <h2>로그인 페이지</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label>이메일</label>
           <Controller
             name="userEmail"
             control={control}
@@ -56,13 +55,17 @@ const Login = () => {
                 message: '이메일 형식이 아닙니다',
               },
             }}
-            render={({ field }) => <input {...field} />}
+            render={({ field }) => (
+              <div>
+                <label htmlFor="userEmail">이메일</label>
+                <input {...field} id="userEmail" />
+              </div>
+            )}
           />
           {errors.userEmail && <p>{errors.userEmail.message}</p>}
         </div>
 
         <div>
-          <label>비밀번호</label>
           <Controller
             name="password"
             control={control}
@@ -72,7 +75,9 @@ const Login = () => {
             }}
             render={({ field }) => (
               <div>
+                <label htmlFor="password">비밀번호</label>
                 <input
+                  id="password"
                   type={showPassword ? 'text' : 'password'}
                   {...field}
                 ></input>
@@ -87,7 +92,9 @@ const Login = () => {
           />
           {errors.password && <p>{errors.password.message}</p>}
         </div>
-        <button type="submit" disabled={isLoading}>로그인</button>
+        <button type="submit" disabled={isLoading}>
+          로그인
+        </button>
       </form>
     </>
   )
