@@ -11,12 +11,12 @@ import {
 
 import { Dispatch, SetStateAction, useState } from 'react'
 
-interface NavProps {
+interface INavProps {
   value: number
   setValue: Dispatch<SetStateAction<number>>
 }
 
-const PcNav = ({ value, setValue }: NavProps) => (
+const PcNav = ({ value, setValue }: INavProps) => (
   <Tabs
     orientation="vertical"
     value={value}
@@ -32,7 +32,7 @@ const PcNav = ({ value, setValue }: NavProps) => (
   </Tabs>
 )
 
-const MobileNav = ({ value, setValue }: NavProps) => (
+const MobileNav = ({ value, setValue }: INavProps) => (
   <Paper
     sx={{
       width: '100vw',
