@@ -19,7 +19,7 @@ const MessageList = () => {
   return (
     <Container>
       <Box>
-        {data.map((user: UserInformation) => {
+        {data.map((user: IUserInformation) => {
           return (
             <Box key={data.id}>
               <Typography>{user.nickname}</Typography>
