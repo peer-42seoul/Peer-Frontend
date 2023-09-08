@@ -1,5 +1,5 @@
-import { Box, Modal } from '@mui/material'
-import React, { useState } from 'react'
+import { Box } from '@mui/material'
+import React from 'react'
 import { UserProfile } from '@/types/UserProfile'
 
 const userInfo: UserProfile = {
@@ -28,14 +28,14 @@ const MyProfile: React.FC = () => {
       <p>관리</p>
       <Box component="img" src={userInfo.profileImageUrl} />
       <b>{username}</b>
-      {userInfo?.association ? <p>{userInfo.association}</p> : <p></p>}
+      {userInfo?.association ? <p>{userInfo.association}</p> : <p />}
       <p>
         {userInfo.userId}({userInfo.email})
       </p>
       <div>achievements</div>
       <div>skills</div>
       {userInfo.linkList.map((link, i) => (
-        <div>
+        <div key={link}>
           <Box
             key={link}
             component="img"
