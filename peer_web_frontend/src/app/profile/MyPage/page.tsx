@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import { UserProfile } from '@/types/UserProfile'
+import Link from 'next/link'
 
 const userInfo: UserProfile = {
   id: 1,
@@ -44,6 +45,7 @@ const MyProfile: React.FC = () => {
           <a href={link}>link {i + 1}</a>
         </div>
       ))}
+      <Link href={'Messages'}>쪽지</Link>
     </div>
   )
 }
