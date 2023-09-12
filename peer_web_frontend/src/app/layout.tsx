@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
-import NavBar from './component/NavBar'
+import NavBar from './panel/NavBar'
 import "../../styles/global.css"
+import Header from './panel/Header'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -16,9 +17,12 @@ export default function RootLayout({
     <html lang="ko">
       <head />
       <body>
-        <div className="layout">
+        <div className="layout" >
           <NavBar />
+          <div style={{display: 'flex', flexDirection: "column", flex: 1}}>
+          <Header/>
           {children}
+          </div>
         </div>
       </body>
     </html>
