@@ -19,6 +19,8 @@ const userInfo: UserProfile = {
   email: 'hyna@student.42seoul.kr',
 }
 
+// TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
+
 const MyProfile: React.FC = () => {
   const username = 'hyna'
 
@@ -27,11 +29,13 @@ const MyProfile: React.FC = () => {
       <h3>프로필</h3>
       <b>소개</b>
       <p>수정</p>
+      {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
       <ProfileCard
+        profileImageURL={userInfo.profileImageUrl}
         username={username}
+        association={userInfo?.association}
         userId={userInfo.userId}
         email={userInfo.email}
-        profileImageURL={userInfo.profileImageUrl}
       />
       <div>biography</div>
       <div>achievements</div>
