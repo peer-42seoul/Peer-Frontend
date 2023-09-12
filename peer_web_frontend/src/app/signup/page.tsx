@@ -26,7 +26,6 @@ interface IFormInputs {
 //       <Controller
 //         name={name}
 //         control={control}
-//         defaultValue=""
 //         rules={rules}
 //         render={({ field }) => (
 //           <>
@@ -53,7 +52,6 @@ const SignUp = () => {
         <Controller
           name="email"
           control={control}
-          defaultValue=""
           rules={{
             required: '이메일을 입력해주세요',
             pattern: {
@@ -72,7 +70,6 @@ const SignUp = () => {
         <Controller
           name="password"
           control={control}
-          defaultValue=""
           rules={{ required: '비밀번호를 입력해주세요', pattern: undefined }}
           render={({ field }) => (
             <>
@@ -85,7 +82,6 @@ const SignUp = () => {
         <Controller
           name="nickName"
           control={control}
-          defaultValue=""
           rules={{ required: '닉네임을 입력해주세요' }}
           render={({ field }) => (
             <>
@@ -98,7 +94,6 @@ const SignUp = () => {
         <Controller
           name="name"
           control={control}
-          defaultValue=""
           rules={{ required: '이름을 입력해주세요' }}
           render={({ field }) => (
             <>
@@ -112,7 +107,6 @@ const SignUp = () => {
         <Controller
           name="birthDate"
           control={control}
-          defaultValue=""
           rules={{ required: true }}
           render={({ field }) => (
             <>
@@ -125,7 +119,6 @@ const SignUp = () => {
         <Controller
           name="phoneNumber"
           control={control}
-          defaultValue=""
           rules={{ required: true }}
           render={({ field }) => (
             <>
