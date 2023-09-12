@@ -16,7 +16,7 @@
   // "parserOptions"는 파서에 전달되는 옵션들을 지정합니다.
   "parserOptions": {
     "ecmaVersion": 12,
-    "project": "./peer_web_frontend/tsconfig.json"
+    "project": "./tsconfig.json"
   },
   // "@typescript-eslint" 플러그인은 TypeScript 관련 규칙과 기능들을 제공합니다.
   "plugins": [
