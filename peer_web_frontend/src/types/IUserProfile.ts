@@ -1,4 +1,4 @@
-export interface UserProfile {
+export interface IUserProfile {
   id: number
   profileImageUrl: string
   introduction: string
