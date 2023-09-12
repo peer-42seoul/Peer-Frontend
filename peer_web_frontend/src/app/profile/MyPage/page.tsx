@@ -45,7 +45,7 @@ const MyProfile: React.FC = () => {
           <a href={link}>link {i + 1}</a>
         </div>
       ))}
-      <Link href={'Messages'}>쪽지</Link>
+      <Link href={'message'}>쪽지</Link>
     </div>
   )
 }

@@ -19,16 +19,12 @@
     "project": "./tsconfig.json"
   },
   // "@typescript-eslint" 플러그인은 TypeScript 관련 규칙과 기능들을 제공합니다.
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint"],
   "rules": {
-    "react/react-in-jsx-scope": [
-      "off"
-    ],
-    "react/function-component-definition": [
-      "off"
-    ],
-    "no-undef": "off"
+    "react/react-in-jsx-scope": ["off"],
+    "react/function-component-definition": ["off"],
+    "no-undef": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error"
   }
 }

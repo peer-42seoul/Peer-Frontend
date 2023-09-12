@@ -1,6 +1,8 @@
 'use client'
 
-import { Box, Button, Typography } from '@mui/material'
+import MessageNavigator from '@/components/MessageNavigator'
+import useMessageStore from '@/states/useMessageStore'
+import { Box, Button, Container, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import useSWR from 'swr'
@@ -57,9 +59,10 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
   )
 }
 
-const page = (props) => {
-  const userId = 'userzero' // 예시로 문자열 "123" 사용
+const Page = () => {
+  // const userId = 'userzero' // 예시로 문자열 "123" 사용
   const router = useRouter()
+  const { setNewChat } = useMessageStore()
 
   const fetcher = (url: string) => fetch(url).then((res) => res.json())
   const { data, error } = useSWR(
@@ -70,14 +73,16 @@ const page = (props) => {
   if (!data) return <Box>쪽지를 불러오는 중입니다...</Box>
 
   return (
-    <>
+    <Container>
+      <MessageNavigator title={'유저네임'} messageType={'inchatting'} />
       <Box sx={{ width: '100%' }}>
         {data.map((user: IMessageInformation, idx: number) => {
           return <MessageContent key={idx} user={user} />
         })}
         <Button
           onClick={() => {
-            router.push(`/profile/Messages/`)
+            router.push('http://localhost:3000/profile/message/')
+            setNewChat(true)
           }}
           sx={{
             width: '100%',
@@ -89,8 +94,8 @@ const page = (props) => {
           답하기
         </Button>
       </Box>
-    </>
+    </Container>
   )
 }
 
-export default page
+export default Page

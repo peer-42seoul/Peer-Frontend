@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
 import useSWR from 'swr'
 import MessageNavigator from './MessageNavigator'
+import useMessageStore from '@/states/useMessageStore'
 
 interface IUserInformation {
   nickname: string
@@ -20,6 +21,7 @@ const MessageCreator = () => {
   const [content, setContent] = useState('')
   const [id, setId] = useState(42)
   const router = useRouter()
+  const { setNewChat } = useMessageStore()
 
   const messageSubmitHandler = useCallback(async () => {
     try {
@@ -37,7 +39,7 @@ const MessageCreator = () => {
         data,
       )
       console.log(response)
-      router.push('http://localhost:3000/profile/Messages')
+      setNewChat(false)
     } catch (error) {
       console.error(error)
     }
@@ -46,7 +48,10 @@ const MessageCreator = () => {
   return (
     <Container>
       <Box>
-        <Typography>받는 사람</Typography>
+        <Box>
+          <Typography>받는 사람</Typography>
+          <Button>팀 리스트</Button>
+        </Box>
         <TextField
           value={nickname}
           label="받는 사람"
@@ -65,7 +70,7 @@ const MessageCreator = () => {
       <Box>
         <Button
           onClick={() => {
-            router.push('http://localhost:3000/profile/Messages')
+            router.push('http://localhost:3000/profile/message')
           }}
         >
           취소
@@ -95,11 +100,12 @@ const MessageItem = ({ user }: { user: IUserInformation }) => {
 const MessageList = () => {
   const userId = 'userzero' // 예시로 문자열 "123" 사용
   const router = useRouter()
-  const [newChat, setNewChat] = useState(false)
   const fetcher = (url: string) => fetch(url).then((res) => res.json())
   const { data, error } = useSWR('http://localhost:4000/message_list', fetcher)
+  const { newChat } = useMessageStore()
+
   const messageContentHandler = useCallback(() => {
-    router.push(`http://localhost:3000/profile/Messages/${userId}`)
+    router.push(`http://localhost:3000/profile/message/${userId}`)
   }, [])
   if (error) return <Box>데이터 불러오기를 실패하였습니다.</Box>
   if (!data) return <Box>데이터를 불러오는 중입니다...</Box>
@@ -108,22 +114,12 @@ const MessageList = () => {
     <Container>
       {newChat ? (
         <>
-          <MessageNavigator
-            title={'새 쪽지'}
-            messageType={'create'}
-            setNewChat={setNewChat}
-            newChat={newChat}
-          />
+          <MessageNavigator title={'새 쪽지'} messageType={'create'} />
           <MessageCreator />
         </>
       ) : (
         <>
-          <MessageNavigator
-            title={'쪽지'}
-            messageType={'쪽지'}
-            setNewChat={setNewChat}
-            newChat={newChat}
-          />
+          <MessageNavigator title={'쪽지'} messageType={'쪽지'} />
           <Box>
             {data.map((user: IUserInformation, idx: number) => (
               <Box key={idx} onClick={messageContentHandler}>

@@ -3,31 +3,28 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import useMessageStore from '@/states/useMessageStore'
 
 interface IMessageNavigatorProps {
   messageType: string
   title: string
-  newChat: boolean
-  setNewChat: (value: boolean) => void
 }
 
-const MessageNavigator = ({
-  messageType,
-  title,
-  setNewChat,
-  newChat,
-}: IMessageNavigatorProps) => {
-  const onNewMessage = () => {
-    setNewChat(!newChat)
-  }
+const MessageNavigator = ({ messageType, title }: IMessageNavigatorProps) => {
+  const { newChat, setNewChat } = useMessageStore()
   const router = useRouter()
 
+  const onNewMessage = () => {
+    setNewChat(true)
+    router.push('http://localhost:3000/profile/message')
+  }
+  console.log(messageType)
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
-      {}
       <svg
         onClick={() => {
-          onNewMessage()
+          setNewChat(false)
+          router.push('http://localhost:3000/profile/message')
         }}
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -54,23 +51,24 @@ const MessageNavigator = ({
             fill="#1C1B1F"
           />
         </svg>
-        {!newChat && (
-          <svg
-            onClick={() => {
-              onNewMessage()
-            }}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M12.8749 12.8749L21.0246 12.8749L21.0246 11.1252H12.8749L12.8749 2.97545H11.1251L11.1251 11.1252H2.97537L2.97537 12.8749L11.1251 12.8749V21.0247H12.8749V12.8749Z"
-              fill="black"
-            />
-          </svg>
-        )}
+        {!newChat ||
+          (messageType === 'inchatting' && (
+            <svg
+              onClick={() => {
+                onNewMessage()
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M12.8749 12.8749L21.0246 12.8749L21.0246 11.1252H12.8749L12.8749 2.97545H11.1251L11.1251 11.1252H2.97537L2.97537 12.8749 L11.1251 12.8749V21.0247H12.8749V12.8749Z"
+                fill="black"
+              />
+            </svg>
+          ))}
       </Box>
     </Box>
   )
