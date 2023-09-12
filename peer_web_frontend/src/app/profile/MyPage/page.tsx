@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import { UserProfile } from '@/types/UserProfile'
+import ProfileCard from './panel/ProfileCard'
 
 const userInfo: UserProfile = {
   id: 1,
@@ -25,13 +26,14 @@ const MyProfile: React.FC = () => {
     <div>
       <h3>프로필</h3>
       <b>소개</b>
-      <p>관리</p>
-      <Box component="img" src={userInfo.profileImageUrl} />
-      <b>{username}</b>
-      {userInfo?.association ? <p>{userInfo.association}</p> : <p />}
-      <p>
-        {userInfo.userId}({userInfo.email})
-      </p>
+      <p>수정</p>
+      <ProfileCard
+        username={username}
+        userId={userInfo.userId}
+        email={userInfo.email}
+        profileImageURL={userInfo.profileImageUrl}
+      />
+      <div>biography</div>
       <div>achievements</div>
       <div>skills</div>
       {userInfo.linkList.map((link, i) => (
