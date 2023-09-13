@@ -16,7 +16,7 @@ const MessageForm = ({ type, nickname }: Props) => {
 
   const messageSubmitHandler = useCallback(async () => {
     try {
-      let data: {
+      const data: {
         id: number
         content: string
         messageTime: number[]
@@ -28,15 +28,10 @@ const MessageForm = ({ type, nickname }: Props) => {
         messageTime: [2023, 9, 6, 17, 16, 51, 144650000],
         messageType: 'SEND',
       }
-      if (type === 'newMessage') {
-        data = {
-          ...data,
-          nickname,
-        }
-      }
+
       const response = await axios.post(
         'http://localhost:4000/message_userzero', //이 주소도 임시라서 api구성할 때 삭제하기
-        data,
+        type === 'newMessage' ? { ...data, nickname } : data,
       )
       console.log(response)
       router.push('http://localhost:3000/profile/message')
