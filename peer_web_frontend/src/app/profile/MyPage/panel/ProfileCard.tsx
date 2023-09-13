@@ -1,5 +1,5 @@
 'use client'
-import { Box, Modal } from '@mui/material'
+import { Box, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
 // TODO css 다른 파일로 빼기
@@ -19,43 +19,49 @@ const ProfileCard: React.FC<IProfileCard> = ({
   email,
 }) => {
   const [open, setOpen] = useState<boolean>(false)
+  const handleModalClose = () => {
+    setOpen(false)
+  }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      {/* image component */}
-      <div
-        style={{
-          width: '56px',
-          height: '56px',
-          padding: '5px 3px',
-        }}
-      >
-        <Box
-          component="img"
-          src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
-          onClick={() => setOpen(true)}
-          sx={{
-            width: '100%',
-            height: '100%',
+    <div>
+      <Stack direction="row">
+        {/* image component */}
+        <div
+          style={{
+            width: '56px',
+            height: '56px',
+            padding: '5px 3px',
           }}
-        />
-      </div>
-      {/* 유저 이름, 소속(42?), 유저 아이디, 유저 이메일 */}
-      <div
-        style={{
-          margin: '0 0 0 4px',
-        }}
-      >
-        <b>{username}</b>
-        {association ? <p>{association}</p> : <p />}
-        <p>
-          {userId}({email})
-        </p>
-      </div>
+        >
+          <Box
+            component="img"
+            src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
+            onClick={() => setOpen(true)}
+            sx={{
+              width: '100%',
+              height: '100%',
+            }}
+          />
+        </div>
+        {/* 유저 이름, 소속(42?), 유저 아이디, 유저 이메일 */}
+        <Stack
+          spacing={0.5}
+          sx={{
+            margin: '0 0 0 4px',
+          }}
+        >
+          <Typography>{username}</Typography>
+          {association ? <p>{association}</p> : <p />}
+          <Typography>
+            {userId}({email})
+          </Typography>
+        </Stack>
+      </Stack>
       {/* 프로필 이미지 확대 모달 */}
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={handleModalClose}
         keepMounted
         sx={{ border: 'none', outline: 'none' }}
       >
@@ -73,7 +79,7 @@ const ProfileCard: React.FC<IProfileCard> = ({
             outline: 'none',
             transform: 'translate(-50%, -50%)',
           }}
-          onClick={() => setOpen(false)}
+          onClick={handleModalClose}
         />
       </Modal>
     </div>
