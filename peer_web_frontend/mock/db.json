@@ -1,0 +1,28 @@
+{
+  "message_userzero": [
+    {
+      "id": 1,
+      "nickname": "userzero",
+      "content": "예시1",
+      "messageTime": [2023, 9, 6, 17, 16, 51, 131412000],
+      "messageType": "SEND"
+    },
+    {
+      "id": 2,
+      "nickname": "userzero",
+      "content": "예시2",
+      "messageTime": [2023, 9, 6, 17, 16, 51, 144650000],
+      "messageType": "SEND"
+    }
+  ],
+  "message_list": [
+    {
+      "nickname": "userzero",
+      "profileImage": "example.jpg"
+    },
+    {
+      "nickname": "userone",
+      "profileImage": "exampl22e.jpg"
+    }
+  ]
+}
