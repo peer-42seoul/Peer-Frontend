@@ -1,7 +1,14 @@
 'use client'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
-import { Switch, TextField, InputLabel, Button, Box } from '@mui/material'
-import { Fragment } from 'react'
+import {
+  Switch,
+  TextField,
+  InputLabel,
+  Button,
+  Box,
+  FormControlLabel,
+} from '@mui/material'
+import { Fragment, useState } from 'react'
 
 interface IFormInputs {
   email: string
@@ -13,30 +20,53 @@ interface IFormInputs {
   pushAlarmAgree: boolean
 }
 
-// interface IFormInput {
-//   label: string
-//   name: string
-//   control: any
-//   rules: any
-// }
+interface IFormField {
+  label: string
+  name: string
+  control: any
+  error: any
+}
 
-// const FormInput = ({ label, name, control, rules }: IFormInput) => {
-//   return (
-//     <>
-//       <Controller
-//         name={name}
-//         control={control}
-//         rules={rules}
-//         render={({ field }) => (
-//           <>
-//             <InputLabel>{label}</InputLabel>
-//             <TextField {...field} />
-//           </>
-//         )}
-//       />
-//     </>
-//   )
-// }
+interface IPushAlarmToggle {
+  label: string
+  name: string
+  control: any
+}
+
+const FormField = ({ label, name, control, error }: IFormField) => {
+  return (
+    <>
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          required: `${label}을 입력해주세요`,
+        }}
+        render={({ field }) => (
+          <>
+            <InputLabel>{label}</InputLabel>
+            <TextField {...field} />
+          </>
+        )}
+      />
+      {error && <Box>{error.message}</Box>}
+    </>
+  )
+}
+
+const PushAlarmToggle = ({ label, name, control }: IPushAlarmToggle) => {
+  return (
+    <section>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <FormControlLabel label={label} control={<Switch {...field} />} />
+        )}
+      />
+    </section>
+  )
+}
 
 const SignUp = () => {
   const {
@@ -44,99 +74,64 @@ const SignUp = () => {
     formState: { errors },
     control,
   } = useForm<IFormInputs>()
+  const [isEmailsent, setIsEmailSent] = useState<boolean>(false)
+  // const [isValidEmail, setIsValidEmail] = useState<boolean>(false)
+
   const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data)
+
   return (
     <Fragment>
       <h2>Peer 회원가입 페이지</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
+        <FormField
+          label="이메일"
           name="email"
           control={control}
-          rules={{
-            required: '이메일을 입력해주세요',
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-              message: '이메일 형식이 아닙니다',
-            },
-          }}
-          render={({ field }) => (
-            <>
-              <InputLabel>이메일</InputLabel>
-              <TextField {...field} />
-            </>
-          )}
+          error={errors.email}
         />
-        {errors.email && <Box>{errors.email.message}</Box>}
-        <Controller
+        <Button
+          onClick={() => {
+            setIsEmailSent(true)
+          }}
+        >
+          이메일 인증
+        </Button>
+        {isEmailsent && <Box>인증코드가 발송되었습니다</Box>}
+        <FormField
+          label="비밀번호"
           name="password"
           control={control}
-          rules={{ required: '비밀번호를 입력해주세요', pattern: undefined }}
-          render={({ field }) => (
-            <>
-              <InputLabel>비밀번호</InputLabel>
-              <TextField {...field} />
-            </>
-          )}
+          error={errors.password}
         />
-        {errors.password && <Box>{errors.password.message}</Box>}
-        <Controller
+        <FormField
+          label="닉네임"
           name="nickName"
           control={control}
-          rules={{ required: '닉네임을 입력해주세요' }}
-          render={({ field }) => (
-            <>
-              <InputLabel>닉네임</InputLabel>
-              <TextField {...field} />
-            </>
-          )}
+          error={errors.nickName}
         />
-        {errors.nickName && <Box>{errors.nickName.message}</Box>}
-        <Controller
+        <FormField
+          label="이름"
           name="name"
           control={control}
-          rules={{ required: '이름을 입력해주세요' }}
-          render={({ field }) => (
-            <>
-              <InputLabel>이름</InputLabel>
-              <TextField {...field} />
-            </>
-          )}
+          error={errors.name}
         />
-        {errors.name && <Box>{errors.name.message}</Box>}
-
-        <Controller
+        <FormField
+          label="생년월일"
           name="birthDate"
           control={control}
-          rules={{ required: true }}
-          render={({ field }) => (
-            <>
-              <InputLabel>생년월일</InputLabel>
-              <TextField {...field} />
-            </>
-          )}
+          error={errors.birthDate}
         />
-        {errors.birthDate && <Box>생년월일을 입력해주세요</Box>}
-        <Controller
+        <FormField
+          label="전화번호"
           name="phoneNumber"
           control={control}
-          rules={{ required: true }}
-          render={({ field }) => (
-            <>
-              <InputLabel>전화번호</InputLabel>
-              <TextField {...field} />
-            </>
-          )}
+          error={errors.phoneNumber}
         />
-        {errors.phoneNumber && <Box>전화번호를 입력해주세요</Box>}
-        <section>
-          <label>푸시알람동의</label>
-          <Controller
-            name="pushAlarmAgree"
-            control={control}
-            defaultValue={false}
-            render={({ field }) => <Switch {...field} />}
-          />
-        </section>
+        <PushAlarmToggle
+          label="푸시 알림 동의"
+          name="pushAlarmAgree"
+          control={control}
+        />
         <Button type="submit">제출</Button>
       </form>
     </Fragment>
