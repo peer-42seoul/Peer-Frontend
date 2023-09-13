@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import React from 'react'
 import ProfileCard from './panel/ProfileCard'
 import ProfileSection from './panel/ProfileSection'
