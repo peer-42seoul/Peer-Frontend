@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { UserProfile } from '@/types/UserProfile'
 import ProfileCard from './panel/ProfileCard'
+import ProfileSection from './panel/ProfileSection'
 
 const userInfo: UserProfile = {
   id: 1,
@@ -27,16 +28,18 @@ const MyProfile: React.FC = () => {
   return (
     <div>
       <Typography>프로필</Typography>
-      <Typography>소개</Typography>
-      <Typography>수정</Typography>
-      {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
-      <ProfileCard
-        profileImageURL={userInfo.profileImageUrl}
-        username={username}
-        association={userInfo?.association}
-        userId={userInfo.userId}
-        email={userInfo.email}
-      />
+      {/* <Typography>소개</Typography>
+      <Typography>수정</Typography> */}
+      <ProfileSection title="소개">
+        {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
+        <ProfileCard
+          profileImageURL={userInfo.profileImageUrl}
+          username={username}
+          association={userInfo?.association}
+          userId={userInfo.userId}
+          email={userInfo.email}
+        />
+      </ProfileSection>
       <div>biography</div>
       <div>achievements</div>
       <div>skills</div>
