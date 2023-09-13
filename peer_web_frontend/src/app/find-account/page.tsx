@@ -1,5 +1,5 @@
 import React from 'react'
-import SendEmailForm from './component/SendEmailForm'
+import SendEmailForm from './panel/SendEmailForm'
 
 const FindAccount = () => {
   return (
