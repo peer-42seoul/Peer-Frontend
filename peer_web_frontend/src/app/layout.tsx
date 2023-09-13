@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
-import NavBar from './panel/NavBar'
 import "../../styles/global.css"
+import "../../styles/reset.css"
+import NavBar from './panel/NavBar'
 import Header from './panel/Header'
+import { Box, Stack } from '@mui/material'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -17,12 +19,14 @@ export default function RootLayout({
     <html lang="ko">
       <head />
       <body>
-        <div className="layout" >
+        <div className="layout">
           <NavBar />
-          <div style={{display: 'flex', flexDirection: "column", flex: 1}}>
-          <Header/>
-          {children}
-          </div>
+          <Stack flex={1} >
+            <Box>
+              <Header />
+            </Box>
+            {children}
+          </Stack>
         </div>
       </body>
     </html>
