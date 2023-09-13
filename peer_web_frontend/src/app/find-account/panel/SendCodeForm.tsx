@@ -1,5 +1,6 @@
 'use client'
 
+import { TextField, Typography, Button, InputLabel } from '@mui/material'
 import React, { useState } from 'react'
 
 const SendCodeForm = ({ email }: { email: string }) => {
@@ -12,15 +13,15 @@ const SendCodeForm = ({ email }: { email: string }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="auth-code">인증코드</label>
-      <p>이메일로 전송된 인증코드를 입력해주세요.</p>
-      <input
+      <InputLabel htmlFor="auth-code">인증코드</InputLabel>
+      <Typography>이메일로 전송된 인증코드를 입력해주세요.</Typography>
+      <TextField
         type="text"
         name="auth-code"
         value={code}
         onChange={(e) => setCode(e.target.value)}
       />
-      <button type="submit">인증코드 확인</button>
+      <Button type="submit">인증코드 확인</Button>
     </form>
   )
 }

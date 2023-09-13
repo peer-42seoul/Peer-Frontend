@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import SendCodeForm from './SendCodeForm'
 import axios from 'axios'
+import { InputLabel, TextField, Typography, Button } from '@mui/material'
 
 const SendEmailForm = () => {
   const [email, setEmail] = useState('')
@@ -48,8 +49,8 @@ const SendEmailForm = () => {
             }}
             render={({ field }) => (
               <div>
-                <label htmlFor="email">이메일:</label>
-                <input
+                <InputLabel htmlFor="email">이메일:</InputLabel>
+                <TextField
                   {...field}
                   type="email"
                   id="email"
@@ -58,16 +59,16 @@ const SendEmailForm = () => {
               </div>
             )}
           />
-          {errors.email && <span>{errors.email.message}</span>}
+          {errors.email && <Typography>{errors.email.message}</Typography>}
         </div>
         {!isSubmitSuccessful ? (
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             인증메일 전송
-          </button>
+          </Button>
         ) : (
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             인증메일 재전송
-          </button>
+          </Button>
         )}
       </form>
       {isSubmitSuccessful && <SendCodeForm email={email} />}
