@@ -20,7 +20,7 @@ const userInfo: IUserProfile = {
   email: 'hyna@student.42seoul.kr',
 }
 
-const MyProfile: React.FC = () => {
+const MyProfile = () => {
   const username = 'hyna'
 
   return (
