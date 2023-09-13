@@ -1,10 +1,12 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
-import { UserProfile } from '@/types/UserProfile'
 import ProfileCard from './panel/ProfileCard'
 import ProfileSection from './panel/ProfileSection'
+import { IUserProfile } from '@/types/IUserProfile'
 
-const userInfo: UserProfile = {
+// TODO 용훈님과 링크 관련 api 논의 필요 (link에 대한 이름도 받음)
+
+const userInfo: IUserProfile = {
   id: 1,
   profileImageUrl: 'https://picsum.photos/100',
   introduction: 'not a squad, salt',
@@ -22,7 +24,7 @@ const userInfo: UserProfile = {
 
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
 
-const MyProfile: React.FC = () => {
+const MyProfile = () => {
   const username = 'hyna'
 
   return (
@@ -43,16 +45,21 @@ const MyProfile: React.FC = () => {
       <div>biography</div>
       <div>achievements</div>
       <div>skills</div>
-      {userInfo.linkList.map((link, i) => (
-        <div key={link}>
-          <Box
-            key={link}
-            component="img"
-            src={`https://www.google.com/s2/favicons?domain=${link}`}
-          />
-          <a href={link}>link {i + 1}</a>
-        </div>
-      ))}
+      <h3>링크</h3>
+      {userInfo.linkList?.length ? (
+        userInfo.linkList.map((link, i) => (
+          <div key={link}>
+            <Box
+              key={link}
+              component="img"
+              src={`https://www.google.com/s2/favicons?domain=${link}`}
+            />
+            <a href={link}>link {i + 1}</a>
+          </div>
+        ))
+      ) : (
+        <p>제공된 링크가 없습니다.</p>
+      )}
     </div>
   )
 }
