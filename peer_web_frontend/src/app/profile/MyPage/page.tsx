@@ -20,7 +20,7 @@ const userInfo: IUserProfile = {
   email: 'hyna@student.42seoul.kr',
 }
 
-const MyProfile: React.FC = () => {
+const MyProfile = () => {
   const username = 'hyna'
 
   return (
@@ -37,20 +37,6 @@ const MyProfile: React.FC = () => {
       <div>achievements</div>
       <div>skills</div>
       <h3>링크</h3>
-      {userInfo.linkList?.length ? (
-        userInfo.linkList.map((link, i) => (
-          <div key={link}>
-            <Box
-              key={link}
-              component="img"
-              src={`https://www.google.com/s2/favicons?domain=${link}`}
-            />
-            <a href={link}>link {i + 1}</a>
-          </div>
-        ))
-      ) : (
-        <p>제공된 링크가 없습니다.</p>
-      )}
     </div>
   )
 }
