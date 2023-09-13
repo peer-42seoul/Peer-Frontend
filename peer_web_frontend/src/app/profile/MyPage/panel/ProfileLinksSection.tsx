@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import React from 'react'
 
 interface IProfileLinksSectionProps {
@@ -6,22 +6,26 @@ interface IProfileLinksSectionProps {
   linkTitle?: string
 }
 
+const ProfileLink = (props: IProfileLinksSectionProps) => {
+  return (
+    <>
+      <Box
+        key={props.link}
+        component="img"
+        src={`https://www.google.com/s2/favicons?domain=${props.link}`}
+      />
+      <Link href={props.link}>link</Link>
+    </>
+  )
+}
+
 const ProfileLinksSection = (props: Array<IProfileLinksSectionProps>) => {
   return (
     <div>
       {props?.length ? (
-        props.map((item, i) => (
-          <div key={item.link}>
-            <Box
-              key={item.link}
-              component="img"
-              src={`https://www.google.com/s2/favicons?domain=${item.link}`}
-            />
-            <a href={item.link}>link {i + 1}</a>
-          </div>
-        ))
+        props.map((item) => <ProfileLink key={item.link} {...item} />)
       ) : (
-        <p>제공된 링크가 없습니다.</p>
+        <Typography>제공된 링크가 없습니다.</Typography>
       )}
     </div>
   )
