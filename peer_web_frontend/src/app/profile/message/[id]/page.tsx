@@ -1,7 +1,6 @@
 'use client'
 
 import MessageNavigator from '@/components/MessageNavigator'
-import useMessageStore from '@/states/useMessageStore'
 import { Box, Button, Container, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -60,17 +59,17 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
 }
 
 const Page = () => {
-  // const userId = 'userzero' // 예시로 문자열 "123" 사용
+  const userId = 'userzero' // 예시로 문자열 "123" 사용
   const router = useRouter()
-  const { setNewChat } = useMessageStore()
 
   const fetcher = (url: string) => fetch(url).then((res) => res.json())
-  const { data, error } = useSWR(
+  const { data, error, isLoading } = useSWR(
     `http://localhost:4000/message_userzero`,
     fetcher,
   )
   if (error) return <Box>쪽지 불러오기를 실패하였습니다.</Box>
-  if (!data) return <Box>쪽지를 불러오는 중입니다...</Box>
+  if (!data) return <Box>빈 쪽지 입니다.</Box>
+  if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
 
   return (
     <Container>
@@ -81,8 +80,9 @@ const Page = () => {
         })}
         <Button
           onClick={() => {
-            router.push('http://localhost:3000/profile/message/')
-            setNewChat(true)
+            router.push(
+              `http://localhost:3000/profile/message/view?target=${userId}`,
+            )
           }}
           sx={{
             width: '100%',
