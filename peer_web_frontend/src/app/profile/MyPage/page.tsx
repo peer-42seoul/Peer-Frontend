@@ -23,7 +23,6 @@ const userInfo: IUserProfile = {
 }
 
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
-
 const MyProfile = () => {
   const username = 'hyna'
 
@@ -46,20 +45,6 @@ const MyProfile = () => {
       <div>achievements</div>
       <div>skills</div>
       <h3>링크</h3>
-      {userInfo.linkList?.length ? (
-        userInfo.linkList.map((link, i) => (
-          <div key={link}>
-            <Box
-              key={link}
-              component="img"
-              src={`https://www.google.com/s2/favicons?domain=${link}`}
-            />
-            <a href={link}>link {i + 1}</a>
-          </div>
-        ))
-      ) : (
-        <p>제공된 링크가 없습니다.</p>
-      )}
     </div>
   )
 }
