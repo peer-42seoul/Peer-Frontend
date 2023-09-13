@@ -7,6 +7,7 @@ import {
   Button,
   Box,
   FormControlLabel,
+  Stack,
 } from '@mui/material'
 import { Fragment, useState } from 'react'
 
@@ -56,7 +57,7 @@ const FormField = ({ label, name, control, error }: IFormField) => {
 
 const PushAlarmToggle = ({ label, name, control }: IPushAlarmToggle) => {
   return (
-    <section>
+    <Stack>
       <Controller
         name={name}
         control={control}
@@ -64,7 +65,7 @@ const PushAlarmToggle = ({ label, name, control }: IPushAlarmToggle) => {
           <FormControlLabel label={label} control={<Switch {...field} />} />
         )}
       />
-    </section>
+    </Stack>
   )
 }
 
@@ -74,7 +75,7 @@ const SignUp = () => {
     formState: { errors },
     control,
   } = useForm<IFormInputs>()
-  const [isEmailsent, setIsEmailSent] = useState<boolean>(false)
+  const [isEmailSent, setIsEmailSent] = useState<boolean>(false)
   // const [isValidEmail, setIsValidEmail] = useState<boolean>(false)
 
   const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data)
@@ -96,7 +97,7 @@ const SignUp = () => {
         >
           이메일 인증
         </Button>
-        {isEmailsent && <Box>인증코드가 발송되었습니다</Box>}
+        {isEmailSent && <Box>인증코드가 발송되었습니다</Box>}
         <FormField
           label="비밀번호"
           name="password"
