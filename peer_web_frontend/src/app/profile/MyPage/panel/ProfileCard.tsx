@@ -4,20 +4,59 @@ import React, { useState } from 'react'
 
 // TODO css 다른 파일로 빼기
 interface IProfileCard {
-  profileImageURL?: string
+  profileImageURL: string | null
   username: string
   association: string | null
   userId: string
   email: string
 }
 
-const ProfileCard: React.FC<IProfileCard> = ({
+interface IProfileImageModalProps {
+  open: boolean
+  handleModalClose: () => void
+  profileImageURL: string | null
+}
+
+// 프로필 이미지 확대 모달
+const ProfileImageModal = ({
+  open,
+  handleModalClose,
+  profileImageURL,
+}: IProfileImageModalProps) => {
+  return (
+    <Modal
+      open={open}
+      onClose={handleModalClose}
+      keepMounted
+      sx={{ border: 'none', outline: 'none' }}
+    >
+      <Box
+        component="img"
+        src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
+        aria-labelledby="유저 이미지"
+        aria-describedby="확대된 유저 이미지"
+        sx={{
+          width: '80%',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          border: 'none',
+          outline: 'none',
+          transform: 'translate(-50%, -50%)',
+        }}
+        onClick={handleModalClose}
+      />
+    </Modal>
+  )
+}
+
+const ProfileCard = ({
   profileImageURL,
   username,
   association,
   userId,
   email,
-}) => {
+}: IProfileCard) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleModalClose = () => {
     setOpen(false)
@@ -58,30 +97,11 @@ const ProfileCard: React.FC<IProfileCard> = ({
           </Typography>
         </Stack>
       </Stack>
-      {/* 프로필 이미지 확대 모달 */}
-      <Modal
+      <ProfileImageModal
         open={open}
-        onClose={handleModalClose}
-        keepMounted
-        sx={{ border: 'none', outline: 'none' }}
-      >
-        <Box
-          component="img"
-          src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
-          aria-labelledby="유저 이미지"
-          aria-describedby="확대된 유저 이미지"
-          sx={{
-            width: '80%',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            border: 'none',
-            outline: 'none',
-            transform: 'translate(-50%, -50%)',
-          }}
-          onClick={handleModalClose}
-        />
-      </Modal>
+        handleModalClose={handleModalClose}
+        profileImageURL={profileImageURL}
+      />
     </div>
   )
 }
