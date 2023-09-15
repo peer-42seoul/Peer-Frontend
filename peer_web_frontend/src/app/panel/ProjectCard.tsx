@@ -1,43 +1,62 @@
+import { IProject } from "@/types/IProejct";
 import { Favorite } from "@mui/icons-material"
 import { Avatar, Box, Card, CardContent, CardHeader, CardMedia, Chip, IconButton, Typography } from "@mui/material"
 import { red } from "@mui/material/colors"
+import { useState } from "react";
 
 
-const ProjectCard = () => {
+const ProjectCard = ({ nickname, imageUrl, description, tags, isFavorite, profileImgUrl, inProgress }: IProject) => {
+    const [favorite, setFavorite] = useState(isFavorite);
+    const changeFavorite = () => {
+        setFavorite(!favorite);
+        // favorite 변경시 favorite 변경 api 호출, 다시 get 해오기.
+    }
+
     return (
         <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-                component="img"
-                height="194"
-                image="/static/images/cards/paella.jpg"
-                alt="Paella dish"
-            />
+            <Box sx={{ position: 'relative' }}>
+                <CardMedia
+                    component="img"
+                    height="194"
+                    image={imageUrl}
+                    alt="Paella dish"
+                />
+                <Chip label={inProgress ? "진행중" : "모집중"} sx={{
+                    position: 'absolute',
+                    top: 16,
+                    left: 16,
+                    borderRadius: 1,
+                    backgroundColor: 'black',
+                    color: 'white',
+                }} size="medium" />
+            </Box>
+            {/* <Link href="detail"> */}
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        R
+                        <Box component="img"
+                            height="194"
+                            src={profileImgUrl}
+                            alt="Paella dish" />
                     </Avatar>
                 }
                 action={
-                    <IconButton aria-label="add to favorites">
-                        <Favorite />
+                    <IconButton aria-label="add to favorites" onClick={changeFavorite}>
+                        <Favorite sx={{ color: favorite ? 'red' : 'gray' }} />
                     </IconButton>
                 }
-                title="Shrimp and Chorizo Paella"
+                title={nickname}
             />
             <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                    This impressive paella is a perfect party dish and a fun meal to cook
-                    together with your guests. Add 1 cup of frozen peas along with the mussels,
-                    if you like.
-                </Typography>
-                <Box>
-                    <Chip label="프레임워크" size="small" />
-                    <Chip label="개발언어1" size="small" />
-                    <Chip label="개발언어2" size="small" />
-                    <Chip label="개발언어3" size="small" />
-                </Box>
+                    {description}</Typography>
+                <Box>{
+                    tags?.map((tag: string, idx: number) => (
+                        <Chip label={tag} size="small" key={idx} />
+                    ))
+                }</Box>
             </CardContent>
+            {/* </Link> */}
         </Card >)
 }
 

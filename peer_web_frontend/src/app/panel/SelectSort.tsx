@@ -1,16 +1,15 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { useState } from "react";
+import { ProjectSort } from "../page";
 
 interface SelectSortProps {
-    sort: 'recent' | 'old' | 'popular';
-    setSort: React.Dispatch<React.SetStateAction<'recent' | 'old' | 'popular'>>;
+    sort: ProjectSort;
+    setSort: React.Dispatch<React.SetStateAction<ProjectSort>>;
 }
 
 const SelectSort = ({ sort, setSort }: SelectSortProps) => {
-    const [sort, setSort] = useState<'recent' | 'old' | 'popular'>('recent');
 
     const handleChange = (event: SelectChangeEvent) => {
-        setSort(event.target.value as 'recent' | 'old' | 'popular');
+        setSort(event.target.value as ProjectSort);
     };
 
     return (
