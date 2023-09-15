@@ -5,31 +5,37 @@ import SendCodeForm from './SendCodeForm'
 import axios from 'axios'
 import { InputLabel, TextField, Typography, Button } from '@mui/material'
 
-const SendEmailForm = () => {
+const SendEmailForm = ({
+  setPasswordToken,
+}: {
+  setPasswordToken: (newValue: string) => void
+}) => {
   const [email, setEmail] = useState('')
+  const [isEmailSuccessful, setIsEmailSuccessful] = useState(false)
   const {
     handleSubmit,
     control,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm<{ email: string }>()
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data: { email: string }) => {
     console.log(data)
-    // 테스트용 post요청 코드
-    axios
-      .post(`http://localhost:5000/find`, {
+
+    try {
+      console.log('isSubmitting:', isSubmitting)
+      // 테스트용 post요청 코드
+      const res = await axios.post(`http://localhost:5000/find`, {
         data,
       })
-      .then((res) => {
-        console.log(res)
-        // 로그인 상태 관리 로직
-        setEmail(data.email)
-      })
-      .catch((error) => {
-        console.log(error.message)
-      })
-    console.log('isSubmitting:', isSubmitting)
-    console.log('isSubmitSuccess:', isSubmitSuccessful)
+      console.log(res)
+
+      setEmail(data.email)
+      setIsEmailSuccessful(true)
+    } catch (error) {
+      console.log(error)
+      // 테스트 용 (추후 삭제)
+      setIsEmailSuccessful(true)
+    }
   }
 
   return (
@@ -61,7 +67,7 @@ const SendEmailForm = () => {
           />
           {errors.email && <Typography>{errors.email.message}</Typography>}
         </div>
-        {!isSubmitSuccessful ? (
+        {!isEmailSuccessful ? (
           <Button type="submit" disabled={isSubmitting}>
             인증메일 전송
           </Button>
@@ -71,7 +77,9 @@ const SendEmailForm = () => {
           </Button>
         )}
       </form>
-      {isSubmitSuccessful && <SendCodeForm email={email} />}
+      {isEmailSuccessful && (
+        <SendCodeForm email={email} setPasswordToken={setPasswordToken} />
+      )}
     </div>
   )
 }
