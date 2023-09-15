@@ -1,4 +1,4 @@
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Link, Skeleton, Typography } from '@mui/material'
 import React from 'react'
 import { IUserProfileLink } from '@/types/IUserProfile'
 
@@ -17,12 +17,16 @@ const ProfileLink = (props: IUserProfileLink) => {
 
 const ProfileLinksSection = ({
   linkList,
+  isLoading,
 }: {
-  linkList: Array<IUserProfileLink>
+  linkList?: Array<IUserProfileLink>
+  isLoading: boolean
 }) => {
   return (
     <div>
-      {linkList?.length ? (
+      {isLoading ? (
+        <Skeleton />
+      ) : linkList?.length ? (
         linkList.map((item) => <ProfileLink key={item.link} {...item} />)
       ) : (
         <Typography>제공된 링크가 없습니다.</Typography>

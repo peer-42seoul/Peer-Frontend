@@ -1,14 +1,15 @@
 'use client'
-import { Box, Modal, Stack, Typography } from '@mui/material'
+import { Box, Modal, Skeleton, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
 // TODO css 다른 파일로 빼기
 interface IProfileCard {
   profileImageURL: string | null
-  username: string
-  association: string | null
-  introduction: string
-  email: string
+  username?: string
+  association?: string | null
+  introduction?: string
+  email?: string
+  isLoading: boolean
 }
 
 interface IProfileImageModalProps {
@@ -56,6 +57,7 @@ const ProfileCard = ({
   association,
   introduction,
   email,
+  isLoading,
 }: IProfileCard) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleModalClose = () => {
@@ -73,15 +75,19 @@ const ProfileCard = ({
             padding: '5px 3px',
           }}
         >
-          <Box
-            component="img"
-            src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
-            onClick={() => setOpen(true)}
-            sx={{
-              width: '100%',
-              height: '100%',
-            }}
-          />
+          {isLoading ? (
+            <Skeleton variant="circular" />
+          ) : (
+            <Box
+              component="img"
+              src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
+              onClick={() => setOpen(true)}
+              sx={{
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          )}
         </div>
         {/* 유저 이름, 소속(42?), 유저 아이디, 유저 이메일 */}
         <Stack
@@ -90,23 +96,35 @@ const ProfileCard = ({
             margin: '0 0 0 4px',
           }}
         >
-          <Typography>{username}</Typography>
-          {association ? (
-            <Typography>{association}</Typography>
+          {isLoading ? (
+            <div>
+              <Skeleton />
+              <Skeleton />
+              <Skeleton />
+            </div>
           ) : (
-            <Typography />
+            <div>
+              <Typography>{username}</Typography>
+              {association ? (
+                <Typography>{association}</Typography>
+              ) : (
+                <Typography />
+              )}
+              <Typography>아이디({email})</Typography>
+            </div>
           )}
-          <Typography>아이디({email})</Typography>
         </Stack>
       </Stack>
       <Box>
-        <Typography>{introduction}</Typography>
+        {isLoading ? <Skeleton /> : <Typography>{introduction}</Typography>}
       </Box>
-      <ProfileImageModal
-        open={open}
-        handleModalClose={handleModalClose}
-        profileImageURL={profileImageURL}
-      />
+      {(!isLoading && profileImageURL) ?? (
+        <ProfileImageModal
+          open={open}
+          handleModalClose={handleModalClose}
+          profileImageURL={profileImageURL}
+        />
+      )}
     </div>
   )
 }

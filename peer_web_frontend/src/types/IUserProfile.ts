@@ -4,7 +4,7 @@ export interface IUserProfile {
   introduction: string
   linkList: Array<IUserProfileLink>
   phone: string
-  representAchievement: Array<string>
+  representAchievement: string
   achievements: Array<string>
   association: string | null
   email: string
