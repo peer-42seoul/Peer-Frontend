@@ -28,7 +28,8 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
             backgroundColor: '#D8D8D8',
           }}
         >
-          <img
+          <Box
+            component={'img'}
             src="https://source.unsplash.com/random/100×100"
             alt="picture_of_sender"
             width={100}
