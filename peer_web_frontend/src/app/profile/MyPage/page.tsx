@@ -50,9 +50,9 @@ const MyProfile = () => {
           username={username}
           association={userInfo?.association}
           email={userInfo.email}
-          // introduction={userInfo.introduction}
+          introduction={userInfo.introduction}
         />
-        <div>biography</div>
+        {/* <div>biography</div> */}
       </ProfileSection>
       {/* profile home */}
       <ProfileSection sectionTitle="achievements">achievements</ProfileSection>
