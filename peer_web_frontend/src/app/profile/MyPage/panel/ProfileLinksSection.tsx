@@ -1,12 +1,8 @@
 import { Box, Link, Typography } from '@mui/material'
 import React from 'react'
+import { IUserProfileLink } from '@/types/IUserProfile'
 
-interface IProfileLinksSectionProps {
-  link: string
-  linkTitle?: string
-}
-
-const ProfileLink = (props: IProfileLinksSectionProps) => {
+const ProfileLink = (props: IUserProfileLink) => {
   return (
     <>
       <Box
@@ -14,16 +10,20 @@ const ProfileLink = (props: IProfileLinksSectionProps) => {
         component="img"
         src={`https://www.google.com/s2/favicons?domain=${props.link}`}
       />
-      <Link href={props.link}>link</Link>
+      <Link href={props.link}>{props.linkTitle}</Link>
     </>
   )
 }
 
-const ProfileLinksSection = (props: Array<IProfileLinksSectionProps>) => {
+const ProfileLinksSection = ({
+  linkList,
+}: {
+  linkList: Array<IUserProfileLink>
+}) => {
   return (
     <div>
-      {props?.length ? (
-        props.map((item) => <ProfileLink key={item.link} {...item} />)
+      {linkList?.length ? (
+        linkList.map((item) => <ProfileLink key={item.link} {...item} />)
       ) : (
         <Typography>제공된 링크가 없습니다.</Typography>
       )}
