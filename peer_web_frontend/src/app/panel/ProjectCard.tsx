@@ -2,6 +2,7 @@ import { Favorite } from "@mui/icons-material"
 import { Avatar, Box, Card, CardContent, CardHeader, CardMedia, Chip, IconButton, Typography } from "@mui/material"
 import { red } from "@mui/material/colors"
 
+
 const ProjectCard = () => {
     return (
         <Card sx={{ maxWidth: 345 }}>

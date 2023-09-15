@@ -4,13 +4,14 @@ import { Button, ButtonGroup, Container, Fab, Grid, IconButton, Stack, Typograph
 import { useState } from "react"
 import ProjectCard from "./panel/ProjectCard";
 import OptionDetail from "./panel/OptionDetail";
+import SelectSort from "./panel/SelectSort";
 
+export type ProjectSort = 'recent' | 'old' | 'popular';
+// export type ProjectType = 'study' | 'project';
 export default function Home() {
   const [type, setType] = useState<"study" | "project">("study");
   const [openOption, setOpenOption] = useState(false);
 
-  /* 추후에 제거할 예정.. */
-  console.log("type", type);
   return (
     <Container>
       <ButtonGroup
@@ -29,12 +30,12 @@ export default function Home() {
       <Grid container p={2}>
         <Grid item xs={8}>
           <Stack justifyContent={"center"}>
-            <Typography>맞춤 프로젝트를 빠르게 찾아요.</Typography>
+            <Typography variant="body2">맞춤 프로젝트를 빠르게 찾아요.</Typography>
           </Stack>
         </Grid>
         <Grid item xs={4}>
-          <Stack direction="row" alignItems={"center"}>
-            <Typography>세부 옵션</Typography>
+          <Stack direction="row" alignItems={"center"} justifyContent={"flex-end"}>
+            <Typography variant="body2">세부 옵션</Typography>
             <IconButton onClick={() => { setOpenOption(!openOption) }}>
               {openOption ? <ArrowDropDown /> : <ArrowDropUp />}
             </IconButton>
@@ -43,15 +44,11 @@ export default function Home() {
         <Grid item xs={12}>
           {openOption && <OptionDetail />}
         </Grid>
-        {/* 추후에 OptionSort 넣을 예정 */}
-        {/* <Grid item xs={12}>
-          <Stack direction="row" alignItems={"center"}>
-            <Typography>최신순</Typography>
-            <IconButton onClick={() => { setOpenOption(!openOption) }}>
-              {openOption ? <ArrowDropDown /> : <ArrowDropUp />}
-            </IconButton>
+        <Grid item xs={12}>
+          <Stack direction="row" alignItems={"center"} justifyContent={"flex-end"}>
+            <SelectSort />
           </Stack>
-        </Grid> */}
+        </Grid>
       </Grid>
       <Stack alignItems={"center"}>
         <ProjectCard />
