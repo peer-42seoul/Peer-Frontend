@@ -3,6 +3,8 @@ import React from 'react'
 import ProfileCard from './panel/ProfileCard'
 import ProfileSection from './panel/ProfileSection'
 import { IUserProfile } from '@/types/IUserProfile'
+import useSWR from 'swr'
+import { defaultGetFetcher } from '@/api/fetchers'
 
 // TODO 용훈님과 링크 관련 api 논의 필요 (link에 대한 이름도 받음)
 
@@ -25,6 +27,12 @@ const userInfo: IUserProfile = {
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
 const MyProfile = () => {
   const username = 'hyna'
+  const userid = '1'
+
+  const [data, isLoading, error] = useSWR(
+    `http://localhost:4000/profile/${userid}`,
+    defaultGetFetcher,
+  )
 
   return (
     <div>

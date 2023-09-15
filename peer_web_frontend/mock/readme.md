@@ -6,7 +6,7 @@
 
 ## 3. 예시 블로그
 
-https://poiemaweb.com/json-server
+[https://poiemaweb.com/json-server](https://poiemaweb.com/json-server)
 
 ```json
 {
