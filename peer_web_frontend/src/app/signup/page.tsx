@@ -8,11 +8,14 @@ import {
   Box,
   FormControlLabel,
   Stack,
+  Typography,
 } from '@mui/material'
 import { Fragment, useState } from 'react'
+import axios from 'axios'
 
 interface IFormInputs {
   email: string
+  code: string
   password: string
   name: string
   nickName: string
@@ -74,9 +77,12 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
     control,
+    getValues,
   } = useForm<IFormInputs>()
   const [isEmailSent, setIsEmailSent] = useState<boolean>(false)
-  // const [isValidEmail, setIsValidEmail] = useState<boolean>(false)
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(false)
+  // const [isCodeSent, setIsCodeSent] = useState<boolean>(false)
+  // const [isValidCode, setIsValidCode] = useState<boolean>(false)
 
   const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data)
 
@@ -92,12 +98,33 @@ const SignUp = () => {
         />
         <Button
           onClick={() => {
-            setIsEmailSent(true)
+            const email = getValues('email')
+            if (!email) return
+            console.log(email)
+            try {
+              axios.post('http://localhost:4000/email', {
+                email: email,
+              })
+              setIsEmailSent(true)
+              setIsValidEmail(true)
+            } catch (error: any) {
+              console.log(error)
+              setIsEmailSent(true)
+              if (error.response.status === 404) setIsValidEmail(false)
+            }
           }}
         >
           이메일 인증
         </Button>
-        {isEmailSent && <Box>인증코드가 발송되었습니다</Box>}
+        {isEmailSent && !isValidEmail && (
+          <Typography>유효하지 않은 이메일</Typography>
+        )}
+        {isEmailSent && isValidEmail && (
+          <>
+            <TextField />
+            <Button onClick={() => {}}>인증코드 인증</Button>
+          </>
+        )}
         <FormField
           label="비밀번호"
           name="password"
