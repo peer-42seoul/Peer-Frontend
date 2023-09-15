@@ -3,6 +3,8 @@
 import React, { useState } from 'react'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import axios from 'axios'
+import useAuthStore from '@/states/useAuthStore'
+import { useCookies } from 'react-cookie'
 
 interface ILoginFormInput {
   userEmail: string
@@ -14,6 +16,8 @@ const API_URL = 'https://localhost:8080'
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const { login } = useAuthStore()
+  const [, setCookie] = useCookies(['refreshToken'])
 
   const {
     handleSubmit,
@@ -31,7 +35,8 @@ const Login = () => {
       })
       .then((res) => {
         console.log(res)
-        // 로그인 상태 관리 로직
+        login(res.data.userId, res.data.accessToken)
+        setCookie('refreshToken', res.data.refreshToken, { path: '/' })
       })
       .catch((error) => {
         console.log(error.message)

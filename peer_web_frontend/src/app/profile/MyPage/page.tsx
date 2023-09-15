@@ -1,8 +1,12 @@
-import { Box } from '@mui/material'
+import { Typography } from '@mui/material'
 import React from 'react'
-import { UserProfile } from '@/types/UserProfile'
+import ProfileCard from './panel/ProfileCard'
+import ProfileSection from './panel/ProfileSection'
+import { IUserProfile } from '@/types/IUserProfile'
 
-const userInfo: UserProfile = {
+// TODO 용훈님과 링크 관련 api 논의 필요 (link에 대한 이름도 받음)
+
+const userInfo: IUserProfile = {
   id: 1,
   profileImageUrl: 'https://picsum.photos/100',
   introduction: 'not a squad, salt',
@@ -18,32 +22,29 @@ const userInfo: UserProfile = {
   email: 'hyna@student.42seoul.kr',
 }
 
-const MyProfile: React.FC = () => {
+// TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
+const MyProfile = () => {
   const username = 'hyna'
 
   return (
     <div>
-      <h3>프로필</h3>
-      <b>소개</b>
-      <p>관리</p>
-      <Box component="img" src={userInfo.profileImageUrl} />
-      <b>{username}</b>
-      {userInfo?.association ? <p>{userInfo.association}</p> : <p />}
-      <p>
-        {userInfo.userId}({userInfo.email})
-      </p>
+      <Typography>프로필</Typography>
+      {/* <Typography>소개</Typography>
+      <Typography>수정</Typography> */}
+      <ProfileSection title="소개">
+        {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
+        <ProfileCard
+          profileImageURL={userInfo.profileImageUrl}
+          username={username}
+          association={userInfo?.association}
+          userId={userInfo.userId}
+          email={userInfo.email}
+        />
+      </ProfileSection>
+      <div>biography</div>
       <div>achievements</div>
       <div>skills</div>
-      {userInfo.linkList.map((link, i) => (
-        <div key={link}>
-          <Box
-            key={link}
-            component="img"
-            src={`https://www.google.com/s2/favicons?domain=${link}`}
-          />
-          <a href={link}>link {i + 1}</a>
-        </div>
-      ))}
+      <h3>링크</h3>
     </div>
   )
 }
