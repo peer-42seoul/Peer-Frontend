@@ -2,7 +2,7 @@
 
 import { Box, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import MessageNavigator from '../../../components/MessageNavigator'
 import CircularProgress from '@mui/material/CircularProgress'
 
