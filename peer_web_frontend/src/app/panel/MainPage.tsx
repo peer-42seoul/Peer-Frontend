@@ -15,6 +15,8 @@ const MainPage = ({ data }: { data: any }) => {
     const [openOption, setOpenOption] = useState<boolean>(false);
     const [sort, setSort] = useState<ProjectSort>('recent');
 
+    //추후에 지울 예정
+    console.log("type", type);
     return (
         <Container sx={{ backgroundColor: "gray" }}>
             <Box sx={{ backgroundColor: "white" }}>
