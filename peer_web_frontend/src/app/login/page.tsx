@@ -101,6 +101,9 @@ const Login = () => {
           로그인
         </button>
       </form>
+      <div>
+        <button>Sign in with Google</button>
+      </div>
     </>
   )
 }
