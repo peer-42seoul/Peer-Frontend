@@ -1,17 +1,10 @@
 'use client'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
-import {
-  Switch,
-  TextField,
-  InputLabel,
-  Button,
-  Box,
-  FormControlLabel,
-  Stack,
-  Typography,
-} from '@mui/material'
-import { Fragment, useState } from 'react'
-import axios from 'axios'
+import { Switch, Button, FormControlLabel, Stack } from '@mui/material'
+import { Fragment } from 'react'
+
+import FormField from './panel/FormField'
+import EmailField from './panel/EmailField'
 
 interface IFormInputs {
   email: string
@@ -24,38 +17,10 @@ interface IFormInputs {
   pushAlarmAgree: boolean
 }
 
-interface IFormField {
-  label: string
-  name: string
-  control: any
-  error: any
-}
-
 interface IPushAlarmToggle {
   label: string
   name: string
   control: any
-}
-
-const FormField = ({ label, name, control, error }: IFormField) => {
-  return (
-    <>
-      <Controller
-        name={name}
-        control={control}
-        rules={{
-          required: `${label}을 입력해주세요`,
-        }}
-        render={({ field }) => (
-          <>
-            <InputLabel>{label}</InputLabel>
-            <TextField {...field} />
-          </>
-        )}
-      />
-      {error && <Box>{error.message}</Box>}
-    </>
-  )
 }
 
 const PushAlarmToggle = ({ label, name, control }: IPushAlarmToggle) => {
@@ -78,11 +43,44 @@ const SignUp = () => {
     formState: { errors },
     control,
     getValues,
-  } = useForm<IFormInputs>()
-  const [isEmailSent, setIsEmailSent] = useState<boolean>(false)
-  const [isValidEmail, setIsValidEmail] = useState<boolean>(false)
-  // const [isCodeSent, setIsCodeSent] = useState<boolean>(false)
-  // const [isValidCode, setIsValidCode] = useState<boolean>(false)
+  } = useForm<IFormInputs>({ mode: 'onChange' })
+  const inputValues = {
+    password: {
+      label: '비밀번호',
+      name: 'password',
+      control: control,
+      error: errors.password,
+    },
+    nickName: {
+      label: '닉네임',
+      name: 'nickName',
+      control: control,
+      error: errors.nickName,
+    },
+    name: {
+      label: '이름',
+      name: 'name',
+      control: control,
+      error: errors.name,
+    },
+    birthDate: {
+      label: '생년월일',
+      name: 'birthDate',
+      control: control,
+      error: errors.birthDate,
+    },
+    phoneNumber: {
+      label: '전화번호',
+      name: 'phoneNumber',
+      control: control,
+      error: errors.phoneNumber,
+    },
+    pushAlarmToggle: {
+      label: '푸시 알림 동의',
+      name: 'pushAlarmAgree',
+      control: control,
+    },
+  }
 
   const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data)
 
@@ -90,76 +88,17 @@ const SignUp = () => {
     <Fragment>
       <h2>Peer 회원가입 페이지</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormField
-          label="이메일"
-          name="email"
+        <EmailField
           control={control}
           error={errors.email}
+          getValues={getValues}
         />
-        <Button
-          onClick={() => {
-            const email = getValues('email')
-            if (!email) return
-            console.log(email)
-            try {
-              axios.post('http://localhost:4000/email', {
-                email: email,
-              })
-              setIsEmailSent(true)
-              setIsValidEmail(true)
-            } catch (error: any) {
-              console.log(error)
-              setIsEmailSent(true)
-              if (error.response.status === 404) setIsValidEmail(false)
-            }
-          }}
-        >
-          이메일 인증
-        </Button>
-        {isEmailSent && !isValidEmail && (
-          <Typography>유효하지 않은 이메일</Typography>
-        )}
-        {isEmailSent && isValidEmail && (
-          <>
-            <TextField />
-            <Button onClick={() => {}}>인증코드 인증</Button>
-          </>
-        )}
-        <FormField
-          label="비밀번호"
-          name="password"
-          control={control}
-          error={errors.password}
-        />
-        <FormField
-          label="닉네임"
-          name="nickName"
-          control={control}
-          error={errors.nickName}
-        />
-        <FormField
-          label="이름"
-          name="name"
-          control={control}
-          error={errors.name}
-        />
-        <FormField
-          label="생년월일"
-          name="birthDate"
-          control={control}
-          error={errors.birthDate}
-        />
-        <FormField
-          label="전화번호"
-          name="phoneNumber"
-          control={control}
-          error={errors.phoneNumber}
-        />
-        <PushAlarmToggle
-          label="푸시 알림 동의"
-          name="pushAlarmAgree"
-          control={control}
-        />
+        <FormField {...inputValues.password} />
+        <FormField {...inputValues.nickName} />
+        <FormField {...inputValues.name} />
+        <FormField {...inputValues.birthDate} />
+        <FormField {...inputValues.phoneNumber} />
+        <PushAlarmToggle {...inputValues.pushAlarmToggle} />
         <Button type="submit">제출</Button>
       </form>
     </Fragment>
