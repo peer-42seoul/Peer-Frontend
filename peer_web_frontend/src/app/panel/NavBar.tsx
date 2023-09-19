@@ -28,18 +28,18 @@ const PcNav = ({ value, setValue }: INavProps) => {
       sx={{ borderRight: 1, borderColor: 'divider' }}
       variant="fullWidth"
     >
-      <Tab label="홈" onClick={() => {router.push("/")}}/>
-      <Tab label="히치하이킹" onClick={() => {router.push("/")}}/>
-      <Tab label="쇼케이스" onClick={() => {router.push("/")}}/>
-      <Tab label="팀페이지" onClick={() => {router.push("/")}}/>
-      <Tab label="내 프로필" onClick={() => {router.push("/profile/MyPage")}}/>
+      <Tab label="홈" onClick={() => { router.push("/") }} />
+      <Tab label="히치하이킹" onClick={() => { router.push("/") }} />
+      <Tab label="쇼케이스" onClick={() => { router.push("/") }} />
+      <Tab label="팀페이지" onClick={() => { router.push("/") }} />
+      <Tab label="내 프로필" onClick={() => { router.push("/profile/MyPage") }} />
     </Tabs>
   )
 }
 
 const MobileNav = ({ value, setValue }: INavProps) => {
   const router = useRouter();
-  
+
   return (
     (
       <Paper
@@ -50,6 +50,7 @@ const MobileNav = ({ value, setValue }: INavProps) => {
           left: 0,
           right: 0,
           overflow: 'hidden',
+          zIndex: 999,
         }}
         elevation={3}
       >
@@ -60,11 +61,11 @@ const MobileNav = ({ value, setValue }: INavProps) => {
             setValue(newValue)
           }}
         >
-          <BottomNavigationAction label="홈" onClick={() => {router.push("/")}} />
-          <BottomNavigationAction label="히치하이킹" onClick={() => {router.push("/")}}/>
-          <BottomNavigationAction label="쇼케이스" onClick={() => {router.push("/")}}/>
-          <BottomNavigationAction label="팀페이지" onClick={() => {router.push("/")}}/>
-          <BottomNavigationAction label="내 프로필" onClick={() => {router.push("/profile/MyPage")}}/>
+          <BottomNavigationAction label="홈" onClick={() => { router.push("/") }} />
+          <BottomNavigationAction label="히치하이킹" onClick={() => { router.push("/") }} />
+          <BottomNavigationAction label="쇼케이스" onClick={() => { router.push("/") }} />
+          <BottomNavigationAction label="팀페이지" onClick={() => { router.push("/") }} />
+          <BottomNavigationAction label="내 프로필" onClick={() => { router.push("/profile/MyPage") }} />
         </BottomNavigation>
       </Paper>
     )
