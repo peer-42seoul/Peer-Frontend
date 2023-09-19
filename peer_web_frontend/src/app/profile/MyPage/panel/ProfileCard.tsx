@@ -3,12 +3,16 @@ import { Box, Modal, Skeleton, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
 // TODO css 다른 파일로 빼기
+interface IProfileCardData {
+  profileImageURL: string | null // 프로필 사진 넣지 않은 사람을 위한 처리
+  username: string
+  association: string | null // 42아닌 사람을 위한 처리
+  introduction: string
+  email: string
+}
+
 interface IProfileCard {
-  profileImageURL: string | null
-  username?: string
-  association?: string | null
-  introduction?: string
-  email?: string
+  data: IProfileCardData | null
   isLoading: boolean
 }
 
@@ -51,24 +55,17 @@ const ProfileImageModal = ({
   )
 }
 
-const ProfileCard = ({
-  profileImageURL,
-  username,
-  association,
-  introduction,
-  email,
-  isLoading,
-}: IProfileCard) => {
+const ProfileCard = ({ data, isLoading }: IProfileCard) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleModalClose = () => {
     setOpen(false)
   }
 
   return (
-    <div>
+    <Box>
       <Stack direction="row">
         {/* image component */}
-        <div
+        <Box
           style={{
             width: '56px',
             height: '56px',
@@ -80,7 +77,11 @@ const ProfileCard = ({
           ) : (
             <Box
               component="img"
-              src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
+              src={
+                data?.profileImageURL
+                  ? data.profileImageURL
+                  : '/images/profile.jpeg'
+              }
               onClick={() => setOpen(true)}
               sx={{
                 width: '100%',
@@ -88,7 +89,7 @@ const ProfileCard = ({
               }}
             />
           )}
-        </div>
+        </Box>
         {/* 유저 이름, 소속(42?), 유저 아이디, 유저 이메일 */}
         <Stack
           spacing={0.5}
@@ -96,36 +97,42 @@ const ProfileCard = ({
             margin: '0 0 0 4px',
           }}
         >
-          {isLoading ? (
-            <div>
+          {isLoading || !data ? (
+            <Box>
               <Skeleton />
               <Skeleton />
               <Skeleton />
-            </div>
+            </Box>
           ) : (
-            <div>
-              <Typography>{username}</Typography>
-              {association ? (
-                <Typography>{association}</Typography>
+            <Box>
+              <Typography>{data.username}</Typography>
+              {data.association ? (
+                <Typography>{data.association}</Typography>
               ) : (
                 <Typography />
               )}
-              <Typography>아이디({email})</Typography>
-            </div>
+              <Typography>아이디({data.email})</Typography>
+            </Box>
           )}
         </Stack>
       </Stack>
       <Box>
-        {isLoading ? <Skeleton /> : <Typography>{introduction}</Typography>}
+        {isLoading || !data ? (
+          <Skeleton />
+        ) : (
+          <Typography>{data.introduction}</Typography>
+        )}
       </Box>
-      {(!isLoading && profileImageURL) ?? (
+      {!isLoading && data !== null && data?.profileImageURL ? (
         <ProfileImageModal
           open={open}
           handleModalClose={handleModalClose}
-          profileImageURL={profileImageURL}
+          profileImageURL={data.profileImageURL}
         />
+      ) : (
+        <></>
       )}
-    </div>
+    </Box>
   )
 }
 
