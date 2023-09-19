@@ -1,11 +1,11 @@
 'use client'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import MessageNavigator from '../../../components/MessageNavigator'
 import CircularProgress from '@mui/material/CircularProgress'
-
+import useMessageStore from '@/states/useMessageStore'
 interface IUserInformation {
   nickname: string
   profileImage: string
@@ -13,12 +13,15 @@ interface IUserInformation {
   lastContent: string
 }
 
-type MessageListProps = {
+interface IMessageList {
   data: IUserInformation[] | []
   error: Error | undefined
   isLoading: boolean
   spinner: boolean
+  setSelectedStatus: (newValue: boolean) => void
+  isPc: boolean
 }
+
 const MessageItem = ({ user }: { user: IUserInformation }) => {
   return (
     <>
@@ -37,34 +40,55 @@ const MessageItem = ({ user }: { user: IUserInformation }) => {
   )
 }
 
-const MessageList = ({ data, error, isLoading, spinner }: MessageListProps) => {
-  const userId = 'userzero' // 예시로 문자열 "123" 사용
+const MessageList = ({
+  data,
+  error,
+  isLoading,
+  spinner,
+  setSelectedStatus,
+  isPc,
+}: IMessageList) => {
   const router = useRouter()
-  // const [isLoading, setIsLoading] = useState(false)
-  const messageContentHandler = useCallback(() => {
-    router.push(`http://localhost:3000/profile/message/${userId}`)
-  }, [router])
+
+  const messageContentHandler = useCallback(
+    (nickname: string) => {
+      if (!isPc) {
+        console.log('11111')
+
+        setSelectedStatus(true),
+          router.push(
+            `http://localhost:3000/profile/message/nickname?search=${nickname}`,
+
+            // 'http://localhost:3000/message_' + nickname, 임시
+          )
+      } else {
+        setSelectedStatus(true)
+        useMessageStore.setState({ storeNickname: nickname })
+      }
+    },
+    [router, isPc],
+  )
 
   if (error) return <Box>데이터 불러오기를 실패하였습니다.</Box>
   if (!data) return <Box>쪽지함이 비었습니다.</Box>
   if (isLoading) return <Box>데이터를 불러오는 중입니다...</Box>
 
   return (
-    <>
+    <Stack>
       <MessageNavigator title={'쪽지'} messageType={'쪽지'} />
       <Box>
         {data.map((user: IUserInformation, idx: number) => (
           <Box
             sx={{ padding: '16px 0 16px 0' }}
             key={idx}
-            onClick={messageContentHandler}
+            onClick={() => messageContentHandler(data[idx].nickname)}
           >
             <MessageItem user={user} />
           </Box>
         ))}
       </Box>
       {spinner && <CircularProgress />}
-    </>
+    </Stack>
   )
 }
 

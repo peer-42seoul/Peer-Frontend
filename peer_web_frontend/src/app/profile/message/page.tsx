@@ -2,11 +2,12 @@
 
 import { defaultGetFetcher } from '@/api/fetchers'
 import MessageList from '@/app/profile/message/MessageList'
-import { Box, Container } from '@mui/material'
+import { Box, Container, useMediaQuery } from '@mui/material'
 import axios from 'axios'
 import { debounce } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
+import MessageChatPage from './[id]/page'
 
 interface IUserInformation {
   nickname: string
@@ -15,11 +16,13 @@ interface IUserInformation {
   lastContent: string
 }
 
-const Page = () => {
+const MessageMain = () => {
   const target = useRef(null)
   const [page, setPage] = useState(1)
   const [spinner, setSpinner] = useState(false)
   const [messageList, setMessageList] = useState<IUserInformation[]>([])
+  const [selectedStatus, setSelectedStatus] = useState(false)
+  const isPc = useMediaQuery('(min-width:481px)')
 
   const { data, error, isLoading } = useSWR(
     `http://localhost:4000/message_list`,
@@ -58,25 +61,33 @@ const Page = () => {
       },
       { threshold: 0.7 },
     )
-    if (target.current) {
-      observer.observe(target.current)
+    const currentTarget = target.current
+    if (currentTarget) {
+      observer.observe(currentTarget)
     }
     return () => {
-      if (target.current) observer.unobserve(target.current)
+      if (currentTarget) observer.unobserve(currentTarget)
     }
   }, [target, !spinner])
 
   return (
     <Container sx={{ height: '90vh' }}>
-      <MessageList
-        data={messageList || []}
-        error={error}
-        isLoading={isLoading}
-        spinner={spinner}
-      />
-      <Box sx={{ height: '5vh' }} ref={target}></Box>
+      <Box sx={{ display: 'grid', gridTemplateColumns: '3fr 7fr' }}>
+        <Box sx={{ height: '90vh', overflow: 'auto' }}>
+          <MessageList
+            data={messageList || []}
+            error={error}
+            isLoading={isLoading}
+            spinner={spinner}
+            setSelectedStatus={setSelectedStatus}
+            isPc={isPc}
+          />
+          <Box sx={{ height: '5vh', visibility: 'hidden' }} ref={target}></Box>
+        </Box>
+        {isPc && <MessageChatPage selectedStatus={selectedStatus} />}
+      </Box>
     </Container>
   )
 }
 
-export default Page
+export default MessageMain

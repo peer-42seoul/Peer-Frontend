@@ -49,7 +49,7 @@ const TeamList = () => {
   )
 }
 
-const WriteForm = () => {
+const MessageWritingForm = () => {
   const [nickname, setNickname] = useState('')
   const [teamList, setTeamList] = useState(false)
 
@@ -82,4 +82,4 @@ const WriteForm = () => {
   )
 }
 
-export default WriteForm
+export default MessageWritingForm

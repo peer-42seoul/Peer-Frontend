@@ -1,7 +1,7 @@
 import React from 'react'
 import MessageForm from '../write/MessageForm'
 
-const View = () => {
+const MessageViewPage = () => {
   return (
     <>
       <MessageForm type={'existingMessage'} nickname={undefined} />
@@ -9,4 +9,4 @@ const View = () => {
   )
 }
 
-export default View
+export default MessageViewPage
