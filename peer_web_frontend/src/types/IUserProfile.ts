@@ -2,11 +2,15 @@ export interface IUserProfile {
   id: number
   profileImageUrl: string
   introduction: string
-  linkList: Array<string>
+  linkList: Array<IUserProfileLink>
   phone: string
   representAchievement: Array<string>
   achievements: Array<string>
   association: string | null
-  userId: string
   email: string
+}
+
+export interface IUserProfileLink {
+  link: string
+  linkTitle: string
 }
