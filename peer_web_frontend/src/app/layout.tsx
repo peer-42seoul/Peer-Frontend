@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import "../../styles/global.css"
-import "../../styles/reset.css"
+import '../../styles/global.css'
+import '../../styles/reset.css'
 import NavBar from './panel/NavBar'
 import Header from './panel/Header'
 import { Box, Stack } from '@mui/material'
@@ -21,13 +21,14 @@ export default function RootLayout({
       <body>
         <div className="layout">
           <NavBar />
-          <Stack flex={1} >
+          <Stack flex={1}>
             <Box>
               <Header />
             </Box>
             {children}
           </Stack>
         </div>
+        <div id="modal-root"></div>
       </body>
     </html>
   )

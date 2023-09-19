@@ -3,11 +3,22 @@
 import { useMediaQuery, IconButton } from '@mui/material'
 import { Search } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
+import useModal from '@/hook/useModal'
 
 const SearchPc = () => {
+  const { isOpen, ModalCustom, openModal, closeModal } = useModal()
   return (
-    <IconButton color="inherit" aria-label="menu">
+    <IconButton color="inherit" aria-label="menu" onClick={openModal}>
       <Search />
+      {isOpen && (
+        <ModalCustom>
+          <div>
+            <h2>A Title</h2>
+            <p>Some content...</p>
+            <button onClick={closeModal}>Close</button>
+          </div>
+        </ModalCustom>
+      )}
     </IconButton>
   )
 }
