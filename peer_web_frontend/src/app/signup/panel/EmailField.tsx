@@ -19,10 +19,9 @@ const EmailField = ({
     required: '이메일을 입력해주세요',
     pattern: {
       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-      message: '이메일 형식이 아닙니다',
+      message: '유효한 이메일 형식이 아닙니다',
     },
   }
-
   const API_URL = 'http://localhost:4000'
   const submitEmail = () => {
     const email = getValues('email')
@@ -40,7 +39,7 @@ const EmailField = ({
       .catch((error) => {
         console.log(error)
         setIsEmailSent(true)
-        if (error.response.status === 404) setIsValidEmail(false)
+        setIsValidEmail(false)
       })
   }
   return (
@@ -54,9 +53,6 @@ const EmailField = ({
             <InputLabel>이메일</InputLabel>
             <TextField {...field} type="text" />
             <Button onClick={submitEmail}>이메일 인증</Button>
-            {isEmailSent && !isValidEmail && (
-              <Typography>유효하지 않은 이메일</Typography>
-            )}
             {isEmailSent && isValidEmail && (
               <>
                 <TextField />

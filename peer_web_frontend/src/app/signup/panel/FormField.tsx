@@ -7,20 +7,18 @@ interface IFormField {
   name: string
   control: any
   error: any
+  rules?: any
+  buttonText?: string
 }
 
-const FormField = ({ label, name, control, error }: IFormField) => {
-  const rules =
-    label === '비밀번호'
-      ? {
-          required: `${label}을 입력해주세요`,
-          pattern: {
-            value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i,
-            message: '8자 이상의 영문, 숫자 조합이어야 합니다',
-          },
-        }
-      : { required: `${label}을 입력해주세요` }
-
+const FormField = ({
+  label,
+  name,
+  control,
+  error,
+  rules,
+  buttonText,
+}: IFormField) => {
   return (
     <>
       <Controller
@@ -31,7 +29,7 @@ const FormField = ({ label, name, control, error }: IFormField) => {
           <>
             <InputLabel>{label}</InputLabel>
             <TextField {...field} type="text" />
-            {label === '이메일' && <Button>이메일 인증</Button>}
+            {buttonText && <Button>{buttonText}</Button>}
           </>
         )}
       />
