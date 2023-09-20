@@ -1,12 +1,12 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { ProjectSort } from '../page'
 
-interface SelectSortProps {
+interface ISelectSortProps {
   sort: ProjectSort
   setSort: React.Dispatch<React.SetStateAction<ProjectSort>>
 }
 
-const SelectSort = ({ sort, setSort }: SelectSortProps) => {
+const SelectSort = ({ sort, setSort }: ISelectSortProps) => {
   const handleChange = (event: SelectChangeEvent) => {
     setSort(event.target.value as ProjectSort)
   }
