@@ -9,11 +9,17 @@ import MainCard from './MainCard'
 import SearchOption from './SearchOption'
 import SelectSort from './SelectSort'
 import SelectType from './SelectType'
+import { get } from 'http'
+import { defaultGetFetcher } from '@/api/fetchers'
+import useSWR from 'swr'
 
-const MainPage = ({ data }: { data: any }) => {
-  const [type, setType] = useState<ProjectType>('study')
+const MainPage = ({ initData }: { initData: any }) => {
+  const [type, setType] = useState<ProjectType>('studies')
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort>('recent')
+  // json server용 url
+  const { data } = useSWR(`http://localhost:3001/${type}-sort-${sort}`, defaultGetFetcher, { fallbackData: initData });
+  console.log("data", data);
 
   //추후에 지울 예정
   console.log('type', type)
