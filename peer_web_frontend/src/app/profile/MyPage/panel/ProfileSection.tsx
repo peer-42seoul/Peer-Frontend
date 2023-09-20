@@ -3,7 +3,7 @@ import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import ProfileSectionEditLink from './ProfileSectionEditLink'
 
-const sectionType = {
+const SectionType = {
   introduction: '소개',
   achievements: '업적',
   skills: '스킬',
@@ -17,15 +17,13 @@ const ProfileSection = ({
   sectionTitle: 'introduction' | 'achievements' | 'skills' | 'links'
   children: React.ReactNode
 }) => {
-  const sectionTypeMap = new Map(Object.entries(sectionType))
+  const sectionTypeMap = new Map(Object.entries(SectionType))
 
   return (
     <section>
       <Stack direction="row" justifyContent="space-between">
         <Typography>{sectionTypeMap.get(sectionTitle)}</Typography>
-        {/* <Link href={'profile/my-profile-setting'}> */}
-        <ProfileSectionEditLink sectionTittle={sectionTitle} />
-        {/* </Link> */}
+        <ProfileSectionEditLink sectionTitle={sectionTitle} />
       </Stack>
       {children}
     </section>

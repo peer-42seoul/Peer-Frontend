@@ -1,5 +1,5 @@
 'use client'
-import { Box, Modal, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
 // TODO css 다른 파일로 빼기
@@ -73,8 +73,7 @@ const ProfileCard = ({
             padding: '5px 3px',
           }}
         >
-          <Box
-            component="img"
+          <Avatar
             src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
             onClick={() => setOpen(true)}
             sx={{
