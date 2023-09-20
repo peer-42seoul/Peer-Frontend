@@ -12,9 +12,8 @@ import React, { useState } from 'react'
 import MessageForm from './MessageForm'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
-import SearchIcon from '@mui/icons-material/Search'
 
-const TeamList = ({ teamListStatus, setTeamListStatus }: any) => {
+const TeamList = ({ setTeamListStatus }: any) => {
   const { data, error, isLoading } = useSWR(
     `http://localhost:4000/team_list`,
     defaultGetFetcher,

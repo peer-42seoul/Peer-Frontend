@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import MessageNavigator from '../../../components/MessageNavigator'

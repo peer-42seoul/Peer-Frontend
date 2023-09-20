@@ -2,14 +2,11 @@
 
 import { defaultGetFetcher } from '@/api/fetchers'
 import MessageNavigator from '@/components/MessageNavigator'
-import ModalContainer from '@/components/ModalContainer'
 import useMessageStore from '@/states/useMessageStore'
-import useModalStore from '@/states/useModalStore'
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
-import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useState } from 'react'
+import { Box, Container, Typography } from '@mui/material'
+import { useRouter } from 'next/navigation'
+import React from 'react'
 import useSWR from 'swr'
-import MessageWritingForm from '../write/page'
 import MessageForm from '../write/MessageForm'
 
 interface IMessageInformation {
@@ -72,8 +69,8 @@ const MessageChatPage = (
 ) => {
   // const userId = 'userzero' // 예시로 문자열 "123" 사용
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const search = searchParams.get('search')
+  // const searchParams = useSearchParams()
+  // const search = searchParams.get('search')
   const { storeNickname } = useMessageStore()
 
   console.log('storeNickname: ', storeNickname)
