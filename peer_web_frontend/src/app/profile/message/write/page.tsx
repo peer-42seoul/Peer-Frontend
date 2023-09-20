@@ -11,18 +11,18 @@ import {
 import React, { useState } from 'react'
 import MessageForm from './MessageForm'
 import useSWR from 'swr'
+import { defaultGetFetcher } from '@/api/fetchers'
+import SearchIcon from '@mui/icons-material/Search'
 
-const TeamList = () => {
-  const fetcher = (url: string) => fetch(url).then((res) => res.json())
+const TeamList = ({ teamListStatus, setTeamListStatus }: any) => {
   const { data, error, isLoading } = useSWR(
     `http://localhost:4000/team_list`,
-    fetcher,
+    defaultGetFetcher,
   )
   if (error) return <Box>팀원 목록 불러오기를 실패하였습니다.</Box>
   if (!data) return <Box>빈 팀원 목록 입니다.</Box>
   if (isLoading) return <Box>팀원 목록을 불러오는 중입니다...</Box>
 
-  console.log(data)
   return (
     <Container>
       <Box>
@@ -45,22 +45,28 @@ const TeamList = () => {
           )
         })}
       </Box>
+      <Box>
+        <Button onClick={() => setTeamListStatus(false)}>닫기</Button>
+        <Button>확인</Button>
+      </Box>
     </Container>
   )
 }
 
 const MessageWritingForm = () => {
   const [nickname, setNickname] = useState('')
-  const [teamList, setTeamList] = useState(false)
+  const [teamListStatus, setTeamListStatus] = useState(false)
 
   const getTeamList = () => {
-    console.log('getTeamList')
-    setTeamList(!teamList)
+    setTeamListStatus(!teamListStatus)
   }
   return (
     <>
-      {teamList ? (
-        <TeamList />
+      {teamListStatus ? (
+        <TeamList
+          teamListStatus={teamListStatus}
+          setTeamListStatus={setTeamListStatus}
+        />
       ) : (
         <Container>
           <Box>

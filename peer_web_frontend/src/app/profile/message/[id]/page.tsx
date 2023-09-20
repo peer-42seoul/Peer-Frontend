@@ -2,11 +2,15 @@
 
 import { defaultGetFetcher } from '@/api/fetchers'
 import MessageNavigator from '@/components/MessageNavigator'
+import ModalContainer from '@/components/ModalContainer'
 import useMessageStore from '@/states/useMessageStore'
-import { Box, Button, Container, Typography } from '@mui/material'
+import useModalStore from '@/states/useModalStore'
+import { Box, Button, Container, TextField, Typography } from '@mui/material'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import useSWR from 'swr'
+import MessageWritingForm from '../write/page'
+import MessageForm from '../write/MessageForm'
 
 interface IMessageInformation {
   nickname: string
@@ -62,17 +66,17 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
   )
 }
 
-const MessageChatPage = ({ selectedStatus }: { selectedStatus: boolean }) => {
-  const userId = 'userzero' // 예시로 문자열 "123" 사용
+const MessageChatPage = (
+  { selectedStatus }: { selectedStatus: boolean },
+  isPc: boolean,
+) => {
+  // const userId = 'userzero' // 예시로 문자열 "123" 사용
   const router = useRouter()
   const searchParams = useSearchParams()
   const search = searchParams.get('search')
   const { storeNickname } = useMessageStore()
 
-  console.log('selectedStatus', selectedStatus)
-  console.log('search', search)
-  console.log('storeNickname?', storeNickname)
-
+  console.log('storeNickname: ', storeNickname)
   const { data, error, isLoading } = useSWR(
     selectedStatus
       ? // ? 'http://localhost:4000/message/nickname?search=' + storeNickname 오리지널
@@ -91,11 +95,15 @@ const MessageChatPage = ({ selectedStatus }: { selectedStatus: boolean }) => {
         {data.map((user: IMessageInformation, idx: number) => {
           return <MessageContent key={idx} user={user} />
         })}
-        <Button
+        {/* <Button
           onClick={() => {
-            router.push(
-              `http://localhost:3000/profile/message/view?target=${userId}`,
-            )
+            {
+              isPc
+                ? handleOpen()
+                : router.push(
+                    `http://localhost:3000/profile/message/view?target=${storeNickname}`,
+                  )
+            }
           }}
           sx={{
             width: '100%',
@@ -105,7 +113,14 @@ const MessageChatPage = ({ selectedStatus }: { selectedStatus: boolean }) => {
           }}
         >
           답하기
-        </Button>
+        </Button> */}
+        {isPc ? (
+          <MessageForm type={'existingMessage'} nickname={undefined} />
+        ) : (
+          router.push(
+            `http://localhost:3000/profile/message/view?target=${storeNickname}`,
+          )
+        )}
       </Box>
     </Container>
   )

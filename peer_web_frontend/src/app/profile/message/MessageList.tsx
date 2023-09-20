@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import MessageNavigator from '../../../components/MessageNavigator'
@@ -53,14 +53,13 @@ const MessageList = ({
   const messageContentHandler = useCallback(
     (nickname: string) => {
       if (!isPc) {
-        console.log('11111')
-
         setSelectedStatus(true),
-          router.push(
-            `http://localhost:3000/profile/message/nickname?search=${nickname}`,
+          useMessageStore.setState({ storeNickname: nickname })
 
-            // 'http://localhost:3000/message_' + nickname, 임시
-          )
+        router.push(
+          // `http://localhost:3000/profile/message/nickname?search=${nickname}`,
+          'http://localhost:3000/profile/message/' + nickname,
+        )
       } else {
         setSelectedStatus(true)
         useMessageStore.setState({ storeNickname: nickname })
@@ -75,7 +74,7 @@ const MessageList = ({
 
   return (
     <Stack>
-      <MessageNavigator title={'쪽지'} messageType={'쪽지'} />
+      {!isPc && <MessageNavigator title={'쪽지'} messageType={'쪽지'} />}
       <Box>
         {data.map((user: IUserInformation, idx: number) => (
           <Box
