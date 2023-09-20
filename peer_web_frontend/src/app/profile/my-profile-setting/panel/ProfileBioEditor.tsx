@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import { Avatar, Stack } from '@mui/material'
 
 const ProfileBioEditor = () => {
-  const { data, error, isLoading } = useSWR('http://localhost:4000/profile')
+  const { data, error, isLoading } = useSWR('http://localhost:4000/profile/1')
 
   return (
     <SettingContainer
@@ -13,9 +13,9 @@ const ProfileBioEditor = () => {
       onPositiveClick={() => console.log('on positive click')}
       settingTitle="introduction"
     >
-      {!isLoading && !error && (
+      {!isLoading && !error && data && (
         <Stack>
-          <Avatar src={data.profileImageURL} />
+          <Avatar src={data.profileImageUrl} />
         </Stack>
       )}
     </SettingContainer>
