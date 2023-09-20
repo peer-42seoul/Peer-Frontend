@@ -9,7 +9,6 @@ import MainCard from './MainCard'
 import SearchOption from './SearchOption'
 import SelectSort from './SelectSort'
 import SelectType from './SelectType'
-import { get } from 'http'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 
@@ -18,11 +17,10 @@ const MainPage = ({ initData }: { initData: any }) => {
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort>('recent')
   // json server용 url
+  //useswr의 초기값을 initdata로 설정하려했으나 실패...
   const { data } = useSWR(`http://localhost:3001/${type}-sort-${sort}`, defaultGetFetcher, { fallbackData: initData });
-  console.log("data", data);
 
   //추후에 지울 예정
-  console.log('type', type)
   return (
     <Container sx={{ backgroundColor: 'gray' }}>
       <Box sx={{ backgroundColor: 'white' }}>
