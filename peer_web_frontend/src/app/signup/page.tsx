@@ -63,7 +63,7 @@ const SignUp = () => {
       error: errors.passwordConfirm,
       rules: {
         validate: () =>
-          getValues('passwordConfirm') === getValues('password') ||
+          getValues('passwordConfirm') !== getValues('password') &&
           '비밀번호가 일치하지 않습니다',
       },
     },
