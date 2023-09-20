@@ -1,7 +1,6 @@
 'use client'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { Switch, Button, FormControlLabel, Stack } from '@mui/material'
-import { Fragment } from 'react'
 
 import FormField from './panel/FormField'
 import EmailField from './panel/EmailField'
@@ -10,10 +9,9 @@ interface IFormInputs {
   email: string
   code: string
   password: string
+  passwordConfirm: string
   name: string
   nickName: string
-  birthDate: string
-  phoneNumber: string
   pushAlarmAgree: boolean
 }
 
@@ -50,30 +48,42 @@ const SignUp = () => {
       name: 'password',
       control: control,
       error: errors.password,
+      rules: {
+        required: '비밀번호를 입력해주세요',
+        pattern: {
+          value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i,
+          message: '8자 이상의 영문, 숫자 조합이어야 합니다',
+        },
+      },
+    },
+    passwordConfirm: {
+      label: '비밀번호 확인',
+      name: 'passwordConfirm',
+      control: control,
+      error: errors.passwordConfirm,
+      rules: {
+        validate: () =>
+          getValues('passwordConfirm') === getValues('password') ||
+          '비밀번호가 일치하지 않습니다',
+      },
     },
     nickName: {
       label: '닉네임',
       name: 'nickName',
       control: control,
       error: errors.nickName,
+      rules: {
+        required: '닉네임을 입력해주세요',
+      },
     },
     name: {
       label: '이름',
       name: 'name',
       control: control,
       error: errors.name,
-    },
-    birthDate: {
-      label: '생년월일',
-      name: 'birthDate',
-      control: control,
-      error: errors.birthDate,
-    },
-    phoneNumber: {
-      label: '전화번호',
-      name: 'phoneNumber',
-      control: control,
-      error: errors.phoneNumber,
+      rules: {
+        required: '이름을 입력해주세요',
+      },
     },
     pushAlarmToggle: {
       label: '푸시 알림 동의',
@@ -85,7 +95,7 @@ const SignUp = () => {
   const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data)
 
   return (
-    <Fragment>
+    <>
       <h2>Peer 회원가입 페이지</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <EmailField
@@ -94,14 +104,13 @@ const SignUp = () => {
           getValues={getValues}
         />
         <FormField {...inputValues.password} />
+        <FormField {...inputValues.passwordConfirm} />
         <FormField {...inputValues.nickName} />
         <FormField {...inputValues.name} />
-        <FormField {...inputValues.birthDate} />
-        <FormField {...inputValues.phoneNumber} />
         <PushAlarmToggle {...inputValues.pushAlarmToggle} />
         <Button type="submit">제출</Button>
       </form>
-    </Fragment>
+    </>
   )
 }
 
