@@ -2,7 +2,8 @@ import { Stack, Typography } from '@mui/material'
 import Link from 'next/link'
 import React from 'react'
 
-const sectionType = {
+// 이후 라우팅 처리르 위한 객체입니다.
+const SectionType = {
   introduction: '소개',
   achievements: '업적',
   skills: '스킬',
@@ -16,7 +17,7 @@ const ProfileSection = ({
   sectionTitle: 'introduction' | 'achievements' | 'skills' | 'links'
   children: React.ReactNode
 }) => {
-  const sectionTypeMap = new Map(Object.entries(sectionType))
+  const sectionTypeMap = new Map(Object.entries(SectionType))
   return (
     <section>
       <Stack direction="row" justifyContent="space-between">

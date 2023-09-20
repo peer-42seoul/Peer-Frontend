@@ -123,14 +123,12 @@ const ProfileCard = ({ data, isLoading }: IProfileCard) => {
           <Typography>{data.introduction}</Typography>
         )}
       </Box>
-      {!isLoading && data !== null && data?.profileImageURL ? (
+      {!isLoading && data && (
         <ProfileImageModal
           open={open}
           handleModalClose={handleModalClose}
           profileImageURL={data.profileImageURL}
         />
-      ) : (
-        <></>
       )}
     </Box>
   )
