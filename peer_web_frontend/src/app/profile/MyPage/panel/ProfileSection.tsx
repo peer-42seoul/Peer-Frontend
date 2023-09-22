@@ -13,9 +13,11 @@ const SectionType = {
 const ProfileSection = ({
   sectionTitle,
   children,
+  setModalType,
 }: {
   sectionTitle: 'introduction' | 'achievements' | 'skills' | 'links'
   children: React.ReactNode
+  setModalType: (type: string) => void
 }) => {
   const sectionTypeMap = new Map(Object.entries(SectionType))
 
@@ -23,7 +25,10 @@ const ProfileSection = ({
     <section>
       <Stack direction="row" justifyContent="space-between">
         <Typography>{sectionTypeMap.get(sectionTitle)}</Typography>
-        <ProfileSectionEditLink sectionTitle={sectionTitle} />
+        <ProfileSectionEditLink
+          sectionTitle={sectionTitle}
+          setModalType={setModalType}
+        />
       </Stack>
       {children}
     </section>

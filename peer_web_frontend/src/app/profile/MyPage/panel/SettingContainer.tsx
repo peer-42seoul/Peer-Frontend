@@ -13,12 +13,12 @@ const settingTypeMap = new Map(Object.entries(SettingType))
 const SettingContainer = ({
   settingTitle,
   onNegativeClick,
-  onPositiveClick,
+  // onPositiveClick,
   children,
 }: {
   settingTitle: string
   onNegativeClick: (object: any) => void
-  onPositiveClick: (object: any) => void
+  // onPositiveClick: (object: any) => void
   children: React.ReactNode
 }) => {
   return (
@@ -28,7 +28,11 @@ const SettingContainer = ({
       <Button variant="contained" onClick={onNegativeClick}>
         취소
       </Button>
-      <Button variant="contained" onClick={onPositiveClick}>
+      <Button
+        variant="contained"
+        type="submit"
+        // onClick={onPositiveClick}
+      >
         완료
       </Button>
     </div>

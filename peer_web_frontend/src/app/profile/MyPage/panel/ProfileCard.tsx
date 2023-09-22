@@ -1,15 +1,9 @@
 'use client'
 import { Avatar, Box, Modal, Stack, Typography } from '@mui/material'
+import { IProfileCard } from '@/types/IUserProfile'
 import React, { useState } from 'react'
 
 // TODO css 다른 파일로 빼기
-interface IProfileCard {
-  profileImageURL: string | null
-  username: string
-  association: string | null
-  introduction: string
-  email: string
-}
 
 interface IProfileImageModalProps {
   open: boolean
