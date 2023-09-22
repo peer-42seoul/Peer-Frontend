@@ -4,12 +4,12 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import MessageNavigator from '@/components/MessageNavigator'
 import useMessageStore from '@/states/useMessageStore'
 import { Box, Container, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import MessageForm from '../write/MessageForm'
 import { IMessageInformation } from '@/types/IUserProfile'
 import Image from 'next/image'
+import MessageForm from '../../message/write/MessageForm'
 
 const MessageContent = ({ user }: { user: IMessageInformation }) => {
   return (
@@ -56,33 +56,33 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
   )
 }
 
-const MessageChatPage = (
+const Test = (
   { selectedStatus }: { selectedStatus: boolean },
   isPc: boolean,
+  props: any,
 ) => {
+  console.log('prop', props)
   const router = useRouter()
-  // const searchParams = useSearchParams()
-  // const search = searchParams.get('search')
+  const searchParams = useSearchParams()
+  const search = searchParams.get('_')
   const { storeNickname } = useMessageStore()
   const [messageData, setMessageData] = useState<IMessageInformation[]>([])
 
-  console.log('selected', selectedStatus)
   const { data, error, isLoading } = useSWR(
-    // selectedStatus
-    //   ? // ? 'http://localhost:4000/message/nickname?search=' + storeNickname //FIXME: 나중에 얘로 설정해야 함
-    `http://localhost:4000/message_${storeNickname}`,
-    // : null,
+    selectedStatus
+      ? // ? 'http://localhost:4000/message/nickname?search=' + storeNickname //FIXME: 나중에 얘로 설정해야 함
+        'http://localhost:4000/message_' + search
+      : null,
     defaultGetFetcher,
   )
 
-  console.log('call', `http://localhost:4000/message_ + ${storeNickname}`)
   useEffect(() => {
     if (data) {
       setMessageData(data)
     }
   }, [data])
   if (error) return <Box>쪽지 불러오기를 실패하였습니다.</Box>
-  if (!data) return <Box>빈 쪽지함 입니다!</Box>
+  if (!data) return <Box>빈 쪽지함 입니다.</Box>
   if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
 
   return (
@@ -110,4 +110,4 @@ const MessageChatPage = (
   )
 }
 
-export default MessageChatPage
+export default Test

@@ -52,7 +52,7 @@ const TeamList = ({ setTeamListStatus }: any) => {
   )
 }
 
-const MessageWritingForm = () => {
+const MessageWritingForm = ({ isPc, handleClose }: any) => {
   const [nickname, setNickname] = useState('')
   const [teamListStatus, setTeamListStatus] = useState(false)
 
@@ -80,7 +80,12 @@ const MessageWritingForm = () => {
               onChange={(e) => setNickname(e.target.value)}
             />
           </Box>
-          <MessageForm type={'newMessage'} nickname={nickname} />
+          <MessageForm
+            type={'newMessage'}
+            nickname={nickname}
+            handleClose={handleClose}
+            isPc={isPc}
+          />
         </Container>
       )}
     </>

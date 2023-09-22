@@ -84,7 +84,7 @@ const MessageMain = () => {
           title={'create_message'}
           description={'create_message'}
         >
-          <MessageWritingForm />
+          <MessageWritingForm isPc={isPc} handleClose={handleClose} />
         </ModalContainer>
       )}
       <Box
@@ -101,7 +101,11 @@ const MessageMain = () => {
               isPc={isPc}
             />
             <Box
-              sx={{ height: '1vh', visibility: 'hidden' }}
+              sx={{
+                bottom: 0,
+                height: '1vh',
+                backgroundColor: 'primary.main',
+              }}
               ref={target}
             ></Box>
           </Box>
