@@ -5,6 +5,8 @@ import ProfileCard from './panel/ProfileCard'
 import ProfileSection from './panel/ProfileSection'
 import { IUserProfile } from '@/types/IUserProfile'
 import ProfileLinksSection from './panel/ProfileLinksSection'
+import ModalContainer from '@/components/ModalContainer'
+import ProfileBioEditor from './panel/ProfileBioEditor'
 
 const userInfo: IUserProfile = {
   id: 1,
@@ -60,6 +62,7 @@ const MyProfile = () => {
       setModalOpen((prev) => ({ ...prev, achievements: true }))
     else if (modalType === 'links')
       setModalOpen((prev) => ({ ...prev, achievements: true }))
+    else if (modalType === '') console.log('API GET 요청!')
   }, [modalType])
 
   return (
@@ -86,6 +89,23 @@ const MyProfile = () => {
       <ProfileSection sectionTitle="links" setModalType={setModalType}>
         <ProfileLinksSection linkList={userInfo.linkList} />
       </ProfileSection>
+      <ModalContainer
+        open={modalOpen.introduction}
+        handleClose={() => setModalType('')}
+        title="프로필 소개 섹션 수정 모달"
+        description="닉네임, 자기 소개 수정 폼"
+      >
+        <ProfileBioEditor
+          data={{
+            profileImageURL: userInfo.profileImageUrl,
+            username: username,
+            association: userInfo.association,
+            email: userInfo.email,
+            introduction: userInfo.introduction,
+          }}
+          closeModal={() => setModalType('')}
+        />
+      </ModalContainer>
     </Box>
   )
 }

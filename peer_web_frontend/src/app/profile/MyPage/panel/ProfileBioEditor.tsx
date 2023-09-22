@@ -11,11 +11,17 @@ interface IFormInput {
   introduction: string
 }
 
-const ProfileBioEditor = (props: IProfileCard) => {
+const ProfileBioEditor = ({
+  data,
+  closeModal,
+}: {
+  data: IProfileCard
+  closeModal: () => void
+}) => {
   // const { data, error, isLoading } = useSWR('http://localhost:4000/profile/1')
   const defaultValues: IFormInput = {
-    username: props.username,
-    introduction: props.introduction,
+    username: data.username,
+    introduction: data.introduction,
   }
 
   const { handleSubmit, control } = useForm<IFormInput>({
@@ -27,25 +33,25 @@ const ProfileBioEditor = (props: IProfileCard) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <SettingContainer
-        onNegativeClick={() => console.log('on negative click')}
+        onNegativeClick={closeModal}
         // onPositiveClick={onSubmit}
         settingTitle="introduction"
       >
         <Stack>
           <Avatar
             src={
-              props.profileImageURL
-                ? props.profileImageURL
+              data.profileImageURL
+                ? data.profileImageURL
                 : '/images/profile.jpeg'
             }
           />
         </Stack>
-        <Grid container columns={2}>
+        <Grid container spacing={2}>
           {/* 닉네임 수정 */}
-          <Grid item>
+          <Grid item xs={3}>
             <Typography>닉네임</Typography>
           </Grid>
-          <Grid item>
+          <Grid item xs={9}>
             <Controller
               render={({ field }) => (
                 <TextField label="닉네임" variant="outlined" {...field} />
@@ -54,18 +60,24 @@ const ProfileBioEditor = (props: IProfileCard) => {
               control={control}
             ></Controller>
           </Grid>
-          <Grid item>
+          <Grid item xs={3}>
             <Typography>소속</Typography>
           </Grid>
-          <Grid item>
+          <Grid item xs={9}>
             <Typography>
-              {props.association ? props.association : '해당 없음'}
+              {data.association ? data.association : '해당 없음'}
             </Typography>
           </Grid>
-          <Grid item>
-            <Typography>자기 소개</Typography>
+          <Grid item xs={3}>
+            <Typography>아이디</Typography>
           </Grid>
-          <Grid item>
+          <Grid item xs={9}>
+            <Typography>{data.email}</Typography>
+          </Grid>
+          {/* <Grid item xs={3}>
+            <Typography>자기 소개</Typography>
+          </Grid> */}
+          <Grid item xs={12}>
             <Controller
               render={({ field }) => (
                 <TextField label="자기 소개" variant="outlined" {...field} />
