@@ -2,7 +2,7 @@
 
 import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import MessageNavigator from '../../../components/MessageNavigator'
 import CircularProgress from '@mui/material/CircularProgress'
 import useMessageStore from '@/states/useMessageStore'

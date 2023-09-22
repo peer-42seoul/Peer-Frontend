@@ -4,7 +4,7 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import MessageNavigator from '@/components/MessageNavigator'
 import useMessageStore from '@/states/useMessageStore'
 import { Box, Container, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import MessageForm from '../write/MessageForm'
@@ -60,7 +60,7 @@ const MessageChatPage = (
   { selectedStatus }: { selectedStatus: boolean },
   isPc: boolean,
 ) => {
-  const router = useRouter()
+  // const router = useRouter()
   // const searchParams = useSearchParams()
   // const search = searchParams.get('search')
   const { storeNickname } = useMessageStore()
@@ -93,18 +93,13 @@ const MessageChatPage = (
         {messageData.map((user: IMessageInformation, idx: number) => {
           return <MessageContent key={idx} user={user} />
         })}
-        {isPc ? (
+        {isPc && (
           <MessageForm
             type={'existingMessage'}
             nickname={undefined} // TODO: 내 상태
             setMessageData={setMessageData}
             isPc={true}
           />
-        ) : (
-          // router.push(
-          //   `http://localhost:3000/profile/message/view?target=${storeNickname}`,
-          // )
-          <div>bye</div>
         )}
       </Box>
     </Container>
