@@ -1,7 +1,7 @@
 'use client'
 
 import { IProject } from '@/types/IProejct'
-import { Container, Box, Grid, Stack } from '@mui/material'
+import { Container, Box, Grid, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import { ProjectType, ProjectSort } from '../page'
 import EditButton from './EditButton'
@@ -13,18 +13,24 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 
 const MainPage = ({ initData }: { initData: any }) => {
-  const [type, setType] = useState<ProjectType>('studies')
+  const [type, setType] = useState<ProjectType>('projects')
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort>('recent')
-  // json server용 url
-  //useswr의 초기값을 initdata로 설정하려했으나 실패...
-  const { data } = useSWR(`http://localhost:3001/${type}-sort-${sort}`, defaultGetFetcher, { fallbackData: initData });
 
-  //추후에 지울 예정
+  // json server용 url
+  // useswr의 초기값을 initdata로 설정하려했으나 실패...
+  // 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
+  const { data, isLoading } = useSWR(`http://localhost:3001/${type}-sort-${sort}`, defaultGetFetcher, { fallbackData: initData });
+  if (isLoading)
+    return (<Typography>로딩중...</Typography>)
+
+  if (!data)
+    return (<Typography>데이터가 없습니다</Typography>)
+
   return (
     <Container sx={{ backgroundColor: 'gray' }}>
       <Box sx={{ backgroundColor: 'white' }}>
-        <SelectType setType={setType} />
+        <SelectType type={type} setType={setType} />
         <Grid container p={2}>
           <SearchOption openOption={openOption} setOpenOption={setOpenOption} />
           <Grid item xs={12}>

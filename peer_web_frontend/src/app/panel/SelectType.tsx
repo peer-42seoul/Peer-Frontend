@@ -3,8 +3,10 @@ import { Dispatch, SetStateAction } from 'react'
 import { ProjectType } from '../page'
 
 const SelectType = ({
+  type,
   setType,
 }: {
+  type: ProjectType
   setType: Dispatch<SetStateAction<ProjectType>>
 }) => {
   return (
@@ -31,7 +33,7 @@ const SelectType = ({
       >
         프로젝트
       </Button>
-    </ButtonGroup>
+    </ButtonGroup >
   )
 }
 
