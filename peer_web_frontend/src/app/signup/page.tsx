@@ -1,9 +1,18 @@
 'use client'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
-import { Switch, Button, FormControlLabel, Stack } from '@mui/material'
+import { useRouter } from 'next/navigation'
+import {
+  Switch,
+  Button,
+  FormControlLabel,
+  Stack,
+  Typography,
+  Box,
+} from '@mui/material'
+import { useState } from 'react'
+import axios from 'axios'
 
 import FormField from './panel/FormField'
-import EmailField from './panel/EmailField'
 
 interface IFormInputs {
   email: string
@@ -36,13 +45,57 @@ const PushAlarmToggle = ({ label, name, control }: IPushAlarmToggle) => {
 }
 
 const SignUp = () => {
+  const API_URL = 'http://localhost:4000'
+  const router = useRouter()
   const {
     handleSubmit,
     formState: { errors },
     control,
     getValues,
   } = useForm<IFormInputs>({ mode: 'onChange' })
-  const inputValues = {
+  const [isCodeVisible, setIsCodeVisible] = useState<boolean>(false)
+  const submitEmail = () => {
+    const email = getValues('email')
+    if (errors.email?.message) return
+    console.log(email)
+    try {
+      const response = axios.post(`${API_URL}/email`, {
+        email: email,
+      })
+      console.log(response)
+      setIsCodeVisible(true)
+    } catch (error) {
+      console.log(error)
+      setIsCodeVisible(false)
+    }
+  }
+  const fieldProp = {
+    email: {
+      label: '이메일',
+      name: 'email',
+      control: control,
+      error: errors.email,
+      rules: {
+        required: '이메일을 입력해주세요',
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+          message: '유효한 이메일 형식이 아닙니다',
+        },
+      },
+      onClick: submitEmail,
+      buttonText: '인증코드 전송',
+    },
+    code: {
+      label: '인증코드',
+      name: 'code',
+      control: control,
+      error: errors.code,
+      rules: {
+        required: '인증코드를 입력해주세요',
+      },
+      onClick: () => {},
+      buttonText: '인증코드 확인',
+    },
     password: {
       label: '비밀번호',
       name: 'password',
@@ -62,6 +115,7 @@ const SignUp = () => {
       control: control,
       error: errors.passwordConfirm,
       rules: {
+        required: '비밀번호를 확인해주세요',
         validate: () =>
           getValues('passwordConfirm') === getValues('password') ||
           '비밀번호가 일치하지 않습니다',
@@ -75,14 +129,16 @@ const SignUp = () => {
       rules: {
         required: '닉네임을 입력해주세요',
       },
+      onClick: () => {},
+      buttonText: '닉네임 중복확인',
     },
     name: {
-      label: '이름',
+      label: '실명',
       name: 'name',
       control: control,
       error: errors.name,
       rules: {
-        required: '이름을 입력해주세요',
+        required: '본명을 입력해주세요',
       },
     },
     pushAlarmToggle: {
@@ -92,25 +148,36 @@ const SignUp = () => {
     },
   }
 
-  const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<IFormInputs> = (data) => {
+    console.log(data)
+    router.push('/login')
+  }
 
   return (
-    <>
-      <h2>Peer 회원가입 페이지</h2>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        maxWidth: 'xs',
+      }}
+      component="main"
+    >
+      <Typography component="h2">Peer 회원가입</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <EmailField
-          control={control}
-          error={errors.email}
-          getValues={getValues}
-        />
-        <FormField {...inputValues.password} />
-        <FormField {...inputValues.passwordConfirm} />
-        <FormField {...inputValues.nickName} />
-        <FormField {...inputValues.name} />
-        <PushAlarmToggle {...inputValues.pushAlarmToggle} />
-        <Button type="submit">제출</Button>
+        <FormField {...fieldProp.email} />
+        {isCodeVisible && <FormField {...fieldProp.code} />}
+        <FormField {...fieldProp.password} />
+        <FormField {...fieldProp.passwordConfirm} />
+        <FormField {...fieldProp.nickName} />
+        <FormField {...fieldProp.name} />
+        <PushAlarmToggle {...fieldProp.pushAlarmToggle} />
+        <Button variant="contained" type="submit">
+          회원가입
+        </Button>
       </form>
-    </>
+    </Box>
   )
 }
 

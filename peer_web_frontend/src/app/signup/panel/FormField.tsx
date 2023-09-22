@@ -7,7 +7,8 @@ interface IFormField {
   name: string
   control: any
   error: any
-  rules?: any
+  rules: any
+  onClick?: () => void
   buttonText?: string
 }
 
@@ -17,6 +18,7 @@ const FormField = ({
   control,
   error,
   rules,
+  onClick,
   buttonText,
 }: IFormField) => {
   return (
@@ -28,8 +30,14 @@ const FormField = ({
         render={({ field }) => (
           <>
             <InputLabel>{label}</InputLabel>
-            <TextField {...field} type="text" />
-            {buttonText && <Button>{buttonText}</Button>}
+            <TextField {...field} type="text" autoFocus />
+            {onClick && (
+              <Button
+                sx={{ margin: '10px' }}
+                variant="contained"
+                onClick={onClick}
+              >{`${buttonText}`}</Button>
+            )}
           </>
         )}
       />
