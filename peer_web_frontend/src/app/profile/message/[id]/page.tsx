@@ -70,18 +70,19 @@ const MessageChatPage = (
   const { data, error, isLoading } = useSWR(
     // selectedStatus
     //   ? // ? 'http://localhost:4000/message/nickname?search=' + storeNickname //FIXME: 나중에 얘로 설정해야 함
-    `http://localhost:4000/message_${storeNickname}`,
+    storeNickname ? `http://localhost:4000/message_${storeNickname}` : null,
     // : null,
     defaultGetFetcher,
   )
 
+  //FIXME: selectedStatus는 아마 store사용하기 이전에 값 관리 때문에 쓰려던 거 같은데 얘 존재 확인하고 삭제하기
   console.log('call', `http://localhost:4000/message_ + ${storeNickname}`)
   useEffect(() => {
     if (data) {
       setMessageData(data)
     }
   }, [data])
-  if (error) return <Box>쪽지 불러오기를 실패하였습니다.</Box>
+  if (error) return <Box>쪽지 불러오기를 실패하였습니다.1</Box>
   if (!data) return <Box>빈 쪽지함 입니다!</Box>
   if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
 
