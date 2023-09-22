@@ -1,5 +1,5 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
-import { Autocomplete, Box, Button, Checkbox, Chip, FormControl, FormControlLabel, FormGroup, Grid, IconButton, Input, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, Checkbox, Chip, FormControl, FormControlLabel, FormGroup, Grid, IconButton, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react';
 
 const Option = () => {
@@ -25,7 +25,7 @@ const Option = () => {
       <Box>
         {
           chipData.map((data, index) => {
-            return (<Chip label={data} variant="outlined" onDelete={(index) => { handleDelete(index) }} />)
+            return (<Chip label={data} key={index} variant="outlined" onDelete={() => { handleDelete(index) }} />)
           })
         }
       </Box>

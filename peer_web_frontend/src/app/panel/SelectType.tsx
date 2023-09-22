@@ -20,6 +20,7 @@ const SelectType = ({
       }}
     >
       <Button
+        sx={{ backgroundColor: type === 'studies' ? 'blue' : 'gray' }}
         onClick={() => {
           setType('studies')
         }}
@@ -27,6 +28,7 @@ const SelectType = ({
         스터디
       </Button>
       <Button
+        sx={{ backgroundColor: type === 'projects' ? 'blue' : 'gray' }}
         onClick={() => {
           setType('projects')
         }}
