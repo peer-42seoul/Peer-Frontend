@@ -1,10 +1,13 @@
 'use client'
 
+import { defaultGetFetcher } from '@/api/fetchers'
 import MessageNavigator from '@/components/MessageNavigator'
-import { Box, Button, Container, Typography } from '@mui/material'
+import useMessageStore from '@/states/useMessageStore'
+import { Box, Container, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import useSWR from 'swr'
+import MessageForm from '../write/MessageForm'
 
 interface IMessageInformation {
   nickname: string
@@ -13,6 +16,7 @@ interface IMessageInformation {
   messageTime: [2023, 9, 6, 17, 16, 51, 131412000]
   messageType: string
 }
+
 const MessageContent = ({ user }: { user: IMessageInformation }) => {
   return (
     <>
@@ -28,7 +32,8 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
             backgroundColor: '#D8D8D8',
           }}
         >
-          <img
+          <Box
+            component={'img'}
             src="https://source.unsplash.com/random/100×100"
             alt="picture_of_sender"
             width={100}
@@ -58,31 +63,44 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
   )
 }
 
-const Page = () => {
-  const userId = 'userzero' // 예시로 문자열 "123" 사용
+const MessageChatPage = (
+  { selectedStatus }: { selectedStatus: boolean },
+  isPc: boolean,
+) => {
+  // const userId = 'userzero' // 예시로 문자열 "123" 사용
   const router = useRouter()
+  // const searchParams = useSearchParams()
+  // const search = searchParams.get('search')
+  const { storeNickname } = useMessageStore()
 
-  const fetcher = (url: string) => fetch(url).then((res) => res.json())
+  console.log('storeNickname: ', storeNickname)
   const { data, error, isLoading } = useSWR(
-    `http://localhost:4000/message_userzero`,
-    fetcher,
+    selectedStatus
+      ? // ? 'http://localhost:4000/message/nickname?search=' + storeNickname 오리지널
+        'http://localhost:4000/message_' + storeNickname
+      : null,
+    defaultGetFetcher,
   )
   if (error) return <Box>쪽지 불러오기를 실패하였습니다.</Box>
-  if (!data) return <Box>빈 쪽지 입니다.</Box>
+  if (!data) return <Box>빈 쪽지함 입니다.</Box>
   if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
 
   return (
     <Container>
-      <MessageNavigator title={'유저네임'} messageType={'inchatting'} />
+      <MessageNavigator title={storeNickname} messageType={'inchatting'} />
       <Box sx={{ width: '100%' }}>
         {data.map((user: IMessageInformation, idx: number) => {
           return <MessageContent key={idx} user={user} />
         })}
-        <Button
+        {/* <Button
           onClick={() => {
-            router.push(
-              `http://localhost:3000/profile/message/view?target=${userId}`,
-            )
+            {
+              isPc
+                ? handleOpen()
+                : router.push(
+                    `http://localhost:3000/profile/message/view?target=${storeNickname}`,
+                  )
+            }
           }}
           sx={{
             width: '100%',
@@ -92,10 +110,17 @@ const Page = () => {
           }}
         >
           답하기
-        </Button>
+        </Button> */}
+        {isPc ? (
+          <MessageForm type={'existingMessage'} nickname={undefined} />
+        ) : (
+          router.push(
+            `http://localhost:3000/profile/message/view?target=${storeNickname}`,
+          )
+        )}
       </Box>
     </Container>
   )
 }
 
-export default Page
+export default MessageChatPage
