@@ -34,6 +34,7 @@ const MessageForm = ({ type, nickname }: Props) => {
         type === 'newMessage' ? { ...data, nickname } : data,
       )
       console.log(response)
+      setContent('')
       router.push('http://localhost:3000/profile/message')
     } catch (error) {
       console.error(error)
@@ -44,7 +45,7 @@ const MessageForm = ({ type, nickname }: Props) => {
     <>
       <TextField
         value={content}
-        label="내용"
+        placeholder="내용을 입력하세요"
         variant="outlined"
         multiline
         rows={3}

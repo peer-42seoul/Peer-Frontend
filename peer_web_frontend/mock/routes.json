@@ -1,0 +1,5 @@
+{
+  "routes": {
+    "/profile/message/nickname": "/profile_messages"
+  }
+}
