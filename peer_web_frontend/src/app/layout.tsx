@@ -29,6 +29,7 @@ export default function RootLayout({
             <Box sx={{ marginBottom: '100px' }}>{children}</Box>
           </Stack>
         </div>
+        <div id="modal-root"></div>
       </body>
     </html>
   )
