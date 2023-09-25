@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import "../../styles/global.css"
-import "../../styles/reset.css"
+import '../../styles/global.css'
+import '../../styles/reset.css'
 import NavBar from './panel/NavBar'
 import Header from './panel/Header'
 import { Box, Stack } from '@mui/material'
@@ -21,11 +21,12 @@ export default function RootLayout({
       <body>
         <div className="layout">
           <NavBar />
-          <Stack flex={1} >
+          <Stack flex={1}>
             <Box>
               <Header />
             </Box>
-            {children}
+            {/* 헤더 고정 시 여기에 margin-top: 추가 */}
+            <Box sx={{ marginBottom: '100px' }}>{children}</Box>
           </Stack>
         </div>
       </body>

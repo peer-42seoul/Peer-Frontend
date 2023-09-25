@@ -7,7 +7,7 @@ interface IProfileCard {
   profileImageURL: string | null
   username: string
   association: string | null
-  userId: string
+  introduction: string
   email: string
 }
 
@@ -54,7 +54,7 @@ const ProfileCard = ({
   profileImageURL,
   username,
   association,
-  userId,
+  introduction,
   email,
 }: IProfileCard) => {
   const [open, setOpen] = useState<boolean>(false)
@@ -91,12 +91,17 @@ const ProfileCard = ({
           }}
         >
           <Typography>{username}</Typography>
-          {association ? <p>{association}</p> : <p />}
-          <Typography>
-            {userId}({email})
-          </Typography>
+          {association ? (
+            <Typography>{association}</Typography>
+          ) : (
+            <Typography />
+          )}
+          <Typography>아이디({email})</Typography>
         </Stack>
       </Stack>
+      <Box>
+        <Typography>{introduction}</Typography>
+      </Box>
       <ProfileImageModal
         open={open}
         handleModalClose={handleModalClose}
