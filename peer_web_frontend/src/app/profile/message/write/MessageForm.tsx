@@ -1,7 +1,7 @@
 'use client'
 
 import useMessageStore from '@/states/useMessageStore'
-import { IMessageInformation } from '@/types/IUserProfile'
+import { IMessageInformation } from '@/types/IMessageInformation'
 import { Box, Button, TextField } from '@mui/material'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'

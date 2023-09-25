@@ -1,6 +1,13 @@
 'use client'
 
-import { Box, Button, Stack, TextField, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Checkbox,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import MessageNavigator from '../../../components/MessageNavigator'
@@ -8,6 +15,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import useMessageStore from '@/states/useMessageStore'
 import Image from 'next/image'
 import SearchIcon from '@mui/icons-material/Search'
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 interface IUserInformation {
   nickname: string
   profileImage: string
@@ -24,20 +33,69 @@ interface IMessageList {
   isPc: boolean
 }
 
-const MessageItem = ({ user }: { user: IUserInformation }) => {
-  return (
-    <>
-      <Typography>{user.nickname}</Typography>
-      <Typography>{user.messageTime}</Typography>
-      <Typography>{user.lastContent}</Typography>
+const MessageItem = ({
+  user,
+  onManageMessage,
+  isPc,
+}: {
+  idx: number
+  user: IUserInformation
+  onManageMessage: boolean
+  isPc: boolean | undefined
+}) => {
+  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
-      <Image
-        src={`${user.profileImage}`}
-        alt="picture_of_sender"
-        width={100}
-        height={100}
-      />
-    </>
+  const router = useRouter()
+  const handleChange = (target) => {
+    console.log('target', target)
+  }
+
+  const messageContentHandler = useCallback(
+    (nickname: string, isPc?: boolean) => {
+      console.log('nickname', nickname)
+      if (!isPc) {
+        // setSelectedStatus(true),
+        useMessageStore.setState({ storeNickname: nickname })
+
+        router.push(
+          // `http://localhost:3000/profile/message/nickname?search=${nickname}`,
+          'http://localhost:3000/profile/message/' + nickname, //FIXME:추후에 수정해야하는 api콜
+        )
+      } else {
+        // setSelectedStatus(true)
+        useMessageStore.setState({ storeNickname: nickname })
+      }
+    },
+    [router],
+  )
+
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+      {!onManageMessage && (
+        <Checkbox
+          onClick={() => handleChange(user.nickname)}
+          {...label}
+          icon={<RadioButtonUncheckedIcon />}
+          checkedIcon={<RadioButtonCheckedIcon />}
+        />
+      )}
+      <Box
+        sx={{ width: '100%', padding: '16px 0 16px 0' }}
+        // key={idx}
+        onClick={() => messageContentHandler(user.nickname, isPc)}
+      >
+        <Typography>{user.nickname}</Typography>
+        <Typography>{user.messageTime}</Typography>
+        <Typography>{user.lastContent}</Typography>
+
+        <Image
+          src={`${user.profileImage}`}
+          alt="picture_of_sender"
+          width={100}
+          height={100}
+        />
+      </Box>
+    </Box>
   )
 }
 
@@ -46,37 +104,23 @@ const MessageList = ({
   error,
   isLoading,
   spinner,
-  setSelectedStatus,
   isPc,
 }: IMessageList) => {
   const router = useRouter()
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState<IUserInformation[]>(data)
+  const [onManageMessage, setOnManageMessage] = useState(true)
 
-  const searchHandler = useCallback(() => {
+  const searchMessageItemHandler = useCallback(() => {
     const filteredResults = data.filter((user: IUserInformation) =>
       user.nickname.includes(searchText),
     )
     setFilteredData(filteredResults)
   }, [data, searchText])
 
-  const messageContentHandler = useCallback(
-    (nickname: string) => {
-      if (!isPc) {
-        setSelectedStatus(true),
-          useMessageStore.setState({ storeNickname: nickname })
-
-        router.push(
-          // `http://localhost:3000/profile/message/nickname?search=${nickname}`,
-          'http://localhost:3000/profile/message/' + nickname, //FIXME:추후에 수정해야하는 api콜
-        )
-      } else {
-        setSelectedStatus(true)
-        useMessageStore.setState({ storeNickname: nickname })
-      }
-    },
-    [router, isPc],
-  )
+  const removeMessageItemHandler = useCallback(() => {
+    setOnManageMessage(!onManageMessage)
+  }, [onManageMessage])
 
   useEffect(() => {
     setFilteredData(data)
@@ -101,9 +145,14 @@ const MessageList = ({
             onChange={(event) => setSearchText(event.target.value)}
             placeholder="닉네임을 입력하세요"
           />
-          <Button onClick={searchHandler}>
+          <Button onClick={searchMessageItemHandler}>
             <SearchIcon />
           </Button>
+          {onManageMessage ? (
+            <Button onClick={removeMessageItemHandler}>관리</Button>
+          ) : (
+            <Button onClick={removeMessageItemHandler}>삭제</Button>
+          )}
         </Box>
         {filteredData.length === 0 ? (
           <Box sx={{ width: '100vw', height: '99vh' }}>
@@ -111,13 +160,13 @@ const MessageList = ({
           </Box>
         ) : (
           filteredData.map((user: IUserInformation, idx: number) => (
-            <Box
-              sx={{ padding: '16px 0 16px 0' }}
-              key={idx}
-              onClick={() => messageContentHandler(data[idx].nickname)}
-            >
-              <MessageItem user={user} />
-            </Box>
+            <MessageItem
+              key={user.nickname}
+              idx={idx}
+              user={user}
+              onManageMessage={onManageMessage}
+              isPc={isPc}
+            />
           ))
         )}
       </Box>

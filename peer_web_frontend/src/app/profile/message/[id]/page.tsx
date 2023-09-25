@@ -4,11 +4,10 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import MessageNavigator from '@/components/MessageNavigator'
 import useMessageStore from '@/states/useMessageStore'
 import { Box, Container, Typography } from '@mui/material'
-// import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import MessageForm from '../write/MessageForm'
-import { IMessageInformation } from '@/types/IUserProfile'
+import { IMessageInformation } from '@/types/IMessageInformation'
 import Image from 'next/image'
 
 const MessageContent = ({ user }: { user: IMessageInformation }) => {
@@ -56,10 +55,13 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
   )
 }
 
-const MessageChatPage = (
-  { selectedStatus }: { selectedStatus: boolean },
-  isPc: boolean,
-) => {
+const MessageChatPage = ({
+  selectedStatus,
+  isPc,
+}: {
+  selectedStatus: boolean
+  isPc: boolean
+}) => {
   // const router = useRouter()
   // const searchParams = useSearchParams()
   // const search = searchParams.get('search')

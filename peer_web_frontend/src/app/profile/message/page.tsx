@@ -10,6 +10,7 @@ import useSWR from 'swr'
 import MessageChatPage from './[id]/page'
 import ModalContainer from '@/components/ModalContainer'
 import MessageWritingForm from './write/page'
+import useModal from '@/hooks/useModal'
 
 interface IUserInformation {
   nickname: string
@@ -25,9 +26,7 @@ const MessageMain = () => {
   const [messageList, setMessageList] = useState<IUserInformation[]>([])
   const [selectedStatus, setSelectedStatus] = useState(false)
   const isPc = useMediaQuery('(min-width:481px)')
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true) // 다른 버튼이나 요소를 얘를 활용해서 모달 핸들링 가능
-  const handleClose = () => setOpen(false)
+  const { open, handleClose, handleOpen } = useModal()
 
   const { data, error, isLoading } = useSWR(
     `http://localhost:4000/message_list`,
@@ -120,9 +119,9 @@ const MessageMain = () => {
             </Button>
           )}
         </Box>
-        {/* {isPc && ( */}
-        <MessageChatPage selectedStatus={selectedStatus} isPc={isPc} />
-        {/* )} */}
+        {isPc && (
+          <MessageChatPage selectedStatus={selectedStatus} isPc={isPc} />
+        )}
       </Box>
     </Container>
   )
