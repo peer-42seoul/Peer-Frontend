@@ -1,8 +1,7 @@
 'use client'
 
-import { useMediaQuery, IconButton } from '@mui/material'
+import { useMediaQuery, IconButton, Box } from '@mui/material'
 import { Search } from '@mui/icons-material'
-import { useRouter } from 'next/navigation'
 import useModal from '@/hook/useModal'
 
 const SearchPc = () => {
@@ -12,11 +11,11 @@ const SearchPc = () => {
       <Search />
       {isOpen && (
         <ModalCustom>
-          <div>
+          <Box sx={{ backgroundColor: 'red' }}>
             <h2>A Title</h2>
             <p>Some content...</p>
             <button onClick={closeModal}>Close</button>
-          </div>
+          </Box>
         </ModalCustom>
       )}
     </IconButton>
@@ -24,14 +23,19 @@ const SearchPc = () => {
 }
 
 const SearchMobile = () => {
-  const router = useRouter()
+  const { isOpen, ModalCustom, openModal, closeModal } = useModal()
   return (
-    <IconButton
-      color="inherit"
-      aria-label="menu"
-      onClick={() => router.push('/search')}
-    >
+    <IconButton color="inherit" aria-label="menu" onClick={openModal}>
       <Search />
+      {isOpen && (
+        <ModalCustom>
+          <Box sx={{ backgroundColor: 'yellow' }}>
+            <h2>A Title</h2>
+            <p>Some content...</p>
+            <button onClick={closeModal}>Close</button>
+          </Box>
+        </ModalCustom>
+      )}
     </IconButton>
   )
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ModalCustom } from '@/components/ModalCustom'
+import ModalCustom from '@/components/ModalCustom'
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false)

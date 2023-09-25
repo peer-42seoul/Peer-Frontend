@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
-const ModalCustom = (children: ReactNode) => {
+const ModalCustom = ({ children }: { children: ReactNode }) => {
   const el = document.createElement('div')
 
   const modalRoot = document.getElementById('modal-root')
