@@ -1,8 +1,10 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
 import { Autocomplete, Box, Button, Checkbox, Chip, FormControl, FormControlLabel, FormGroup, Grid, IconButton, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react';
+import {Controller, useForm} from "react-hook-form";
 
 const Option = () => {
+    const { handleSubmit, control } = useForm();
   const [chipData, setChipData] = useState([]);
   const handleDelete = (index: number) => {
     setChipData((chips) => chips.filter((chip, cIndex) => cIndex !== index));
@@ -10,6 +12,7 @@ const Option = () => {
 
   const stackList = ['javaScript', 'react', 'TypeScript', 'NextJs']
   return (
+      <form onSubmit={handleSubmit(onSubmit)}>
     <Grid item xs={12}>
       <Box>
         작업 스택
@@ -35,34 +38,77 @@ const Option = () => {
       <Box>
         작업 지역
       </Box>
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-        <Select defaultValue={"none"}>
-          <MenuItem value={'gangnam'}>강남구</MenuItem>
-          <MenuItem value={'seocho'}>서초구</MenuItem>
-          <MenuItem value={'none'}>선택 안함</MenuItem>
-        </Select>
-      </FormControl>
+        <Controller
+            name="workLocation" // Field name for 작업 지역
+            control={control} // Control from useForm()
+            render={({ field }) => (
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                    <Select {...field} defaultValue="none">
+                        <MenuItem value="gangnam">강남구</MenuItem>
+                        <MenuItem value="seocho">서초구</MenuItem>
+                        <MenuItem value="none">선택 안함</MenuItem>
+                    </Select>
+                </FormControl>
+            )}
+        />
       <Box>
         작업 유형
       </Box>
-      <FormGroup row>
-        <FormControlLabel aria-label="check-region" control={<Checkbox />} label="온라인" />
-        <FormControlLabel aria-label="check-region" control={<Checkbox />} label="오프라인" />
-        <FormControlLabel aria-label="check-region" control={<Checkbox />} label="혼합" />
-      </FormGroup>
+        <Controller
+            name="workType" // Field name for 작업 유형
+            control={control}
+            render={({ field }) => (
+                <FormGroup row>
+                    <FormControlLabel
+                        aria-label="check-work-type"
+                        control={<Checkbox {...field} value="온라인" />}
+                        label="온라인"
+                    />
+                    <FormControlLabel
+                        aria-label="check-work-type"
+                        control={<Checkbox {...field} value="오프라인" />}
+                        label="오프라인"
+                    />
+                    <FormControlLabel
+                        aria-label="check-work-type"
+                        control={<Checkbox {...field} value="혼합" />}
+                        label="혼합"
+                    />
+                </FormGroup>
+            )}
+        />
       <Box>
         작업 단계
       </Box>
-      <FormGroup row>
-        <FormControlLabel aria-label="check-region" control={<Checkbox />} label="시작전" />
-        <FormControlLabel aria-label="check-region" control={<Checkbox />} label="진행중" />
-        <FormControlLabel aria-label="check-region" control={<Checkbox />} label="진행완료" />
-      </FormGroup>
+        <Controller
+            name="workStage" // Field name for 작업 단계
+            control={control}
+            render={({ field }) => (
+                <FormGroup row>
+                    <FormControlLabel
+                        aria-label="check-work-stage"
+                        control={<Checkbox {...field} value="시작전" />}
+                        label="시작전"
+                    />
+                    <FormControlLabel
+                        aria-label="check-work-stage"
+                        control={<Checkbox {...field} value="진행중" />}
+                        label="진행중"
+                    />
+                    <FormControlLabel
+                        aria-label="check-work-stage"
+                        control={<Checkbox {...field} value="진행완료" />}
+                        label="진행완료"
+                    />
+                </FormGroup>
+            )}
+        />
       <Stack direction="row" justifyContent={"space-between"}>
         <Button>초기화</Button>
-        <Button>확인</Button>
+        <Button type={"submit"}>확인</Button>
       </Stack>
     </Grid>
+      </form>
   )
 }
 
