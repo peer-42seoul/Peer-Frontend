@@ -25,7 +25,8 @@ export default function RootLayout({
             <Box>
               <Header />
             </Box>
-            {children}
+            {/* 헤더 고정 시 여기에 margin-top: 추가 */}
+            <Box sx={{ marginBottom: '100px' }}>{children}</Box>
           </Stack>
         </div>
         <div id="modal-root"></div>

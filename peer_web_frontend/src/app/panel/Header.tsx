@@ -23,7 +23,9 @@ const Header = () => {
                 <NotificationsNoneOutlined />
               </IconButton>
               <Typography component="div">로고</Typography>
-              <SearchButton />
+              <IconButton color="inherit" aria-label="menu">
+                <SearchButton />
+              </IconButton>
             </Toolbar>
           </AppBar>
         </Box>
