@@ -1,14 +1,8 @@
 'use client'
-import { useForm, SubmitHandler, Controller } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import {
-  Switch,
-  Button,
-  FormControlLabel,
-  Stack,
-  Typography,
-  Box,
-} from '@mui/material'
+import { Button, Typography, Box, IconButton } from '@mui/material'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { useState } from 'react'
 import axios from 'axios'
 
@@ -18,30 +12,8 @@ interface IFormInputs {
   email: string
   code: string
   password: string
-  passwordConfirm: string
   name: string
   nickName: string
-  pushAlarmAgree: boolean
-}
-
-interface IPushAlarmToggle {
-  label: string
-  name: string
-  control: any
-}
-
-const PushAlarmToggle = ({ label, name, control }: IPushAlarmToggle) => {
-  return (
-    <Stack>
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <FormControlLabel label={label} control={<Switch {...field} />} />
-        )}
-      />
-    </Stack>
-  )
 }
 
 const SignUp = () => {
@@ -53,20 +25,51 @@ const SignUp = () => {
     control,
     getValues,
   } = useForm<IFormInputs>({ mode: 'onChange' })
-  const [isCodeVisible, setIsCodeVisible] = useState<boolean>(false)
-  const submitEmail = () => {
+  const [isEmailValid, setIsEmailValid] = useState<boolean>(false)
+  const [isCodeValid, setIsCodeValid] = useState<boolean>(false)
+  const [isNickNameValid, setIsNickNameValid] = useState<boolean>(false)
+  const submitEmail = async () => {
     const email = getValues('email')
     if (errors.email?.message) return
     console.log(email)
     try {
-      const response = axios.post(`${API_URL}/email`, {
+      const response = await axios.post(`${API_URL}/email`, {
         email: email,
       })
       console.log(response)
-      setIsCodeVisible(true)
+      setIsEmailValid(true)
     } catch (error) {
       console.log(error)
-      setIsCodeVisible(false)
+    }
+  }
+  const submitCode = async () => {
+    const code = getValues('code')
+    if (errors.code?.message) return
+    console.log(code)
+    try {
+      const response = await axios.post(`${API_URL}/code`, {
+        code: code,
+      })
+      console.log(response)
+      setIsCodeValid(true)
+    } catch (error) {
+      console.log(error)
+      setIsCodeValid(false)
+    }
+  }
+  const submitNickName = async () => {
+    const nickName = getValues('nickName')
+    if (errors.nickName?.message) return
+    console.log(nickName)
+    try {
+      const response = await axios.post(`${API_URL}/nickname`, {
+        nickName: nickName,
+      })
+      console.log(response)
+      setIsNickNameValid(true)
+    } catch (error) {
+      console.log(error)
+      setIsNickNameValid(false)
     }
   }
   const fieldProp = {
@@ -81,9 +84,13 @@ const SignUp = () => {
           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
           message: '유효한 이메일 형식이 아닙니다',
         },
+        validate: () =>
+          !isEmailValid && '이메일이 유효하지 않습니다. 다시 시도해주세요',
       },
+      placeholder: '사용할 이메일을 입력하세요',
       onClick: submitEmail,
       buttonText: '인증코드 전송',
+      isInputValid: isEmailValid,
     },
     code: {
       label: '인증코드',
@@ -92,9 +99,13 @@ const SignUp = () => {
       error: errors.code,
       rules: {
         required: '인증코드를 입력해주세요',
+        validate: () =>
+          !isCodeValid && '인증코드가 일치하지 않습니다. 다시 시도해주세요',
       },
-      onClick: () => {},
+      placeholder: '인증코드를 입력해주세요',
+      onClick: submitCode,
       buttonText: '인증코드 확인',
+      isInputValid: isCodeValid,
     },
     password: {
       label: '비밀번호',
@@ -102,24 +113,14 @@ const SignUp = () => {
       control: control,
       error: errors.password,
       rules: {
-        required: '비밀번호를 입력해주세요',
+        required: '비밀번호를 입력하세요',
         pattern: {
-          value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i,
-          message: '8자 이상의 영문, 숫자 조합이어야 합니다',
+          value:
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*(){}[]\/<>])[A-Za-z\d~!@#$%^&*(){}[]\/<>]{8,}$/i,
+          message: '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
         },
       },
-    },
-    passwordConfirm: {
-      label: '비밀번호 확인',
-      name: 'passwordConfirm',
-      control: control,
-      error: errors.passwordConfirm,
-      rules: {
-        required: '비밀번호를 확인해주세요',
-        validate: () =>
-          getValues('passwordConfirm') === getValues('password') ||
-          '비밀번호가 일치하지 않습니다',
-      },
+      placeholder: '비밀번호를 입력하세요',
     },
     nickName: {
       label: '닉네임',
@@ -127,32 +128,30 @@ const SignUp = () => {
       control: control,
       error: errors.nickName,
       rules: {
-        required: '닉네임을 입력해주세요',
+        required: '닉네임을 입력하세요',
+        validate: () =>
+          !isNickNameValid && '닉네임이 유효하지 않습니다 다시 시도해주세요',
       },
-      onClick: () => {},
+      placeholder: '닉네임을 입력하세요',
+      onClick: submitNickName,
       buttonText: '닉네임 중복확인',
+      isInputValid: isNickNameValid,
     },
     name: {
-      label: '실명',
+      label: '이름',
       name: 'name',
       control: control,
       error: errors.name,
+      placeholder: '실명을 입력하세요',
       rules: {
-        required: '본명을 입력해주세요',
+        required: '실명을 입력하세요',
       },
     },
-    pushAlarmToggle: {
-      label: '푸시 알림 동의',
-      name: 'pushAlarmAgree',
-      control: control,
-    },
   }
-
-  const onSubmit: SubmitHandler<IFormInputs> = (data) => {
+  const onSubmit: SubmitHandler<IFormInputs> = async (data) => {
     console.log(data)
     router.push('/login')
   }
-
   return (
     <Box
       sx={{
@@ -160,21 +159,48 @@ const SignUp = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        maxWidth: 'xs',
+        width: '100%',
       }}
       component="main"
     >
-      <Typography component="h2">Peer 회원가입</Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '70%',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton
+          sx={{ textAlign: 'left' }}
+          onClick={() => {
+            router.back()
+          }}
+        >
+          <ArrowBackIosNewIcon />
+        </IconButton>
+        <Typography sx={{ textAlign: 'center', flexGrow: 1 }} component="h2">
+          Peer 회원가입
+        </Typography>
+      </Box>
+      <form
+        style={{ width: '70%', display: 'flex', flexDirection: 'column' }}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <FormField {...fieldProp.email} />
-        {isCodeVisible && <FormField {...fieldProp.code} />}
+        {isEmailValid && <FormField {...fieldProp.code} />}
         <FormField {...fieldProp.password} />
-        <FormField {...fieldProp.passwordConfirm} />
         <FormField {...fieldProp.nickName} />
         <FormField {...fieldProp.name} />
-        <PushAlarmToggle {...fieldProp.pushAlarmToggle} />
-        <Button variant="contained" type="submit">
-          회원가입
+        <Button
+          sx={{
+            display: 'box',
+            marginTop: '10px',
+          }}
+          variant="contained"
+          type="submit"
+        >
+          가입하기
         </Button>
       </form>
     </Box>

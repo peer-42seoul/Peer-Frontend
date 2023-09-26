@@ -8,8 +8,10 @@ interface IFormField {
   control: any
   error: any
   rules: any
+  placeholder?: string
   onClick?: () => void
   buttonText?: string
+  isInputValid?: boolean
 }
 
 const FormField = ({
@@ -18,8 +20,10 @@ const FormField = ({
   control,
   error,
   rules,
+  placeholder,
   onClick,
   buttonText,
+  isInputValid,
 }: IFormField) => {
   return (
     <>
@@ -30,13 +34,21 @@ const FormField = ({
         render={({ field }) => (
           <>
             <InputLabel>{label}</InputLabel>
-            <TextField {...field} type="text" autoFocus />
+            <TextField
+              {...field}
+              type="text"
+              autoFocus
+              disabled={isInputValid}
+              placeholder={placeholder}
+            />
             {onClick && (
               <Button
-                sx={{ margin: '10px' }}
                 variant="contained"
+                disabled={isInputValid}
                 onClick={onClick}
-              >{`${buttonText}`}</Button>
+              >
+                {buttonText}
+              </Button>
             )}
           </>
         )}
