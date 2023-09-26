@@ -16,7 +16,7 @@ interface IProps {
 }
 
 interface IMessageData {
-  id: () => void
+  id: () => number
   content: string
   messageTime: number[]
   messageType: string
@@ -31,7 +31,7 @@ const MessageForm = ({
   isPc,
 }: IProps) => {
   const router = useRouter()
-  const [id, setId] = useState(42)
+  const id = 42
   const [content, setContent] = useState('')
   const { storeNickname } = useMessageStore()
 
@@ -53,7 +53,7 @@ const MessageForm = ({
       }
 
       const data: IMessageData = {
-        id: setId(id + 1),
+        id: id + 1,
         content,
         messageTime: [2023, 9, 6, 17, 16, 51, 144650000],
         messageType: 'SEND',

@@ -17,15 +17,11 @@ import Image from 'next/image'
 import SearchIcon from '@mui/icons-material/Search'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
-interface IUserInformation {
-  nickname: string
-  profileImage: string
-  messageTime: string
-  lastContent: string
-}
+import axios from 'axios'
+import { IMessagObject } from '@/types/IMessageInformation'
 
 interface IMessageList {
-  data: IUserInformation[] | []
+  data: IMessagObject[] | []
   error: Error | undefined
   isLoading: boolean
   spinner: boolean
@@ -37,22 +33,26 @@ const MessageItem = ({
   user,
   onManageMessage,
   isPc,
+  setSelectedUser,
 }: {
   idx: number
-  user: IUserInformation
+  user: IMessagObject
   onManageMessage: boolean
   isPc: boolean | undefined
+  setSelectedUser: (newValue: string) => void
 }) => {
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-
+  const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const router = useRouter()
-  const handleChange = (target) => {
-    console.log('target', target)
-  }
+
+  const handleChange = useCallback(
+    (target: string) => {
+      setSelectedUser(target)
+    },
+    [setSelectedUser],
+  )
 
   const messageContentHandler = useCallback(
     (nickname: string, isPc?: boolean) => {
-      console.log('nickname', nickname)
       if (!isPc) {
         // setSelectedStatus(true),
         useMessageStore.setState({ storeNickname: nickname })
@@ -73,7 +73,7 @@ const MessageItem = ({
     <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
       {!onManageMessage && (
         <Checkbox
-          onClick={() => handleChange(user.nickname)}
+          onClick={() => handleChange(user.targetNickname)}
           {...label}
           icon={<RadioButtonUncheckedIcon />}
           checkedIcon={<RadioButtonCheckedIcon />}
@@ -82,14 +82,14 @@ const MessageItem = ({
       <Box
         sx={{ width: '100%', padding: '16px 0 16px 0' }}
         // key={idx}
-        onClick={() => messageContentHandler(user.nickname, isPc)}
+        onClick={() => messageContentHandler(user.targetNickname, isPc)}
       >
-        <Typography>{user.nickname}</Typography>
-        <Typography>{user.messageTime}</Typography>
-        <Typography>{user.lastContent}</Typography>
+        <Typography>{user.targetNickname}</Typography>
+        <Typography>{user.latestDate}</Typography>
+        <Typography>{user.latestContent}</Typography>
 
         <Image
-          src={`${user.profileImage}`}
+          src={`${user.targetImage}`}
           alt="picture_of_sender"
           width={100}
           height={100}
@@ -106,21 +106,35 @@ const MessageList = ({
   spinner,
   isPc,
 }: IMessageList) => {
-  const router = useRouter()
+  // const router = useRouter()
   const [searchText, setSearchText] = useState('')
-  const [filteredData, setFilteredData] = useState<IUserInformation[]>(data)
+  const [filteredData, setFilteredData] = useState<IMessagObject[]>(data)
   const [onManageMessage, setOnManageMessage] = useState(true)
+  const [seletedUser, setSelectedUser] = useState<string[]>([])
 
   const searchMessageItemHandler = useCallback(() => {
-    const filteredResults = data.filter((user: IUserInformation) =>
-      user.nickname.includes(searchText),
+    const filteredResults = data.filter((user: IMessagObject) =>
+      user.targetNickname.includes(searchText),
     )
     setFilteredData(filteredResults)
   }, [data, searchText])
 
-  const removeMessageItemHandler = useCallback(() => {
-    setOnManageMessage(!onManageMessage)
-  }, [onManageMessage])
+  const removeMessageItemHandler = useCallback(
+    (type: string) => {
+      if (type === 'delete') {
+        console.log('seletedUser42', seletedUser)
+        // const confirmResult = confirm('are you sure?')
+        axios.delete(`http://localhost:4000/message_list`, {
+          data: {
+            nickname: seletedUser,
+          },
+        })
+      } else if (type === 'manage') {
+        setOnManageMessage(!onManageMessage)
+      }
+    },
+    [onManageMessage, seletedUser],
+  )
 
   useEffect(() => {
     setFilteredData(data)
@@ -149,9 +163,13 @@ const MessageList = ({
             <SearchIcon />
           </Button>
           {onManageMessage ? (
-            <Button onClick={removeMessageItemHandler}>관리</Button>
+            <Button onClick={() => removeMessageItemHandler('manage')}>
+              관리
+            </Button>
           ) : (
-            <Button onClick={removeMessageItemHandler}>삭제</Button>
+            <Button onClick={() => removeMessageItemHandler('delete')}>
+              삭제
+            </Button>
           )}
         </Box>
         {filteredData.length === 0 ? (
@@ -159,13 +177,14 @@ const MessageList = ({
             검색 결과가 없습니다.
           </Box>
         ) : (
-          filteredData.map((user: IUserInformation, idx: number) => (
+          filteredData.map((user: IMessagObject, idx: number) => (
             <MessageItem
-              key={user.nickname}
+              key={user.target}
               idx={idx}
               user={user}
               onManageMessage={onManageMessage}
               isPc={isPc}
+              setSelectedUser={() => setSelectedUser}
             />
           ))
         )}

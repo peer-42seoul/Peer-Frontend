@@ -13,44 +13,27 @@ import Image from 'next/image'
 const MessageContent = ({ user }: { user: IMessageInformation }) => {
   return (
     <>
-      {user.messageType === 'RECEIVE' && (
-        <Box
-          sx={{
-            width: '100%',
-            height: 100,
-            padding: '16px 0 16px 0',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            backgroundColor: '#D8D8D8',
-          }}
-        >
-          <Image
-            src="https://source.unsplash.com/random/100×100"
-            alt="picture_of_sender"
-            width={100}
-            height={100}
-          />
-          <Typography>{user.nickname}</Typography>
-          <Typography>{user.content}</Typography>
-        </Box>
-      )}
-      {user.messageType === 'SEND' && (
-        <Box
-          sx={{
-            width: '100%',
-            height: 100,
-            padding: '16px 0 16px 0',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end',
-            backgroundColor: 'lightblue',
-          }}
-        >
-          <Typography>{user.nickname}</Typography>
-          <Typography>{user.content}</Typography>
-        </Box>
-      )}
+      <Box
+        sx={{
+          width: '100%',
+          height: 100,
+          padding: '16px 0 16px 0',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: user.senderId ? 'flex-end' : 'start',
+          backgroundColor: user.senderId ? 'lightblue' : '#D8D8D8',
+        }}
+      >
+        <Image
+          src="https://source.unsplash.com/random/100×100"
+          alt="picture_of_sender"
+          width={100}
+          height={100}
+        />
+        <Typography>{user.senderNickname}</Typography>
+        <Typography>{user.content}</Typography>
+        <Typography>{user.date}</Typography>
+      </Box>
     </>
   )
 }
@@ -71,14 +54,15 @@ const MessageChatPage = ({
   console.log('selected', selectedStatus)
   const { data, error, isLoading } = useSWR(
     // selectedStatus
-    //   ? // ? 'http://localhost:4000/message/nickname?search=' + storeNickname //FIXME: 나중에 얘로 설정해야 함
-    storeNickname ? `http://localhost:4000/message_${storeNickname}` : null,
+    //   ? // ? 'http://localhost:4000//profile/message?target=${storeNickname}' //FIXME: 나중에 얘로 설정해야 함
+    storeNickname
+      ? `http://localhost:4000/profile_message_${storeNickname}`
+      : null,
     // : null,
     defaultGetFetcher,
   )
 
   //FIXME: selectedStatus는 아마 store사용하기 이전에 값 관리 때문에 쓰려던 거 같은데 얘 존재 확인하고 삭제하기
-  console.log('call', `http://localhost:4000/message_ + ${storeNickname}`)
   useEffect(() => {
     if (data) {
       setMessageData(data)
