@@ -3,22 +3,27 @@ import { Autocomplete, Box, Button, Checkbox, Chip, FormControl, FormControlLabe
 import { useState } from 'react';
 import { Controller, useForm } from "react-hook-form";
 
-const Option = () => {
+const Option = ({ setDetailOption }: { setDetailOption: any }) => {
   const { handleSubmit, control } = useForm();
-  const [chipData, setChipData] = useState<string[]>([]);
+  const [tagData, setTagData] = useState<string[]>([]);
   const stackList = ['javaScript', 'react', 'TypeScript', 'NextJs']
   const handleDelete = (index: number) => {
-    setChipData((chips) => chips.filter((chip, cIndex) => cIndex !== index));
+    setTagData((chips) => chips.filter((chip, cIndex) => cIndex !== index));
   }
 
+  //설정하려다 너무 오래걸려서 일단 보류
   const onSubmit = (data: any) => {
+    setDetailOption(
+      { due: data.workDue ?? '', region: '', place: "", status: "", tag: "" }
+    )
     console.log("data", data);
   }
+
   const handleInput = (
     event: React.SyntheticEvent,
     value: readonly string[],
   ) => {
-    setChipData([...value]);
+    setTagData([...value]);
   };
 
   return (
@@ -33,7 +38,7 @@ const Option = () => {
           id="language-select"
           options={stackList}
           onChange={handleInput}
-          value={chipData}
+          value={tagData}
           renderTags={() => <></>}
           renderInput={(params) => (
             <TextField
@@ -44,7 +49,7 @@ const Option = () => {
         />
         <Stack direction="row" gap={0.5}>
           {
-            chipData.map((data, index) => {
+            tagData.map((data, index) => {
               return (<Box key={index}><Chip label={data} variant="outlined" onDelete={() => { handleDelete(index) }} /></Box>)
             })
           }
@@ -53,7 +58,7 @@ const Option = () => {
           목표 기간
         </Box>
         <Controller
-          name="workPeriod"
+          name="workDue"
           control={control}
           render={({ field }) => (
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -69,7 +74,7 @@ const Option = () => {
           작업 지역
         </Box>
         <Controller
-          name="workLocation"
+          name="workRegion"
           control={control}
           render={({ field }) => (
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -86,33 +91,33 @@ const Option = () => {
         </Box>
         <FormGroup row>
           <Controller
-            name="workTypeOnline"
+            name="workPlaceOnline"
             control={control}
             render={({ field }) => (
               <FormControlLabel
-                aria-label="check-work-type"
+                aria-label="check-work-place"
                 control={<Checkbox {...field} />}
                 label="온라인"
               />
             )}
           />
           <Controller
-            name="workTypeOffline"
+            name="workPlaceOffline"
             control={control}
             render={({ field }) => (
               <FormControlLabel
-                aria-label="check-work-type"
+                aria-label="check-work-place"
                 control={<Checkbox {...field} />}
                 label="오프라인"
               />
             )}
           />
           <Controller
-            name="workTypeMixed"
+            name="workPlaceMixed"
             control={control}
             render={({ field }) => (
               <FormControlLabel
-                aria-label="check-work-type"
+                aria-label="check-work-place"
                 control={<Checkbox {...field} />}
                 label="혼합"
               />
@@ -124,33 +129,33 @@ const Option = () => {
         </Box>
         <FormGroup row>
           <Controller
-            name="workStageStart" // Field name for 작업 단계 시작전
+            name="workStatusStart" // Field name for 작업 단계 시작전
             control={control}
             render={({ field }) => (
               <FormControlLabel
-                aria-label="check-work-stage"
+                aria-label="check-work-status"
                 control={<Checkbox {...field} />}
                 label="시작전"
               />
             )}
           />
           <Controller
-            name="workStageInProgress" // Field name for 작업 단계 진행중
+            name="workStatusInProgress" // Field name for 작업 단계 진행중
             control={control}
             render={({ field }) => (
               <FormControlLabel
-                aria-label="check-work-stage"
+                aria-label="check-work-status"
                 control={<Checkbox {...field} />}
                 label="진행중"
               />
             )}
           />
           <Controller
-            name="workStageComplete" // Field name for 작업 단계 진행완료
+            name="workStatusComplete" // Field name for 작업 단계 진행완료
             control={control}
             render={({ field }) => (
               <FormControlLabel
-                aria-label="check-work-stage"
+                aria-label="check-work-status"
                 control={<Checkbox {...field} />}
                 label="진행완료"
               />
@@ -169,9 +174,11 @@ const Option = () => {
 const SearchOption = ({
   openOption,
   setOpenOption,
+  setDetailOption
 }: {
   openOption: boolean
   setOpenOption: any
+  setDetailOption: any
 }) => {
   return (
     <>
@@ -197,7 +204,7 @@ const SearchOption = ({
           </IconButton>
         </Stack>
       </Grid>
-      {openOption && <Option />}
+      {openOption && <Option setDetailOption={setDetailOption} />}
     </>
   )
 }
