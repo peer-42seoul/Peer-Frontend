@@ -13,10 +13,28 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
 
   //설정하려다 너무 오래걸려서 일단 보류
   const onSubmit = (data: any) => {
+    const makeCommaString = (obj: Object) => {
+      const trueKeys = Object.keys(obj).filter(key => obj[key]);
+      const resultString = trueKeys.join(',');
+      return resultString;
+    }
+
+    const status = makeCommaString({
+      before: data.statusBefore,
+      inProgress: data.statusInProgress,
+      after: data.statusAfter
+    });
+
+    const place = makeCommaString({
+      online: data.placeOnline,
+      offline: data.placeOffline,
+      mixed: data.placeMixed
+    });
+
+    const tag = tagData.length ? tagData.join(',') : '';
     setDetailOption(
-      { due: data.workDue ?? '', region: '', place: "", status: "", tag: "" }
+      { due: data.due ?? '', region: data.region ?? '', place: place, status: status, tag: tag }
     )
-    console.log("data", data);
   }
 
   const handleInput = (
@@ -35,7 +53,6 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
         <Autocomplete
           disableClearable
           multiple
-          id="language-select"
           options={stackList}
           onChange={handleInput}
           value={tagData}
@@ -58,7 +75,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
           목표 기간
         </Box>
         <Controller
-          name="workDue"
+          name="due"
           control={control}
           render={({ field }) => (
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -74,7 +91,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
           작업 지역
         </Box>
         <Controller
-          name="workRegion"
+          name="region"
           control={control}
           render={({ field }) => (
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -91,7 +108,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
         </Box>
         <FormGroup row>
           <Controller
-            name="workPlaceOnline"
+            name="placeOnline"
             control={control}
             render={({ field }) => (
               <FormControlLabel
@@ -102,7 +119,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
             )}
           />
           <Controller
-            name="workPlaceOffline"
+            name="placeOffline"
             control={control}
             render={({ field }) => (
               <FormControlLabel
@@ -113,7 +130,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
             )}
           />
           <Controller
-            name="workPlaceMixed"
+            name="placeMixed"
             control={control}
             render={({ field }) => (
               <FormControlLabel
@@ -129,35 +146,35 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
         </Box>
         <FormGroup row>
           <Controller
-            name="workStatusStart" // Field name for 작업 단계 시작전
+            name="statusBefore" // Field name for 작업 단계 시작전
             control={control}
             render={({ field }) => (
               <FormControlLabel
                 aria-label="check-work-status"
                 control={<Checkbox {...field} />}
-                label="시작전"
+                label="모집전"
               />
             )}
           />
           <Controller
-            name="workStatusInProgress" // Field name for 작업 단계 진행중
+            name="statusInProgress" // Field name for 작업 단계 진행중
             control={control}
             render={({ field }) => (
               <FormControlLabel
                 aria-label="check-work-status"
                 control={<Checkbox {...field} />}
-                label="진행중"
+                label="모집중"
               />
             )}
           />
           <Controller
-            name="workStatusComplete" // Field name for 작업 단계 진행완료
+            name="statusAfter" // Field name for 작업 단계 진행완료
             control={control}
             render={({ field }) => (
               <FormControlLabel
                 aria-label="check-work-status"
                 control={<Checkbox {...field} />}
-                label="진행완료"
+                label="모집완료"
               />
             )}
           />
