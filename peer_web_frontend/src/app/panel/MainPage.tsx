@@ -16,6 +16,14 @@ const MainPage = ({ initData }: { initData: any }) => {
   const [type, setType] = useState<ProjectType>('projects')
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort>('recent')
+  //세부옵션용 state
+  // const [detailOp, setDetailOp] = useState < {
+  //   due: '',
+  //   region: '',
+  //   place: '',
+  //   status: '',
+  //   tag=''
+  // } > (false)
 
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패...
