@@ -8,7 +8,7 @@ import { debounce } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import MessageChatPage from './[id]/page'
-import ModalContainer from '@/components/ModalContainer'
+import CuModal from '@/components/CuModal'
 import MessageWritingForm from './write/page'
 
 interface IUserInformation {
@@ -78,14 +78,14 @@ const MessageMain = () => {
   return (
     <Container sx={{ height: '90vh' }}>
       {open && (
-        <ModalContainer
+        <CuModal
           open={open}
           handleClose={handleClose}
           title={'create_message'}
           description={'create_message'}
         >
           <MessageWritingForm />
-        </ModalContainer>
+        </CuModal>
       )}
       <Box
         sx={{ display: 'grid', gridTemplateColumns: isPc ? '3fr 7fr' : '1fr' }}

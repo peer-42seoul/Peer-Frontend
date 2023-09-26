@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { Card, SxProps } from '@mui/material'
 import { ReactNode } from 'react'
 
