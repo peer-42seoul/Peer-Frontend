@@ -21,6 +21,7 @@ const MainPage = ({ initData }: { initData: any }) => {
   // useswr의 초기값을 initdata로 설정하려했으나 실패...
   // 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const { data, isLoading } = useSWR(`http://localhost:3001/${type}-sort-${sort}`, defaultGetFetcher, { fallbackData: initData });
+
   if (isLoading)
     return (<Typography>로딩중...</Typography>)
 
