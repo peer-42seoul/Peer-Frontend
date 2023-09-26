@@ -2,10 +2,10 @@
 
 import { TextField } from '@mui/material'
 
-export default function SearchStudy() {
+export default function Search() {
   return (
     <>
-      <TextField placeholder="Study" />
+      <TextField placeholder="search" />
     </>
   )
 }

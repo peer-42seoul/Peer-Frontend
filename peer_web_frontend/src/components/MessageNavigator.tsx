@@ -9,6 +9,7 @@ import SearchIcon from '@mui/icons-material/Search'
 
 interface IMessageNavigatorProps {
   title: string
+  messageType: string
 }
 
 const MessageNavigator = ({ title }: IMessageNavigatorProps) => {

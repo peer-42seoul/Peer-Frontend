@@ -1,13 +1,14 @@
 'use client'
 
 import CloseIcon from '@mui/icons-material/Close'
+import { Button } from '@mui/material'
 
 export default function CloseButton() {
   return (
     <>
-      <button style={{ border: 'none', backgroundColor: 'white' }}>
+      <Button style={{ border: 'none', color: 'white' }}>
         <CloseIcon />
-      </button>
+      </Button>
     </>
   )
 }
