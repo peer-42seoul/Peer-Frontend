@@ -10,16 +10,17 @@ const SettingType = {
 
 const settingTypeMap = new Map(Object.entries(SettingType))
 
+// TODO 2스텝 때 업적 어떻게 할 지 고민해보기. 우선 업적 파트를 고려하여 submit이 아니어도 가능하게 해두었음
 const SettingContainer = ({
   settingTitle,
   onNegativeClick,
-  // onPositiveClick,
   children,
+  onPositiveClick,
 }: {
   settingTitle: string
   onNegativeClick: (object: any) => void
-  // onPositiveClick: (object: any) => void
   children: React.ReactNode
+  onPositiveClick?: (object: any) => void
 }) => {
   return (
     <div>
@@ -28,13 +29,19 @@ const SettingContainer = ({
       <Button variant="contained" onClick={onNegativeClick}>
         취소
       </Button>
-      <Button
-        variant="contained"
-        type="submit"
-        // onClick={onPositiveClick}
-      >
-        완료
-      </Button>
+      {onPositiveClick ? (
+        <Button variant="contained" onClick={onPositiveClick}>
+          완료
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          type="submit"
+          // onClick={onPositiveClick}
+        >
+          완료
+        </Button>
+      )}
     </div>
   )
 }
