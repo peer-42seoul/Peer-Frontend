@@ -3,6 +3,7 @@ import { Autocomplete, Box, Button, Chip, FormControl, FormGroup, Grid, IconButt
 import { useState } from 'react';
 import { Controller, useForm } from "react-hook-form";
 import FormCheckbox from './FormCheckbox';
+import TagAutoComplete from '@/components/TagAutoComplete';
 
 const Option = ({ setDetailOption }: { setDetailOption: any }) => {
   const { handleSubmit, control, reset } = useForm({
@@ -21,9 +22,6 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
   const stackList = ['javaScript', 'react', 'TypeScript', 'NextJs']
   const dueList = [{ value: -1, label: '선택 안함' }, { value: 0, label: '1개월 이하' }, { value: 1, label: '1개월' }, { value: 2, label: '2개월' }]
   const regionList = [{ value: 'none', label: '선택 안함' }, { value: 'gangnam', label: '강남구' }, { value: 'seocho', label: '서초구' }];
-  const handleDelete = (index: number) => {
-    setTagData((chips) => chips.filter((chip, cIndex) => cIndex !== index));
-  }
 
   const onSubmit = (data: any) => {
     const { due, region, placeOnline, placeOffline, placeMixed, statusBefore, statusInProgress, statusAfter } = data;
@@ -51,13 +49,6 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
     )
   }
 
-  const handleInput = (
-    event: React.SyntheticEvent,
-    value: readonly string[],
-  ) => {
-    setTagData([...value]);
-  };
-
   const handleReset = () => {
     reset();
     setTagData([]);
@@ -69,27 +60,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
         <Box>
           작업 스택
         </Box>
-        <Autocomplete
-          disableClearable
-          multiple
-          options={stackList}
-          onChange={handleInput}
-          value={tagData}
-          renderTags={() => <></>}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              placeholder="프레임워크 또는 개발언어를 입력해주세요."
-            />
-          )}
-        />
-        <Stack direction="row" gap={0.5}>
-          {
-            tagData.map((data, index) => {
-              return (<Box key={index}><Chip label={data} variant="outlined" onDelete={() => { handleDelete(index) }} /></Box>)
-            })
-          }
-        </Stack>
+        <TagAutoComplete list={stackList} datas={tagData} setData={setTagData} placeholder={"프레임워크 또는 개발언어를 입력해주세요."} />
         <Box>
           목표 기간
         </Box>
