@@ -3,16 +3,16 @@ export interface IUserProfile {
   profileImageUrl: string
   introduction: string
   linkList: Array<IUserProfileLink>
-  phone: string
-  representAchievement: Array<string>
+  representAchievement: string // 2스텝에서 사용/ 임시/ 1스텝에서넌 신경 x
   achievements: Array<string>
-  association: string | null
+  association: string | null // 해당 없을 시 null
   email: string
 }
 
 export interface IUserProfileLink {
+  id: number
   link: string
-  linkTitle: string
+  linkName: string
 }
 
 export interface IProfileCard {

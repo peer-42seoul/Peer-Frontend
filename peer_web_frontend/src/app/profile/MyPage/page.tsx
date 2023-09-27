@@ -14,16 +14,17 @@ const userInfo: IUserProfile = {
   introduction: 'not a squad, salt',
   linkList: [
     {
+      id: 1,
       link: 'https://profile.intra.42.fr/users/hyna',
-      linkTitle: 'intra profile',
+      linkName: 'intra profile',
     },
     {
+      id: 2,
       link: 'https://www.linkedin.com/in/%ED%98%84-%EB%82%98-98199227a/',
-      linkTitle: 'linkedIn',
+      linkName: 'linkedIn',
     },
   ],
-  phone: '010-0707-2000',
-  representAchievement: ['beginner'],
+  representAchievement: 'beginner',
   achievements: ['beginner', 'too much talker', 'tester'],
   association: '42seoul',
   email: 'hyna@student.42seoul.kr',
