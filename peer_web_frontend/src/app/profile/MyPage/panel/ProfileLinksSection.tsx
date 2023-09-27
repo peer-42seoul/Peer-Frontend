@@ -4,14 +4,14 @@ import { IUserProfileLink } from '@/types/IUserProfile'
 
 const ProfileLink = (props: IUserProfileLink) => {
   return (
-    <>
+    <Box>
       <Box
         key={props.link}
         component="img"
         src={`https://www.google.com/s2/favicons?domain=${props.link}`}
       />
       <Link href={props.link}>{props.linkTitle}</Link>
-    </>
+    </Box>
   )
 }
 
