@@ -10,27 +10,32 @@ import useSWR from 'swr'
 import MessageChatPage from './[id]/page'
 import ModalContainer from '@/components/ModalContainer'
 import MessageWritingForm from './write/page'
+import useModal from '@/hooks/useModal'
+import { IMessagObject } from '@/types/IMessageInformation'
 
-interface IUserInformation {
-  nickname: string
-  profileImage: string
-  messageTime: string
-  lastContent: string
-}
+// interface IMessagObject {
+//   // nickname: string
+//   // profileImage: string
+//   // messageTime: string
+//   // lastContent: string
+//   target: number
+//   targetNickname: string
+//   unreadMsgNumber: number
+//   latestContent: string
+//   latestDate: string
+// }
 
 const MessageMain = () => {
   const target = useRef(null)
   const [page, setPage] = useState(1)
   const [spinner, setSpinner] = useState(false)
-  const [messageList, setMessageList] = useState<IUserInformation[]>([])
+  const [messageList, setMessageList] = useState<IMessagObject[]>([])
   const [selectedStatus, setSelectedStatus] = useState(false)
   const isPc = useMediaQuery('(min-width:481px)')
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true) // 다른 버튼이나 요소를 얘를 활용해서 모달 핸들링 가능
-  const handleClose = () => setOpen(false)
+  const { open, handleClose, handleOpen } = useModal()
 
   const { data, error, isLoading } = useSWR(
-    `http://localhost:4000/message_list`,
+    `http://localhost:4000/profile_message`, //FIXME: _바를 /로 체인지
     defaultGetFetcher,
   )
 
@@ -44,7 +49,7 @@ const MessageMain = () => {
   const debouncedFetchData = debounce(() => {
     if (!spinner) {
       axios
-        .get(`http://localhost:4000/message_list?page=${page}`)
+        .get(`http://localhost:4000/profile_message?page=${page}`)
         .then((res) => {
           setMessageList((prevMessages) => [...prevMessages, ...res.data])
           setSpinner(false)
@@ -84,7 +89,7 @@ const MessageMain = () => {
           title={'create_message'}
           description={'create_message'}
         >
-          <MessageWritingForm />
+          <MessageWritingForm isPc={isPc} handleClose={handleClose} />
         </ModalContainer>
       )}
       <Box
@@ -101,7 +106,11 @@ const MessageMain = () => {
               isPc={isPc}
             />
             <Box
-              sx={{ height: '1vh', visibility: 'hidden' }}
+              sx={{
+                bottom: 0,
+                height: '1vh',
+                backgroundColor: 'primary.main',
+              }}
               ref={target}
             ></Box>
           </Box>
@@ -116,9 +125,9 @@ const MessageMain = () => {
             </Button>
           )}
         </Box>
-        {/* {isPc && ( */}
-        <MessageChatPage selectedStatus={selectedStatus} isPc={isPc} />
-        {/* )} */}
+        {isPc && (
+          <MessageChatPage selectedStatus={selectedStatus} isPc={isPc} />
+        )}
       </Box>
     </Container>
   )
