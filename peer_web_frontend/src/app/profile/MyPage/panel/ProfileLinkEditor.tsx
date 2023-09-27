@@ -30,7 +30,7 @@ const ProfileLinkEditor = ({
     console.log('on positive click', data)
 
   const { handleSubmit, control } = useForm<Array<IUserProfileLink>>({
-    defaultValues: defaultValues,
+    defaultValues: { ...defaultValues },
   })
 
   return (
@@ -43,7 +43,6 @@ const ProfileLinkEditor = ({
               <Controller
                 render={({ field }) => (
                   <TextField
-                    label=""
                     variant="outlined"
                     id={`link-${i}-name-field`}
                     {...field}
