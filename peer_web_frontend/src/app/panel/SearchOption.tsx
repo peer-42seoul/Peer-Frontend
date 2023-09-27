@@ -1,5 +1,5 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
-import { Autocomplete, Box, Button, Chip, FormControl, FormGroup, Grid, IconButton, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, FormControl, FormGroup, Grid, IconButton, MenuItem, Select, Stack, Typography } from '@mui/material'
 import { useState } from 'react';
 import { Controller, useForm } from "react-hook-form";
 import FormCheckbox from './FormCheckbox';
@@ -60,7 +60,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
         <Box>
           작업 스택
         </Box>
-        <TagAutoComplete list={stackList} datas={tagData} setData={setTagData} placeholder={"프레임워크 또는 개발언어를 입력해주세요."} />
+        <TagAutoComplete list={stackList} datas={tagData} setData={setTagData} />
         <Box>
           목표 기간
         </Box>
