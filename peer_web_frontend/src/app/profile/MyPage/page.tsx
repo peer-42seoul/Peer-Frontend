@@ -7,6 +7,7 @@ import { IUserProfile } from '@/types/IUserProfile'
 import ProfileLinksSection from './panel/ProfileLinksSection'
 import ModalContainer from '@/components/ModalContainer'
 import ProfileBioEditor from './panel/ProfileBioEditor'
+import ProfileLinkEditor from './panel/ProfileLinkEditor'
 
 const userInfo: IUserProfile = {
   id: 1,
@@ -124,6 +125,17 @@ const MyProfile = () => {
             email: userInfo.email,
             introduction: userInfo.introduction,
           }}
+          closeModal={() => setModalType('')}
+        />
+      </ModalContainer>
+      <ModalContainer
+        open={modalOpen.links}
+        handleClose={() => setModalType('')}
+        title="프로필 링크 섹션 수정 모달"
+        description="링크 수정 폼"
+      >
+        <ProfileLinkEditor
+          links={userInfo.linkList}
           closeModal={() => setModalType('')}
         />
       </ModalContainer>
