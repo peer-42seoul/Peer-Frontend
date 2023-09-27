@@ -25,7 +25,6 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
     setTagData((chips) => chips.filter((chip, cIndex) => cIndex !== index));
   }
 
-  //설정하려다 너무 오래걸려서 일단 보류
   const onSubmit = (data: any) => {
     const { due, region, placeOnline, placeOffline, placeMixed, statusBefore, statusInProgress, statusAfter } = data;
     const makeCommaString = (obj: Object) => {
