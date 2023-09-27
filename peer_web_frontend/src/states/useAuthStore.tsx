@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import LocalStorage from './localStorage'
 
 interface IAuthStore {
   isLogin: boolean
@@ -9,7 +10,7 @@ interface IAuthStore {
 }
 
 const useAuthStore = create<IAuthStore>((set) => {
-  const authDataJSON = localStorage.getItem('authData')
+  const authDataJSON = LocalStorage.getItem('authData')
   const authData = authDataJSON
     ? JSON.parse(authDataJSON)
     : { userId: null, accessToken: null }
@@ -19,9 +20,9 @@ const useAuthStore = create<IAuthStore>((set) => {
     userId: authData.userId,
     accessToken: authData.accessToken,
     login: (userId, accessToken) => {
-      // save userId, accessToken to localStorage
+      // save userId, accessToken to LocalStorage
       const authDataToSave = { userId, accessToken }
-      localStorage.setItem('authData', JSON.stringify(authDataToSave))
+      LocalStorage.setItem('authData', JSON.stringify(authDataToSave))
       // set state
       set(() => ({
         isLogin: true,
@@ -30,7 +31,7 @@ const useAuthStore = create<IAuthStore>((set) => {
       }))
     },
     logout: () => {
-      localStorage.removeItem('authData')
+      LocalStorage.removeItem('authData')
       set(() => ({
         isLogin: false,
         userId: null,
