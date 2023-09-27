@@ -1,5 +1,6 @@
 export interface IUserProfile {
   id: number
+  nickname: string
   profileImageUrl: string
   introduction: string
   linkList: Array<IUserProfileLink>
@@ -17,7 +18,7 @@ export interface IUserProfileLink {
 
 export interface IProfileCard {
   profileImageURL: string | null
-  username: string
+  nickname: string
   association: string | null
   introduction: string
   email: string

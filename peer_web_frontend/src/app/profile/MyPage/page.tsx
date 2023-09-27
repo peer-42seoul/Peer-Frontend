@@ -10,6 +10,7 @@ import ProfileBioEditor from './panel/ProfileBioEditor'
 
 const userInfo: IUserProfile = {
   id: 1,
+  nickname: 'hyna',
   profileImageUrl: 'https://picsum.photos/100',
   introduction: 'not a squad, salt',
   linkList: [
@@ -40,7 +41,7 @@ interface IModals {
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
 // TODO Grid 쓸지 말지 결정하기 (모바일과 PC 모두 한 줄로 되어있음)
 const MyProfile = () => {
-  const username = 'hyna'
+  // const username = 'hyna'
   const [modalType, setModalType] = useState<string>('' as string)
   const [modalOpen, setModalOpen] = useState<IModals>({
     introduction: false,
@@ -82,7 +83,7 @@ const MyProfile = () => {
         {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
         <ProfileCard
           profileImageURL={userInfo.profileImageUrl}
-          username={username}
+          nickname={userInfo.nickname}
           association={userInfo?.association}
           email={userInfo.email}
           introduction={userInfo.introduction}
@@ -118,7 +119,7 @@ const MyProfile = () => {
         <ProfileBioEditor
           data={{
             profileImageURL: userInfo.profileImageUrl,
-            username: username,
+            nickname: userInfo.nickname,
             association: userInfo.association,
             email: userInfo.email,
             introduction: userInfo.introduction,
