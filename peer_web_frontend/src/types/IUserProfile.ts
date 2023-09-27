@@ -14,3 +14,11 @@ export interface IUserProfileLink {
   link: string
   linkTitle: string
 }
+
+export interface IProfileCard {
+  profileImageURL: string | null
+  username: string
+  association: string | null
+  introduction: string
+  email: string
+}
