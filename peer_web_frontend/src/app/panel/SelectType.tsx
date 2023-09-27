@@ -3,8 +3,10 @@ import { Dispatch, SetStateAction } from 'react'
 import { ProjectType } from '../page'
 
 const SelectType = ({
+  type,
   setType,
 }: {
+  type: ProjectType
   setType: Dispatch<SetStateAction<ProjectType>>
 }) => {
   return (
@@ -17,22 +19,23 @@ const SelectType = ({
         border: 'none',
       }}
     >
-      {/* type에 따라 다른 내용 보여주는 것 처리 필요. get해올때 처리될듯*/}
       <Button
+        sx={{ backgroundColor: type === 'studies' ? 'blue' : 'gray' }}
         onClick={() => {
-          setType('study')
+          setType('studies')
         }}
       >
         스터디
       </Button>
       <Button
+        sx={{ backgroundColor: type === 'projects' ? 'blue' : 'gray' }}
         onClick={() => {
-          setType('project')
+          setType('projects')
         }}
       >
         프로젝트
       </Button>
-    </ButtonGroup>
+    </ButtonGroup >
   )
 }
 

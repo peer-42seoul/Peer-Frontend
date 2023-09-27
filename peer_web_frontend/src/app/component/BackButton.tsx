@@ -1,9 +1,17 @@
+'use client'
+
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import { Button } from '@mui/material'
+import { useRouter } from 'next/navigation'
 
 export default function BackButton() {
+  const router = useRouter()
   return (
-    <button style={{ border: 'none', backgroundColor: 'white' }}>
+    <Button
+      style={{ border: 'none', color: 'white' }}
+      onClick={() => router.back()}
+    >
       <ArrowBackIosNewIcon />
-    </button>
+    </Button>
   )
 }
