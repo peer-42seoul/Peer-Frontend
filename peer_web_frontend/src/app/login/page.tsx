@@ -5,6 +5,7 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import axios from 'axios'
 import useAuthStore from '@/states/useAuthStore'
 import { useCookies } from 'react-cookie'
+import { signIn } from 'next-auth/react'
 
 interface ILoginFormInput {
   userEmail: string
@@ -42,6 +43,11 @@ const Login = () => {
         console.log(error.message)
       })
     setIsLoading(false)
+  }
+  console.log(process.env.NEXT_PUBLIC_GOOGlE_CLIENT_ID)
+  const handleGoogleLogin = () => {
+    const email = signIn('google')
+    console.log(email)
   }
 
   return (
@@ -101,6 +107,7 @@ const Login = () => {
           로그인
         </button>
       </form>
+      <button onClick={handleGoogleLogin}>구글 로그인</button>
     </>
   )
 }
