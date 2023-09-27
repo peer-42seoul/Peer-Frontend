@@ -4,119 +4,88 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import MessageNavigator from '@/components/MessageNavigator'
 import useMessageStore from '@/states/useMessageStore'
 import { Box, Container, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import MessageForm from '../write/MessageForm'
-
-interface IMessageInformation {
-  nickname: string
-  content: string
-  profileImage: string
-  messageTime: [2023, 9, 6, 17, 16, 51, 131412000]
-  messageType: string
-}
+import { IMessageInformation } from '@/types/IMessageInformation'
+import Image from 'next/image'
 
 const MessageContent = ({ user }: { user: IMessageInformation }) => {
   return (
     <>
-      {user.messageType === 'RECEIVE' && (
-        <Box
-          sx={{
-            width: '100%',
-            height: 100,
-            padding: '16px 0 16px 0',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            backgroundColor: '#D8D8D8',
-          }}
-        >
-          <Box
-            component={'img'}
-            src="https://source.unsplash.com/random/100×100"
-            alt="picture_of_sender"
-            width={100}
-            height={100}
-          />
-          <Typography>{user.nickname}</Typography>
-          <Typography>{user.content}</Typography>
-        </Box>
-      )}
-      {user.messageType === 'SEND' && (
-        <Box
-          sx={{
-            width: '100%',
-            height: 100,
-            padding: '16px 0 16px 0',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end',
-            backgroundColor: 'lightblue',
-          }}
-        >
-          <Typography>{user.nickname}</Typography>
-          <Typography>{user.content}</Typography>
-        </Box>
-      )}
+      <Box
+        sx={{
+          width: '100%',
+          height: 100,
+          padding: '16px 0 16px 0',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: user.senderId ? 'flex-end' : 'start',
+          backgroundColor: user.senderId ? 'lightblue' : '#D8D8D8',
+        }}
+      >
+        <Image
+          src="https://source.unsplash.com/random/100×100"
+          alt="picture_of_sender"
+          width={100}
+          height={100}
+        />
+        <Typography>{user.senderNickname}</Typography>
+        <Typography>{user.content}</Typography>
+        <Typography>{user.date}</Typography>
+      </Box>
     </>
   )
 }
 
-const MessageChatPage = (
-  { selectedStatus }: { selectedStatus: boolean },
-  isPc: boolean,
-) => {
-  // const userId = 'userzero' // 예시로 문자열 "123" 사용
-  const router = useRouter()
+const MessageChatPage = ({
+  selectedStatus,
+  isPc,
+}: {
+  selectedStatus: boolean
+  isPc: boolean
+}) => {
+  // const router = useRouter()
   // const searchParams = useSearchParams()
   // const search = searchParams.get('search')
   const { storeNickname } = useMessageStore()
+  const [messageData, setMessageData] = useState<IMessageInformation[]>([])
 
-  console.log('storeNickname: ', storeNickname)
+  console.log('selected', selectedStatus)
   const { data, error, isLoading } = useSWR(
-    selectedStatus
-      ? // ? 'http://localhost:4000/message/nickname?search=' + storeNickname 오리지널
-        'http://localhost:4000/message_' + storeNickname
+    // selectedStatus
+    //   ? // ? 'http://localhost:4000//profile/message?target=${storeNickname}' //FIXME: 나중에 얘로 설정해야 함
+    storeNickname
+      ? `http://localhost:4000/profile_message_${storeNickname}`
       : null,
+    // : null,
     defaultGetFetcher,
   )
-  if (error) return <Box>쪽지 불러오기를 실패하였습니다.</Box>
-  if (!data) return <Box>빈 쪽지함 입니다.</Box>
+
+  //FIXME: selectedStatus는 아마 store사용하기 이전에 값 관리 때문에 쓰려던 거 같은데 얘 존재 확인하고 삭제하기
+  useEffect(() => {
+    if (data) {
+      setMessageData(data)
+    }
+  }, [data])
+  if (error) return <Box>쪽지 불러오기를 실패하였습니다.1</Box>
+  if (!data) return <Box>빈 쪽지함 입니다!</Box>
   if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
 
   return (
     <Container>
       <MessageNavigator title={storeNickname} messageType={'inchatting'} />
       <Box sx={{ width: '100%' }}>
-        {data.map((user: IMessageInformation, idx: number) => {
+        {messageData.map((user: IMessageInformation, idx: number) => {
           return <MessageContent key={idx} user={user} />
         })}
-        {/* <Button
-          onClick={() => {
-            {
-              isPc
-                ? handleOpen()
-                : router.push(
-                    `http://localhost:3000/profile/message/view?target=${storeNickname}`,
-                  )
-            }
-          }}
-          sx={{
-            width: '100%',
-            height: '5vh',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          답하기
-        </Button> */}
-        {isPc ? (
-          <MessageForm type={'existingMessage'} nickname={undefined} />
-        ) : (
-          router.push(
-            `http://localhost:3000/profile/message/view?target=${storeNickname}`,
-          )
+        {isPc && (
+          <MessageForm
+            type={'existingMessage'}
+            nickname={undefined} // TODO: 내 상태
+            setMessageData={setMessageData}
+            isPc={true}
+          />
         )}
       </Box>
     </Container>
