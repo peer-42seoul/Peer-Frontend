@@ -1,20 +1,20 @@
 import { InputLabel, SxProps } from '@mui/material'
 import React from 'react'
 
-const CuInputLabel = ({
-  labelString,
+const CuTextFieldLabel = ({
+  children,
   htmlFor,
   style,
 }: {
-  labelString: string
+  children: React.ReactNode
   htmlFor: string
   style?: SxProps
 }) => {
   return (
     <InputLabel sx={style} htmlFor={htmlFor}>
-      {labelString}
+      {children}
     </InputLabel>
   )
 }
 
-export default CuInputLabel
+export default CuTextFieldLabel
