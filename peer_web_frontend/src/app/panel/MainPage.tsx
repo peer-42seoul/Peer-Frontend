@@ -13,23 +13,23 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 
 const MainPage = ({ initData }: { initData: any }) => {
-  const [page, setPage] = useState<number>(1)
+  const [page] = useState<number>(1)
   const [type, setType] = useState<ProjectType>('projects')
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort>('recent')
   //세부옵션용 state
   const [detailOption, setDetailOption] = useState<{
-    due: string | undefined,
-    region: string | undefined,
-    place: string | undefined,
-    status: string | undefined,
-    tag: string | undefined
-  }>({ due: undefined, region: undefined, place: undefined, status: undefined, tag: undefined })
+    due: string,
+    region: string,
+    place: string,
+    status: string,
+    tag: string
+  }>({ due: '', region: '', place: '', status: '', tag: '' })
 
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패...
   // 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
-  const { data, isLoading } = useSWR(`http://localhost:3001/${type}-sort-${sort}`, defaultGetFetcher, { fallbackData: initData });
+  const { data, isLoading } = useSWR(`https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/${type}-sort-${sort}`, defaultGetFetcher, { fallbackData: initData });
 
   const pagesize = 10;
   //실제 api 서버용 url. mockup 데이터 만들기 어려워서 보류중
@@ -59,7 +59,7 @@ const MainPage = ({ initData }: { initData: any }) => {
           </Grid>
         </Grid>
         <Stack alignItems={'center'} gap={2}>
-          {data?.map((project: IProject) => (
+          {data.map((project: IProject) => (
             <Box key={project.id}>
               <MainCard {...project} />
             </Box>

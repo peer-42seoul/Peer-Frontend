@@ -1,18 +1,33 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
-import { Autocomplete, Box, Button, Checkbox, Chip, FormControl, FormControlLabel, FormGroup, Grid, IconButton, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, Chip, FormControl, FormGroup, Grid, IconButton, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react';
 import { Controller, useForm } from "react-hook-form";
+import FormCheckbox from './FormCheckbox';
 
 const Option = ({ setDetailOption }: { setDetailOption: any }) => {
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control, reset } = useForm({
+    defaultValues: {
+      due: -1,
+      region: 'none',
+      placeOnline: false,
+      placeOffline: false,
+      placeMixed: false,
+      statusBefore: false,
+      statusInProgress: false,
+      statusAfter: false,
+    }
+  });
   const [tagData, setTagData] = useState<string[]>([]);
   const stackList = ['javaScript', 'react', 'TypeScript', 'NextJs']
+  const dueList = [{ value: -1, label: '선택 안함' }, { value: 0, label: '1개월 이하' }, { value: 1, label: '1개월' }, { value: 2, label: '2개월' }]
+  const regionList = [{ value: 'none', label: '선택 안함' }, { value: 'gangnam', label: '강남구' }, { value: 'seocho', label: '서초구' }];
   const handleDelete = (index: number) => {
     setTagData((chips) => chips.filter((chip, cIndex) => cIndex !== index));
   }
 
   //설정하려다 너무 오래걸려서 일단 보류
   const onSubmit = (data: any) => {
+    const { due, region, placeOnline, placeOffline, placeMixed, statusBefore, statusInProgress, statusAfter } = data;
     const makeCommaString = (obj: Object) => {
       const trueKeys = Object.keys(obj).filter(key => obj[key]);
       const resultString = trueKeys.join(',');
@@ -20,20 +35,20 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
     }
 
     const status = makeCommaString({
-      before: data.statusBefore,
-      inProgress: data.statusInProgress,
-      after: data.statusAfter
+      before: statusBefore,
+      inProgress: statusInProgress,
+      after: statusAfter
     });
 
     const place = makeCommaString({
-      online: data.placeOnline,
-      offline: data.placeOffline,
-      mixed: data.placeMixed
+      online: placeOnline,
+      offline: placeOffline,
+      mixed: placeMixed
     });
 
     const tag = tagData.length ? tagData.join(',') : '';
     setDetailOption(
-      { due: data.due ?? '', region: data.region ?? '', place: place, status: status, tag: tag }
+      { due: due == -1 || !due ? '' : due, region: region == "none" || !region ? '' : region, place: place, status: status, tag: tag }
     )
   }
 
@@ -43,6 +58,11 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
   ) => {
     setTagData([...value]);
   };
+
+  const handleReset = () => {
+    reset();
+    setTagData([]);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -79,10 +99,12 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
           control={control}
           render={({ field }) => (
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-              <Select {...field} defaultValue={0}>
-                <MenuItem value={0}>1개월 이하</MenuItem>
-                <MenuItem value={1}>1개월</MenuItem>
-                <MenuItem value={2}>2개월</MenuItem>
+              <Select {...field}>
+                {
+                  dueList.map((item, index) => {
+                    return (<MenuItem key={index} value={item.value}>{item.label}</MenuItem>)
+                  })
+                }
               </Select>
             </FormControl>
           )}
@@ -95,11 +117,11 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
           control={control}
           render={({ field }) => (
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-              <Select {...field} defaultValue="none">
-                <MenuItem value="gangnam">강남구</MenuItem>
-                <MenuItem value="seocho">서초구</MenuItem>
-                <MenuItem value="none">선택 안함</MenuItem>
-              </Select>
+              <Select {...field} >{
+                regionList?.map((item, index) => {
+                  return (<MenuItem key={index} value={item.value}>{item.label}</MenuItem>)
+                })
+              }</Select>
             </FormControl>
           )}
         />
@@ -107,80 +129,20 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
           작업 유형
         </Box>
         <FormGroup row>
-          <Controller
-            name="placeOnline"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                aria-label="check-work-place"
-                control={<Checkbox {...field} />}
-                label="온라인"
-              />
-            )}
-          />
-          <Controller
-            name="placeOffline"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                aria-label="check-work-place"
-                control={<Checkbox {...field} />}
-                label="오프라인"
-              />
-            )}
-          />
-          <Controller
-            name="placeMixed"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                aria-label="check-work-place"
-                control={<Checkbox {...field} />}
-                label="혼합"
-              />
-            )}
-          />
+          <FormCheckbox name="placeOnline" label="온라인" control={control} />
+          <FormCheckbox name="placeOffline" label="오프라인" control={control} />
+          <FormCheckbox name="placeMixed" label="혼합" control={control} />
         </FormGroup>
         <Box>
           작업 단계
         </Box>
         <FormGroup row>
-          <Controller
-            name="statusBefore" // Field name for 작업 단계 시작전
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                aria-label="check-work-status"
-                control={<Checkbox {...field} />}
-                label="모집전"
-              />
-            )}
-          />
-          <Controller
-            name="statusInProgress" // Field name for 작업 단계 진행중
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                aria-label="check-work-status"
-                control={<Checkbox {...field} />}
-                label="모집중"
-              />
-            )}
-          />
-          <Controller
-            name="statusAfter" // Field name for 작업 단계 진행완료
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                aria-label="check-work-status"
-                control={<Checkbox {...field} />}
-                label="모집완료"
-              />
-            )}
-          />
+          <FormCheckbox name="statusBefore" label="모집전" control={control} />
+          <FormCheckbox name="statusInProgress" label="모집중" control={control} />
+          <FormCheckbox name="statusAfter" label="모집완료" control={control} />
         </FormGroup>
         <Stack direction="row" justifyContent={"space-between"}>
-          <Button>초기화</Button>
+          <Button onClick={handleReset}>초기화</Button>
           <Button type={"submit"}>확인</Button>
         </Stack>
       </Grid>
