@@ -20,12 +20,14 @@ const MainPage = ({ initData }: { initData: any }) => {
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패...
   // 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
-  const { data, isLoading } = useSWR(`http://localhost:3001/${type}-sort-${sort}`, defaultGetFetcher, { fallbackData: initData });
-  if (isLoading)
-    return (<Typography>로딩중...</Typography>)
+  const { data, isLoading } = useSWR(
+    `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/${type}-sort-${sort}`,
+    defaultGetFetcher,
+    { fallbackData: initData },
+  )
+  if (isLoading) return <Typography>로딩중...</Typography>
 
-  if (!data)
-    return (<Typography>데이터가 없습니다</Typography>)
+  if (!data) return <Typography>데이터가 없습니다</Typography>
 
   return (
     <Container sx={{ backgroundColor: 'gray' }}>

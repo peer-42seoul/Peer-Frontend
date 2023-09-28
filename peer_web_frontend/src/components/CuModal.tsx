@@ -23,17 +23,17 @@ interface ICuModal {
   open: boolean
   handleClose: () => void
   children: React.ReactNode
-  title: string
-  description: string
-  style: SxProps
+  ariaTitle: string
+  ariaDescription: string
+  style?: SxProps
 }
 
 const CuModal = ({
   open,
   handleClose,
   children,
-  title,
-  description,
+  ariaTitle,
+  ariaDescription,
   style = defaultstyle,
 }: ICuModal) => {
   return (
@@ -41,8 +41,8 @@ const CuModal = ({
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby={title}
-        aria-describedby={description}
+        aria-labelledby={ariaTitle}
+        aria-describedby={ariaDescription}
       >
         <Box sx={style}>{children}</Box>
       </Modal>
