@@ -53,7 +53,9 @@ const FormField = ({
           </>
         )}
       />
-      {error && <Typography>{error.message}</Typography>}
+      {(error && <Typography>{error.message}</Typography>) || (
+        <Typography>&nbsp;</Typography>
+      )}
     </>
   )
 }
