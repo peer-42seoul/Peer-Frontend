@@ -1,13 +1,12 @@
-// 'use client'
+'use client'
 import React from 'react'
 import SettingContainer from './SettingContainer'
-// import useSWR from 'swr'
 import { Avatar, Grid, InputLabel, TextField, Typography } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
 
 interface IFormInput {
-  username: string
+  nickname: string
   introduction: string
 }
 
@@ -18,9 +17,8 @@ const ProfileBioEditor = ({
   data: IProfileCard
   closeModal: () => void
 }) => {
-  // const { data, error, isLoading } = useSWR('http://localhost:4000/profile/1')
   const defaultValues: IFormInput = {
-    username: data.username,
+    nickname: data.nickname,
     introduction: data.introduction,
   }
 
@@ -65,7 +63,7 @@ const ProfileBioEditor = ({
                     fullWidth
                   />
                 )}
-                name="username"
+                name="nickname"
                 control={control}
               />
             </Grid>
@@ -100,7 +98,6 @@ const ProfileBioEditor = ({
                     id="introduction-message-field"
                     {...field}
                     sx={{ width: '100%' }}
-                    InputLabelProps={{ shrink: false }}
                   />
                 )}
                 name="introduction"
