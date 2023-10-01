@@ -38,17 +38,13 @@ const SignUp = () => {
       alert('이메일을 입력해주세요')
       return
     }
-    console.log('submitEmail')
-    console.log(email)
     setIsEmailSent(true)
     try {
-      const response = await axios.post(`${API_URL}/email`, {
+      await axios.post(`${API_URL}/email`, {
         email: email,
       })
-      console.log(response)
       setEmailError(false)
     } catch (error: any) {
-      console.log(error)
       setEmailError(true)
       if (error.response?.status === 409) {
         alert('이미 가입된 이메일입니다')
@@ -66,16 +62,13 @@ const SignUp = () => {
       alert('인증코드를 입력해주세요')
       return
     }
-    console.log('submitCode')
     setIsCodeSent(true)
     try {
-      const response = await axios.post(`${API_URL}/code`, {
+      await axios.post(`${API_URL}/code`, {
         code: code,
       })
-      console.log(response)
       setCodeError(false)
     } catch (error: any) {
-      console.log(error)
       setCodeError(true)
       if (error.response?.status === 404) {
         alert('유효하지 않은 인증코드입니다')
@@ -93,10 +86,9 @@ const SignUp = () => {
     }
     setIsNickNameSent(true)
     try {
-      const response = await axios.post(`${API_URL}/nickname`, {
+      await axios.post(`${API_URL}/nickname`, {
         nickName: nickName,
       })
-      console.log(response)
       setNickNameError(false)
     } catch (error: any) {
       console.log(error)
