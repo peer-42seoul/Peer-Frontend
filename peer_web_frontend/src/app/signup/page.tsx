@@ -25,51 +25,89 @@ const SignUp = () => {
     control,
     getValues,
   } = useForm<IFormInputs>({ mode: 'onChange' })
-  const [isEmailValid, setIsEmailValid] = useState<boolean>(false)
-  const [isCodeValid, setIsCodeValid] = useState<boolean>(false)
-  const [isNickNameValid, setIsNickNameValid] = useState<boolean>(false)
+  const [isEmailSent, setIsEmailSent] = useState<boolean>(false)
+  const [emailError, setEmailError] = useState<boolean>(false)
+  const [isCodeSent, setIsCodeSent] = useState<boolean>(false)
+  const [codeError, setCodeError] = useState<boolean>(false)
+  const [isNickNameSent, setIsNickNameSent] = useState<boolean>(false)
+  const [nickNameError, setNickNameError] = useState<boolean>(false)
   const submitEmail = async () => {
     const email = getValues('email')
     if (errors.email?.message) return
+    if (email === undefined) {
+      alert('이메일을 입력해주세요')
+      return
+    }
+    console.log('submitEmail')
     console.log(email)
+    setIsEmailSent(true)
     try {
       const response = await axios.post(`${API_URL}/email`, {
         email: email,
       })
       console.log(response)
-      setIsEmailValid(true)
-    } catch (error) {
+      setEmailError(false)
+    } catch (error: any) {
       console.log(error)
+      setEmailError(true)
+      if (error.response?.status === 409) {
+        alert('이미 가입된 이메일입니다')
+      } else if (error.response?.status === 404) {
+        alert('유효하지 않은 이메일입니다')
+      } else {
+        alert('알 수 없는 오류가 발생했습니다')
+      }
     }
   }
   const submitCode = async () => {
     const code = getValues('code')
     if (errors.code?.message) return
-    console.log(code)
+    if (code === undefined) {
+      alert('인증코드를 입력해주세요')
+      return
+    }
+    console.log('submitCode')
+    setIsCodeSent(true)
     try {
       const response = await axios.post(`${API_URL}/code`, {
         code: code,
       })
       console.log(response)
-      setIsCodeValid(true)
-    } catch (error) {
+      setCodeError(false)
+    } catch (error: any) {
       console.log(error)
-      setIsCodeValid(false)
+      setCodeError(true)
+      if (error.response?.status === 404) {
+        alert('유효하지 않은 인증코드입니다')
+      } else {
+        alert('알 수 없는 오류가 발생했습니다')
+      }
     }
   }
   const submitNickName = async () => {
     const nickName = getValues('nickName')
     if (errors.nickName?.message) return
-    console.log(nickName)
+    if (nickName === undefined) {
+      alert('닉네임을 입력해주세요')
+      return
+    }
+    setIsNickNameSent(true)
     try {
       const response = await axios.post(`${API_URL}/nickname`, {
         nickName: nickName,
       })
       console.log(response)
-      setIsNickNameValid(true)
-    } catch (error) {
+      setNickNameError(false)
+    } catch (error: any) {
       console.log(error)
-      setIsNickNameValid(false)
+      setNickNameError(true)
+      if (error.response?.status === 404) {
+        alert('유효하지 않은 닉네임입니다')
+      } else if (error.response?.status === 409) {
+        alert('이미 사용중인 닉네임입니다')
+      } else {
+        alert('알 수 없는 오류가 발생했습니다')
+      }
     }
   }
   const fieldProp = {
@@ -84,13 +122,11 @@ const SignUp = () => {
           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
           message: '유효한 이메일 형식이 아닙니다',
         },
-        validate: () =>
-          !isEmailValid && '이메일이 유효하지 않습니다. 다시 시도해주세요',
       },
       placeholder: '사용할 이메일을 입력하세요',
       onClick: submitEmail,
-      buttonText: '인증코드 전송',
-      isInputValid: isEmailValid,
+      buttonText: '이메일 중복확인',
+      isInputValid: isEmailSent && !emailError,
     },
     code: {
       label: '인증코드',
@@ -99,13 +135,11 @@ const SignUp = () => {
       error: errors.code,
       rules: {
         required: '인증코드를 입력해주세요',
-        validate: () =>
-          !isCodeValid && '인증코드가 일치하지 않습니다. 다시 시도해주세요',
       },
       placeholder: '인증코드를 입력해주세요',
       onClick: submitCode,
       buttonText: '인증코드 확인',
-      isInputValid: isCodeValid,
+      isInputValid: isCodeSent && !codeError,
     },
     password: {
       label: '비밀번호',
@@ -116,7 +150,7 @@ const SignUp = () => {
         required: '비밀번호를 입력하세요',
         pattern: {
           value:
-            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*(){}[]\/<>])[A-Za-z\d~!@#$%^&*(){}[]\/<>]{8,}$/i,
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*<>])[A-Za-z\d~!@#$%^&*<>]{8,}$/i,
           message: '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
         },
       },
@@ -129,13 +163,15 @@ const SignUp = () => {
       error: errors.nickName,
       rules: {
         required: '닉네임을 입력하세요',
-        validate: () =>
-          !isNickNameValid && '닉네임이 유효하지 않습니다 다시 시도해주세요',
+        minLength: {
+          value: 2,
+          message: '닉네임은 2자 이상이어야 합니다',
+        },
       },
       placeholder: '닉네임을 입력하세요',
       onClick: submitNickName,
       buttonText: '닉네임 중복확인',
-      isInputValid: isNickNameValid,
+      isInputValid: isNickNameSent && !nickNameError,
     },
     name: {
       label: '이름',
@@ -188,14 +224,13 @@ const SignUp = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <FormField {...fieldProp.email} />
-        {isEmailValid && <FormField {...fieldProp.code} />}
+        <FormField {...fieldProp.code} />
         <FormField {...fieldProp.password} />
         <FormField {...fieldProp.nickName} />
         <FormField {...fieldProp.name} />
         <Button
           sx={{
-            display: 'box',
-            marginTop: '10px',
+            display: 'block',
           }}
           variant="contained"
           type="submit"
