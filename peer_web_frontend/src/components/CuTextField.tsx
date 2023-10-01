@@ -10,7 +10,7 @@ const CuTextField = ({
   style,
   label,
 }: {
-  field: any
+  field?: any
   id?: string
   variant?: string
   style?: SxProps
