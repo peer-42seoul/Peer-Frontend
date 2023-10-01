@@ -1,9 +1,11 @@
 'use client'
 import React from 'react'
 import SettingContainer from './SettingContainer'
-import { Avatar, Grid, InputLabel, TextField, Typography } from '@mui/material'
+import { Avatar, Grid, Typography } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
+import CuTextField from '@/components/CuTextField'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 
 interface IFormInput {
   nickname: string
@@ -51,16 +53,17 @@ const ProfileBioEditor = ({
           <Grid item container spacing={2} justifyContent={'flex-start'}>
             {/* 닉네임 수정 */}
             <Grid item xs={3}>
-              <InputLabel htmlFor="nickname-field">닉네임</InputLabel>
+              <CuTextFieldLabel htmlFor="nickname-field">
+                닉네임
+              </CuTextFieldLabel>
             </Grid>
             <Grid item xs={9}>
               <Controller
                 render={({ field }) => (
-                  <TextField
+                  <CuTextField
                     id="nickname-field"
                     variant="outlined"
-                    {...field}
-                    fullWidth
+                    field={{ ...field, fullWidth: true }}
                   />
                 )}
                 name="nickname"
@@ -85,19 +88,18 @@ const ProfileBioEditor = ({
             </Grid>
             {/* introduction message */}
             <Grid item xs={12}>
-              <InputLabel htmlFor="introduction-message-field">
+              <CuTextFieldLabel htmlFor="introduction-message-field">
                 자기 소개
-              </InputLabel>
+              </CuTextFieldLabel>
             </Grid>
             <Grid item xs={12}>
               <Controller
                 render={({ field }) => (
-                  <TextField
+                  <CuTextField
                     label=""
                     variant="outlined"
                     id="introduction-message-field"
-                    {...field}
-                    sx={{ width: '100%' }}
+                    field={{ ...field, fullWidth: true }}
                   />
                 )}
                 name="introduction"

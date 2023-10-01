@@ -1,8 +1,10 @@
 import React from 'react'
 import SettingContainer from './SettingContainer'
 import { IUserProfileLink } from '@/types/IUserProfile'
-import { Box, InputLabel, TextField } from '@mui/material'
+import { Box } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
+import CuTextField from '@/components/CuTextField'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 
 const ProfileLinkEditor = ({
   closeModal,
@@ -39,13 +41,15 @@ const ProfileLinkEditor = ({
         {defaultValues.map((link, i) => {
           return (
             <Box key={link.id}>
-              <InputLabel htmlFor={`link-${i}-name-field`}>제목</InputLabel>
+              <CuTextFieldLabel htmlFor={`link-${i}-name-field`}>
+                제목
+              </CuTextFieldLabel>
               <Controller
                 render={({ field }) => (
-                  <TextField
+                  <CuTextField
                     variant="outlined"
                     id={`link-${i}-name-field`}
-                    {...field}
+                    field={{ ...field }}
                   />
                 )}
                 name={`${i}.linkName`}
