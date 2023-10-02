@@ -34,11 +34,7 @@ const SettingContainer = ({
           완료
         </Button>
       ) : (
-        <Button
-          variant="contained"
-          type="submit"
-          // onClick={onPositiveClick}
-        >
+        <Button variant="contained" type="submit">
           완료
         </Button>
       )}
