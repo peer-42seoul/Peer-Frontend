@@ -63,9 +63,7 @@ const ProfileLinkEditor = ({
                         id={`${i}.linkName`}
                         field={{ ...field, fullWidth: true }}
                         autoComplete="off"
-                        muiProps={{
-                          error: errors[i]?.linkName,
-                        }}
+                        error={errors[i]?.linkName ? true : false}
                       />
                     )}
                     name={`${i}.linkName`}
@@ -89,9 +87,7 @@ const ProfileLinkEditor = ({
                               id={`${i}.link`}
                               field={{ ...field, fullWidth: true }}
                               autoComplete="off"
-                              muiProps={{
-                                error: errors[i]?.link,
-                              }}
+                              error={errors[i]?.link ? true : false}
                             />
                           </Box>
                           {errors[i]?.link && <Typography>test</Typography>}
