@@ -60,16 +60,14 @@ const ProfileBioEditor = ({
           <Grid item container spacing={2} justifyContent={'flex-start'}>
             {/* 닉네임 수정 */}
             <Grid item xs={3}>
-              <CuTextFieldLabel htmlFor="nickname-field">
-                닉네임
-              </CuTextFieldLabel>
+              <CuTextFieldLabel htmlFor="nickname">닉네임</CuTextFieldLabel>
             </Grid>
             <Grid item xs={9}>
               <Controller
                 render={({ field }) => (
                   <Box>
                     <CuTextField
-                      id="nickname-field"
+                      id="nickname"
                       variant="outlined"
                       field={{ ...field }}
                       fullWidth={true}
@@ -101,7 +99,7 @@ const ProfileBioEditor = ({
             </Grid>
             {/* introduction message */}
             <Grid item xs={12} style={{ display: 'none' }}>
-              <CuTextFieldLabel htmlFor="introduction-message-field">
+              <CuTextFieldLabel htmlFor="introduction">
                 자기 소개
               </CuTextFieldLabel>
             </Grid>
@@ -111,7 +109,7 @@ const ProfileBioEditor = ({
                   <CuTextField
                     label=""
                     variant="outlined"
-                    id="introduction-message-field"
+                    id="introduction"
                     field={field}
                     autoComplete="off"
                     fullWidth
