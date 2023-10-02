@@ -64,6 +64,8 @@ const ProfileBioEditor = ({
                     id="nickname-field"
                     variant="outlined"
                     field={{ ...field, fullWidth: true }}
+                    muiProps={{ autoComplete: false }}
+                    autoComplete="off"
                   />
                 )}
                 name="nickname"
@@ -88,7 +90,10 @@ const ProfileBioEditor = ({
             </Grid>
             {/* introduction message */}
             <Grid item xs={12}>
-              <CuTextFieldLabel htmlFor="introduction-message-field">
+              <CuTextFieldLabel
+                htmlFor="introduction-message-field"
+                style={{ display: 'none' }}
+              >
                 자기 소개
               </CuTextFieldLabel>
             </Grid>
@@ -100,6 +105,7 @@ const ProfileBioEditor = ({
                     variant="outlined"
                     id="introduction-message-field"
                     field={{ ...field, fullWidth: true }}
+                    autoComplete="off"
                   />
                 )}
                 name="introduction"

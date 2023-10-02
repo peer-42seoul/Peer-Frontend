@@ -54,6 +54,7 @@ const ProfileLinkEditor = ({
                         variant="outlined"
                         id={`link-${i}-name-field`}
                         field={{ ...field, fullWidth: true }}
+                        autoComplete="off"
                       />
                     )}
                     name={`${i}.linkName`}
@@ -73,6 +74,7 @@ const ProfileLinkEditor = ({
                           variant="outlined"
                           id={`link-${i}-link-field`}
                           field={{ ...field, fullWidth: true }}
+                          autoComplete="off"
                         />
                       )}
                       name={`${i}.link`}
