@@ -1,9 +1,11 @@
 'use client'
 import React from 'react'
 import SettingContainer from './SettingContainer'
-import { Avatar, Grid, InputLabel, TextField, Typography } from '@mui/material'
+import { Avatar, Box, Grid, Typography } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
+import CuTextField from '@/components/CuTextField'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 
 interface IFormInput {
   nickname: string
@@ -22,11 +24,18 @@ const ProfileBioEditor = ({
     introduction: data.introduction,
   }
 
-  const { handleSubmit, control } = useForm<IFormInput>({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<IFormInput>({
     defaultValues: defaultValues,
+    mode: 'onChange',
   })
 
-  const onSubmit = (data: IFormInput) => console.log('on positive click', data)
+  const onSubmit = (data: IFormInput) => {
+    console.log('on positive click', data)
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -35,7 +44,7 @@ const ProfileBioEditor = ({
         // onPositiveClick={onSubmit}
         settingTitle="introduction"
       >
-        <Grid container spacing={2}>
+        <Grid container spacing={2} rowSpacing={1}>
           {/* profile image */}
           <Grid item xs={12}>
             <Avatar
@@ -47,24 +56,29 @@ const ProfileBioEditor = ({
               alt="profile image"
             />
           </Grid>
-          {/* below profile image, nickname, association, email, introduction */}
+          {/* nickname, association, email, introduction */}
           <Grid item container spacing={2} justifyContent={'flex-start'}>
             {/* 닉네임 수정 */}
             <Grid item xs={3}>
-              <InputLabel htmlFor="nickname-field">닉네임</InputLabel>
+              <CuTextFieldLabel htmlFor="nickname">닉네임</CuTextFieldLabel>
             </Grid>
             <Grid item xs={9}>
               <Controller
                 render={({ field }) => (
-                  <TextField
-                    id="nickname-field"
-                    variant="outlined"
-                    {...field}
-                    fullWidth
-                  />
+                  <Box>
+                    <CuTextField
+                      id="nickname"
+                      variant="outlined"
+                      field={{ ...field }}
+                      fullWidth={true}
+                      error={errors.nickname ? true : false}
+                      autoComplete="off"
+                    />
+                  </Box>
                 )}
                 name="nickname"
                 control={control}
+                rules={{ required: true, maxLength: 7 }}
               />
             </Grid>
             {/* association */}
@@ -84,24 +98,26 @@ const ProfileBioEditor = ({
               <Typography>{data.email}</Typography>
             </Grid>
             {/* introduction message */}
-            <Grid item xs={12}>
-              <InputLabel htmlFor="introduction-message-field">
+            <Grid item xs={12} style={{ display: 'none' }}>
+              <CuTextFieldLabel htmlFor="introduction">
                 자기 소개
-              </InputLabel>
+              </CuTextFieldLabel>
             </Grid>
             <Grid item xs={12}>
               <Controller
                 render={({ field }) => (
-                  <TextField
+                  <CuTextField
                     label=""
                     variant="outlined"
-                    id="introduction-message-field"
-                    {...field}
-                    sx={{ width: '100%' }}
+                    id="introduction"
+                    field={field}
+                    autoComplete="off"
+                    fullWidth
                   />
                 )}
                 name="introduction"
                 control={control}
+                rules={{ maxLength: 150 }}
               />
             </Grid>
           </Grid>
