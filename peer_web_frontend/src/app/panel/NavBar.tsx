@@ -1,10 +1,17 @@
 'use client'
 
-import { NotificationsNoneOutlined } from '@mui/icons-material'
 import {
+  BorderColor,
+  Edit,
+  Favorite,
+  NotificationsNoneOutlined,
+} from '@mui/icons-material'
+import {
+  Avatar,
   BottomNavigation,
   BottomNavigationAction,
   Box,
+  Button,
   IconButton,
   Paper,
   Stack,
@@ -14,6 +21,8 @@ import { useRouter } from 'next/navigation'
 
 import { Dispatch, SetStateAction, useState } from 'react'
 import SearchButton from './SearchButton'
+import Link from 'next/link'
+import useMedia from '@/hook/useMedia'
 
 interface INavProps {
   value: number
@@ -26,63 +35,73 @@ const PcNav = ({ value, setValue }: INavProps) => {
   return (
     <Stack
       direction={'row'}
+      justifyContent={'space-between'}
       sx={{
-        width: '100vw',
         position: 'fixed',
         left: 0,
         right: 0,
         top: 0,
         overflow: 'hidden',
         zIndex: 999,
-      }}>
-      <Box flex={1}>
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue)
+        backgroundColor: 'white',
+      }}
+    >
+      <BottomNavigation
+        showLabels
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue)
+        }}
+      >
+        <BottomNavigationAction
+          label="로고"
+          onClick={() => {
+            router.push('/')
           }}
-        >
-          <BottomNavigationAction
-            label="홈"
-            onClick={() => {
-              router.push('/')
-            }}
-          />
-          <BottomNavigationAction
-            label="히치하이킹"
-            onClick={() => {
-              router.push('/')
-            }}
-          />
-          <BottomNavigationAction
-            label="쇼케이스"
-            onClick={() => {
-              router.push('/')
-            }}
-          />
-          <BottomNavigationAction
-            label="팀페이지"
-            onClick={() => {
-              router.push('/')
-            }}
-          />
-          <BottomNavigationAction
-            label="내 프로필"
-            onClick={() => {
-              router.push('/profile/MyPage')
-            }}
-          />
-        </BottomNavigation>
-      </Box>
-      <Box flex={1}>
+        />
+        <BottomNavigationAction
+          label="홈"
+          onClick={() => {
+            router.push('/')
+          }}
+        />
+        <BottomNavigationAction
+          label="히치하이킹"
+          onClick={() => {
+            router.push('/')
+          }}
+        />
+
+        <BottomNavigationAction
+          label="팀페이지"
+          onClick={() => {
+            router.push('/')
+          }}
+        />
+        <BottomNavigationAction
+          label="쇼케이스"
+          onClick={() => {
+            router.push('/')
+          }}
+        />
+      </BottomNavigation>
+      <Stack direction={'row'}>
+        {/*<Link>*/}
+        <IconButton aria-label="favorites">
+          <Favorite />
+        </IconButton>
+        {/*</Link>*/}
         <IconButton color="inherit" aria-label="menu">
           <NotificationsNoneOutlined />
         </IconButton>
         <IconButton color="inherit" aria-label="menu">
           <SearchButton />
         </IconButton>
-      </Box>
+        <Avatar alt="profile" src="" />
+        <Button variant="outlined" startIcon={<BorderColor />}>
+          새 글쓰기
+        </Button>
+      </Stack>
     </Stack>
   )
 }
@@ -146,7 +165,7 @@ const MobileNav = ({ value, setValue }: INavProps) => {
 }
 
 const NavBar = () => {
-  const isPc = useMediaQuery('(min-width:481px)')
+  const { isPc } = useMedia()
   const [value, setValue] = useState(0)
 
   return (
