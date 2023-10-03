@@ -34,13 +34,11 @@ const MainPage = ({ initData }: { initData: any }) => {
   const pagesize = 10;
   //실제 api 서버용 url. mockup 데이터 만들기 어려워서 보류중
   const url = `http://localhost:3001?type=${type}&sort=${sort}&page=${page}&pagesize=${pagesize}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
-  console.log(url)
-
+  console.log("url", url);
   if (isLoading)
     return (<Typography>로딩중...</Typography>)
 
-  if (!data)
-    return (<Typography>데이터가 없습니다</Typography>)
+  if (!data) return <Typography>데이터가 없습니다</Typography>
 
   return (
     <Container sx={{ backgroundColor: 'gray' }}>

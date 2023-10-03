@@ -1,42 +1,66 @@
 'use client'
 
-import { useMediaQuery, IconButton, Box } from '@mui/material'
-import { Search } from '@mui/icons-material'
+import { useMediaQuery, IconButton } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 import useModal from '@/hook/useModal'
+import CuModal from '@/components/CuModal'
+import SearchBody from '../search/panel/SearchBody'
+
+const StyleMobileSearch = {
+  position: 'absolute' as 'absolute',
+  top: '0%',
+  width: '100%',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+}
+
+const StylePcSearch = {
+  position: 'absolute' as 'absolute',
+  top: '0%',
+  width: '100%',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+}
 
 const SearchPc = () => {
-  const { isOpen, ModalCustom, openModal, closeModal } = useModal()
+  const { isOpen, openModal, closeModal } = useModal()
   return (
-    <IconButton color="inherit" aria-label="menu" onClick={openModal}>
-      <Search />
-      {isOpen && (
-        <ModalCustom>
-          <Box sx={{ backgroundColor: 'red' }}>
-            <h2>A Title</h2>
-            <p>Some content...</p>
-            <button onClick={closeModal}>Close</button>
-          </Box>
-        </ModalCustom>
-      )}
-    </IconButton>
+    <>
+      <IconButton color="inherit" aria-label="menu" onClick={openModal}>
+        <SearchIcon />
+      </IconButton>
+
+      <CuModal
+        open={isOpen}
+        handleClose={closeModal}
+        ariaTitle="modal-title"
+        ariaDescription="modal-description"
+        style={StylePcSearch}
+      >
+        <SearchBody onClose={closeModal} />
+      </CuModal>
+    </>
   )
 }
 
 const SearchMobile = () => {
-  const { isOpen, ModalCustom, openModal, closeModal } = useModal()
+  const { isOpen, openModal, closeModal } = useModal()
   return (
-    <IconButton color="inherit" aria-label="menu" onClick={openModal}>
-      <Search />
-      {isOpen && (
-        <ModalCustom>
-          <Box sx={{ backgroundColor: 'yellow' }}>
-            <h2>A Title</h2>
-            <p>Some content...</p>
-            <button onClick={closeModal}>Close</button>
-          </Box>
-        </ModalCustom>
-      )}
-    </IconButton>
+    <>
+      <IconButton color="inherit" aria-label="menu" onClick={openModal}>
+        <SearchIcon />
+      </IconButton>
+
+      <CuModal
+        open={isOpen}
+        handleClose={closeModal}
+        ariaTitle="modal-title"
+        ariaDescription="modal-description"
+        style={StyleMobileSearch}
+      >
+        <SearchBody onClose={closeModal} />
+      </CuModal>
+    </>
   )
 }
 

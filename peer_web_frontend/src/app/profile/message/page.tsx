@@ -8,9 +8,9 @@ import { debounce } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import MessageChatPage from './[id]/page'
-import ModalContainer from '@/components/ModalContainer'
+import CuModal from '@/components/CuModal'
 import MessageWritingForm from './write/page'
-import useModal from '@/hooks/useModal'
+import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
 
 // interface IMessagObject {
@@ -32,7 +32,7 @@ const MessageMain = () => {
   const [messageList, setMessageList] = useState<IMessagObject[]>([])
   const [selectedStatus, setSelectedStatus] = useState(false)
   const isPc = useMediaQuery('(min-width:481px)')
-  const { open, handleClose, handleOpen } = useModal()
+  const { isOpen, openModal, closeModal } = useModal()
 
   const { data, error, isLoading } = useSWR(
     `http://localhost:4000/profile_message`, //FIXME: _바를 /로 체인지
@@ -82,15 +82,15 @@ const MessageMain = () => {
 
   return (
     <Container sx={{ height: '90vh' }}>
-      {open && (
-        <ModalContainer
-          open={open}
-          handleClose={handleClose}
+      {isOpen && (
+        <CuModal
+          open={isOpen}
+          handleClose={closeModal}
           title={'create_message'}
           description={'create_message'}
         >
-          <MessageWritingForm isPc={isPc} handleClose={handleClose} />
-        </ModalContainer>
+          <MessageWritingForm />
+        </CuModal>
       )}
       <Box
         sx={{ display: 'grid', gridTemplateColumns: isPc ? '3fr 7fr' : '1fr' }}
@@ -118,7 +118,7 @@ const MessageMain = () => {
             <Button
               variant="outlined"
               onClick={() => {
-                handleOpen()
+                openModal()
               }}
             >
               쪽지 보내기
