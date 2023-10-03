@@ -1,9 +1,12 @@
 import React from 'react'
 import SettingContainer from './SettingContainer'
 import { IUserProfileLink } from '@/types/IUserProfile'
-import { Box, InputLabel, TextField } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
+import CuTextField from '@/components/CuTextField'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 
+// TODO 디자이너와 레이아웃 수정 합의 필요
 const ProfileLinkEditor = ({
   closeModal,
   links,
@@ -29,31 +32,79 @@ const ProfileLinkEditor = ({
   const onSubmit = (data: Array<IUserProfileLink>) =>
     console.log('on positive click', data)
 
-  const { handleSubmit, control } = useForm<Array<IUserProfileLink>>({
+  const {
+    handleSubmit,
+    getFieldState,
+    control,
+    formState: { errors },
+  } = useForm<Array<IUserProfileLink>>({
     defaultValues: { ...defaultValues },
+    mode: 'onChange',
   })
+  // const fieldState = getFieldState('firstName')
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <SettingContainer onNegativeClick={closeModal} settingTitle="links">
-        {defaultValues.map((link, i) => {
-          return (
-            <Box key={link.id}>
-              <InputLabel htmlFor={`link-${i}-name-field`}>제목</InputLabel>
-              <Controller
-                render={({ field }) => (
-                  <TextField
-                    variant="outlined"
-                    id={`link-${i}-name-field`}
-                    {...field}
+        <Grid container rowSpacing={2}>
+          {defaultValues.map((link, i) => {
+            return (
+              <Grid item container xs={12} key={link.id} rowSpacing={1}>
+                <Grid item xs={3}>
+                  <CuTextFieldLabel htmlFor={`${i}.linkName`}>
+                    제목
+                  </CuTextFieldLabel>
+                </Grid>
+                <Grid item xs={9}>
+                  <Controller
+                    render={({ field }) => (
+                      <CuTextField
+                        variant="outlined"
+                        id={`${i}.linkName`}
+                        field={{ ...field, fullWidth: true }}
+                        autoComplete="off"
+                        error={errors[i]?.linkName ? true : false}
+                      />
+                    )}
+                    name={`${i}.linkName`}
+                    control={control}
+                    rules={{ required: getFieldState(`${i}.link`).isDirty }}
                   />
-                )}
-                name={`${i}.linkName`}
-                control={control}
-              />
-            </Box>
-          )
-        })}
+                </Grid>
+                <Grid item container xs={12}>
+                  <Grid item xs={3}>
+                    <CuTextFieldLabel htmlFor={`${i}.link`}>
+                      링크
+                    </CuTextFieldLabel>
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Controller
+                      render={({ field }) => (
+                        <Box>
+                          <Box>
+                            <CuTextField
+                              variant="outlined"
+                              id={`${i}.link`}
+                              field={{ ...field, fullWidth: true }}
+                              autoComplete="off"
+                              error={errors[i]?.link ? true : false}
+                            />
+                          </Box>
+                          {errors[i]?.link && <Typography>test</Typography>}
+                        </Box>
+                      )}
+                      rules={{
+                        required: getFieldState(`${i}.linkName`).isDirty,
+                      }}
+                      name={`${i}.link`}
+                      control={control}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            )
+          })}
+        </Grid>
       </SettingContainer>
     </form>
   )
