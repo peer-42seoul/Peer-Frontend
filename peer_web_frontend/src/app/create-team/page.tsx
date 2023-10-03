@@ -1,19 +1,27 @@
 'use client'
 
 import { Box, Button, TextField, Typography } from '@mui/material'
-import RowRadioButtonsGroup from './radioGroup'
-import BasicSelectTeamSize from './BasicSelectTeamSize'
-import BasicSelectMonth from './BasicSelectMonth'
-import BasicSelectArea from './BasicSelectArea'
+import RowRadioButtonsGroup from './panel/radioGroup'
+import CommunicationToolLink from './panel/CommunicationToolLink'
+import SetTeamRole from './panel/SetTeamRole'
+import TagAutoComplete from './panel/TagAutoComplete'
+import { useState } from 'react'
+import BasicSelect, { ComponentType } from './panel/BasicSelect'
 
 const CreateTeam = () => {
+  const [tagData, setTagData] = useState<string[]>([])
+  const [area, setArea] = useState<string>('')
+  const [month, setMonth] = useState<string>('')
+  const [teamsize, setTeamsize] = useState<string>('')
+  const stackList = ['javaScript', 'react', 'TypeScript', 'NextJs']
+
   return (
     <>
       <Box>
         <Typography>모집 글 쓰기</Typography>
         <Box>
           <Typography>팀 제목</Typography>
-          <TextField id="outlined-password-input" variant="outlined" />
+          <TextField variant="outlined" />
         </Box>
         <Box>
           <Typography>팀 분류</Typography>
@@ -21,24 +29,43 @@ const CreateTeam = () => {
         </Box>
         <Box>
           <Typography>팀 인원</Typography>
-          <BasicSelectTeamSize />
+          <BasicSelect
+            type={ComponentType.TeamSize}
+            value={teamsize}
+            setValue={setTeamsize}
+          />
         </Box>
         <Box>
           <Typography>목표기간</Typography>
-          <BasicSelectMonth />
+          <BasicSelect
+            type={ComponentType.Month}
+            value={month}
+            setValue={setMonth}
+          />
         </Box>
         <Box>
           <Typography>지역</Typography>
-          <BasicSelectArea />
+          <BasicSelect
+            type={ComponentType.Area}
+            value={area}
+            setValue={setArea}
+          />
         </Box>
         <Box>
-          <Typography>소통 링크</Typography>
+          <Typography>커뮤니케이션 툴 링크</Typography>
+          <CommunicationToolLink />
         </Box>
         <Box>
           <Typography>태그</Typography>
+          <TagAutoComplete
+            list={stackList}
+            datas={tagData}
+            setData={setTagData}
+          />
         </Box>
         <Box>
-          <Typography>투자 시간</Typography>
+          <Typography>팀 역할</Typography>
+          <SetTeamRole />
         </Box>
         <Button variant="contained" color="success">
           작성 완료
