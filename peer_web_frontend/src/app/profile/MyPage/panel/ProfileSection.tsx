@@ -1,7 +1,6 @@
-import { Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 // import Link from 'next/link'
 import React from 'react'
-import ProfileSectionEditLink from './ProfileSectionEditLink'
 
 const SectionType = {
   introduction: '소개',
@@ -20,15 +19,17 @@ const ProfileSection = ({
   setModalType: (type: string) => void
 }) => {
   const sectionTypeMap = new Map(Object.entries(SectionType))
+  const handleEditClick = () => {
+    setModalType(sectionTitle)
+  }
 
   return (
     <section>
       <Stack direction="row" justifyContent="space-between">
         <Typography>{sectionTypeMap.get(sectionTitle)}</Typography>
-        <ProfileSectionEditLink
-          sectionTitle={sectionTitle}
-          setModalType={setModalType}
-        />
+        <Button variant="text" onClick={handleEditClick}>
+          <Typography>수정</Typography>
+        </Button>
       </Stack>
       {children}
     </section>

@@ -46,7 +46,7 @@ const ProfileImageModal = ({
 
 const ProfileCard = ({
   profileImageURL,
-  username,
+  nickname,
   association,
   introduction,
   email,
@@ -83,7 +83,7 @@ const ProfileCard = ({
             margin: '0 0 0 4px',
           }}
         >
-          <Typography>{username}</Typography>
+          <Typography>{nickname}</Typography>
           {association ? (
             <Typography>{association}</Typography>
           ) : (
