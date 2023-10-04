@@ -1,13 +1,13 @@
 import React from 'react'
 import Modal from '@mui/material/Modal'
-import { Box } from '@mui/material'
+import { Box, SxProps } from '@mui/material'
 
 //   여기 있는 state를 쓰면 됩니다.
 //   const [open, setOpen] = useState(false)
 //   const handleOpen = () => setOpen(true) // 다른 버튼이나 요소를 얘를 활용해서 모달 핸들링 가능
 //   const handleClose = () => setOpen(false)
 
-const style = {
+const defaultstyle = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -19,28 +19,30 @@ const style = {
   p: 4,
 }
 
-interface IModalContainer {
+interface ICuModal {
   open: boolean
   handleClose: () => void
   children: React.ReactNode
-  title: string
-  description: string
+  ariaTitle: string
+  ariaDescription: string
+  style?: SxProps
 }
 
-const ModalContainer = ({
+const CuModal = ({
   open,
   handleClose,
   children,
-  title,
-  description,
-}: IModalContainer) => {
+  ariaTitle,
+  ariaDescription,
+  style = defaultstyle,
+}: ICuModal) => {
   return (
     <>
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby={title}
-        aria-describedby={description}
+        aria-labelledby={ariaTitle}
+        aria-describedby={ariaDescription}
       >
         <Box sx={style}>{children}</Box>
       </Modal>
@@ -48,4 +50,4 @@ const ModalContainer = ({
   )
 }
 
-export default ModalContainer
+export default CuModal

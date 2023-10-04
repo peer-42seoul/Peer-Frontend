@@ -5,25 +5,28 @@ import ProfileCard from './panel/ProfileCard'
 import ProfileSection from './panel/ProfileSection'
 import { IUserProfile } from '@/types/IUserProfile'
 import ProfileLinksSection from './panel/ProfileLinksSection'
-import ModalContainer from '@/components/ModalContainer'
+import CuModal from '@/components/CuModal'
 import ProfileBioEditor from './panel/ProfileBioEditor'
+import ProfileLinkEditor from './panel/ProfileLinkEditor'
 
 const userInfo: IUserProfile = {
   id: 1,
+  nickname: 'hyna',
   profileImageUrl: 'https://picsum.photos/100',
   introduction: 'not a squad, salt',
   linkList: [
     {
+      id: 1,
       link: 'https://profile.intra.42.fr/users/hyna',
-      linkTitle: 'intra profile',
+      linkName: 'intra profile',
     },
     {
+      id: 2,
       link: 'https://www.linkedin.com/in/%ED%98%84-%EB%82%98-98199227a/',
-      linkTitle: 'linkedIn',
+      linkName: 'linkedIn',
     },
   ],
-  phone: '010-0707-2000',
-  representAchievement: ['beginner'],
+  representAchievement: 'beginner',
   achievements: ['beginner', 'too much talker', 'tester'],
   association: '42seoul',
   email: 'hyna@student.42seoul.kr',
@@ -39,7 +42,7 @@ interface IModals {
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
 // TODO Grid 쓸지 말지 결정하기 (모바일과 PC 모두 한 줄로 되어있음)
 const MyProfile = () => {
-  const username = 'hyna'
+  // const username = 'hyna'
   const [modalType, setModalType] = useState<string>('' as string)
   const [modalOpen, setModalOpen] = useState<IModals>({
     introduction: false,
@@ -81,7 +84,7 @@ const MyProfile = () => {
         {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
         <ProfileCard
           profileImageURL={userInfo.profileImageUrl}
-          username={username}
+          nickname={userInfo.nickname}
           association={userInfo?.association}
           email={userInfo.email}
           introduction={userInfo.introduction}
@@ -108,23 +111,34 @@ const MyProfile = () => {
       {/* </Grid> */}
 
       {/* modals */}
-      <ModalContainer
+      <CuModal
         open={modalOpen.introduction}
         handleClose={() => setModalType('')}
-        title="프로필 소개 섹션 수정 모달"
-        description="닉네임, 자기 소개 수정 폼"
+        ariaTitle="프로필 소개 섹션 수정 모달"
+        ariaDescription="닉네임, 자기 소개 수정 폼"
       >
         <ProfileBioEditor
           data={{
             profileImageURL: userInfo.profileImageUrl,
-            username: username,
+            nickname: userInfo.nickname,
             association: userInfo.association,
             email: userInfo.email,
             introduction: userInfo.introduction,
           }}
           closeModal={() => setModalType('')}
         />
-      </ModalContainer>
+      </CuModal>
+      <CuModal
+        open={modalOpen.links}
+        handleClose={() => setModalType('')}
+        ariaTitle="프로필 링크 섹션 수정 모달"
+        ariaDescription="링크 수정 폼"
+      >
+        <ProfileLinkEditor
+          links={userInfo.linkList}
+          closeModal={() => setModalType('')}
+        />
+      </CuModal>
     </Box>
   )
 }
