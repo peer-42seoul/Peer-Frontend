@@ -29,10 +29,10 @@ export default function RootLayout({
         </div>
         <div className="pc-layout">
           <NavBar />
-          <Box sx={{ marginY: '16px' }}>{children}</Box>
+          <Box sx={{ marginY: '16px', height: '100%' }}>{children}</Box>
         </div>
         <div id="modal-root"></div>
       </body>
-    </html >
+    </html>
   )
 }
