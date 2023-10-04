@@ -16,11 +16,9 @@ interface IProps {
 }
 
 interface IMessageData {
-  id: () => number
+  userId: number
+  targetId: number
   content: string
-  messageTime: number[]
-  messageType: string
-  nickname?: string
 }
 
 const MessageForm = ({
@@ -53,16 +51,17 @@ const MessageForm = ({
       }
 
       const data: IMessageData = {
-        id: id + 1,
+        userId: id,
+        targetId: 1, //FIXME: storeNickname이 아니라 targetId로 바꾸기
         content,
-        messageTime: [2023, 9, 6, 17, 16, 51, 144650000],
-        messageType: 'SEND',
       }
 
+      //ㅣ찐 api
+      // /profile/message/message?target=${userId}
       const url =
         type === 'newMessage'
-          ? `http://localhost:4000/message_${nickname}`
-          : `http://localhost:4000/message_${storeNickname}`
+          ? `http://localhost:4000/profile_message_${nickname}`
+          : `http://localhost:4000/profile_message_${storeNickname}`
 
       const response = await axios.post(
         url, //FIXME:이 주소도 임시라서 api구성할 때 삭제하기

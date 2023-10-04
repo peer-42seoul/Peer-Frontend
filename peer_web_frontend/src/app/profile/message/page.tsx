@@ -13,20 +13,9 @@ import MessageWritingForm from './write/page'
 import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
 
-// interface IMessagObject {
-//   // nickname: string
-//   // profileImage: string
-//   // messageTime: string
-//   // lastContent: string
-//   target: number
-//   targetNickname: string
-//   unreadMsgNumber: number
-//   latestContent: string
-//   latestDate: string
-// }
-
 const MessageMain = () => {
   const target = useRef(null)
+  const MessageBox = useRef<HTMLDivElement | null>(null)
   const [page, setPage] = useState(1)
   const [spinner, setSpinner] = useState(false)
   const [messageList, setMessageList] = useState<IMessagObject[]>([])
@@ -35,7 +24,7 @@ const MessageMain = () => {
   const { isOpen, openModal, closeModal } = useModal()
 
   const { data, error, isLoading } = useSWR(
-    `http://localhost:4000/profile_message`, //FIXME: _바를 /로 체인지
+    `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/profile/message`, //FIXME: _바를 /로 체인지
     defaultGetFetcher,
   )
 
@@ -54,7 +43,13 @@ const MessageMain = () => {
           setMessageList((prevMessages) => [...prevMessages, ...res.data])
           setSpinner(false)
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+          console.log(err)
+          setSpinner(false)
+          setPage(1)
+          alert('불러오는 것에 실패했습니다.')
+          MessageBox?.current?.scrollTo({ top: 0, behavior: 'smooth' })
+        })
     }
   }, 1000)
 
@@ -96,7 +91,7 @@ const MessageMain = () => {
         sx={{ display: 'grid', gridTemplateColumns: isPc ? '3fr 7fr' : '1fr' }}
       >
         <Box>
-          <Box sx={{ height: '85vh', overflow: 'auto' }}>
+          <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}>
             <MessageList
               data={messageList || []}
               error={error}
@@ -126,7 +121,11 @@ const MessageMain = () => {
           )}
         </Box>
         {isPc && (
-          <MessageChatPage selectedStatus={selectedStatus} isPc={isPc} />
+          <MessageChatPage
+            selectedStatus={selectedStatus}
+            isPc={isPc}
+            image={messageList}
+          />
         )}
       </Box>
     </Container>

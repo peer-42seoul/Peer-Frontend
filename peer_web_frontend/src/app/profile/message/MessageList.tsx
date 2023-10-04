@@ -44,10 +44,15 @@ const MessageItem = ({
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const router = useRouter()
 
-  const handleChange = useCallback(
-    (target: string) => {
-      setSelectedUser(target)
+  const userSelector = useCallback(
+    (targetUser: number) => {
+      console.log('targetUser', targetUser)
+      setSelectedUser((prevSelectedUsers) => [
+        ...prevSelectedUsers,
+        { targetId: targetUser },
+      ])
     },
+    // console.log('seletedUser', seletedUser),
     [setSelectedUser],
   )
 
@@ -73,7 +78,7 @@ const MessageItem = ({
     <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
       {!onManageMessage && (
         <Checkbox
-          onClick={() => handleChange(user.targetNickname)}
+          onClick={() => userSelector(user.targetNickname)} //FIXME: targetId로 바꿔야함
           {...label}
           icon={<RadioButtonUncheckedIcon />}
           checkedIcon={<RadioButtonCheckedIcon />}
@@ -87,12 +92,24 @@ const MessageItem = ({
         <Typography>{user.targetNickname}</Typography>
         <Typography>{user.latestDate}</Typography>
         <Typography>{user.latestContent}</Typography>
+        <Typography
+          style={{
+            width: '10%',
+            color: 'white',
+            background: 'rgba(255, 81, 64, 1)',
+            borderRadius: '50%',
+            textAlign: 'center',
+          }}
+        >
+          {user.unreadMsgNumber > 0 ? user.unreadMsgNumber : null}
+        </Typography>
 
         <Image
-          src={`${user.targetImage}`}
+          src={`${user.targetProfile}`}
           alt="picture_of_sender"
           width={100}
           height={100}
+          style={{ borderRadius: '50%' }}
         />
       </Box>
     </Box>
@@ -110,8 +127,10 @@ const MessageList = ({
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState<IMessagObject[]>(data)
   const [onManageMessage, setOnManageMessage] = useState(true)
-  const [seletedUser, setSelectedUser] = useState<string[]>([])
-
+  // const [seletedUser, setSelectedUser] = useState<string[]>([])
+  const [seletedUser, setSelectedUser] = useState<Array<{ targetId: string }>>(
+    [],
+  )
   const searchMessageItemHandler = useCallback(() => {
     const filteredResults = data.filter((user: IMessagObject) =>
       user.targetNickname.includes(searchText),
@@ -124,6 +143,7 @@ const MessageList = ({
       if (type === 'delete') {
         console.log('seletedUser42', seletedUser)
         // const confirmResult = confirm('are you sure?')
+        console.log('deleteList', seletedUser)
         axios.delete(`http://localhost:4000/message_list`, {
           data: {
             nickname: seletedUser,
@@ -184,7 +204,7 @@ const MessageList = ({
               user={user}
               onManageMessage={onManageMessage}
               isPc={isPc}
-              setSelectedUser={() => setSelectedUser}
+              setSelectedUser={setSelectedUser}
             />
           ))
         )}
