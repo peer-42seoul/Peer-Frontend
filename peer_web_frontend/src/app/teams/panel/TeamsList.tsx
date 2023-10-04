@@ -15,19 +15,20 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
     >
       {prop.map((team, index) => (
         <Card key={index} sx={{ p: 2, boxShadow: 'none', border: '1px solid' }}>
-          <IconButton
-            sx={{ float: 'right' }}
-            onClick={() => router.push(`/teams/setup/${index}`)}
-          >
-            <SettingsIcon />
-          </IconButton>
+          {team.myRole && (
+            <IconButton
+              sx={{ float: 'right' }}
+              onClick={() => router.push(`/teams/setup/${index}`)}
+            >
+              <SettingsIcon />
+            </IconButton>
+          )}
           <Typography>팀 종류: {team.type}</Typography>
           <Typography>팀 이름: {team.name}</Typography>
           <Typography>팀 상태: {team.status}</Typography>
-          <Typography>팀 활동 기간: {team.deadline}</Typography>
-          <Typography>팀원: {team.members}</Typography>
-          <Typography>활동 장소: {team.location}</Typography>
-          <Typography>활동 시간: {team.activity}</Typography>
+          <Typography>팀 활동 기간: {team.dueTo}</Typography>
+          <Typography>활동 장소: {team.region}</Typography>
+          <Typography>활동 시간: {team.operationForm}</Typography>
         </Card>
       ))}
     </Stack>
