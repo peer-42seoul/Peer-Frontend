@@ -13,3 +13,4 @@ fi
 
 # Start json-server
 npx json-server --watch "$JSON_FILE" --port "$PORT"
+# npx json-server --watch ./db.json --port 3001
