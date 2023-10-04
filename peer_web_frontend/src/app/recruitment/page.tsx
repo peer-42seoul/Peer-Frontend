@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Checkbox, TextField, Typography } from '@mui/material'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import RowRadioButtonsGroup from './panel/radioGroup'
 import CommunicationToolLink from './panel/CommunicationToolLink'
 import SetTeamRole from './panel/SetTeamRole'

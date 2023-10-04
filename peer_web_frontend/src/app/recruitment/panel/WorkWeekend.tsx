@@ -1,10 +1,6 @@
-import { CheckBox } from '@mui/icons-material'
-import { Box, Checkbox, FormControlLabel, Grid, Paper, Typography } from '@mui/material'
-
+import { Box, Checkbox, FormControlLabel, Grid, Typography } from '@mui/material'
 
 const WorkWeekend = () => {
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-
   return (
     <Grid sx={{ flexGrow: 1 }} container spacing={0}>
       <Grid item xs={12}>
