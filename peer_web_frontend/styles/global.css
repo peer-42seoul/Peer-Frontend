@@ -1,14 +1,21 @@
 @media (min-width: 100px) {
-  .layout {
+  .mobile-layout {
     display: flex;
     flex-direction: column;
+  }
+  .pc-layout {
+    display: none;
   }
 }
 
 @media (min-width: 481px) {
-  .layout {
+  .mobile-layout{
+    display: none;
+  }
+
+  .pc-layout {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
   }
 }
 

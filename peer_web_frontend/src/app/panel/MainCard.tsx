@@ -24,9 +24,14 @@ const MainCard = ({
   inProgress,
 }: IProject) => {
   const [favorite, setFavorite] = useState(isFavorite)
-  const changeFavorite = () => {
-    setFavorite(!favorite)
-    // favorite 변경시 favorite 변경 api 호출, 다시 get 해오기.
+  const changeFavorite = async () => {
+    try {
+      // 추후에 이게 어떤 type인지 api 수정해야.
+      // await fetch(`/recruitement/favorite/${study_id}`
+      setFavorite(!favorite)
+    } catch (e) {
+      console.log("error", e);
+    }
   }
 
   return (
@@ -54,12 +59,12 @@ const MainCard = ({
       {/* <Link href="detail"> */}
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
             <Box
               component="img"
               height="194"
               src={profileImgUrl}
-              alt="Paella dish"
+              alt="profile image"
             />
           </Avatar>
         }
