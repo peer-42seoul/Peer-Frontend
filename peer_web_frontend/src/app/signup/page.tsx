@@ -1,4 +1,5 @@
 'use client'
+
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { Button, Typography, Box, IconButton } from '@mui/material'
@@ -12,6 +13,7 @@ interface IFormInputs {
   email: string
   code: string
   password: string
+  passwordConfirm: string
   name: string
   nickName: string
 }

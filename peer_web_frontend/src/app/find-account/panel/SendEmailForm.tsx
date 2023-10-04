@@ -5,11 +5,7 @@ import SendCodeForm from './SendCodeForm'
 import axios from 'axios'
 import { InputLabel, TextField, Typography, Button } from '@mui/material'
 
-const SendEmailForm = ({
-  setPasswordToken,
-}: {
-  setPasswordToken: (newValue: string) => void
-}) => {
+const SendEmailForm = () => {
   const [email, setEmail] = useState('')
   const [isEmailSuccessful, setIsEmailSuccessful] = useState(false)
   const {
@@ -24,7 +20,7 @@ const SendEmailForm = ({
     try {
       console.log('isSubmitting:', isSubmitting)
       // 테스트용 post요청 코드
-      const res = await axios.post(`http://localhost:5000/find`, {
+      const res = await axios.post(`http://localhost:8080/find`, {
         data,
       })
       console.log(res)
@@ -77,9 +73,7 @@ const SendEmailForm = ({
           </Button>
         )}
       </form>
-      {isEmailSuccessful && (
-        <SendCodeForm email={email} setPasswordToken={setPasswordToken} />
-      )}
+      {isEmailSuccessful && <SendCodeForm email={email} />}
     </div>
   )
 }

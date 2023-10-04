@@ -1,15 +1,9 @@
 'use client'
-import { Box, Modal, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Modal, Stack, Typography } from '@mui/material'
+import { IProfileCard } from '@/types/IUserProfile'
 import React, { useState } from 'react'
 
 // TODO css 다른 파일로 빼기
-interface IProfileCard {
-  profileImageURL: string | null
-  username: string
-  association: string | null
-  introduction: string
-  email: string
-}
 
 interface IProfileImageModalProps {
   open: boolean
@@ -52,7 +46,7 @@ const ProfileImageModal = ({
 
 const ProfileCard = ({
   profileImageURL,
-  username,
+  nickname,
   association,
   introduction,
   email,
@@ -73,8 +67,7 @@ const ProfileCard = ({
             padding: '5px 3px',
           }}
         >
-          <Box
-            component="img"
+          <Avatar
             src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
             onClick={() => setOpen(true)}
             sx={{
@@ -83,14 +76,14 @@ const ProfileCard = ({
             }}
           />
         </div>
-        {/* 유저 이름, 소속(42?), 유저 아이디, 유저 이메일 */}
+        {/* 유저 이름, 소속, 유저 아이디, 유저 이메일 */}
         <Stack
           spacing={0.5}
           sx={{
             margin: '0 0 0 4px',
           }}
         >
-          <Typography>{username}</Typography>
+          <Typography>{nickname}</Typography>
           {association ? (
             <Typography>{association}</Typography>
           ) : (

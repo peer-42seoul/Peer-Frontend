@@ -1,29 +1,34 @@
 'use client'
 
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
+import { Box, Container, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import MessageForm from './MessageForm'
 
-const WriteForm = () => {
+const MessageWritingForm = ({ isPc, handleClose }: any) => {
   const [nickname, setNickname] = useState('')
-
   return (
-    <Container>
-      <Box>
+    <>
+      <Container>
         <Box>
-          <Typography>받는 사람</Typography>
-          <Button>팀 리스트</Button>
+          <Box>
+            <Typography>받는 사람</Typography>
+          </Box>
+          <TextField
+            value={nickname}
+            label="받는 사람"
+            variant="outlined"
+            onChange={(e) => setNickname(e.target.value)}
+          />
         </Box>
-        <TextField
-          value={nickname}
-          label="받는 사람"
-          variant="outlined"
-          onChange={(e) => setNickname(e.target.value)}
+        <MessageForm
+          type={'newMessage'}
+          nickname={nickname}
+          handleClose={handleClose}
+          isPc={isPc}
         />
-      </Box>
-      <MessageForm type={'newMessage'} nickname={nickname} />
-    </Container>
+      </Container>
+    </>
   )
 }
 
-export default WriteForm
+export default MessageWritingForm

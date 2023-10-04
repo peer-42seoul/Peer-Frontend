@@ -1,26 +1,25 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material"
-import { Search, NotificationsNoneOutlined } from '@mui/icons-material';
+'use client'
+
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material'
+import { NotificationsNoneOutlined } from '@mui/icons-material'
+import SearchButton from './SearchButton'
+
 const Header = () => {
-  return (<Box sx={{ flex: 1, }}>
-    <AppBar position="static">
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-        >
-          <NotificationsNoneOutlined />
-        </IconButton>
-        <Typography component="div">
-          로고
-        </Typography>
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-        ><Search />        
-        </IconButton>
-      </Toolbar>
-    </AppBar>
-  </Box>)
+  return (
+    <>
+      <Box sx={{ flex: 1 }}>
+        <AppBar position="static">
+          <Toolbar sx={{ justifyContent: 'space-between' }}>
+            <IconButton color="inherit" aria-label="menu">
+              <NotificationsNoneOutlined />
+            </IconButton>
+            <Typography component="div">로고</Typography>
+            <SearchButton />
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </>
+  )
 }
 
-export default Header;
+export default Header

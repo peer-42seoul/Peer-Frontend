@@ -4,14 +4,14 @@ import { IUserProfileLink } from '@/types/IUserProfile'
 
 const ProfileLink = (props: IUserProfileLink) => {
   return (
-    <>
+    <Box>
       <Box
         key={props.link}
         component="img"
         src={`https://www.google.com/s2/favicons?domain=${props.link}`}
       />
-      <Link href={props.link}>{props.linkTitle}</Link>
-    </>
+      <Link href={props.link}>{props.linkName}</Link>
+    </Box>
   )
 }
 
@@ -23,7 +23,7 @@ const ProfileLinksSection = ({
   return (
     <div>
       {linkList?.length ? (
-        linkList.map((item) => <ProfileLink key={item.link} {...item} />)
+        linkList.map((item) => <ProfileLink key={item.id} {...item} />)
       ) : (
         <Typography>제공된 링크가 없습니다.</Typography>
       )}

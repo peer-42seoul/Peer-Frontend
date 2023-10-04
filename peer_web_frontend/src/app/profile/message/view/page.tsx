@@ -1,13 +1,15 @@
 import React from 'react'
 import MessageForm from '../write/MessageForm'
+import { useMediaQuery } from '@mui/material'
 
-const View = () => {
+const MessageViewPage = () => {
+  const isPc = useMediaQuery('(min-width:481px)')
+
   return (
     <>
-      <h1>view</h1>
-      <MessageForm type={'existingMessage'} nickname={undefined} />
+      <MessageForm type={'existingMessage'} nickname={undefined} isPc={isPc} />
     </>
   )
 }
 
-export default View
+export default MessageViewPage
