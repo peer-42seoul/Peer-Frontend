@@ -1,5 +1,4 @@
 'use client'
-
 import { IProject } from '@/types/IProejct'
 import { Container, Box, Grid, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
@@ -12,6 +11,9 @@ import SelectType from './SelectType'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 import useMedia from '@/hook/useMedia'
+import MainProfile from './MainProfile'
+import MainShowcase from './MainShowcase'
+import MainCarousel from './MainCarousel'
 
 const MainPage = ({ initData }: { initData: any }) => {
   const { isPc } = useMedia()
@@ -39,8 +41,10 @@ const MainPage = ({ initData }: { initData: any }) => {
 
   const pagesize = 10
   //실제 api 서버용 url. mockup 데이터 만들기 어려워서 보류중
+  //모바일인지 pc인지에 따라서도 pagesize가 달라져야
   const url = `http://localhost:3001?type=${type}&sort=${sort}&page=${page}&pagesize=${pagesize}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
   console.log('url', url)
+
   if (isLoading) return <Typography>로딩중...</Typography>
 
   if (!data) return <Typography>데이터가 없습니다</Typography>
@@ -80,14 +84,11 @@ const MainPage = ({ initData }: { initData: any }) => {
               ))}
             </Grid>
           </Stack>
-          <Stack width={'250px'} height={'100%'} bgcolor={'green'}>
-            <Typography>쇼케이스</Typography>
-            <Box bgcolor={'blue'} height={'400px'}>
-              쇼케이스
-            </Box>
-            <Box height={'100px'} bgcolor={'yellow'}>
-              캐러셀
-            </Box>
+          <Stack width={'250px'} height={'100%'} bgcolor={'yellow'}>
+            <MainProfile />
+            <MainShowcase />
+            {/* 공식에서 시킨대로 했는데 타입 에러가 나요... */}
+            <MainCarousel />
           </Stack>
         </Stack>
       </Container>

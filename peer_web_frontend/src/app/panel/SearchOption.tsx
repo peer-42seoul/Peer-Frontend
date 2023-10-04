@@ -169,13 +169,15 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
               control={control}
             />
           </FormGroup>
+        </Grid>
+        <Grid item xs={12}>
           <Stack direction="row" justifyContent={'space-between'}>
             <Button onClick={handleReset}>초기화</Button>
             <Button type={'submit'}>확인</Button>
           </Stack>
         </Grid>
       </Grid>
-    </form>
+    </form >
   )
 }
 

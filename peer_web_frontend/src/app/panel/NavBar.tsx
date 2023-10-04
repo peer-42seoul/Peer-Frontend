@@ -2,7 +2,6 @@
 
 import {
   BorderColor,
-  Edit,
   Favorite,
   NotificationsNoneOutlined,
 } from '@mui/icons-material'
@@ -10,18 +9,15 @@ import {
   Avatar,
   BottomNavigation,
   BottomNavigationAction,
-  Box,
   Button,
   IconButton,
   Paper,
   Stack,
-  useMediaQuery,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
 import { Dispatch, SetStateAction, useState } from 'react'
 import SearchButton from './SearchButton'
-import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
 
 interface INavProps {
@@ -86,17 +82,17 @@ const PcNav = ({ value, setValue }: INavProps) => {
         />
       </BottomNavigation>
       <Stack direction={'row'}>
-        {/*<Link>*/}
-        <IconButton aria-label="favorites">
-          <Favorite />
-        </IconButton>
-        {/*</Link>*/}
         <IconButton color="inherit" aria-label="menu">
           <NotificationsNoneOutlined />
         </IconButton>
         <IconButton color="inherit" aria-label="menu">
           <SearchButton />
         </IconButton>
+        {/*<Link>*/}
+        <IconButton aria-label="favorites">
+          <Favorite />
+        </IconButton>
+        {/*</Link>*/}
         <Avatar alt="profile" src="" />
         <Button variant="outlined" startIcon={<BorderColor />}>
           새 글쓰기
