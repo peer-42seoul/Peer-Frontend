@@ -4,6 +4,7 @@ import '../../styles/reset.css'
 import NavBar from './panel/NavBar'
 import Header from './panel/Header'
 import { Box, Stack } from '@mui/material'
+import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -19,16 +20,18 @@ export default function RootLayout({
     <html lang="ko">
       <head />
       <body>
-        <div className="layout">
-          <NavBar />
-          <Stack flex={1}>
-            <Box>
-              <Header />
-            </Box>
-            {/* 헤더 고정 시 여기에 margin-top: 추가 */}
-            <Box sx={{ marginBottom: '100px' }}>{children}</Box>
-          </Stack>
-        </div>
+        <MuiThemeProvider>
+          <div className="layout">
+            <NavBar />
+            <Stack flex={1}>
+              <Box>
+                <Header />
+              </Box>
+              {/* 헤더 고정 시 여기에 margin-top: 추가 */}
+              <Box sx={{ marginBottom: '100px' }}>{children}</Box>
+            </Stack>
+          </div>
+        </MuiThemeProvider>
         <div id="modal-root"></div>
       </body>
     </html>
