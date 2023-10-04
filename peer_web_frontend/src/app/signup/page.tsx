@@ -7,16 +7,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { useState } from 'react'
 import axios from 'axios'
 
-import FormField from './panel/FormField'
-
-interface IFormInputs {
-  email: string
-  code: string
-  password: string
-  passwordConfirm: string
-  name: string
-  nickName: string
-}
+import { ISignUpInputs } from '@/types/ISignUpInputs'
+import SignUpField from './panel/SignUpField'
 
 const SignUp = () => {
   const API_URL = 'http://localhost:4000'
@@ -26,7 +18,7 @@ const SignUp = () => {
     formState: { errors },
     control,
     getValues,
-  } = useForm<IFormInputs>({ mode: 'onChange' })
+  } = useForm<ISignUpInputs>({ mode: 'onChange' })
   const [isEmailSent, setIsEmailSent] = useState<boolean>(false)
   const [emailError, setEmailError] = useState<boolean>(false)
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false)
@@ -122,6 +114,9 @@ const SignUp = () => {
       onClick: submitEmail,
       buttonText: '이메일 중복확인',
       isInputValid: isEmailSent && !emailError,
+      inputProps: {
+        maxLength: 30,
+      },
     },
     code: {
       label: '인증코드',
@@ -135,6 +130,9 @@ const SignUp = () => {
       onClick: submitCode,
       buttonText: '인증코드 확인',
       isInputValid: isCodeSent && !codeError,
+      inputProps: {
+        maxLength: 6,
+      },
     },
     password: {
       label: '비밀번호',
@@ -150,6 +148,10 @@ const SignUp = () => {
         },
       },
       placeholder: '비밀번호를 입력하세요',
+      inputProps: {
+        minLength: 8,
+        maxLength: 20,
+      },
     },
     nickName: {
       label: '닉네임',
@@ -162,11 +164,19 @@ const SignUp = () => {
           value: 2,
           message: '닉네임은 2자 이상이어야 합니다',
         },
+        maxLength: {
+          value: 7,
+          message: '닉네임은 7자 이하여야 합니다',
+        },
       },
       placeholder: '닉네임을 입력하세요',
       onClick: submitNickName,
       buttonText: '닉네임 중복확인',
       isInputValid: isNickNameSent && !nickNameError,
+      inputProps: {
+        minLength: 2,
+        maxLength: 7,
+      },
     },
     name: {
       label: '이름',
@@ -177,9 +187,13 @@ const SignUp = () => {
       rules: {
         required: '실명을 입력하세요',
       },
+      inputProps: {
+        minLength: 2,
+        maxLength: 20,
+      },
     },
   }
-  const onSubmit: SubmitHandler<IFormInputs> = async (data) => {
+  const onSubmit: SubmitHandler<ISignUpInputs> = async (data) => {
     console.log(data)
     router.push('/login')
   }
@@ -218,11 +232,11 @@ const SignUp = () => {
         style={{ width: '70%', display: 'flex', flexDirection: 'column' }}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <FormField {...fieldProp.email} />
-        <FormField {...fieldProp.code} />
-        <FormField {...fieldProp.password} />
-        <FormField {...fieldProp.nickName} />
-        <FormField {...fieldProp.name} />
+        <SignUpField {...fieldProp.email} />
+        <SignUpField {...fieldProp.code} />
+        <SignUpField {...fieldProp.password} />
+        <SignUpField {...fieldProp.nickName} />
+        <SignUpField {...fieldProp.name} />
         <Button
           sx={{
             display: 'block',
