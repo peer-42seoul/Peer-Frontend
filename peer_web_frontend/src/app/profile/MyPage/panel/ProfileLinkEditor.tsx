@@ -1,7 +1,7 @@
 import React from 'react'
 import SettingContainer from './SettingContainer'
 import { IUserProfileLink } from '@/types/IUserProfile'
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
@@ -28,13 +28,22 @@ const ProfileLinkEditor = ({
       linkName: '',
       link: '',
     })
-  console.log(defaultValues)
-  const onSubmit = (data: Array<IUserProfileLink>) =>
+
+  const onSubmit = (data: Array<IUserProfileLink>) => {
+    data.map((link) => {
+      if (link.link && !link.linkName) {
+        return
+      } else if (link.linkName && !link.link) {
+        return
+      }
+    })
     console.log('on positive click', data)
+  }
 
   const {
     handleSubmit,
     getFieldState,
+    // getValues,
     control,
     formState: { errors },
   } = useForm<Array<IUserProfileLink>>({
@@ -64,6 +73,7 @@ const ProfileLinkEditor = ({
                         field={{ ...field, fullWidth: true }}
                         autoComplete="off"
                         error={errors[i]?.linkName ? true : false}
+                        fullWidth
                       />
                     )}
                     name={`${i}.linkName`}
@@ -88,9 +98,9 @@ const ProfileLinkEditor = ({
                               field={{ ...field, fullWidth: true }}
                               autoComplete="off"
                               error={errors[i]?.link ? true : false}
+                              fullWidth
                             />
                           </Box>
-                          {errors[i]?.link && <Typography>test</Typography>}
                         </Box>
                       )}
                       rules={{
