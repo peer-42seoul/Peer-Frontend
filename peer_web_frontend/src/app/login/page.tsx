@@ -5,14 +5,23 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import axios from 'axios'
 import useAuthStore from '@/states/useAuthStore'
 import { useCookies } from 'react-cookie'
-import { signIn } from 'next-auth/react'
+import {
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 interface ILoginFormInput {
   userEmail: string
   password: string
 }
 
-const API_URL = 'https://localhost:8080'
+const API_URL = process.env.API_URL
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -44,17 +53,12 @@ const Login = () => {
       })
     setIsLoading(false)
   }
-  console.log(process.env.NEXT_PUBLIC_GOOGlE_CLIENT_ID)
-  const handleGoogleLogin = () => {
-    const email = signIn('google')
-    console.log(email)
-  }
 
   return (
     <>
       <h2>로그인 페이지</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <Box>
           <Controller
             name="userEmail"
             control={control}
@@ -67,16 +71,18 @@ const Login = () => {
               },
             }}
             render={({ field }) => (
-              <div>
-                <label htmlFor="userEmail">이메일</label>
-                <input {...field} id="userEmail" />
-              </div>
+              <Box>
+                <InputLabel htmlFor="userEmail">이메일</InputLabel>
+                <TextField {...field} id="userEmail" sx={{ width: '500px' }} />
+              </Box>
             )}
           />
-          {errors.userEmail && <p>{errors.userEmail.message}</p>}
-        </div>
+          {errors.userEmail && (
+            <Typography>{errors.userEmail.message}</Typography>
+          )}
+        </Box>
 
-        <div>
+        <Box>
           <Controller
             name="password"
             control={control}
@@ -85,29 +91,48 @@ const Login = () => {
               required: '비밀번호를 입력해주세요',
             }}
             render={({ field }) => (
-              <div>
-                <label htmlFor="password">비밀번호</label>
-                <input
+              <Box>
+                <InputLabel htmlFor="password">비밀번호</InputLabel>
+                <TextField
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   {...field}
-                ></input>
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? 'hide' : 'show'}
-                </button>
-              </div>
+                  sx={{ width: '500px' }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
             )}
           />
-          {errors.password && <p>{errors.password.message}</p>}
-        </div>
-        <button type="submit" disabled={isLoading}>
+          {errors.password && (
+            <Typography>{errors.password.message}</Typography>
+          )}
+        </Box>
+        <Button type="submit" disabled={isLoading}>
           로그인
-        </button>
+        </Button>
       </form>
-      <button onClick={handleGoogleLogin}>구글 로그인</button>
+      <Box>
+        <Button href={`${API_URL}/oauth2/authorization/ft`}>
+          Sign in with 42Seoul
+        </Button>
+      </Box>
+      <Box>
+        <Button href={`${API_URL}/oauth2/authorization/google`}>
+          Sign in with Google
+        </Button>
+      </Box>
     </>
   )
 }
