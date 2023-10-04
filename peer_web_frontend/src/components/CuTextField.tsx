@@ -14,6 +14,8 @@ const CuTextField = ({
   error,
   placeholder,
   inputProps,
+  type,
+  disabled,
 }: {
   id?: string
   field?: any
@@ -25,6 +27,8 @@ const CuTextField = ({
   error?: boolean
   placeholder?: string
   inputProps?: any
+  type?: string
+  disabled?: boolean
 }) => {
   return (
     <TextField
