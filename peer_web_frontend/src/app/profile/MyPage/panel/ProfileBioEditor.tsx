@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import SettingContainer from './SettingContainer'
-import { Avatar, Box, Grid, Typography } from '@mui/material'
+import { Avatar, Grid, Typography } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
@@ -65,16 +65,16 @@ const ProfileBioEditor = ({
             <Grid item xs={9}>
               <Controller
                 render={({ field }) => (
-                  <Box>
-                    <CuTextField
-                      id="nickname"
-                      variant="outlined"
-                      field={{ ...field }}
-                      fullWidth={true}
-                      error={errors.nickname ? true : false}
-                      autoComplete="off"
-                    />
-                  </Box>
+                  <CuTextField
+                    id="nickname"
+                    variant="outlined"
+                    field={{ ...field }}
+                    fullWidth={true}
+                    error={errors.nickname ? true : false}
+                    autoComplete="off"
+                    placeholder="닉네임은 비워둘 수 없습니다."
+                    inputProps={{ maxLength: 7 }}
+                  />
                 )}
                 name="nickname"
                 control={control}
@@ -113,6 +113,7 @@ const ProfileBioEditor = ({
                     field={field}
                     autoComplete="off"
                     fullWidth
+                    inputProps={{ maxLength: 150 }}
                   />
                 )}
                 name="introduction"

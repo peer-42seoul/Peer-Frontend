@@ -114,8 +114,8 @@ const MyProfile = () => {
       <CuModal
         open={modalOpen.introduction}
         handleClose={() => setModalType('')}
-        title="프로필 소개 섹션 수정 모달"
-        description="닉네임, 자기 소개 수정 폼"
+        ariaTitle="프로필 소개 섹션 수정 모달"
+        ariaDescription="닉네임, 자기 소개 수정 폼"
       >
         <ProfileBioEditor
           data={{
@@ -131,8 +131,8 @@ const MyProfile = () => {
       <CuModal
         open={modalOpen.links}
         handleClose={() => setModalType('')}
-        title="프로필 링크 섹션 수정 모달"
-        description="링크 수정 폼"
+        ariaTitle="프로필 링크 섹션 수정 모달"
+        ariaDescription="링크 수정 폼"
       >
         <ProfileLinkEditor
           links={userInfo.linkList}
