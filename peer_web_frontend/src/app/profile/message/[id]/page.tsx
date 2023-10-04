@@ -39,10 +39,11 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
 }
 
 const MessageChatPage = ({
-  selectedStatus,
+  messageList,
   isPc,
   image,
 }: {
+  messageList: IMessageInformation[]
   selectedStatus: boolean
   isPc: boolean
   image?: Array<IMessagObject>
@@ -51,18 +52,13 @@ const MessageChatPage = ({
   // const searchParams = useSearchParams()
   // const search = searchParams.get('search')
 
-  console.log(image, 'imaggg')
-  const { storeNickname } = useMessageStore()
+  const { storedTargetId } = useMessageStore()
   const [messageData, setMessageData] = useState<IMessageInformation[]>([])
 
-  console.log
   const { data, error, isLoading } = useSWR(
-    // selectedStatus
-    //   ? // ? 'http://localhost:4000//profile/message?target=${storeNickname}' //FIXME: 나중에 얘로 설정해야 함
-    storeNickname
-      ? `http://localhost:4000/profile_message_${storeNickname}`
+    storedTargetId
+      ? `http://localhost:4000/profile/message/conversation-list?target=${storedTargetId}`
       : null,
-    // : null,
     defaultGetFetcher,
   )
 
@@ -72,10 +68,8 @@ const MessageChatPage = ({
   //   })
   // }, [image])
   //FIXME: selectedStatus는 아마 store사용하기 이전에 값 관리 때문에 쓰려던 거 같은데 얘 존재 확인하고 삭제하기
-  useEffect(() => {
-    console.log('image', image)
-    console.log('data', data)
 
+  useEffect(() => {
     if (data) {
       const updatedMessageData = data.map(
         (user: IMessageInformation, idx: number) => {
@@ -90,6 +84,7 @@ const MessageChatPage = ({
         setMessageData(updatedMessageData)
     }
   }, [data, image])
+  console.log('messageData 넌 누구지', messageList)
 
   if (error) return <Box>쪽지 불러오기를 실패하였습니다.</Box>
   if (!data) return <Box>빈 쪽지함 입니다!</Box>

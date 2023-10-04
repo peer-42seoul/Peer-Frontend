@@ -24,10 +24,11 @@ const MessageMain = () => {
   const { isOpen, openModal, closeModal } = useModal()
 
   const { data, error, isLoading } = useSWR(
-    `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/profile/message`, //FIXME: _바를 /로 체인지
+    `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/profile/message`,
     defaultGetFetcher,
   )
 
+  console.log('data', data)
   useEffect(() => {
     if (data) {
       setMessageList((prevMessages) => [...prevMessages, ...data])
@@ -38,12 +39,13 @@ const MessageMain = () => {
   const debouncedFetchData = debounce(() => {
     if (!spinner) {
       axios
-        .get(`http://localhost:4000/profile_message?page=${page}`)
+        .get(`http://localhost:4000/profile_message?page=${page}`) // FIXME 백엔드랑 논의 이후에 무한 스크롤 기능 수정해야함
         .then((res) => {
           setMessageList((prevMessages) => [...prevMessages, ...res.data])
           setSpinner(false)
         })
         .catch((err) => {
+          // FIXME : 에러처리 401 해줘야 함
           console.log(err)
           setSpinner(false)
           setPage(1)
@@ -75,6 +77,7 @@ const MessageMain = () => {
     }
   }, [target, !spinner])
 
+  console.log('data의 값은', data)
   return (
     <Container sx={{ height: '90vh' }}>
       {isOpen && (
@@ -122,6 +125,7 @@ const MessageMain = () => {
         </Box>
         {isPc && (
           <MessageChatPage
+            messageList={data}
             selectedStatus={selectedStatus}
             isPc={isPc}
             image={messageList}

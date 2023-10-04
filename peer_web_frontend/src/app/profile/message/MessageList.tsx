@@ -17,7 +17,7 @@ import Image from 'next/image'
 import SearchIcon from '@mui/icons-material/Search'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
-import axios from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import { IMessagObject } from '@/types/IMessageInformation'
 
 interface IMessageList {
@@ -46,7 +46,7 @@ const MessageItem = ({
 
   const userSelector = useCallback(
     (targetUser: number) => {
-      console.log('targetUser', targetUser)
+      console.log('삭제 타게팅된 유저', targetUser)
       setSelectedUser((prevSelectedUsers) => [
         ...prevSelectedUsers,
         { targetId: targetUser },
@@ -57,28 +57,27 @@ const MessageItem = ({
   )
 
   const messageContentHandler = useCallback(
-    (nickname: string, isPc?: boolean) => {
+    (targetId: number, isPc?: boolean) => {
       if (!isPc) {
         // setSelectedStatus(true),
-        useMessageStore.setState({ storeNickname: nickname })
-
+        useMessageStore.setState({ storedTargetId: targetId })
         router.push(
-          // `http://localhost:3000/profile/message/nickname?search=${nickname}`,
-          'http://localhost:3000/profile/message/' + nickname, //FIXME:추후에 수정해야하는 api콜
+          `http://localhost:3000/profile/message/conversaion-list?target=${targetId}`,
         )
       } else {
         // setSelectedStatus(true)
-        useMessageStore.setState({ storeNickname: nickname })
+        useMessageStore.setState({ storedTargetId: targetId })
       }
     },
     [router],
   )
 
+  console.log('user의 값은', user)
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
       {!onManageMessage && (
         <Checkbox
-          onClick={() => userSelector(user.targetNickname)} //FIXME: targetId로 바꿔야함
+          onClick={() => userSelector(user.targetId)} //FIXME: targetId로 바꿔야함
           {...label}
           icon={<RadioButtonUncheckedIcon />}
           checkedIcon={<RadioButtonCheckedIcon />}
@@ -87,7 +86,7 @@ const MessageItem = ({
       <Box
         sx={{ width: '100%', padding: '16px 0 16px 0' }}
         // key={idx}
-        onClick={() => messageContentHandler(user.targetNickname, isPc)}
+        onClick={() => messageContentHandler(user.targetId, isPc)}
       >
         <Typography>{user.targetNickname}</Typography>
         <Typography>{user.latestDate}</Typography>
@@ -144,11 +143,18 @@ const MessageList = ({
         console.log('seletedUser42', seletedUser)
         // const confirmResult = confirm('are you sure?')
         console.log('deleteList', seletedUser)
-        axios.delete(`http://localhost:4000/message_list`, {
-          data: {
-            nickname: seletedUser,
-          },
-        })
+        axios
+          .delete(`http://localhost:4000/profile/message/delete-message`, {
+            data: {
+              target: seletedUser,
+            },
+          })
+          .then((response: AxiosResponse<IMessagObject[]>) => {
+            setFilteredData(response.data) //FIXME: 받아오는 데이터 값 확인하고 filterdData에 넣고 새로 렌더링 하는 것 확인하기
+          })
+          .catch((error: AxiosError) => {
+            error.response?.data.statusCode === 401 //FIXME: 401에러 처리하기
+          })
       } else if (type === 'manage') {
         setOnManageMessage(!onManageMessage)
       }
@@ -168,7 +174,7 @@ const MessageList = ({
         데이터를 불러오는 중입니다...
       </Box>
     )
-
+  console.log('메시지 리스트의 user', filteredData)
   return (
     <Stack>
       {!isPc && <MessageNavigator title={'쪽지'} messageType={'쪽지'} />}
