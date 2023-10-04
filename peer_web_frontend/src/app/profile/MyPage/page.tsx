@@ -5,7 +5,7 @@ import ProfileCard from './panel/ProfileCard'
 import ProfileSection from './panel/ProfileSection'
 import { IUserProfile } from '@/types/IUserProfile'
 import ProfileLinksSection from './panel/ProfileLinksSection'
-import ModalContainer from '@/components/ModalContainer'
+import CuModal from '@/components/CuModal'
 import ProfileBioEditor from './panel/ProfileBioEditor'
 import ProfileLinkEditor from './panel/ProfileLinkEditor'
 
@@ -111,7 +111,7 @@ const MyProfile = () => {
       {/* </Grid> */}
 
       {/* modals */}
-      <ModalContainer
+      <CuModal
         open={modalOpen.introduction}
         handleClose={() => setModalType('')}
         title="프로필 소개 섹션 수정 모달"
@@ -127,8 +127,8 @@ const MyProfile = () => {
           }}
           closeModal={() => setModalType('')}
         />
-      </ModalContainer>
-      <ModalContainer
+      </CuModal>
+      <CuModal
         open={modalOpen.links}
         handleClose={() => setModalType('')}
         title="프로필 링크 섹션 수정 모달"
@@ -138,7 +138,7 @@ const MyProfile = () => {
           links={userInfo.linkList}
           closeModal={() => setModalType('')}
         />
-      </ModalContainer>
+      </CuModal>
     </Box>
   )
 }
