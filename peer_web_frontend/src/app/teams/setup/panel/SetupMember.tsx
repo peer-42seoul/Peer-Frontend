@@ -1,14 +1,5 @@
-import {
-  Avatar,
-  Box,
-  Grid,
-  IconButton,
-  Stack,
-  Switch,
-  Typography,
-} from '@mui/material'
+import { Avatar, Box, Grid, Stack, Switch, Typography } from '@mui/material'
 import { IMember } from '../[id]/page'
-import ClearIcon from '@mui/icons-material/Clear'
 
 const SetupMember = ({ team }: { team: IMember[] }) => {
   return (
