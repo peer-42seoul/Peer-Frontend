@@ -31,6 +31,7 @@ const SignUp = () => {
   const [codeError, setCodeError] = useState<boolean>(false)
   const [isNickNameSent, setIsNickNameSent] = useState<boolean>(false)
   const [nickNameError, setNickNameError] = useState<boolean>(false)
+
   const submitEmail = async () => {
     const email = getValues('email')
     if (errors.email?.message) return
@@ -48,7 +49,7 @@ const SignUp = () => {
       setEmailError(true)
       if (error.response?.status === 409) {
         alert('이미 가입된 이메일입니다')
-      } else if (error.response?.status === 404) {
+      } else if (error.response?.status === 400) {
         alert('유효하지 않은 이메일입니다')
       } else {
         alert('알 수 없는 오류가 발생했습니다')
@@ -70,7 +71,7 @@ const SignUp = () => {
       setCodeError(false)
     } catch (error: any) {
       setCodeError(true)
-      if (error.response?.status === 404) {
+      if (error.response?.status === 400) {
         alert('유효하지 않은 인증코드입니다')
       } else {
         alert('알 수 없는 오류가 발생했습니다')
@@ -93,7 +94,7 @@ const SignUp = () => {
     } catch (error: any) {
       console.log(error)
       setNickNameError(true)
-      if (error.response?.status === 404) {
+      if (error.response?.status === 400) {
         alert('유효하지 않은 닉네임입니다')
       } else if (error.response?.status === 409) {
         alert('이미 사용중인 닉네임입니다')
