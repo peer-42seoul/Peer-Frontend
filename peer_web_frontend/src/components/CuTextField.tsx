@@ -42,6 +42,8 @@ const CuTextField = ({
       autoComplete={autoComplete}
       placeholder={placeholder}
       inputProps={inputProps}
+      type={type}
+      disabled={disabled}
     />
   )
 }
