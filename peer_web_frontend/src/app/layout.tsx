@@ -3,6 +3,7 @@ import '../../styles/global.css'
 import '../../styles/reset.css'
 import NavBar from './panel/NavBar'
 import Header from './panel/Header'
+import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
 import { Box } from '@mui/material'
 
 export const metadata: Metadata = {
@@ -20,18 +21,20 @@ export default function RootLayout({
     <html lang="ko">
       <head />
       <body>
-        <div className="mobile-layout">
-          <Header />
-          {/* 헤더 고정 시 여기에 margin-top: 추가 */}
-          {/* 상하단 여백 어떻게 할지 조정 필요 */}
-          <Box sx={{ marginBottom: '16px' }}>{children}</Box>
-          <NavBar />
-        </div>
-        <div className="pc-layout">
-          <NavBar />
-          <Box sx={{ marginY: '56px' }}>{children}</Box>
-        </div>
-        <div id="modal-root"></div>
+        <MuiThemeProvider>
+          <div className="mobile-layout">
+            <Header />
+            {/* 헤더 고정 시 여기에 margin-top: 추가 */}
+            {/* 상하단 여백 어떻게 할지 조정 필요 */}
+            <Box sx={{ marginBottom: '16px' }}>{children}</Box>
+            <NavBar />
+          </div>
+          <div className="pc-layout">
+            <NavBar />
+            <Box sx={{ marginY: '56px' }}>{children}</Box>
+          </div>
+          <div id="modal-root"></div>
+        </MuiThemeProvider>
       </body>
     </html>
   )
