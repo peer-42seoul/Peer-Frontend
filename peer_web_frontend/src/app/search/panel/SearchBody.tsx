@@ -82,7 +82,9 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
                 <TextField
                   sx={{ width: '100%' }}
                   placeholder={
-                    type ? '프로젝트를 찾는 중...' : '스터디를 찾는 중...'
+                    type === 'project'
+                      ? '프로젝트를 찾는 중...'
+                      : '스터디를 찾는 중...'
                   }
                   {...field}
                 />
