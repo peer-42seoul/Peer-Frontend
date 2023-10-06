@@ -200,6 +200,10 @@ const SignUp = () => {
       placeholder: '실명을 입력하세요',
       rules: {
         required: '실명을 입력하세요',
+        minLength: {
+          value: 2,
+          message: '실명을 입력하세요',
+        },
       },
       inputProps: {
         minLength: 2,
