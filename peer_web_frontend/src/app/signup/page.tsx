@@ -7,7 +7,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { useState } from 'react'
 import axios from 'axios'
 
-import { ISignUpInputs } from '@/types/ISignUpInputs'
+import { ISignUpInputs, ISignUpFields } from '@/types/ISignUpInputs'
 import SignUpField from './panel/SignUpField'
 
 const SignUp = () => {
@@ -28,6 +28,7 @@ const SignUp = () => {
 
   const submitEmail = async () => {
     const email = getValues('email')
+    console.log(email)
     if (errors.email?.message) return
     if (email === undefined) {
       alert('이메일을 입력해주세요')
@@ -97,7 +98,8 @@ const SignUp = () => {
       }
     }
   }
-  const fieldProp = {
+
+  const fieldProp: ISignUpFields = {
     email: {
       label: '이메일',
       name: 'email',
