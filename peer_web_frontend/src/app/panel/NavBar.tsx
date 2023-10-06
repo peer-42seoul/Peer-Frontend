@@ -1,16 +1,19 @@
 'use client'
 
+import { NotificationsNoneOutlined } from '@mui/icons-material'
 import {
   BottomNavigation,
   BottomNavigationAction,
+  Box,
+  IconButton,
   Paper,
-  Tab,
-  Tabs,
+  Stack,
   useMediaQuery,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
 import { Dispatch, SetStateAction, useState } from 'react'
+import SearchButton from './SearchButton'
 
 interface INavProps {
   value: number
@@ -21,44 +24,66 @@ const PcNav = ({ value, setValue }: INavProps) => {
   const router = useRouter()
 
   return (
-    <Tabs
-      orientation="vertical"
-      value={value}
-      onChange={(event, newValue) => setValue(newValue)}
-      sx={{ borderRight: 1, borderColor: 'divider' }}
-      variant="fullWidth"
-    >
-      <Tab
-        label="홈"
-        onClick={() => {
-          router.push('/')
-        }}
-      />
-      <Tab
-        label="히치하이킹"
-        onClick={() => {
-          router.push('/')
-        }}
-      />
-      <Tab
-        label="쇼케이스"
-        onClick={() => {
-          router.push('/')
-        }}
-      />
-      <Tab
-        label="팀페이지"
-        onClick={() => {
-          router.push('/')
-        }}
-      />
-      <Tab
-        label="내 프로필"
-        onClick={() => {
-          router.push('/profile/MyPage')
-        }}
-      />
-    </Tabs>
+    <Stack
+      direction={'row'}
+      sx={{
+        width: '100vw',
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        top: 0,
+        overflow: 'hidden',
+        zIndex: 999,
+      }}>
+      <Box flex={1}>
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue)
+          }}
+        >
+          <BottomNavigationAction
+            label="홈"
+            onClick={() => {
+              router.push('/')
+            }}
+          />
+          <BottomNavigationAction
+            label="히치하이킹"
+            onClick={() => {
+              router.push('/')
+            }}
+          />
+          <BottomNavigationAction
+            label="쇼케이스"
+            onClick={() => {
+              router.push('/')
+            }}
+          />
+          <BottomNavigationAction
+            label="팀페이지"
+            onClick={() => {
+              router.push('/')
+            }}
+          />
+          <BottomNavigationAction
+            label="내 프로필"
+            onClick={() => {
+              router.push('/profile/MyPage')
+            }}
+          />
+        </BottomNavigation>
+      </Box>
+      <Box flex={1}>
+        <IconButton color="inherit" aria-label="menu">
+          <NotificationsNoneOutlined />
+        </IconButton>
+        <IconButton color="inherit" aria-label="menu">
+          <SearchButton />
+        </IconButton>
+      </Box>
+    </Stack>
   )
 }
 
@@ -106,7 +131,7 @@ const MobileNav = ({ value, setValue }: INavProps) => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/')
+            router.push('/teams')
           }}
         />
         <BottomNavigationAction
