@@ -10,11 +10,10 @@ const SetupMember = ({ team }: { team: IMember[] }) => {
         </Grid>
         {team.map((member, index) => (
           <Grid component="div" key={index} item xs={6} textAlign="center">
-            <Box component="div">
+            <Box component="div" border="1px solid" p={1}>
               <Avatar sx={{ margin: 'auto' }}>A</Avatar>
               <Typography fontWeight="bold">{member.name}</Typography>
-              <Typography fontSize="small">프로필 보기</Typography>
-              <Stack direction="row" sx={{ margin: 'auto' }}>
+              <Stack direction="row" sx={{ justifyContent: 'center' }}>
                 <Typography fontSize="small">리더 권한</Typography>
                 <Switch size="small" />
               </Stack>

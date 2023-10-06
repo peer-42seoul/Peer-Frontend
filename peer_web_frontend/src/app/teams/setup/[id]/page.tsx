@@ -1,30 +1,11 @@
 'use client'
 
-import { Stack } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import SetupPage from '../panel/SetupTeam'
 import { useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import SetupMember from '../panel/SetupMember'
-
-/**
- * 
- * 
-{
-  team: {
-    id : string,
-    name: string,
-    dueTo: string,
-    operationForm: string,
-    region: string[ 1, 2, 3 ]
-  }, 
-  member: [
-      name: string,
-      id: string,
-      grant: boolean,
-    }, ...
-  ]
-}
- */
+import ApplicantList from '../panel/ApplicantList'
 
 export interface IMember {
   name: string
@@ -49,7 +30,7 @@ const mockdata: ITeam = {
     id: '0',
     name: '프로젝트 1',
     type: '프로젝트',
-    dueTo: '2021-10-10',
+    dueTo: '10개월',
     operationForm: '온라인',
     region: ['서울', '경기', '인천'],
   },
@@ -77,14 +58,29 @@ const mockdata: ITeam = {
   ],
 }
 
+interface interview {
+  question: string
+  answer: string
+}
+
+export interface IApplicant {
+  name: string
+  id: string
+  interview: interview[]
+}
+
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const { isPc } = useMedia()
   const { id } = params
   const [team, setTeam] = useState<ITeam>()
+  const [showApplicant, setShowApplicant] = useState<boolean>(false)
 
   useEffect(() => {
     setTeam(mockdata)
   }, [team, id])
+
+  const openApplicant = () => setShowApplicant(true)
+  const closeApplicant = () => setShowApplicant(false)
 
   return (
     <Stack
@@ -97,7 +93,25 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       padding={2}
     >
       {team && <SetupPage team={team} />}
-      {team && <SetupMember team={team.member} />}
+      {team && (
+        <>
+          {!showApplicant && (
+            <>
+              <SetupMember team={team.member} />
+              <Button
+                onClick={openApplicant}
+                sx={{ mt: 1 }}
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
+                신청 대기자 보기
+              </Button>
+            </>
+          )}
+          {showApplicant && <ApplicantList close={closeApplicant} />}
+        </>
+      )}
       {!team && <div>팀을 선택해주세요</div>}
     </Stack>
   )
