@@ -131,7 +131,7 @@ const MobileNav = ({ value, setValue }: INavProps) => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/')
+            router.push('/teams')
           }}
         />
         <BottomNavigationAction
