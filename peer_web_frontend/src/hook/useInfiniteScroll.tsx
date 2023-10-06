@@ -1,28 +1,32 @@
 import { debounce } from 'lodash'
-import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 
-import { useState, useEffect, useRef } from 'react';
+/**
+ * 무한 스크롤 훅
+ * @param setPage 페이지 번호를 변경하는 함수
+ * @param mutate 데이터를 가져오는 함수
+ * @param pageLimit 마지막 페이지 번호
+ * @param page 현재 페이지 번호
+ */
+const useInfiniteScroll = ({ setPage, mutate, pageLimit, page }: { setPage: Dispatch<SetStateAction<number>>, mutate: any, pageLimit: number, page: number }) => {
+    const [spinner, setSpinner] = useState(false);
+    const target = useRef(null);
 
-const useInfiniteScroll = ({ initialPage = 1, initialSpinner = false, targetRef, setPage }) => {
-    const [spinner, setSpinner] = useState(initialSpinner);
-
-    const debouncedFetchData = debounce(() => {
-        if (!spinner) {
-            // 데이터 업데이트
-            setPage((prevPage) => prevPage + 1);
-            setSpinner(false);
-        }
+    const debouncedFetchData = debounce(async () => {
+        // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
+        setSpinner(true);
+        setPage(page + 1);
+        await mutate();
+        setSpinner(false);
     }, 1000);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting) {
-                    if (!spinner) {
+                    if (!spinner && page < pageLimit) {
                         // 스피너를 표시하고 페이지 번호를 증가시킨 후 디바운스된 데이터 가져오기 함수 호출
-                        setSpinner(true);
-                        setPage((prevPage) => prevPage + 1);
+                        // 가능한 페이지 양을 도달했다면 더이상 로딩하지 않는다.
                         debouncedFetchData();
                     }
                 }
@@ -30,7 +34,7 @@ const useInfiniteScroll = ({ initialPage = 1, initialSpinner = false, targetRef,
             { threshold: 0.7 },
         );
 
-        const currentTarget = targetRef.current;
+        const currentTarget = target.current;
 
         if (currentTarget) {
             observer.observe(currentTarget);
@@ -40,15 +44,9 @@ const useInfiniteScroll = ({ initialPage = 1, initialSpinner = false, targetRef,
         return () => {
             if (currentTarget) observer.unobserve(currentTarget);
         };
-    }, [targetRef, spinner, debouncedFetchData, setPage]);
+    }, [target, spinner, debouncedFetchData, page, pageLimit]);
 
-    return { targetRef, spinner };
+    return { target, spinner };
 };
-
-export default useInfiniteScroll;
-
-
-// Example usage:
-// const { target, messageList } = useInfiniteScroll(fetchData, { initialPage: 1, initialMessageList: [] });
 
 export default useInfiniteScroll;
