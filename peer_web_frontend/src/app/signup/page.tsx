@@ -23,6 +23,9 @@ const SignUp = () => {
   const [emailError, setEmailError] = useState<boolean>(false)
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false)
   const [codeError, setCodeError] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<'password' | 'text'>(
+    'password',
+  )
   const [isNickNameSent, setIsNickNameSent] = useState<boolean>(false)
   const [nickNameError, setNickNameError] = useState<boolean>(false)
 
@@ -66,8 +69,10 @@ const SignUp = () => {
       setCodeError(false)
     } catch (error: any) {
       setCodeError(true)
-      if (error.response?.status === 400) {
+      if (error.response?.status === 401) {
         alert('유효하지 않은 인증코드입니다')
+      } else if (error.response?.status === 400) {
+        alert('유효한 이메일이 아닙니다')
       } else {
         alert('알 수 없는 오류가 발생했습니다')
       }
@@ -114,11 +119,12 @@ const SignUp = () => {
       },
       placeholder: '사용할 이메일을 입력하세요',
       onClick: submitEmail,
-      buttonText: '이메일 중복확인',
+      buttonText: '이메일 인증',
       isInputValid: isEmailSent && !emailError,
       inputProps: {
         maxLength: 30,
       },
+      type: 'text',
     },
     code: {
       label: '인증코드',
@@ -130,11 +136,12 @@ const SignUp = () => {
       },
       placeholder: '인증코드를 입력해주세요',
       onClick: submitCode,
-      buttonText: '인증코드 확인',
+      buttonText: '인증 확인',
       isInputValid: isCodeSent && !codeError,
       inputProps: {
         maxLength: 6,
       },
+      type: 'text',
     },
     password: {
       label: '비밀번호',
@@ -150,10 +157,14 @@ const SignUp = () => {
         },
       },
       placeholder: '비밀번호를 입력하세요',
+      onClick: () => {
+        setShowPassword(showPassword === 'password' ? 'text' : 'password')
+      },
       inputProps: {
         minLength: 8,
         maxLength: 20,
       },
+      type: showPassword,
     },
     nickName: {
       label: '닉네임',
@@ -179,6 +190,7 @@ const SignUp = () => {
         minLength: 2,
         maxLength: 7,
       },
+      type: 'text',
     },
     name: {
       label: '이름',
@@ -193,6 +205,7 @@ const SignUp = () => {
         minLength: 2,
         maxLength: 20,
       },
+      type: 'text',
     },
   }
   const onSubmit: SubmitHandler<ISignUpInputs> = async (data) => {

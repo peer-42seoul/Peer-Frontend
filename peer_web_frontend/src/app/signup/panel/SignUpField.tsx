@@ -1,10 +1,12 @@
 'use client'
 import { Controller } from 'react-hook-form'
-import { Typography, Button, TextField } from '@mui/material'
-// import CuTextField from '@/components/CuTextField'
-import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import Typography from '@mui/material/Typography'
 
 import { ISignUpField } from '@/types/ISignUpInputs'
+import CuTextField from '@/components/CuTextField'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import SignUpFieldButton from './SignUpFieldButton'
+import { InputAdornment, TextField } from '@mui/material'
 
 const SignUpField = ({
   label,
@@ -17,6 +19,7 @@ const SignUpField = ({
   buttonText,
   isInputValid,
   inputProps,
+  type,
 }: ISignUpField) => {
   return (
     <>
@@ -29,20 +32,24 @@ const SignUpField = ({
             <CuTextFieldLabel htmlFor={name}>{label}</CuTextFieldLabel>
             <TextField
               {...field}
-              type="text"
+              type={type}
               disabled={isInputValid}
               placeholder={placeholder}
               inputProps={inputProps}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SignUpFieldButton
+                      name={name}
+                      type={type}
+                      onClick={onClick}
+                      buttonText={buttonText}
+                      isInputValid={isInputValid}
+                    />
+                  </InputAdornment>
+                ),
+              }}
             />
-            {onClick && (
-              <Button
-                variant="contained"
-                disabled={isInputValid}
-                onClick={onClick}
-              >
-                {buttonText}
-              </Button>
-            )}
           </>
         )}
       />
