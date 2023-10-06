@@ -6,7 +6,7 @@ import { ISignUpField } from '@/types/ISignUpInputs'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import SignUpFieldButton from './SignUpFieldButton'
-import { InputAdornment, TextField } from '@mui/material'
+import { InputAdornment } from '@mui/material'
 
 const SignUpField = ({
   label,
@@ -30,8 +30,8 @@ const SignUpField = ({
         render={({ field }) => (
           <>
             <CuTextFieldLabel htmlFor={name}>{label}</CuTextFieldLabel>
-            <TextField
-              {...field}
+            <CuTextField
+              field={field}
               type={type}
               disabled={isInputValid}
               placeholder={placeholder}
