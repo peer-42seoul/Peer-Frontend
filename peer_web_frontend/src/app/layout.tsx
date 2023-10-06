@@ -31,7 +31,7 @@ export default function RootLayout({
           </div>
           <div className="pc-layout">
             <NavBar />
-            <Box sx={{ marginY: '16px' }}>{children}</Box>
+            <Box sx={{ marginY: '56px' }}>{children}</Box>
           </div>
           <div id="modal-root"></div>
         </MuiThemeProvider>
