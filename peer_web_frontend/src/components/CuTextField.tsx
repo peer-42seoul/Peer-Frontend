@@ -14,6 +14,7 @@ const CuTextField = ({
   error,
   placeholder,
   inputProps,
+  type,
 }: {
   id?: string
   field?: any
@@ -25,6 +26,7 @@ const CuTextField = ({
   error?: boolean
   placeholder?: string
   inputProps?: any
+  type?: string
 }) => {
   return (
     <TextField
@@ -37,7 +39,8 @@ const CuTextField = ({
       sx={style}
       autoComplete={autoComplete}
       placeholder={placeholder}
-      inputProps={inputProps}
+      InputProps={inputProps}
+      type={type}
     />
   )
 }
