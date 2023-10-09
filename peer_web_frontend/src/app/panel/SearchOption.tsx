@@ -23,10 +23,10 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
       region: 'none',
       placeOnline: false,
       placeOffline: false,
-      placeMixed: false,
+      placemix: false,
       statusBefore: false,
-      statusInProgress: false,
-      statusAfter: false,
+      statusonGoing: false,
+      statusdone: false,
     },
   })
   const [tagData, setTagData] = useState<string[]>([])
@@ -49,10 +49,10 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
       region,
       placeOnline,
       placeOffline,
-      placeMixed,
+      placemix,
       statusBefore,
-      statusInProgress,
-      statusAfter,
+      statusonGoing,
+      statusdone,
     } = data
     const makeCommaString = (obj: Object) => {
       const trueKeys = Object.keys(obj).filter((key) => obj[key])
@@ -62,14 +62,14 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
 
     const status = makeCommaString({
       before: statusBefore,
-      inProgress: statusInProgress,
-      after: statusAfter,
+      onGoing: statusonGoing,
+      done: statusdone,
     })
 
     const place = makeCommaString({
       online: placeOnline,
       offline: placeOffline,
-      mixed: placeMixed,
+      mix: placemix,
     })
 
     const tag = tagData.length ? tagData.join(',') : ''
@@ -147,7 +147,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
               label="오프라인"
               control={control}
             />
-            <FormCheckbox name="placeMixed" label="혼합" control={control} />
+            <FormCheckbox name="placemix" label="혼합" control={control} />
           </FormGroup>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -159,12 +159,12 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
               control={control}
             />
             <FormCheckbox
-              name="statusInProgress"
+              name="statusonGoing"
               label="모집중"
               control={control}
             />
             <FormCheckbox
-              name="statusAfter"
+              name="statusdone"
               label="모집완료"
               control={control}
             />
