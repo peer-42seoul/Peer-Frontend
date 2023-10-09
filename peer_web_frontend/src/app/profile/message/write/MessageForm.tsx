@@ -57,17 +57,12 @@ const MessageForm = ({
         url, //FIXME:이 주소도 임시라서 api구성할 때 삭제하기
         data,
       )
-
-      if (response.status >= 200 && response.status < 300) {
-        setContent('')
-        updateMessageData(response.data)
-        if (isPc) {
-          handleClose()
-        } else {
-          router.push('http://localhost:3000/profile/message')
-        }
+      setContent('')
+      updateMessageData(response.data)
+      if (isPc) {
+        handleClose()
       } else {
-        console.error('HTTP Error:', response.status, response.statusText)
+        router.push('http://localhost:3000/profile/message')
       }
     } catch (error) {
       console.error('Message sending error:', error)
