@@ -24,7 +24,7 @@ const SendCodeForm = ({ email }: { email: string }) => {
   useEffect(() => {
     if (timer === 0) {
       alert('인증 코드가 만료되었습니다.')
-      location.reload() // 페이지 새로고침
+      region.reload() // 페이지 새로고침
     }
   }, [timer])
 
