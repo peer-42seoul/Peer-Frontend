@@ -8,6 +8,7 @@ import ProfileLinksSection from './panel/ProfileLinksSection'
 import CuModal from '@/components/CuModal'
 import ProfileBioEditor from './panel/ProfileBioEditor'
 import ProfileLinkEditor from './panel/ProfileLinkEditor'
+import useToast from '@/hook/useToast'
 
 const userInfo: IUserProfile = {
   id: 1,
@@ -17,12 +18,12 @@ const userInfo: IUserProfile = {
   linkList: [
     {
       id: 1,
-      link: 'https://profile.intra.42.fr/users/hyna',
+      linkUrl: 'https://profile.intra.42.fr/users/hyna',
       linkName: 'intra profile',
     },
     {
       id: 2,
-      link: 'https://www.linkedin.com/in/%ED%98%84-%EB%82%98-98199227a/',
+      linkUrl: 'https://www.linkedin.com/in/%ED%98%84-%EB%82%98-98199227a/',
       linkName: 'linkedIn',
     },
   ],
@@ -50,6 +51,7 @@ const MyProfile = () => {
     skills: false,
     links: false,
   })
+  const [toastMessage, setToastMessage] = useState<string>('')
 
   useEffect(() => {
     const newModalOpen: IModals = {
@@ -73,6 +75,8 @@ const MyProfile = () => {
 
     setModalOpen(newModalOpen)
   }, [modalType])
+
+  const { CuToast, isOpen, openToast, closeToast } = useToast()
 
   return (
     <Box>
@@ -137,8 +141,13 @@ const MyProfile = () => {
         <ProfileLinkEditor
           links={userInfo.linkList}
           closeModal={() => setModalType('')}
+          setToastMessage={setToastMessage}
+          setToastOpen={openToast}
         />
       </CuModal>
+      <CuToast open={isOpen} onClose={closeToast} severity="error">
+        <Typography>{toastMessage}</Typography>
+      </CuToast>
     </Box>
   )
 }
