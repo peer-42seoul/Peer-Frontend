@@ -3,12 +3,22 @@
 import { defaultGetFetcher } from '@/api/fetchers'
 import MessageNavigator from '@/components/MessageNavigator'
 import useMessageStore from '@/states/useMessageStore'
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Button, Container, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import MessageForm from '../write/MessageForm'
+import MessageForm from '../MessageForm'
 import { IMessagObject, IMessageInformation } from '@/types/IMessageInformation'
 import Image from 'next/image'
+
+interface IMessageType {
+  senderId: number
+  senderNickname: string
+  targetProfile: string
+  msgId: number
+  content: string
+  date: string
+  isEnd: boolean
+}
 
 const MessageContent = ({ user }: { user: IMessageInformation }) => {
   return (
@@ -44,7 +54,7 @@ const MessageChatPage = ({
   image,
 }: {
   messageList: IMessageInformation[]
-  selectedStatus: boolean
+  setPageStatus: boolean
   isPc: boolean
   image?: Array<IMessagObject>
 }) => {
@@ -54,20 +64,12 @@ const MessageChatPage = ({
 
   const { storedTargetId } = useMessageStore()
   const [messageData, setMessageData] = useState<IMessageInformation[]>([])
+  const [isMessageFormVisible, setMessageFormVisible] = useState(false)
 
   const { data, error, isLoading } = useSWR(
-    storedTargetId
-      ? `http://localhost:4000/profile/message/conversation-list?target=${storedTargetId}`
-      : null,
+    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/conversation-list?userId=${storedTargetId}}`, // FIXME : 여기의 userid는 내 uid
     defaultGetFetcher,
   )
-
-  // useEffect(() => {
-  //   messageData.map((user: IMessageInformation, idx: number) => {
-  //     user.senderImage = image[idx].targetImage
-  //   })
-  // }, [image])
-  //FIXME: selectedStatus는 아마 store사용하기 이전에 값 관리 때문에 쓰려던 거 같은데 얘 존재 확인하고 삭제하기
 
   useEffect(() => {
     if (data) {
@@ -84,26 +86,37 @@ const MessageChatPage = ({
         setMessageData(updatedMessageData)
     }
   }, [data, image])
-  console.log('messageData 넌 누구지', messageList)
 
   if (error) return <Box>쪽지 불러오기를 실패하였습니다.</Box>
-  if (!data) return <Box>빈 쪽지함 입니다!</Box>
   if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
+  if (!data) return <Box>빈 쪽지함 입니다!</Box>
 
+  console.log('유저 안 값', messageData)
   return (
     <Container>
-      <MessageNavigator title={storeNickname} messageType={'inchatting'} />
+      <MessageNavigator title={storedTargetId} messageType={'inchatting'} />
       <Box sx={{ width: '100%' }}>
         {messageData.map((user: IMessageInformation, idx: number) => {
           return <MessageContent key={idx} user={user} />
         })}
-        {isPc && (
+        {isMessageFormVisible ? (
           <MessageForm
-            type={'existingMessage'}
-            nickname={undefined} // TODO: 내 상태
+            targetId={messageData[0].senderId}
+            type={'inchatting'}
+            keyword={undefined} // TODO: 내 상태
             setMessageData={setMessageData}
+            setMessageFormVisible={setMessageFormVisible}
             isPc={true}
           />
+        ) : (
+          <Button
+            sx={{ width: '100%' }}
+            onClick={() => {
+              setMessageFormVisible((prevValue) => !prevValue)
+            }}
+          >
+            답하기
+          </Button>
         )}
       </Box>
     </Container>

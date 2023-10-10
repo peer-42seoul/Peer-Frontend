@@ -7,10 +7,12 @@ import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
 
 interface IProps {
+  targetId: number
   type: string
-  nickname?: string
+  keyword?: string
   setMessageData?: (prevData: any) => void | IMessageInformation[] | undefined
   handleClose?: any | undefined
+  setMessageFormVisible?: any | undefined
   isPc: boolean
 }
 
@@ -21,8 +23,10 @@ interface IMessageData {
 
 const MessageForm = ({
   type,
-  nickname,
+  targetId,
+  keyword,
   setMessageData,
+  setMessageFormVisible,
   handleClose,
   isPc,
 }: IProps) => {
@@ -41,17 +45,19 @@ const MessageForm = ({
           return
         }
       } else if (!isPc) {
-        if (!content || !nickname) {
+        if (!content || !keyword) {
           alert('내용을 입력하세요.')
           return
         }
       }
 
       const data: IMessageData = {
-        targetId: 1, //FIXME: 값을 받는 사람으로 targetId로 수정해야함
+        targetId,
         content,
       }
-      const url = `/profile/message/new-message`
+      const url = `${
+        process.env.NEXT_PUBLIC_API_URL
+      }api/v1/message/new-message?userId=${42}` // FIXME : 내 uid 넣기
 
       const response = await axios.post(
         url, //FIXME:이 주소도 임시라서 api구성할 때 삭제하기
@@ -67,11 +73,12 @@ const MessageForm = ({
     } catch (error) {
       console.error('Message sending error:', error)
     }
-  }, [nickname, content, router, id, type, updateMessageData])
+  }, [keyword, content, router, id, updateMessageData])
 
   return (
     <>
       <TextField
+        sx={{ width: '100%' }}
         value={content}
         placeholder="내용을 입력하세요"
         variant="outlined"
@@ -79,14 +86,12 @@ const MessageForm = ({
         rows={3}
         onChange={(e) => setContent(e.target.value)}
       />
-      <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
         <Button
           onClick={() => {
-            {
-              isPc
-                ? handleClose()
-                : router.push('http://localhost:3000/profile/message')
-            }
+            type === 'inchatting'
+              ? setMessageFormVisible((prevValue: boolean) => !prevValue)
+              : handleClose()
           }}
         >
           취소
