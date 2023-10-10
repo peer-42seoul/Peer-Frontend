@@ -15,12 +15,12 @@ const SettingContainer = ({
   settingTitle,
   onNegativeClick,
   children,
-  onPositiveClick,
-}: {
+} // onPositiveClick,
+: {
   settingTitle: string
   onNegativeClick: (object: any) => void
   children: React.ReactNode
-  onPositiveClick?: (object: any) => void
+  // onPositiveClick?: (object: any) => void
 }) => {
   return (
     <div>
@@ -29,15 +29,15 @@ const SettingContainer = ({
       <Button variant="contained" onClick={onNegativeClick}>
         취소
       </Button>
-      {onPositiveClick ? (
+      {/* {onPositiveClick ? (
         <Button variant="contained" onClick={onPositiveClick}>
           완료
         </Button>
-      ) : (
-        <Button variant="contained" type="submit">
-          완료
-        </Button>
-      )}
+      ) : ( */}
+      <Button variant="contained" type="submit">
+        완료
+      </Button>
+      {/* )} */}
     </div>
   )
 }

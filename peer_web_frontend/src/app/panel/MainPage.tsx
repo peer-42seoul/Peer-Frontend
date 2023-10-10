@@ -1,6 +1,6 @@
 'use client'
 import { IProject } from '@/types/IProejct'
-import { Container, Box, Grid, Stack, Typography } from '@mui/material'
+import { Container, Box, Grid, Stack, Typography, CircularProgress } from '@mui/material'
 import { useState } from 'react'
 import { ProjectType, ProjectSort } from '../page'
 import EditButton from './EditButton'
@@ -14,14 +14,16 @@ import useMedia from '@/hook/useMedia'
 import MainProfile from './MainProfile'
 import MainShowcase from './MainShowcase'
 import MainCarousel from './MainCarousel'
+import { useSearchParams } from 'next/navigation'
+import useInfiniteScroll from '@/hook/useInfiniteScroll'
 
 const MainPage = ({ initData }: { initData: any }) => {
   const { isPc } = useMedia()
-  const [page] = useState<number>(1)
+  const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType>('projects')
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort>('recent')
-  //세부옵션용 state
+  /* 추후 디자인 추가되면 schedule 추가하기 */
   const [detailOption, setDetailOption] = useState<{
     due: string
     region: string
@@ -29,11 +31,11 @@ const MainPage = ({ initData }: { initData: any }) => {
     status: string
     tag: string
   }>({ due: '', region: '', place: '', status: '', tag: '' })
-
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get('keyword') ?? '';
   // json server용 url
-  // useswr의 초기값을 initdata로 설정하려했으나 실패...
-  // 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
-  const { data, isLoading } = useSWR(
+  // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
+  const { data, isLoading, mutate } = useSWR(
     `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/${type}-sort-${sort}`,
     defaultGetFetcher,
     { fallbackData: initData },
@@ -42,8 +44,12 @@ const MainPage = ({ initData }: { initData: any }) => {
   const pagesize = 10
   //실제 api 서버용 url. mockup 데이터 만들기 어려워서 보류중
   //모바일인지 pc인지에 따라서도 pagesize가 달라져야
-  const url = `http://localhost:3001?type=${type}&sort=${sort}&page=${page}&pagesize=${pagesize}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
+  const url = `http://localhost:3001?type=${type}&sort=${sort}&page=${page}&pagesize=${pagesize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
   console.log('url', url)
+
+  /* 무한 스크롤 */
+  const pageLimit = 2;
+  const { target, spinner } = useInfiniteScroll({ setPage, mutate, pageLimit, page });
 
   if (isLoading) return <Typography>로딩중...</Typography>
 
@@ -83,11 +89,19 @@ const MainPage = ({ initData }: { initData: any }) => {
                 </Grid>
               ))}
             </Grid>
+            {spinner && <CircularProgress />}
+            <Box
+              sx={{
+                bottom: 0,
+                height: '1vh',
+                backgroundColor: 'primary.main',
+              }}
+              ref={target}
+            />
           </Stack>
           <Stack width={'250px'} height={'100%'} bgcolor={'yellow'}>
             <MainProfile />
             <MainShowcase />
-            {/* 공식에서 시킨대로 했는데 타입 에러가 나요... */}
             <MainCarousel />
           </Stack>
         </Stack>
@@ -133,6 +147,15 @@ const MainPage = ({ initData }: { initData: any }) => {
           <EditButton />
         </Box>
       </Box>
+      {spinner && <CircularProgress />}
+      <Box
+        sx={{
+          bottom: 0,
+          height: '1vh',
+          backgroundColor: 'primary.main',
+        }}
+        ref={target}
+      />
     </Container>
   )
 }

@@ -14,7 +14,9 @@ const CuTextField = ({
   error,
   placeholder,
   inputProps,
+  InputProps,
   type,
+  disabled,
 }: {
   id?: string
   field?: any
@@ -26,7 +28,9 @@ const CuTextField = ({
   error?: boolean
   placeholder?: string
   inputProps?: any
+  InputProps?: any
   type?: string
+  disabled?: boolean
 }) => {
   return (
     <TextField
@@ -39,8 +43,10 @@ const CuTextField = ({
       sx={style}
       autoComplete={autoComplete}
       placeholder={placeholder}
-      InputProps={inputProps}
+      inputProps={inputProps} // minLength, maxLength, pattern 등을 사용하고 싶을 때 사용
+      InputProps={InputProps} // endAdornment 등을 사용하고 싶을 때 사용 ex TextField에 버튼 같은 요소를 넣고 싶을 때 사용합니다.
       type={type}
+      disabled={disabled}
     />
   )
 }

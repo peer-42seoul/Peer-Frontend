@@ -17,13 +17,13 @@ const MainCarousel = () => {
             {...settings}
         >
             <Box height={'100px'} bgcolor={'green'}>
-                <h3>배너 1</h3>
+                배너 1
             </Box>
             <Box height={'100px'} bgcolor={'green'}>
-                <h3>배너 2</h3>
+                배너 2
             </Box>
             <Box height={'100px'} bgcolor={'green'}>
-                <h3>배너3</h3>
+                배너 3
             </Box>
         </Slider>)
 }
