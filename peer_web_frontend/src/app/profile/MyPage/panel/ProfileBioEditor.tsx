@@ -72,6 +72,7 @@ const ProfileBioEditor = ({
         message: '사용할 수 있는 닉네임 입니다.',
       })
       setToastOpen(true)
+      if (nicknameError) setNicknameError(false) // 닉네임 폼 에러 띄우기 위함
       // TODO status code가 200이 아닐 경우 false 처리나 toast 띄우기
     }, [nickname, setIsNicknameUnique])
 
