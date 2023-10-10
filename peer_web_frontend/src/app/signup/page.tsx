@@ -58,7 +58,7 @@ const SignUp = () => {
     }
   }
 
-  const clickPrevStep = (signUpStep: number) => {
+  const clickPrevStep = () => {
     if (signUpStep === 0) {
       router.back()
       return
@@ -66,7 +66,7 @@ const SignUp = () => {
     setSignUpStep(signUpStep - 1)
   }
 
-  const clickNextStep = (signUpStep: number) => {
+  const clickNextStep = () => {
     setSignUpStep(signUpStep + 1)
   }
 
@@ -99,6 +99,7 @@ const SignUp = () => {
         code: code,
       })
       setCodeError(false)
+      clickNextStep()
     } catch (error: any) {
       setCodeError(true)
       if (error.response?.status === 401) {
@@ -108,7 +109,7 @@ const SignUp = () => {
       } else {
         alert('그 밖의 오류')
         setCodeError(false) // 나중에 제거해야 함!
-        setSignUpStep(2)
+        clickNextStep()
       }
     }
   }
@@ -333,9 +334,7 @@ const SignUp = () => {
                 width: '50%',
                 marginTop: '30px',
               }}
-              onClick={() => {
-                setSignUpStep(1)
-              }}
+              onClick={clickNextStep}
             >
               다음
             </Button>
