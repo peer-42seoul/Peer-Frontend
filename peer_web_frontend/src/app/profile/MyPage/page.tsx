@@ -89,12 +89,14 @@ const MyProfile = () => {
   const { CuToast, isOpen, openToast, closeToast } = useToast()
 
   return (
-    <Box>
-      <Typography>프로필</Typography>
-      {/* <Grid container> */}
-      {/* profile introduction part */}
-      {/* <Grid item xs={12} md={6}> */}
-      <ProfileSection sectionTitle="introduction" setModalType={setModalType}>
+    <Box px={[2, 4]} py={[3, 4]}>
+      {!isPc && <Typography>프로필</Typography>}
+
+      <ProfileSection
+        sectionTitle="introduction"
+        setModalType={setModalType}
+        sx={{ marginBottom: '24px' }}
+      >
         {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
         <ProfileCard
           profileImageURL={userInfo.profileImageUrl}
@@ -103,12 +105,9 @@ const MyProfile = () => {
           email={userInfo.email}
           introduction={userInfo.introduction}
         />
-        {/* <div>biography</div> */}
       </ProfileSection>
-      {/* </Grid> */}
 
       {/* profile home */}
-      {/* <Grid item> */}
       <Box>
         <ProfileSection sectionTitle="achievements" setModalType={setModalType}>
           achievements
@@ -120,9 +119,7 @@ const MyProfile = () => {
           <ProfileLinksSection linkList={userInfo.linkList} />
         </ProfileSection>
       </Box>
-      {/* </Grid> */}
       {/* profile home end*/}
-      {/* </Grid> */}
 
       {/* modals */}
       <CuModal
