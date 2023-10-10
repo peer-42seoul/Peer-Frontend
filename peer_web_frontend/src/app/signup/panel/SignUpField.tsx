@@ -16,6 +16,7 @@ const SignUpField = ({
   rules,
   placeholder,
   onClick,
+  onChange,
   buttonText,
   isInputValid,
   inputProps,
@@ -31,7 +32,15 @@ const SignUpField = ({
           <>
             <CuTextFieldLabel htmlFor={name}>{label}</CuTextFieldLabel>
             <CuTextField
-              field={field}
+              field={{
+                ...field,
+                onChange: (e: any) => {
+                  field.onChange(e)
+                  if (onChange) {
+                    onChange()
+                  }
+                },
+              }}
               type={type}
               disabled={isInputValid}
               placeholder={placeholder}

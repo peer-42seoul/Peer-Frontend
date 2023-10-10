@@ -9,7 +9,7 @@ export interface ISignUpInputs {
 }
 
 interface ISignUpFieldRules {
-  required: string
+  required?: string
   pattern?: {
     value: RegExp
     message: string
@@ -30,9 +30,10 @@ export interface ISignUpField {
   name: 'email' | 'code' | 'password' | 'nickName' | 'name'
   control: Control<ISignUpInputs, any>
   error: FieldError | undefined
-  rules: ISignUpFieldRules
+  rules?: ISignUpFieldRules
   placeholder?: string
   onClick?: () => void
+  onChange?: () => void
   buttonText?: string
   isInputValid?: boolean
   inputProps?: {
