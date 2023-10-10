@@ -18,21 +18,23 @@ const ProfileLinkEditor = ({
   setToastOpen,
 }: {
   closeModal: () => void
-  links: Array<IUserProfileLink>
+  links?: Array<IUserProfileLink>
   setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (open: boolean) => void
 }) => {
-  const defaultValues: Array<IUserProfileLink> = links.map((link) => ({
-    id: link.id,
-    linkName: link.linkName,
-    linkUrl: link.linkUrl,
-  }))
+  const defaultValues: Array<IUserProfileLink> = links
+    ? links.map((link) => ({
+        id: link.id,
+        linkName: link.linkName,
+        linkUrl: link.linkUrl,
+      }))
+    : ([] as Array<IUserProfileLink>)
 
-  const emptyLinksLength: number = 3 - links.length
+  const emptyLinksLength: number = 3 - (links ? links.length : 0)
 
   for (let i = 0; i < emptyLinksLength; i++)
     defaultValues.push({
-      id: links.length + i + 1,
+      id: links ? links.length + i + 1 : i,
       linkName: '',
       linkUrl: '',
     })
