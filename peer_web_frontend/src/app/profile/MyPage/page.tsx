@@ -1,5 +1,5 @@
 'use client'
-import { AlertColor, Box, /*Grid,*/ Typography } from '@mui/material'
+import { AlertColor, Box, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ProfileCard from './panel/ProfileCard'
 import ProfileSection from './panel/ProfileSection'
@@ -10,29 +10,8 @@ import ProfileBioEditor from './panel/ProfileBioEditor'
 import ProfileLinkEditor from './panel/ProfileLinkEditor'
 import useToast from '@/hook/useToast'
 import useMedia from '@/hook/useMedia'
-
-const userInfo: IUserProfile = {
-  id: 1,
-  nickname: 'hyna',
-  profileImageUrl: 'https://picsum.photos/100',
-  introduction: 'not a squad, salt',
-  linkList: [
-    {
-      id: 1,
-      linkUrl: 'https://profile.intra.42.fr/users/hyna',
-      linkName: 'intra profile',
-    },
-    {
-      id: 2,
-      linkUrl: 'https://www.linkedin.com/in/%ED%98%84-%EB%82%98-98199227a/',
-      linkName: 'linkedIn',
-    },
-  ],
-  representAchievement: 'beginner',
-  achievements: ['beginner', 'too much talker', 'tester'],
-  association: '42seoul',
-  email: 'hyna@student.42seoul.kr',
-}
+import useSWR from 'swr'
+import { defaultGetFetcher } from '@/api/fetchers'
 
 interface IModals {
   introduction: boolean
@@ -49,7 +28,12 @@ interface IToastProps {
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
 // TODO Grid 쓸지 말지 결정하기 (모바일과 PC 모두 한 줄로 되어있음)
 const MyProfile = () => {
-  // const username = 'hyna'
+  const {
+    data: userInfo,
+    error,
+    isLoading,
+  } = useSWR<IUserProfile>('http://localhost:4000/profile/1', defaultGetFetcher)
+
   const [modalType, setModalType] = useState<string>('' as string)
   const [modalOpen, setModalOpen] = useState<IModals>({
     introduction: false,
@@ -86,7 +70,17 @@ const MyProfile = () => {
     setModalOpen(newModalOpen)
   }, [modalType])
 
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const { CuToast, isOpen: isToastOpen, openToast, closeToast } = useToast()
+
+  if (error) {
+    return <Typography>데이터를 가져오는 것을 실패했습니다.</Typography>
+  }
+  if (isLoading) {
+    return <Typography>로딩중 입니다.</Typography>
+  }
+  if (!userInfo) {
+    return <Typography>데이터가 없습니다.</Typography>
+  }
 
   return (
     <Box px={[2, 4]} py={[3, 4]}>
@@ -180,7 +174,7 @@ const MyProfile = () => {
         }
       >
         <ProfileLinkEditor
-          links={userInfo.linkList}
+          links={userInfo?.linkList}
           closeModal={() => setModalType('')}
           setToastMessage={setToastMessage}
           setToastOpen={openToast}
@@ -188,7 +182,7 @@ const MyProfile = () => {
       </CuModal>
       {/* toast */}
       <CuToast
-        open={isOpen}
+        open={isToastOpen}
         onClose={closeToast}
         severity={toastMessage.severity}
       >
