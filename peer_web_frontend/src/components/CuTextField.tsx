@@ -14,6 +14,9 @@ const CuTextField = ({
   error,
   placeholder,
   inputProps,
+  multiline,
+  maxRows,
+  minRows,
 }: {
   id?: string
   field?: any
@@ -25,6 +28,9 @@ const CuTextField = ({
   error?: boolean
   placeholder?: string
   inputProps?: any
+  multiline?: boolean
+  maxRows?: number
+  minRows?: number
 }) => {
   return (
     <TextField
@@ -38,6 +44,9 @@ const CuTextField = ({
       autoComplete={autoComplete}
       placeholder={placeholder}
       inputProps={inputProps}
+      multiline={multiline}
+      maxRows={maxRows}
+      minRows={minRows}
     />
   )
 }
