@@ -1,9 +1,9 @@
 'use client'
 
-import { Stack } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 
-const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
+const TeamsPage = ({ params }: { params: { id: string } }) => {
   const { isPc } = useMedia()
   const { id } = params
 
@@ -18,8 +18,9 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       padding={2}
     >
       팀 페이지
+      <Typography>{id}</Typography>
     </Stack>
   )
 }
 
-export default TeamsSetupPage
+export default TeamsPage
