@@ -26,12 +26,12 @@ export default function RootLayout({
             <Header />
             {/* 헤더 고정 시 여기에 margin-top: 추가 */}
             {/* 상하단 여백 어떻게 할지 조정 필요 */}
-            <Box sx={{ marginBottom: '16px' }}>{children}</Box>
+            <Box sx={{ marginBottom: '56px' }}>{children}</Box>
             <NavBar />
           </div>
           <div className="pc-layout">
             <NavBar />
-            <Box sx={{ marginY: '16px' }}>{children}</Box>
+            <Box sx={{ marginY: '56px' }}>{children}</Box>
           </div>
           <div id="modal-root"></div>
         </MuiThemeProvider>

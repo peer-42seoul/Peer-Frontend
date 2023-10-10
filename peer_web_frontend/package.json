@@ -34,10 +34,13 @@
     "react-cookie": "^6.1.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
     "swr": "^2.2.1",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.199",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "eslint": "^8.48.0",
@@ -50,6 +53,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "lodash": "^4.17.21",
     "prettier": "^3.0.2",
     "typescript": "^5.1.6"
   }

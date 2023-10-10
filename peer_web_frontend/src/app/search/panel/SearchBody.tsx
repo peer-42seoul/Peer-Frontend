@@ -13,8 +13,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import useSWR from 'swr'
-import { fetchStaticData } from '@/api/fetchers'
+import { useRouter } from 'next/navigation'
 
 interface SearchBodyProps {
   onClose: () => void
@@ -36,26 +35,18 @@ const StyleSeachMobile = {
 }
 
 export default function SearchBody({ onClose }: SearchBodyProps) {
+  const router = useRouter()
   const { isPc } = useMedia()
   const { control, handleSubmit } = useForm()
   const [type, setType] = useState<SearchType>(SearchType.STUDY)
-  const [searchWord, setSearchWord] = useState<string>('')
-  const { data, error, isLoading } = useSWR(
-    searchWord
-      ? `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/recruitment?type=${type}&keyword=${searchWord}&category=title&sort=latest&page=1&pagesize=10`
-      : null,
-    fetchStaticData,
-  )
 
   const clickStudy = () => setType(SearchType.STUDY)
   const clickProject = () => setType(SearchType.PROJECT)
   const onSubmit = (data: any) => {
-    setSearchWord(data.searchWord)
-    console.log(searchWord)
+    console.log('data', data.searchWord)
+    router.push(`?keyword=${data.searchWord}`)
+    onClose()
   }
-
-  if (isLoading) return <Typography>로딩중...</Typography>
-  if (error) return <Typography>에러가 발생했습니다</Typography>
 
   return (
     <>
@@ -91,7 +82,9 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
                 <TextField
                   sx={{ width: '100%' }}
                   placeholder={
-                    type ? '프로젝트를 찾는 중...' : '스터디를 찾는 중...'
+                    type === 'project'
+                      ? '프로젝트를 찾는 중...'
+                      : '스터디를 찾는 중...'
                   }
                   {...field}
                 />
@@ -101,7 +94,6 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
           </form>
         </Stack>
         <SearchHistory />
-        {data ? <Typography>{data}</Typography> : null}
       </Box>
     </>
   )

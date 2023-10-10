@@ -17,6 +17,9 @@ const CuTextField = ({
   multiline,
   maxRows,
   minRows,
+  InputProps,
+  type,
+  disabled,
 }: {
   id?: string
   field?: any
@@ -31,6 +34,9 @@ const CuTextField = ({
   multiline?: boolean
   maxRows?: number
   minRows?: number
+  InputProps?: any
+  type?: string
+  disabled?: boolean
 }) => {
   return (
     <TextField
@@ -47,6 +53,9 @@ const CuTextField = ({
       multiline={multiline}
       maxRows={maxRows}
       minRows={minRows}
+      InputProps={InputProps} // endAdornment 등을 사용하고 싶을 때 사용 ex TextField에 버튼 같은 요소를 넣고 싶을 때 사용합니다.
+      type={type}
+      disabled={disabled}
     />
   )
 }
