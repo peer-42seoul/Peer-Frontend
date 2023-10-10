@@ -20,11 +20,10 @@ const MessageMain = () => {
   const { isOpen, openModal, closeModal } = useModal()
   // const { userId } = useAuthStore()
   const { data, error, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/list?userId=${1}`, // FIXME : 내 userId 넣기
+    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/list?userId=${1}`, // FIXME  내 userId 넣기
     defaultGetFetcher,
   )
 
-  console.log('data', data)
   useEffect(() => {
     if (data) {
       setMessageList((prevMessages) => [...prevMessages, ...data])

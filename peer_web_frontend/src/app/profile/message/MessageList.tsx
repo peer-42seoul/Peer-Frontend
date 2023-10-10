@@ -17,6 +17,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { IMessagObject } from '@/types/IMessageInformation'
+import useAuthStore from '@/states/useAuthStore'
 
 interface IMessageList {
   data: IMessagObject[] | []
@@ -54,7 +55,7 @@ const MessageItem = ({
       useMessageStore.setState({ storedTargetId: targetId })
 
       router.push(
-        `http://localhost:3000/profile/message/conversaion-list?target=${targetId}`,
+        `http://localhost:3000/profile/message/conversation-list?target=${targetId}`,
       )
     },
     [router],
@@ -107,7 +108,7 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState<IMessagObject[]>(data)
   const [onManageMessage, setOnManageMessage] = useState(true)
-  // const [seletedUser, setSelectedUser] = useState<string[]>([])
+  const { userId } = useAuthStore()
   const [seletedUser, setSelectedUser] = useState<Array<{ targetId: string }>>(
     [],
   )
@@ -126,7 +127,7 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
         console.log('deleteList', seletedUser)
         axios
           .delete(
-            `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/delete-message?userId=${userId}`, // FIXME : userId 받아와야함
+            `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/delete-message?userId=${userId}`,
             {
               data: {
                 target: seletedUser,
@@ -137,7 +138,7 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
             setFilteredData(response.data) //FIXME: 받아오는 데이터 값 확인하고 filterdData에 넣고 새로 렌더링 하는 것 확인하기
           })
           .catch((error: AxiosError) => {
-            error.response?.data.statusCode === 401 //FIXME: 401에러 처리하기
+            error.response?.data.statusCode === 401 // TODO: 401에러 처리하기
           })
       } else if (type === 'manage') {
         setOnManageMessage(!onManageMessage)

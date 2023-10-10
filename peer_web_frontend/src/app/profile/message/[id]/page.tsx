@@ -9,6 +9,7 @@ import useSWR from 'swr'
 import MessageForm from '../MessageForm'
 import { IMessagObject, IMessageInformation } from '@/types/IMessageInformation'
 import Image from 'next/image'
+import useAuthStore from '@/states/useAuthStore'
 
 // interface IMessageType {
 //   senderId: number
@@ -63,11 +64,12 @@ const MessageChatPage = ({
   // const search = searchParams.get('search')
 
   const { storedTargetId } = useMessageStore()
+  const { userId } = useAuthStore()
   const [messageData, setMessageData] = useState<IMessageInformation[]>([])
   const [isMessageFormVisible, setMessageFormVisible] = useState(false)
 
   const { data, error, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/conversation-list?userId=${storedTargetId}}`, // FIXME : 여기의 userid는 내 uid
+    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/conversation-list?userId=${userId}}`, // FIXME : 여기의 userid는 내 uid
     defaultGetFetcher,
   )
 
@@ -91,7 +93,6 @@ const MessageChatPage = ({
   if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
   if (!data) return <Box>빈 쪽지함 입니다!</Box>
 
-  console.log('유저 안 값', messageData)
   return (
     <Container>
       <MessageNavigator title={storedTargetId} messageType={'inchatting'} />
@@ -102,7 +103,7 @@ const MessageChatPage = ({
         {isMessageFormVisible ? (
           <MessageForm
             targetId={messageData[0].senderId}
-            type={'inchatting'}
+            type={'inChatting'}
             keyword={undefined} // TODO: 내 상태
             setMessageData={setMessageData}
             setMessageFormVisible={setMessageFormVisible}

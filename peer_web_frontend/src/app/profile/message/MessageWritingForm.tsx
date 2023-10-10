@@ -5,6 +5,7 @@ import React, { useCallback, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
+import useAuthStore from '@/states/useAuthStore'
 
 interface IProps {
   userInfo: {
@@ -38,8 +39,8 @@ const MessageForm = ({
   handleClose,
 }: IProps) => {
   const router = useRouter()
-  const id = 42
   const [content, setContent] = useState('')
+  const { userId } = useAuthStore()
 
   const updateMessageData = (newMessage: IMessageInformation) => {
     setMessageData?.((prevData: any) => [...prevData, newMessage])
@@ -59,7 +60,7 @@ const MessageForm = ({
         targetId: userInfo.targetId,
         content,
       }
-      const url = `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/new-message?userId=${userInfo.targetId}`
+      const url = `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/new-message?userId=${userId}`
       // const url = `/api/v1/message/new-message?userId=${1}`
 
       const response = await axios.post(
