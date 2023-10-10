@@ -28,7 +28,12 @@ const TypeTabs = ({
   handleChange: (e: React.SyntheticEvent, newValue: string) => void
 }) => {
   return (
-    <Tabs value={type} onChange={handleChange} aria-label="basic tabs example">
+    <Tabs
+      value={type}
+      onChange={handleChange}
+      aria-label="basic tabs example"
+      variant="fullWidth"
+    >
       <Tab label="프로젝트" value={'project'} />
       <Tab label="스터디" value={'study'} />
       {/* <Tab label="쇼케이스" value={'showcase'} /> */}
