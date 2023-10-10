@@ -1,6 +1,5 @@
 'use client'
 
-import useMessageStore from '@/states/useMessageStore'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import { Box, Button, TextField } from '@mui/material'
 import axios from 'axios'
@@ -16,11 +15,8 @@ interface IProps {
 }
 
 interface IMessageData {
-  id: () => number
+  targetId: number
   content: string
-  messageTime: number[]
-  messageType: string
-  nickname?: string
 }
 
 const MessageForm = ({
@@ -33,7 +29,6 @@ const MessageForm = ({
   const router = useRouter()
   const id = 42
   const [content, setContent] = useState('')
-  const { storeNickname } = useMessageStore()
 
   const updateMessageData = (newMessage: IMessageInformation) => {
     setMessageData?.((prevData: any) => [...prevData, newMessage])
@@ -53,31 +48,24 @@ const MessageForm = ({
       }
 
       const data: IMessageData = {
-        id: id + 1,
+        targetId: 1, //FIXME: 값을 받는 사람으로 targetId로 수정해야함
         content,
-        messageTime: [2023, 9, 6, 17, 16, 51, 144650000],
-        messageType: 'SEND',
       }
-
-      const url =
-        type === 'newMessage'
-          ? `http://localhost:4000/message_${nickname}`
-          : `http://localhost:4000/message_${storeNickname}`
+      const url = `/profile/message/new-message`
 
       const response = await axios.post(
         url, //FIXME:이 주소도 임시라서 api구성할 때 삭제하기
-        type === 'newMessage' ? { ...data, nickname } : data,
+        data,
       )
       setContent('')
-      console.log('Before updateMessageData')
       updateMessageData(response.data)
-      {
-        isPc
-          ? handleClose()
-          : router.push('http://localhost:3000/profile/message')
+      if (isPc) {
+        handleClose()
+      } else {
+        router.push('http://localhost:3000/profile/message')
       }
     } catch (error) {
-      console.error('메시지 전송  에러', error)
+      console.error('Message sending error:', error)
     }
   }, [nickname, content, router, id, type, updateMessageData])
 
