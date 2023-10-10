@@ -1,7 +1,14 @@
 'use client'
 import React, { useCallback, useState } from 'react'
 import SettingContainer from './SettingContainer'
-import { Avatar, Button, Grid, InputAdornment, Typography } from '@mui/material'
+import {
+  AlertColor,
+  Avatar,
+  Button,
+  Grid,
+  InputAdornment,
+  Typography,
+} from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
@@ -13,6 +20,11 @@ interface IFormInput {
   introduction: string
 }
 
+interface IToastProps {
+  severity?: AlertColor
+  message: string
+}
+
 const ProfileBioEditor = ({
   data,
   closeModal,
@@ -21,10 +33,11 @@ const ProfileBioEditor = ({
 }: {
   data: IProfileCard
   closeModal: () => void
-  setToastMessage: (message: string) => void
+  setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (isOpen: boolean) => void
 }) => {
-  const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(false)
+  const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
+  const [nicknameError, setNicknameError] = useState<boolean>(false)
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
@@ -44,11 +57,6 @@ const ProfileBioEditor = ({
 
   const nickname = watch('nickname')
 
-  // useEffect(() => {
-  //   if (!isNicknameUnique) return
-  //   setIsNicknameUnique(false)
-  // }, [nickname])
-
   const NicknameCheckButton = ({
     nickname,
     setIsNicknameUnique,
@@ -59,6 +67,11 @@ const ProfileBioEditor = ({
     const onClick = useCallback(() => {
       console.log('닉네임 중복확인 api', nickname)
       setIsNicknameUnique(true)
+      setToastMessage({
+        severity: 'success',
+        message: '사용할 수 있는 닉네임 입니다.',
+      })
+      setToastOpen(true)
       // TODO status code가 200이 아닐 경우 false 처리나 toast 띄우기
     }, [nickname, setIsNicknameUnique])
 
@@ -75,7 +88,14 @@ const ProfileBioEditor = ({
 
   const onSubmit = (data: IFormInput) => {
     console.log('닉네임 중복확인', isNicknameUnique)
-    if (!isNicknameUnique) return
+    if (!isNicknameUnique) {
+      setToastMessage({
+        severity: 'error',
+        message: '닉네임 중복확인이 필요합니다.',
+      })
+      setToastOpen(true)
+      setNicknameError(true)
+    }
     console.log('on positive click', data)
   }
 
@@ -115,10 +135,11 @@ const ProfileBioEditor = ({
                       onChange: (e: any[]) => {
                         field.onChange(e)
                         if (isNicknameUnique) setIsNicknameUnique(false)
+                        if (nicknameError) setNicknameError(false)
                       },
                     }}
                     fullWidth={true}
-                    error={errors.nickname ? true : false}
+                    error={(errors.nickname ? true : false) || nicknameError}
                     autoComplete="off"
                     placeholder="닉네임은 두 글자 이상이어야 합니다."
                     inputProps={{ minLength: 2, maxLength: 7 }}

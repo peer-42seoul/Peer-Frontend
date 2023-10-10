@@ -1,5 +1,5 @@
 'use client'
-import { Box, /*Grid,*/ Typography } from '@mui/material'
+import { AlertColor, Box, /*Grid,*/ Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ProfileCard from './panel/ProfileCard'
 import ProfileSection from './panel/ProfileSection'
@@ -9,6 +9,7 @@ import CuModal from '@/components/CuModal'
 import ProfileBioEditor from './panel/ProfileBioEditor'
 import ProfileLinkEditor from './panel/ProfileLinkEditor'
 import useToast from '@/hook/useToast'
+import useMedia from '@/hook/useMedia'
 
 const userInfo: IUserProfile = {
   id: 1,
@@ -40,6 +41,11 @@ interface IModals {
   links: boolean
 }
 
+interface IToastProps {
+  severity?: AlertColor
+  message: string
+}
+
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
 // TODO Grid 쓸지 말지 결정하기 (모바일과 PC 모두 한 줄로 되어있음)
 const MyProfile = () => {
@@ -51,7 +57,11 @@ const MyProfile = () => {
     skills: false,
     links: false,
   })
-  const [toastMessage, setToastMessage] = useState<string>('')
+  const [toastMessage, setToastMessage] = useState<IToastProps>(
+    {} as IToastProps,
+  )
+
+  const { isPc } = useMedia()
 
   useEffect(() => {
     const newModalOpen: IModals = {
@@ -120,6 +130,22 @@ const MyProfile = () => {
         handleClose={() => setModalType('')}
         ariaTitle="프로필 소개 섹션 수정 모달"
         ariaDescription="닉네임, 자기 소개 수정 폼"
+        style={
+          isPc
+            ? undefined
+            : {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                bgcolor: 'background.paper',
+                border: '2px solid #000',
+                boxShadow: 24,
+                p: 4,
+              }
+        }
       >
         <ProfileBioEditor
           data={{
@@ -139,6 +165,22 @@ const MyProfile = () => {
         handleClose={() => setModalType('')}
         ariaTitle="프로필 링크 섹션 수정 모달"
         ariaDescription="링크 수정 폼"
+        style={
+          isPc
+            ? undefined
+            : {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                bgcolor: 'background.paper',
+                border: '2px solid #000',
+                boxShadow: 24,
+                p: 4,
+              }
+        }
       >
         <ProfileLinkEditor
           links={userInfo.linkList}
@@ -148,8 +190,12 @@ const MyProfile = () => {
         />
       </CuModal>
       {/* toast */}
-      <CuToast open={isOpen} onClose={closeToast} severity="error">
-        <Typography>{toastMessage}</Typography>
+      <CuToast
+        open={isOpen}
+        onClose={closeToast}
+        severity={toastMessage.severity}
+      >
+        <Typography>{toastMessage.message}</Typography>
       </CuToast>
     </Box>
   )
