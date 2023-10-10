@@ -2,9 +2,7 @@
 
 import { defaultGetFetcher } from '@/api/fetchers'
 import MessageList from '@/app/profile/message/MessageList'
-import { Box, Button, Container, useMediaQuery } from '@mui/material'
-import axios from 'axios'
-import { debounce } from 'lodash'
+import { Box, Button, Container } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import CuModal from '@/components/CuModal'
@@ -13,7 +11,7 @@ import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
 import MessageNavigator from '@/components/MessageNavigator'
 import useMedia from '@/hook/useMedia'
-import useAuthStore from '@/states/useAuthStore'
+// import useAuthStore from '@/states/useAuthStore'
 
 const MessageMain = () => {
   const MessageBox = useRef<HTMLDivElement | null>(null)

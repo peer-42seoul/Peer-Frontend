@@ -10,15 +10,15 @@ import MessageForm from '../MessageForm'
 import { IMessagObject, IMessageInformation } from '@/types/IMessageInformation'
 import Image from 'next/image'
 
-interface IMessageType {
-  senderId: number
-  senderNickname: string
-  targetProfile: string
-  msgId: number
-  content: string
-  date: string
-  isEnd: boolean
-}
+// interface IMessageType {
+//   senderId: number
+//   senderNickname: string
+//   targetProfile: string
+//   msgId: number
+//   content: string
+//   date: string
+//   isEnd: boolean
+// }
 
 const MessageContent = ({ user }: { user: IMessageInformation }) => {
   return (
@@ -49,8 +49,8 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
 }
 
 const MessageChatPage = ({
-  messageList,
-  isPc,
+  // messageList,
+  // isPc,
   image,
 }: {
   messageList: IMessageInformation[]

@@ -10,7 +10,6 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import MessageNavigator from '../../../components/MessageNavigator'
 import useMessageStore from '@/states/useMessageStore'
 import Image from 'next/image'
 import SearchIcon from '@mui/icons-material/Search'
@@ -103,7 +102,7 @@ const MessageItem = ({
   )
 }
 
-const MessageList = ({ data, error, isLoading, isPc }: IMessageList) => {
+const MessageList = ({ data, error, isLoading }: IMessageList) => {
   // const router = useRouter()
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState<IMessagObject[]>(data)
