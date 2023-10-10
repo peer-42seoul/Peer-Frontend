@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import SettingContainer from './SettingContainer'
 import { Avatar, Grid, Typography } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
@@ -15,10 +15,16 @@ interface IFormInput {
 const ProfileBioEditor = ({
   data,
   closeModal,
+  setToastMessage,
+  setToastOpen,
 }: {
   data: IProfileCard
   closeModal: () => void
+  setToastMessage: (message: string) => void
+  setToastOpen: (isOpen: boolean) => void
 }) => {
+  const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(false)
+
   const defaultValues: IFormInput = {
     nickname: data.nickname,
     introduction: data.introduction,
@@ -28,14 +34,13 @@ const ProfileBioEditor = ({
     handleSubmit,
     control,
     formState: { errors },
-    getValues,
+    // getValues,
   } = useForm<IFormInput>({
     defaultValues: defaultValues,
     mode: 'onChange',
   })
 
   const onSubmit = (data: IFormInput) => {
-    console.log(getValues('introduction'))
     console.log('on positive click', data)
   }
 
@@ -74,13 +79,13 @@ const ProfileBioEditor = ({
                     fullWidth={true}
                     error={errors.nickname ? true : false}
                     autoComplete="off"
-                    placeholder="닉네임은 비워둘 수 없습니다."
-                    inputProps={{ maxLength: 7 }}
+                    placeholder="닉네임은 두 글자 이상이어야 합니다."
+                    inputProps={{ minLength: 2, maxLength: 7 }}
                   />
                 )}
                 name="nickname"
                 control={control}
-                rules={{ required: true, maxLength: 7 }}
+                rules={{ required: true, maxLength: 7, minLength: 2 }}
               />
             </Grid>
             {/* association */}
@@ -116,6 +121,9 @@ const ProfileBioEditor = ({
                     autoComplete="off"
                     fullWidth
                     inputProps={{ maxLength: 150 }}
+                    multiline
+                    maxRows={4}
+                    minRows={4}
                   />
                 )}
                 name="introduction"

@@ -129,6 +129,8 @@ const MyProfile = () => {
             email: userInfo.email,
             introduction: userInfo.introduction,
           }}
+          setToastMessage={setToastMessage}
+          setToastOpen={openToast}
           closeModal={() => setModalType('')}
         />
       </CuModal>
@@ -145,6 +147,7 @@ const MyProfile = () => {
           setToastOpen={openToast}
         />
       </CuModal>
+      {/* toast */}
       <CuToast open={isOpen} onClose={closeToast} severity="error">
         <Typography>{toastMessage}</Typography>
       </CuToast>
