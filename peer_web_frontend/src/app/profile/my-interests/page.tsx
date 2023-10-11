@@ -80,7 +80,7 @@ const MyInterests = () => {
         direction="row"
       >
         {data.map((item) => (
-          <Grid item key={item.id} xs={0} sm={4}>
+          <Grid item key={item.id} xs={10} sm={4}>
             <MainCard {...item} />
           </Grid>
         ))}
