@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton } from '@mui/material'
+import { Box, Stack, Typography, IconButton } from '@mui/material'
 import Image from 'next/image'
 
 const OauthLoginBox = () => {
@@ -13,15 +13,7 @@ const OauthLoginBox = () => {
         justifyContent: 'space-between',
       }}
     >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          textAlign: 'center',
-          height: '100%',
-        }}
-      >
+      <Stack alignItems={'center'} spacing={1}>
         <IconButton
           href={`${API_URL}/oauth2/authorization/ft`}
           sx={{ width: '40px', height: '40px' }}
@@ -37,16 +29,8 @@ const OauthLoginBox = () => {
           />
         </IconButton>
         <Typography fontSize={10}>42서울</Typography>
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          textAlign: 'center',
-          height: '100%',
-        }}
-      >
+      </Stack>
+      <Stack alignItems={'center'} spacing={1}>
         <IconButton
           href={`${API_URL}/oauth2/authorization/google`}
           sx={{ width: '40px', height: '40px' }}
@@ -62,7 +46,7 @@ const OauthLoginBox = () => {
           />
         </IconButton>
         <Typography fontSize={10}>구글</Typography>
-      </div>
+      </Stack>
     </Box>
   )
 }
