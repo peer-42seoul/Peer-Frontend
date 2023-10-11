@@ -1,4 +1,6 @@
 import { Autocomplete, Box, Chip, Stack, TextField } from '@mui/material'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 /**
  *
@@ -7,17 +9,33 @@ import { Autocomplete, Box, Chip, Stack, TextField } from '@mui/material'
  * @param setData 선택한 값들의 리스트를 변경해주는 함수입니다 (useState로 관리해주세요)
  */
 
+// interface List {
+//   tagList: string
+// }
+
 const TagAutoComplete = ({
-  list,
   datas,
   setData,
   placeholder,
 }: {
-  list: string[]
   datas: string[]
   setData: any
   placeholder?: string
 }) => {
+  const [list, setList] = useState([
+    'javaScript',
+    'react',
+    'TypeScript',
+    'NextJs',
+  ])
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/recruitement/write').then((res) => {
+      console.log(res)
+      setList(res.data.tagList)
+    })
+  }, [])
+
   /* 태그를 추가합니다 */
   const handleInput = (
     event: React.SyntheticEvent,
