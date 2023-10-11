@@ -1,12 +1,16 @@
 import React from 'react'
 import SettingContainer from './SettingContainer'
 import { IUserProfileLink } from '@/types/IUserProfile'
-import { Box, Grid } from '@mui/material'
+import { AlertColor, Box, Grid } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 
-// TODO 디자이너와 레이아웃 수정 합의 필요
+interface IToastProps {
+  severity?: AlertColor
+  message: string
+}
+
 const ProfileLinkEditor = ({
   closeModal,
   links,
@@ -14,21 +18,23 @@ const ProfileLinkEditor = ({
   setToastOpen,
 }: {
   closeModal: () => void
-  links: Array<IUserProfileLink>
-  setToastMessage: (message: string) => void
+  links?: Array<IUserProfileLink>
+  setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (open: boolean) => void
 }) => {
-  const defaultValues: Array<IUserProfileLink> = links.map((link) => ({
-    id: link.id,
-    linkName: link.linkName,
-    linkUrl: link.linkUrl,
-  }))
+  const defaultValues: Array<IUserProfileLink> = links
+    ? links.map((link) => ({
+        id: link.id,
+        linkName: link.linkName,
+        linkUrl: link.linkUrl,
+      }))
+    : ([] as Array<IUserProfileLink>)
 
-  const emptyLinksLength: number = 3 - links.length
+  const emptyLinksLength: number = 3 - (links ? links.length : 0)
 
   for (let i = 0; i < emptyLinksLength; i++)
     defaultValues.push({
-      id: links.length + i + 1,
+      id: links ? links.length + i + 1 : i,
       linkName: '',
       linkUrl: '',
     })
@@ -36,13 +42,17 @@ const ProfileLinkEditor = ({
   const onSubmit = (data: Array<IUserProfileLink>) => {
     for (let i = 0; i < 3; i++) {
       if (data[i].linkUrl && !data[i].linkName) {
-        setToastMessage(`${i + 1}번째 링크의 제목이 없습니다. 확인해주세요!`)
+        setToastMessage({
+          severity: 'error',
+          message: `${i + 1}번째 링크의 제목이 없습니다. 확인해주세요!`,
+        })
         setToastOpen(true)
         return
       } else if (data[i].linkName && !data[i].linkUrl) {
-        setToastMessage(
-          `${data[i].linkName}의 링크 주소가 없습니다. 확인해주세요!`,
-        )
+        setToastMessage({
+          severity: 'error',
+          message: `${data[i].linkName}의 링크 주소가 없습니다. 확인해주세요!`,
+        })
         setToastOpen(true)
         return
       }
