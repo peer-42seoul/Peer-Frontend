@@ -1,6 +1,6 @@
 import { Box, Grid } from '@mui/material'
 import React from 'react'
-import SubNavBar from './MyPage/panel/SubNavBar'
+import SubNavBar from './panel/SubNavBar'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
