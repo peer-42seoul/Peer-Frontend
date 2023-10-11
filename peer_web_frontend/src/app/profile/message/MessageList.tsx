@@ -18,6 +18,8 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { IMessagObject } from '@/types/IMessageInformation'
 import useAuthStore from '@/states/useAuthStore'
+import CuToast from '@/components/CuToast'
+import useToast from '@/hook/useToast'
 
 interface IMessageList {
   data: IMessagObject[] | []
@@ -37,10 +39,12 @@ const MessageItem = ({
 }) => {
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const router = useRouter()
+  const { setStoredTargetProfile } = useMessageStore()
 
   const userSelector = useCallback(
     (targetUser: number) => {
       console.log('삭제 타게팅된 유저', targetUser)
+
       setSelectedUser((prevSelectedUsers) => [
         ...prevSelectedUsers,
         { targetId: targetUser },
@@ -51,16 +55,18 @@ const MessageItem = ({
   )
 
   const messageContentHandler = useCallback(
-    (targetId: number) => {
-      useMessageStore.setState({ storedTargetId: targetId })
+    (user: any) => {
+      useMessageStore.setState({
+        storedTargetId: user.targetId,
+        setStoredConversationalId: user.conversationalId,
+      })
 
       router.push(
-        `http://localhost:3000/profile/message/conversation-list?target=${targetId}`,
+        `http://localhost:3000/profile/message/conversation-list?target=${user.targetId}`,
       )
     },
     [router],
   )
-
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
       {!onManageMessage && (
@@ -74,7 +80,7 @@ const MessageItem = ({
       <Box
         sx={{ width: '100%', padding: '16px 0 16px 0' }}
         // key={idx}
-        onClick={() => messageContentHandler(user.targetId)}
+        onClick={() => messageContentHandler(user)}
       >
         <Typography>{user.targetNickname}</Typography>
         <Typography>{user.latestDate}</Typography>
@@ -104,14 +110,14 @@ const MessageItem = ({
 }
 
 const MessageList = ({ data, error, isLoading }: IMessageList) => {
-  // const router = useRouter()
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState<IMessagObject[]>(data)
   const [onManageMessage, setOnManageMessage] = useState(true)
-  const { userId } = useAuthStore()
   const [seletedUser, setSelectedUser] = useState<Array<{ targetId: string }>>(
     [],
   )
+  const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const { userId } = useAuthStore()
   const searchMessageItemHandler = useCallback(() => {
     const filteredResults = data.filter((user: IMessagObject) =>
       user.targetNickname.includes(searchText),
@@ -138,7 +144,7 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
             setFilteredData(response.data) //FIXME: 받아오는 데이터 값 확인하고 filterdData에 넣고 새로 렌더링 하는 것 확인하기
           })
           .catch((error: AxiosError) => {
-            error.response?.data.statusCode === 401 // TODO: 401에러 처리하기
+            openToast() // TODO: 401에러 처리하기
           })
       } else if (type === 'manage') {
         setOnManageMessage(!onManageMessage)
@@ -205,6 +211,9 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
           ))
         )}
       </Box>
+      <CuToast open={isOpen} onClose={closeToast} severity="error">
+        <Typography>삭제에 실패하였습니다.</Typography>
+      </CuToast>
     </Stack>
   )
 }
