@@ -104,7 +104,7 @@ const Login = () => {
       })
       .then((res) => {
         console.log(res)
-        login(res.data.userId, res.data.accessToken)
+        login(res.data.accessToken)
         setCookie('refreshToken', res.data.refreshToken, { path: '/' })
       })
       .catch((error) => {
