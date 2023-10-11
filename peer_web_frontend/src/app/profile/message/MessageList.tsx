@@ -18,7 +18,6 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { IMessagObject } from '@/types/IMessageInformation'
 import useAuthStore from '@/states/useAuthStore'
-import CuToast from '@/components/CuToast'
 import useToast from '@/hook/useToast'
 
 interface IMessageList {
@@ -39,7 +38,7 @@ const MessageItem = ({
 }) => {
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const router = useRouter()
-  const { setStoredTargetProfile } = useMessageStore()
+  // const { setStoredTargetProfile } = useMessageStore()
 
   const userSelector = useCallback(
     (targetUser: number) => {
@@ -144,6 +143,7 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
             setFilteredData(response.data) //FIXME: 받아오는 데이터 값 확인하고 filterdData에 넣고 새로 렌더링 하는 것 확인하기
           })
           .catch((error: AxiosError) => {
+            console.error(error)
             openToast() // TODO: 401에러 처리하기
           })
       } else if (type === 'manage') {
