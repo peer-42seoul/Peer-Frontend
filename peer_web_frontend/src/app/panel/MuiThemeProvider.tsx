@@ -1,5 +1,5 @@
 'use client'
-import { ThemeProvider, createTheme } from '@mui/material'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 export const theme = createTheme({
   breakpoints: {

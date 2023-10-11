@@ -1,6 +1,5 @@
 'use client'
 
-import useMessageStore from '@/states/useMessageStore'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import { Box, Button, TextField } from '@mui/material'
 import axios from 'axios'
@@ -8,32 +7,32 @@ import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
 
 interface IProps {
+  targetId: number
   type: string
-  nickname?: string
+  keyword?: string
   setMessageData?: (prevData: any) => void | IMessageInformation[] | undefined
   handleClose?: any | undefined
+  setMessageFormVisible?: any | undefined
   isPc: boolean
 }
 
 interface IMessageData {
-  id: () => number
+  targetId: number
   content: string
-  messageTime: number[]
-  messageType: string
-  nickname?: string
 }
 
 const MessageForm = ({
   type,
-  nickname,
+  targetId,
+  keyword,
   setMessageData,
+  setMessageFormVisible,
   handleClose,
   isPc,
 }: IProps) => {
   const router = useRouter()
   const id = 42
   const [content, setContent] = useState('')
-  const { storeNickname } = useMessageStore()
 
   const updateMessageData = (newMessage: IMessageInformation) => {
     setMessageData?.((prevData: any) => [...prevData, newMessage])
@@ -46,44 +45,40 @@ const MessageForm = ({
           return
         }
       } else if (!isPc) {
-        if (!content || !nickname) {
+        if (!content || !keyword) {
           alert('내용을 입력하세요.')
           return
         }
       }
 
       const data: IMessageData = {
-        id: id + 1,
+        targetId,
         content,
-        messageTime: [2023, 9, 6, 17, 16, 51, 144650000],
-        messageType: 'SEND',
       }
-
-      const url =
-        type === 'newMessage'
-          ? `http://localhost:4000/message_${nickname}`
-          : `http://localhost:4000/message_${storeNickname}`
+      const url = `${
+        process.env.NEXT_PUBLIC_API_URL
+      }api/v1/message/new-message?userId=${42}` // FIXME : 내 uid 넣기
 
       const response = await axios.post(
         url, //FIXME:이 주소도 임시라서 api구성할 때 삭제하기
-        type === 'newMessage' ? { ...data, nickname } : data,
+        data,
       )
       setContent('')
-      console.log('Before updateMessageData')
       updateMessageData(response.data)
-      {
-        isPc
-          ? handleClose()
-          : router.push('http://localhost:3000/profile/message')
+      if (isPc) {
+        handleClose()
+      } else {
+        router.push('http://localhost:3000/profile/message')
       }
     } catch (error) {
-      console.error('메시지 전송  에러', error)
+      console.error('Message sending error:', error)
     }
-  }, [nickname, content, router, id, type, updateMessageData])
+  }, [keyword, content, router, id, updateMessageData])
 
   return (
     <>
       <TextField
+        sx={{ width: '100%' }}
         value={content}
         placeholder="내용을 입력하세요"
         variant="outlined"
@@ -91,14 +86,12 @@ const MessageForm = ({
         rows={3}
         onChange={(e) => setContent(e.target.value)}
       />
-      <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
         <Button
           onClick={() => {
-            {
-              isPc
-                ? handleClose()
-                : router.push('http://localhost:3000/profile/message')
-            }
+            type === 'inchatting'
+              ? setMessageFormVisible((prevValue: boolean) => !prevValue)
+              : handleClose()
           }}
         >
           취소

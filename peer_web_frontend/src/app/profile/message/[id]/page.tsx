@@ -3,12 +3,22 @@
 import { defaultGetFetcher } from '@/api/fetchers'
 import MessageNavigator from '@/components/MessageNavigator'
 import useMessageStore from '@/states/useMessageStore'
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Button, Container, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import MessageForm from '../write/MessageForm'
-import { IMessageInformation } from '@/types/IMessageInformation'
+import MessageForm from '../MessageForm'
+import { IMessagObject, IMessageInformation } from '@/types/IMessageInformation'
 import Image from 'next/image'
+
+// interface IMessageType {
+//   senderId: number
+//   senderNickname: string
+//   targetProfile: string
+//   msgId: number
+//   content: string
+//   date: string
+//   isEnd: boolean
+// }
 
 const MessageContent = ({ user }: { user: IMessageInformation }) => {
   return (
@@ -25,7 +35,7 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
         }}
       >
         <Image
-          src="https://source.unsplash.com/random/100×100"
+          src={user.senderImage}
           alt="picture_of_sender"
           width={100}
           height={100}
@@ -39,53 +49,74 @@ const MessageContent = ({ user }: { user: IMessageInformation }) => {
 }
 
 const MessageChatPage = ({
-  selectedStatus,
-  isPc,
+  // messageList,
+  // isPc,
+  image,
 }: {
-  selectedStatus: boolean
+  messageList: IMessageInformation[]
+  setPageStatus: boolean
   isPc: boolean
+  image?: Array<IMessagObject>
 }) => {
   // const router = useRouter()
   // const searchParams = useSearchParams()
   // const search = searchParams.get('search')
-  const { storeNickname } = useMessageStore()
-  const [messageData, setMessageData] = useState<IMessageInformation[]>([])
 
-  console.log('selected', selectedStatus)
+  const { storedTargetId } = useMessageStore()
+  const [messageData, setMessageData] = useState<IMessageInformation[]>([])
+  const [isMessageFormVisible, setMessageFormVisible] = useState(false)
+
   const { data, error, isLoading } = useSWR(
-    // selectedStatus
-    //   ? // ? 'http://localhost:4000//profile/message?target=${storeNickname}' //FIXME: 나중에 얘로 설정해야 함
-    storeNickname
-      ? `http://localhost:4000/profile_message_${storeNickname}`
-      : null,
-    // : null,
+    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/conversation-list?userId=${storedTargetId}}`, // FIXME : 여기의 userid는 내 uid
     defaultGetFetcher,
   )
 
-  //FIXME: selectedStatus는 아마 store사용하기 이전에 값 관리 때문에 쓰려던 거 같은데 얘 존재 확인하고 삭제하기
   useEffect(() => {
     if (data) {
-      setMessageData(data)
+      const updatedMessageData = data.map(
+        (user: IMessageInformation, idx: number) => {
+          return {
+            ...user,
+            senderImage: image?.[idx]?.targetProfile,
+            // senderImage: image[idx].targetImage,
+          }
+        },
+      )
+      console.log(updatedMessageData, 'updatedMessageData'),
+        setMessageData(updatedMessageData)
     }
-  }, [data])
-  if (error) return <Box>쪽지 불러오기를 실패하였습니다.1</Box>
-  if (!data) return <Box>빈 쪽지함 입니다!</Box>
-  if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
+  }, [data, image])
 
+  if (error) return <Box>쪽지 불러오기를 실패하였습니다.</Box>
+  if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
+  if (!data) return <Box>빈 쪽지함 입니다!</Box>
+
+  console.log('유저 안 값', messageData)
   return (
     <Container>
-      <MessageNavigator title={storeNickname} messageType={'inchatting'} />
+      <MessageNavigator title={storedTargetId} messageType={'inchatting'} />
       <Box sx={{ width: '100%' }}>
         {messageData.map((user: IMessageInformation, idx: number) => {
           return <MessageContent key={idx} user={user} />
         })}
-        {isPc && (
+        {isMessageFormVisible ? (
           <MessageForm
-            type={'existingMessage'}
-            nickname={undefined} // TODO: 내 상태
+            targetId={messageData[0].senderId}
+            type={'inchatting'}
+            keyword={undefined} // TODO: 내 상태
             setMessageData={setMessageData}
+            setMessageFormVisible={setMessageFormVisible}
             isPc={true}
           />
+        ) : (
+          <Button
+            sx={{ width: '100%' }}
+            onClick={() => {
+              setMessageFormVisible((prevValue) => !prevValue)
+            }}
+          >
+            답하기
+          </Button>
         )}
       </Box>
     </Container>

@@ -2,84 +2,36 @@
 
 import { defaultGetFetcher } from '@/api/fetchers'
 import MessageList from '@/app/profile/message/MessageList'
-import { Box, Button, Container, useMediaQuery } from '@mui/material'
-import axios from 'axios'
-import { debounce } from 'lodash'
+import { Box, Button, Container } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
-import MessageChatPage from './[id]/page'
 import CuModal from '@/components/CuModal'
-import MessageWritingForm from './write/page'
+import MessageWritingForm from './MessageWritingForm'
 import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
-
-// interface IMessagObject {
-//   // nickname: string
-//   // profileImage: string
-//   // messageTime: string
-//   // lastContent: string
-//   target: number
-//   targetNickname: string
-//   unreadMsgNumber: number
-//   latestContent: string
-//   latestDate: string
-// }
+import MessageNavigator from '@/components/MessageNavigator'
+import useMedia from '@/hook/useMedia'
+// import useAuthStore from '@/states/useAuthStore'
 
 const MessageMain = () => {
-  const target = useRef(null)
-  const [page, setPage] = useState(1)
-  const [spinner, setSpinner] = useState(false)
+  const MessageBox = useRef<HTMLDivElement | null>(null)
   const [messageList, setMessageList] = useState<IMessagObject[]>([])
-  const [selectedStatus, setSelectedStatus] = useState(false)
-  const isPc = useMediaQuery('(min-width:481px)')
+  const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
-
+  // const { userId } = useAuthStore()
   const { data, error, isLoading } = useSWR(
-    `http://localhost:4000/profile_message`, //FIXME: _바를 /로 체인지
+    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/list?userId=${1}`, // FIXME : 내 userId 넣기
     defaultGetFetcher,
   )
 
+  console.log('data', data)
   useEffect(() => {
     if (data) {
       setMessageList((prevMessages) => [...prevMessages, ...data])
-      setSpinner(false)
     }
   }, [data])
 
-  const debouncedFetchData = debounce(() => {
-    if (!spinner) {
-      axios
-        .get(`http://localhost:4000/profile_message?page=${page}`)
-        .then((res) => {
-          setMessageList((prevMessages) => [...prevMessages, ...res.data])
-          setSpinner(false)
-        })
-        .catch((err) => console.log(err))
-    }
-  }, 1000)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          if (!spinner) {
-            setSpinner(true)
-            setPage((prev: number) => prev + 1)
-            debouncedFetchData()
-          }
-        }
-      },
-      { threshold: 0.7 },
-    )
-    const currentTarget = target.current
-    if (currentTarget) {
-      observer.observe(currentTarget)
-    }
-    return () => {
-      if (currentTarget) observer.unobserve(currentTarget)
-    }
-  }, [target, !spinner])
-
+  console.log('data의 값은', data)
   return (
     <Container sx={{ height: '90vh' }}>
       {isOpen && (
@@ -89,32 +41,12 @@ const MessageMain = () => {
           title={'create_message'}
           description={'create_message'}
         >
-          <MessageWritingForm />
+          <MessageWritingForm handleClose={closeModal} />
         </CuModal>
       )}
-      <Box
-        sx={{ display: 'grid', gridTemplateColumns: isPc ? '3fr 7fr' : '1fr' }}
-      >
+      <Box sx={{ display: 'grid', width: '100%' }}>
         <Box>
-          <Box sx={{ height: '85vh', overflow: 'auto' }}>
-            <MessageList
-              data={messageList || []}
-              error={error}
-              isLoading={isLoading}
-              spinner={spinner}
-              setSelectedStatus={setSelectedStatus}
-              isPc={isPc}
-            />
-            <Box
-              sx={{
-                bottom: 0,
-                height: '1vh',
-                backgroundColor: 'primary.main',
-              }}
-              ref={target}
-            ></Box>
-          </Box>
-          {isPc && (
+          {isPc ? (
             <Button
               variant="outlined"
               onClick={() => {
@@ -123,11 +55,24 @@ const MessageMain = () => {
             >
               쪽지 보내기
             </Button>
+          ) : (
+            <MessageNavigator
+              title="쪽지"
+              messageType="main"
+              // open={isOpen}
+              // handleClose={closeModal}
+              openModal={openModal}
+            />
           )}
+          <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}>
+            <MessageList
+              data={messageList || []}
+              error={error}
+              isLoading={isLoading}
+              isPc={isPc}
+            />
+          </Box>
         </Box>
-        {isPc && (
-          <MessageChatPage selectedStatus={selectedStatus} isPc={isPc} />
-        )}
       </Box>
     </Container>
   )

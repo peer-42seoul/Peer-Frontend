@@ -1,9 +1,9 @@
 import React from 'react'
-import MessageForm from '../write/MessageForm'
-import { useMediaQuery } from '@mui/material'
+import MessageForm from '../MessageForm'
+import useMedia from '@/hook/useMedia'
 
 const MessageViewPage = () => {
-  const isPc = useMediaQuery('(min-width:481px)')
+  const { isPc } = useMedia()
 
   return (
     <>
