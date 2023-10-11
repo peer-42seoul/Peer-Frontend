@@ -1,4 +1,3 @@
-import { IProject } from '@/types/IProejct'
 import { Favorite } from '@mui/icons-material'
 import {
   Avatar,

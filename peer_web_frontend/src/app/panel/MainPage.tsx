@@ -1,5 +1,4 @@
 'use client'
-import { IProject } from '@/types/IProejct'
 import { Container, Box, Grid, Stack, Typography, CircularProgress } from '@mui/material'
 import { useState } from 'react'
 import { ProjectType, ProjectSort } from '../page'
@@ -35,11 +34,12 @@ const MainPage = ({ initData }: { initData: any }) => {
   const keyword = searchParams.get('keyword') ?? '';
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
-  // const { data, isLoading, mutate } = useSWR(
-  //   `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/${type}-sort-${sort}`,
-  //   defaultGetFetcher,
-  //   { fallbackData: initData },
-  // )
+  const { data: tmpData, isLoading, mutate } = useSWR(
+    `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/${type}-sort-${sort}`,
+    defaultGetFetcher,
+    { fallbackData: initData },
+  )
+  console.log("tmpData", tmpData, initData);
 
   const pagesize = 10
   //실제 api 서버용 url. mockup 데이터 만들기 어려워서 보류중
@@ -47,7 +47,7 @@ const MainPage = ({ initData }: { initData: any }) => {
   const url = `http://localhost:3001?type=${type}&sort=${sort}&page=${page}&pagesize=${pagesize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
   console.log('url', url)
 
-  /* 더미데이터 추가 */
+  /* 더미데이터 추가. api의 response가 바뀌면서 바뀜 */
   const data: IPost[] = [
     {
       post_id: 1,
@@ -109,8 +109,6 @@ const MainPage = ({ initData }: { initData: any }) => {
   /* 무한 스크롤 */
   const pageLimit = 2;
   /* 임시 변수 */
-  const mutate = null;
-  const isLoading = false;
   const { target, spinner } = useInfiniteScroll({ setPage, mutate, pageLimit, page });
 
   if (isLoading) return <Typography>로딩중...</Typography>

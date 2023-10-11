@@ -1,4 +1,4 @@
-interface IPost {
+export interface IPost {
   post_id: number
   title: string
   image: string
