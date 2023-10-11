@@ -1,5 +1,4 @@
-import { Button, Stack, Typography } from '@mui/material'
-// import Link from 'next/link'
+import { Box, Button, Stack, SxProps, Typography } from '@mui/material'
 import React from 'react'
 
 const SectionType = {
@@ -13,10 +12,12 @@ const ProfileSection = ({
   sectionTitle,
   children,
   setModalType,
+  sx,
 }: {
   sectionTitle: 'introduction' | 'achievements' | 'skills' | 'links'
   children: React.ReactNode
   setModalType: (type: string) => void
+  sx?: SxProps
 }) => {
   const sectionTypeMap = new Map(Object.entries(SectionType))
   const handleEditClick = () => {
@@ -24,15 +25,18 @@ const ProfileSection = ({
   }
 
   return (
-    <section>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography>{sectionTypeMap.get(sectionTitle)}</Typography>
-        <Button variant="text" onClick={handleEditClick}>
-          <Typography>수정</Typography>
-        </Button>
-      </Stack>
-      {children}
-    </section>
+    <Box sx={sx}>
+      {/* 스타일을 넣기 위해 우선 넣었습니다. */}
+      <section>
+        <Stack direction="row" justifyContent="space-between">
+          <Typography>{sectionTypeMap.get(sectionTitle)}</Typography>
+          <Button variant="text" onClick={handleEditClick}>
+            <Typography>수정</Typography>
+          </Button>
+        </Stack>
+        {children}
+      </section>
+    </Box>
   )
 }
 
