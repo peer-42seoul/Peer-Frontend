@@ -48,12 +48,14 @@ const SignUpField = ({
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <SignUpFieldButton
-                      name={name}
-                      type={type}
-                      onClick={onClick}
-                      buttonText={buttonText}
-                    />
+                    {onClick && (
+                      <SignUpFieldButton
+                        name={name}
+                        type={type}
+                        onClick={onClick}
+                        buttonText={buttonText}
+                      />
+                    )}
                   </InputAdornment>
                 ),
               }}

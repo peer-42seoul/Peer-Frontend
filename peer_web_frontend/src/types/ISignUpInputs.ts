@@ -40,7 +40,7 @@ export interface ISignUpField {
     minLength?: number
     maxLength?: number
   }
-  type: 'text' | 'password' | 'number'
+  type: 'text' | 'password'
 }
 
 export interface ISignUpFields {
