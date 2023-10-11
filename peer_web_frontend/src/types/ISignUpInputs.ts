@@ -35,7 +35,7 @@ export interface ISignUpField {
   onClick?: () => void
   onChange?: () => void
   buttonText?: string
-  isInputValid?: boolean
+  inValidInput?: boolean
   inputProps?: {
     minLength?: number
     maxLength?: number

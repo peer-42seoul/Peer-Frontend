@@ -18,7 +18,7 @@ const SignUpField = ({
   onClick,
   onChange,
   buttonText,
-  isInputValid,
+  inValidInput,
   inputProps,
   type,
 }: ISignUpField) => {
@@ -41,8 +41,8 @@ const SignUpField = ({
                   }
                 },
               }}
+              error={inValidInput}
               type={type}
-              disabled={isInputValid}
               placeholder={placeholder}
               inputProps={inputProps}
               InputProps={{
@@ -53,7 +53,6 @@ const SignUpField = ({
                       type={type}
                       onClick={onClick}
                       buttonText={buttonText}
-                      isInputValid={isInputValid}
                     />
                   </InputAdornment>
                 ),
@@ -62,7 +61,7 @@ const SignUpField = ({
           </>
         )}
       />
-      {(error && <Typography>{error.message}</Typography>) || (
+      {(error && <Typography color="error">{error.message}</Typography>) || (
         <Typography>&nbsp;</Typography>
       )}
     </>
