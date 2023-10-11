@@ -6,14 +6,16 @@ import FormLabel from '@mui/material/FormLabel'
 import { Dispatch, SetStateAction } from 'react'
 
 interface RowRadioButtonsGroupProps {
-  setValue: Dispatch<SetStateAction<string>>
+  setValue?: Dispatch<SetStateAction<string>>
+  value?: string
 }
 
 export default function RowRadioButtonsGroup({
   setValue,
+  value,
 }: RowRadioButtonsGroupProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value)
+    setValue && setValue((event.target as HTMLInputElement).value)
   }
 
   return (
@@ -26,18 +28,20 @@ export default function RowRadioButtonsGroup({
         aria-labelledby="demo-row-radio-buttons-group-label"
         name="row-radio-buttons-group"
         onChange={handleChange}
-        defaultValue="project"
+        defaultValue={value ?? "project"}
       >
         <FormControlLabel
           value="study"
           control={<Radio />}
           label="Study-group"
+          disabled={!!value}
         />
         <FormControlLabel
           value="project"
           control={<Radio />}
           label="Project-team"
-          defaultChecked
+          // defaultChecked
+          disabled={!!value}
         />
       </RadioGroup>
     </FormControl>
