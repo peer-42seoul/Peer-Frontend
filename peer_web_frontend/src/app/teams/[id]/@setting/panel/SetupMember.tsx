@@ -1,5 +1,5 @@
 import { Avatar, Box, Grid, Stack, Switch, Typography } from '@mui/material'
-import { IMember } from '../[id]/page'
+import { IMember } from '../page'
 
 const SetupMember = ({ team }: { team: IMember[] }) => {
   return (

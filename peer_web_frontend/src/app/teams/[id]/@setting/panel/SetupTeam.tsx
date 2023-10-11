@@ -7,7 +7,7 @@ import {
   Typography,
   Button,
 } from '@mui/material'
-import { ITeam } from '../[id]/page'
+import { ITeam } from '../page'
 import { useState } from 'react'
 import SetupSelect from './SetupSelect'
 
@@ -76,8 +76,6 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
       },
     })
   }
-
-  console.log(teamInfo)
 
   return (
     <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>

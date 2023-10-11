@@ -1,11 +1,11 @@
 'use client'
 
-import { Button, Stack } from '@mui/material'
-import SetupPage from '../panel/SetupTeam'
+import { Button, Stack, Typography } from '@mui/material'
+import SetupPage from './panel/SetupTeam'
 import { useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
-import SetupMember from '../panel/SetupMember'
-import ApplicantList from '../panel/ApplicantList'
+import SetupMember from './panel/SetupMember'
+import ApplicantList from './panel/ApplicantList'
 
 export interface IMember {
   name: string
@@ -69,15 +69,14 @@ export interface IApplicant {
   interview: interview[]
 }
 
-const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
+const TeamsSetupPage = () => {
   const { isPc } = useMedia()
-  const { id } = params
   const [team, setTeam] = useState<ITeam>()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
 
   useEffect(() => {
     setTeam(mockdata)
-  }, [team, id])
+  }, [team])
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
@@ -92,9 +91,9 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       borderRadius={2}
       padding={2}
     >
-      {team && <SetupPage team={team} />}
-      {team && (
+      {team ? (
         <>
+          <SetupPage team={team} />
           {!showApplicant && (
             <>
               <SetupMember team={team.member} />
@@ -111,8 +110,9 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
           )}
           {showApplicant && <ApplicantList close={closeApplicant} />}
         </>
+      ) : (
+        <Typography>팀을 추가해주세요</Typography>
       )}
-      {!team && <div>팀을 선택해주세요</div>}
     </Stack>
   )
 }

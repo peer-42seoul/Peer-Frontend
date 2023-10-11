@@ -1,7 +1,7 @@
 'use client'
 
 import { Avatar, Button, Stack, Typography } from '@mui/material'
-import { IApplicant } from '../[id]/page'
+import { IApplicant } from '../page'
 import { useEffect, useState } from 'react'
 
 const applicantMock: IApplicant[] = [
