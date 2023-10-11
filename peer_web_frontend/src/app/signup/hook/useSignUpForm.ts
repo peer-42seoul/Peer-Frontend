@@ -38,6 +38,7 @@ const useSignUpForm = () => {
         email: email,
       })
       setEmailError(false)
+      alert('인증코드가 전송되었습니다')
     } catch (error: any) {
       setEmailError(true)
       if (error.response?.status === 409) {
@@ -100,6 +101,7 @@ const useSignUpForm = () => {
         nickName: nickName,
       })
       setNickNameError(false)
+      alert('닉네임이 인증되었습니다')
     } catch (error: any) {
       setNickNameError(true)
       if (error.response?.status === 409) {
