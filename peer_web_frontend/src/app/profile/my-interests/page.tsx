@@ -1,8 +1,12 @@
 'use client'
+import { defaultGetFetcher } from '@/api/fetchers'
+import MainCard from '@/app/panel/MainCard'
 import useMedia from '@/hook/useMedia'
-import { MenuItem, Tab, Tabs } from '@mui/material'
+import { IProject } from '@/types/IProejct'
+import { Grid, MenuItem, Tab, Tabs, Typography } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import React from 'react'
+import useSWR from 'swr'
 
 const TypeToggle = ({
   type,
@@ -13,8 +17,8 @@ const TypeToggle = ({
 }) => {
   return (
     <Select value={type} onChange={handleChange} variant="standard">
-      <MenuItem value={'project'}>프로젝트</MenuItem>
-      <MenuItem value={'study'}>스터디</MenuItem>
+      <MenuItem value={'projects'}>프로젝트</MenuItem>
+      <MenuItem value={'studies'}>스터디</MenuItem>
       {/* <MenuItem value={'showcase'}>쇼케이스</MenuItem> 2step */}
     </Select>
   )
@@ -31,11 +35,11 @@ const TypeTabs = ({
     <Tabs
       value={type}
       onChange={handleChange}
-      aria-label="basic tabs example"
+      aria-label="menu tabs"
       variant="fullWidth"
     >
-      <Tab label="프로젝트" value={'project'} />
-      <Tab label="스터디" value={'study'} />
+      <Tab label="프로젝트" value={'projects'} />
+      <Tab label="스터디" value={'studies'} />
       {/* <Tab label="쇼케이스" value={'showcase'} /> */}
     </Tabs>
   )
@@ -43,7 +47,7 @@ const TypeTabs = ({
 
 const MyInterests = () => {
   const { isPc } = useMedia()
-  const [type, setType] = React.useState('project')
+  const [type, setType] = React.useState('projects')
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string)
@@ -53,6 +57,13 @@ const MyInterests = () => {
     setType(newValue)
   }
 
+  const { data, isLoading } = useSWR<Array<IProject>>(
+    `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/${type}-sort-recent`,
+    defaultGetFetcher,
+  )
+
+  if (isLoading) return <Typography>로딩중 입니다.</Typography>
+  if (!data) return <Typography>데이터가 없습니다.</Typography>
   return (
     <div>
       {isPc ? (
@@ -60,6 +71,20 @@ const MyInterests = () => {
       ) : (
         <TypeTabs type={type} handleChange={handleTabChange} />
       )}
+      <Grid
+        container
+        spacing={[0, 2]}
+        alignItems="center"
+        justifyContent={['space-evenly', 'flex-start']}
+        sx={{ width: '100%' }}
+        direction="row"
+      >
+        {data.map((item) => (
+          <Grid item key={item.id} xs={0} sm={4}>
+            <MainCard {...item} />
+          </Grid>
+        ))}
+      </Grid>
     </div>
   )
 }
