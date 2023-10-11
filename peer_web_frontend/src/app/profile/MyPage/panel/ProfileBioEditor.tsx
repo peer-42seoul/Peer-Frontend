@@ -4,6 +4,7 @@ import SettingContainer from './SettingContainer'
 import {
   AlertColor,
   Avatar,
+  Box,
   Button,
   Grid,
   InputAdornment,
@@ -13,6 +14,7 @@ import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
 // import { ChildProcessWithoutNullStreams } from 'child_process'
 // import { File } from 'buffer'
 // import axios from 'axios'
@@ -153,16 +155,35 @@ const ProfileBioEditor = ({
             {/* <Controller
               render={({ field }) => ( */}
             <Button component="label">
-              <Avatar
-                src={
-                  previewImage
-                    ? previewImage
-                    : data.profileImageURL
-                    ? data.profileImageURL
-                    : '/images/profile.jpeg'
-                }
-                alt="profile image"
-              />
+              <Box width={[56, 100]} height={[56, 100]}>
+                <Avatar
+                  src={
+                    previewImage
+                      ? previewImage
+                      : data.profileImageURL
+                      ? data.profileImageURL
+                      : '/images/profile.jpeg'
+                  }
+                  alt="profile image"
+                  sx={{ height: '100%', width: '100%' }}
+                />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    bottom: '0',
+                    right: '6px',
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50px',
+                    borderColor: 'lightgray',
+                    border: '1px',
+                    padding: '4px',
+                    backgroundColor: 'white',
+                  }}
+                >
+                  <PhotoCameraOutlinedIcon />
+                </Box>
+              </Box>
               <input
                 type="file"
                 accept={'image/*'}
