@@ -15,14 +15,15 @@ import { red } from '@mui/material/colors'
 import { useState } from 'react'
 
 const MainCard = ({
-  nickname,
-  imageUrl,
-  description,
-  tags,
+  title,
+  image,
+  // user_id,
+  user_nickname,
+  user_thumbnail,
+  status,
+  tagList,
   isFavorite,
-  profileImgUrl,
-  inProgress,
-}: IProject) => {
+}: IPost) => {
   const [favorite, setFavorite] = useState(isFavorite)
   const changeFavorite = async () => {
     try {
@@ -40,11 +41,11 @@ const MainCard = ({
         <CardMedia
           component="img"
           height="194"
-          image={imageUrl}
+          image={image}
           alt="Paella dish"
         />
         <Chip
-          label={inProgress ? '진행중' : '모집중'}
+          label={status}
           sx={{
             position: 'absolute',
             top: 16,
@@ -63,7 +64,7 @@ const MainCard = ({
             <Box
               component="img"
               height="194"
-              src={profileImgUrl}
+              src={user_thumbnail}
               alt="profile image"
             />
           </Avatar>
@@ -73,15 +74,15 @@ const MainCard = ({
             <Favorite sx={{ color: favorite ? 'red' : 'gray' }} />
           </IconButton>
         }
-        title={nickname}
+        title={user_nickname}
       />
       <CardContent>
         {/* title로 바꾸기 */}
         <Typography variant="body2" color="text.secondary">
-          {description}
+          {title}
         </Typography>
         <Box>
-          {tags?.map((tag: string, idx: number) => (
+          {tagList?.map((tag: string, idx: number) => (
             <Chip label={tag} size="small" key={idx} />
           ))}
         </Box>

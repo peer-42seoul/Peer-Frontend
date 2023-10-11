@@ -1,14 +1,4 @@
-@media (min-width: 100px) {
-  .mobile-layout {
-    display: flex;
-    flex-direction: column;
-  }
-  .pc-layout {
-    display: none;
-  }
-}
-
-@media (min-width: 481px) {
+@media only screen and (min-width: 481px) {
   .mobile-layout{
     display: none;
   }
@@ -19,4 +9,15 @@
   }
 }
 
+
+
+@media (min-width: 100px) {
+  .mobile-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  .pc-layout {
+    display: none;
+  }
+}
 
