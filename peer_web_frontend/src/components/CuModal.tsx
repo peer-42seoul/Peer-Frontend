@@ -1,6 +1,7 @@
 import React from 'react'
 import Modal from '@mui/material/Modal'
 import { Box, SxProps } from '@mui/material'
+import useMedia from '@/hook/useMedia'
 
 //   여기 있는 state를 쓰면 됩니다.
 //   const [open, setOpen] = useState(false)
@@ -13,6 +14,22 @@ const defaultstyle = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+}
+
+const MobileMessagetstyle = {
+  display: 'flex',
+  width: '100%',
+  height: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -36,6 +53,8 @@ const CuModal = ({
   ariaDescription,
   style = defaultstyle,
 }: ICuModal) => {
+  const { isPc } = useMedia()
+
   return (
     <>
       <Modal
@@ -44,7 +63,7 @@ const CuModal = ({
         aria-labelledby={ariaTitle}
         aria-describedby={ariaDescription}
       >
-        <Box sx={style}>{children}</Box>
+        <Box sx={isPc ? style : MobileMessagetstyle}>{children}</Box>
       </Modal>
     </>
   )
