@@ -5,7 +5,7 @@ import useMedia from '@/hook/useMedia'
 import { IProject } from '@/types/IProejct'
 import { Grid, MenuItem, Tab, Tabs, Typography } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import React from 'react'
+import React, { useEffect } from 'react'
 import useSWR from 'swr'
 
 const TypeToggle = ({
@@ -15,6 +15,7 @@ const TypeToggle = ({
   type: string
   handleChange: (e: SelectChangeEvent) => void
 }) => {
+  // console.log('dropdown', type)
   return (
     <Select value={type} onChange={handleChange} variant="standard">
       <MenuItem value={'projects'}>프로젝트</MenuItem>
@@ -31,6 +32,8 @@ const TypeTabs = ({
   type: string
   handleChange: (e: React.SyntheticEvent, newValue: string) => void
 }) => {
+  // console.log('tab', type)
+
   return (
     <Tabs
       value={type}
@@ -49,11 +52,17 @@ const MyInterests = () => {
   const { isPc } = useMedia()
   const [type, setType] = React.useState('projects')
 
+  useEffect(() => {
+    console.log(type)
+  }, [isPc, type])
+
   const handleSelectChange = (event: SelectChangeEvent) => {
+    console.log('event.target.value as string : ', event.target.value as string)
     setType(event.target.value as string)
   }
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    console.log('newValue: ', newValue)
     setType(newValue)
   }
 
