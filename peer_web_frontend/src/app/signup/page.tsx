@@ -33,45 +33,40 @@ const SignUp = () => {
     errors,
   } = useSignUpForm()
 
+  const mainStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: '50px',
+  }
+
+  const formStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '400px',
+    marginTop: '30px',
+  }
+
+  const buttonStyle = {
+    display: 'block',
+    margin: 'auto',
+    width: '50%',
+  }
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: '50px',
-      }}
-      component="main"
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
+    <Box sx={mainStyle} component="main">
+      <Typography
+        aria-label="회원가입"
+        sx={{ textAlign: 'center', flexGrow: 1 }}
+        component="h3"
       >
-        <Box
-          sx={{
-            display: 'flex',
-            width: '100%',
-            alignItems: 'center',
-          }}
-        >
-          <Typography sx={{ textAlign: 'center', flexGrow: 1 }} component="h1">
-            회원가입
-          </Typography>
-        </Box>
-        <form onSubmit={handleSubmit(submitSignUp)}>
+        회원가입
+      </Typography>
+      <form onSubmit={handleSubmit(submitSignUp)}>
+        <Box sx={formStyle}>
           {signUpStep === 0 && (
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '400px',
-                marginTop: '30px',
-              }}
-            >
+            <>
               <EmailField
                 control={control}
                 error={errors.email}
@@ -94,27 +89,17 @@ const SignUp = () => {
                 setShowPassword={setShowPassword}
               />
               <Button
-                sx={{
-                  display: 'block',
-                  margin: 'auto',
-                  width: '50%',
-                }}
+                aria-label="다음 버튼"
+                sx={buttonStyle}
                 variant="contained"
                 onClick={submitCode}
               >
                 다음
               </Button>
-            </Box>
+            </>
           )}
           {signUpStep === 1 && (
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '400px',
-                marginTop: '30px',
-              }}
-            >
+            <>
               <NameField control={control} error={errors.name} />
               <NickNameField
                 control={control}
@@ -125,20 +110,17 @@ const SignUp = () => {
                 nickNameError={nickNameError}
               />
               <Button
-                sx={{
-                  display: 'block',
-                  margin: 'auto',
-                  width: '50%',
-                }}
+                aria-label="회원가입 버튼"
+                sx={buttonStyle}
                 variant="contained"
                 type="submit"
               >
                 회원가입
               </Button>
-            </Box>
+            </>
           )}
-        </form>
-      </Box>
+        </Box>
+      </form>
     </Box>
   )
 }
