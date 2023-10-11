@@ -28,12 +28,14 @@ const ProfileBioEditor = ({
     handleSubmit,
     control,
     formState: { errors },
+    getValues,
   } = useForm<IFormInput>({
     defaultValues: defaultValues,
     mode: 'onChange',
   })
 
   const onSubmit = (data: IFormInput) => {
+    console.log(getValues('introduction'))
     console.log('on positive click', data)
   }
 
@@ -68,7 +70,7 @@ const ProfileBioEditor = ({
                   <CuTextField
                     id="nickname"
                     variant="outlined"
-                    field={{ ...field }}
+                    field={field}
                     fullWidth={true}
                     error={errors.nickname ? true : false}
                     autoComplete="off"

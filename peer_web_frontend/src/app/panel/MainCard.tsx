@@ -76,6 +76,7 @@ const MainCard = ({
         title={nickname}
       />
       <CardContent>
+        {/* title로 바꾸기 */}
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>

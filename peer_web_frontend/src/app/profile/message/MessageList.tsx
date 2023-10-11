@@ -10,61 +10,52 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import MessageNavigator from '../../../components/MessageNavigator'
-import CircularProgress from '@mui/material/CircularProgress'
 import useMessageStore from '@/states/useMessageStore'
 import Image from 'next/image'
 import SearchIcon from '@mui/icons-material/Search'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
-import axios from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import { IMessagObject } from '@/types/IMessageInformation'
 
 interface IMessageList {
   data: IMessagObject[] | []
   error: Error | undefined
   isLoading: boolean
-  spinner: boolean
-  setSelectedStatus: (newValue: boolean) => void
   isPc: boolean
 }
 
 const MessageItem = ({
   user,
   onManageMessage,
-  isPc,
   setSelectedUser,
 }: {
-  idx: number
   user: IMessagObject
   onManageMessage: boolean
-  isPc: boolean | undefined
   setSelectedUser: (newValue: string) => void
 }) => {
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const router = useRouter()
 
-  const handleChange = useCallback(
-    (target: string) => {
-      setSelectedUser(target)
+  const userSelector = useCallback(
+    (targetUser: number) => {
+      console.log('삭제 타게팅된 유저', targetUser)
+      setSelectedUser((prevSelectedUsers) => [
+        ...prevSelectedUsers,
+        { targetId: targetUser },
+      ])
     },
+    // console.log('seletedUser', seletedUser),
     [setSelectedUser],
   )
 
   const messageContentHandler = useCallback(
-    (nickname: string, isPc?: boolean) => {
-      if (!isPc) {
-        // setSelectedStatus(true),
-        useMessageStore.setState({ storeNickname: nickname })
+    (targetId: number) => {
+      useMessageStore.setState({ storedTargetId: targetId })
 
-        router.push(
-          // `http://localhost:3000/profile/message/nickname?search=${nickname}`,
-          'http://localhost:3000/profile/message/' + nickname, //FIXME:추후에 수정해야하는 api콜
-        )
-      } else {
-        // setSelectedStatus(true)
-        useMessageStore.setState({ storeNickname: nickname })
-      }
+      router.push(
+        `http://localhost:3000/profile/message/conversaion-list?target=${targetId}`,
+      )
     },
     [router],
   )
@@ -73,7 +64,7 @@ const MessageItem = ({
     <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
       {!onManageMessage && (
         <Checkbox
-          onClick={() => handleChange(user.targetNickname)}
+          onClick={() => userSelector(user.targetId)} //FIXME: targetId로 바꿔야함
           {...label}
           icon={<RadioButtonUncheckedIcon />}
           checkedIcon={<RadioButtonCheckedIcon />}
@@ -82,36 +73,44 @@ const MessageItem = ({
       <Box
         sx={{ width: '100%', padding: '16px 0 16px 0' }}
         // key={idx}
-        onClick={() => messageContentHandler(user.targetNickname, isPc)}
+        onClick={() => messageContentHandler(user.targetId)}
       >
         <Typography>{user.targetNickname}</Typography>
         <Typography>{user.latestDate}</Typography>
         <Typography>{user.latestContent}</Typography>
+        <Typography
+          style={{
+            width: '10%',
+            color: 'white',
+            background: 'rgba(255, 81, 64, 1)',
+            borderRadius: '50%',
+            textAlign: 'center',
+          }}
+        >
+          {user.unreadMsgNumber > 0 ? user.unreadMsgNumber : null}
+        </Typography>
 
         <Image
-          src={`${user.targetImage}`}
+          src={`${user.targetProfile}`}
           alt="picture_of_sender"
           width={100}
           height={100}
+          style={{ borderRadius: '50%' }}
         />
       </Box>
     </Box>
   )
 }
 
-const MessageList = ({
-  data,
-  error,
-  isLoading,
-  spinner,
-  isPc,
-}: IMessageList) => {
+const MessageList = ({ data, error, isLoading }: IMessageList) => {
   // const router = useRouter()
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState<IMessagObject[]>(data)
   const [onManageMessage, setOnManageMessage] = useState(true)
-  const [seletedUser, setSelectedUser] = useState<string[]>([])
-
+  // const [seletedUser, setSelectedUser] = useState<string[]>([])
+  const [seletedUser, setSelectedUser] = useState<Array<{ targetId: string }>>(
+    [],
+  )
   const searchMessageItemHandler = useCallback(() => {
     const filteredResults = data.filter((user: IMessagObject) =>
       user.targetNickname.includes(searchText),
@@ -124,11 +123,22 @@ const MessageList = ({
       if (type === 'delete') {
         console.log('seletedUser42', seletedUser)
         // const confirmResult = confirm('are you sure?')
-        axios.delete(`http://localhost:4000/message_list`, {
-          data: {
-            nickname: seletedUser,
-          },
-        })
+        console.log('deleteList', seletedUser)
+        axios
+          .delete(
+            `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/delete-message?userId=${userId}`, // FIXME : userId 받아와야함
+            {
+              data: {
+                target: seletedUser,
+              },
+            },
+          )
+          .then((response: AxiosResponse<IMessagObject[]>) => {
+            setFilteredData(response.data) //FIXME: 받아오는 데이터 값 확인하고 filterdData에 넣고 새로 렌더링 하는 것 확인하기
+          })
+          .catch((error: AxiosError) => {
+            error.response?.data.statusCode === 401 //FIXME: 401에러 처리하기
+          })
       } else if (type === 'manage') {
         setOnManageMessage(!onManageMessage)
       }
@@ -148,16 +158,22 @@ const MessageList = ({
         데이터를 불러오는 중입니다...
       </Box>
     )
-
+  console.log('메시지 리스트의 user', filteredData)
   return (
-    <Stack>
-      {!isPc && <MessageNavigator title={'쪽지'} messageType={'쪽지'} />}
+    <Stack
+      sx={{
+        borderRadius: '1rem',
+        border: '1px solid #000',
+        background: '#FFF',
+        padding: '1.5rem',
+      }}
+    >
       <Box>
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', width: '100%' }}>
           <TextField
             value={searchText}
             onChange={(event) => setSearchText(event.target.value)}
-            placeholder="닉네임을 입력하세요"
+            placeholder="사람을 검색하여 주세요"
           />
           <Button onClick={searchMessageItemHandler}>
             <SearchIcon />
@@ -173,23 +189,21 @@ const MessageList = ({
           )}
         </Box>
         {filteredData.length === 0 ? (
-          <Box sx={{ width: '100vw', height: '99vh' }}>
+          <Box sx={{ width: '100vw', height: '100vh' }}>
             검색 결과가 없습니다.
           </Box>
         ) : (
           filteredData.map((user: IMessagObject, idx: number) => (
             <MessageItem
-              key={user.target}
+              key={user.targetId}
               idx={idx}
               user={user}
               onManageMessage={onManageMessage}
-              isPc={isPc}
-              setSelectedUser={() => setSelectedUser}
+              setSelectedUser={setSelectedUser}
             />
           ))
         )}
       </Box>
-      {spinner && <CircularProgress />}
     </Stack>
   )
 }

@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 
 interface IMessageStore {
-  storeNickname: string
-  setNickname: (storeNickname: string) => void
+  storedTargetId: number
+  setNickname: (storedTargetId: number) => void
 }
 
 const useMessageStore = create<IMessageStore>()((set) => ({
-  storeNickname: '',
-  setNickname: (storeNickname: string) => set({ storeNickname }),
+  storedTargetId: 0,
+  setNickname: (storedTargetId: number) => set({ storedTargetId }),
 }))
 
 export default useMessageStore

@@ -12,7 +12,7 @@ export interface IUserProfile {
 
 export interface IUserProfileLink {
   id: number
-  link: string
+  linkUrl: string
   linkName: string
 }
 
