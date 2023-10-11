@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { ISignUpInputs } from '@/types/ISignUpInputs'
 
 const useSignUpForm = () => {
-  const API_URL = process.env.API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
   const {
     handleSubmit,
@@ -46,7 +46,6 @@ const useSignUpForm = () => {
         alert('유효하지 않은 이메일입니다')
       } else {
         alert('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
-        // setEmailError(false) // 나중에 제거해야 함!
       }
     }
   }
@@ -84,7 +83,6 @@ const useSignUpForm = () => {
         alert('유효하지 않은 이메일입니다')
       } else {
         alert('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
-        // setCodeError(false) // 나중에 제거해야 함!
       }
     }
   }
@@ -136,7 +134,7 @@ const useSignUpForm = () => {
         nickName: nickName,
       })
       alert('회원가입이 완료되었습니다')
-      router.push('/login') // 로그인 페이지로 이동
+      router.push('/') // 메인페이지로 이동
     } catch (error: any) {
       if (error.response?.status === 409) {
         alert('이미 가입된 이메일입니다')
