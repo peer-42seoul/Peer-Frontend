@@ -4,6 +4,7 @@ import Modal from '@mui/material/Modal'
 import { useEffect, useState } from 'react'
 import AreaForAddInterviewForm from './AreaForAddInterviewForm'
 import AreaForShowAnswers from './AreaForShowAnswers'
+import { IFormInterview } from '@/types/IPostDetail'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -17,12 +18,6 @@ const style = {
   boxShadow: 24,
   p: 4,
   overflowY: 'scroll',
-}
-
-export interface IFormInterview {
-  question: string
-  type: string
-  optionList: string[]
 }
 
 export const SetInterview = ({
