@@ -10,7 +10,6 @@ const SubNavBar = () => {
   const { isPc } = useMedia()
 
   if (!isPc) {
-    console.log(isPc)
     return <div></div>
   }
 

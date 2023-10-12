@@ -6,11 +6,11 @@ const ProfileLink = (props: IUserProfileLink) => {
   return (
     <Box>
       <Box
-        key={props.link}
+        key={props.linkUrl}
         component="img"
-        src={`https://www.google.com/s2/favicons?domain=${props.link}`}
+        src={`https://www.google.com/s2/favicons?domain=${props.linkUrl}`}
       />
-      <Link href={props.link}>{props.linkName}</Link>
+      <Link href={props.linkUrl}>{props.linkName}</Link>
     </Box>
   )
 }

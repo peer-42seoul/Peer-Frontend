@@ -3,8 +3,19 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
+import { Dispatch, SetStateAction } from 'react'
 
-export default function RowRadioButtonsGroup() {
+interface RowRadioButtonsGroupProps {
+  setValue: Dispatch<SetStateAction<string>>
+}
+
+export default function RowRadioButtonsGroup({
+  setValue,
+}: RowRadioButtonsGroupProps) {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue((event.target as HTMLInputElement).value)
+  }
+
   return (
     <FormControl>
       <FormLabel id="demo-row-radio-buttons-group-label">
@@ -14,16 +25,19 @@ export default function RowRadioButtonsGroup() {
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
         name="row-radio-buttons-group"
+        onChange={handleChange}
+        defaultValue="project"
       >
         <FormControlLabel
-          value="스터디"
+          value="study"
           control={<Radio />}
           label="Study-group"
         />
         <FormControlLabel
-          value="프로젝트"
+          value="project"
           control={<Radio />}
           label="Project-team"
+          defaultChecked
         />
       </RadioGroup>
     </FormControl>
