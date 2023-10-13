@@ -9,15 +9,12 @@ const SignUpFieldButton = ({
   type,
   onClick,
   buttonText,
-  isInputValid,
 }: {
   name: 'email' | 'code' | 'password' | 'nickName' | 'name'
-  type: 'text' | 'password' | 'number'
+  type: 'text' | 'password'
   onClick?: () => void
   buttonText?: string
-  isInputValid?: boolean
 }) => {
-  if (!onClick) return null
   if (name === 'password') {
     return (
       <IconButton
@@ -30,7 +27,7 @@ const SignUpFieldButton = ({
     )
   }
   return (
-    <Button variant="contained" disabled={isInputValid} onClick={onClick}>
+    <Button variant="contained" onClick={onClick}>
       {buttonText}
     </Button>
   )

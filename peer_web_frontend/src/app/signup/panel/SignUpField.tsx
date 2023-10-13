@@ -16,8 +16,9 @@ const SignUpField = ({
   rules,
   placeholder,
   onClick,
+  onChange,
   buttonText,
-  isInputValid,
+  inValidInput,
   inputProps,
   type,
 }: ISignUpField) => {
@@ -31,21 +32,30 @@ const SignUpField = ({
           <>
             <CuTextFieldLabel htmlFor={name}>{label}</CuTextFieldLabel>
             <CuTextField
-              field={field}
+              field={{
+                ...field,
+                onChange: (e: any) => {
+                  field.onChange(e)
+                  if (onChange) {
+                    onChange()
+                  }
+                },
+              }}
+              error={inValidInput}
               type={type}
-              disabled={isInputValid}
               placeholder={placeholder}
               inputProps={inputProps}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <SignUpFieldButton
-                      name={name}
-                      type={type}
-                      onClick={onClick}
-                      buttonText={buttonText}
-                      isInputValid={isInputValid}
-                    />
+                    {onClick && (
+                      <SignUpFieldButton
+                        name={name}
+                        type={type}
+                        onClick={onClick}
+                        buttonText={buttonText}
+                      />
+                    )}
                   </InputAdornment>
                 ),
               }}
@@ -53,7 +63,7 @@ const SignUpField = ({
           </>
         )}
       />
-      {(error && <Typography>{error.message}</Typography>) || (
+      {(error && <Typography color="error">{error.message}</Typography>) || (
         <Typography>&nbsp;</Typography>
       )}
     </>
