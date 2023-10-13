@@ -25,3 +25,26 @@ export const fetchStaticData = async (url: string) => {
   })
   return response.data
 }
+
+export const messageFetcher = async ({
+  url,
+  targetId,
+  conversationalId,
+}: {
+  url: string
+  targetId: number
+  conversationalId: number
+}) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const response = await axios.get(url, {
+      params: {
+        targetId,
+        conversationalId,
+      },
+    })
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}

@@ -1,9 +1,11 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import AreaForAddInterviewForm from './AreaForAddInterviewForm'
 import AreaForShowAnswers from './AreaForShowAnswers'
+import { Stack } from '@mui/material'
+import { IFormInterview } from '@/app/recruitment/page'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -19,30 +21,23 @@ const style = {
   overflowY: 'scroll',
 }
 
-export interface IFormInterview {
-  question: string
-  type: string
-  optionList: string[]
-}
-
 export const SetInterview = ({
   openBasicModal,
   handleCloseBasicModal,
+  interviewData,
+  setInterviewData,
 }: {
   openBasicModal: boolean
   handleCloseBasicModal: () => void
+  interviewData: IFormInterview[]
+  setInterviewData: React.Dispatch<React.SetStateAction<IFormInterview[]>>
 }) => {
-  const [interviewData, setInterviewData] = useState<IFormInterview[]>([])
   const [question, setQuestion] = useState<string>('')
   const [formType, setFormType] = useState<string>('주관식')
   const [answer, setAnswer] = useState<string[]>([])
 
-  useEffect(() => {
-    console.log('interviewData :', interviewData)
-  }, [interviewData])
-
   return (
-    <div>
+    <Stack>
       <Modal
         open={openBasicModal}
         onClose={handleCloseBasicModal}
@@ -68,7 +63,7 @@ export const SetInterview = ({
           />
         </Box>
       </Modal>
-    </div>
+    </Stack>
   )
 }
 

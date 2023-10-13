@@ -11,6 +11,7 @@ import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
 import MessageNavigator from '@/components/MessageNavigator'
 import useMedia from '@/hook/useMedia'
+
 // import useAuthStore from '@/states/useAuthStore'
 
 const MessageMain = () => {
@@ -18,13 +19,11 @@ const MessageMain = () => {
   const [messageList, setMessageList] = useState<IMessagObject[]>([])
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
-  // const { userId } = useAuthStore()
   const { data, error, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/list?userId=${1}`, // FIXME : 내 userId 넣기
+    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/list?userId=${1}`, // FIXME:  내 userId 넣기
     defaultGetFetcher,
   )
 
-  console.log('data', data)
   useEffect(() => {
     if (data) {
       setMessageList((prevMessages) => [...prevMessages, ...data])
