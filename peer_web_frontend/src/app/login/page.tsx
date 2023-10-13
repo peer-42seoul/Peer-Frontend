@@ -80,7 +80,7 @@ const PCLabelBox = {
 
 const Login = () => {
   const { isPc } = useMedia()
-  const API_URL = process.env.API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { login } = useAuthStore()

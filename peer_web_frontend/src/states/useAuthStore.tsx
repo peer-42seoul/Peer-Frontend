@@ -3,7 +3,7 @@ import LocalStorage from './localStorage'
 
 interface IAuthStore {
   isLogin: boolean
-  userId: number | null
+  //userId: number | null
   accessToken: string | null
   login: (accessToken: string) => void
   logout: () => void
@@ -17,7 +17,7 @@ const useAuthStore = create<IAuthStore>((set) => {
 
   return {
     isLogin: !!authData.accessToken,
-    userId: authData.userId,
+    //userId: authData.userId,
     accessToken: authData.accessToken,
     login: (accessToken) => {
       // save userId, accessToken to LocalStorage
@@ -33,7 +33,6 @@ const useAuthStore = create<IAuthStore>((set) => {
       LocalStorage.removeItem('authData')
       set(() => ({
         isLogin: false,
-        userId: null,
         accessToken: null,
         refreshToken: null,
       }))
