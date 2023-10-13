@@ -219,17 +219,17 @@ const ProfileBioEditor = ({
                   >
                     <PhotoCameraOutlinedIcon />
                   </Box>
+                  <input
+                    type="file"
+                    accept={'image/*'}
+                    style={{ display: 'none' }}
+                    {...register('profileImage')}
+                    id="profileImage"
+                    name="profileImage"
+                    onChange={handleImageChange}
+                  />
                 </Button>
               </Box>
-              <input
-                type="file"
-                accept={'image/*'}
-                style={{ display: 'none' }}
-                {...register('profileImage')}
-                id="profileImage"
-                name="profileImage"
-                onChange={handleImageChange}
-              />
             </Box>
 
             {/* )}
