@@ -36,8 +36,10 @@ const useAxiosWithAuth = () => {
           // 로그아웃 후 리디렉션
           useAuthStore.getState().logout()
           router.push('/login')
+          alert('다시 로그인 해주세요')
         } else {
           try {
+            // accessToken 갱신 요청
             const response = await axiosInstance.post('/accessToken', {
               refreshToken: refreshToken,
             })
@@ -50,6 +52,7 @@ const useAxiosWithAuth = () => {
           } catch (refreshError) {
             // 로그아웃 후 리디렉션
             useAuthStore.getState().logout()
+            alert('다시 로그인 해주세요')
             router.push('/login')
           }
         }
