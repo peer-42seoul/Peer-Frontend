@@ -1,5 +1,6 @@
 'use client'
 
+import useAuthStore from '@/states/useAuthStore'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import { Box, Button, TextField } from '@mui/material'
 import axios from 'axios'
@@ -31,7 +32,7 @@ const MessageForm = ({
   isPc,
 }: IProps) => {
   const router = useRouter()
-  const id = 42
+  const { userId } = useAuthStore()
   const [content, setContent] = useState('')
 
   const updateMessageData = (newMessage: IMessageInformation) => {
@@ -55,25 +56,20 @@ const MessageForm = ({
         targetId,
         content,
       }
-      const url = `${
-        process.env.NEXT_PUBLIC_API_URL
-      }api/v1/message/new-message?userId=${42}` // FIXME : 내 uid 넣기
+      const url =
+        type === 'inChatting' // 타입에 따라서 api 요청을 하는 url을 다르게 설정
+          ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/back-message?userId=${userId}`
+          : `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/new-message?userId=${userId}`
 
-      const response = await axios.post(
-        url, //FIXME:이 주소도 임시라서 api구성할 때 삭제하기
-        data,
-      )
+      const response = await axios.post(url, data)
       setContent('')
       updateMessageData(response.data)
-      if (isPc) {
-        handleClose()
-      } else {
-        router.push('http://localhost:3000/profile/message')
-      }
+      handleClose()
     } catch (error) {
-      console.error('Message sending error:', error)
+      console.log('메시지 전송에 실패하였습니다.')
+      handleClose() //TODO: 에러 처리하기 및 handleClose() 정상동작 체크
     }
-  }, [keyword, content, router, id, updateMessageData])
+  }, [keyword, content, router, updateMessageData])
 
   return (
     <>
@@ -89,7 +85,7 @@ const MessageForm = ({
       <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
         <Button
           onClick={() => {
-            type === 'inchatting'
+            type === 'inChatting'
               ? setMessageFormVisible((prevValue: boolean) => !prevValue)
               : handleClose()
           }}

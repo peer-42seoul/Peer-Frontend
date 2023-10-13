@@ -5,18 +5,16 @@ import React, { useCallback, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
+import useAuthStore from '@/states/useAuthStore'
+import MenuItems from '@/components/CuMenuItems'
+import useMessageStore from '@/states/useMessageStore'
 
 interface IProps {
-  userInfo: {
-    targetId: number
-    targetNickname: string
-    targetProfile: string
-  }
+  userInfo?: ILetterTarget
   type: string
   keyword?: string
   setMessageData?: (prevData: any) => void | IMessageInformation[] | undefined
   handleClose?: any | undefined
-  isPc: boolean
 }
 
 interface IMessageData {
@@ -24,8 +22,9 @@ interface IMessageData {
   content: string
 }
 
-interface IuserInfo {
+export interface ILetterTarget {
   targetId: number
+  targetEmail: string
   targetNickname: string
   targetProfile: string
 }
@@ -38,14 +37,13 @@ const MessageForm = ({
   handleClose,
 }: IProps) => {
   const router = useRouter()
-  const id = 42
   const [content, setContent] = useState('')
-
+  const { userId } = useAuthStore()
+  const { storedSelectedUser } = useMessageStore()
   const updateMessageData = (newMessage: IMessageInformation) => {
     setMessageData?.((prevData: any) => [...prevData, newMessage])
   }
   const messageSubmitHandler = useCallback(async () => {
-    // userInfo.targetId = 1
     try {
       if (!content) {
         alert('내용을 입력하세요.')
@@ -56,10 +54,10 @@ const MessageForm = ({
       }
 
       const data: IMessageData = {
-        targetId: userInfo.targetId,
+        targetId: storedSelectedUser,
         content,
       }
-      const url = `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/new-message?userId=${userInfo.targetId}`
+      const url = `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/new-message?userId=${userId}`
       // const url = `/api/v1/message/new-message?userId=${1}`
 
       const response = await axios.post(
@@ -72,7 +70,7 @@ const MessageForm = ({
     } catch (error) {
       alert('쪽지 전송에 실패하였습니다. 다시 시도해주세요.')
     }
-  }, [keyword, content, router, id, type, updateMessageData])
+  }, [keyword, content, router, type, updateMessageData])
 
   return (
     <>
@@ -95,7 +93,7 @@ const MessageForm = ({
 
 const MessageWritingForm = ({ handleClose }: any) => {
   const [keyword, setKeyword] = useState('')
-  const [userInfo, setUserInfo] = useState<IuserInfo | null>(null)
+  const [letterTarget, setLetterTarget] = useState<ILetterTarget | undefined>()
 
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {
@@ -105,20 +103,21 @@ const MessageWritingForm = ({ handleClose }: any) => {
 
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/searching`,
+        // `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/searching`,
+        'http://localhost:4000/test_options',
         {
           params: {
             keyword,
           },
         },
       )
-
-      setUserInfo(response.data)
+      setLetterTarget(response.data)
     } catch (error) {
       alert('존재하지 않는 사람입니다.')
     }
   }, [keyword])
 
+  console.log('레터 밖', letterTarget)
   return (
     <>
       <Container>
@@ -136,9 +135,10 @@ const MessageWritingForm = ({ handleClose }: any) => {
             />
             <Button onClick={searchUserWithKeyword}>검색</Button>
           </Box>
+          {letterTarget && <MenuItems letterTarget={letterTarget} />}
         </Box>
         <MessageForm
-          userInfo={userInfo}
+          userInfo={letterTarget}
           type={'newMessage'}
           keyword={keyword}
           handleClose={handleClose}
