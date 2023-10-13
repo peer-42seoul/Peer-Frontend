@@ -10,7 +10,6 @@ const SubNavBar = () => {
   const { isPc } = useMedia()
 
   if (!isPc) {
-    console.log(isPc)
     return <div></div>
   }
 
@@ -20,7 +19,10 @@ const SubNavBar = () => {
         orientation="vertical"
         value={value}
         onChange={(event, newValue) => setValue(newValue)}
-        sx={{ borderRight: 1, borderColor: 'divider' }}
+        sx={{
+          borderRight: 1,
+          borderColor: 'divider',
+        }}
         variant="fullWidth"
       >
         <Tab

@@ -1,270 +1,125 @@
 'use client'
 
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
-import { Button, Typography, Box, IconButton } from '@mui/material'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
-import { useState } from 'react'
-import axios from 'axios'
+import { Button, Typography, Box } from '@mui/material'
 
-import { ISignUpInputs, ISignUpFields } from '@/types/ISignUpInputs'
-import SignUpField from './panel/SignUpField'
+import useSignUpForm from './hook/useSignUpForm'
+
+import EmailField from './panel/EmailField'
+import CodeField from './panel/CodeField'
+import PasswordField from './panel/PasswordField'
+import NameField from './panel/NameField'
+import NickNameField from './panel/NickNameField'
 
 const SignUp = () => {
-  const API_URL = 'http://localhost:4000'
-  const router = useRouter()
   const {
+    signUpStep,
+    isEmailSent,
+    emailError,
+    isCodeSent,
+    codeError,
+    isNickNameSent,
+    nickNameError,
+    showPassword,
+    setIsEmailSent,
+    submitEmail,
+    setIsCodeSent,
+    submitCode,
+    setIsNickNameSent,
+    submitNickName,
+    setShowPassword,
+    submitSignUp,
     handleSubmit,
-    formState: { errors },
     control,
-    getValues,
-  } = useForm<ISignUpInputs>({ mode: 'onChange' })
-  const [isEmailSent, setIsEmailSent] = useState<boolean>(false)
-  const [emailError, setEmailError] = useState<boolean>(false)
-  const [isCodeSent, setIsCodeSent] = useState<boolean>(false)
-  const [codeError, setCodeError] = useState<boolean>(false)
-  const [showPassword, setShowPassword] = useState<'password' | 'text'>(
-    'password',
-  )
-  const [isNickNameSent, setIsNickNameSent] = useState<boolean>(false)
-  const [nickNameError, setNickNameError] = useState<boolean>(false)
+    errors,
+  } = useSignUpForm()
 
-  const submitEmail = async () => {
-    const email = getValues('email')
-    console.log(email)
-    if (errors.email?.message) return
-    if (email === undefined) {
-      alert('이메일을 입력해주세요')
-      return
-    }
-    setIsEmailSent(true)
-    try {
-      await axios.post(`${API_URL}/email`, {
-        email: email,
-      })
-      setEmailError(false)
-    } catch (error: any) {
-      setEmailError(true)
-      if (error.response?.status === 409) {
-        alert('이미 가입된 이메일입니다')
-      } else if (error.response?.status === 400) {
-        alert('유효하지 않은 이메일입니다')
-      } else {
-        alert('알 수 없는 오류가 발생했습니다')
-      }
-    }
-  }
-  const submitCode = async () => {
-    const code = getValues('code')
-    if (errors.code?.message) return
-    if (code === undefined) {
-      alert('인증코드를 입력해주세요')
-      return
-    }
-    setIsCodeSent(true)
-    try {
-      await axios.post(`${API_URL}/code`, {
-        code: code,
-      })
-      setCodeError(false)
-    } catch (error: any) {
-      setCodeError(true)
-      if (error.response?.status === 401) {
-        alert('유효하지 않은 인증코드입니다')
-      } else if (error.response?.status === 400) {
-        alert('유효한 이메일이 아닙니다')
-      } else {
-        alert('알 수 없는 오류가 발생했습니다')
-      }
-    }
-  }
-  const submitNickName = async () => {
-    const nickName = getValues('nickName')
-    if (errors.nickName?.message) return
-    if (nickName === undefined) {
-      alert('닉네임을 입력해주세요')
-      return
-    }
-    setIsNickNameSent(true)
-    try {
-      await axios.post(`${API_URL}/nickname`, {
-        nickName: nickName,
-      })
-      setNickNameError(false)
-    } catch (error: any) {
-      console.log(error)
-      setNickNameError(true)
-      if (error.response?.status === 400) {
-        alert('유효하지 않은 닉네임입니다')
-      } else if (error.response?.status === 409) {
-        alert('이미 사용중인 닉네임입니다')
-      } else {
-        alert('알 수 없는 오류가 발생했습니다')
-      }
-    }
+  const mainStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: '50px',
   }
 
-  const fieldProp: ISignUpFields = {
-    email: {
-      label: '이메일',
-      name: 'email',
-      control: control,
-      error: errors.email,
-      rules: {
-        required: '이메일을 입력해주세요',
-        pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-          message: '유효한 이메일 형식이 아닙니다',
-        },
-      },
-      placeholder: '사용할 이메일을 입력하세요',
-      onClick: submitEmail,
-      buttonText: '이메일 인증',
-      isInputValid: isEmailSent && !emailError,
-      inputProps: {
-        maxLength: 30,
-      },
-      type: 'text',
-    },
-    code: {
-      label: '인증코드',
-      name: 'code',
-      control: control,
-      error: errors.code,
-      rules: {
-        required: '인증코드를 입력해주세요',
-      },
-      placeholder: '인증코드를 입력해주세요',
-      onClick: submitCode,
-      buttonText: '인증 확인',
-      isInputValid: isCodeSent && !codeError,
-      inputProps: {
-        maxLength: 6,
-      },
-      type: 'text',
-    },
-    password: {
-      label: '비밀번호',
-      name: 'password',
-      control: control,
-      error: errors.password,
-      rules: {
-        required: '비밀번호를 입력하세요',
-        pattern: {
-          value:
-            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*<>])[A-Za-z\d~!@#$%^&*<>]{8,}$/i,
-          message: '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
-        },
-      },
-      placeholder: '비밀번호를 입력하세요',
-      onClick: () => {
-        setShowPassword(showPassword === 'password' ? 'text' : 'password')
-      },
-      inputProps: {
-        minLength: 8,
-        maxLength: 20,
-      },
-      type: showPassword,
-    },
-    nickName: {
-      label: '닉네임',
-      name: 'nickName',
-      control: control,
-      error: errors.nickName,
-      rules: {
-        required: '닉네임을 입력하세요',
-        minLength: {
-          value: 2,
-          message: '닉네임은 2자 이상이어야 합니다',
-        },
-        maxLength: {
-          value: 7,
-          message: '닉네임은 7자 이하여야 합니다',
-        },
-      },
-      placeholder: '닉네임을 입력하세요',
-      onClick: submitNickName,
-      buttonText: '닉네임 중복확인',
-      isInputValid: isNickNameSent && !nickNameError,
-      inputProps: {
-        minLength: 2,
-        maxLength: 7,
-      },
-      type: 'text',
-    },
-    name: {
-      label: '이름',
-      name: 'name',
-      control: control,
-      error: errors.name,
-      placeholder: '실명을 입력하세요',
-      rules: {
-        required: '실명을 입력하세요',
-        minLength: {
-          value: 2,
-          message: '실명을 입력하세요',
-        },
-      },
-      inputProps: {
-        minLength: 2,
-        maxLength: 20,
-      },
-      type: 'text',
-    },
+  const formStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '400px',
+    marginTop: '30px',
   }
-  const onSubmit: SubmitHandler<ISignUpInputs> = async (data) => {
-    console.log(data)
-    router.push('/login')
+
+  const buttonStyle = {
+    display: 'block',
+    margin: 'auto',
+    width: '50%',
   }
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-      }}
-      component="main"
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          width: '70%',
-          alignItems: 'center',
-        }}
+    <Box sx={mainStyle} component="main">
+      <Typography
+        aria-label="회원가입"
+        sx={{ textAlign: 'center', flexGrow: 1 }}
+        component="h3"
       >
-        <IconButton
-          sx={{ textAlign: 'left' }}
-          onClick={() => {
-            router.back()
-          }}
-        >
-          <ArrowBackIosNewIcon />
-        </IconButton>
-        <Typography sx={{ textAlign: 'center', flexGrow: 1 }} component="h2">
-          Peer 회원가입
-        </Typography>
-      </Box>
-      <form
-        style={{ width: '70%', display: 'flex', flexDirection: 'column' }}
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <SignUpField {...fieldProp.email} />
-        <SignUpField {...fieldProp.code} />
-        <SignUpField {...fieldProp.password} />
-        <SignUpField {...fieldProp.nickName} />
-        <SignUpField {...fieldProp.name} />
-        <Button
-          sx={{
-            display: 'block',
-          }}
-          variant="contained"
-          type="submit"
-        >
-          가입하기
-        </Button>
+        회원가입
+      </Typography>
+      <form onSubmit={handleSubmit(submitSignUp)}>
+        <Box sx={formStyle}>
+          {signUpStep === 0 && (
+            <>
+              <EmailField
+                control={control}
+                error={errors.email}
+                submitEmail={submitEmail}
+                setIsEmailSent={setIsEmailSent}
+                isEmailSent={isEmailSent}
+                emailError={emailError}
+              />
+              <CodeField
+                control={control}
+                error={errors.code}
+                setIsCodeSent={setIsCodeSent}
+                isCodeSent={isCodeSent}
+                codeError={codeError}
+              />
+              <PasswordField
+                control={control}
+                error={errors.password}
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+              />
+              <Button
+                aria-label="다음 버튼"
+                sx={buttonStyle}
+                variant="contained"
+                onClick={submitCode}
+              >
+                다음
+              </Button>
+            </>
+          )}
+          {signUpStep === 1 && (
+            <>
+              <NameField control={control} error={errors.name} />
+              <NickNameField
+                control={control}
+                error={errors.nickName}
+                setIsNickNameSent={setIsNickNameSent}
+                submitNickName={submitNickName}
+                isNickNameSent={isNickNameSent}
+                nickNameError={nickNameError}
+              />
+              <Button
+                aria-label="회원가입 버튼"
+                sx={buttonStyle}
+                variant="contained"
+                type="submit"
+              >
+                회원가입
+              </Button>
+            </>
+          )}
+        </Box>
       </form>
     </Box>
   )
