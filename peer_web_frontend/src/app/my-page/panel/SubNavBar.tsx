@@ -28,19 +28,19 @@ const SubNavBar = () => {
         <Tab
           label="프로필"
           onClick={() => {
-            router.push('/profile/MyPage')
+            router.push('/my-page/profile')
           }}
         />
         <Tab
           label="관심리스트"
           onClick={() => {
-            router.push('/')
+            router.push('/my-page/interests')
           }}
         />
         <Tab
           label="쪽지"
           onClick={() => {
-            router.push('/')
+            router.push('/my-page/message')
           }}
         />
         <Tab
