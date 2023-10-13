@@ -14,9 +14,9 @@ const SignUpField = ({
   control,
   error,
   rules,
-  placeholder,
   onClick,
   onChange,
+  placeholder,
   buttonText,
   inValidInput,
   inputProps,
@@ -34,6 +34,7 @@ const SignUpField = ({
             <CuTextField
               field={{
                 ...field,
+                value: field.value || '',
                 onChange: (e: any) => {
                   field.onChange(e)
                   if (onChange) {
@@ -41,6 +42,7 @@ const SignUpField = ({
                   }
                 },
               }}
+              autoComplete="off"
               error={inValidInput}
               type={type}
               placeholder={placeholder}

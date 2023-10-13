@@ -13,7 +13,7 @@ const useSignUpForm = () => {
     control,
     formState: { errors },
     getValues,
-  } = useForm<ISignUpInputs>({ mode: 'onBlur' })
+  } = useForm<ISignUpInputs>({ mode: 'onChange' })
   const [signUpStep, setSignUpStep] = useState<number>(0)
   const [isEmailSent, setIsEmailSent] = useState<boolean>(false)
   const [emailError, setEmailError] = useState<boolean>(false)
