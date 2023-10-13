@@ -1,7 +1,12 @@
 import axios from 'axios'
 
 export const defaultGetFetcher = (url: string) =>
-  axios.get(url).then((res) => res.data)
+  axios
+    .get(url)
+    .then((res) => res.data)
+    .catch((error) => {
+      throw error
+    })
 
 export const fetchServerData = async (url: string) => {
   try {

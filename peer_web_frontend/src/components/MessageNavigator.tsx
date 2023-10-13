@@ -10,13 +10,21 @@ import SearchIcon from '@mui/icons-material/Search'
 interface IMessageNavigatorProps {
   title: string
   messageType: string
+  openModal: () => void
 }
 
-const MessageNavigator = ({ title }: IMessageNavigatorProps) => {
+const MessageNavigator = ({
+  title,
+  messageType,
+  // isOpen,
+  // closeModal,
+  openModal,
+}: IMessageNavigatorProps) => {
   const router = useRouter()
 
   const onNewMessage = () => {
-    router.push('http://localhost:3000/profile/message/write')
+    // router.push('http://localhost:3000/profile/message/write')
+    openModal()
   }
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
@@ -27,7 +35,7 @@ const MessageNavigator = ({ title }: IMessageNavigatorProps) => {
       />
       <Typography>{title}</Typography>
       <Box>
-        <SearchIcon />
+        {messageType !== 'main' && <SearchIcon />}
         <AddIcon onClick={onNewMessage} />
       </Box>
     </Box>

@@ -10,8 +10,6 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import MessageNavigator from '../../../components/MessageNavigator'
-import CircularProgress from '@mui/material/CircularProgress'
 import useMessageStore from '@/states/useMessageStore'
 import Image from 'next/image'
 import SearchIcon from '@mui/icons-material/Search'
@@ -24,21 +22,16 @@ interface IMessageList {
   data: IMessagObject[] | []
   error: Error | undefined
   isLoading: boolean
-  spinner: boolean
-  setSelectedStatus: (newValue: boolean) => void
   isPc: boolean
 }
 
 const MessageItem = ({
   user,
   onManageMessage,
-  isPc,
   setSelectedUser,
 }: {
-  idx: number
   user: IMessagObject
   onManageMessage: boolean
-  isPc: boolean | undefined
   setSelectedUser: (newValue: string) => void
 }) => {
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
@@ -57,22 +50,16 @@ const MessageItem = ({
   )
 
   const messageContentHandler = useCallback(
-    (targetId: number, isPc?: boolean) => {
-      if (!isPc) {
-        // setSelectedStatus(true),
-        useMessageStore.setState({ storedTargetId: targetId })
-        router.push(
-          `http://localhost:3000/profile/message/conversaion-list?target=${targetId}`,
-        )
-      } else {
-        // setSelectedStatus(true)
-        useMessageStore.setState({ storedTargetId: targetId })
-      }
+    (targetId: number) => {
+      useMessageStore.setState({ storedTargetId: targetId })
+
+      router.push(
+        `http://localhost:3000/profile/message/conversaion-list?target=${targetId}`,
+      )
     },
     [router],
   )
 
-  console.log('user의 값은', user)
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
       {!onManageMessage && (
@@ -86,7 +73,7 @@ const MessageItem = ({
       <Box
         sx={{ width: '100%', padding: '16px 0 16px 0' }}
         // key={idx}
-        onClick={() => messageContentHandler(user.targetId, isPc)}
+        onClick={() => messageContentHandler(user.targetId)}
       >
         <Typography>{user.targetNickname}</Typography>
         <Typography>{user.latestDate}</Typography>
@@ -115,13 +102,7 @@ const MessageItem = ({
   )
 }
 
-const MessageList = ({
-  data,
-  error,
-  isLoading,
-  spinner,
-  isPc,
-}: IMessageList) => {
+const MessageList = ({ data, error, isLoading }: IMessageList) => {
   // const router = useRouter()
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState<IMessagObject[]>(data)
@@ -144,11 +125,14 @@ const MessageList = ({
         // const confirmResult = confirm('are you sure?')
         console.log('deleteList', seletedUser)
         axios
-          .delete(`http://localhost:4000/profile/message/delete-message`, {
-            data: {
-              target: seletedUser,
+          .delete(
+            `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/delete-message?userId=${userId}`, // FIXME : userId 받아와야함
+            {
+              data: {
+                target: seletedUser,
+              },
             },
-          })
+          )
           .then((response: AxiosResponse<IMessagObject[]>) => {
             setFilteredData(response.data) //FIXME: 받아오는 데이터 값 확인하고 filterdData에 넣고 새로 렌더링 하는 것 확인하기
           })
@@ -176,14 +160,20 @@ const MessageList = ({
     )
   console.log('메시지 리스트의 user', filteredData)
   return (
-    <Stack>
-      {!isPc && <MessageNavigator title={'쪽지'} messageType={'쪽지'} />}
+    <Stack
+      sx={{
+        borderRadius: '1rem',
+        border: '1px solid #000',
+        background: '#FFF',
+        padding: '1.5rem',
+      }}
+    >
       <Box>
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', width: '100%' }}>
           <TextField
             value={searchText}
             onChange={(event) => setSearchText(event.target.value)}
-            placeholder="닉네임을 입력하세요"
+            placeholder="사람을 검색하여 주세요"
           />
           <Button onClick={searchMessageItemHandler}>
             <SearchIcon />
@@ -199,23 +189,21 @@ const MessageList = ({
           )}
         </Box>
         {filteredData.length === 0 ? (
-          <Box sx={{ width: '100vw', height: '99vh' }}>
+          <Box sx={{ width: '100vw', height: '100vh' }}>
             검색 결과가 없습니다.
           </Box>
         ) : (
           filteredData.map((user: IMessagObject, idx: number) => (
             <MessageItem
-              key={user.target}
+              key={user.targetId}
               idx={idx}
               user={user}
               onManageMessage={onManageMessage}
-              isPc={isPc}
               setSelectedUser={setSelectedUser}
             />
           ))
         )}
       </Box>
-      {spinner && <CircularProgress />}
     </Stack>
   )
 }

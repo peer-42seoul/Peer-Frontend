@@ -1,30 +1,31 @@
-import * as React from 'react'
 import Box from '@mui/material/Box'
-import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
-export default function BasicSelectArea() {
-  const [num, setNum] = React.useState('')
-
+export default function BasicSelect({
+  member,
+  setMember,
+}: {
+  member: string
+  setMember: React.Dispatch<React.SetStateAction<string>>
+}) {
   const handleChange = (event: SelectChangeEvent) => {
-    setNum(event.target.value as string)
+    setMember(event.target.value as string)
   }
 
   return (
-    <Box sx={{ width: 150 }}>
+    <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">지역</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={num}
-          label="num"
+          value={member}
           onChange={handleChange}
         >
-          <MenuItem value={0}>구로구</MenuItem>
-          <MenuItem value={1}>API 땡겨와서 작업예정</MenuItem>
+          {[1, 2, 3, 4, 5, 6].map((value) => {
+            return <MenuItem key={value} value={value}>{`${value}명`}</MenuItem>
+          })}
         </Select>
       </FormControl>
     </Box>
