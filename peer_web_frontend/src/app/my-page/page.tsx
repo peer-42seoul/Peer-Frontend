@@ -12,7 +12,7 @@ const MyPage = () => {
   const buttonLabel = { display: 'flex', justifyContent: 'flex-start' }
 
   if (isPc) {
-    router.push('/profile/MyPage')
+    router.push('/my-page/profile')
     return <div></div>
   }
   return (
