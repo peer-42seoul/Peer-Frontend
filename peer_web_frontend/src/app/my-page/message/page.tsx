@@ -1,7 +1,7 @@
 'use client'
 
 import { defaultGetFetcher } from '@/api/fetchers'
-import MessageList from '@/app/profile/message/MessageList'
+import MessageList from '@/app/my-page/message/MessageList'
 import { Box, Button, Container } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
