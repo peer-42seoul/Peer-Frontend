@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
   InputAdornment,
   Typography,
 } from '@mui/material'
@@ -15,6 +16,7 @@ import { useForm, Controller } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
+import ClearIcon from '@mui/icons-material/Clear'
 // import { ChildProcessWithoutNullStreams } from 'child_process'
 // import { File } from 'buffer'
 // import axios from 'axios'
@@ -44,7 +46,10 @@ const ProfileBioEditor = ({
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
   const [nicknameError, setNicknameError] = useState<boolean>(false)
   const [image, setImage] = useState<File | null>(null)
-  const [previewImage, setPreviewImage] = useState<string | null>(null)
+  const [previewImage, setPreviewImage] = useState<string | null>(
+    data.profileImageURL,
+  )
+  const [imageChanged, setImageChanged] = useState<boolean>(false)
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // const file = e.target.files && e.target.files[0]
@@ -53,9 +58,17 @@ const ProfileBioEditor = ({
       setImage(e.target.files[0])
       reader.onload = (e) => {
         setPreviewImage(e.target?.result as string)
+        setImageChanged(true)
       }
       reader.readAsDataURL(e.target.files && e.target.files[0])
     }
+  }
+
+  const handleImageDelete = () => {
+    setImage(null)
+    setPreviewImage(null)
+    setImageChanged(true)
+    console.log('handleImageDelete')
   }
 
   const defaultValues: IFormInput = {
@@ -124,7 +137,7 @@ const ProfileBioEditor = ({
       introduction: string
     } = {
       ...formData,
-      imageChanged: false,
+      imageChanged: imageChanged,
       profileImage: image,
     }
     console.log('닉네임 중복확인', isNicknameUnique)
@@ -136,9 +149,9 @@ const ProfileBioEditor = ({
       setToastOpen(true)
       setNicknameError(true)
     }
-    if (submitData.profileImage) {
-      submitData.imageChanged = true
-    }
+    // if (submitData.profileImage) {
+    //   submitData.imageChanged = true
+    // }
     console.log('on positive click', submitData)
   }
 
@@ -154,46 +167,71 @@ const ProfileBioEditor = ({
           <Grid item xs={12}>
             {/* <Controller
               render={({ field }) => ( */}
-            <Button component="label">
-              <Box width={[56, 100]} height={[56, 100]}>
-                <Avatar
-                  src={
-                    previewImage
-                      ? previewImage
-                      : data.profileImageURL
-                      ? data.profileImageURL
-                      : '/images/profile.jpeg'
-                  }
-                  alt="profile image"
-                  sx={{ height: '100%', width: '100%' }}
-                />
-                <Box
+            <Box>
+              <Box
+                width={[56, 100]}
+                height={[56, 100]}
+                sx={{ position: 'relative' }}
+              >
+                <IconButton
                   sx={{
                     position: 'absolute',
-                    bottom: '0',
+                    top: '0',
                     right: '6px',
-                    width: '24px',
-                    height: '24px',
+                    width: '16px',
+                    height: '16px',
                     borderRadius: '50px',
                     borderColor: 'lightgray',
                     border: '1px',
                     padding: '4px',
                     backgroundColor: 'white',
+                    zIndex: '9999',
                   }}
+                  onClick={handleImageDelete}
                 >
-                  <PhotoCameraOutlinedIcon />
-                </Box>
+                  <ClearIcon />
+                </IconButton>
+                <Button component="label">
+                  <Avatar
+                    src={
+                      previewImage
+                        ? previewImage
+                        : // : data.profileImageURL
+                          // ? data.profileImageURL
+                          '/images/profile.jpeg'
+                    }
+                    alt="profile image"
+                    sx={{ height: '100%', width: '100%' }}
+                  />
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: '0',
+                      right: '6px',
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50px',
+                      borderColor: 'lightgray',
+                      border: '1px',
+                      padding: '4px',
+                      backgroundColor: 'white',
+                    }}
+                  >
+                    <PhotoCameraOutlinedIcon />
+                  </Box>
+                  <input
+                    type="file"
+                    accept={'image/*'}
+                    style={{ display: 'none' }}
+                    {...register('profileImage')}
+                    id="profileImage"
+                    name="profileImage"
+                    onChange={handleImageChange}
+                  />
+                </Button>
               </Box>
-              <input
-                type="file"
-                accept={'image/*'}
-                style={{ display: 'none' }}
-                {...register('profileImage')}
-                id="profileImage"
-                name="profileImage"
-                onChange={handleImageChange}
-              />
-            </Button>
+            </Box>
+
             {/* )}
               name={'profileImageURL'}
               control={control}
