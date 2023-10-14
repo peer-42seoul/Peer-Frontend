@@ -6,7 +6,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import useAuthStore from '@/states/useAuthStore'
-import MenuItems from '@/components/CuMenuItems'
+import MenuItem from '@mui/material/MenuItem'
 import useMessageStore from '@/states/useMessageStore'
 
 interface IProps {
@@ -27,6 +27,37 @@ export interface ILetterTarget {
   targetEmail: string
   targetNickname: string
   targetProfile: string
+}
+
+function MenuItems({ letterTarget }: any) {
+  const selectMessageTarget = (targetId: number) => {
+    console.log('targetId', targetId)
+    useMessageStore.setState({
+      storedSelectedUser: targetId,
+    })
+  }
+  return (
+    <Box>
+      {letterTarget.map((item: any) => {
+        return (
+          <>
+            <Box
+              onClick={() => selectMessageTarget(item.targetId)}
+              key={item.targetId}
+            >
+              <MenuItem>
+                {item.targetNickname ? (
+                  <span>{item.targetNickname}</span>
+                ) : (
+                  <span>{item.targetEmail}</span>
+                )}
+              </MenuItem>
+            </Box>
+          </>
+        )
+      })}
+    </Box>
+  )
 }
 
 const MessageForm = ({
@@ -94,6 +125,8 @@ const MessageForm = ({
 const MessageWritingForm = ({ handleClose }: any) => {
   const [keyword, setKeyword] = useState('')
   const [letterTarget, setLetterTarget] = useState<ILetterTarget | undefined>()
+
+  //TODO: 반환된 검색 결과 state 에 실어서 보내기 (받는 사람 정보)
 
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {
