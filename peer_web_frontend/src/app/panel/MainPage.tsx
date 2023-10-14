@@ -36,7 +36,7 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const { data, isLoading, mutate } = useSWR(
-    `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/main?type=projects&sort=recent&page=1&pagesize=10&keyword=&due=&region=&place=&status=&tag=`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main?type=projects&sort=recent&page=1&pagesize=10&keyword=&due=&region=&place=&status=&tag=`,
     defaultGetFetcher,
     { fallbackData: initData },
   )
@@ -56,64 +56,11 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
   if (isLoading) return <Typography>로딩중...</Typography>
 
   if (!data) return <Typography>데이터가 없습니다</Typography>
-
-  /* pc 화면 */
-  if (isPc) {
-    return (
-      <Container sx={{ backgroundColor: 'beige' }}>
-        <Stack bgcolor={'orange'} direction={'row'}>
-          <Stack flex={1}>
-            <Box bgcolor={'gray'} height={'200px'}>
-              피어 소개 배너
-            </Box>
-            <SelectType type={type} setType={setType} pc />
-            <Grid container p={2}>
-              <SearchOption
-                openOption={openOption}
-                setOpenOption={setOpenOption}
-                setDetailOption={setDetailOption}
-              />
-              <Grid item xs={12}>
-                <Stack
-                  direction="row"
-                  alignItems={'center'}
-                  justifyContent={'space-between'}
-                >
-                  <Typography>모집글</Typography>
-                  <SelectSort sort={sort} setSort={setSort} />
-                </Stack>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2}>
-              {data?.map((project: IPost) => (
-                <Grid item key={project.user_id} sm={12} md={4}>
-                  <MainCard {...project} />
-                </Grid>
-              ))}
-            </Grid>
-            {spinner && <CircularProgress />}
-            <Box
-              sx={{
-                bottom: 0,
-                height: '1vh',
-                backgroundColor: 'primary.main',
-              }}
-              ref={target}
-            />
-          </Stack>
-          <Stack width={'250px'} height={'100%'} bgcolor={'yellow'}>
-            <MainProfile />
-            <MainShowcase />
-            <MainCarousel />
-          </Stack>
-        </Stack>
-      </Container>
-    )
-  }
-
-  /* mobile 화면 */
+  
   return (
-    <Container sx={{ backgroundColor: 'gray' }}>
+    <>
+    {/* mobile view */}
+    <Container sx={{ backgroundColor: 'gray' }} className="mobile-layout">
       <Box sx={{ backgroundColor: 'white' }}>
         <SelectType type={type} setType={setType} />
         <Grid container p={2}>
@@ -159,6 +106,56 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
         ref={target}
       />
     </Container>
+    {/* pc view */}
+    <Container sx={{ backgroundColor: 'beige' }} className="pc-layout">
+    <Stack bgcolor={'orange'} direction={'row'}>
+      <Stack flex={1}>
+        <Box bgcolor={'gray'} height={'200px'}>
+          피어 소개 배너
+        </Box>
+        <SelectType type={type} setType={setType} pc />
+        <Grid container p={2}>
+          <SearchOption
+            openOption={openOption}
+            setOpenOption={setOpenOption}
+            setDetailOption={setDetailOption}
+          />
+          <Grid item xs={12}>
+            <Stack
+              direction="row"
+              alignItems={'center'}
+              justifyContent={'space-between'}
+            >
+              <Typography>모집글</Typography>
+              <SelectSort sort={sort} setSort={setSort} />
+            </Stack>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          {data?.map((project: IPost) => (
+            <Grid item key={project.user_id} sm={12} md={4}>
+              <MainCard {...project} />
+            </Grid>
+          ))}
+        </Grid>
+        {spinner && <CircularProgress />}
+        <Box
+          sx={{
+            bottom: 0,
+            height: '1vh',
+            backgroundColor: 'primary.main',
+          }}
+          ref={target}
+        />
+      </Stack>
+      <Stack width={'250px'} height={'100%'} bgcolor={'yellow'}>
+        <MainProfile />
+        <MainShowcase />
+        <MainCarousel />
+      </Stack>
+    </Stack>
+  </Container>
+  </>
   )
 }
 
