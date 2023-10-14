@@ -1,28 +1,18 @@
 'use client'
 
-import { defaultGetFetcher } from "@/api/fetchers"
-import {Box, Typography, TextField, Button, Stack, Chip} from "@mui/material"
+import { Box, Typography, Button, Stack, Chip } from "@mui/material"
 import { useRouter } from "next/navigation"
-import { title } from "process"
-import useSWR from "swr"
-import BasicSelect, { ComponentType } from "../panel/BasicSelect"
-import SetCommunicationToolLink from "../panel/SetCommunicationToolLink/SetCommunicationToolLink"
-import SetInterview from "../panel/SetInterview/SetInterview"
-import SetTeamRole from "../panel/SetTeamRole/SetTeamRole"
-import TagAutoComplete from "../panel/SetTeamTag/TagAutoComplete"
-import SetWorkWeekend from "../panel/SetWorkWeekend/SetWorkWeekend"
-import RowRadioButtonsGroup from "../panel/radioGroup"
 import { IPostDetail } from "@/types/IPostDetail"
 import LinkIcon from "@mui/icons-material/Link";
 import Image from "next/image";
 import React from "react";
+import Link from "next/link"
 
 //이후 ssr 개선 필요
-const RecruitDetailPage = () => {
-    // const router = useRouter()
+const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     //id에 따라 값 가져오기
     // const { data, isLoading, mutate } = useSWR(
-    //     `${process.env.NEXT_PUBLIC_API_URL}api/v1/recruit/${router.query.id}`,
+    //     `${process.env.NEXT_PUBLIC_API_URL}api/v1/recruit/${params.id}`,
     //     defaultGetFetcher,
     // )
 
@@ -61,13 +51,13 @@ const RecruitDetailPage = () => {
                 </Box>
                 <Box>
                     <Typography variant="h6">팀 상태</Typography>
-                    <Chip label={data?.status} size="medium"/>
+                    <Chip label={data?.status} size="medium" />
                 </Box>
                 <Box>
                     <Typography variant="h6">리더 프로필</Typography>
                     <Image
-                        src={userData?.nickname}
-                        alt="picture_of_sender"
+                        src={userData?.profileUrl}
+                        alt="leader_profile"
                         width={100}
                         height={100}
                     />
@@ -122,18 +112,20 @@ const RecruitDetailPage = () => {
                 {
                     data?.role?.map((v) => (
                         <>
-                        <Typography>{v.roleName}</Typography>
-                    <Typography>{v?.number}</Typography>
+                            <Typography>{v.roleName}</Typography>
+                            <Typography>{v?.number}</Typography>
                         </>
-            ))
-            }
+                    ))
+                }
                 <Box>
                     <Typography variant="h6">팀 소개</Typography>
                     <Typography>{data?.content}</Typography>
                 </Box>
-                <Button variant="contained" color="success">
-                    지원 하기
-                </Button>
+                <Link href={`/recruitment/${params.id}/apply`}>
+                    <Button variant="contained" color="success">
+                        지원 하기
+                    </Button>
+                </Link>
             </Box>
         </>
     )

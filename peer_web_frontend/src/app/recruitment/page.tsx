@@ -73,10 +73,10 @@ const CreateTeam = () => {
           <Typography variant="h6">팀 제목</Typography>
           <TextField variant="outlined" value={title} onChange={handleChange} />
         </Box>
-        {/* <Box> 모집 글 뷰에선 스터디/프로젝트 구분을 애초에 들어올때 하니까 필요없나?
+        <Box>
           <Typography variant="h6">팀 분류</Typography>
           <RowRadioButtonsGroup setValue={setTeamType} />
-        </Box> */}
+        </Box>
         <Box>
           <Typography variant="h6">팀 인원</Typography>
           <BasicSelect
