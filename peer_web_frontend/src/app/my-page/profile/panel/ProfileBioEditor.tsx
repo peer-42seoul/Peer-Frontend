@@ -4,8 +4,10 @@ import SettingContainer from './SettingContainer'
 import {
   AlertColor,
   Avatar,
+  Box,
   Button,
   Grid,
+  IconButton,
   InputAdornment,
   Typography,
 } from '@mui/material'
@@ -13,11 +15,16 @@ import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
+import ClearIcon from '@mui/icons-material/Clear'
+// import { ChildProcessWithoutNullStreams } from 'child_process'
+// import { File } from 'buffer'
 // import axios from 'axios'
 
 interface IFormInput {
   nickname: string
   introduction: string
+  profileImage: File[]
 }
 
 interface IToastProps {
@@ -38,16 +45,43 @@ const ProfileBioEditor = ({
 }) => {
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
   const [nicknameError, setNicknameError] = useState<boolean>(false)
+  const [image, setImage] = useState<File | null>(null)
+  const [previewImage, setPreviewImage] = useState<string | null>(
+    data.profileImageURL,
+  )
+  const [imageChanged, setImageChanged] = useState<boolean>(false)
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // const file = e.target.files && e.target.files[0]
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader()
+      setImage(e.target.files[0])
+      reader.onload = (e) => {
+        setPreviewImage(e.target?.result as string)
+        setImageChanged(true)
+      }
+      reader.readAsDataURL(e.target.files && e.target.files[0])
+    }
+  }
+
+  const handleImageDelete = () => {
+    setImage(null)
+    setPreviewImage(null)
+    setImageChanged(true)
+    console.log('handleImageDelete')
+  }
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
     introduction: data.introduction,
+    profileImage: [] as File[],
   }
 
   const {
     handleSubmit,
     control,
     formState: { errors },
+    register,
     // getValues,
     watch,
   } = useForm<IFormInput>({
@@ -56,6 +90,14 @@ const ProfileBioEditor = ({
   })
 
   const nickname = watch('nickname')
+
+  // const profileImage = watch('profileImage')
+  // useEffect(() => {
+  //   if (profileImage) {
+  //     const file = profileImage[0]
+  //     setImage(URL.createObjectURL(file))
+  //   }
+  // }, [profileImage])
 
   const NicknameCheckButton = ({
     nickname,
@@ -87,7 +129,17 @@ const ProfileBioEditor = ({
     )
   }
 
-  const onSubmit = (data: IFormInput) => {
+  const onSubmit = (formData: IFormInput) => {
+    const submitData: {
+      profileImage: File | null
+      nickname: string
+      imageChanged: boolean
+      introduction: string
+    } = {
+      ...formData,
+      imageChanged: imageChanged,
+      profileImage: image,
+    }
     console.log('닉네임 중복확인', isNicknameUnique)
     if (!isNicknameUnique) {
       setToastMessage({
@@ -97,7 +149,10 @@ const ProfileBioEditor = ({
       setToastOpen(true)
       setNicknameError(true)
     }
-    console.log('on positive click', data)
+    // if (submitData.profileImage) {
+    //   submitData.imageChanged = true
+    // }
+    console.log('on positive click', submitData)
   }
 
   return (
@@ -110,14 +165,77 @@ const ProfileBioEditor = ({
         <Grid container spacing={2} rowSpacing={1}>
           {/* profile image */}
           <Grid item xs={12}>
-            <Avatar
-              src={
-                data.profileImageURL
-                  ? data.profileImageURL
-                  : '/images/profile.jpeg'
-              }
-              alt="profile image"
-            />
+            {/* <Controller
+              render={({ field }) => ( */}
+            <Box>
+              <Box
+                width={[56, 100]}
+                height={[56, 100]}
+                sx={{ position: 'relative' }}
+              >
+                <IconButton
+                  sx={{
+                    position: 'absolute',
+                    top: '0',
+                    right: '6px',
+                    width: '16px',
+                    height: '16px',
+                    borderRadius: '50px',
+                    borderColor: 'lightgray',
+                    border: '1px',
+                    padding: '4px',
+                    backgroundColor: 'white',
+                    zIndex: '9999',
+                  }}
+                  onClick={handleImageDelete}
+                >
+                  <ClearIcon />
+                </IconButton>
+                <Button component="label">
+                  <Avatar
+                    src={
+                      previewImage
+                        ? previewImage
+                        : // : data.profileImageURL
+                          // ? data.profileImageURL
+                          '/images/profile.jpeg'
+                    }
+                    alt="profile image"
+                    sx={{ height: '100%', width: '100%' }}
+                  />
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: '0',
+                      right: '6px',
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50px',
+                      borderColor: 'lightgray',
+                      border: '1px',
+                      padding: '4px',
+                      backgroundColor: 'white',
+                    }}
+                  >
+                    <PhotoCameraOutlinedIcon />
+                  </Box>
+                  <input
+                    type="file"
+                    accept={'image/*'}
+                    style={{ display: 'none' }}
+                    {...register('profileImage')}
+                    id="profileImage"
+                    name="profileImage"
+                    onChange={handleImageChange}
+                  />
+                </Button>
+              </Box>
+            </Box>
+
+            {/* )}
+              name={'profileImageURL'}
+              control={control}
+            /> */}
           </Grid>
           {/* nickname, association, email, introduction */}
           <Grid item container spacing={2} justifyContent={'flex-start'}>
