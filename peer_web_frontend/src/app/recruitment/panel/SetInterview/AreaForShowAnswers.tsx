@@ -1,6 +1,6 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
 import Answers from './Answers'
-import { IFormInterview } from './SetInterview'
+import { IFormInterview } from '@/app/recruitment/page'
 
 const AreaForShowAnswers = ({
   interviewData,
