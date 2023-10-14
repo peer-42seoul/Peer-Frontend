@@ -6,6 +6,7 @@ import { Button, FormControl, FormControlLabel, FormGroup, FormLabel, MenuItem, 
 import CuTextField from "@/components/CuTextField";
 import FormCheckbox from "@/app/panel/FormCheckbox";
 import { useForm } from "react-hook-form";
+import React from "react";
 
 type CloseQuestionList = string[];
 // type OpenQuestionList = null;
@@ -107,14 +108,14 @@ const RecruitApplyPage = () => {
         <>
             <Typography variant="h4">지원 하기</Typography>
             {data?.map((v, idx) => (
-                <>
+                <React.Fragment key={idx}>
                     <Typography>{idx + 1}번 질문</Typography>
                     <Typography>{v.question}</Typography>
-                    v.type === 'open' && <CuTextField />
-                    v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} />
-                    v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} />
-                    v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} />
-                </>
+                    {v.type === 'open' && <CuTextField />}
+                    {v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} />}
+                    {v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} />}
+                    {v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} />}
+                </React.Fragment>
             ))}
         </>
     )
