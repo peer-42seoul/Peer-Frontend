@@ -15,8 +15,9 @@ import MainShowcase from './MainShowcase'
 import MainCarousel from './MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
+import { IPost } from '@/types/IPost'
 
-const MainPage = ({ initData }: { initData: any }) => {
+const MainPage = ({ initData }: { initData: IPost[] }) => {
   const { isPc } = useMedia()
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType>('projects')
@@ -34,77 +35,18 @@ const MainPage = ({ initData }: { initData: any }) => {
   const keyword = searchParams.get('keyword') ?? '';
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
-  const { data: tmpData, isLoading, mutate } = useSWR(
-    `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/${type}-sort-${sort}`,
+  const { data, isLoading, mutate } = useSWR(
+    `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/main?type=projects&sort=recent&page=1&pagesize=10&keyword=&due=&region=&place=&status=&tag=`,
     defaultGetFetcher,
     { fallbackData: initData },
   )
-  console.log("tmpData", tmpData, initData);
+  console.log("data", data);
 
   const pagesize = 10
   //실제 api 서버용 url. mockup 데이터 만들기 어려워서 보류중
   //모바일인지 pc인지에 따라서도 pagesize가 달라져야
   const url = `http://localhost:3001?type=${type}&sort=${sort}&page=${page}&pagesize=${pagesize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
   console.log('url', url)
-
-  /* 더미데이터 추가. api의 response가 바뀌면서 바뀜 */
-  const data: IPost[] = [
-    {
-      post_id: 1,
-      title: "더미 포스트 1",
-      image: "https://picsum.photos/200/300",
-      user_id: 123,
-      user_nickname: "dummy_user1",
-      user_thumbnail: "https://picsum.photos/100/100",
-      status: "published",
-      tagList: ["dummy", "typescript", "example"],
-      isFavorite: true
-    },
-    {
-      post_id: 2,
-      title: "더미 포스트 2",
-      image: "https://picsum.photos/200/300",
-      user_id: 456,
-      user_nickname: "dummy_user2",
-      user_thumbnail: "https://picsum.photos/100/100",
-      status: "draft",
-      tagList: ["dummy", "javascript", "example"],
-      isFavorite: false
-    },
-    {
-      post_id: 3,
-      title: "더미 포스트 3",
-      image: "https://picsum.photos/200/300",
-      user_id: 789,
-      user_nickname: "dummy_user3",
-      user_thumbnail: "https://picsum.photos/100/100",
-      status: "published",
-      tagList: ["dummy", "react", "example"],
-      isFavorite: true
-    },
-    {
-      post_id: 4,
-      title: "더미 포스트 4",
-      image: "https://picsum.photos/200/300",
-      user_id: 101,
-      user_nickname: "dummy_user4",
-      user_thumbnail: "https://picsum.photos/100/100",
-      status: "draft",
-      tagList: ["dummy", "java", "example"],
-      isFavorite: false
-    },
-    {
-      post_id: 5,
-      title: "더미 포스트 5",
-      image: "https://picsum.photos/200/300",
-      user_id: 202,
-      user_nickname: "dummy_user5",
-      user_thumbnail: "https://picsum.photos/100/100",
-      status: "published",
-      tagList: ["dummy", "python", "example"],
-      isFavorite: true
-    }
-  ];
 
   /* 무한 스크롤 */
   const pageLimit = 2;
@@ -143,8 +85,8 @@ const MainPage = ({ initData }: { initData: any }) => {
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              {data.map((project: IPost) => (
-                <Grid item xs={12} key={project.user_id} sm={6} md={4}>
+              {data?.map((project: IPost) => (
+                <Grid item key={project.user_id} sm={12} md={4}>
                   <MainCard {...project} />
                 </Grid>
               ))}
@@ -191,7 +133,7 @@ const MainPage = ({ initData }: { initData: any }) => {
           </Grid>
         </Grid>
         <Stack alignItems={'center'} gap={2}>
-          {data.map((project: IPost) => (
+          {data?.map((project: IPost) => (
             <Box key={project.user_id}>
               <MainCard {...project} />
             </Box>
