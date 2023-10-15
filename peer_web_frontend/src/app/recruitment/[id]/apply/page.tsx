@@ -5,11 +5,10 @@ import Typography from "@mui/material/Typography";
 import { Button, FormControl, FormControlLabel, FormGroup, FormLabel, MenuItem, Radio, RadioGroup, Select, TextField } from "@mui/material";
 import CuTextField from "@/components/CuTextField";
 import FormCheckbox from "@/app/panel/FormCheckbox";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import React from "react";
 
 type CloseQuestionList = string[];
-// type OpenQuestionList = null;
 type RatioQuestionList = {
     number: string;
     option1: string;
@@ -50,74 +49,100 @@ const data: IInterviewData[] = [
     }
 ];
 
-const CloseQuestionForm = ({ optionList, control }: { optionList: CloseQuestionList, control: any }) => {
-    console.log("optionList2", optionList)
+const CloseQuestionForm = ({ optionList, control, id }: { optionList: CloseQuestionList, control: any, id: string }) => {
     return (
-        <RadioGroup name="closeQuestion">
-            {
-                optionList?.map((data: string, index: number) => {
-                    return (
-                        <Box key={index}>
-                            <FormControlLabel control={<Radio />} label={data} value={index} />
-                        </Box>
-                    )
-                })
-            }
-        </RadioGroup>
+        <Controller
+            name={id}
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+                <RadioGroup {...field}>
+                    {
+                        optionList?.map((data: string, index: number) => {
+                            return (
+                                <FormControlLabel control={<Radio />} label={data} value={index} key={index} />
+                            )
+                        })
+                    }
+                </RadioGroup>
+            )}
+        />
+
     );
 }
 
-const RatioQuestionForm = ({ optionList, control }: { optionList: RatioQuestionList, control: any }) => {
+const RatioQuestionForm = ({ optionList, control, id }: { optionList: RatioQuestionList, control: any, id: string }) => {
     const number = optionList?.number;
     const listArray = Array.from({ length: number }, (_, index) => index.toString());
     return (
-        <RadioGroup
-            name="closeQuestion"
-        >
-            {
-                listArray?.map((data: string, index: number) => {
-                    return (
-                        <Box key={index}>
-                            <FormControlLabel control={<Radio />} label={data} value={index} />
-                        </Box>
-                    )
-                })
-            }
-        </RadioGroup>
+        <Controller
+            name={id}
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+                <RadioGroup {...field}>
+                    {
+                        listArray?.map((data: string, index: number) => {
+                            return (
+                                <Box key={index}>
+                                    <FormControlLabel control={<Radio />} label={data} value={index} />
+                                </Box>
+                            )
+                        })
+                    }
+                </RadioGroup>
+            )}
+        />
     )
 }
 
-const CheckQuestionForm = ({ optionList, control }: { optionList: CheckQuestionList, control: any }) => {
-    return (<FormGroup>
-        {optionList?.map((data: string, index: number) => {
-            return (
-                <FormCheckbox
-                    name={index.toString()}
-                    label={data}
-                    control={control}
-                />
-            )
-        })}
-    </FormGroup>);
+const CheckQuestionForm = ({ optionList, control, id }: { optionList: CheckQuestionList, control: any, id: string }) => {
+    return (
+        <FormGroup>
+            {optionList?.map((data: string, index: number) => {
+                return (
+                    <FormCheckbox
+                        name={id + "-" + index}
+                        label={data}
+                        control={control}
+                    />
+                )
+            })}
+        </FormGroup>
+    );
 }
 
 const RecruitApplyPage = () => {
     const { handleSubmit, control, reset } = useForm()
+
     console.log("optionList", data);
+    const onSubmit = (data: any) => {
+        console.log(data);
+        // Handle form submission logic here
+    };
+
     return (
-        <>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Typography variant="h4">지원 하기</Typography>
             {data?.map((v, idx) => (
                 <React.Fragment key={idx}>
                     <Typography>{idx + 1}번 질문</Typography>
                     <Typography>{v.question}</Typography>
-                    {v.type === 'open' && <CuTextField />}
+                    {v.type === 'open' &&
+                        <Controller
+                            name={idx + ""}
+                            control={control}
+                            defaultValue=""
+                            render={({ field }) => <TextField {...field} />}
+                        />
+                    }
                     {v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} />}
                     {v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} />}
                     {v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} />}
                 </React.Fragment>
             ))}
-        </>
+            <Button type="submit">제출</Button>
+        </form>
     )
 }
 
