@@ -9,6 +9,8 @@ import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import SetWorkWeekend from './panel/SetWorkWeekend/SetWorkWeekend'
+import axios from 'axios'
+import SetTeamIntroduction from './panel/SetTeamIntroduction/SetTeamIntroduction'
 
 export interface IRoleData {
   role: string
@@ -40,6 +42,7 @@ const CreateTeam = () => {
     sun: false,
   })
   const [roleData, setRoleData] = useState<IRoleData[]>([])
+  const [interviewData, setInterviewData] = useState<IFormInterview[]>([])
 
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const handleOpenBasicModal = () => {
@@ -54,6 +57,27 @@ const CreateTeam = () => {
 
   const handleChangeIntroduction = (event: ChangeEvent<HTMLInputElement>) => {
     setTeamIntroduction(event.target.value as string)
+  }
+
+  const onHandlerFinish = async () => {
+    let tagString = tagData.join(",");
+
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/recruitement/write?type="${teamType}"`,
+      {
+        title,
+        month,
+        teamIntroduction,
+        // "user_id",
+        area,
+        communicationTool,
+        tagString,
+        roleData,
+        interviewData,
+      },
+    ).catch((err) => {
+      console.log(err);
+    })
   }
 
   // 나중에 지울 것.
@@ -121,6 +145,8 @@ const CreateTeam = () => {
           <SetInterview
             openBasicModal={openBasicModal}
             handleCloseBasicModal={handleCloseBasicModal}
+            interviewData={interviewData}
+            setInterviewData={setInterviewData}
           />
         </Box>
         <Box>
@@ -141,6 +167,7 @@ const CreateTeam = () => {
         )}
         <Box>
           <Typography variant="h6">팀 소개</Typography>
+          <SetTeamIntroduction value={teamIntroduction} setValue={setTeamIntroduction}/>
           <TextField
             variant="outlined"
             sx={{ width: '80vw', height: 'auto' }}
@@ -148,7 +175,7 @@ const CreateTeam = () => {
             multiline
           />
         </Box>
-        <Button variant="contained" color="success">
+        <Button variant="contained" color="success" onClick={onHandlerFinish}>
           작성 완료
         </Button>
       </Box>

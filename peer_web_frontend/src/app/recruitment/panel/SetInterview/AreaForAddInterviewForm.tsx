@@ -22,7 +22,7 @@ const AreaForAddInterviewForm = ({
   setInterviewData: Dispatch<SetStateAction<IFormInterview[]>>
 }) => {
   const [option, setOption] = useState<string[]>([])
-  // const [max, setMax] = useState<string>('')
+  const [max, setMax] = useState<string>('')
   const [valueOfMin, setvalueOfMin] = useState<string>('')
   const [valueOfMax, setvalueOfMax] = useState<string>('')
 
@@ -33,12 +33,39 @@ const AreaForAddInterviewForm = ({
   }
 
   const onHandlerAddQuestion = () => {
-    if (
-      question === '' ||
-      formType === '' ||
-      (formType !== '주관식' && option.length === 0)
-    )
-      return
+    switch (formType) {
+      case '선형배율': {
+        if (
+          question === '' ||
+          max === '' ||
+          valueOfMin === '' ||
+          valueOfMax === ''
+        )
+          return
+        setInterviewData((prev) => [
+          ...prev,
+          {
+            question: question,
+            type: formType,
+            ratioList: { max, valueOfMin, valueOfMax },
+          },
+        ])
+        setQuestion('')
+        setFormType('주관식')
+        setOption([])
+        setMax('')
+        setvalueOfMin('')
+        setvalueOfMax('')
+        return
+      }
+      case '주관식': {
+        if (question === '') return
+        break
+      }
+      default: {
+        if (question === '' || formType === '' || option.length === 0) return
+      }
+    }
     setInterviewData((prev) => [
       ...prev,
       {
@@ -72,8 +99,8 @@ const AreaForAddInterviewForm = ({
             formType={formType}
             option={option}
             setOption={setOption}
-            // max={max}
-            // setMax={setMax}
+            max={max}
+            setMax={setMax}
             valueOfMin={valueOfMin}
             setvalueOfMin={setvalueOfMin}
             valueOfMax={valueOfMax}

@@ -3,81 +3,96 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from '@mui/material'
 import { IFormInterview } from '@/app/recruitment/page'
 
 const Answers = ({ data }: { data: IFormInterview; index: number }) => {
-  if (data.type === '객관식') {
-    return (
-      <Box>
-        {data.optionList.map((option, index) => {
-          return (
-            <Box key={index}>
-              <Typography>{`${index}번째 옵션`}</Typography>
-              <TextField
-                variant="standard"
-                value={option}
-                disabled={true}
-              ></TextField>
-            </Box>
-          )
-        })}
-      </Box>
-    )
-  } else if (data.type === '주관식') {
-    return (
-      <TextField
-        variant="standard"
-        value={data.type}
-        disabled={true}
-      ></TextField>
-    )
-  } else if (data.type === '체크박스') {
-    return (
-      <Box>
-        <FormGroup sx={{ paddingLeft: '10px' }}>
-          {data.optionList.map((option, index) => {
-            return (
-              <Box key={index}>
-                <Typography>{`${index}번째 옵션`}</Typography>
-                <FormControlLabel control={<Checkbox />} label={``} />
-                <TextField
-                  variant="standard"
-                  value={option}
-                  disabled={true}
-                ></TextField>
-              </Box>
-            )
-          })}
-        </FormGroup>
-      </Box>
-    )
-  } else if (data.type === '선형배율') {
-    return (// 미완성 수정예정
-      <Box>
-        {/* {data.optionList.map((option, index) => {
-          return (
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              console.log(option) console.log(index)
-            </Box>
-          )
-        })} */}
-        <Typography>최소값</Typography>
+  console.log('data.type', data.type)
+  switch (data.type) {
+    case '객관식': {
+      return (
+        <Box>
+          <RadioGroup
+            aria-labelledby="muitiple-radio-buttons-group-label"
+            name="multiple-radio-buttons-group"
+          >
+            {data.optionList?.map((option, index) => {
+              return (
+                <FormControlLabel
+                  key={index}
+                  value={`${option}`}
+                  control={<Radio />}
+                  label={`${option}`}
+                />
+              )
+            })}
+          </RadioGroup>
+        </Box>
+      )
+    }
+    case '주관식': {
+      return (
         <TextField
           variant="standard"
-          value={data.optionList[0]}
+          value={data.type}
           disabled={true}
         ></TextField>
-        <Typography>최대값</Typography>
-        <TextField
-          variant="standard"
-          value={data.optionList[1]}
-          disabled={true}
-        ></TextField>
-      </Box>
-    )
+      )
+    }
+    case '체크박스': {
+      return (
+        <Box>
+          <FormGroup sx={{ paddingLeft: '10px' }}>
+            {data.optionList?.map((option, index) => {
+              return (
+                <Box key={index}>
+                  <Typography>{`${index}번째 옵션`}</Typography>
+                  <FormControlLabel control={<Checkbox />} label={``} />
+                  <TextField
+                    variant="standard"
+                    value={option}
+                    disabled={true}
+                  ></TextField>
+                </Box>
+              )
+            })}
+          </FormGroup>
+        </Box>
+      )
+    }
+    case '선형배율': {
+      if (data.ratioList === undefined) return
+      const maxNumber = parseInt(data.ratioList?.max)
+
+      return (
+        <Box>
+          <RadioGroup
+            aria-labelledby="muitiple-radio-buttons-group-label"
+            name="multiple-radio-buttons-group"
+          >
+            <Box sx={{display: 'flex', flexDirection: 'row' }}>
+              {Array.from({ length: maxNumber }, (_, i) => i + 1).map((num, index) => (
+                <Box key={index} sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <FormControlLabel
+                    value={`${num}`}
+                    control={<Radio />}
+                    label={``}
+                  />
+                  {num === 1 ? data.ratioList?.valueOfMin : null}
+                  {num === maxNumber ? data.ratioList?.valueOfMax : null}
+                </Box>
+              ))}
+            </Box>
+          </RadioGroup>
+        </Box>
+      )
+    }
+    default:
+      return
   }
 }
 
