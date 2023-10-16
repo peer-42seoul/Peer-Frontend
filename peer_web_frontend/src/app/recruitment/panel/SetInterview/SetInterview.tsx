@@ -4,7 +4,7 @@ import Modal from '@mui/material/Modal'
 import { useEffect, useState } from 'react'
 import AreaForAddInterviewForm from './AreaForAddInterviewForm'
 import AreaForShowAnswers from './AreaForShowAnswers'
-import { IFormInterview } from '@/types/IPostDetail'
+import { IFormInterview } from '@/app/recruitment/page'
 
 const style = {
   position: 'absolute' as 'absolute',

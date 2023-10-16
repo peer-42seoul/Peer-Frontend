@@ -14,6 +14,12 @@ export interface IRoleData {
   role: string
   member: number
 }
+export interface IFormInterview {
+  question: string
+  type: string
+  optionList?: string[]
+  ratioList?: { max: string; valueOfMin: string; valueOfMax: string }
+}
 
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')

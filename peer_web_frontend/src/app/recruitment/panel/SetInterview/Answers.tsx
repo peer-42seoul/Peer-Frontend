@@ -1,4 +1,3 @@
-import { IFormInterview } from '@/types/IPostDetail';
 import {
   Box,
   Checkbox,
@@ -7,6 +6,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import { IFormInterview } from '@/app/recruitment/page'
 
 const Answers = ({ data }: { data: IFormInterview; index: number }) => {
   if (data.type === '객관식') {
