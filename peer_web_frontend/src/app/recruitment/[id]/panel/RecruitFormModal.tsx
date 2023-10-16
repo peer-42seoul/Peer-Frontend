@@ -1,12 +1,8 @@
-'use client'
-
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { Button, FormControl, FormControlLabel, FormGroup, FormLabel, MenuItem, Radio, RadioGroup, Select, TextField } from "@mui/material";
-import CuTextField from "@/components/CuTextField";
 import FormCheckbox from "@/app/panel/FormCheckbox";
-import { Controller, useForm } from "react-hook-form";
+import { Box, Button, FormControlLabel, FormGroup, Modal, Radio, RadioGroup, TextField, Typography } from "@mui/material"
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
+
 
 type CloseQuestionList = string[];
 type RatioQuestionList = {
@@ -105,6 +101,7 @@ const CheckQuestionForm = ({ optionList, control, id }: { optionList: CheckQuest
                         name={id + "-" + index}
                         label={data}
                         control={control}
+                        key={index}
                     />
                 )
             })}
@@ -112,46 +109,54 @@ const CheckQuestionForm = ({ optionList, control, id }: { optionList: CheckQuest
     );
 }
 
-const RecruitApplyPage = () => {
+const RecruitFormModal = ({ open, setOpen, post_id, type }: { open: boolean, setOpen: any, post_id: string, type: string }) => {
     const { handleSubmit, control } = useForm()
-
     console.log("optionList", data);
     const onSubmit = (data: any) => {
         console.log(data);
+        //추후에 제출할 form
         const value = {
             user_id: "",
-            post_id: "",
-            type: "디자이너",
+            post_id,
+            type,
             interviewList: [{
                 question_id: "",
                 answer: ""
             }]
         }
+        console.log("value", value);
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <Typography variant="h4">지원 하기</Typography>
-            {data?.map((v, idx) => (
-                <React.Fragment key={idx}>
-                    <Typography>{idx + 1}번 질문</Typography>
-                    <Typography>{v.question}</Typography>
-                    {v.type === 'open' &&
-                        <Controller
-                            name={idx + ""}
-                            control={control}
-                            defaultValue=""
-                            render={({ field }) => <TextField {...field} />}
-                        />
-                    }
-                    {v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} id={idx + ""}/>}
-                    {v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} id={idx + ""}/>}
-                    {v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} id={idx + ""}/>}
-                </React.Fragment>
-            ))}
-            <Button type="submit">제출</Button>
-        </form>
+        <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+        >
+            <Box bgcolor={"white"} maxWidth={"90vw"} overflow={"scroll"} h="80vh">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Typography variant="h4">{`${type} 지원 하기`}</Typography>
+                    {data?.map((v, idx) => (
+                        <React.Fragment key={idx}>
+                            <Typography>{idx + 1}번 질문</Typography>
+                            <Typography>{v.question}</Typography>
+                            {v.type === 'open' &&
+                                <Controller
+                                    name={idx + ""}
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => <TextField {...field} />}
+                                />
+                            }
+                            {v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} id={idx + ""} />}
+                            {v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} id={idx + ""} />}
+                            {v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} id={idx + ""} />}
+                        </React.Fragment>
+                    ))}
+                    <Button type="submit">제출</Button>
+                </form>
+            </Box>
+        </Modal>
     )
 }
 
-export default RecruitApplyPage;
+export default RecruitFormModal;
