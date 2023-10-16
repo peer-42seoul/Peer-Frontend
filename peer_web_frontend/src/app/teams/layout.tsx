@@ -2,7 +2,7 @@
 
 import useMedia from '@/hook/useMedia'
 import { Stack, Typography } from '@mui/material'
-import TeamSidebar from '../panel/TeamSidebar'
+import TeamSidebar from './panel/TeamSidebar'
 import useShowTeamCategory from '@/states/useShowTeamCategory'
 import { ReactNode } from 'react'
 

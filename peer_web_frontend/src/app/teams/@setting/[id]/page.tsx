@@ -2,15 +2,17 @@
 
 import { Button, Stack, Typography } from '@mui/material'
 import SetupPage from './panel/SetupTeam'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
+import useSWR from 'swr'
+import { defaultGetFetcher } from '@/api/fetchers'
 
 export interface IMember {
   name: string
   id: string
-  grant: boolean
+  grant: 'leader' | 'member'
 }
 
 export interface ITeam {
@@ -25,39 +27,6 @@ export interface ITeam {
   member: IMember[]
 }
 
-const mockdata: ITeam = {
-  team: {
-    id: '0',
-    name: '프로젝트 1',
-    type: '프로젝트',
-    dueTo: '10개월',
-    operationForm: '온라인',
-    region: ['서울', '경기', '인천'],
-  },
-  member: [
-    {
-      name: '김철수',
-      id: '123',
-      grant: true,
-    },
-    {
-      name: '김철수',
-      id: '123',
-      grant: true,
-    },
-    {
-      name: '김철수',
-      id: '123',
-      grant: true,
-    },
-    {
-      name: '김철수',
-      id: '123',
-      grant: true,
-    },
-  ],
-}
-
 interface interview {
   question: string
   answer: string
@@ -69,17 +38,23 @@ export interface IApplicant {
   interview: interview[]
 }
 
-const TeamsSetupPage = () => {
+const TeamsSetupPage = ({ id }: { id: number }) => {
   const { isPc } = useMedia()
-  const [team, setTeam] = useState<ITeam>()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
-
-  useEffect(() => {
-    setTeam(mockdata)
-  }, [team])
+  console.log(id)
+  // const { data, isLoading } = useSWR<ITeam>(
+  //   'https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/setting/${param}',
+  //   defaultGetFetcher,
+  // )
+  const { data, isLoading } = useSWR<ITeam>(
+    'https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/setting/1',
+    defaultGetFetcher,
+  )
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
+
+  if (isLoading) return <Typography>로딩중</Typography>
 
   return (
     <Stack
@@ -91,12 +66,12 @@ const TeamsSetupPage = () => {
       borderRadius={2}
       padding={2}
     >
-      {team ? (
+      {data ? (
         <>
-          <SetupPage team={team} />
-          {!showApplicant && (
+          <SetupPage team={data} />
+          {!showApplicant ? (
             <>
-              <SetupMember team={team.member} />
+              <SetupMember team={data.member} teamId={data.team.id} />
               <Button
                 onClick={openApplicant}
                 sx={{ mt: 1 }}
@@ -107,12 +82,15 @@ const TeamsSetupPage = () => {
                 신청 대기자 보기
               </Button>
             </>
+          ) : (
+            <ApplicantList close={closeApplicant} teamId={data.team.id} />
           )}
-          {showApplicant && <ApplicantList close={closeApplicant} />}
         </>
       ) : (
         <Typography>팀을 추가해주세요</Typography>
       )}
+      <Button variant="contained">모집 글 보기</Button>
+      <Button variant="contained">모집 글 수정하기</Button>
     </Stack>
   )
 }

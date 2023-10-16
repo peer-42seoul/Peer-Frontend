@@ -10,9 +10,30 @@ import {
 import { ITeam } from '../page'
 import { useState } from 'react'
 import SetupSelect from './SetupSelect'
+import axios from 'axios'
+import useShowTeamCategory from '@/states/useShowTeamCategory'
 
 const SetupTeam = ({ team }: { team: ITeam }) => {
   const [teamInfo, setTeamInfo] = useState(team)
+  const { setShowTeamPageCategory } = useShowTeamCategory()
+
+  const sendTeamInfo = () => {
+    axios
+      .post(
+        'https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/setting/1',
+        teamInfo,
+      )
+      // .post(`/api/v1/team/setting/${team.team.id}`, teamInfo)
+      .then((res) => {
+        if (res.status == 200) {
+          console.log('서버에 저장 완료')
+          setShowTeamPageCategory('메인')
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
   const handleLocation1 = (event: SelectChangeEvent) => {
     setTeamInfo({
@@ -67,7 +88,6 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
   }
 
   const handleDate = (event: SelectChangeEvent) => {
-    console.log(event.target.value)
     setTeamInfo({
       ...teamInfo,
       team: {
@@ -121,7 +141,7 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
           </Stack>
         </Stack>
       </Box>
-      <Button>팀 설정</Button>
+      <Button onClick={sendTeamInfo}>팀 설정</Button>
     </Box>
   )
 }

@@ -1,6 +1,13 @@
 'use client'
 import { IProject } from '@/types/IProejct'
-import { Container, Box, Grid, Stack, Typography, CircularProgress } from '@mui/material'
+import {
+  Container,
+  Box,
+  Grid,
+  Stack,
+  Typography,
+  CircularProgress,
+} from '@mui/material'
 import { useState } from 'react'
 import { ProjectType, ProjectSort } from '../page'
 import EditButton from './EditButton'
@@ -31,12 +38,12 @@ const MainPage = ({ initData }: { initData: any }) => {
     status: string
     tag: string
   }>({ due: '', region: '', place: '', status: '', tag: '' })
-  const searchParams = useSearchParams();
-  const keyword = searchParams.get('keyword') ?? '';
+  const searchParams = useSearchParams()
+  const keyword = searchParams.get('keyword') ?? ''
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const { data, isLoading, mutate } = useSWR(
-    `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/${type}-sort-${sort}`,
+    `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/${type}-sort-${sort}`,
     defaultGetFetcher,
     { fallbackData: initData },
   )
@@ -48,8 +55,13 @@ const MainPage = ({ initData }: { initData: any }) => {
   console.log('url', url)
 
   /* 무한 스크롤 */
-  const pageLimit = 2;
-  const { target, spinner } = useInfiniteScroll({ setPage, mutate, pageLimit, page });
+  const pageLimit = 2
+  const { target, spinner } = useInfiniteScroll({
+    setPage,
+    mutate,
+    pageLimit,
+    page,
+  })
 
   if (isLoading) return <Typography>로딩중...</Typography>
 
