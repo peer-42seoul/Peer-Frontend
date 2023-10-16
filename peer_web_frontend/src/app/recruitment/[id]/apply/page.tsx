@@ -113,12 +113,20 @@ const CheckQuestionForm = ({ optionList, control, id }: { optionList: CheckQuest
 }
 
 const RecruitApplyPage = () => {
-    const { handleSubmit, control, reset } = useForm()
+    const { handleSubmit, control } = useForm()
 
     console.log("optionList", data);
     const onSubmit = (data: any) => {
         console.log(data);
-        // Handle form submission logic here
+        const value = {
+            user_id: "",
+            post_id: "",
+            type: "디자이너",
+            interviewList: [{
+                question_id: "",
+                answer: ""
+            }]
+        }
     };
 
     return (
@@ -136,9 +144,9 @@ const RecruitApplyPage = () => {
                             render={({ field }) => <TextField {...field} />}
                         />
                     }
-                    {v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} />}
-                    {v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} />}
-                    {v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} />}
+                    {v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} id={idx + ""}/>}
+                    {v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} id={idx + ""}/>}
+                    {v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} id={idx + ""}/>}
                 </React.Fragment>
             ))}
             <Button type="submit">제출</Button>
