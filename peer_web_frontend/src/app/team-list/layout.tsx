@@ -3,10 +3,11 @@
 import useMedia from '@/hook/useMedia'
 import { Stack, Typography } from '@mui/material'
 import { ReactNode } from 'react'
-import Sidebar from './setup/panel/Sidebar'
+import Sidebar from './panel/Sidebar'
 
 const TeamsLayout = ({ children }: { children: ReactNode }) => {
   const { isPc } = useMedia()
+
   return (
     <Stack display="flex" padding={1} spacing={2}>
       <Stack textAlign="center">

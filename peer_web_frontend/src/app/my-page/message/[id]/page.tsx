@@ -1,7 +1,5 @@
 'use client'
 
-// import { defaultGetFetcher, messageFetcher } from '@/api/fetchers'
-// import useMessageStore from '@/states/useMessageStore'
 import {
   Box,
   Button,
@@ -19,8 +17,7 @@ interface IMessageData {
   MsgList: {
     MsgTarget: IUser
     MsgOwner: IUser
-    Msg: []
-    // Other properties...
+    Msg: any[]
   }
 }
 
@@ -102,13 +99,17 @@ const MessageItem = ({ user, Owner, Target }: IMessageItemProps) => {
               background: '#EFEFEF',
             }}
           >
-            <Image
-              style={{ borderRadius: '50%' }}
-              width={100}
-              height={100}
-              src={Owner.userProfile}
-              alt="picture_of_owner"
-            />
+            {Owner?.userProfile ? (
+              <Image
+                style={{ borderRadius: '50%' }}
+                width={100}
+                height={100}
+                src={Owner?.userProfile}
+                alt="picture_of_owner"
+              />
+            ) : (
+              <div>No image</div>
+            )}
             <Typography sx={{ fontWeight: 'bold' }}>
               {Owner?.userNickname}
             </Typography>
@@ -135,13 +136,17 @@ const MessageItem = ({ user, Owner, Target }: IMessageItemProps) => {
               background: '#EFEFEF',
             }}
           >
-            <Image
-              style={{ borderRadius: '50%' }}
-              width={100}
-              height={100}
-              src={Target?.userProfile}
-              alt="picture_of_target"
-            />
+            {Target?.userProfile ? (
+              <Image
+                style={{ borderRadius: '50%' }}
+                width={100}
+                height={100}
+                src={Target?.userProfile}
+                alt="picture_of_target"
+              />
+            ) : (
+              <div>No image</div>
+            )}
             <Typography sx={{ fontWeight: 'bold' }}>
               {Target?.userNickname}
             </Typography>
@@ -170,7 +175,7 @@ const MessageChatPage = () => {
     `http://localhost:4000/test_detail_${page}`,
     fetcherWithParams, // FIXME: 여기의 userid는 내 uid
   )
-
+  console.log('값 까보ㅈ', updatedData?.MsgList?.Msg)
   const { target, spinner } = useInfiniteScroll({
     setPage,
     mutate,
@@ -216,10 +221,10 @@ const MessageChatPage = () => {
         <Typography>{Target?.userNickname}</Typography>
       </Box>
       <Box sx={{ width: '100%', height: '90%', overflowY: 'auto' }}>
-        {updatedData?.MsgList?.Msg.map((user: any) => (
+        {updatedData?.MsgList?.Msg.map((msgObj: any) => (
           <MessageItem
-            key={user.id}
-            user={user}
+            key={msgObj.msgId}
+            user={msgObj}
             Owner={Owner}
             Target={Target}
           />

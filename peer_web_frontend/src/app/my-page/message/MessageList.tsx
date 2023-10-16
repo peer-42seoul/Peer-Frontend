@@ -34,7 +34,7 @@ const MessageItem = ({
 }: {
   user: IMessagObject
   onManageMessage: boolean
-  setSelectedUser: (newValue: string) => void
+  setSelectedUser: (newValue: Array<{ targetId: string }>) => void
 }) => {
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const router = useRouter()
@@ -44,12 +44,11 @@ const MessageItem = ({
     (targetUser: number) => {
       console.log('삭제 타게팅된 유저', targetUser)
 
-      setSelectedUser((prevSelectedUsers) => [
+      setSelectedUser((prevSelectedUsers: Array<{ targetId: string }>) => [
         ...prevSelectedUsers,
-        { targetId: targetUser },
+        { targetId: String(targetUser) }, //FIXME: targetId로 바꿔야함
       ])
     },
-    // console.log('seletedUser', seletedUser),
     [setSelectedUser],
   )
 
@@ -61,7 +60,7 @@ const MessageItem = ({
       })
 
       router.push(
-        `http://localhost:3000/profile/message/conversation-list?target=${user.targetId}`,
+        `http://localhost:3000/my-page/message/conversation-list?target=${user.targetId}`,
       )
     },
     [router],
@@ -112,9 +111,13 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState<IMessagObject[]>(data)
   const [onManageMessage, setOnManageMessage] = useState(true)
-  const [seletedUser, setSelectedUser] = useState<Array<{ targetId: string }>>(
+  // const [seletedUser, setSelectedUser] = useState<Array<{ targetId: string }>>(
+  //   [],
+  // )
+  const [selectedUser, setSelectedUser] = useState<Array<{ targetId: string }>>(
     [],
   )
+
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const { userId } = useAuthStore()
   const searchMessageItemHandler = useCallback(() => {
@@ -127,15 +130,15 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
   const removeMessageItemHandler = useCallback(
     (type: string) => {
       if (type === 'delete') {
-        console.log('seletedUser42', seletedUser)
+        console.log('seletedUser42', selectedUser)
         // const confirmResult = confirm('are you sure?')
-        console.log('deleteList', seletedUser)
+        console.log('deleteList', selectedUser)
         axios
           .delete(
             `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/delete-message?userId=${userId}`,
             {
               data: {
-                target: seletedUser,
+                target: selectedUser,
               },
             },
           )
@@ -150,7 +153,7 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
         setOnManageMessage(!onManageMessage)
       }
     },
-    [onManageMessage, seletedUser],
+    [onManageMessage, selectedUser],
   )
 
   useEffect(() => {
@@ -200,10 +203,9 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
             검색 결과가 없습니다.
           </Box>
         ) : (
-          filteredData.map((user: IMessagObject, idx: number) => (
+          filteredData.map((user: IMessagObject) => (
             <MessageItem
               key={user.targetId}
-              idx={idx}
               user={user}
               onManageMessage={onManageMessage}
               setSelectedUser={setSelectedUser}
