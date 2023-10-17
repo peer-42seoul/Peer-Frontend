@@ -2,7 +2,7 @@
 
 import { Avatar, Button, Stack, Typography } from '@mui/material'
 import { IApplicant } from '../page'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 import axios from 'axios'
@@ -15,6 +15,7 @@ const ApplicantList = ({
   teamId: string
 }) => {
   const [index, setIndex] = useState(0)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const { data, isLoading } = useSWR(
     `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/applicant/1`,
     defaultGetFetcher,
@@ -31,14 +32,18 @@ const ApplicantList = ({
   const handleAccept = () => {
     axios
       .put(
-        `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/accept/${teamId}?userId=${
-          member!.id
-        }`,
+        `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/accept/1?userId=1`,
       )
+      // .put(
+      //   `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/accept/${teamId}?userId=${
+      //     member!.id
+      //   }`,
+      // )
       .then((res) => {
         if (res.status === 200) {
-          setMembers(res.data.applicant)
-          console.log('accept')
+          console.log('member.id', member!.id)
+          setMembers(members.filter((m) => m.id !== member!.id))
+          console.log('accept', teamId)
         }
       })
       .catch((err) => {
@@ -48,12 +53,8 @@ const ApplicantList = ({
 
   const handleReject = () => {
     console.log('reject')
+    setMembers(members.filter((m) => m.id !== member!.id))
   }
-
-  useEffect(() => {
-    setMembers(data)
-    setMember(members ? members[index] : null)
-  }, [index, members, data])
 
   const handleNext = () => {
     if (index < members.length - 1) setIndex(index + 1)
@@ -63,6 +64,19 @@ const ApplicantList = ({
     if (index > 0) setIndex(index - 1)
   }
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0
+    }
+
+    if (data) {
+      setMembers(data)
+      if (data.length >= index) {
+        setMember(data[index])
+      }
+    }
+  }, [index, data])
+
   if (isLoading) {
     return (
       <Stack border="1px solid" borderRadius={2} height={400}>
@@ -71,7 +85,7 @@ const ApplicantList = ({
     )
   }
 
-  if (!data) {
+  if (!data || members.length === 0) {
     return (
       <>
         <Stack border="1px solid" borderRadius={2} height={400}>
@@ -94,7 +108,7 @@ const ApplicantList = ({
 
   return (
     <>
-      <Stack border="1px solid" borderRadius={2}>
+      <Stack border="1px solid" borderRadius={2} height={400}>
         <Stack
           direction="row"
           display="flex"
@@ -119,18 +133,30 @@ const ApplicantList = ({
           <Button onClick={handlePrev}>◀︎</Button>
           <Stack alignItems="center" spacing={1}>
             <Avatar>A</Avatar>
-            <Typography>{member!.name}</Typography>
+            {member && <Typography>{member.name}</Typography>}
           </Stack>
           <Button onClick={handleNext}>▶︎</Button>
         </Stack>
         <Stack border="1px solid" borderRadius={2} p={2}>
           <Typography fontWeight="bold">팀 신청 설문</Typography>
-          {member!.interview.map((interview, index) => (
-            <Stack key={index} m={1}>
-              <Typography fontWeight="bold">{interview.question}</Typography>
-              <Typography>{interview.answer}</Typography>
-            </Stack>
-          ))}
+          <Stack
+            border="1px solid"
+            borderRadius={2}
+            p={2}
+            overflow="auto"
+            height={100}
+            ref={scrollRef}
+          >
+            {member &&
+              member.interview.map((interview, index) => (
+                <Stack key={index} m={1}>
+                  <Typography fontWeight="bold">
+                    {interview.question}
+                  </Typography>
+                  <Typography>{interview.answer}</Typography>
+                </Stack>
+              ))}
+          </Stack>
         </Stack>
         <Stack direction="row" spacing={1}>
           <Button
