@@ -17,14 +17,15 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
 import ClearIcon from '@mui/icons-material/Clear'
+import axios from 'axios'
+import CuButton from '@/components/CuButton'
 // import { ChildProcessWithoutNullStreams } from 'child_process'
 // import { File } from 'buffer'
-// import axios from 'axios'
 
 interface IFormInput {
   nickname: string
   introduction: string
-  profileImage: File[]
+  profileImage: File[] | null
 }
 
 interface IToastProps {
@@ -45,31 +46,12 @@ const ProfileBioEditor = ({
 }) => {
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
   const [nicknameError, setNicknameError] = useState<boolean>(false)
-  const [image, setImage] = useState<File | null>(null)
+  // const [image, setImage] = useState<File | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(
     data.profileImageURL,
   )
   const [imageChanged, setImageChanged] = useState<boolean>(false)
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const file = e.target.files && e.target.files[0]
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader()
-      setImage(e.target.files[0])
-      reader.onload = (e) => {
-        setPreviewImage(e.target?.result as string)
-        setImageChanged(true)
-      }
-      reader.readAsDataURL(e.target.files && e.target.files[0])
-    }
-  }
-
-  const handleImageDelete = () => {
-    setImage(null)
-    setPreviewImage(null)
-    setImageChanged(true)
-    console.log('handleImageDelete')
-  }
+  const [isLoading, setIsLoading] = useState(false)
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
@@ -84,10 +66,32 @@ const ProfileBioEditor = ({
     register,
     // getValues,
     watch,
+    setValue,
   } = useForm<IFormInput>({
     defaultValues: defaultValues,
     mode: 'onChange',
   })
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0]
+    if (e.target.files && e.target.files?.length && e.target.files[0]) {
+      const reader = new FileReader()
+      setValue('profileImage', [e.target.files[0]])
+      reader.onload = (e) => {
+        setPreviewImage(e.target?.result as string)
+        setImageChanged(true)
+      }
+      if (file) reader.readAsDataURL(file)
+    }
+  }
+
+  const handleImageDelete = () => {
+    setValue('profileImage', null)
+    // setImage(null)
+    setPreviewImage(null)
+    setImageChanged(true)
+    console.log('handleImageDelete')
+  }
 
   const nickname = watch('nickname')
 
@@ -106,26 +110,49 @@ const ProfileBioEditor = ({
     nickname: string
     setIsNicknameUnique: (isNicknameUnique: boolean) => void
   }) => {
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const onClick = useCallback(() => {
-      console.log('닉네임 중복확인 api', nickname)
-      setIsNicknameUnique(true)
-      setToastMessage({
-        severity: 'success',
-        message: '사용할 수 있는 닉네임 입니다.',
-      })
-      setToastOpen(true)
-      if (nicknameError) setNicknameError(false) // 닉네임 폼 에러 띄우기 위함
+      setIsLoading(true)
+      const checkIsNicknameUnique = async () => {
+        axios
+          .post(
+            'https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/signup/nickname',
+            { nickname },
+          )
+          .then(() => {
+            setIsNicknameUnique(true)
+            setToastMessage({
+              severity: 'success',
+              message: '사용할 수 있는 닉네임 입니다.',
+            })
+            setToastOpen(true)
+            if (nicknameError) setNicknameError(false) // 중복확인 안했을 경우 닉네임 폼 에러 띄우기 위해 true로 되어있었음. 중복확인을 했으므로 false 처리
+            setIsLoading(false)
+          })
+          .catch((error) => {
+            console.log(error)
+            setToastMessage({
+              severity: 'error',
+              message: '중복된 닉네임 입니다.',
+            })
+            setToastOpen(true)
+            setIsLoading(false)
+            setNicknameError(true)
+          })
+      }
+      if (!isLoading) {
+        checkIsNicknameUnique()
+      }
       // TODO status code가 200이 아닐 경우 false 처리나 toast 띄우기
-    }, [nickname, setIsNicknameUnique])
+    }, [isLoading, nickname, setIsNicknameUnique])
 
     return (
-      <Button
+      <CuButton
         variant="contained"
-        disabled={errors.nickname ? true : false}
-        onClick={onClick}
-      >
-        중복 확인
-      </Button>
+        disabled={errors.nickname ? isLoading : false}
+        action={onClick}
+        message="중복 확인"
+      />
     )
   }
 
@@ -138,7 +165,7 @@ const ProfileBioEditor = ({
     } = {
       ...formData,
       imageChanged: imageChanged,
-      profileImage: image,
+      profileImage: formData.profileImage ? formData.profileImage[0] : null,
     }
     console.log('닉네임 중복확인', isNicknameUnique)
     if (!isNicknameUnique) {
@@ -148,11 +175,39 @@ const ProfileBioEditor = ({
       })
       setToastOpen(true)
       setNicknameError(true)
+      return
     }
-    // if (submitData.profileImage) {
-    //   submitData.imageChanged = true
-    // }
-    console.log('on positive click', submitData)
+    const editData = async (submitData: {
+      profileImage: File | null
+      nickname: string
+      imageChanged: boolean
+      introduction: string
+    }) => {
+      setIsLoading(true)
+      axios
+        .put(
+          'https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/profile/introduction/edit',
+          submitData,
+        )
+        .then(() => {
+          setToastMessage({
+            severity: 'success',
+            message: '프로필 변경에 성공하였습니다.',
+          })
+          setToastOpen(true)
+          closeModal()
+        })
+        .catch(() => {
+          setToastMessage({
+            severity: 'error',
+            message: '프로필 변경에 실패하였습니다.',
+          })
+          setToastOpen(true)
+        })
+    }
+    if (!isLoading) {
+      editData(submitData)
+    }
   }
 
   return (
@@ -191,7 +246,10 @@ const ProfileBioEditor = ({
                 >
                   <ClearIcon />
                 </IconButton>
-                <Button component="label">
+                <Button
+                  component="label"
+                  sx={{ position: 'relative', width: '100%', height: '100%' }}
+                >
                   <Avatar
                     src={
                       previewImage
@@ -201,7 +259,13 @@ const ProfileBioEditor = ({
                           '/images/profile.jpeg'
                     }
                     alt="profile image"
-                    sx={{ height: '100%', width: '100%' }}
+                    sx={{
+                      position: 'absolute',
+                      top: '0',
+                      left: '0',
+                      height: '100%',
+                      width: '100%',
+                    }}
                   />
                   <Box
                     sx={{
