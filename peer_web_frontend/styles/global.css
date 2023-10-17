@@ -9,7 +9,7 @@
 }
 
 @media (min-width: 481px) {
-  .mobile-layout{
+  .mobile-layout {
     display: none;
   }
 
@@ -18,5 +18,3 @@
     flex-direction: column;
   }
 }
-
-

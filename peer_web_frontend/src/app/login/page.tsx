@@ -8,32 +8,41 @@ import { useCookies } from 'react-cookie'
 import {
   Box,
   Button,
+  Container,
   IconButton,
   InputAdornment,
-  InputLabel,
-  TextField,
   Typography,
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import CuTextField from '@/components/CuTextField'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import OauthLoginBox from './panel/OauthLoginBox'
+import useMedia from '@/hook/useMedia'
 
 interface ILoginFormInput {
   userEmail: string
   password: string
 }
 
-const API_URL = process.env.API_URL
-
 const PCBase = {
   display: 'flex',
   width: '100%',
-  height: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  paddingTop: '140px',
+  paddingTop: '80px',
+}
+
+const MobileBase = {
+  display: 'flex',
+  width: '100%',
+  flexDirection: 'column',
+  alignItems: 'center',
+  paddingTop: '20px',
 }
 
 const PCLoginBox = {
   display: 'flex',
+  position: 'relative',
   width: '496px',
   padding: '24px 24px 40px 24px',
   flexDirection: 'column',
@@ -43,14 +52,34 @@ const PCLoginBox = {
   border: '1px solid #000',
 }
 
-const PCForm = {
+const MobileLoginBox = {
   display: 'flex',
+  width: '100%',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: '0 32px 15px 32px',
+}
+
+const Form = {
+  display: 'flex',
+  width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
   gap: '24px',
 }
 
+const PCLabelBox = {
+  display: 'flex',
+  width: '100%',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '8px',
+  fontSize: '14px',
+}
+
 const Login = () => {
+  const { isPc } = useMedia()
+  const API_URL = process.env.API_URL
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { login } = useAuthStore()
@@ -83,11 +112,11 @@ const Login = () => {
 
   return (
     <>
-      <Box sx={PCBase}>
-        <Box sx={PCLoginBox}>
-          <Typography>Peer</Typography>
-          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={PCForm}>
-            <Box>
+      <Container sx={isPc ? PCBase : MobileBase}>
+        <Container sx={isPc ? PCLoginBox : MobileLoginBox}>
+          <Typography margin={3}>Peer</Typography>
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={Form}>
+            <Box sx={{ display: 'flex', width: '100%' }}>
               <Controller
                 name="userEmail"
                 control={control}
@@ -100,12 +129,17 @@ const Login = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <Box>
-                    <InputLabel htmlFor="userEmail">이메일</InputLabel>
-                    <TextField
-                      {...field}
+                  <Box sx={PCLabelBox}>
+                    <CuTextFieldLabel
+                      htmlFor="userEmail"
+                      style={{ color: '#000', font: 'inherit' }}
+                    >
+                      이메일
+                    </CuTextFieldLabel>
+                    <CuTextField
+                      field={field}
                       id="userEmail"
-                      sx={{ width: '500px' }}
+                      style={{ width: '100%' }}
                       placeholder="이메일을 입력하세요."
                     />
                   </Box>
@@ -116,7 +150,7 @@ const Login = () => {
               )}
             </Box>
 
-            <Box>
+            <Box sx={{ display: 'flex', width: '100%' }}>
               <Controller
                 name="password"
                 control={control}
@@ -125,14 +159,19 @@ const Login = () => {
                   required: '비밀번호를 입력해주세요',
                 }}
                 render={({ field }) => (
-                  <Box>
-                    <InputLabel htmlFor="password">비밀번호</InputLabel>
-                    <TextField
+                  <Box sx={PCLabelBox}>
+                    <CuTextFieldLabel
+                      htmlFor="password"
+                      style={{ color: '#000', font: 'inherit' }}
+                    >
+                      비밀번호
+                    </CuTextFieldLabel>
+                    <CuTextField
                       id="password"
                       type={showPassword ? 'text' : 'password'}
-                      {...field}
-                      sx={{ width: '500px' }}
-                      InputProps={{
+                      field={field}
+                      style={{ width: '100%' }}
+                      inputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton
@@ -141,9 +180,9 @@ const Login = () => {
                               edge="end"
                             >
                               {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
                                 <Visibility />
+                              ) : (
+                                <VisibilityOff />
                               )}
                             </IconButton>
                           </InputAdornment>
@@ -162,36 +201,32 @@ const Login = () => {
               로그인
             </Button>
           </Box>
-          <Box sx={PCForm}>
-            <Typography>간편 로그인</Typography>
-            <Box sx={{ display: 'flex' }}>
-              <div style={{ textAlign: 'center' }}>
-                <Button href={`${API_URL}/oauth2/authorization/ft`}>
-                  42Seoul
-                </Button>
-                <Typography>42서울</Typography>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <Button href={`${API_URL}/oauth2/authorization/google`}>
-                  Google
-                </Button>
-                <Typography>구글</Typography>
-              </div>
-            </Box>
+          <Box sx={Form}>
+            {isPc ? (
+              <Typography sx={{ color: '#868686' }}>간편 로그인</Typography>
+            ) : (
+              <Typography
+                sx={{ color: '#868686', fontSize: '10px', marginTop: '24px' }}
+              >
+                또는
+              </Typography>
+            )}
+            <OauthLoginBox />
           </Box>
-          <Box
+          <Container
             sx={{
               display: 'flex',
-              width: '428px',
+              width: '100%',
               justifyContent: 'space-between',
               alignItems: 'center',
+              ...(isPc ? {} : { marginTop: '104px' }),
             }}
           >
-            <Button>회원가입</Button>
-            <Button>비밀번호 찾기</Button>
-          </Box>
-        </Box>
-      </Box>
+            <Button href="/signup">회원가입</Button>
+            <Button href="/find-account">비밀번호 찾기</Button>
+          </Container>
+        </Container>
+      </Container>
     </>
   )
 }
