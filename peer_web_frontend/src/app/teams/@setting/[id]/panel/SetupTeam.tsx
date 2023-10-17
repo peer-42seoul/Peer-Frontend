@@ -12,10 +12,8 @@ import { useState } from 'react'
 import SetupSelect from './SetupSelect'
 import axios from 'axios'
 import useShowTeamCategory from '@/states/useShowTeamCategory'
-import useMedia from '@/hook/useMedia'
 
 const SetupTeam = ({ team }: { team: ITeam }) => {
-  const { isPc } = useMedia()
   const [teamInfo, setTeamInfo] = useState(team)
   const { setShowTeamPageCategory } = useShowTeamCategory()
 

@@ -1,10 +1,8 @@
 'use client'
 
-import { Stack, Typography } from '@mui/material'
-import useMedia from '@/hook/useMedia'
+import { Typography } from '@mui/material'
 
 const TeamsPage = ({ params }: { params: { id: string } }) => {
-  const { isPc } = useMedia()
   const { id } = params
 
   return (
