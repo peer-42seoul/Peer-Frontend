@@ -9,10 +9,6 @@ import { useEffect, useState } from 'react'
  * @param setData 선택한 값들의 리스트를 변경해주는 함수입니다 (useState로 관리해주세요)
  */
 
-// interface List {
-//   tagList: string
-// }
-
 const TagAutoComplete = ({
   datas,
   setData,

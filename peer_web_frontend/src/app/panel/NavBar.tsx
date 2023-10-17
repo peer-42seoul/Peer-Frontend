@@ -71,7 +71,7 @@ const PcNav = ({ value, setValue }: INavProps) => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/')
+            router.push('/team-list')
           }}
         />
         <BottomNavigationAction
@@ -146,7 +146,7 @@ const MobileNav = ({ value, setValue }: INavProps) => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/teams')
+            router.push('/team-list')
           }}
         />
         <BottomNavigationAction
