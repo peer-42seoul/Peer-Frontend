@@ -116,28 +116,6 @@ const Login = () => {
       })
     setIsLoading(false)
   }
-
-  const testCookie = () => {
-    setCookie('refreshToken', '1212', { path: '/' })
-  }
-
-  const testAccess = () => {
-    login('1234')
-  }
-
-  const testInstance = () => {
-    axiosInstance
-      .post('/hello', {
-        data: 'hello',
-      })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-
   return (
     <>
       <Container sx={isPc ? PCBase : MobileBase}>
