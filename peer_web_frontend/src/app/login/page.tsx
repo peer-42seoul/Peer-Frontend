@@ -18,6 +18,7 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import OauthLoginBox from './panel/OauthLoginBox'
 import useMedia from '@/hook/useMedia'
+import useToast from '@/hook/useToast'
 
 interface ILoginFormInput {
   userEmail: string
@@ -84,6 +85,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const { login } = useAuthStore()
   const [, setCookie] = useCookies(['refreshToken'])
+  const [errorMessage, setErrorMessage] = useState('')
+  const { CuToast, isOpen, openToast, closeToast } = useToast()
 
   const {
     handleSubmit,
@@ -106,6 +109,10 @@ const Login = () => {
       })
       .catch((error) => {
         console.log(error.message)
+        if (error.statusText == 'Unathorized')
+          setErrorMessage('이메일과 비밀번호를 다시 확인해주세요.')
+        else setErrorMessage('알 수 없는 오류가 발생했습니다.')
+        openToast()
       })
     setIsLoading(false)
   }
@@ -142,12 +149,12 @@ const Login = () => {
                       style={{ width: '100%' }}
                       placeholder="이메일을 입력하세요."
                     />
+                    {errors.userEmail && (
+                      <Typography>{errors.userEmail.message}</Typography>
+                    )}
                   </Box>
                 )}
               />
-              {errors.userEmail && (
-                <Typography>{errors.userEmail.message}</Typography>
-              )}
             </Box>
 
             <Box sx={{ display: 'flex', width: '100%' }}>
@@ -190,12 +197,12 @@ const Login = () => {
                       }}
                       placeholder="비밀번호를 입력하세요."
                     />
+                    {errors.password && (
+                      <Typography>{errors.password.message}</Typography>
+                    )}
                   </Box>
                 )}
               />
-              {errors.password && (
-                <Typography>{errors.password.message}</Typography>
-              )}
             </Box>
             <Button type="submit" disabled={isLoading}>
               로그인
@@ -227,6 +234,9 @@ const Login = () => {
           </Container>
         </Container>
       </Container>
+      <CuToast open={isOpen} onClose={closeToast} severity="error">
+        <Typography>{errorMessage}</Typography>
+      </CuToast>
     </>
   )
 }
