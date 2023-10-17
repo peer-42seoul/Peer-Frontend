@@ -75,6 +75,7 @@ const SendEmailForm = () => {
                   id="email"
                   placeholder="이메일을 입력하세요"
                   style={{ width: '100%' }}
+                  disabled={isEmailSuccessful}
                 />
                 {errors.email && (
                   <Typography>{errors.email.message}</Typography>
