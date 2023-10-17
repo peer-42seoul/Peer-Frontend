@@ -3,7 +3,8 @@
 import { Typography, Container, IconButton, Box } from '@mui/material'
 import SendEmailForm from './panel/SendEmailForm'
 import useMedia from '@/hook/useMedia'
-import BackIconButton from '@/components/BackIconButton'
+import { NavigateBefore } from '@mui/icons-material'
+import { useRouter } from 'next/navigation'
 
 const PCBase = {
   display: 'flex',
@@ -43,6 +44,7 @@ const MobileBox = {
 
 const FindAccount = () => {
   const { isPc } = useMedia()
+  const router = useRouter()
 
   return (
     <Container sx={isPc ? PCBase : MobileBase}>
@@ -59,7 +61,12 @@ const FindAccount = () => {
               marginBottom: '16px',
             }}
           >
-            <BackIconButton />
+            <IconButton
+              sx={{ width: '40px', height: '40px' }}
+              onClick={() => router.back()}
+            >
+              <NavigateBefore />
+            </IconButton>
             <Typography>비밀번호 찾기</Typography>
             <IconButton sx={{ width: '40px', height: '40px' }} disabled />
           </Box>

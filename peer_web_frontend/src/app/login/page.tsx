@@ -19,7 +19,6 @@ import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import OauthLoginBox from './panel/OauthLoginBox'
 import useMedia from '@/hook/useMedia'
 import useToast from '@/hook/useToast'
-import useAxiosWithAuth from '@/api/config'
 
 interface ILoginFormInput {
   userEmail: string
@@ -88,8 +87,6 @@ const Login = () => {
   const [, setCookie] = useCookies(['refreshToken'])
   const [errorMessage, setErrorMessage] = useState('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
-
-  const axiosInstance = useAxiosWithAuth()
 
   const {
     handleSubmit,
@@ -258,10 +255,6 @@ const Login = () => {
           </Container>
         </Container>
       </Container>
-
-      <Button onClick={testCookie}>set accessToken</Button>
-      <Button onClick={testAccess}>set cookie</Button>
-      <Button onClick={testInstance}>test instance</Button>
       <CuToast open={isOpen} onClose={closeToast} severity="error">
         <Typography>{errorMessage}</Typography>
       </CuToast>
