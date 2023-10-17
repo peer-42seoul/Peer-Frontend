@@ -115,7 +115,7 @@ const ProfileBioEditor = ({
       const checkIsNicknameUnique = async () => {
         axios
           .post(
-            'https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/signup/nickname',
+            'https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/signup/nickname',
             { nickname },
           )
           .then(() => {
