@@ -71,7 +71,7 @@ const PcNav = ({ value, setValue }: INavProps) => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/')
+            router.push('/team-list')
           }}
         />
         <BottomNavigationAction
@@ -85,9 +85,9 @@ const PcNav = ({ value, setValue }: INavProps) => {
         <IconButton color="inherit" aria-label="menu">
           <NotificationsNoneOutlined />
         </IconButton>
-        <IconButton color="inherit" aria-label="menu">
-          <SearchButton />
-        </IconButton>
+        {/* <IconButton color="inherit" aria-label="menu"> SearchButton이 이미 IconButton이어서 임시적으로 주석 처리했습니다~ */}
+        <SearchButton />
+        {/* </IconButton> */}
         {/*<Link>*/}
         <IconButton aria-label="favorites">
           <Favorite />
@@ -146,7 +146,7 @@ const MobileNav = ({ value, setValue }: INavProps) => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/teams')
+            router.push('/team-list')
           }}
         />
         <BottomNavigationAction
