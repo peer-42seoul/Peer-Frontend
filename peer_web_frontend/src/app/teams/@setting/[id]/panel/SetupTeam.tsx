@@ -12,8 +12,10 @@ import { useState } from 'react'
 import SetupSelect from './SetupSelect'
 import axios from 'axios'
 import useShowTeamCategory from '@/states/useShowTeamCategory'
+import useMedia from '@/hook/useMedia'
 
 const SetupTeam = ({ team }: { team: ITeam }) => {
+  const { isPc } = useMedia()
   const [teamInfo, setTeamInfo] = useState(team)
   const { setShowTeamPageCategory } = useShowTeamCategory()
 
@@ -101,9 +103,12 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
     <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
       <Typography fontWeight="bold">클릭한 프로젝트명 팀 설정 : </Typography>
       <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
-        <Typography>{team.team.type}</Typography>
-        <Typography>프로젝트명: {team.team.name}</Typography>
-
+        <Stack>
+          <Typography>{team.team.type}</Typography>
+          <Typography>
+            {team.team.type}명: {team.team.name}
+          </Typography>
+        </Stack>
         <Stack>
           <Typography>목표 기간: </Typography>
           <SetupSelect

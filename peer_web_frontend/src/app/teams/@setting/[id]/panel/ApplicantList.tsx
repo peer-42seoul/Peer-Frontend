@@ -16,11 +16,11 @@ const ApplicantList = ({
 }) => {
   const [index, setIndex] = useState(0)
   const { data, isLoading } = useSWR(
-    `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/aplicant/1`,
+    `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/applicant/1`,
     defaultGetFetcher,
   )
   // const { data, isLoading } = useSWR(
-  //   `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/aplicant/${teamId}`,
+  //   `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/applicant/${teamId}`,
   //   defaultGetFetcher,
   // )
   const [members, setMembers] = useState<IApplicant[]>([])
@@ -63,12 +63,18 @@ const ApplicantList = ({
     if (index > 0) setIndex(index - 1)
   }
 
-  if (isLoading) return <p> 로딩 중</p>
+  if (isLoading) {
+    return (
+      <Stack border="1px solid" borderRadius={2} height={400}>
+        <Typography>로딩중</Typography>
+      </Stack>
+    )
+  }
 
-  if (data === undefined) {
+  if (!data) {
     return (
       <>
-        <Stack border="1px solid" borderRadius={2}>
+        <Stack border="1px solid" borderRadius={2} height={400}>
           <Stack
             direction="row"
             display="flex"

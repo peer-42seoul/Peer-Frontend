@@ -3,7 +3,6 @@
 import { Button, Stack, Typography } from '@mui/material'
 import SetupPage from './panel/SetupTeam'
 import { useState } from 'react'
-import useMedia from '@/hook/useMedia'
 import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
@@ -39,7 +38,6 @@ export interface IApplicant {
 }
 
 const TeamsSetupPage = ({ id }: { id: number }) => {
-  const { isPc } = useMedia()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   console.log(id)
   // const { data, isLoading } = useSWR<ITeam>(
@@ -60,7 +58,7 @@ const TeamsSetupPage = ({ id }: { id: number }) => {
     <Stack
       margin={4}
       spacing={2}
-      direction={isPc ? 'row' : 'column'}
+      direction={'column'}
       flex={4}
       border="1px solid"
       borderRadius={2}

@@ -12,8 +12,10 @@ import { IMember } from '../page'
 import axios from 'axios'
 import useModal from '@/hook/useModal'
 import { useEffect, useState } from 'react'
+import useMedia from '@/hook/useMedia'
 
 const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
+  const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   const [members, setMembers] = useState<IMember[]>([])
   const [member, setMember] = useState<IMember | null>(null)
@@ -100,13 +102,27 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
 
   return (
     <>
-      <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
+      <Box
+        sx={{
+          border: '1px solid',
+          borderRadius: 2,
+          p: 2,
+          height: 400,
+          overflow: 'scroll',
+        }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography fontWeight="bold">팀원 목록</Typography>
           </Grid>
           {members.map((member, index) => (
-            <Grid component="div" key={index} item xs={6} textAlign="center">
+            <Grid
+              component="div"
+              key={index}
+              item
+              xs={isPc ? 4 : 6}
+              textAlign="center"
+            >
               <Box
                 component="div"
                 border="1px solid"
