@@ -51,7 +51,6 @@ const ProfileBioEditor = ({
     data.profileImageURL,
   )
   const [imageChanged, setImageChanged] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
@@ -62,7 +61,7 @@ const ProfileBioEditor = ({
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     register,
     // getValues,
     watch,
@@ -156,7 +155,7 @@ const ProfileBioEditor = ({
     )
   }
 
-  const onSubmit = (formData: IFormInput) => {
+  const onSubmit = async (formData: IFormInput) => {
     const submitData: {
       profileImage: File | null
       nickname: string
@@ -177,45 +176,35 @@ const ProfileBioEditor = ({
       setNicknameError(true)
       return
     }
-    const editData = async (submitData: {
-      profileImage: File | null
-      nickname: string
-      imageChanged: boolean
-      introduction: string
-    }) => {
-      setIsLoading(true)
-      axios
-        .put(
-          'https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/profile/introduction/edit',
-          submitData,
-        )
-        .then(() => {
-          setToastMessage({
-            severity: 'success',
-            message: '프로필 변경에 성공하였습니다.',
-          })
-          setToastOpen(true)
-          closeModal()
+
+    await axios
+      .put(
+        'https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io//api/v1/profile/introduction/edit',
+        submitData,
+      )
+      .then(() => {
+        setToastMessage({
+          severity: 'success',
+          message: '프로필 변경에 성공하였습니다.',
         })
-        .catch(() => {
-          setToastMessage({
-            severity: 'error',
-            message: '프로필 변경에 실패하였습니다.',
-          })
-          setToastOpen(true)
+        setToastOpen(true)
+        closeModal()
+      })
+      .catch(() => {
+        setToastMessage({
+          severity: 'error',
+          message: '프로필 변경에 실패하였습니다.',
         })
-    }
-    if (!isLoading) {
-      editData(submitData)
-    }
+        setToastOpen(true)
+      })
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <SettingContainer
         onNegativeClick={closeModal}
-        // onPositiveClick={onSubmit}
         settingTitle="introduction"
+        isSubmitting={isSubmitting}
       >
         <Grid container spacing={2} rowSpacing={1}>
           {/* profile image */}
