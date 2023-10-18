@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Box, Typography, Button, Container } from '@mui/material'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import CuTextField from '@/components/CuTextField'
+import SendCodeForm from './SendCodeForm'
 
 const Form = {
   display: 'flex',
@@ -74,6 +75,7 @@ const SendEmailForm = () => {
                   id="email"
                   placeholder="이메일을 입력하세요"
                   style={{ width: '100%' }}
+                  disabled={isEmailSuccessful}
                 />
                 {errors.email && (
                   <Typography>{errors.email.message}</Typography>
@@ -84,18 +86,15 @@ const SendEmailForm = () => {
         </Box>
         {!isEmailSuccessful ? (
           <Button type="submit" disabled={isSubmitting}>
-            임시 비밀번호 발송
+            코드 발송
           </Button>
         ) : (
-          <Box>
-            <Typography
-              sx={{ color: 'd9d9d9', fontSize: '12px', textAlign: 'center' }}
-            >
-              메일이 오지 않았나요?
-            </Typography>
-            <Button type="submit" disabled={isSubmitting}>
-              임시 비밀번호 재발송
-            </Button>
+          <Box sx={{ display: 'flex', width: '100%' }}>
+            <SendCodeForm
+              email={
+                control._fields.email ? control._fields.email._f.value : ''
+              }
+            />
           </Box>
         )}
       </Box>

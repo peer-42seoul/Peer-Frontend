@@ -6,7 +6,7 @@ interface IShowTeams {
 }
 
 const useShowTeamCategory = create<IShowTeams>((set) => ({
-  showTeamPageCategory: '모집 중',
+  showTeamPageCategory: '메인',
   setShowTeamPageCategory: (showTeamPageCategory: string) =>
     set({ showTeamPageCategory }),
 }))

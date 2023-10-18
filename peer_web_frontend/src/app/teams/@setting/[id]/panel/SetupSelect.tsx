@@ -26,7 +26,7 @@ const SetupSelect = ({
           label="지역"
           onChange={setValue}
         >
-          {['서울', '부산', '인천', '대구', '대전', '광주', '울산'].map(
+          {['공백', '서울', '부산', '인천', '대구', '대전', '광주', '울산'].map(
             (region, idx) => (
               <MenuItem key={'region' + idx} value={region}>
                 {region}

@@ -18,6 +18,7 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import OauthLoginBox from './panel/OauthLoginBox'
 import useMedia from '@/hook/useMedia'
+import useToast from '@/hook/useToast'
 
 interface ILoginFormInput {
   userEmail: string
@@ -79,11 +80,13 @@ const PCLabelBox = {
 
 const Login = () => {
   const { isPc } = useMedia()
-  const API_URL = process.env.API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { login } = useAuthStore()
   const [, setCookie] = useCookies(['refreshToken'])
+  const [errorMessage, setErrorMessage] = useState('')
+  const { CuToast, isOpen, openToast, closeToast } = useToast()
 
   const {
     handleSubmit,
@@ -101,15 +104,18 @@ const Login = () => {
       })
       .then((res) => {
         console.log(res)
-        login(res.data.userId, res.data.accessToken)
+        login(res.data.accessToken)
         setCookie('refreshToken', res.data.refreshToken, { path: '/' })
       })
       .catch((error) => {
         console.log(error.message)
+        if (error.statusText == 'Unathorized')
+          setErrorMessage('이메일과 비밀번호를 다시 확인해주세요.')
+        else setErrorMessage('알 수 없는 오류가 발생했습니다.')
+        openToast()
       })
     setIsLoading(false)
   }
-
   return (
     <>
       <Container sx={isPc ? PCBase : MobileBase}>
@@ -142,12 +148,12 @@ const Login = () => {
                       style={{ width: '100%' }}
                       placeholder="이메일을 입력하세요."
                     />
+                    {errors.userEmail && (
+                      <Typography>{errors.userEmail.message}</Typography>
+                    )}
                   </Box>
                 )}
               />
-              {errors.userEmail && (
-                <Typography>{errors.userEmail.message}</Typography>
-              )}
             </Box>
 
             <Box sx={{ display: 'flex', width: '100%' }}>
@@ -171,7 +177,7 @@ const Login = () => {
                       type={showPassword ? 'text' : 'password'}
                       field={field}
                       style={{ width: '100%' }}
-                      inputProps={{
+                      InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton
@@ -190,12 +196,12 @@ const Login = () => {
                       }}
                       placeholder="비밀번호를 입력하세요."
                     />
+                    {errors.password && (
+                      <Typography>{errors.password.message}</Typography>
+                    )}
                   </Box>
                 )}
               />
-              {errors.password && (
-                <Typography>{errors.password.message}</Typography>
-              )}
             </Box>
             <Button type="submit" disabled={isLoading}>
               로그인
@@ -227,6 +233,9 @@ const Login = () => {
           </Container>
         </Container>
       </Container>
+      <CuToast open={isOpen} onClose={closeToast} severity="error">
+        <Typography>{errorMessage}</Typography>
+      </CuToast>
     </>
   )
 }
