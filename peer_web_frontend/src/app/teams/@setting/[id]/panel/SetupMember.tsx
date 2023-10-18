@@ -8,7 +8,7 @@ import {
   Switch,
   Typography,
 } from '@mui/material'
-import { IMember } from '../page'
+import { IMember, TeamGrant } from '../page'
 import axios from 'axios'
 import useModal from '@/hook/useModal'
 import { useEffect, useState } from 'react'
@@ -38,7 +38,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
-                m.id === member.id ? { ...m, grant: 'member' } : m,
+                m.id === member.id ? { ...m, grant: TeamGrant.MEMBER } : m,
               ),
             )
           } else console.log(res.status)
@@ -57,7 +57,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
-                m.id === member.id ? { ...m, grant: 'leader' } : m,
+                m.id === member.id ? { ...m, grant: TeamGrant.LEADER } : m,
               ),
             )
           } else console.log(res.status)

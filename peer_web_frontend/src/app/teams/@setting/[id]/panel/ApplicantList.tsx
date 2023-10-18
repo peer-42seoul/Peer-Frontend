@@ -14,12 +14,15 @@ const ApplicantList = ({
   close: () => void
   teamId: string
 }) => {
+  console.log(teamId)
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const { data, isLoading } = useSWR(
     `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/applicant/1`,
     defaultGetFetcher,
   )
+  // TODO: DTO 맞추기
+
   // const { data, isLoading } = useSWR(
   //   `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/applicant/${teamId}`,
   //   defaultGetFetcher,
@@ -41,14 +44,15 @@ const ApplicantList = ({
       // )
       .then((res) => {
         if (res.status === 200) {
-          console.log('member.id', member!.id)
+          // TODO:백엔드에서 제외 시키는 걸 생각
+          // setMembers(data.applicants)
+
           setMembers(
             members.length === 1
               ? []
               : members.filter((m) => m.id !== member!.id),
-          ) // TODO:백엔드에서 제외 시키는 걸 생각
+          )
           if (index > 0) setIndex(index - 1)
-          console.log('accept', teamId)
         }
       })
       .catch((err) => {
@@ -58,11 +62,31 @@ const ApplicantList = ({
 
   const handleReject = () => {
     console.log('reject')
-    // 거절 API 필요
-    setMembers(
-      members.length === 1 ? [] : members.filter((m) => m.id !== member!.id),
-    ) // TODO:백엔드에서 제외 시키는 걸 생각
-    setIndex(index > 0 ? index - 1 : index)
+    axios
+      .put(
+        `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/deny/1?userId=1`,
+      )
+      // .put(
+      //   `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/deny/${teamId}?userId=${
+      //     member!.id
+      //   }`,
+      // )
+      .then((res) => {
+        if (res.status === 200) {
+          // TODO:백엔드에서 제외 시키는 걸 생각
+          // setMembers(data.applicants)
+
+          setMembers(
+            members.length === 1
+              ? []
+              : members.filter((m) => m.id !== member!.id),
+          )
+          if (index > 0) setIndex(index - 1)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const handleNext = () => {
@@ -94,7 +118,7 @@ const ApplicantList = ({
     )
   }
 
-  if (!data || members.length === 0) {
+  if (!data) {
     return (
       <>
         <Stack border="1px solid" borderRadius={2} height={400}>
@@ -156,17 +180,31 @@ const ApplicantList = ({
             height={100}
             ref={scrollRef}
           >
-            {}
-            {member
-              ? member.interview.map((interview, index) => (
-                  <Stack key={index} m={1}>
-                    <Typography fontWeight="bold">
-                      {interview.question}
-                    </Typography>
-                    <Typography>{interview.answer}</Typography>
-                  </Stack>
-                ))
-              : null}
+            {member ? (
+              member.interview.map((interview, index) => (
+                <Stack key={index} m={1}>
+                  <Typography fontWeight="bold">
+                    {interview.question}
+                  </Typography>
+                  <Typography>{interview.answer}</Typography>
+                </Stack>
+              ))
+            ) : (
+              <Stack border="1px solid" borderRadius={2} height={400}>
+                <Stack
+                  direction="row"
+                  display="flex"
+                  justifyContent="space-between"
+                  p={2}
+                >
+                  <Typography fontWeight="bold">신청 대기자</Typography>
+                  <Button onClick={close} size="small">
+                    X
+                  </Button>
+                </Stack>
+                <Typography>신청한 대기자가 없습니다.</Typography>
+              </Stack>
+            )}
           </Stack>
         </Stack>
         <Stack direction="row" spacing={1}>

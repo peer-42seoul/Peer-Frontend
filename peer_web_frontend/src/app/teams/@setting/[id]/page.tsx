@@ -8,25 +8,50 @@ import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 
+export enum TeamType {
+  PROJECT = 'project',
+  STUDY = 'study',
+}
+
+export enum TeamStatus {
+  RECRUITING = 'recruiting',
+  BEFORE = 'before',
+  ONGOING = 'ongoing',
+  COMPLETE = 'complete',
+}
+
+export enum TeamGrant {
+  LEADER = 'leader',
+  MEMBER = 'member',
+}
+
+export enum TeamOperationForm {
+  OFFLINE = 'offline',
+  ONLINE = 'online',
+  MIX = 'mix',
+}
 export interface IMember {
   name: string
   id: string
-  grant: 'leader' | 'member'
+  grant: TeamGrant
 }
 
 export interface ITeam {
   team: {
     id: string
-    type: string
+    type: TeamType
     name: string
+    maxMember: String
+    status: TeamStatus
     dueTo: string
-    operationForm: string
+    operationForm: TeamOperationForm
     region: string[]
   }
   member: IMember[]
 }
 
 interface interview {
+  //TODO: DTO 수정 필요
   question: string
   answer: string
 }
