@@ -10,9 +10,30 @@ import {
 import { ITeam } from '../page'
 import { useState } from 'react'
 import SetupSelect from './SetupSelect'
+import axios from 'axios'
+import useShowTeamCategory from '@/states/useShowTeamCategory'
 
 const SetupTeam = ({ team }: { team: ITeam }) => {
   const [teamInfo, setTeamInfo] = useState(team)
+  const { setShowTeamPageCategory } = useShowTeamCategory()
+
+  const sendTeamInfo = () => {
+    axios
+      .post(
+        'https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/setting/1',
+        teamInfo,
+      )
+      // .post(`/api/v1/team/setting/${team.team.id}`, teamInfo)
+      .then((res) => {
+        if (res.status == 200) {
+          console.log('서버에 저장 완료')
+          setShowTeamPageCategory('메인')
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
   const handleLocation1 = (event: SelectChangeEvent) => {
     setTeamInfo({
@@ -67,7 +88,6 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
   }
 
   const handleDate = (event: SelectChangeEvent) => {
-    console.log(event.target.value)
     setTeamInfo({
       ...teamInfo,
       team: {
@@ -81,9 +101,12 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
     <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
       <Typography fontWeight="bold">클릭한 프로젝트명 팀 설정 : </Typography>
       <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
-        <Typography>{team.team.type}</Typography>
-        <Typography>프로젝트명: {team.team.name}</Typography>
-
+        <Stack>
+          <Typography>{team.team.type}</Typography>
+          <Typography>
+            {team.team.type}명: {team.team.name}
+          </Typography>
+        </Stack>
         <Stack>
           <Typography>목표 기간: </Typography>
           <SetupSelect
@@ -121,7 +144,7 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
           </Stack>
         </Stack>
       </Box>
-      <Button>팀 설정</Button>
+      <Button onClick={sendTeamInfo}>팀 설정</Button>
     </Box>
   )
 }
