@@ -9,7 +9,7 @@ const TeamsLayout = ({ children }: { children: ReactNode }) => {
   const { isPc } = useMedia()
 
   return (
-    <Stack display="flex" padding={1} px={10} spacing={2}>
+    <Stack display="flex" padding={1} spacing={2} px={isPc ? 10 : 1}>
       <Stack textAlign="center">
         <Typography fontWeight="bold">나의 팀페이지</Typography>
       </Stack>

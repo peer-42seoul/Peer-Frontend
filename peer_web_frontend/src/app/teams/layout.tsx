@@ -18,7 +18,7 @@ const TeamLayout = (props: TeamLayoutProps) => {
   const { showTeamPageCategory } = useShowTeamCategory()
 
   return (
-    <Stack display="flex" padding={1} spacing={2} px={10}>
+    <Stack display="flex" padding={1} spacing={2} px={isPc ? 10 : 1}>
       <Stack textAlign="center">
         <Typography fontWeight="bold">나의 팀페이지</Typography>
       </Stack>

@@ -31,7 +31,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
       axios
         // .post(`/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`)
         .post(
-          `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/grant/1?userId=1&role=member`,
+          `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/grant/1?userId=1&role=member`,
         )
         .then((res) => {
           console.log(res)
@@ -52,7 +52,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
       axios
         // .post(`/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`)
         .post(
-          `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/grant/1?userId=1&role=leader`,
+          `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/grant/1?userId=1&role=leader`,
         )
         .then((res) => {
           console.log(res)
@@ -82,7 +82,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
     console.log('팀원 삭제')
     axios
       .delete(
-        `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/delete/1?userId=1`,
+        `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/delete/1?userId=1`,
       )
       // .delete(`/api/v1/team/delete/${teamId}?userId=${member.id}`)
       .then((res) => {

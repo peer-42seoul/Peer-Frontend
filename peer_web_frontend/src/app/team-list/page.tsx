@@ -23,7 +23,7 @@ const TeamsListPage = () => {
   // const { userId } = useAuthStore()
   //postman 테스트용
   const { data, isLoading } = useSWR<ITeamInfo[]>(
-    `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/list/userId=1?teamStatus=${showTeams}`,
+    `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/list/userId=1?teamStatus=${showTeams}`,
     defaultGetFetcher,
   )
   // //실제 동작해야할 API

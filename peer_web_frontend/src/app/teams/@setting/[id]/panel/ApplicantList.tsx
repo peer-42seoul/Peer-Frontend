@@ -17,11 +17,11 @@ const ApplicantList = ({
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const { data, isLoading } = useSWR(
-    `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/applicant/1`,
+    `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/applicant/1`,
     defaultGetFetcher,
   )
   // const { data, isLoading } = useSWR(
-  //   `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/applicant/${teamId}`,
+  //   `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/applicant/${teamId}`,
   //   defaultGetFetcher,
   // )
   const [members, setMembers] = useState<IApplicant[]>([])
@@ -32,17 +32,22 @@ const ApplicantList = ({
   const handleAccept = () => {
     axios
       .put(
-        `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/accept/1?userId=1`,
+        `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/accept/1?userId=1`,
       )
       // .put(
-      //   `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/api/v1/team/accept/${teamId}?userId=${
+      //   `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/api/v1/team/accept/${teamId}?userId=${
       //     member!.id
       //   }`,
       // )
       .then((res) => {
         if (res.status === 200) {
           console.log('member.id', member!.id)
-          setMembers(members.filter((m) => m.id !== member!.id))
+          setMembers(
+            members.length === 1
+              ? []
+              : members.filter((m) => m.id !== member!.id),
+          ) // TODO:백엔드에서 제외 시키는 걸 생각
+          if (index > 0) setIndex(index - 1)
           console.log('accept', teamId)
         }
       })
@@ -53,7 +58,11 @@ const ApplicantList = ({
 
   const handleReject = () => {
     console.log('reject')
-    setMembers(members.filter((m) => m.id !== member!.id))
+    // 거절 API 필요
+    setMembers(
+      members.length === 1 ? [] : members.filter((m) => m.id !== member!.id),
+    ) // TODO:백엔드에서 제외 시키는 걸 생각
+    setIndex(index > 0 ? index - 1 : index)
   }
 
   const handleNext = () => {
@@ -147,15 +156,17 @@ const ApplicantList = ({
             height={100}
             ref={scrollRef}
           >
-            {member &&
-              member.interview.map((interview, index) => (
-                <Stack key={index} m={1}>
-                  <Typography fontWeight="bold">
-                    {interview.question}
-                  </Typography>
-                  <Typography>{interview.answer}</Typography>
-                </Stack>
-              ))}
+            {}
+            {member
+              ? member.interview.map((interview, index) => (
+                  <Stack key={index} m={1}>
+                    <Typography fontWeight="bold">
+                      {interview.question}
+                    </Typography>
+                    <Typography>{interview.answer}</Typography>
+                  </Stack>
+                ))
+              : null}
           </Stack>
         </Stack>
         <Stack direction="row" spacing={1}>

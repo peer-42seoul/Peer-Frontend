@@ -43,7 +43,7 @@ const MainPage = ({ initData }: { initData: any }) => {
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const { data, isLoading, mutate } = useSWR(
-    `https://21bf1e8a-2c5e-466f-8261-fa05ad3bde03.mock.pstmn.io/${type}-sort-${sort}`,
+    `https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/${type}-sort-${sort}`,
     defaultGetFetcher,
     { fallbackData: initData },
   )
