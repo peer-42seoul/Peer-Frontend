@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { ISignUpInputs } from '@/types/ISignUpInputs'
 
 const useSignUpForm = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const socialEmail = searchParams.get('social-email')
+
   const {
     handleSubmit,
     control,
@@ -134,6 +138,7 @@ const useSignUpForm = () => {
         password: password,
         name: name,
         nickName: nickName,
+        socialEmail: socialEmail ? socialEmail : null,
       })
       alert('회원가입이 완료되었습니다')
       router.push('/') // 메인페이지로 이동
