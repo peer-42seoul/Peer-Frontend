@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import useMessageStore from '@/states/useMessageStore'
 import Image from 'next/image'
-import SearchIcon from '@mui/icons-material/Search'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import axios, { AxiosError, AxiosResponse } from 'axios'
@@ -85,7 +84,7 @@ const MessageItem = ({
         <Typography>{user.latestContent}</Typography>
         <Typography
           style={{
-            width: '10%',
+            width: '24px',
             color: 'white',
             background: 'rgba(255, 81, 64, 1)',
             borderRadius: '50%',
@@ -185,9 +184,7 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
             onChange={(event) => setSearchText(event.target.value)}
             placeholder="사람을 검색하여 주세요"
           />
-          <Button onClick={searchMessageItemHandler}>
-            <SearchIcon />
-          </Button>
+          <Button onClick={searchMessageItemHandler}>검색</Button>
           {onManageMessage ? (
             <Button onClick={() => removeMessageItemHandler('manage')}>
               관리
