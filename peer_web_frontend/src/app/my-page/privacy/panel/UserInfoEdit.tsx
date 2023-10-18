@@ -1,10 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Button, Typography } from '@mui/material'
+import { Button, Typography, Container } from '@mui/material'
 import axios from 'axios'
-import CuModal from '@/components/CuModal'
 import CuTextField from '@/components/CuTextField'
 
 interface IChangePassword {
@@ -13,12 +11,13 @@ interface IChangePassword {
   newPasswordConfirm: string
 }
 
-export default function ModifyInfoModal() {
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-
-  const [isPasswordChange, setIsPasswordChange] = useState(false)
+export default function UserInfoEdit({
+  local,
+  authentication,
+}: {
+  local?: string
+  authentication?: string
+}) {
   const {
     handleSubmit,
     control,
@@ -30,24 +29,24 @@ export default function ModifyInfoModal() {
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
     try {
       await axios.post(`${API_URL}api/v1/info`, data)
-      setIsPasswordChange(true)
     } catch (error) {
       console.log(error)
     }
   }
   return (
     <>
-      <Button onClick={handleOpen}>개인정보 수정</Button>
-      <CuModal
-        open={open}
-        handleClose={handleClose}
-        ariaTitle="유저 개인정보 수정"
-        ariaDescription="유저의 개인정보를 수정합니다."
+      <Container
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+        component="main"
       >
-        <Button onClick={handleClose}>완료</Button>
         <Typography>지역</Typography>
+        {local ? <Typography>{local}</Typography> : null}
         <Button>인증하기</Button>
         <Typography>42계정</Typography>
+        {authentication ? <Typography>{authentication}</Typography> : null}
         <Button>인증하기</Button>
         <form onSubmit={handleSubmit(changePassword)}>
           <Typography>비밀번호</Typography>
@@ -59,6 +58,7 @@ export default function ModifyInfoModal() {
             render={({ field }) => (
               <CuTextField
                 field={field}
+                type="password"
                 autoComplete="off"
                 error={errors.currentPassword ? true : false}
                 label="현재 비밀번호"
@@ -80,6 +80,7 @@ export default function ModifyInfoModal() {
             render={({ field }) => (
               <CuTextField
                 field={field}
+                type="password"
                 autoComplete="off"
                 error={errors.newPassword ? true : false}
                 label="새로운 비밀번호"
@@ -104,6 +105,7 @@ export default function ModifyInfoModal() {
             render={({ field }) => (
               <CuTextField
                 field={field}
+                type="password"
                 autoComplete="off"
                 error={errors.newPasswordConfirm ? true : false}
                 label="새로운 비밀번호 재입력"
@@ -111,19 +113,21 @@ export default function ModifyInfoModal() {
             )}
           />
           {errors.newPassword ? (
-            <Typography>{errors.newPassword.message}</Typography>
+            <Typography color="error">
+              {errors.newPassword.message
+                ? errors.newPassword.message
+                : '비밀번호를 입력해주세요'}
+            </Typography>
           ) : errors.newPasswordConfirm ? (
-            <Typography>{errors.newPasswordConfirm.message}</Typography>
-          ) : isPasswordChange ? (
-            <Typography style={{ color: 'green' }}>
-              비밀번호가 변경되었습니다
+            <Typography color="error">
+              {errors.newPasswordConfirm.message}
             </Typography>
           ) : (
             <Typography>&nbsp;</Typography>
           )}
-          <Button type="submit">확인</Button>
+          <Button type="submit">변경하기</Button>
         </form>
-      </CuModal>
+      </Container>
     </>
   )
 }
