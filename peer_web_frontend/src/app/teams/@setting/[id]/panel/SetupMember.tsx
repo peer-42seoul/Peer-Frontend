@@ -38,9 +38,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
-                m.id === member.id
-                  ? { ...m, grant: m.grant === 'leader' ? 'member' : 'leader' }
-                  : m,
+                m.id === member.id ? { ...m, grant: 'member' } : m,
               ),
             )
           } else console.log(res.status)
@@ -59,9 +57,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
-                m.id === member.id
-                  ? { ...m, grant: m.grant === 'leader' ? 'member' : 'leader' }
-                  : m,
+                m.id === member.id ? { ...m, grant: 'leader' } : m,
               ),
             )
           } else console.log(res.status)
