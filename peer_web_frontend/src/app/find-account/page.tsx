@@ -68,10 +68,7 @@ const FindAccount = () => {
               <NavigateBefore />
             </IconButton>
             <Typography>비밀번호 찾기</Typography>
-            <IconButton
-              sx={{ width: '40px', height: '40px' }}
-              disabled={true}
-            />
+            <IconButton sx={{ width: '40px', height: '40px' }} disabled />
           </Box>
         )}
         <SendEmailForm />

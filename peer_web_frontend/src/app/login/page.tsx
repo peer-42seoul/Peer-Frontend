@@ -80,7 +80,7 @@ const PCLabelBox = {
 
 const Login = () => {
   const { isPc } = useMedia()
-  const API_URL = process.env.API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { login } = useAuthStore()
@@ -104,7 +104,7 @@ const Login = () => {
       })
       .then((res) => {
         console.log(res)
-        login(res.data.userId, res.data.accessToken)
+        login(res.data.accessToken)
         setCookie('refreshToken', res.data.refreshToken, { path: '/' })
       })
       .catch((error) => {
@@ -116,7 +116,6 @@ const Login = () => {
       })
     setIsLoading(false)
   }
-
   return (
     <>
       <Container sx={isPc ? PCBase : MobileBase}>
@@ -178,7 +177,7 @@ const Login = () => {
                       type={showPassword ? 'text' : 'password'}
                       field={field}
                       style={{ width: '100%' }}
-                      inputProps={{
+                      InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton
