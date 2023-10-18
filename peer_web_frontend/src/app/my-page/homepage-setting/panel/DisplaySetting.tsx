@@ -2,7 +2,7 @@
 import { Button, Skeleton, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 // import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+// import React, { useEffect, useState } from 'react'
 
 const ImageButton = ({
   imageUrl,
@@ -28,13 +28,16 @@ const ImageButton = ({
 }
 
 const DisplaySetting = () => {
-  const [themeType, setThemeType] = useState<'light' | 'dark' | 'system'>(
-    'light',
-  )
+  // const [themeType, setThemeType] = useState<'light' | 'dark' | 'system'>(
+  //   'light',
+  // )
 
-  useEffect(() => {
-    console.log('API call!')
-  }, [themeType])
+  // useEffect(() => {
+  //   console.log('API call!')
+  // }, [themeType])
+  const apiCall = (themeType: string) => {
+    console.log('API Call!', themeType)
+  }
 
   return (
     <Box>
@@ -43,19 +46,19 @@ const DisplaySetting = () => {
         imageUrl="https://picsum.photos/200"
         alt="라이트 모드 이미지"
         text="라이트 모드"
-        action={() => setThemeType('light')}
+        action={() => apiCall('light')}
       />
       <ImageButton
         imageUrl="https://picsum.photos/200"
         alt="다크 모드 이미지"
         text="다크 모드"
-        action={() => setThemeType('dark')}
+        action={() => apiCall('dark')}
       />
       <ImageButton
         imageUrl="https://picsum.photos/200"
         alt="기기 설정 이미지"
         text="기기 설정"
-        action={() => setThemeType('system')}
+        action={() => apiCall('system')}
       />
     </Box>
   )
