@@ -59,13 +59,13 @@ function MenuItems({ letterTarget }: any) {
                   height={100}
                   style={{ borderRadius: '50%' }}
                 ></Image>
-                <MenuItem>
+                <Box>
                   {item.targetNickname ? (
                     <span>{item.targetNickname}</span>
                   ) : (
                     <span>{item.targetEmail}</span>
                   )}
-                </MenuItem>
+                </Box>
               </Box>
             </Box>
           </>

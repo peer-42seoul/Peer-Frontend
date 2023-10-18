@@ -96,7 +96,7 @@ const MessageItem = ({
 
         <Image
           src={`${user.targetProfile}`}
-          alt="picture_of_sender"
+          alt="picture_of_target"
           width={100}
           height={100}
           style={{ borderRadius: '50%' }}
