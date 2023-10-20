@@ -1,5 +1,4 @@
 'use client'
-import { IProject } from '@/types/IProejct'
 import { Container, Box, Grid, Stack, Typography, CircularProgress } from '@mui/material'
 import { useState } from 'react'
 import { ProjectType, ProjectSort } from '../page'
@@ -10,7 +9,6 @@ import SelectSort from './SelectSort'
 import SelectType from './SelectType'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
-import useMedia from '@/hook/useMedia'
 import MainProfile from './MainProfile'
 import MainShowcase from './MainShowcase'
 import MainCarousel from './MainCarousel'
@@ -19,7 +17,6 @@ import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import { IPost } from '@/types/IPost'
 
 const MainPage = ({ initData }: { initData: IPost[] }) => {
-  const { isPc } = useMedia()
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType>('projects')
   const [openOption, setOpenOption] = useState<boolean>(false)

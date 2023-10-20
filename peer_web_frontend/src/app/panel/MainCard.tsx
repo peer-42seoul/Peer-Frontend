@@ -1,4 +1,4 @@
-import { IPost, IPostDetail, Tag } from '@/types/IPostDetail'
+import { IPost, Tag } from '@/types/IPostDetail'
 import { Favorite } from '@mui/icons-material'
 import {
   Avatar,
