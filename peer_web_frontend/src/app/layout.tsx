@@ -20,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head />
+      <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css" />
       <body>
         <MuiThemeProvider>
           <div className="mobile-layout">

@@ -1,7 +1,7 @@
 import FormCheckbox from "@/app/panel/FormCheckbox";
-import { Box, Button, FormControlLabel, FormGroup, Modal, Radio, RadioGroup, TextField, Typography } from "@mui/material"
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, Modal, Radio, RadioGroup, Stack, TextField, Typography } from "@mui/material"
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 
 type CloseQuestionList = string[];
@@ -45,10 +45,10 @@ const data: IInterviewData[] = [
     }
 ];
 
-const CloseQuestionForm = ({ optionList, control, id }: { optionList: CloseQuestionList, control: any, id: string }) => {
+const CloseQuestionForm = ({ optionList, control, idx }: { optionList: CloseQuestionList, control: any, idx: number }) => {
     return (
         <Controller
-            name={id}
+            name={idx + ""}
             control={control}
             defaultValue=""
             render={({ field }) => (
@@ -67,12 +67,12 @@ const CloseQuestionForm = ({ optionList, control, id }: { optionList: CloseQuest
     );
 }
 
-const RatioQuestionForm = ({ optionList, control, id }: { optionList: RatioQuestionList, control: any, id: string }) => {
+const RatioQuestionForm = ({ optionList, control, idx }: { optionList: RatioQuestionList, control: any, idx: number }) => {
     const number = optionList?.number;
     const listArray = Array.from({ length: number }, (_, index) => index.toString());
     return (
         <Controller
-            name={id}
+            name={idx + ""}
             control={control}
             defaultValue=""
             render={({ field }) => (
@@ -92,24 +92,52 @@ const RatioQuestionForm = ({ optionList, control, id }: { optionList: RatioQuest
     )
 }
 
-const CheckQuestionForm = ({ optionList, control, id }: { optionList: CheckQuestionList, control: any, id: string }) => {
+const CheckQuestionForm = ({ optionList, control, idx }: { optionList: CheckQuestionList, control: any, idx: number }) => {
+    const { fields } = useFieldArray({
+        control,
+        name: idx + ""
+    });
+
     return (
         <FormGroup>
             {optionList?.map((data: string, index: number) => {
                 return (
                     <FormCheckbox
-                        name={id + "-" + index}
+                        name={idx + "-" + index}
                         label={data}
                         control={control}
                         key={index}
                     />
                 )
             })}
+            {/* <Stack direction={"row"} alignItems={"center"}>
+                <Controller
+                    name={name}
+                    control={control}
+                    render={({ field: { value, ...field } }) => (
+                        <Checkbox {...field} checked={!!value} />
+                    )}
+                />
+                <Box>{label}</Box>
+            </Stack> */}
+            {fields.map((item, index) => {
+                return (
+                    <Stack direction={"row"} alignItems={"center"}>
+                        <Controller
+                            name={`${idx}[${index}]`}
+                            control={control}
+                            render={({ field: { value, ...field } }) => (
+                                <Checkbox {...field} checked={!!value} />
+                            )}
+                        />
+                    </Stack>
+                );
+            })}
         </FormGroup>
     );
 }
 
-const RecruitFormModal = ({ open, setOpen, post_id, type }: { open: boolean, setOpen: any, post_id: string, type: string }) => {
+const RecruitFormModal = ({ open, setOpen, post_id, role }: { open: boolean, setOpen: any, post_id: string, role: string }) => {
     const { handleSubmit, control } = useForm()
     console.log("optionList", data);
     const onSubmit = (data: any) => {
@@ -118,7 +146,7 @@ const RecruitFormModal = ({ open, setOpen, post_id, type }: { open: boolean, set
         const value = {
             user_id: "",
             post_id,
-            type,
+            role,
             interviewList: [{
                 question_id: "",
                 answer: ""
@@ -132,11 +160,12 @@ const RecruitFormModal = ({ open, setOpen, post_id, type }: { open: boolean, set
             open={open}
             onClose={() => setOpen(false)}
         >
-            <Box bgcolor={"white"} maxWidth={"90vw"} overflow={"scroll"} h="80vh">
+            <Box bgcolor={"white"} padding={4} height={"90%"} sx={{ overflowY: "scroll" }}>
+                <Button onClick={() => setOpen(false)}>닫기</Button>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <Typography variant="h4">{`${type} 지원 하기`}</Typography>
+                    <Typography variant="h4">{`${role} 지원 하기`}</Typography>
                     {data?.map((v, idx) => (
-                        <React.Fragment key={idx}>
+                        <Box key={idx}>
                             <Typography>{idx + 1}번 질문</Typography>
                             <Typography>{v.question}</Typography>
                             {v.type === 'open' &&
@@ -147,10 +176,10 @@ const RecruitFormModal = ({ open, setOpen, post_id, type }: { open: boolean, set
                                     render={({ field }) => <TextField {...field} />}
                                 />
                             }
-                            {v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} id={idx + ""} />}
-                            {v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} id={idx + ""} />}
-                            {v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} id={idx + ""} />}
-                        </React.Fragment>
+                            {v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} idx={idx} />}
+                            {v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} idx={idx} />}
+                            {v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} idx={idx} />}
+                        </Box>
                     ))}
                     <Button type="submit">제출</Button>
                 </form>

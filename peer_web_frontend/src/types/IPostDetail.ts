@@ -7,7 +7,7 @@ export interface IPostDetail {
   region: string
   link: string
   tag: string[] // 문자열 배열 형태
-  schedule: string[] // 문자열 배열 형태
+  // schedule: string[] // 문자열 배열 형태
   role: IRole[]
   interviewList: IFormInterview[]
 }
