@@ -1,0 +1,60 @@
+'use client'
+
+import CuModal from '@/components/CuModal'
+
+import { useState } from 'react'
+import { Box, Button, TextField, Typography } from '@mui/material'
+import axios from 'axios'
+
+const UserWithdrawalModal = () => {
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true) // 다른 버튼이나 요소를 얘를 활용해서 모달 핸들링 가능
+  const handleClose = () => setOpen(false)
+  const [password, setPassword] = useState('')
+  const handleDelete = () => {
+    console.log(password) // 비밀번호를 서버로 보내서 계정 삭제
+    try {
+      axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/membership/withdrawal`,
+        {
+          password: password,
+        },
+      )
+      alert('계정이 삭제되었습니다')
+      handleClose()
+    } catch (error: any) {
+      if (error.response?.status === 400) {
+        alert('비밀번호가 일치하지 않습니다')
+      }
+    }
+  }
+
+  return (
+    <>
+      <Button onClick={handleOpen}>계정삭제</Button>
+      <CuModal
+        open={open}
+        handleClose={handleClose}
+        ariaTitle="계정삭제"
+        ariaDescription="계정을 삭제하시겠습니까?"
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Typography>계정삭제</Typography>
+          <TextField
+            placeholder="계정 삭제를 위해 비밀번호를 입력하세요"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+          <Typography>계정을 삭제하시겠습니까?</Typography>
+          <Typography>모든 작업물과 데이터가 영구적으로 삭제됩니다.</Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Button onClick={handleClose}>취소</Button>
+            <Button onClick={handleDelete}>확인</Button>
+          </Box>
+        </Box>
+      </CuModal>
+    </>
+  )
+}
+
+export default UserWithdrawalModal
