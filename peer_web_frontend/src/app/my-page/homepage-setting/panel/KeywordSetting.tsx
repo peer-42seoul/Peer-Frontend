@@ -112,7 +112,6 @@ const KeywordSetting = () => {
     await axios.get<{ keyword: string } | null>(url).then((res) => {
       if (res.data?.keyword) {
         const newKeywords = res.data?.keyword.split('^&%')
-        // return newKeywords
         const newChipData = [] as Array<IChip>
         newKeywords.forEach((keyword, i) =>
           newChipData.push({ key: i, label: keyword }),
