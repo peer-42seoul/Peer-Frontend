@@ -4,9 +4,9 @@ import { Avatar, Stack, Typography } from "@mui/material";
 import useSWR from "swr";
 
 const MainProfile = () => {
-    const {data} = useSWR<IUserProfile>('http://localhost:4000/profile/1', defaultGetFetcher);
+    const { data } = useSWR<IUserProfile>('http://localhost:4000/profile/1', defaultGetFetcher);
     return (
-        <Stack bgcolor="purple" height="150px" alignItems="center">
+        <Stack height="150px" alignItems="center" border="1px solid black">
             <Avatar alt="avatar" src={data?.profileImageUrl} sx={{ width: 56, height: 56 }} />
             <Typography>{data?.nickname}</Typography>
             <Typography>{data?.association}</Typography>

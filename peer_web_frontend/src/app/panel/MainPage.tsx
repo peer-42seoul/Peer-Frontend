@@ -40,7 +40,6 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
     defaultGetFetcher,
     { fallbackData: initData },
   )
-  console.log("data", data);
 
   const pagesize = 10
   //실제 api 서버용 url. mockup 데이터 만들기 어려워서 보류중
@@ -56,88 +55,46 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
   if (isLoading) return <Typography>로딩중...</Typography>
 
   if (!data) return <Typography>데이터가 없습니다</Typography>
-  
+
   return (
     <>
-    {/* mobile view */}
-    <Container sx={{ backgroundColor: 'gray' }} className="mobile-layout">
-      <Box sx={{ backgroundColor: 'white' }}>
-        <SelectType type={type} setType={setType} />
-        <Grid container p={2}>
-          <SearchOption
-            openOption={openOption}
-            setOpenOption={setOpenOption}
-            setDetailOption={setDetailOption}
-          />
-          <Grid item xs={12}>
-            <Stack
-              direction="row"
-              alignItems={'center'}
-              justifyContent={'flex-end'}
-            >
-              <SelectSort sort={sort} setSort={setSort} />
-            </Stack>
-          </Grid>
-        </Grid>
-        <Stack alignItems={'center'} gap={2}>
-          {data?.map((project: IPost) => (
-            <Box key={project.user_id}>
-              <MainCard {...project} />
-            </Box>
-          ))}
-        </Stack>
-        <Box
-          sx={{
-            position: 'fixed',
-            right: 20,
-            bottom: 80,
-          }}
-        >
-          <EditButton />
-        </Box>
-      </Box>
-      {spinner && <CircularProgress />}
-      <Box
-        sx={{
-          bottom: 0,
-          height: '1vh',
-          backgroundColor: 'primary.main',
-        }}
-        ref={target}
-      />
-    </Container>
-    {/* pc view */}
-    <Container sx={{ backgroundColor: 'beige' }} className="pc-layout">
-    <Stack bgcolor={'orange'} direction={'row'}>
-      <Stack flex={1}>
-        <Box bgcolor={'gray'} height={'200px'}>
-          피어 소개 배너
-        </Box>
-        <SelectType type={type} setType={setType} pc />
-        <Grid container p={2}>
-          <SearchOption
-            openOption={openOption}
-            setOpenOption={setOpenOption}
-            setDetailOption={setDetailOption}
-          />
-          <Grid item xs={12}>
-            <Stack
-              direction="row"
-              alignItems={'center'}
-              justifyContent={'space-between'}
-            >
-              <Typography>모집글</Typography>
-              <SelectSort sort={sort} setSort={setSort} />
-            </Stack>
-          </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          {data?.map((project: IPost) => (
-            <Grid item key={project.user_id} sm={12} md={4}>
-              <MainCard {...project} />
+      {/* mobile view */}
+      <Container className="mobile-layout">
+        <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
+          <SelectType type={type} setType={setType} />
+          <Grid container p={2}>
+            <SearchOption
+              openOption={openOption}
+              setOpenOption={setOpenOption}
+              setDetailOption={setDetailOption}
+            />
+            <Grid item xs={12}>
+              <Stack
+                direction="row"
+                alignItems={'center'}
+                justifyContent={'flex-end'}
+              >
+                <SelectSort sort={sort} setSort={setSort} />
+              </Stack>
             </Grid>
-          ))}
-        </Grid>
+          </Grid>
+          <Stack alignItems={'center'} gap={2}>
+            {data?.map((project: IPost) => (
+              <Box key={project.user_id}>
+                <MainCard {...project} />
+              </Box>
+            ))}
+          </Stack>
+          <Box
+            sx={{
+              position: 'fixed',
+              right: 20,
+              bottom: 80,
+            }}
+          >
+            <EditButton />
+          </Box>
+        </Box>
         {spinner && <CircularProgress />}
         <Box
           sx={{
@@ -147,15 +104,57 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
           }}
           ref={target}
         />
-      </Stack>
-      <Stack width={'250px'} height={'100%'} bgcolor={'yellow'}>
-        <MainProfile />
-        <MainShowcase />
-        <MainCarousel />
-      </Stack>
-    </Stack>
-  </Container>
-  </>
+      </Container>
+      {/* pc view */}
+      <Container sx={{ backgroundColor: 'white', border: "1px solid black" }} className="pc-layout">
+        <Stack direction={'row'} border="1px solid black">
+          <Stack flex={1}>
+            <Box height={'200px'} border="1px solid black">
+              피어 소개 배너
+            </Box>
+            <SelectType type={type} setType={setType} pc />
+            <Grid container p={2}>
+              <SearchOption
+                openOption={openOption}
+                setOpenOption={setOpenOption}
+                setDetailOption={setDetailOption}
+              />
+              <Grid item xs={12}>
+                <Stack
+                  direction="row"
+                  alignItems={'center'}
+                  justifyContent={'space-between'}
+                >
+                  <Typography>모집글</Typography>
+                  <SelectSort sort={sort} setSort={setSort} />
+                </Stack>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              {data?.map((project: IPost) => (
+                <Grid item key={project.user_id} sm={12} md={4}>
+                  <MainCard {...project} />
+                </Grid>
+              ))}
+            </Grid>
+            {spinner && <CircularProgress />}
+            <Box
+              sx={{
+                bottom: 0,
+                height: '1vh',
+                backgroundColor: 'primary.main',
+              }}
+              ref={target}
+            />
+          </Stack>
+          <Stack width={'250px'} height={'100%'}>
+            <MainProfile />
+            <MainShowcase />
+            <MainCarousel />
+          </Stack>
+        </Stack>
+      </Container>
+    </>
   )
 }
 
