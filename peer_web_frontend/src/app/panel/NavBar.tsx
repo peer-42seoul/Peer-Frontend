@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useState } from 'react'
 import SearchButton from './SearchButton'
 import useMedia from '@/hook/useMedia'
+import Link from 'next/link'
 
 interface INavProps {
   value: number
@@ -71,7 +72,7 @@ const PcNav = ({ value, setValue }: INavProps) => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/')
+            router.push('/team-list')
           }}
         />
         <BottomNavigationAction
@@ -85,18 +86,20 @@ const PcNav = ({ value, setValue }: INavProps) => {
         <IconButton color="inherit" aria-label="menu">
           <NotificationsNoneOutlined />
         </IconButton>
-        <IconButton color="inherit" aria-label="menu">
-          <SearchButton />
-        </IconButton>
+        {/* <IconButton color="inherit" aria-label="menu"> SearchButton이 이미 IconButton이어서 임시적으로 주석 처리했습니다~ */}
+        <SearchButton />
+        {/* </IconButton> */}
         {/*<Link>*/}
         <IconButton aria-label="favorites">
           <Favorite />
         </IconButton>
         {/*</Link>*/}
         <Avatar alt="profile" src="" />
-        <Button variant="outlined" startIcon={<BorderColor />}>
-          새 글쓰기
-        </Button>
+        <Link href={'/recruitment'}>
+          <Button variant="outlined" startIcon={<BorderColor />}>
+            새 글쓰기
+          </Button>
+        </Link>
       </Stack>
     </Stack>
   )
@@ -146,7 +149,7 @@ const MobileNav = ({ value, setValue }: INavProps) => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/teams')
+            router.push('/team-list')
           }}
         />
         <BottomNavigationAction
