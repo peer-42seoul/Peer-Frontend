@@ -6,7 +6,6 @@ import LinkIcon from "@mui/icons-material/Link";
 import Image from "next/image";
 import React from "react";
 import RecruitFormModal from "./panel/RecruitFormModal";
-import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { Viewer } from '@toast-ui/react-editor';
 
 //이후 ssr 개선 필요
@@ -48,7 +47,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
 
     return (
         <>
-            <RecruitFormModal open={open} setOpen={setOpen} post_id={params.id} role={role} />
+            <RecruitFormModal open={open} setOpen={setOpen} post_id={params.id} role={role} user_id={data?.user_id} />
             <Typography variant="h3">모집 글</Typography>
             <Box>
                 <Typography variant="h6">팀 제목</Typography>
@@ -119,7 +118,6 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             }
             <Box>
                 <Typography variant="h6">팀 소개</Typography>
-                {/* react-editor view */}
                 <Viewer initialValue={data?.content} />
             </Box>
         </>

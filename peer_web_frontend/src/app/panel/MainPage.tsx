@@ -23,7 +23,6 @@ import MainShowcase from './MainShowcase'
 import MainCarousel from './MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
-import Link from 'next/link'
 
 const MainPage = ({ initData }: { initData: any }) => {
   const { isPc } = useMedia()
@@ -144,12 +143,10 @@ const MainPage = ({ initData }: { initData: any }) => {
           </Grid>
         </Grid>
         <Stack alignItems={'center'} gap={2}>
-          {data.map((project: IProject, index: number) => (
-            <Link href={`/recruitment/${index}`}>
-              <Box key={project.id}>
-                <MainCard {...project} />
-              </Box>
-            </Link>
+          {data.map((project: IProject) => (
+            <Box key={project.id}>
+              <MainCard {...project} />
+            </Box>
           ))}
         </Stack>
         <Box

@@ -1,7 +1,7 @@
 import FormCheckbox from "@/app/panel/FormCheckbox";
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, Modal, Radio, RadioGroup, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, FormControlLabel, FormGroup, Modal, Radio, RadioGroup, TextField, Typography } from "@mui/material"
 import React from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 
 type CloseQuestionList = string[];
@@ -33,7 +33,7 @@ const data: IInterviewData[] = [
         question: '질문내용 3',
         type: 'ratio',
         optionList: {
-            number: '10',
+            number: '5',
             option1: '일번옵션',
             option2: '마지막옵션'
         }
@@ -68,7 +68,7 @@ const CloseQuestionForm = ({ optionList, control, idx }: { optionList: CloseQues
 }
 
 const RatioQuestionForm = ({ optionList, control, idx }: { optionList: RatioQuestionList, control: any, idx: number }) => {
-    const number = optionList?.number;
+    const number = parseInt(optionList?.number);
     const listArray = Array.from({ length: number }, (_, index) => index.toString());
     return (
         <Controller
@@ -78,7 +78,7 @@ const RatioQuestionForm = ({ optionList, control, idx }: { optionList: RatioQues
             render={({ field }) => (
                 <RadioGroup {...field}>
                     {
-                        listArray?.map((data: string, index: number) => {
+                        listArray?.map((data: any, index: number) => {
                             return (
                                 <Box key={index}>
                                     <FormControlLabel control={<Radio />} label={data} value={index} />
@@ -93,66 +93,52 @@ const RatioQuestionForm = ({ optionList, control, idx }: { optionList: RatioQues
 }
 
 const CheckQuestionForm = ({ optionList, control, idx }: { optionList: CheckQuestionList, control: any, idx: number }) => {
-    const { fields } = useFieldArray({
-        control,
-        name: idx + ""
-    });
-
     return (
         <FormGroup>
             {optionList?.map((data: string, index: number) => {
                 return (
                     <FormCheckbox
-                        name={idx + "-" + index}
+                        name={`${idx}[${index}]`}
                         label={data}
                         control={control}
                         key={index}
                     />
                 )
             })}
-            {/* <Stack direction={"row"} alignItems={"center"}>
-                <Controller
-                    name={name}
-                    control={control}
-                    render={({ field: { value, ...field } }) => (
-                        <Checkbox {...field} checked={!!value} />
-                    )}
-                />
-                <Box>{label}</Box>
-            </Stack> */}
-            {fields.map((item, index) => {
-                return (
-                    <Stack direction={"row"} alignItems={"center"}>
-                        <Controller
-                            name={`${idx}[${index}]`}
-                            control={control}
-                            render={({ field: { value, ...field } }) => (
-                                <Checkbox {...field} checked={!!value} />
-                            )}
-                        />
-                    </Stack>
-                );
-            })}
         </FormGroup>
     );
 }
 
-const RecruitFormModal = ({ open, setOpen, post_id, role }: { open: boolean, setOpen: any, post_id: string, role: string }) => {
+const RecruitFormModal = ({ open, setOpen, user_id, post_id, role }: { open: boolean, setOpen: any, user_id: string, post_id: string, role: string }) => {
     const { handleSubmit, control } = useForm()
-    console.log("optionList", data);
-    const onSubmit = (data: any) => {
-        console.log(data);
-        //추후에 제출할 form
+
+    const onSubmit = async (data: any) => {
+        console.log("data", data);
+        const array = Object.values(data);
+        const interviewList = array?.map((v: any) => {
+            if (typeof v !== 'string') {
+                const idxArr = v?.map((item: any, idx: number) => item === true ? idx : undefined);
+                const trueArr = idxArr?.filter((item: any) => (item !== undefined));
+                return trueArr.join('^&%'); //정해놓은 구분자로 넣기
+            }
+            else
+                return v;
+        })
+
         const value = {
-            user_id: "",
+            user_id,
             post_id,
             role,
-            interviewList: [{
-                question_id: "",
-                answer: ""
-            }]
+            interviewList
         }
         console.log("value", value);
+
+        //제출할 시 모달 필요한지 고려
+        // try {
+        //     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${post_id}`, value);
+        // } catch (e) {
+        //     console.log(e);
+        // }
     };
 
     return (
