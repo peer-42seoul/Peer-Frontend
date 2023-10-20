@@ -61,7 +61,7 @@ export default function UserInfoEdit({
                 type="password"
                 autoComplete="off"
                 error={errors.currentPassword ? true : false}
-                label="현재 비밀번호"
+                placeholder="현재 비밀번호"
               />
             )}
           />
@@ -83,7 +83,7 @@ export default function UserInfoEdit({
                 type="password"
                 autoComplete="off"
                 error={errors.newPassword ? true : false}
-                label="새로운 비밀번호"
+                placeholder="새로운 비밀번호"
               />
             )}
           />
@@ -108,7 +108,7 @@ export default function UserInfoEdit({
                 type="password"
                 autoComplete="off"
                 error={errors.newPasswordConfirm ? true : false}
-                label="새로운 비밀번호 재입력"
+                placeholder="새로운 비밀번호 재입력"
               />
             )}
           />
