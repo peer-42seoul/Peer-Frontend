@@ -1,12 +1,30 @@
 'use client'
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import SendCodeForm from './SendCodeForm'
 import axios from 'axios'
-import { InputLabel, TextField, Typography, Button } from '@mui/material'
+import { Box, Typography, Button, Container } from '@mui/material'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import CuTextField from '@/components/CuTextField'
+import SendCodeForm from './SendCodeForm'
+
+const Form = {
+  display: 'flex',
+  width: '100%',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '24px',
+}
+
+const LabelBox = {
+  display: 'flex',
+  width: '100%',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '8px',
+  fontSize: '14px',
+}
 
 const SendEmailForm = () => {
-  const [email, setEmail] = useState('')
   const [isEmailSuccessful, setIsEmailSuccessful] = useState(false)
   const {
     handleSubmit,
@@ -25,7 +43,6 @@ const SendEmailForm = () => {
       })
       console.log(res)
 
-      setEmail(data.email)
       setIsEmailSuccessful(true)
     } catch (error) {
       console.log(error)
@@ -35,9 +52,9 @@ const SendEmailForm = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+    <>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={Form}>
+        <Box sx={{ display: 'flex', width: '100%' }}>
           <Controller
             name="email"
             control={control}
@@ -50,31 +67,38 @@ const SendEmailForm = () => {
               },
             }}
             render={({ field }) => (
-              <div>
-                <InputLabel htmlFor="email">이메일:</InputLabel>
-                <TextField
-                  {...field}
+              <Container sx={LabelBox}>
+                <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
+                <CuTextField
+                  field={field}
                   type="email"
                   id="email"
                   placeholder="이메일을 입력하세요"
+                  style={{ width: '100%' }}
+                  disabled={isEmailSuccessful}
                 />
-              </div>
+                {errors.email && (
+                  <Typography>{errors.email.message}</Typography>
+                )}
+              </Container>
             )}
           />
-          {errors.email && <Typography>{errors.email.message}</Typography>}
-        </div>
+        </Box>
         {!isEmailSuccessful ? (
           <Button type="submit" disabled={isSubmitting}>
-            인증메일 전송
+            코드 발송
           </Button>
         ) : (
-          <Button type="submit" disabled={isSubmitting}>
-            인증메일 재전송
-          </Button>
+          <Box sx={{ display: 'flex', width: '100%' }}>
+            <SendCodeForm
+              email={
+                control._fields.email ? control._fields.email._f.value : ''
+              }
+            />
+          </Box>
         )}
-      </form>
-      {isEmailSuccessful && <SendCodeForm email={email} />}
-    </div>
+      </Box>
+    </>
   )
 }
 

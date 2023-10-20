@@ -1,4 +1,5 @@
 'use client'
+import { IProject } from '@/types/IProejct'
 import { Container, Box, Grid, Stack, Typography, CircularProgress } from '@mui/material'
 import { useState } from 'react'
 import { ProjectType, ProjectSort } from '../page'
@@ -31,12 +32,12 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
     status: string
     tag: string
   }>({ due: '', region: '', place: '', status: '', tag: '' })
-  const searchParams = useSearchParams();
-  const keyword = searchParams.get('keyword') ?? '';
+  const searchParams = useSearchParams()
+  const keyword = searchParams.get('keyword') ?? ''
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const { data, isLoading, mutate } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main?type=projects&sort=recent&page=1&pagesize=10&keyword=&due=&region=&place=&status=&tag=`,
+    `https://27366dd1-6e95-4ec6-90c2-062a85a79dfe.mock.pstmn.io/${type}-sort-${sort}`,
     defaultGetFetcher,
     { fallbackData: initData },
   )
@@ -49,7 +50,6 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
 
   /* 무한 스크롤 */
   const pageLimit = 2;
-  /* 임시 변수 */
   const { target, spinner } = useInfiniteScroll({ setPage, mutate, pageLimit, page });
 
   if (isLoading) return <Typography>로딩중...</Typography>

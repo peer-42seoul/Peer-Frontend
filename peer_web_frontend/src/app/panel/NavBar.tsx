@@ -17,6 +17,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import SearchButton from './SearchButton'
+import Link from 'next/link'
 
 export const MobileNav = () => {
   const [value, setValue] = useState(0)
@@ -63,7 +64,7 @@ export const MobileNav = () => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/teams')
+            router.push('/team-list')
           }}
         />
         <BottomNavigationAction
@@ -125,7 +126,7 @@ export const PcNav = () => {
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
-            router.push('/')
+            router.push('/team-list')
           }}
         />
         <BottomNavigationAction
@@ -139,19 +140,22 @@ export const PcNav = () => {
         <IconButton color="inherit" aria-label="menu">
           <NotificationsNoneOutlined />
         </IconButton>
-        <IconButton color="inherit" aria-label="menu">
-          <SearchButton />
-        </IconButton>
+        {/* <IconButton color="inherit" aria-label="menu"> SearchButton이 이미 IconButton이어서 임시적으로 주석 처리했습니다~ */}
+        <SearchButton />
+        {/* </IconButton> */}
         {/*<Link>*/}
         <IconButton aria-label="favorites">
           <Favorite />
         </IconButton>
         {/*</Link>*/}
         <Avatar alt="profile" src="" />
-        <Button variant="outlined" startIcon={<BorderColor />}>
-          새 글쓰기
-        </Button>
+        <Link href={'/recruitment'}>
+          <Button variant="outlined" startIcon={<BorderColor />}>
+            새 글쓰기
+          </Button>
+        </Link>
       </Stack>
     </Stack>
   )
 }
+
