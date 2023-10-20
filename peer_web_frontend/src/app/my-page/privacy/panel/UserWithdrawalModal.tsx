@@ -13,10 +13,10 @@ const UserWithdrawalModal = () => {
   const [password, setPassword] = useState('')
   const axiosInstance = useAxiosWithAuth()
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     console.log(password) // 비밀번호를 서버로 보내서 계정 삭제
     try {
-      axiosInstance.post(
+      await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/membership/withdrawal`,
         {
           password: password,
