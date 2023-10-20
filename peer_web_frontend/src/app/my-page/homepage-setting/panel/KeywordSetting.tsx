@@ -1,6 +1,7 @@
 'use client'
-// import CuTextField from '@/components/CuTextField'
-import { Box, Chip, ListItem, TextField, Typography } from '@mui/material'
+import CuTextField from '@/components/CuTextField'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import { Box, Chip, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
@@ -45,11 +46,18 @@ const KeywordAddingField = ({
 
   return (
     <Box>
-      <TextField
-        onChange={onChangeHandler}
-        onKeyDown={handleKeyPress}
-        inputRef={textFieldRef}
-        value={inputValue}
+      <CuTextFieldLabel style={{ margin: '8px 0px' }} htmlFor="keyword-field">
+        키워드
+      </CuTextFieldLabel>
+      <CuTextField
+        id="keyword-field"
+        placeholder="ex. JS"
+        field={{
+          onChange: onChangeHandler,
+          onKeyDown: handleKeyPress,
+          inputRef: textFieldRef,
+          value: inputValue,
+        }}
       />
     </Box>
   )
@@ -81,40 +89,21 @@ const ChipsArray = ({
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        listStyle: 'none',
-        p: 0.5,
-        m: 0,
-      }}
-      component="ul"
-    >
+    <Stack direction={'row'} spacing={1} p={1}>
       {!data && <Typography>등록한 알림 키워드가 없습니다.</Typography>}
       {data &&
         data.map((chip) => {
           return (
-            <ListItem key={chip.key}>
-              <Chip label={chip.label} onDelete={handleDelete(chip)} />
-            </ListItem>
+            <Chip
+              key={chip.key}
+              label={chip.label}
+              onDelete={handleDelete(chip)}
+            />
           )
         })}
-    </Box>
+    </Stack>
   )
 }
-
-// const KeywordChip = ({ keyword }: { keyword: string }) => {
-//   const handleDelete = () => {
-//     axios
-//       .delete(
-//         `https://6a33dc92-80a8-466d-b83a-c2d3ce9b6a1d.mock.pstmn.io/api/v1/alarm/delete?keyword=${keyword}`,
-//       )
-//       .then(() => console.log('키워드 삭제에 성공하였습니다!', keyword))
-//   }
-//   return <Chip label="Deletable" onDelete={handleDelete} />
-// }
 
 const KeywordSetting = () => {
   const [keywords, setKeywords] = useState<Array<IChip> | null>(null)
@@ -146,7 +135,6 @@ const KeywordSetting = () => {
 
   return (
     <div>
-      <Typography>키워드</Typography>
       <KeywordAddingField mutate={mutate} setKeywords={setKeywords} />
       {keywords && (
         <ChipsArray mutate={mutate} data={keywords} setKeywords={setKeywords} />
