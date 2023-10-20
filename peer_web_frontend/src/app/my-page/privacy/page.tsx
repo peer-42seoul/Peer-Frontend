@@ -1,6 +1,7 @@
-import { Typography, Button } from '@mui/material'
+import { Typography } from '@mui/material'
 import { fetchServerData } from '@/api/fetchers'
 import UserInfoEdit from './panel/UserInfoEdit'
+import UserWithdrawalModal from './panel/UserWithdrawalModal'
 
 const PrivacyPage = async () => {
   const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/info`
@@ -17,7 +18,7 @@ const PrivacyPage = async () => {
       <Typography>{email}</Typography>
       <UserInfoEdit local={local} authentication={authentication} />
       <Typography>계정관리</Typography>
-      <Button>계정삭제</Button>
+      <UserWithdrawalModal />
     </>
   )
 }
