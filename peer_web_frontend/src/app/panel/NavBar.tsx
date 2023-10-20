@@ -70,7 +70,7 @@ export const MobileNav = () => {
         <BottomNavigationAction
           label="내 프로필"
           onClick={() => {
-            router.push('/profile/MyPage')
+            router.push('/my-page')
           }}
         />
       </BottomNavigation>
@@ -148,7 +148,9 @@ export const PcNav = () => {
           <Favorite />
         </IconButton>
         {/*</Link>*/}
-        <Avatar alt="profile" src="" />
+        <Link href={'/my-page/profile'}>
+          <Avatar alt="profile" src="" />
+        </Link>
         <Link href={'/recruitment'}>
           <Button variant="outlined" startIcon={<BorderColor />}>
             새 글쓰기
