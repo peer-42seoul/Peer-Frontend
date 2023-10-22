@@ -98,8 +98,7 @@ const RatioQuestionForm = ({ optionList, control, idx }: { optionList: RatioQues
 const CheckQuestionForm = ({ optionList, control, idx }: { optionList: CheckQuestionList, control: any, idx: number }) => {
 
     return (
-        <FormControl
-            component='fieldset'>
+        <FormControl component='fieldset'>
             <FormGroup>
                 {optionList?.map((data: string, index: number) => {
                     return (
