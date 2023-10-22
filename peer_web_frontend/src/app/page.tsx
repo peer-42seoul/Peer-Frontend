@@ -6,7 +6,7 @@ export type ProjectType = 'studies' | 'projects'
 
 export default async function Home() {
   const data = await fetchServerData(
-    'https://c4f7d82c-8418-4e7e-bd40-b363bad0ef04.mock.pstmn.io/projects-sort-recent',
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main?type=projects&sort=recent&page=1&pagesize=10&keyword=&due=&region=&place=&status=&tag=`
   )
   return <MainPage initData={data} />
 }
