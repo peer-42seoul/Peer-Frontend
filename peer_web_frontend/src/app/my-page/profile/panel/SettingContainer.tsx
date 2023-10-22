@@ -1,4 +1,5 @@
-import { Button, Typography } from '@mui/material'
+import CuButton from '@/components/CuButton'
+import { Typography } from '@mui/material'
 import React from 'react'
 
 const SettingType = {
@@ -10,34 +11,41 @@ const SettingType = {
 
 const settingTypeMap = new Map(Object.entries(SettingType))
 
-// TODO 2스텝 때 업적 어떻게 할 지 고민해보기. 우선 업적 파트를 고려하여 submit이 아니어도 가능하게 해두었음
+// TODO 2스텝 때 업적 어떻게 할 지 고민해보기.
 const SettingContainer = ({
   settingTitle,
   onNegativeClick,
   children,
-} // onPositiveClick,
-: {
+  isSubmitting, // onPositiveClick,
+}: {
   settingTitle: string
-  onNegativeClick: (object: any) => void
+  onNegativeClick: () => void
   children: React.ReactNode
+  isSubmitting: boolean
   // onPositiveClick?: (object: any) => void
 }) => {
   return (
     <div>
       <Typography>{settingTypeMap.get(settingTitle)} 수정</Typography>
       {children}
-      <Button variant="contained" onClick={onNegativeClick}>
-        취소
-      </Button>
+      <CuButton
+        variant="contained"
+        action={onNegativeClick}
+        disabled={isSubmitting}
+        message="취소"
+      />
       {/* {onPositiveClick ? (
         <Button variant="contained" onClick={onPositiveClick}>
           완료
         </Button>
       ) : ( */}
-      <Button variant="contained" type="submit">
-        완료
-      </Button>
-      {/* )} */}
+      <CuButton
+        variant="contained"
+        type="submit"
+        disabled={isSubmitting}
+        message={isSubmitting ? '제출 중' : '완료'}
+        action={() => {}}
+      />
     </div>
   )
 }

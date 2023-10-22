@@ -1,8 +1,7 @@
 import FormCheckbox from "@/app/panel/FormCheckbox";
-import { Box, Button, FormControlLabel, FormGroup, Modal, Radio, RadioGroup, TextField, Typography } from "@mui/material"
+import { Box, Button, FormControl, FormControlLabel, FormGroup, Modal, Radio, RadioGroup, TextField, Typography } from "@mui/material"
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-
 
 type CloseQuestionList = string[];
 type RatioQuestionList = {
@@ -50,7 +49,9 @@ const CloseQuestionForm = ({ optionList, control, idx }: { optionList: CloseQues
         <Controller
             name={idx + ""}
             control={control}
-            defaultValue=""
+            rules={{
+                required: '답변을 선택해주세요',
+            }}
             render={({ field }) => (
                 <RadioGroup {...field}>
                     {
@@ -74,7 +75,9 @@ const RatioQuestionForm = ({ optionList, control, idx }: { optionList: RatioQues
         <Controller
             name={idx + ""}
             control={control}
-            defaultValue=""
+            rules={{
+                required: '답변을 선택해주세요',
+            }}
             render={({ field }) => (
                 <RadioGroup {...field}>
                     {
@@ -93,24 +96,28 @@ const RatioQuestionForm = ({ optionList, control, idx }: { optionList: RatioQues
 }
 
 const CheckQuestionForm = ({ optionList, control, idx }: { optionList: CheckQuestionList, control: any, idx: number }) => {
+
     return (
-        <FormGroup>
-            {optionList?.map((data: string, index: number) => {
-                return (
-                    <FormCheckbox
-                        name={`${idx}[${index}]`}
-                        label={data}
-                        control={control}
-                        key={index}
-                    />
-                )
-            })}
-        </FormGroup>
+        <FormControl
+            component='fieldset'>
+            <FormGroup>
+                {optionList?.map((data: string, index: number) => {
+                    return (
+                        <FormCheckbox
+                            name={`${idx}[${index}]`}
+                            label={data}
+                            control={control}
+                            key={index}
+                        />
+                    )
+                })}
+            </FormGroup>
+        </FormControl>
     );
 }
 
 const RecruitFormModal = ({ open, setOpen, user_id, post_id, role }: { open: boolean, setOpen: any, user_id: string, post_id: string, role: string }) => {
-    const { handleSubmit, control } = useForm()
+    const { handleSubmit, control, formState: { errors } } = useForm()
 
     const onSubmit = async (data: any) => {
         console.log("data", data);
@@ -156,6 +163,9 @@ const RecruitFormModal = ({ open, setOpen, user_id, post_id, role }: { open: boo
                             <Typography>{v.question}</Typography>
                             {v.type === 'open' &&
                                 <Controller
+                                    rules={{
+                                        required: '답변을 입력해주세요',
+                                    }}
                                     name={idx + ""}
                                     control={control}
                                     defaultValue=""
@@ -165,6 +175,7 @@ const RecruitFormModal = ({ open, setOpen, user_id, post_id, role }: { open: boo
                             {v.type === 'close' && <CloseQuestionForm optionList={v?.optionList as CloseQuestionList} control={control} idx={idx} />}
                             {v.type === 'ratio' && <RatioQuestionForm optionList={v?.optionList as RatioQuestionList} control={control} idx={idx} />}
                             {v.type === 'check' && <CheckQuestionForm optionList={v?.optionList as CheckQuestionList} control={control} idx={idx} />}
+                            {errors[idx] && <Typography color="error">{errors[idx]?.message as string}</Typography>}
                         </Box>
                     ))}
                     <Button type="submit">제출</Button>

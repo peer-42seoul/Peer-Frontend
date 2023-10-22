@@ -1,3 +1,20 @@
+export type Tag = {
+  tagName: string
+  tagColor: string
+}
+
+export interface IPost {
+  post_id: number
+  title: string
+  image: string
+  user_id: number
+  user_nickname: string
+  user_thumbnail: string
+  status: string
+  tagList: Tag[]
+  isFavorite: boolean
+}
+
 export interface IPostDetail {
   title: string
   status: string // 예를 들면 "모집중"
