@@ -8,19 +8,19 @@ import { usePathname } from 'next/navigation'
 const getTabValue = (path: string) => {
   switch (path) {
     case '/my-page/profile':
-      return '프로필'
+      return 0
 
     case '/my-page/interests':
-      return '관심리스트'
+      return 1
 
     case '/my-page/messages':
-      return '쪽지'
+      return 2
 
     case '/my-page/privacy':
-      return '개인정보'
+      return 3
 
     case 'my-page/homepage-setting':
-      return '홈페이지 설정'
+      return 4
 
     default:
       return 0
@@ -40,49 +40,54 @@ const SubNavBar = () => {
   }
 
   return (
-    <div>
-      <Tabs
-        orientation="vertical"
-        value={value}
-        onChange={(event, newValue) => setValue(newValue)}
-        sx={{
-          borderRight: 1,
-          borderColor: 'divider',
+    <Tabs
+      orientation="vertical"
+      value={value}
+      onChange={(event, newValue) => setValue(newValue)}
+      sx={{
+        // borderRight: 1,
+        borderColor: 'divider',
+        padding: '24px 32px',
+        gap: '4px',
+      }}
+      variant="fullWidth"
+    >
+      <Tab
+        label="프로필"
+        onClick={() => {
+          router.push('/my-page/profile')
         }}
-        variant="fullWidth"
-      >
-        <Tab
-          label="프로필"
-          onClick={() => {
-            router.push('/my-page/profile')
-          }}
-        />
-        <Tab
-          label="관심리스트"
-          onClick={() => {
-            router.push('/my-page/interests')
-          }}
-        />
-        <Tab
-          label="쪽지"
-          onClick={() => {
-            router.push('/my-page/message')
-          }}
-        />
-        <Tab
-          label="개인정보"
-          onClick={() => {
-            router.push('/my-page/privacy')
-          }}
-        />
-        <Tab
-          label="홈페이지 설정"
-          onClick={() => {
-            router.push('/my-page/homepage-setting')
-          }}
-        />
-      </Tabs>
-    </div>
+        value={0}
+      />
+      <Tab
+        label="관심리스트"
+        onClick={() => {
+          router.push('/my-page/interests')
+        }}
+        value={1}
+      />
+      <Tab
+        label="쪽지"
+        onClick={() => {
+          router.push('/my-page/message')
+        }}
+        value={2}
+      />
+      <Tab
+        label="개인정보"
+        onClick={() => {
+          router.push('/my-page/privacy')
+        }}
+        value={3}
+      />
+      <Tab
+        label="홈페이지 설정"
+        onClick={() => {
+          router.push('/my-page/homepage-setting')
+        }}
+        value={4}
+      />
+    </Tabs>
   )
 }
 
