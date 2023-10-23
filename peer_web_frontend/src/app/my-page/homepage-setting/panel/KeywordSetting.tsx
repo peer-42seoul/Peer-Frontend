@@ -3,7 +3,7 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import { Box, Chip, Stack, Typography } from '@mui/material'
 import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
 
 interface IChip {
@@ -11,13 +11,7 @@ interface IChip {
   label: string
 }
 
-const KeywordAddingField = ({
-  mutate,
-  setKeywords,
-}: {
-  mutate: (data: Array<IChip> | null) => void
-  setKeywords: (keyword: Array<IChip> | null) => void
-}) => {
+const KeywordAddingField = ({ mutate }: { mutate: () => void }) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
   const textFieldRef = useRef<HTMLInputElement | null>(null)
 
@@ -29,11 +23,8 @@ const KeywordAddingField = ({
         .post(`http://localhost:4000/alarmAdd`, { newKeyword: inputValue })
         .then(() => console.log('api 전송 성공!'))
         .then(() => {
-          const newData = [] as Array<IChip>
-          mutate(newData)
-          return newData
+          mutate()
         })
-        .then((data) => setKeywords(data))
         .catch((error) => console.log(error))
       console.log(inputValue)
       setInputValue('' as string)
@@ -65,32 +56,31 @@ const KeywordAddingField = ({
 
 const ChipsArray = ({
   data,
-  setKeywords,
   mutate,
+  isLoading,
 }: {
-  mutate: (data: Array<IChip> | null) => void
-  setKeywords: (keyword: Array<IChip> | null) => void
+  mutate: () => void
   data: Array<IChip> | undefined | null
+  isLoading: boolean
 }) => {
   const handleDelete = (chip: IChip) => {
-    return () =>
-      axios
+    return async () =>
+      await axios
         .delete(
           `https://6a33dc92-80a8-466d-b83a-c2d3ce9b6a1d.mock.pstmn.io/api/v1/alarm/delete?keyword=${chip.label}`,
         )
         .then(() => {
           console.log('키워드 삭제에 성공하였습니다!', chip.label)
-          const newData = [] as Array<IChip>
-          mutate(newData)
-          console.log('newData', newData)
-          return newData
+          mutate()
         })
-        .then((data) => setKeywords(data))
   }
 
   return (
     <Stack direction={'row'} spacing={1} p={1}>
-      {!data && <Typography>등록한 알림 키워드가 없습니다.</Typography>}
+      {isLoading && !data && <Typography>로딩 중 입니다.</Typography>}
+      {!isLoading && !data && (
+        <Typography>등록한 알림 키워드가 없습니다.</Typography>
+      )}
       {data &&
         data.map((chip) => {
           return (
@@ -106,7 +96,7 @@ const ChipsArray = ({
 }
 
 const KeywordSetting = () => {
-  const [keywords, setKeywords] = useState<Array<IChip> | null>(null)
+  // const [keywords, setKeywords] = useState<Array<IChip> | null>(null)
 
   const getKeywords = async (url: string) =>
     await axios.get<{ keyword: string } | null>(url).then((res) => {
@@ -126,19 +116,17 @@ const KeywordSetting = () => {
     getKeywords,
   )
 
-  useEffect(() => {
-    if (!isLoading && data !== undefined) {
-      setKeywords(data)
-    }
-  }, [isLoading, data])
+  // useEffect(() => {
+  //   if (!isLoading && data !== undefined) {
+  //     setKeywords(data)
+  //   }
+  // }, [isLoading, data])
 
   return (
     <div>
-      <KeywordAddingField mutate={mutate} setKeywords={setKeywords} />
-      {keywords && (
-        <ChipsArray mutate={mutate} data={keywords} setKeywords={setKeywords} />
-      )}
-      {!keywords && <Typography>등록한 키워드가 없습니다.</Typography>}
+      <KeywordAddingField mutate={mutate} />
+      {data && <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />}
+      {/* {!data && <Typography>등록한 키워드가 없습니다.</Typography>} */}
     </div>
   )
 }
