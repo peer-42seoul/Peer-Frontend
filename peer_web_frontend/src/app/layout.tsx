@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import '../../styles/global.css'
 import '../../styles/reset.css'
-import NavBar from './panel/NavBar'
+import { MobileNav, PcNav } from './panel/NavBar'
 import Header from './panel/Header'
 import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
 import { Box } from '@mui/material'
@@ -27,10 +27,10 @@ export default function RootLayout({
             {/* 헤더 고정 시 여기에 margin-top: 추가 */}
             {/* 상하단 여백 어떻게 할지 조정 필요 */}
             <Box sx={{ marginBottom: '56px' }}>{children}</Box>
-            <NavBar />
+            <MobileNav />
           </div>
           <div className="pc-layout">
-            <NavBar />
+            <PcNav />
             <Box sx={{ marginY: '56px' }}>{children}</Box>
           </div>
           <div id="modal-root"></div>

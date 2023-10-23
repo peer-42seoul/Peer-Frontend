@@ -1,3 +1,20 @@
+export type Tag = {
+  tagName: string
+  tagColor: string
+}
+
+export interface IPost {
+  post_id: number
+  title: string
+  image: string
+  user_id: number
+  user_nickname: string
+  user_thumbnail: string
+  status: string
+  tagList: Tag[]
+  isFavorite: boolean
+}
+
 export interface IPostDetail {
   title: string
   status: string // 예를 들면 "모집중"
@@ -6,8 +23,7 @@ export interface IPostDetail {
   user_id: string // 사용자 ID의 데이터 타입에 따라 변경해야 함
   region: string
   link: string
-  tag: string[] // 문자열 배열 형태
-  schedule: string[] // 문자열 배열 형태
+  tag: Tag[] // 문자열 배열 형태
   role: IRole[]
   interviewList: IFormInterview[]
 }
