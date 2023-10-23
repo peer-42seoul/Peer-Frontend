@@ -6,7 +6,6 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import useAuthStore from '@/states/useAuthStore'
-import MenuItem from '@mui/material/MenuItem'
 import useMessageStore from '@/states/useMessageStore'
 import Image from 'next/image'
 
