@@ -13,7 +13,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         width={1}
         maxWidth={1280}
       >
-        <Grid item xs={0} sm={3} sx={{ maxWidth: '244px' }}>
+        <Grid item xs={0} sm={3} sx={{ maxWidth: '308px' }}>
           <SubNavBar />
         </Grid>
         <Grid
