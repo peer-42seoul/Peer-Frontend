@@ -38,7 +38,7 @@ const KeywordAddingField = ({ mutate }: { mutate: () => void }) => {
   return (
     <Box>
       <CuTextFieldLabel style={{ margin: '8px 0px' }} htmlFor="keyword-field">
-        키워드
+        키워드 관리
       </CuTextFieldLabel>
       <CuTextField
         id="keyword-field"
