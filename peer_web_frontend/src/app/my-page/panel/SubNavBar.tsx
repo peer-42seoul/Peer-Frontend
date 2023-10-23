@@ -72,7 +72,7 @@ const SubNavBar = () => {
         <Tab
           label="개인정보"
           onClick={() => {
-            router.push('/')
+            router.push('/my-page/privacy')
           }}
         />
         <Tab
