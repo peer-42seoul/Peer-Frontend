@@ -11,6 +11,17 @@ export const theme = createTheme({
       xl: 1536,
     },
   },
+  components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          '@media (min-width: 1200px)': {
+            maxWidth: '1280px',
+          },
+        },
+      },
+    },
+  },
 })
 
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
