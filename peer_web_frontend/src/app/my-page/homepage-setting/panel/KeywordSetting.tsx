@@ -1,7 +1,12 @@
 'use client'
+import BackButton from '@/components/BackButton'
+import CuButton from '@/components/CuButton'
+import CuModal from '@/components/CuModal'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
-import { Box, Chip, Stack, Typography } from '@mui/material'
+import useMedia from '@/hook/useMedia'
+import useModal from '@/hook/useModal'
+import { Box, Button, Chip, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
@@ -11,7 +16,13 @@ interface IChip {
   label: string
 }
 
-const KeywordAddingField = ({ mutate }: { mutate: () => void }) => {
+const KeywordAddingField = ({
+  mutate,
+  isPc,
+}: {
+  mutate: () => void
+  isPc: boolean
+}) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
   const textFieldRef = useRef<HTMLInputElement | null>(null)
 
@@ -38,7 +49,7 @@ const KeywordAddingField = ({ mutate }: { mutate: () => void }) => {
   return (
     <Box>
       <CuTextFieldLabel style={{ margin: '8px 0px' }} htmlFor="keyword-field">
-        키워드 관리
+        {isPc ? '키워드 관리' : '키워드'}
       </CuTextFieldLabel>
       <CuTextField
         id="keyword-field"
@@ -97,6 +108,8 @@ const ChipsArray = ({
 
 const KeywordSetting = () => {
   // const [keywords, setKeywords] = useState<Array<IChip> | null>(null)
+  const { isPc } = useMedia()
+  const { isOpen, closeModal, openModal } = useModal()
 
   const getKeywords = async (url: string) =>
     await axios.get<{ keyword: string } | null>(url).then((res) => {
@@ -111,22 +124,92 @@ const KeywordSetting = () => {
       return null
     })
 
+  const deleteAll = async () => {
+    console.log('전체 삭제')
+    // await axios.delete('/api/v1/alarm/delete/all')
+  }
+
   const { isLoading, data, mutate } = useSWR<Array<IChip> | null>(
     'http://localhost:4000/alarm/1',
     getKeywords,
   )
 
-  // useEffect(() => {
-  //   if (!isLoading && data !== undefined) {
-  //     setKeywords(data)
-  //   }
-  // }, [isLoading, data])
-
   return (
     <div>
-      <KeywordAddingField mutate={mutate} />
-      {data && <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />}
-      {/* {!data && <Typography>등록한 키워드가 없습니다.</Typography>} */}
+      <Typography>키워드 설정</Typography>
+      {isPc ? (
+        <Box>
+          <KeywordAddingField mutate={mutate} isPc={isPc} />
+          <CuButton
+            variant="text"
+            message="전체 삭제"
+            action={() => deleteAll}
+          ></CuButton>
+          {data && (
+            <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
+          )}
+        </Box>
+      ) : (
+        <CuButton variant="text" message="키워드 관리" action={openModal} />
+      )}
+      <CuModal
+        open={isOpen}
+        handleClose={closeModal}
+        ariaTitle="홈페이지 알림 키워드 설정 모달"
+        ariaDescription="홈페이지 알림 키워드 추가 및 삭제"
+        style={{
+          width: window.innerWidth,
+          height: window.innerHeight,
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 2,
+        }}
+      >
+        <Box height={1} px={2}>
+          <Stack
+            flexDirection={'row'}
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
+            <BackButton
+              action={closeModal}
+              style={{
+                border: 'none',
+                color: 'black',
+                padding: '3px 5px',
+                width: '40px',
+                height: '40px',
+              }}
+            />
+            <Typography>키워드 관리</Typography>
+            <Button
+              sx={{
+                border: 'none',
+                color: 'black',
+                padding: '3px 5px',
+                width: '40px',
+                height: '40px',
+              }}
+              aria-hidden
+              disabled
+            ></Button>
+          </Stack>
+          <KeywordAddingField mutate={mutate} isPc={isPc} />
+          <CuButton
+            variant="text"
+            message="전체 삭제"
+            action={() => deleteAll}
+          ></CuButton>
+          {data && (
+            <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
+          )}
+        </Box>
+      </CuModal>
     </div>
   )
 }
