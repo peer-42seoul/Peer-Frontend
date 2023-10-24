@@ -1,4 +1,4 @@
-import { IProject } from '@/types/IProejct'
+import { IPost, Tag } from '@/types/IPostDetail'
 import { Favorite } from '@mui/icons-material'
 import {
   Avatar,
@@ -9,20 +9,23 @@ import {
   CardMedia,
   Chip,
   IconButton,
+  Link,
   Typography,
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 import { useState } from 'react'
 
 const MainCard = ({
-  nickname,
-  imageUrl,
-  description,
-  tags,
+  title,
+  image,
+  // user_id,
+  user_nickname,
+  user_thumbnail,
+  status,
+  tagList,
   isFavorite,
-  profileImgUrl,
-  inProgress,
-}: IProject) => {
+  post_id,
+}: IPost) => {
   const [favorite, setFavorite] = useState(isFavorite)
   const changeFavorite = async () => {
     try {
@@ -30,64 +33,69 @@ const MainCard = ({
       // await fetch(`/recruitement/favorite/${study_id}`
       setFavorite(!favorite)
     } catch (e) {
-      console.log("error", e);
+      console.log('error', e)
     }
   }
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <Box sx={{ position: 'relative' }}>
-        <CardMedia
-          component="img"
-          height="194"
-          image={imageUrl}
-          alt="Paella dish"
-        />
-        <Chip
-          label={inProgress ? '진행중' : '모집중'}
-          sx={{
-            position: 'absolute',
-            top: 16,
-            left: 16,
-            borderRadius: 1,
-            backgroundColor: 'black',
-            color: 'white',
-          }}
-          size="medium"
-        />
-      </Box>
-      {/* <Link href="detail"> */}
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
-            <Box
-              component="img"
-              height="194"
-              src={profileImgUrl}
-              alt="profile image"
-            />
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="add to favorites" onClick={changeFavorite}>
-            <Favorite sx={{ color: favorite ? 'red' : 'gray' }} />
-          </IconButton>
-        }
-        title={nickname}
-      />
-      <CardContent>
-        {/* title로 바꾸기 */}
-        <Typography variant="body2" color="text.secondary">
-          {description}
-        </Typography>
-        <Box>
-          {tags?.map((tag: string, idx: number) => (
-            <Chip label={tag} size="small" key={idx} />
-          ))}
+    <Link href={`/recruitment/${post_id}`} style={{ textDecoration: 'none' }}>
+      <Card sx={{ maxWidth: 345 }}>
+        <Box sx={{ position: 'relative' }}>
+          <CardMedia
+            component="img"
+            height="194"
+            image={image}
+            alt="Paella dish"
+          />
+          <Chip
+            label={status}
+            sx={{
+              position: 'absolute',
+              top: 16,
+              left: 16,
+              borderRadius: 1,
+              backgroundColor: 'black',
+              color: 'white',
+            }}
+            size="medium"
+          />
         </Box>
-      </CardContent>
-      {/* </Link> */}
-    </Card>
+        <CardHeader
+          avatar={
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
+              <Box
+                component="img"
+                height="194"
+                src={user_thumbnail}
+                alt="profile image"
+              />
+            </Avatar>
+          }
+          action={
+            <IconButton aria-label="add to favorites" onClick={changeFavorite}>
+              <Favorite sx={{ color: favorite ? 'red' : 'gray' }} />
+            </IconButton>
+          }
+          title={user_nickname}
+        />
+        <CardContent>
+          {/* title로 바꾸기 */}
+          <Typography variant="body2" color="text.secondary">
+            {title}
+          </Typography>
+          <Box>
+            {tagList?.map(({ tagName, tagColor }: Tag, idx: number) => (
+              <Chip
+                label={tagName}
+                size="small"
+                key={idx}
+                style={{ color: tagColor }}
+              />
+            ))}
+          </Box>
+        </CardContent>
+      </Card>
+    </Link>
   )
 }
 

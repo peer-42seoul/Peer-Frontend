@@ -1,5 +1,4 @@
 'use client'
-import { IProject } from '@/types/IProejct'
 import {
   Container,
   Box,
@@ -17,15 +16,14 @@ import SelectSort from './SelectSort'
 import SelectType from './SelectType'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
-import useMedia from '@/hook/useMedia'
 import MainProfile from './MainProfile'
 import MainShowcase from './MainShowcase'
 import MainCarousel from './MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
+import { IPost } from '@/types/IPost'
 
-const MainPage = ({ initData }: { initData: any }) => {
-  const { isPc } = useMedia()
+const MainPage = ({ initData }: { initData: IPost[] }) => {
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType>('projects')
   const [openOption, setOpenOption] = useState<boolean>(false)
@@ -43,7 +41,7 @@ const MainPage = ({ initData }: { initData: any }) => {
   // json server용 url
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const { data, isLoading, mutate } = useSWR(
-    `process.env.NEXT_PUBLIC_API_URL/${type}-sort-${sort}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main?type=projects&sort=recent&page=1&pagesize=10&keyword=&due=&region=&place=&status=&tag=`,
     defaultGetFetcher,
     { fallbackData: initData },
   )
@@ -67,13 +65,63 @@ const MainPage = ({ initData }: { initData: any }) => {
 
   if (!data) return <Typography>데이터가 없습니다</Typography>
 
-  /* pc 화면 */
-  if (isPc) {
-    return (
-      <Container sx={{ backgroundColor: 'beige' }}>
-        <Stack bgcolor={'orange'} direction={'row'}>
+  return (
+    <>
+      {/* mobile view */}
+      <Container className="mobile-layout">
+        <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
+          <SelectType type={type} setType={setType} />
+          <Grid container p={2}>
+            <SearchOption
+              openOption={openOption}
+              setOpenOption={setOpenOption}
+              setDetailOption={setDetailOption}
+            />
+            <Grid item xs={12}>
+              <Stack
+                direction="row"
+                alignItems={'center'}
+                justifyContent={'flex-end'}
+              >
+                <SelectSort sort={sort} setSort={setSort} />
+              </Stack>
+            </Grid>
+          </Grid>
+          <Stack alignItems={'center'} gap={2}>
+            {data?.map((project: IPost) => (
+              <Box key={project.user_id}>
+                <MainCard {...project} />
+              </Box>
+            ))}
+          </Stack>
+          <Box
+            sx={{
+              position: 'fixed',
+              right: 20,
+              bottom: 80,
+            }}
+          >
+            <EditButton />
+          </Box>
+        </Box>
+        {spinner && <CircularProgress />}
+        <Box
+          sx={{
+            bottom: 0,
+            height: '1vh',
+            backgroundColor: 'primary.main',
+          }}
+          ref={target}
+        />
+      </Container>
+      {/* pc view */}
+      <Container
+        sx={{ backgroundColor: 'white', border: '1px solid black' }}
+        className="pc-layout"
+      >
+        <Stack direction={'row'} border="1px solid black">
           <Stack flex={1}>
-            <Box bgcolor={'gray'} height={'200px'}>
+            <Box height={'200px'} border="1px solid black">
               피어 소개 배너
             </Box>
             <SelectType type={type} setType={setType} pc />
@@ -95,8 +143,8 @@ const MainPage = ({ initData }: { initData: any }) => {
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              {data.map((project: IProject) => (
-                <Grid item xs={12} key={project.id} sm={6} md={4}>
+              {data?.map((project: IPost) => (
+                <Grid item key={project.user_id} sm={12} md={4}>
                   <MainCard {...project} />
                 </Grid>
               ))}
@@ -111,64 +159,14 @@ const MainPage = ({ initData }: { initData: any }) => {
               ref={target}
             />
           </Stack>
-          <Stack width={'250px'} height={'100%'} bgcolor={'yellow'}>
+          <Stack width={'250px'} height={'100%'}>
             <MainProfile />
             <MainShowcase />
             <MainCarousel />
           </Stack>
         </Stack>
       </Container>
-    )
-  }
-
-  /* mobile 화면 */
-  return (
-    <Container sx={{ backgroundColor: 'gray' }}>
-      <Box sx={{ backgroundColor: 'white' }}>
-        <SelectType type={type} setType={setType} />
-        <Grid container p={2}>
-          <SearchOption
-            openOption={openOption}
-            setOpenOption={setOpenOption}
-            setDetailOption={setDetailOption}
-          />
-          <Grid item xs={12}>
-            <Stack
-              direction="row"
-              alignItems={'center'}
-              justifyContent={'flex-end'}
-            >
-              <SelectSort sort={sort} setSort={setSort} />
-            </Stack>
-          </Grid>
-        </Grid>
-        <Stack alignItems={'center'} gap={2}>
-          {data.map((project: IProject) => (
-            <Box key={project.id}>
-              <MainCard {...project} />
-            </Box>
-          ))}
-        </Stack>
-        <Box
-          sx={{
-            position: 'fixed',
-            right: 20,
-            bottom: 80,
-          }}
-        >
-          <EditButton />
-        </Box>
-      </Box>
-      {spinner && <CircularProgress />}
-      <Box
-        sx={{
-          bottom: 0,
-          height: '1vh',
-          backgroundColor: 'primary.main',
-        }}
-        ref={target}
-      />
-    </Container>
+    </>
   )
 }
 
