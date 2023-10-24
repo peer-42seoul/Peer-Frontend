@@ -7,7 +7,7 @@ import Image from "next/image";
 import React from "react";
 import RecruitFormModal from "./panel/RecruitFormModal";
 import { Viewer } from '@toast-ui/react-editor';
-
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 //이후 ssr 개선 필요
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
