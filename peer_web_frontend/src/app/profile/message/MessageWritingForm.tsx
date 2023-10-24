@@ -6,8 +6,8 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import useAuthStore from '@/states/useAuthStore'
+import MenuItem from '@mui/material/MenuItem'
 import useMessageStore from '@/states/useMessageStore'
-import Image from 'next/image'
 
 interface IProps {
   userInfo?: ILetterTarget
@@ -36,36 +36,22 @@ function MenuItems({ letterTarget }: any) {
       storedSelectedUser: targetId,
     })
   }
-  console.log(`이미지 값`, letterTarget[0].targetProfile)
   return (
     <Box>
       {letterTarget.map((item: any) => {
         return (
           <>
-            <Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  ':hover': { backgroundColor: '#e6e6e6' },
-                }}
-                onClick={() => selectMessageTarget(item.targetId)}
-                key={item.targetId}
-              >
-                <Image
-                  src={`${letterTarget[0].targetProfile}`}
-                  alt="picture_of_sender"
-                  width={100}
-                  height={100}
-                  style={{ borderRadius: '50%' }}
-                ></Image>
-                <Box>
-                  {item.targetNickname ? (
-                    <span>{item.targetNickname}</span>
-                  ) : (
-                    <span>{item.targetEmail}</span>
-                  )}
-                </Box>
-              </Box>
+            <Box
+              onClick={() => selectMessageTarget(item.targetId)}
+              key={item.targetId}
+            >
+              <MenuItem>
+                {item.targetNickname ? (
+                  <span>{item.targetNickname}</span>
+                ) : (
+                  <span>{item.targetEmail}</span>
+                )}
+              </MenuItem>
             </Box>
           </>
         )
