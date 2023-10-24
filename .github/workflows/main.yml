@@ -23,20 +23,20 @@ jobs:
           echo "Directory content:"
           ls -la
       - name: Change to project dic
-        run: cd /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
+        run: cd /home/runner/work/Peer-Frontend/Peer-Frontend
       - name: Install packages
-        run: npm i /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
+        run: npm i /home/runner/work/Peer-Frontend/Peer-Frontend
       - name: Prettier
-        working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
+        working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend
         run: npm run format
       - name: Lint
-        working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend/peer_web_frontend
+        working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend
         run: npm run lint
       # - name: random_reviwer
       #   uses: hkusu/review-assign-action@v1.2.0
       #   with:
       #     configuration-path: ".github/auto_assign.yml"
-          # token: ${{ secrets.GITHUB_TOKEN }}
+      # token: ${{ secrets.GITHUB_TOKEN }}
       # - name: pick_random_reviwer
       #   id: pick_random_reviwer
       #   uses: actions/github-script@v3
@@ -46,7 +46,7 @@ jobs:
       #       const candidate = ['joonseong11', 'HiHoi', 'asroq1', 'KRimwoo', 'SaltySalt77', 'hyeon81', 'heehoh'];
       #       const randomReviewer = candidate[Math.floor(Math.random() * candidate.length)];
       #       const comment = `🎉 @${randomReviewer} 님 랜덤 리뷰어로 당첨되셨습니다! 리뷰를 부탁드립니다. 🙏`
-      #       core.setOutput('comment', comment) 
+      #       core.setOutput('comment', comment)
       #       core.setOutput('reviewer', randomReviewer) // core.setOutput(이름, 값)
 
       # - name: comment PR
