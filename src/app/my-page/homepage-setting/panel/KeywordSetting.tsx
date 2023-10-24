@@ -6,7 +6,7 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
-import { Box, Button, Chip, Stack, Typography } from '@mui/material'
+import { AlertColor, Box, Button, Chip, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
@@ -16,12 +16,19 @@ interface IChip {
   label: string
 }
 
+interface IToastProps {
+  severity: AlertColor | undefined
+  message: string
+}
+
 const KeywordAddingField = ({
   mutate,
   isPc,
+  setToastMessage,
 }: {
   mutate: () => void
   isPc: boolean
+  setToastMessage: (message: IToastProps) => void
 }) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
   const textFieldRef = useRef<HTMLInputElement | null>(null)
@@ -29,14 +36,31 @@ const KeywordAddingField = ({
   const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      if (inputValue === '') return
+      const trimmed = inputValue.trim()
+      if (trimmed.length < 2) {
+        setToastMessage({
+          severity: 'error',
+          message:
+            '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
+        })
+        return
+      }
       await axios
-        .post(`http://localhost:4000/alarmAdd`, { newKeyword: inputValue })
-        .then(() => console.log('api 전송 성공!'))
+        .post(`http://localhost:4000/alarmAdd`, { newKeyword: trimmed })
         .then(() => {
+          setToastMessage({
+            severity: 'success',
+            message: `'${trimmed}'를 알림 키워드 목록에 추가하였습니다.`,
+          })
           mutate()
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          console.log(error)
+          setToastMessage({
+            severity: 'error',
+            message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
+          })
+        })
       console.log(inputValue)
       setInputValue('' as string)
     }
@@ -60,6 +84,7 @@ const KeywordAddingField = ({
           inputRef: textFieldRef,
           value: inputValue,
         }}
+        inputProps={{ maxLength: 7 }}
         fullWidth
       />
     </Box>
@@ -70,10 +95,12 @@ const ChipsArray = ({
   data,
   mutate,
   isLoading,
+  setToastMessage,
 }: {
   mutate: () => void
   data: Array<IChip> | undefined | null
   isLoading: boolean
+  setToastMessage: (message: IToastProps) => void
 }) => {
   const handleDelete = (chip: IChip) => {
     return async () =>
@@ -82,8 +109,18 @@ const ChipsArray = ({
           `https://6a33dc92-80a8-466d-b83a-c2d3ce9b6a1d.mock.pstmn.io/api/v1/alarm/delete?keyword=${chip.label}`,
         )
         .then(() => {
-          console.log('키워드 삭제에 성공하였습니다!', chip.label)
           mutate()
+          setToastMessage({
+            severity: 'success',
+            message: `'${chip.label}'를 알림 키워드 목록에서 삭제했습니다.`,
+          })
+        })
+        .catch((error) => {
+          console.log(error)
+          setToastMessage({
+            severity: 'error',
+            message: `'${chip.label}'를 알림 키워드 목록에서 삭제하지 못했습니다`,
+          })
         })
   }
 
@@ -116,6 +153,7 @@ const KeywordSettingBox = ({
   data,
   isLoading,
   error,
+  setToastMessage,
 }: {
   mutate: () => void
   isPc: boolean
@@ -123,10 +161,15 @@ const KeywordSettingBox = ({
   data: Array<IChip> | undefined | null
   isLoading: boolean
   error: any
+  setToastMessage: (message: IToastProps) => void
 }) => {
   return (
     <Box>
-      <KeywordAddingField mutate={mutate} isPc={isPc} />
+      <KeywordAddingField
+        setToastMessage={setToastMessage}
+        mutate={mutate}
+        isPc={isPc}
+      />
       <CuButton
         variant="text"
         message="전체 삭제"
@@ -135,13 +178,22 @@ const KeywordSettingBox = ({
       {error ? (
         <Typography>데이터를 가져오는 데 실패했습니다.</Typography>
       ) : (
-        <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
+        <ChipsArray
+          setToastMessage={setToastMessage}
+          mutate={mutate}
+          data={data}
+          isLoading={isLoading}
+        />
       )}
     </Box>
   )
 }
 
-const KeywordSetting = () => {
+const KeywordSetting = ({
+  setToastMessage,
+}: {
+  setToastMessage: (message: IToastProps) => void
+}) => {
   // const [keywords, setKeywords] = useState<Array<IChip> | null>(null)
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
@@ -180,6 +232,7 @@ const KeywordSetting = () => {
           isPc={isPc}
           isLoading={isLoading}
           error={error}
+          setToastMessage={setToastMessage}
         />
       ) : (
         <CuButton variant="text" message="키워드 관리" action={openModal} />
@@ -238,6 +291,7 @@ const KeywordSetting = () => {
             isPc={isPc}
             isLoading={isLoading}
             error={error}
+            setToastMessage={setToastMessage}
           />
         </Box>
       </CuModal>
