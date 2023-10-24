@@ -6,10 +6,10 @@ import LinkIcon from "@mui/icons-material/Link";
 import Image from "next/image";
 import React from "react";
 import RecruitFormModal from "./panel/RecruitFormModal";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
 //이후 ssr 개선 필요
-const DynamicViewer = dynamic(() => import("./panel/ToastViewer"), { ssr: false });
+// const DynamicViewer = dynamic(() => import("./panel/ToastViewer"), { ssr: false });
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     const [open, setOpen] = React.useState(false);
@@ -117,10 +117,10 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                     </Stack>
                 ))
             }
-            <Box>
+            {/* <Box>
                 <Typography variant="h6">팀 소개</Typography>
                 <DynamicViewer initialValue={data?.content} />
-            </Box>
+            </Box> */}
         </>
     )
 }
