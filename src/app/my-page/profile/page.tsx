@@ -128,8 +128,8 @@ const MyProfile = () => {
           isPc
             ? undefined
             : {
-                width: window.innerWidth,
-                height: window.innerHeight,
+                width: '100vmax',
+                height: '100vmax',
                 position: 'fixed',
                 top: '50%',
                 left: '50%',
@@ -163,8 +163,8 @@ const MyProfile = () => {
           isPc
             ? undefined
             : {
-                width: window.innerWidth,
-                height: window.innerHeight,
+                width: '100vmax',
+                height: '100vmax',
                 position: 'fixed',
                 top: '50%',
                 left: '50%',

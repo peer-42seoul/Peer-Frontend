@@ -60,6 +60,7 @@ const KeywordAddingField = ({
           inputRef: textFieldRef,
           value: inputValue,
         }}
+        fullWidth
       />
     </Box>
   )
@@ -88,10 +89,12 @@ const ChipsArray = ({
 
   return (
     <Stack direction={'row'} spacing={1} p={1}>
-      {isLoading && !data && <Typography>로딩 중 입니다.</Typography>}
-      {!isLoading && !data && (
-        <Typography>등록한 알림 키워드가 없습니다.</Typography>
-      )}
+      {!data &&
+        (isLoading ? (
+          <Typography>로딩 중 입니다.</Typography>
+        ) : (
+          <Typography>등록한 알림 키워드가 없습니다.</Typography>
+        ))}
       {data &&
         data.map((chip) => {
           return (
@@ -103,6 +106,38 @@ const ChipsArray = ({
           )
         })}
     </Stack>
+  )
+}
+
+const KeywordSettingBox = ({
+  mutate,
+  isPc,
+  deleteAll,
+  data,
+  isLoading,
+  error,
+}: {
+  mutate: () => void
+  isPc: boolean
+  deleteAll: () => void
+  data: Array<IChip> | undefined | null
+  isLoading: boolean
+  error: any
+}) => {
+  return (
+    <Box>
+      <KeywordAddingField mutate={mutate} isPc={isPc} />
+      <CuButton
+        variant="text"
+        message="전체 삭제"
+        action={deleteAll}
+      ></CuButton>
+      {error ? (
+        <Typography>데이터를 가져오는 데 실패했습니다.</Typography>
+      ) : (
+        <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
+      )}
+    </Box>
   )
 }
 
@@ -129,7 +164,7 @@ const KeywordSetting = () => {
     // await axios.delete('/api/v1/alarm/delete/all')
   }
 
-  const { isLoading, data, mutate } = useSWR<Array<IChip> | null>(
+  const { isLoading, data, mutate, error } = useSWR<Array<IChip> | null>(
     'http://localhost:4000/alarm/1',
     getKeywords,
   )
@@ -138,17 +173,14 @@ const KeywordSetting = () => {
     <div>
       <Typography>키워드 설정</Typography>
       {isPc ? (
-        <Box>
-          <KeywordAddingField mutate={mutate} isPc={isPc} />
-          <CuButton
-            variant="text"
-            message="전체 삭제"
-            action={() => deleteAll}
-          ></CuButton>
-          {data && (
-            <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
-          )}
-        </Box>
+        <KeywordSettingBox
+          data={data}
+          mutate={mutate}
+          deleteAll={() => deleteAll()}
+          isPc={isPc}
+          isLoading={isLoading}
+          error={error}
+        />
       ) : (
         <CuButton variant="text" message="키워드 관리" action={openModal} />
       )}
@@ -158,8 +190,8 @@ const KeywordSetting = () => {
         ariaTitle="홈페이지 알림 키워드 설정 모달"
         ariaDescription="홈페이지 알림 키워드 추가 및 삭제"
         style={{
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width: '100vmax',
+          height: '100vmax',
           position: 'fixed',
           top: '50%',
           left: '50%',
@@ -170,7 +202,7 @@ const KeywordSetting = () => {
           p: 2,
         }}
       >
-        <Box height={1} px={2}>
+        <Box sx={{ height: '100vmax', width: '100vmax', padding: '0 16px' }}>
           <Stack
             flexDirection={'row'}
             alignItems={'center'}
@@ -199,15 +231,14 @@ const KeywordSetting = () => {
               disabled
             ></Button>
           </Stack>
-          <KeywordAddingField mutate={mutate} isPc={isPc} />
-          <CuButton
-            variant="text"
-            message="전체 삭제"
-            action={() => deleteAll}
-          ></CuButton>
-          {data && (
-            <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
-          )}
+          <KeywordSettingBox
+            data={data}
+            mutate={mutate}
+            deleteAll={() => deleteAll()}
+            isPc={isPc}
+            isLoading={isLoading}
+            error={error}
+          />
         </Box>
       </CuModal>
     </div>
