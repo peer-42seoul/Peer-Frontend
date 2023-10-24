@@ -21,6 +21,7 @@ const SignUpField = ({
   inValidInput,
   inputProps,
   type,
+  isSubmitting,
 }: ISignUpField) => {
   return (
     <>
@@ -56,6 +57,7 @@ const SignUpField = ({
                         type={type}
                         onClick={onClick}
                         buttonText={buttonText}
+                        isSubmitting={isSubmitting}
                       />
                     )}
                   </InputAdornment>
