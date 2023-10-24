@@ -83,7 +83,10 @@ const MyProfile = () => {
   }
 
   return (
-    <Box px={[2, 4]} py={[3, 4]}>
+    <Box
+      // px={[2, 4]} py={[3, 4]}
+      width={1}
+    >
       {!isPc && <Typography>프로필</Typography>}
 
       <ProfileSection
