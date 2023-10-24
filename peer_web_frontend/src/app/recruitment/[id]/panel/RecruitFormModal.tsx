@@ -1,7 +1,9 @@
 import FormCheckbox from "@/app/panel/FormCheckbox";
 import CuModal from "@/components/CuModal";
-import { Box, Button, FormControl, FormControlLabel, FormGroup, Modal, Radio, RadioGroup, TextField, Typography } from "@mui/material"
-import React, { Dispatch, useState } from "react";
+import useToast from "@/hook/useToast";
+import { Box, Button, FormControl, FormControlLabel, FormGroup, Modal, Portal, Radio, RadioGroup, TextField, Typography } from "@mui/material"
+import axios from "axios";
+import React, { Dispatch, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 type CloseQuestionList = string[];
@@ -53,6 +55,7 @@ const CloseQuestionForm = ({ optionList, control, idx }: { optionList: CloseQues
             rules={{
                 required: '답변을 선택해주세요',
             }}
+            defaultValue={"0"}
             render={({ field }) => (
                 <RadioGroup {...field}>
                     {
@@ -79,6 +82,7 @@ const RatioQuestionForm = ({ optionList, control, idx }: { optionList: RatioQues
             rules={{
                 required: '답변을 선택해주세요',
             }}
+            defaultValue={"0"}
             render={({ field }) => (
                 <RadioGroup {...field}>
                     {
@@ -116,30 +120,31 @@ const CheckQuestionForm = ({ optionList, control, idx }: { optionList: CheckQues
     );
 }
 
-const ConfirmModal = ({open, setOpen}: {open: boolean, setOpen: Dispatch<React.SetStateAction<boolean>>}) => {
-    
+const ConfirmModal = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<React.SetStateAction<boolean>> }) => {
     return (<CuModal
         open={open}
         handleClose={() => setOpen(false)}
         ariaTitle="modal-title"
         ariaDescription="modal-description"
     >
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant="h2" id="modal-title">지원서 제출</Typography>
+        <Box>
+            <Typography variant="h4" id="modal-title">지원서 제출</Typography>
             <Typography id="modal-description">
                 지원서를 제출하시겠습니까?
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box>
                 <Button onClick={() => setOpen(false)}>취소</Button>
-                <Button onClick={() => setOpen(true)}>확인</Button>
+                <Button type="submit" form="myForm">확인</Button>
             </Box>
         </Box>
-    </CuModal>)
+    </CuModal >)
 }
 
 const RecruitFormModal = ({ open, setOpen, user_id, post_id, role }: { open: boolean, setOpen: any, user_id: string, post_id: string, role: string }) => {
     const [openConfirm, setOpenConfirm] = useState(false);
     const { handleSubmit, control, formState: { errors } } = useForm()
+    const { CuToast: CuSuccessToast, isOpen: isSuccessOpen, openToast: openSuccessToast, closeToast: closeSuccessToast } = useToast();
+    const { CuToast: CuFailedToast, isOpen: isFailedOpen, openToast: openFailedToast, closeToast: closeFailedToast } = useToast();
 
     const onSubmit = async (data: any) => {
         console.log("data", data);
@@ -160,28 +165,38 @@ const RecruitFormModal = ({ open, setOpen, user_id, post_id, role }: { open: boo
             role,
             interviewList
         }
-        console.log("value", value);
 
-        setOpenConfirm(true);
-        
-        //제출할 시 모달 필요한지 고려
-        // try {
-        //     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${post_id}`, value);
-        // } catch (e) {
-        //     console.log(e);
-        // }
+        try {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${post_id}`, value);
+            setOpenConfirm(false);
+            openSuccessToast();
+        } catch (e) {
+            setOpenConfirm(false);
+            openFailedToast();
+            console.log("e", e);
+        }
+
     };
 
     return (
         <>
+            <Portal>
+                <CuSuccessToast open={isSuccessOpen} onClose={closeSuccessToast} severity="success">
+                    <Typography>제출에 성공하였습니다.</Typography>
+                </CuSuccessToast>
+                <CuFailedToast open={isFailedOpen} onClose={closeFailedToast} severity="error">
+                    <Typography>제출에 실패하였습니다.</Typography>
+                </CuFailedToast>
+            </Portal>
             <ConfirmModal open={openConfirm} setOpen={setOpenConfirm} />
-            <Modal
-                open={open}
-                onClose={() => setOpen(false)}
-            >
-                <Box bgcolor={"white"} padding={4} height={"90%"} sx={{ overflowY: "scroll" }}>
-                    <Button onClick={() => setOpen(false)}>닫기</Button>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} id="myForm">
+
+                <Modal
+                    open={open}
+                    onClose={() => setOpen(false)}
+                >
+                    <Box bgcolor={"white"} padding={4} height={"90%"} sx={{ overflowY: "scroll" }}>
+                        <Button onClick={() => setOpen(false)}>닫기</Button>
                         <Typography variant="h4">{`${role} 지원 하기`}</Typography>
                         {data?.map((v, idx) => (
                             <Box key={idx}>
@@ -204,10 +219,10 @@ const RecruitFormModal = ({ open, setOpen, user_id, post_id, role }: { open: boo
                                 {errors[idx] && <Typography color="error">{errors[idx]?.message as string}</Typography>}
                             </Box>
                         ))}
-                        <Button type="submit">제출</Button>
-                    </form>
-                </Box>
-            </Modal>
+                        <Button onClick={() => setOpenConfirm(true)}>제출</Button>
+                    </Box>
+                </Modal>
+            </form>
         </>
     )
 }
