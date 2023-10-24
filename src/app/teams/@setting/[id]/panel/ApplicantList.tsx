@@ -34,12 +34,12 @@ const ApplicantList = ({
       .put(
         `${
           process.env.NEXT_PUBLIC_API_URL
-        }/api/v1/team/accept/${teamId}?userId=${member!.id}`,
+        }/api/v1/team/accept/${teamId}?userId=${member!.userId}`,
       )
       .then((res) => {
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
-          setMembers(data.applicants)
+          setMembers(data)
 
           if (index > 0) setIndex(index - 1)
         }
@@ -53,14 +53,14 @@ const ApplicantList = ({
     console.log('reject')
     axios
       .put(
-        `process.env.NEXT_PUBLIC_API_URL/api/v1/team/deny/${teamId}?userId=${
-          member!.id
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/deny/${teamId}?userId=${
+          member!.userId
         }`,
       )
       .then((res) => {
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
-          setMembers(data.applicants)
+          setMembers(data)
 
           if (index > 0) setIndex(index - 1)
         }

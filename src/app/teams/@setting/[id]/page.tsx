@@ -32,7 +32,7 @@ export enum TeamOperationForm {
 }
 export interface IMember {
   name: string
-  id: string
+  userId: string
   grant: TeamGrant
 }
 
@@ -50,27 +50,39 @@ export interface ITeam {
   member: IMember[]
 }
 
-interface interview {
-  //TODO: DTO 수정 필요
+export enum EInterviewType {
+  CLOSE = 'close',
+  OPEN = 'open',
+  RATIO = 'ratio',
+  CHECK = 'check',
+}
+
+//TODO: 타입 묶기
+type CloseQuestionList = string[]
+type RatioQuestionList = {
+  number: string
+  option1: string
+  option2: string
+}
+type CheckQuestionList = string[]
+
+interface IInterview {
   question: string
   answer: string
+  type: EInterviewType
+  optionList: CloseQuestionList | RatioQuestionList | CheckQuestionList | null
 }
 
 export interface IApplicant {
   name: string
-  id: string
-  interview: interview[]
+  userId: string
+  interview: IInterview[]
 }
 
 const TeamsSetupPage = ({ id }: { id: number }) => {
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
-  console.log(id)
-  // const { data, isLoading } = useSWR<ITeam>(
-  //   'process.env.NEXT_PUBLIC_API_URL/api/v1/team/setting/${param}',
-  //   defaultGetFetcher,
-  // )
   const { data, isLoading } = useSWR<ITeam>(
-    'process.env.NEXT_PUBLIC_API_URL/api/v1/team/setting/1',
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${id}`,
     defaultGetFetcher,
   )
 
