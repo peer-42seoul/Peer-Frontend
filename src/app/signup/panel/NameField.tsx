@@ -4,10 +4,9 @@ import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 const NameField = ({ field }: { field: any }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="이름">이름</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="name">이름</CuTextFieldLabel>
       <CuTextField
         field={field}
-        defaultValue=""
         autoComplete="off"
         error={false}
         type="text"

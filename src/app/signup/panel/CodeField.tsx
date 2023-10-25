@@ -20,7 +20,7 @@ const CodeField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="인증번호">인증번호</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="code">인증번호</CuTextFieldLabel>
       <CuTextField
         field={{
           ...field,
@@ -29,7 +29,6 @@ const CodeField = ({
             setCodeSendStatus('before')
           },
         }}
-        defaultValue=""
         autoComplete="off"
         error={codeSendStatus === 'error'}
         type="text"

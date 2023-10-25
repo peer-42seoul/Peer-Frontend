@@ -20,7 +20,7 @@ const EmailField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="이메일">이메일</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
       <CuTextField
         field={{
           ...field,
@@ -29,7 +29,6 @@ const EmailField = ({
             setEmailSendStatus('before')
           },
         }}
-        defaultValue=""
         autoComplete="off"
         error={emailSendStatus === 'error'}
         type="text"

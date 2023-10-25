@@ -17,10 +17,9 @@ const PasswordField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="비밀번호">비밀번호</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="password">비밀번호</CuTextFieldLabel>
       <CuTextField
         field={field}
-        defaultValue=""
         autoComplete="off"
         error={false}
         type={showPassword}

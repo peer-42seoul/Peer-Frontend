@@ -19,7 +19,7 @@ const NickNameField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="닉네임">닉네임</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="nickname">닉네임</CuTextFieldLabel>
       <CuTextField
         field={{
           ...field,
@@ -28,14 +28,13 @@ const NickNameField = ({
             setNickNameSendStatus('before')
           },
         }}
-        defaultValue=""
         autoComplete="off"
         error={nickNameSendStatus === 'error'}
         type="text"
         placeholder="닉네임을 입력하세요"
         inputProps={{
           minLength: 2,
-          maxLength: 10,
+          maxLength: 7,
         }}
         InputProps={{
           endAdornment: (
