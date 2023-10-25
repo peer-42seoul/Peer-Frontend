@@ -25,6 +25,7 @@ const LabelBox = {
 }
 
 const SendEmailForm = () => {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [isEmailSuccessful, setIsEmailSuccessful] = useState(false)
   const {
     handleSubmit,
@@ -38,7 +39,7 @@ const SendEmailForm = () => {
     try {
       console.log('isSubmitting:', isSubmitting)
       // 테스트용 post요청 코드
-      const res = await axios.post(`http://localhost:8080/find`, {
+      const res = await axios.post(`${API_URL}/api/v1/find`, {
         data,
       })
       console.log(res)
