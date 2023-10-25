@@ -41,6 +41,7 @@ export interface ISignUpField {
     maxLength?: number
   }
   type: 'text' | 'password'
+  isSubmitting?: boolean
 }
 
 export interface ISignUpFields {
