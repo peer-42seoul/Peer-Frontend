@@ -6,7 +6,7 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
-import { Box, Button, Chip, Stack, Typography } from '@mui/material'
+import { AlertColor, Box, Button, Chip, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
@@ -16,12 +16,32 @@ interface IChip {
   label: string
 }
 
+interface IToastProps {
+  severity: AlertColor | undefined
+  message: string
+}
+
+const mobileModalStyle = {
+  width: '100vmax',
+  height: '100vmax',
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 2,
+}
+
 const KeywordAddingField = ({
   mutate,
   isPc,
+  setToastMessage,
 }: {
   mutate: () => void
   isPc: boolean
+  setToastMessage: (message: IToastProps) => void
 }) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
   const textFieldRef = useRef<HTMLInputElement | null>(null)
@@ -29,14 +49,31 @@ const KeywordAddingField = ({
   const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      if (inputValue === '') return
+      const trimmed = inputValue.trim()
+      if (trimmed.length < 2) {
+        setToastMessage({
+          severity: 'error',
+          message:
+            '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
+        })
+        return
+      }
       await axios
-        .post(`http://localhost:4000/alarmAdd`, { newKeyword: inputValue })
-        .then(() => console.log('api 전송 성공!'))
+        .post(`http://localhost:4000/alarmAdd`, { newKeyword: trimmed })
         .then(() => {
+          setToastMessage({
+            severity: 'success',
+            message: `'${trimmed}'를 알림 키워드 목록에 추가하였습니다.`,
+          })
           mutate()
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          console.log(error)
+          setToastMessage({
+            severity: 'error',
+            message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
+          })
+        })
       console.log(inputValue)
       setInputValue('' as string)
     }
@@ -60,6 +97,8 @@ const KeywordAddingField = ({
           inputRef: textFieldRef,
           value: inputValue,
         }}
+        inputProps={{ maxLength: 7 }}
+        fullWidth
       />
     </Box>
   )
@@ -69,36 +108,48 @@ const ChipsArray = ({
   data,
   mutate,
   isLoading,
+  setToastMessage,
 }: {
   mutate: () => void
   data: Array<IChip> | undefined | null
   isLoading: boolean
+  setToastMessage: (message: IToastProps) => void
 }) => {
-  const handleDelete = (chip: IChip) => {
-    return async () =>
-      await axios
-        .delete(
-          `https://6a33dc92-80a8-466d-b83a-c2d3ce9b6a1d.mock.pstmn.io/api/v1/alarm/delete?keyword=${chip.label}`,
-        )
-        .then(() => {
-          console.log('키워드 삭제에 성공하였습니다!', chip.label)
-          mutate()
+  const handleDelete = async (chip: IChip) =>
+    await axios
+      .delete(
+        `https://6a33dc92-80a8-466d-b83a-c2d3ce9b6a1d.mock.pstmn.io/api/v1/alarm/delete?keyword=${chip.label}`,
+      )
+      .then(() => {
+        mutate()
+        setToastMessage({
+          severity: 'success',
+          message: `'${chip.label}'를 알림 키워드 목록에서 삭제했습니다.`,
         })
-  }
+      })
+      .catch((error) => {
+        console.log(error)
+        setToastMessage({
+          severity: 'error',
+          message: `'${chip.label}'를 알림 키워드 목록에서 삭제하지 못했습니다`,
+        })
+      })
 
   return (
     <Stack direction={'row'} spacing={1} p={1}>
-      {isLoading && !data && <Typography>로딩 중 입니다.</Typography>}
-      {!isLoading && !data && (
-        <Typography>등록한 알림 키워드가 없습니다.</Typography>
-      )}
+      {!data &&
+        (isLoading ? (
+          <Typography>로딩 중 입니다.</Typography>
+        ) : (
+          <Typography>등록한 알림 키워드가 없습니다.</Typography>
+        ))}
       {data &&
         data.map((chip) => {
           return (
             <Chip
               key={chip.key}
               label={chip.label}
-              onDelete={handleDelete(chip)}
+              onDelete={() => handleDelete(chip)}
             />
           )
         })}
@@ -106,8 +157,96 @@ const ChipsArray = ({
   )
 }
 
-const KeywordSetting = () => {
-  // const [keywords, setKeywords] = useState<Array<IChip> | null>(null)
+const KeywordSettingBox = ({
+  mutate,
+  isPc,
+  data,
+  isLoading,
+  error,
+  setToastMessage,
+}: {
+  mutate: () => void
+  isPc: boolean
+  data: Array<IChip> | undefined | null
+  isLoading: boolean
+  error: any
+  setToastMessage: (message: IToastProps) => void
+}) => {
+  const { isOpen, closeModal, openModal } = useModal()
+
+  const deleteAll = async () => {
+    console.log('전체 삭제')
+    // await axios.delete('/api/v1/alarm/delete/all')
+    closeModal()
+  }
+
+  return (
+    <Box id="keyword-setting-modal-description">
+      <KeywordAddingField
+        setToastMessage={setToastMessage}
+        mutate={mutate}
+        isPc={isPc}
+      />
+      <CuButton
+        variant="text"
+        message="전체 삭제"
+        action={openModal}
+      ></CuButton>
+      {error ? (
+        <Typography>데이터를 가져오지 못했습니다.</Typography>
+      ) : (
+        <ChipsArray
+          setToastMessage={setToastMessage}
+          mutate={mutate}
+          data={data}
+          isLoading={isLoading}
+        />
+      )}
+      <CuModal
+        ariaTitle="alert-modal-title"
+        ariaDescription="alert-modal-description"
+        open={isOpen}
+        handleClose={closeModal}
+        style={{
+          position: 'absolute' as 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+        }}
+      >
+        <Box>
+          <Typography id="alert-modal-title">삭제</Typography>
+          <Typography id="alert-modal-description">
+            모든 키워드를 삭제하시겠습니까?
+          </Typography>
+          <CuButton
+            variant="contained"
+            action={closeModal}
+            message="취소"
+            style={{ width: '50%' }}
+          />
+          <CuButton
+            variant="contained"
+            action={deleteAll}
+            message="삭제"
+            style={{ width: '50%' }}
+          />
+        </Box>
+      </CuModal>
+    </Box>
+  )
+}
+
+const KeywordSetting = ({
+  setToastMessage,
+}: {
+  setToastMessage: (message: IToastProps) => void
+}) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
 
@@ -124,12 +263,7 @@ const KeywordSetting = () => {
       return null
     })
 
-  const deleteAll = async () => {
-    console.log('전체 삭제')
-    // await axios.delete('/api/v1/alarm/delete/all')
-  }
-
-  const { isLoading, data, mutate } = useSWR<Array<IChip> | null>(
+  const { isLoading, data, mutate, error } = useSWR<Array<IChip> | null>(
     'http://localhost:4000/alarm/1',
     getKeywords,
   )
@@ -138,39 +272,25 @@ const KeywordSetting = () => {
     <div>
       <Typography>키워드 설정</Typography>
       {isPc ? (
-        <Box>
-          <KeywordAddingField mutate={mutate} isPc={isPc} />
-          <CuButton
-            variant="text"
-            message="전체 삭제"
-            action={() => deleteAll}
-          ></CuButton>
-          {data && (
-            <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
-          )}
-        </Box>
+        <KeywordSettingBox
+          data={data}
+          mutate={mutate}
+          isPc={isPc}
+          isLoading={isLoading}
+          error={error}
+          setToastMessage={setToastMessage}
+        />
       ) : (
         <CuButton variant="text" message="키워드 관리" action={openModal} />
       )}
       <CuModal
         open={isOpen}
         handleClose={closeModal}
-        ariaTitle="홈페이지 알림 키워드 설정 모달"
-        ariaDescription="홈페이지 알림 키워드 추가 및 삭제"
-        style={{
-          width: window.innerWidth,
-          height: window.innerHeight,
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 2,
-        }}
+        ariaTitle="keyword-setting-modal-title"
+        ariaDescription="keyword-setting-modal-description"
+        style={mobileModalStyle}
       >
-        <Box height={1} px={2}>
+        <Box sx={{ height: '100vmax', width: '100vmax', padding: '0 16px' }}>
           <Stack
             flexDirection={'row'}
             alignItems={'center'}
@@ -186,7 +306,9 @@ const KeywordSetting = () => {
                 height: '40px',
               }}
             />
-            <Typography>키워드 관리</Typography>
+            <Typography id="keyword-setting-modal-title">
+              키워드 관리
+            </Typography>
             <Button
               sx={{
                 border: 'none',
@@ -199,15 +321,14 @@ const KeywordSetting = () => {
               disabled
             ></Button>
           </Stack>
-          <KeywordAddingField mutate={mutate} isPc={isPc} />
-          <CuButton
-            variant="text"
-            message="전체 삭제"
-            action={() => deleteAll}
-          ></CuButton>
-          {data && (
-            <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
-          )}
+          <KeywordSettingBox
+            data={data}
+            mutate={mutate}
+            isPc={isPc}
+            isLoading={isLoading}
+            error={error}
+            setToastMessage={setToastMessage}
+          />
         </Box>
       </CuModal>
     </div>

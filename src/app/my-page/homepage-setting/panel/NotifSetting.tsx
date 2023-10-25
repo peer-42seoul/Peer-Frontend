@@ -1,6 +1,18 @@
 'use client'
-import { Box, FormControlLabel, Grid, Switch, Typography } from '@mui/material'
+import {
+  AlertColor,
+  Box,
+  FormControlLabel,
+  Grid,
+  Switch,
+  Typography,
+} from '@mui/material'
 import React, { useState } from 'react'
+
+interface IToastProps {
+  severity: AlertColor | undefined
+  message: string
+}
 
 const Notif = ({
   checked,
@@ -33,10 +45,16 @@ const Notif = ({
   )
 }
 
-const NotifSetting = () => {
+const NotifSetting = ({
+  setToastMessage,
+}: {
+  setToastMessage: (message: IToastProps) => void
+}) => {
   const [keyword, setKeyword] = useState(false)
   const [team, setTeam] = useState(false)
   const [message, setMessage] = useState(false)
+
+  console.log(setToastMessage)
   return (
     <Box>
       <Grid container rowSpacing={2}>

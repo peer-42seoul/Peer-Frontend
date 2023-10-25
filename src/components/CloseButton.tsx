@@ -1,12 +1,21 @@
 'use client'
 
 import CloseIcon from '@mui/icons-material/Close'
-import { Button } from '@mui/material'
+import { Button, SxProps } from '@mui/material'
 
-export default function CloseButton() {
+export default function CloseButton({
+  style,
+  action,
+}: {
+  style?: SxProps
+  action?: () => void
+}) {
   return (
     <>
-      <Button style={{ border: 'none', color: 'white' }}>
+      <Button
+        onClick={action}
+        sx={style ? style : { border: 'none', color: 'white' }}
+      >
         <CloseIcon />
       </Button>
     </>

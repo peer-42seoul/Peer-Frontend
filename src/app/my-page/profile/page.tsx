@@ -122,14 +122,14 @@ const MyProfile = () => {
       <CuModal
         open={modalOpen.introduction}
         handleClose={() => setModalType('')}
-        ariaTitle="프로필 소개 섹션 수정 모달"
-        ariaDescription="닉네임, 자기 소개 수정 폼"
+        ariaTitle="profile-introduction-setting-modal-title"
+        ariaDescription="profile-introduction-setting-modal-description"
         style={
           isPc
             ? undefined
             : {
-                width: window.innerWidth,
-                height: window.innerHeight,
+                width: '100vmax',
+                height: '100vmax',
                 position: 'fixed',
                 top: '50%',
                 left: '50%',
@@ -157,14 +157,14 @@ const MyProfile = () => {
       <CuModal
         open={modalOpen.links}
         handleClose={() => setModalType('')}
-        ariaTitle="프로필 링크 섹션 수정 모달"
-        ariaDescription="링크 수정 폼"
+        ariaTitle="profile-links-setting-modal-title"
+        ariaDescription="profile-links-setting-modal-description"
         style={
           isPc
             ? undefined
             : {
-                width: window.innerWidth,
-                height: window.innerHeight,
+                width: '100vmax',
+                height: '100vmax',
                 position: 'fixed',
                 top: '50%',
                 left: '50%',
