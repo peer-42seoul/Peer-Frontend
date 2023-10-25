@@ -7,7 +7,8 @@ import useSWR from 'swr'
 import { Stack } from '@mui/material'
 
 export interface ITeamInfo {
-  userId: string
+  // userId: string
+  id: string
   name: string
   dueTo: string
   type: 'project' | 'study'
@@ -20,9 +21,12 @@ export interface ITeamInfo {
 const TeamsListPage = () => {
   const { showTeams } = useShowTeams()
 
+  console.log(showTeams)
+
   //실제 동작해야할 API
   const { data, isLoading } = useSWR(
-    `/api/v1/team/list?teamStatus=${showTeams}`,
+    // `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/list?teamStatus=${showTeams}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/list/userId=1?teamStatus=모집 중`,
     defaultGetFetcher,
   )
 

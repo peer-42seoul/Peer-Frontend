@@ -58,15 +58,17 @@ export enum EInterviewType {
 }
 
 //TODO: 타입 묶기
-type CloseQuestionList = string[]
-type RatioQuestionList = {
+export type CloseQuestionList = string[]
+
+export type RatioQuestionList = {
   number: string
   option1: string
   option2: string
 }
-type CheckQuestionList = string[]
 
-interface IInterview {
+export type CheckQuestionList = string[]
+
+export interface IInterview {
   question: string
   answer: string
   type: EInterviewType
@@ -80,9 +82,10 @@ export interface IApplicant {
 }
 
 const TeamsSetupPage = ({ id }: { id: number }) => {
+  console.log(id)
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const { data, isLoading } = useSWR<ITeam>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/1`,
     defaultGetFetcher,
   )
 

@@ -1,11 +1,22 @@
 'use client'
 
 import { Avatar, Button, Stack, Typography } from '@mui/material'
-import { IApplicant } from '../page'
+import {
+  CheckQuestionList,
+  CloseQuestionList,
+  IApplicant,
+  RatioQuestionList,
+} from '../page'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 import axios from 'axios'
+import {
+  CheckQuestionForm,
+  CloseQuestionForm,
+  RatioQuestionForm,
+} from '@/app/recruitment/[id]/panel/RecruitFormModal'
+import { useForm } from 'react-hook-form'
 
 const ApplicantList = ({
   close,
@@ -15,6 +26,7 @@ const ApplicantList = ({
   teamId: string
 }) => {
   console.log(teamId)
+  const { control } = useForm()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -167,7 +179,33 @@ const ApplicantList = ({
                   <Typography fontWeight="bold">
                     {interview.question}
                   </Typography>
-                  <Typography>{interview.answer}</Typography>
+                  {interview.type === 'open' && (
+                    <Typography>{interview.answer}</Typography>
+                  )}
+                  {interview.type === 'close' && (
+                    <CloseQuestionForm
+                      optionList={interview?.optionList as CloseQuestionList}
+                      control={control}
+                      id={index + ''}
+                      value={interview.answer}
+                    />
+                  )}
+                  {interview.type === 'ratio' && (
+                    <RatioQuestionForm
+                      optionList={interview?.optionList as RatioQuestionList}
+                      control={control}
+                      id={index + ''}
+                      value={interview.answer}
+                    />
+                  )}
+                  {interview.type === 'check' && (
+                    <CheckQuestionForm
+                      optionList={interview?.optionList as CheckQuestionList}
+                      control={control}
+                      id={index + ''}
+                      value={interview.answer}
+                    />
+                  )}
                 </Stack>
               ))
             ) : (
