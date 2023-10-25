@@ -181,7 +181,7 @@ const KeywordSettingBox = ({
   }
 
   return (
-    <Box>
+    <Box id="keyword-setting-modal-description">
       <KeywordAddingField
         setToastMessage={setToastMessage}
         mutate={mutate}
@@ -203,8 +203,8 @@ const KeywordSettingBox = ({
         />
       )}
       <CuModal
-        ariaTitle="전체 삭제 경고 모달"
-        ariaDescription="전체 삭제 경고문"
+        ariaTitle="alert-modal-title"
+        ariaDescription="alert-modal-description"
         open={isOpen}
         handleClose={closeModal}
         style={{
@@ -220,8 +220,10 @@ const KeywordSettingBox = ({
         }}
       >
         <Box>
-          <Typography>삭제</Typography>
-          <Typography>모든 키워드를 삭제하시겠습니까?</Typography>
+          <Typography id="alert-modal-title">삭제</Typography>
+          <Typography id="alert-modal-description">
+            모든 키워드를 삭제하시겠습니까?
+          </Typography>
           <CuButton
             variant="contained"
             action={closeModal}
@@ -284,8 +286,8 @@ const KeywordSetting = ({
       <CuModal
         open={isOpen}
         handleClose={closeModal}
-        ariaTitle="홈페이지 알림 키워드 설정 모달"
-        ariaDescription="홈페이지 알림 키워드 추가 및 삭제"
+        ariaTitle="keyword-setting-modal-title"
+        ariaDescription="keyword-setting-modal-description"
         style={mobileModalStyle}
       >
         <Box sx={{ height: '100vmax', width: '100vmax', padding: '0 16px' }}>
@@ -304,7 +306,9 @@ const KeywordSetting = ({
                 height: '40px',
               }}
             />
-            <Typography>키워드 관리</Typography>
+            <Typography id="keyword-setting-modal-title">
+              키워드 관리
+            </Typography>
             <Button
               sx={{
                 border: 'none',
