@@ -195,6 +195,8 @@ const SignUp = () => {
     } catch (error: any) {
       if (error.response?.status === 400) {
         alert('유효하지 않은 회원가입 정보입니다')
+      } else if (error.response?.status === 409) {
+        alert('소셜 로그인 정보가 잘못되었습니다')
       } else {
         alert('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
       }
@@ -225,6 +227,7 @@ const SignUp = () => {
                     message: '유효한 이메일 형식이 아닙니다',
                   },
                 }}
+                defaultValue=""
                 render={({ field }) => (
                   <EmailField
                     field={field}
@@ -244,6 +247,7 @@ const SignUp = () => {
                 rules={{
                   required: '인증코드를 입력하세요',
                 }}
+                defaultValue=""
                 render={({ field }) => (
                   <CodeField
                     field={field}
@@ -269,6 +273,7 @@ const SignUp = () => {
                       '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
                   },
                 }}
+                defaultValue=""
                 render={({ field }) => (
                   <PasswordField
                     field={field}
@@ -299,9 +304,10 @@ const SignUp = () => {
                   required: '이름을 입력하세요',
                   pattern: {
                     value: /^[가-힣]{2,4}$/i,
-                    message: '한글 2~4자로 입력하세요',
+                    message: '한글 2 ~ 4자로 입력하세요',
                   },
                 }}
+                defaultValue=""
                 render={({ field }) => <NameField field={field} />}
               />
               {(errors?.name && (
@@ -321,6 +327,7 @@ const SignUp = () => {
                     message: '닉네임은 7자 이하여야 합니다',
                   },
                 }}
+                defaultValue=""
                 render={({ field }) => (
                   <NickNameField
                     field={field}
