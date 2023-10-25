@@ -1,55 +1,58 @@
-import { Control, FieldError } from 'react-hook-form'
 import { Dispatch, SetStateAction } from 'react'
 
-import { ISignUpField, ISignUpInputs } from '@/types/ISignUpInputs'
-import SignUpField from './SignUpField'
+import CuTextField from '@/components/CuTextField'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import { Button, InputAdornment } from '@mui/material'
 
 const NickNameField = ({
-  control,
-  error,
-  setIsNickNameSent,
+  field,
+  nickNameSendStatus,
+  setNickNameSendStatus,
   submitNickName,
-  isNickNameSent,
-  nickNameError,
+  isSubmitting,
 }: {
-  control: Control<ISignUpInputs, any>
-  error?: FieldError
-  setIsNickNameSent: Dispatch<SetStateAction<boolean>>
+  field: any
+  nickNameSendStatus: 'before' | 'submit' | 'error'
+  setNickNameSendStatus: Dispatch<SetStateAction<'before' | 'submit' | 'error'>>
   submitNickName: () => void
-  isNickNameSent: boolean
-  nickNameError: boolean
+  isSubmitting: boolean
 }) => {
-  const nickName: ISignUpField = {
-    label: '닉네임',
-    name: 'nickName',
-    control: control,
-    error: error,
-    rules: {
-      required: '닉네임을 입력하세요',
-      minLength: {
-        value: 2,
-        message: '닉네임은 2자 이상이어야 합니다',
-      },
-      maxLength: {
-        value: 7,
-        message: '닉네임은 7자 이하여야 합니다',
-      },
-    },
-    placeholder: '닉네임을 입력하세요',
-    onClick: submitNickName,
-    onChange: () => {
-      setIsNickNameSent(false)
-    },
-    buttonText: '중복 확인',
-    inValidInput: isNickNameSent && nickNameError,
-    inputProps: {
-      minLength: 2,
-      maxLength: 7,
-    },
-    type: 'text',
-  }
-
-  return <SignUpField {...nickName} />
+  return (
+    <>
+      <CuTextFieldLabel htmlFor="닉네임">닉네임</CuTextFieldLabel>
+      <CuTextField
+        field={{
+          ...field,
+          onChange: (e: any) => {
+            field.onChange(e)
+            setNickNameSendStatus('before')
+          },
+        }}
+        defaultValue=""
+        autoComplete="off"
+        error={nickNameSendStatus === 'error'}
+        type="text"
+        placeholder="닉네임을 입력하세요"
+        inputProps={{
+          minLength: 2,
+          maxLength: 10,
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Button
+                variant="contained"
+                disabled={isSubmitting}
+                onClick={submitNickName}
+              >
+                중복 확인
+              </Button>
+            </InputAdornment>
+          ),
+        }}
+      />
+    </>
+  )
 }
 
 export default NickNameField

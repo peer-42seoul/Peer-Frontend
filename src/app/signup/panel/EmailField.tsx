@@ -1,52 +1,58 @@
-import { Control, FieldError } from 'react-hook-form'
 import { Dispatch, SetStateAction } from 'react'
 
-import { ISignUpField, ISignUpInputs } from '@/types/ISignUpInputs'
-import SignUpField from './SignUpField'
+import CuTextField from '@/components/CuTextField'
+import { InputAdornment } from '@mui/material'
+import { Button } from '@mui/material'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 
 const EmailField = ({
-  control,
-  error,
+  field,
+  emailSendStatus,
+  setEmailSendStatus,
   submitEmail,
-  setIsEmailSent,
-  isEmailSent,
-  emailError,
   isSubmitting,
 }: {
-  control: Control<ISignUpInputs, any>
-  error?: FieldError
+  field: any
+  emailSendStatus: 'before' | 'submit' | 'error'
+  setEmailSendStatus: Dispatch<SetStateAction<'before' | 'submit' | 'error'>>
   submitEmail: () => void
-  setIsEmailSent: Dispatch<SetStateAction<boolean>>
-  isEmailSent: boolean
-  emailError: boolean
   isSubmitting: boolean
 }) => {
-  const email: ISignUpField = {
-    label: '이메일',
-    name: 'email',
-    control: control,
-    error: error,
-    rules: {
-      required: '이메일을 입력하세요',
-      pattern: {
-        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-        message: '유효한 이메일 형식이 아닙니다',
-      },
-    },
-    placeholder: '이메일을 입력하세요',
-    onClick: submitEmail,
-    onChange: () => {
-      setIsEmailSent(false)
-    },
-    buttonText: '이메일 인증',
-    inValidInput: isEmailSent && emailError,
-    inputProps: {
-      maxLength: 30,
-    },
-    type: 'text',
-    isSubmitting: isSubmitting,
-  }
-  return <SignUpField {...email} />
+  return (
+    <>
+      <CuTextFieldLabel htmlFor="이메일">이메일</CuTextFieldLabel>
+      <CuTextField
+        field={{
+          ...field,
+          onChange: (e: any) => {
+            field.onChange(e)
+            setEmailSendStatus('before')
+          },
+        }}
+        defaultValue=""
+        autoComplete="off"
+        error={emailSendStatus === 'error'}
+        type="text"
+        placeholder="이메일을 입력하세요"
+        inputProps={{
+          maxLength: 30,
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Button
+                variant="contained"
+                disabled={isSubmitting}
+                onClick={submitEmail}
+              >
+                이메일 인증
+              </Button>
+            </InputAdornment>
+          ),
+        }}
+      />
+    </>
+  )
 }
 
 export default EmailField
