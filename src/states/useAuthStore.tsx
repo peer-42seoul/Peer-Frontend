@@ -34,7 +34,6 @@ const useAuthStore = create<IAuthStore>((set) => {
       set(() => ({
         isLogin: false,
         accessToken: null,
-        refreshToken: null,
       }))
     },
   }
