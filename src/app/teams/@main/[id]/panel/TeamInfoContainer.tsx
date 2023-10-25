@@ -60,6 +60,13 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
         component="img"
         src={data.teamPicturePath ? data.teamPicturePath : defaultLogoPath}
       />
+      <Typography>{data.status}</Typography>
+      <Typography>{data.memberCount}</Typography>
+      <Typography>{data.leaderName}</Typography>
+      <Typography>{data.type}</Typography>
+      <Typography>{data.dueTo}</Typography>
+      <Typography>{data.operationForm}</Typography>
+      <Typography>{data.region}</Typography>
     </Stack>
   )
 
