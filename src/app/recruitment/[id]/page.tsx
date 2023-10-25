@@ -6,10 +6,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import Image from "next/image";
 import React from "react";
 import RecruitFormModal from "./panel/RecruitFormModal";
-// import dynamic from "next/dynamic";
 
-//이후 ssr 개선 필요
-// const DynamicViewer = dynamic(() => import("./panel/ToastViewer"), { ssr: false });
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     const [open, setOpen] = React.useState(false);
@@ -107,11 +104,11 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             </Box>
             <Typography variant="h6">팀 역할</Typography>
             {
-                data?.role?.map((v, index) => (
+                data?.role?.map((roleInfo, index) => (
                     <Stack key={index} direction={"row"}>
-                        <Typography>{v.roleName}</Typography>
-                        <Typography>{v?.number}</Typography>
-                        <Button variant="contained" color="success" onClick={() => { setOpen(true); setRole(v.roleName) }}>
+                        <Typography>{roleInfo.roleName}</Typography>
+                        <Typography>{roleInfo.number}</Typography>
+                        <Button variant="contained" color="success" onClick={() => { setOpen(true); setRole(roleInfo.roleName) }}>
                             지원 하기
                         </Button>
                     </Stack>
