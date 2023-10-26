@@ -1,8 +1,8 @@
-export type TTeamStatus = 'RECRUITING' // TODO : 타입 추가
+export type TTeamStatus = 'RECRUITING' | 'BEFORE' | 'ONGOING' | 'COMPLETE'
 
-export type TTeamType = 'STUDY' // TODO : 타입 추가
+export type TTeamType = 'STUDY' | 'PROJECT'
 
-export type TOperationForm = 'ONLINE' | 'OFFLINE'
+export type TOperationForm = 'ONLINE' | 'OFFLINE' | 'MIX'
 
 export interface ITeamInfo {
   id: number
