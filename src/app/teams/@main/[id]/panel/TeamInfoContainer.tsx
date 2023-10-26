@@ -1,5 +1,8 @@
 // import useSWR from 'swr'
 import { Stack, Box, Typography } from '@mui/material'
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
+import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined'
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
 // import { defaultGetFetcher } from '@/api/fetchers'
 import {
   ITeamInfo,
@@ -24,6 +27,42 @@ const StatusIcon = ({ status }: IStatusIconProps) => {
       return <div>모집중</div>
     default:
       return <div>아아아</div>
+  }
+}
+
+type TIconType = 'MEMBER' | 'LEADER' | 'DATE'
+
+interface IIconInfoProps {
+  type: TIconType
+  text: string
+  // clickHandler가 필요하면 추가
+}
+
+const IconInfo = ({ type, text }: IIconInfoProps) => {
+  switch (type) {
+    case 'MEMBER':
+      return (
+        <Box>
+          <GroupsOutlinedIcon />
+          <Typography>{text}</Typography>
+        </Box>
+      )
+    case 'LEADER':
+      return (
+        <Box>
+          <PermContactCalendarOutlinedIcon />
+          <Typography>{text}</Typography>
+        </Box>
+      )
+    case 'DATE':
+      return (
+        <Box>
+          <CalendarMonthOutlinedIcon />
+          <Typography>{text}</Typography>
+        </Box>
+      )
+    // default:
+    //   return <div>아아아</div>
   }
 }
 
@@ -74,10 +113,10 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
         src={data.teamPicturePath ? data.teamPicturePath : defaultLogoPath}
       />
       <StatusIcon status={data.status} />
-      <Typography>{data.memberCount}</Typography>
-      <Typography>{data.leaderName}</Typography>
+      <IconInfo type="MEMBER" text={data.memberCount} />
+      <IconInfo type="LEADER" text={data.leaderName} />
       <Typography>{data.type}</Typography>
-      <Typography>{data.dueTo}</Typography>
+      <IconInfo type="DATE" text={data.dueTo.toString()} />
       <Typography>{data.operationForm}</Typography>
       <Typography>{data.region}</Typography>
     </Stack>
