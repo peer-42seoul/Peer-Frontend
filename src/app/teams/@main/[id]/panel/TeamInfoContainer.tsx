@@ -5,7 +5,7 @@ import {
   ITeamInfo,
   //   TOperationForm,
   //   TTeamType,
-  //   TTeamStatus,
+  TTeamStatus,
 } from '@/types/ITeamInfo'
 
 interface ITeamInfoContainerProps {
@@ -13,6 +13,19 @@ interface ITeamInfoContainerProps {
 }
 
 const defaultLogoPath = '/images/profile.jpeg' // TODO : 기본 로고 path 확인하기
+
+interface IStatusIconProps {
+  status: TTeamStatus
+}
+
+const StatusIcon = ({ status }: IStatusIconProps) => {
+  switch (status) {
+    case 'RECRUITING':
+      return <div>모집중</div>
+    default:
+      return <div>아아아</div>
+  }
+}
 
 const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
   // TODO : id를 이용해서 데이터 받아오기
@@ -60,7 +73,7 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
         component="img"
         src={data.teamPicturePath ? data.teamPicturePath : defaultLogoPath}
       />
-      <Typography>{data.status}</Typography>
+      <StatusIcon status={data.status} />
       <Typography>{data.memberCount}</Typography>
       <Typography>{data.leaderName}</Typography>
       <Typography>{data.type}</Typography>
