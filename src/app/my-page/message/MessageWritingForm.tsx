@@ -6,8 +6,8 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import useAuthStore from '@/states/useAuthStore'
-import MenuItems from '@/components/CuMenuItems'
 import useMessageStore from '@/states/useMessageStore'
+import Image from 'next/image'
 
 interface IProps {
   userInfo?: ILetterTarget
@@ -27,6 +27,51 @@ export interface ILetterTarget {
   targetEmail: string
   targetNickname: string
   targetProfile: string
+}
+
+function MenuItems({ letterTarget }: any) {
+  const selectMessageTarget = (targetId: number) => {
+    console.log('targetId', targetId)
+    useMessageStore.setState({
+      storedSelectedUser: targetId,
+    })
+  }
+  console.log(`이미지 값`, letterTarget[0].targetProfile)
+  return (
+    <Box>
+      {letterTarget.map((item: any) => {
+        return (
+          <>
+            <Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  ':hover': { backgroundColor: '#e6e6e6' },
+                }}
+                onClick={() => selectMessageTarget(item.targetId)}
+                key={item.targetId}
+              >
+                <Image
+                  src={`${letterTarget[0].targetProfile}`}
+                  alt="picture_of_sender"
+                  width={100}
+                  height={100}
+                  style={{ borderRadius: '50%' }}
+                ></Image>
+                <Box>
+                  {item.targetNickname ? (
+                    <span>{item.targetNickname}</span>
+                  ) : (
+                    <span>{item.targetEmail}</span>
+                  )}
+                </Box>
+              </Box>
+            </Box>
+          </>
+        )
+      })}
+    </Box>
+  )
 }
 
 const MessageForm = ({
@@ -94,6 +139,8 @@ const MessageForm = ({
 const MessageWritingForm = ({ handleClose }: any) => {
   const [keyword, setKeyword] = useState('')
   const [letterTarget, setLetterTarget] = useState<ILetterTarget | undefined>()
+
+  //TODO: 반환된 검색 결과 state 에 실어서 보내기 (받는 사람 정보)
 
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {

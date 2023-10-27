@@ -1,5 +1,5 @@
 import CuButton from '@/components/CuButton'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 const SettingType = {
@@ -26,8 +26,12 @@ const SettingContainer = ({
 }) => {
   return (
     <div>
-      <Typography>{settingTypeMap.get(settingTitle)} 수정</Typography>
-      {children}
+      <Typography id={`profile-${settingTitle}-setting-modal-title`}>
+        {settingTypeMap.get(settingTitle)} 수정
+      </Typography>
+      <Box id={`profile-${settingTitle}-setting-modal-description`}>
+        {children}
+      </Box>
       <CuButton
         variant="contained"
         action={onNegativeClick}
