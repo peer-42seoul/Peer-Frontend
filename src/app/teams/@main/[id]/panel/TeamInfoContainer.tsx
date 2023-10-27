@@ -1,5 +1,5 @@
 // import useSWR from 'swr'
-import { Stack, Box, Typography, Chip } from '@mui/material'
+import { Avatar, Stack, Typography, Chip } from '@mui/material'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
@@ -149,8 +149,10 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
   // render 3 : 정상
   return (
     <Stack direction={'row'} spacing={1}>
-      <Box
-        component="img"
+      <Avatar
+        alt="team logo"
+        variant="rounded"
+        sx={{ width: 89, height: 92, border: 1, borderRadius: 1.2 }}
         src={data.teamPicturePath ? data.teamPicturePath : defaultLogoPath}
       />
       <Stack>
