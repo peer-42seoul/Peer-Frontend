@@ -2,13 +2,13 @@ import React from 'react';
 import { Select, MenuItem, Box } from '@mui/material';
 import CuTextFieldLabel from '@/components/CuTextFieldLabel';
 
-interface ReportTypeSelectProps {
+interface IReportTypeSelectProps {
   field: any;
   label: string;
   options: string[];
 }
 
-const ReportTypeSelect = ({ field, label, options } : ReportTypeSelectProps) => {
+const ReportTypeSelect = ({ field, label, options } : IReportTypeSelectProps) => {
   return (
     <Box style={{ display: 'flex', alignItems: 'center' }}>
       <CuTextFieldLabel htmlFor={field.name} style={{ width: '120px' }}>
