@@ -6,34 +6,47 @@ import {
   Typography,
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { cloneElement, ReactElement } from 'react'
-
-function generate(element: ReactElement) {
-  return [0, 1, 2, 3].map((value) =>
-    cloneElement(element, {
-      key: value,
-    }),
-  )
-}
+import { useEffect, useState } from 'react'
 
 export default function SearchHistory() {
+  const [searchKeywords, setSearchKeywords] = useState<string[]>([])
+
+  // 컴포넌트가 마운트 될 때 localStorage에서 검색어 가져오기
+  useEffect(() => {
+    const storedKeywords = Object.keys(localStorage)
+      .filter((key) => key.startsWith('searchWord_'))
+      .map((key) => localStorage.getItem(key) || '') // 만약 localStorage에서 아이템을 가져오지 못하는 경우를 대비해서 ''를 추가했습니다.
+    setSearchKeywords(storedKeywords)
+  }, [])
+
+  // 검색어 삭제 함수
+  const deleteKeyword = (index: number) => {
+    localStorage.removeItem(`searchWord_${index}`)
+    setSearchKeywords((prev) => prev.filter((_, i) => i !== index))
+  }
+
   return (
     <>
       <List>
         <Typography padding={1} fontSize={'small'} color={'grey'}>
           최근 검색어
         </Typography>
-        {generate(
+        {searchKeywords.map((keyword, index) => (
           <ListItem
+            key={index}
             secondaryAction={
-              <IconButton edge="end" aria-label="delete">
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => deleteKeyword(index)}
+              >
                 <DeleteIcon />
               </IconButton>
             }
           >
-            <ListItemText primary="Single-line item" />
-          </ListItem>,
-        )}
+            <ListItemText primary={keyword} />
+          </ListItem>
+        ))}
       </List>
     </>
   )
