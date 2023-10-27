@@ -9,11 +9,13 @@ const SignUpFieldButton = ({
   type,
   onClick,
   buttonText,
+  isSubmitting,
 }: {
   name: 'email' | 'code' | 'password' | 'nickName' | 'name'
   type: 'text' | 'password'
   onClick?: () => void
   buttonText?: string
+  isSubmitting?: boolean
 }) => {
   if (name === 'password') {
     return (
@@ -27,7 +29,7 @@ const SignUpFieldButton = ({
     )
   }
   return (
-    <Button variant="contained" onClick={onClick}>
+    <Button variant="contained" disabled={isSubmitting} onClick={onClick}>
       {buttonText}
     </Button>
   )
