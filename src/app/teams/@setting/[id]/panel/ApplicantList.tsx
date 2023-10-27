@@ -11,13 +11,12 @@ import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 import axios from 'axios'
-import {
-  CheckQuestionForm,
-  CloseQuestionForm,
-  RatioQuestionForm,
-} from '@/app/recruitment/[id]/panel/RecruitFormModal'
+
 import { useForm } from 'react-hook-form'
 import useMedia from '@/hook/useMedia'
+import RatioQuestionForm from '@/app/recruitment/[id]/panel/RatioQuestionForm'
+import CloseQuestionForm from '@/app/recruitment/[id]/panel/CloseQuestionForm'
+import CheckQuestionForm from '@/app/recruitment/[id]/panel/CheckQuestionForm'
 
 const ApplicantList = ({
   close,
@@ -188,7 +187,7 @@ const ApplicantList = ({
                     <CloseQuestionForm
                       optionList={interview?.optionList as CloseQuestionList}
                       control={control}
-                      id={index + ''}
+                      idx={index}
                       value={interview.answer}
                     />
                   )}
@@ -196,7 +195,7 @@ const ApplicantList = ({
                     <RatioQuestionForm
                       optionList={interview?.optionList as RatioQuestionList}
                       control={control}
-                      id={index + ''}
+                      idx={index}
                       value={interview.answer}
                     />
                   )}
@@ -204,7 +203,7 @@ const ApplicantList = ({
                     <CheckQuestionForm
                       optionList={interview?.optionList as CheckQuestionList}
                       control={control}
-                      id={index + ''}
+                      idx={index}
                       value={interview.answer}
                     />
                   )}
