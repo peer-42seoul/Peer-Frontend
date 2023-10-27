@@ -46,7 +46,7 @@ const ImageUploadButton = ({
     }
   }
   return (
-    <Button>
+    <Button component="label">
       {children}
       <input
         type="file"
