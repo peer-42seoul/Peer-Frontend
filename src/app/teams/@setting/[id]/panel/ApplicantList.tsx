@@ -17,6 +17,7 @@ import {
   RatioQuestionForm,
 } from '@/app/recruitment/[id]/panel/RecruitFormModal'
 import { useForm } from 'react-hook-form'
+import useMedia from '@/hook/useMedia'
 
 const ApplicantList = ({
   close,
@@ -26,6 +27,7 @@ const ApplicantList = ({
   teamId: string
 }) => {
   console.log(teamId)
+  const { isPc } = useMedia()
   const { control } = useForm()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -134,7 +136,7 @@ const ApplicantList = ({
 
   return (
     <>
-      <Stack border="1px solid" borderRadius={2} height={400}>
+      <Stack border="1px solid" borderRadius={2} height={isPc ? 600 : 400}>
         <Stack
           direction="row"
           display="flex"
@@ -170,7 +172,7 @@ const ApplicantList = ({
             borderRadius={2}
             p={2}
             overflow="auto"
-            height={100}
+            height={isPc ? 300 : 100}
             ref={scrollRef}
           >
             {member ? (

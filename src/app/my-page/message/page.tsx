@@ -9,7 +9,6 @@ import CuModal from '@/components/CuModal'
 import MessageWritingForm from './MessageWritingForm'
 import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
-import MessageNavigator from '@/components/MessageNavigator'
 import useMedia from '@/hook/useMedia'
 
 // import useAuthStore from '@/states/useAuthStore'
@@ -37,32 +36,22 @@ const MessageMain = () => {
         <CuModal
           open={isOpen}
           handleClose={closeModal}
-          title={'create_message'}
-          description={'create_message'}
+          ariaTitle={'create_message'}
+          ariaDescription={'create_message'}
         >
           <MessageWritingForm handleClose={closeModal} />
         </CuModal>
       )}
       <Box sx={{ display: 'grid', width: '100%' }}>
         <Box>
-          {isPc ? (
-            <Button
-              variant="outlined"
-              onClick={() => {
-                openModal()
-              }}
-            >
-              쪽지 보내기
-            </Button>
-          ) : (
-            <MessageNavigator
-              title="쪽지"
-              messageType="main"
-              // open={isOpen}
-              // handleClose={closeModal}
-              openModal={openModal}
-            />
-          )}
+          <Button
+            variant="outlined"
+            onClick={() => {
+              openModal()
+            }}
+          >
+            쪽지 보내기
+          </Button>
           <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}>
             <MessageList
               data={messageList || []}

@@ -1,26 +1,19 @@
-import FormCheckbox from '@/app/panel/FormCheckbox'
+import useToast from '@/hook/useToast'
 import {
   Box,
   Button,
-  FormControlLabel,
-  FormGroup,
   Modal,
-  Radio,
-  RadioGroup,
+  Portal,
   TextField,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-
-type CloseQuestionList = string[]
-type RatioQuestionList = {
-  number: string
-  option1: string
-  option2: string
-}
-type CheckQuestionList = string[]
-
+import ConfirmModal from './ConfirmModal'
+import CloseQuestionForm, { CloseQuestionList } from './CloseQuestionForm'
+import CheckQuestionForm, { CheckQuestionList } from './CheckQuestionForm'
+import RatioQuestionForm, { RatioQuestionList } from './RatioQuestionForm'
 interface IInterviewData {
   question: string
   type: 'close' | 'open' | 'ratio' | 'check'
@@ -48,186 +41,178 @@ const data: IInterviewData[] = [
     },
   },
   {
+    question: '질문내용 2',
+    type: 'open',
+    optionList: null,
+  },
+  {
+    question: '질문내용 3',
+    type: 'ratio',
+    optionList: {
+      number: '5',
+      option1: '일번옵션',
+      option2: '마지막옵션',
+    },
+  },
+  {
     question: '질문내용 4',
     type: 'check',
     optionList: ['1번선택지', '2번선택지', '3번선택지'],
   },
 ]
 
-export const CloseQuestionForm = ({
-  optionList,
-  control,
-  id,
-  value,
-}: {
-  optionList: CloseQuestionList
-  control: any
-  id: string
-  value?: string
-}) => {
-  return (
-    <Controller
-      name={id}
-      control={control}
-      defaultValue={value ? value : ''}
-      render={({ field }) => (
-        <RadioGroup {...field}>
-          {optionList?.map((data: string, index: number) => {
-            return (
-              <FormControlLabel
-                control={<Radio />}
-                label={data}
-                value={index}
-                key={index}
-              />
-            )
-          })}
-        </RadioGroup>
-      )}
-    />
-  )
-}
-
-export const RatioQuestionForm = ({
-  optionList,
-  control,
-  id,
-  value,
-}: {
-  optionList: RatioQuestionList
-  control: any
-  id: string
-  value?: string
-}) => {
-  const number = optionList?.number
-  const listArray = Array.from({ length: number }, (_, index) =>
-    index.toString(),
-  )
-  return (
-    <Controller
-      name={id}
-      control={control}
-      defaultValue={value ? value : ''}
-      render={({ field }) => (
-        <RadioGroup {...field}>
-          {listArray?.map((data: string, index: number) => {
-            return (
-              <Box key={index}>
-                <FormControlLabel
-                  control={<Radio />}
-                  label={data}
-                  value={index}
-                />
-              </Box>
-            )
-          })}
-        </RadioGroup>
-      )}
-    />
-  )
-}
-
-export const CheckQuestionForm = ({
-  optionList,
-  control,
-  id,
-  value,
-}: {
-  optionList: CheckQuestionList
-  control: any
-  id: string
-  value?: string
-}) => {
-  return (
-    <FormGroup defaultValue={value ? value : ''}>
-      {optionList?.map((data: string, index: number) => {
-        return (
-          <FormCheckbox
-            name={id + '-' + index}
-            label={data}
-            control={control}
-            key={index}
-          />
-        )
-      })}
-    </FormGroup>
-  )
-}
-
 const RecruitFormModal = ({
   open,
   setOpen,
+  user_id,
   post_id,
-  type,
+  role,
 }: {
   open: boolean
   setOpen: any
+  user_id: string
   post_id: string
-  type: string
+  role: string
 }) => {
-  const { handleSubmit, control } = useForm()
-  console.log('optionList', data)
-  const onSubmit = (data: any) => {
-    console.log(data)
-    //추후에 제출할 form
+  const [openConfirm, setOpenConfirm] = useState(false)
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm()
+  const {
+    CuToast: CuSuccessToast,
+    isOpen: isSuccessOpen,
+    openToast: openSuccessToast,
+    closeToast: closeSuccessToast,
+  } = useToast()
+  const {
+    CuToast: CuFailedToast,
+    isOpen: isFailedOpen,
+    openToast: openFailedToast,
+    closeToast: closeFailedToast,
+  } = useToast()
+
+  const submitForm = () => {
+    handleSubmit(onSubmit)()
+  }
+
+  const onSubmit = async (data: any) => {
+    console.log('data', data)
+    const array = Object.values(data)
+    const answerList = array?.map((res: any) => {
+      if (typeof res !== 'string') {
+        const idxArr = res?.map((item: any, idx: number) =>
+          item === true ? idx : undefined,
+        )
+        const trueArr = idxArr?.filter((item: any) => item !== undefined)
+        return trueArr.join('^&%') //정해놓은 구분자로 넣기
+      } else return res
+    })
+
     const value = {
-      user_id: '',
+      user_id,
       post_id,
-      type,
-      interviewList: [
-        {
-          question_id: '',
-          answer: '',
-        },
-      ],
+      role,
+      answerList,
     }
     console.log('value', value)
+
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${post_id}`,
+        value,
+      )
+      setOpenConfirm(false)
+      openSuccessToast()
+    } catch (e) {
+      setOpenConfirm(false)
+      openFailedToast()
+      console.log('e', e)
+    }
   }
 
   return (
-    <Modal open={open} onClose={() => setOpen(false)}>
-      <Box bgcolor={'white'} maxWidth={'90vw'} overflow={'scroll'} h="80vh">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Typography variant="h4">{`${type} 지원 하기`}</Typography>
-          {data?.map((v, idx) => (
-            <React.Fragment key={idx}>
-              <Typography>{idx + 1}번 질문</Typography>
-              <Typography>{v.question}</Typography>
-              {v.type === 'open' && (
-                <Controller
-                  name={idx + ''}
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => <TextField {...field} />}
-                />
-              )}
-              {v.type === 'close' && (
-                <CloseQuestionForm
-                  optionList={v?.optionList as CloseQuestionList}
-                  control={control}
-                  id={idx + ''}
-                />
-              )}
-              {v.type === 'ratio' && (
-                <RatioQuestionForm
-                  optionList={v?.optionList as RatioQuestionList}
-                  control={control}
-                  id={idx + ''}
-                />
-              )}
-              {v.type === 'check' && (
-                <CheckQuestionForm
-                  optionList={v?.optionList as CheckQuestionList}
-                  control={control}
-                  id={idx + ''}
-                />
-              )}
-            </React.Fragment>
-          ))}
-          <Button type="submit">제출</Button>
-        </form>
-      </Box>
-    </Modal>
+    <>
+      <Portal>
+        <CuSuccessToast
+          open={isSuccessOpen}
+          onClose={closeSuccessToast}
+          severity="success"
+        >
+          <Typography>제출에 성공하였습니다.</Typography>
+        </CuSuccessToast>
+        <CuFailedToast
+          open={isFailedOpen}
+          onClose={closeFailedToast}
+          severity="error"
+        >
+          <Typography>제출에 실패하였습니다.</Typography>
+        </CuFailedToast>
+      </Portal>
+      <form>
+        <ConfirmModal
+          open={openConfirm}
+          setOpen={setOpenConfirm}
+          submitForm={submitForm}
+        />
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <Box
+            bgcolor={'white'}
+            padding={4}
+            height={'90%'}
+            sx={{ overflowY: 'scroll' }}
+          >
+            <Button onClick={() => setOpen(false)}>닫기</Button>
+            <Typography variant="h4">{`${role} 지원 하기`}</Typography>
+            {data?.map((quest, idx) => (
+              <Box key={idx}>
+                <Typography>{idx + 1}번 질문</Typography>
+                <Typography>{quest.question}</Typography>
+                {quest.type === 'open' && (
+                  <Controller
+                    rules={{
+                      required: '답변을 입력해주세요',
+                    }}
+                    name={idx.toString()}
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => <TextField {...field} />}
+                  />
+                )}
+                {quest.type === 'close' && (
+                  <CloseQuestionForm
+                    optionList={quest?.optionList as CloseQuestionList}
+                    control={control}
+                    idx={idx}
+                  />
+                )}
+                {quest.type === 'ratio' && (
+                  <RatioQuestionForm
+                    optionList={quest?.optionList as RatioQuestionList}
+                    control={control}
+                    idx={idx}
+                  />
+                )}
+                {quest.type === 'check' && (
+                  <CheckQuestionForm
+                    optionList={quest?.optionList as CheckQuestionList}
+                    control={control}
+                    idx={idx}
+                  />
+                )}
+                {errors[idx] && (
+                  <Typography color="error">
+                    {errors[idx]?.message as string}
+                  </Typography>
+                )}
+              </Box>
+            ))}
+            <Button onClick={() => setOpenConfirm(true)}>제출</Button>
+          </Box>
+        </Modal>
+      </form>
+    </>
   )
 }
 

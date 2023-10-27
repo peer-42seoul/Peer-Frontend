@@ -31,6 +31,7 @@ const SignUp = () => {
     handleSubmit,
     control,
     errors,
+    isSubmitting,
   } = useSignUpForm()
 
   const mainStyle = {
@@ -90,6 +91,7 @@ const SignUp = () => {
               />
               <Button
                 aria-label="다음 버튼"
+                disabled={isSubmitting}
                 sx={buttonStyle}
                 variant="contained"
                 onClick={submitCode}
@@ -111,6 +113,7 @@ const SignUp = () => {
               />
               <Button
                 aria-label="회원가입 버튼"
+                disabled={isSubmitting}
                 sx={buttonStyle}
                 variant="contained"
                 type="submit"

@@ -9,7 +9,6 @@ const useSignUpForm = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
   const router = useRouter()
   const searchParams = useSearchParams()
-
   const socialEmail = searchParams.get('social-email')
 
   const {
@@ -28,13 +27,18 @@ const useSignUpForm = () => {
   )
   const [isNickNameSent, setIsNickNameSent] = useState<boolean>(false)
   const [nickNameError, setNickNameError] = useState<boolean>(false)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+
+  // const { EmailToast, is } = useToast()
 
   const submitEmail = async () => {
+    setIsSubmitting(true)
     setIsEmailSent(true)
     const email = getValues('email')
     if (email === undefined || errors.email?.message) {
       alert('이메일을 확인해주세요') // 토스트로 바꿔줄 예정
       setEmailError(true)
+      setIsSubmitting(false)
       return
     }
     try {
@@ -53,12 +57,15 @@ const useSignUpForm = () => {
         alert('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
       }
     }
+    setIsSubmitting(false)
   }
 
   const submitCode = async () => {
+    setIsSubmitting(true)
     setIsCodeSent(true)
     if (isEmailSent === false || emailError === true) {
       alert('이메일을 인증해주세요') // 토스트로 바꿔줄 예정
+      setIsSubmitting(false)
       return
     }
     const email = getValues('email')
@@ -90,14 +97,17 @@ const useSignUpForm = () => {
         alert('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
       }
     }
+    setIsSubmitting(false)
   }
 
   const submitNickName = async () => {
+    setIsSubmitting(true)
     setIsNickNameSent(true)
     const nickName = getValues('nickName')
     if (nickName === undefined || errors.nickName?.message) {
       alert('닉네임을 확인해주세요') // 토스트로 바꿔줄 예정
       setNickNameError(true)
+      setIsSubmitting(false)
       return
     }
     try {
@@ -116,19 +126,24 @@ const useSignUpForm = () => {
         alert('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
       }
     }
+    setIsSubmitting(false)
   }
 
   const submitSignUp: SubmitHandler<ISignUpInputs> = async (data) => {
+    setIsSubmitting(true)
     if (isEmailSent === false || emailError === true) {
       alert('이메일을 인증해주세요')
+      setIsSubmitting(false)
       return
     }
     if (isCodeSent === false || codeError === true) {
       alert('인증코드를 인증해주세요')
+      setIsSubmitting(false)
       return
     }
     if (isNickNameSent === false || nickNameError === true) {
       alert('닉네임을 인증해주세요')
+      setIsSubmitting(false)
       return
     }
     const { email, password, name, nickName } = data
@@ -151,6 +166,7 @@ const useSignUpForm = () => {
         alert('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
       }
     }
+    setIsSubmitting(false)
   }
 
   return {
@@ -173,6 +189,7 @@ const useSignUpForm = () => {
     handleSubmit,
     control,
     errors,
+    isSubmitting,
   }
 }
 

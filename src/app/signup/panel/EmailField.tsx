@@ -11,6 +11,7 @@ const EmailField = ({
   setIsEmailSent,
   isEmailSent,
   emailError,
+  isSubmitting,
 }: {
   control: Control<ISignUpInputs, any>
   error?: FieldError
@@ -18,6 +19,7 @@ const EmailField = ({
   setIsEmailSent: Dispatch<SetStateAction<boolean>>
   isEmailSent: boolean
   emailError: boolean
+  isSubmitting: boolean
 }) => {
   const email: ISignUpField = {
     label: '이메일',
@@ -42,6 +44,7 @@ const EmailField = ({
       maxLength: 30,
     },
     type: 'text',
+    isSubmitting: isSubmitting,
   }
   return <SignUpField {...email} />
 }
