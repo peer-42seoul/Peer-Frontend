@@ -1,196 +1,28 @@
 // import useSWR from 'swr'
-import { Avatar, Stack, Typography, Chip } from '@mui/material'
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
-import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined'
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
+import { Avatar, Stack, Typography } from '@mui/material'
 // import { defaultGetFetcher } from '@/api/fetchers'
-import {
-  ITeamInfo,
-  TOperationForm,
-  TTeamType,
-  TTeamStatus,
-  ITeamMember,
-} from '@/types/ITeamInfo'
-import CuModal from '@/components/CuModal'
+import { ITeamInfo } from '@/types/ITeamInfo'
 import useModal from '@/hook/useModal'
-
-interface ITeamInfoContainerProps {
-  id: number
-}
+import {
+  StatusIcon,
+  IconInfo,
+  RegionInfo,
+  OperationFormInfo,
+  TypeInfo,
+} from './TeamInfoComponent'
+import TeamMemberModal from './TeamMemberModal'
 
 const defaultLogoPath = '/images/profile.jpeg' // TODO : 기본 로고 path 확인하기
 
-interface IStatusIconProps {
-  status: TTeamStatus
-}
-
-const StatusIcon = ({ status }: IStatusIconProps) => {
-  // TODO : 디자인 확정되지 않음
-  switch (status) {
-    case 'RECRUITING':
-      return <Chip label={'모집 중'} sx={{ backgroundColor: '#FFFBDB' }} />
-    case 'BEFORE':
-      return <Chip label={'시작 전'} sx={{ backgroundColor: '#B5B5B5' }} />
-    case 'ONGOING':
-      return <Chip label={'진행 중'} sx={{ backgroundColor: '#EADFFF' }} />
-    case 'COMPLETE':
-      return <Chip label={'진행 완료'} sx={{ backgroundColor: '#F7C5C5' }} />
-  }
-}
-
-type TIconType = 'MEMBER' | 'LEADER' | 'DATE'
-
-interface IIconInfoProps {
-  type: TIconType
-  text: string
-  onClick?: () => void
-}
-
-const IconInfo = ({ type, text, onClick }: IIconInfoProps) => {
-  switch (type) {
-    case 'MEMBER':
-      return (
-        <Stack direction={'row'} onClick={onClick} sx={{ cursor: 'pointer' }}>
-          <GroupsOutlinedIcon />
-          <Typography>{text}</Typography>
-        </Stack>
-      )
-    case 'LEADER':
-      return (
-        <Stack direction={'row'}>
-          <PermContactCalendarOutlinedIcon />
-          <Typography>{text}</Typography>
-        </Stack>
-      )
-    case 'DATE':
-      return (
-        <Stack direction={'row'}>
-          <CalendarMonthOutlinedIcon />
-          <Typography>{text}</Typography>
-        </Stack>
-      )
-  }
-}
-
-interface IRegionInfoProps {
-  region: string
-}
-
-const RegionInfo = ({ region }: IRegionInfoProps) => {
-  // TODO : 디자인 확정되지 않음
-  return <Chip label={region} />
-}
-
-interface IOperationFormInfoProps {
-  operationForm: TOperationForm
-}
-
-const OperationFormInfo = ({ operationForm }: IOperationFormInfoProps) => {
-  // TODO : 디자인 확정되지 않음
-  switch (operationForm) {
-    case 'ONLINE':
-      return <Chip label={'온라인'} />
-    case 'OFFLINE':
-      return <Chip label={'오프라인'} />
-    case 'MIX':
-      return <Chip label={'온/오프라인'} />
-  }
-}
-
-interface ITypeInfoProps {
-  type: TTeamType
-}
-
-const TypeInfo = ({ type }: ITypeInfoProps) => {
-  // TODO : 디자인 확정되지 않음
-  switch (type) {
-    case 'PROJECT':
-      return <Chip label={'project'} />
-    case 'STUDY':
-      return <Chip label={'study'} />
-  }
-}
-
-interface ITeamMemberModalProps {
-  teamId: number
-  open: boolean
-  handleClose: () => void
-}
-
-const TeamMemberModal = ({
-  teamId,
-  open,
-  handleClose,
-}: ITeamMemberModalProps) => {
-  // TODO : 팀원 목록 받아오기
-  // const { data, error, isLoading } = useSWR<Array<ITeamMember>>(
-  //   `/api/v1/team/main/member/${teamId}`,
-  //   defaultGetFetcher,
-  // )
-  void teamId
-
-  const {
-    data,
-    error,
-    isLoading,
-  }: { data: ITeamMember[]; error: any; isLoading: boolean } = {
-    data: [
-      {
-        id: 1,
-        name: 'qwer',
-        role: 'LEADER',
-      },
-      {
-        id: 2,
-        name: 'asdf',
-        role: 'MEMBER',
-      },
-    ],
-    error: false,
-    isLoading: false,
-  }
-
-  // render 1 : 로딩중
-  if (isLoading) {
-    // 로딩 컴포넌트 구체화
-    return <div>로딩중</div>
-  }
-
-  // render 2 : 에러
-  if (error || !data) {
-    // 에러 컴포넌트 구체화
-    // 에러 알림?!
-    return <div>에러!</div>
-  }
-
-  // render 3 : 정상
-  return (
-    // TODO: 디자인 확정되지 않음
-    <CuModal
-      open={open}
-      handleClose={handleClose}
-      ariaTitle={'팀원 목록'}
-      ariaDescription={'팀원 목록을 확인할 수 있습니다.'}
-    >
-      <Stack spacing={1}>
-        {data.map((member) => (
-          <Stack key={member.id}>
-            <Typography>name: {member.name}</Typography>
-            <Typography>role: {member.role.toLowerCase()}</Typography>
-          </Stack>
-        ))}
-      </Stack>
-    </CuModal>
-  )
-}
-
-const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
+const TeamInfoContainer = ({ id }: { id: number }) => {
   const { isOpen, closeModal, openModal } = useModal()
   // TODO : id를 이용해서 데이터 받아오기
   //   const { data, error, isLoading } = useSWR<ITeamInfo>(
   //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/main/${id}`,
   //     defaultGetFetcher,
   //   )
+
+  // Mock Data
   const {
     data,
     error,
