@@ -76,7 +76,6 @@ const ReportForm = () => {
                 field={field}
                 id="targetUrl"
                 style={{ width: 'calc(100% - 120px)' }}
-                placeholder="신고 내용을 작성해주세요"
                 disabled
               />
             </Box>
