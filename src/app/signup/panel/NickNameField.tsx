@@ -2,7 +2,10 @@ import { Dispatch, SetStateAction } from 'react'
 
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
-import { Button, InputAdornment } from '@mui/material'
+import { Button, InputAdornment, Typography } from '@mui/material'
+
+import { ControllerRenderProps, FieldError } from 'react-hook-form'
+import { ISignUpInputs } from '@/types/ISignUpInputs'
 
 const NickNameField = ({
   field,
@@ -10,16 +13,18 @@ const NickNameField = ({
   setNickNameSendStatus,
   submitNickName,
   isSubmitting,
+  error,
 }: {
-  field: any
+  field: ControllerRenderProps<ISignUpInputs, 'nickName'>
   nickNameSendStatus: 'before' | 'submit' | 'error'
   setNickNameSendStatus: Dispatch<SetStateAction<'before' | 'submit' | 'error'>>
   submitNickName: () => void
   isSubmitting: boolean
+  error: FieldError | undefined
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="nickname">닉네임</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="nickName">닉네임</CuTextFieldLabel>
       <CuTextField
         field={{
           ...field,
@@ -50,6 +55,9 @@ const NickNameField = ({
           ),
         }}
       />
+      {(error && <Typography color="error">{error.message}</Typography>) || (
+        <Typography>&nbsp;</Typography>
+      )}
     </>
   )
 }

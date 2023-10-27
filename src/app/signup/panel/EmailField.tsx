@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction } from 'react'
 
+import { InputAdornment, Button, Typography } from '@mui/material'
 import CuTextField from '@/components/CuTextField'
-import { InputAdornment } from '@mui/material'
-import { Button } from '@mui/material'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import { ControllerRenderProps, FieldError } from 'react-hook-form'
+
+import { ISignUpInputs } from '@/types/ISignUpInputs'
 
 const EmailField = ({
   field,
@@ -11,12 +13,14 @@ const EmailField = ({
   setEmailSendStatus,
   submitEmail,
   isSubmitting,
+  error,
 }: {
-  field: any
+  field: ControllerRenderProps<ISignUpInputs, 'email'>
   emailSendStatus: 'before' | 'submit' | 'error'
   setEmailSendStatus: Dispatch<SetStateAction<'before' | 'submit' | 'error'>>
   submitEmail: () => void
   isSubmitting: boolean
+  error: FieldError | undefined
 }) => {
   return (
     <>
@@ -50,6 +54,9 @@ const EmailField = ({
           ),
         }}
       />
+      {(error && <Typography color="error">{error.message}</Typography>) || (
+        <Typography>&nbsp;</Typography>
+      )}
     </>
   )
 }
