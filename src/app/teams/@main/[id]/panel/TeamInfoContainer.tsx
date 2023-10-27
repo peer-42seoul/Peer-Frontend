@@ -47,24 +47,24 @@ const IconInfo = ({ type, text }: IIconInfoProps) => {
   switch (type) {
     case 'MEMBER':
       return (
-        <Box>
+        <Stack direction={'row'}>
           <GroupsOutlinedIcon />
           <Typography>{text}</Typography>
-        </Box>
+        </Stack>
       )
     case 'LEADER':
       return (
-        <Box>
+        <Stack direction={'row'}>
           <PermContactCalendarOutlinedIcon />
           <Typography>{text}</Typography>
-        </Box>
+        </Stack>
       )
     case 'DATE':
       return (
-        <Box>
+        <Stack direction={'row'}>
           <CalendarMonthOutlinedIcon />
           <Typography>{text}</Typography>
-        </Box>
+        </Stack>
       )
   }
 }
@@ -134,22 +134,30 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
   }
   // render 3 : 정상
   return (
-    <Stack>
-      <Typography>{data.name}</Typography>
+    <Stack direction={'row'} spacing={1}>
       <Box
         component="img"
         src={data.teamPicturePath ? data.teamPicturePath : defaultLogoPath}
       />
-      <StatusIcon status={data.status} />
-      <IconInfo type="MEMBER" text={data.memberCount} />
-      <IconInfo type="LEADER" text={data.leaderName} />
-      <Typography>{data.type}</Typography>
-      <IconInfo type="DATE" text={data.dueTo.toString()} />
-      <OperationFormInfo operationForm={data.operationForm} />
-      <Stack direction={'row'}>
-        {data.region.map((region, idx) => (
-          <RegionInfo key={idx} region={region} />
-        ))}
+      <Stack>
+        <Stack direction={'row'}>
+          <Typography variant="h5">{data.name}</Typography>
+          <StatusIcon status={data.status} />
+        </Stack>
+        <Stack direction={'row'}>
+          <IconInfo type="MEMBER" text={data.memberCount} />
+          <IconInfo type="LEADER" text={data.leaderName} />
+          <IconInfo type="DATE" text={data.dueTo.toString()} />
+        </Stack>
+        <Stack direction={'row'}>
+          <Typography>{data.type}</Typography>
+          <OperationFormInfo operationForm={data.operationForm} />
+        </Stack>
+        <Stack direction={'row'}>
+          {data.region.map((region, idx) => (
+            <RegionInfo key={idx} region={region} />
+          ))}
+        </Stack>
       </Stack>
     </Stack>
   )
