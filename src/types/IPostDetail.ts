@@ -23,7 +23,7 @@ export interface IPostDetail {
   user_id: string // 사용자 ID의 데이터 타입에 따라 변경해야 함
   region: string
   link: string
-  tag: Tag[] // 문자열 배열 형태
+  tagList: Tag[] // 문자열 배열 형태
   role: IRole[]
   interviewList: IFormInterview[]
 }
