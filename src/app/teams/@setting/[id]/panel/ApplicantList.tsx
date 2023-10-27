@@ -1,22 +1,13 @@
 'use client'
 
 import { Avatar, Button, Stack, Typography } from '@mui/material'
-import {
-  CheckQuestionList,
-  CloseQuestionList,
-  IApplicant,
-  RatioQuestionList,
-} from '../page'
+import { IApplicant } from '../page'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 import axios from 'axios'
-
-import { useForm } from 'react-hook-form'
 import useMedia from '@/hook/useMedia'
-import RatioQuestionForm from '@/app/recruitment/[id]/panel/RatioQuestionForm'
-import CloseQuestionForm from '@/app/recruitment/[id]/panel/CloseQuestionForm'
-import CheckQuestionForm from '@/app/recruitment/[id]/panel/CheckQuestionForm'
+import FormAnswer from './RecuitFormAnswer'
 
 const ApplicantList = ({
   close,
@@ -27,7 +18,6 @@ const ApplicantList = ({
 }) => {
   console.log(teamId)
   const { isPc } = useMedia()
-  const { control } = useForm()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -180,33 +170,7 @@ const ApplicantList = ({
                   <Typography fontWeight="bold">
                     {interview.question}
                   </Typography>
-                  {interview.type === 'open' && (
-                    <Typography>{interview.answer}</Typography>
-                  )}
-                  {interview.type === 'close' && (
-                    <CloseQuestionForm
-                      optionList={interview?.optionList as CloseQuestionList}
-                      control={control}
-                      idx={index}
-                      value={interview.answer}
-                    />
-                  )}
-                  {interview.type === 'ratio' && (
-                    <RatioQuestionForm
-                      optionList={interview?.optionList as RatioQuestionList}
-                      control={control}
-                      idx={index}
-                      value={interview.answer}
-                    />
-                  )}
-                  {interview.type === 'check' && (
-                    <CheckQuestionForm
-                      optionList={interview?.optionList as CheckQuestionList}
-                      control={control}
-                      idx={index}
-                      value={interview.answer}
-                    />
-                  )}
+                  <FormAnswer interview={interview} index={index} />
                 </Stack>
               ))
             ) : (

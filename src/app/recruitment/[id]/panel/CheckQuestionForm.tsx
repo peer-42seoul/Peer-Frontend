@@ -8,15 +8,17 @@ const CheckQuestionForm = ({
   control,
   idx,
   value,
+  disabled = false,
 }: {
   optionList: CheckQuestionList
   control: any
   idx: number
   value?: string
+  disabled: boolean
 }) => {
   console.log('check', value)
   return (
-    <FormControl component="fieldset">
+    <FormControl disabled={disabled ? true : false} component="fieldset">
       <FormGroup defaultValue={value}>
         {optionList?.map((label: string, index: number) => {
           console.log(label, value?.includes(label))

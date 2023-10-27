@@ -12,11 +12,13 @@ const RatioQuestionForm = ({
   control,
   idx,
   value,
+  disabled = false,
 }: {
   optionList: RatioQuestionList
   control: any
   idx: number
   value?: string
+  disabled: boolean
 }) => {
   const number = parseInt(optionList?.number)
   const listArray = Array.from({ length: number }, (_, index) =>
@@ -24,6 +26,7 @@ const RatioQuestionForm = ({
   )
   return (
     <Controller
+      disabled={disabled ? true : false}
       name={idx.toString()}
       control={control}
       rules={{
@@ -36,6 +39,7 @@ const RatioQuestionForm = ({
             return (
               <Box key={index}>
                 <FormControlLabel
+                  disabled={disabled ? true : false}
                   control={<Radio />}
                   label={label}
                   value={index}
