@@ -43,7 +43,25 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
   const clickStudy = () => setType(SearchType.STUDY)
   const clickProject = () => setType(SearchType.PROJECT)
   const onSubmit = (data: any) => {
-    console.log('data', data.searchWord)
+    const keyword = data.searchWord
+
+    // 기존에 저장된 검색어 개수 확인
+    const storedKeywords = Object.keys(localStorage).filter((key) =>
+      key.startsWith('searchWord_'),
+    )
+    const maxKeywords = 5
+
+    // 기존 검색어 개수를 초과하는 경우, 가장 오래된 검색어 삭제
+    if (storedKeywords.length >= maxKeywords) {
+      const oldestKeyword = storedKeywords[0]
+      localStorage.removeItem(oldestKeyword)
+    }
+
+    // 새로운 검색어 localStorage에 저장
+    const newKeywordIndex = storedKeywords.length
+    const newKeywordKey = `searchWord_${newKeywordIndex}`
+    localStorage.setItem(newKeywordKey, keyword)
+
     router.push(`?keyword=${data.searchWord}`)
     onClose()
   }
