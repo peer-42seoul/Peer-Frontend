@@ -1,5 +1,5 @@
 // import useSWR from 'swr'
-import { Stack, Box, Typography } from '@mui/material'
+import { Stack, Box, Typography, Chip } from '@mui/material'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
@@ -66,6 +66,15 @@ const IconInfo = ({ type, text }: IIconInfoProps) => {
   }
 }
 
+interface IRegionInfoProps {
+  region: string
+}
+
+const RegionInfo = ({ region }: IRegionInfoProps) => {
+  // TODO : 디자인 확정되지 않음
+  return <Chip label={region} />
+}
+
 const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
   // TODO : id를 이용해서 데이터 받아오기
   //   const { data, error, isLoading } = useSWR<ITeamInfo>(
@@ -118,7 +127,11 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
       <Typography>{data.type}</Typography>
       <IconInfo type="DATE" text={data.dueTo.toString()} />
       <Typography>{data.operationForm}</Typography>
-      <Typography>{data.region}</Typography>
+      <Stack direction={'row'}>
+        {data.region.map((region, idx) => (
+          <RegionInfo key={idx} region={region} />
+        ))}
+      </Stack>
     </Stack>
   )
 
