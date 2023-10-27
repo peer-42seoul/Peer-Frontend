@@ -6,7 +6,7 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 // import { defaultGetFetcher } from '@/api/fetchers'
 import {
   ITeamInfo,
-  //   TOperationForm,
+  TOperationForm,
   //   TTeamType,
   TTeamStatus,
 } from '@/types/ITeamInfo'
@@ -78,6 +78,22 @@ const RegionInfo = ({ region }: IRegionInfoProps) => {
   return <Chip label={region} />
 }
 
+interface IOperationFormInfoProps {
+  operationForm: TOperationForm
+}
+
+const OperationFormInfo = ({ operationForm }: IOperationFormInfoProps) => {
+  // TODO : 디자인 확정되지 않음
+  switch (operationForm) {
+    case 'ONLINE':
+      return <Chip label={'온라인'} />
+    case 'OFFLINE':
+      return <Chip label={'오프라인'} />
+    case 'MIX':
+      return <Chip label={'온/오프라인'} />
+  }
+}
+
 const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
   // TODO : id를 이용해서 데이터 받아오기
   //   const { data, error, isLoading } = useSWR<ITeamInfo>(
@@ -129,7 +145,7 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
       <IconInfo type="LEADER" text={data.leaderName} />
       <Typography>{data.type}</Typography>
       <IconInfo type="DATE" text={data.dueTo.toString()} />
-      <Typography>{data.operationForm}</Typography>
+      <OperationFormInfo operationForm={data.operationForm} />
       <Stack direction={'row'}>
         {data.region.map((region, idx) => (
           <RegionInfo key={idx} region={region} />
