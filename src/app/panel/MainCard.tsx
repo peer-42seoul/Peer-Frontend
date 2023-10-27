@@ -14,7 +14,20 @@ import {
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 import { useState } from 'react'
+import { ProjectType } from '../page'
 
+interface IMainCard {
+  title: string
+  image: string
+  user_id: string
+  user_nickname: string
+  user_thumbnail: string
+  status: string
+  tagList: Tag[]
+  isFavorite: boolean
+  post_id: string
+  type: ProjectType
+}
 const MainCard = ({
   title,
   image,
@@ -25,7 +38,8 @@ const MainCard = ({
   tagList,
   isFavorite,
   post_id,
-}: IPost) => {
+  type,
+}: IMainCard) => {
   const [favorite, setFavorite] = useState(isFavorite)
   const changeFavorite = async () => {
     try {
@@ -38,7 +52,7 @@ const MainCard = ({
   }
 
   return (
-    <Link href={`/recruitment/${post_id}`} style={{ textDecoration: 'none' }}>
+    <Link href={`/recruitment/${post_id}?type=${type}`} style={{ textDecoration: 'none' }}>
       <Card sx={{ maxWidth: 345 }}>
         <Box sx={{ position: 'relative' }}>
           <CardMedia
