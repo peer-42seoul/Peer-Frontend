@@ -1,12 +1,13 @@
 'use client'
 import React, { useState } from 'react'
-import { Box, Typography, Button, Select, MenuItem } from '@mui/material'
+import { Box, Typography, Button } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import CuTextField from '@/components/CuTextField'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
+import ReportTypeSelect from './ReportTypeSelect'
 
 interface IReportFormInput {
   targetUrl: string
@@ -93,25 +94,11 @@ const ReportForm = () => {
         }}
         render={({ field }) => (
           <>
-            <Box sx={{display: 'flex', alignItems: 'center'}}>
-              <CuTextFieldLabel
-                id="reportType-label"
-                htmlFor="reportType"
-                style={{ width: '120px' }}
-              >
-                신고 유형
-              </CuTextFieldLabel>
-              <Select
-                labelId='reportType-label'
-                {...field}
-                sx={{width: "200px"}}
-              >
-                <MenuItem value="광고">광고</MenuItem>
-                <MenuItem value="유해 컨텐츠">유해 컨텐츠</MenuItem>
-                <MenuItem value="혐오 조장">혐오 조장</MenuItem>
-                <MenuItem value="기타">기타</MenuItem>
-              </Select>
-            </Box>
+            <ReportTypeSelect
+              field={field}
+              label="신고 유형"
+              options={['광고', '유해 컨텐츠', '혐오 조장', '기타']}
+            />
             {errors.reportType && (
               <Typography>{errors.reportType?.message}</Typography>
             )}
