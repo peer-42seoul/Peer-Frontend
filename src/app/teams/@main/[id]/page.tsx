@@ -11,7 +11,6 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <Stack spacing={2}>
-      {/* 팀 리스트로 가는 기능 추가하기 */}
       <Typography
         onClick={() => router.push('/team-list')}
         sx={{ color: '#9B9B9B', cursor: 'pointer' }}
