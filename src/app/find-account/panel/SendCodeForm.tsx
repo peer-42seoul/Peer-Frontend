@@ -32,6 +32,7 @@ const Form = {
 }
 
 const SendCodeForm = ({ email }: { email: string }) => {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
   const {
     handleSubmit,
     control,
@@ -72,7 +73,7 @@ const SendCodeForm = ({ email }: { email: string }) => {
 
     try {
       // 테스트용 post요청 코드
-      const res = await axios.post(`https://localhost:8080/password_change`, {
+      const res = await axios.post(`${API_URL}/api/v1/password_change`, {
         codeData,
       })
       console.log(res)
