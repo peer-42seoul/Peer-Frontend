@@ -6,14 +6,13 @@ import { Button, Typography, Box } from '@mui/material'
 import axios from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm, Controller } from 'react-hook-form'
 
 import EmailField from './panel/EmailField'
 import CodeField from './panel/CodeField'
 import PasswordField from './panel/PasswordField'
 import NameField from './panel/NameField'
 import NickNameField from './panel/NickNameField'
-import { Controller } from 'react-hook-form'
 import { ISignUpInputs } from '@/types/ISignUpInputs'
 
 const mainStyle = {
@@ -31,6 +30,13 @@ const formStyle = {
   marginTop: '30px',
 }
 
+const nextButtonStyle = {
+  display: 'block',
+  margin: 'auto',
+  width: '50%',
+  marginTop: '10px',
+}
+
 const buttonStyle = {
   display: 'block',
   margin: 'auto',
@@ -45,9 +51,19 @@ const SignUp = () => {
   const {
     handleSubmit,
     control,
+
     formState: { errors },
     getValues,
-  } = useForm<ISignUpInputs>({ mode: 'onChange' })
+  } = useForm<ISignUpInputs>({
+    defaultValues: {
+      email: '',
+      code: '',
+      password: '',
+      name: '',
+      nickName: '',
+    },
+    mode: 'onChange',
+  })
 
   const [signUpStep, setSignUpStep] = useState<number>(0)
   const [emailSendStatus, setEmailSendStatus] = useState<
@@ -60,21 +76,18 @@ const SignUp = () => {
     'before' | 'submit' | 'error'
   >('before')
 
-  const [showPassword, setShowPassword] = useState<'password' | 'text'>(
-    'password',
-  )
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const submitEmail = async () => {
     setIsSubmitting(true)
     const email = getValues('email')
-    if (email === undefined || errors.email?.message) {
+    if (email === '' || errors.email?.message) {
       alert('이메일을 확인해주세요') // 토스트로 바꿔줄 예정
       setIsSubmitting(false)
       return
     }
     try {
-      await axios.post(`${API_URL}/email`, {
+      await axios.post(`http://${API_URL}/api/v1/signup/email`, {
         email: email,
       })
       setEmailSendStatus('submit')
@@ -86,7 +99,7 @@ const SignUp = () => {
       } else if (error.response?.status === 400) {
         alert('유효하지 않은 이메일입니다')
       } else {
-        alert('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
+        alert('그 밖의 오류')
       }
     }
     setIsSubmitting(false)
@@ -101,13 +114,13 @@ const SignUp = () => {
     }
     const email = getValues('email')
     const code = getValues('code')
-    if (code === undefined || errors.code?.message) {
+    if (code === '' || errors.code?.message) {
       alert('인증코드를 확인해주세요') // 토스트로 바꿔줄 예정
       setIsSubmitting(false)
       return
     }
     try {
-      await axios.post(`${API_URL}/code`, {
+      await axios.post(`http://${API_URL}/api/v1/signup/code`, {
         email: email,
         code: code,
       })
@@ -127,6 +140,13 @@ const SignUp = () => {
 
   const clickNext = () => {
     setIsSubmitting(true)
+    const password = getValues('password')
+    console.log(errors.password?.message)
+    if (password === '' || errors.password?.message) {
+      alert('비밀번호를 확인해주세요') // 토스트로 바꿔줄 예정
+      setIsSubmitting(false)
+      return
+    }
     if (emailSendStatus !== 'submit') {
       alert('이메일을 인증해주세요') // 토스트로 바꿔줄 예정
       setIsSubmitting(false)
@@ -137,14 +157,9 @@ const SignUp = () => {
       setIsSubmitting(false)
       return
     }
-    const password = getValues('password')
-    if (password === undefined || errors.password?.message) {
-      alert('비밀번호를 확인해주세요') // 토스트로 바꿔줄 예정
-      setIsSubmitting(false)
-      return
-    }
+
+    setSignUpStep(1)
     setIsSubmitting(false)
-    setSignUpStep(signUpStep + 1)
   }
 
   const submitNickName = async () => {
@@ -156,7 +171,7 @@ const SignUp = () => {
       return
     }
     try {
-      await axios.post(`${API_URL}/nickname`, {
+      await axios.post(`http://${API_URL}/api/v1/signup/nickname`, {
         nickName: nickName,
       })
       setNickNameSendStatus('submit')
@@ -183,7 +198,7 @@ const SignUp = () => {
     }
     const { email, password, name, nickName } = data
     try {
-      await axios.post(`${API_URL}/signup`, {
+      await axios.post(`http://${API_URL}/api/v1/signup/form`, {
         email: email,
         password: password,
         name: name,
@@ -227,7 +242,6 @@ const SignUp = () => {
                     message: '유효한 이메일 형식이 아닙니다',
                   },
                 }}
-                defaultValue=""
                 render={({ field }) => (
                   <EmailField
                     field={field}
@@ -235,19 +249,16 @@ const SignUp = () => {
                     setEmailSendStatus={setEmailSendStatus}
                     submitEmail={submitEmail}
                     isSubmitting={isSubmitting}
+                    error={errors?.email}
                   />
                 )}
               />
-              {(errors?.email && (
-                <Typography color="error">{errors.email.message}</Typography>
-              )) || <Typography>&nbsp;</Typography>}
               <Controller
                 name="code"
                 control={control}
                 rules={{
                   required: '인증코드를 입력하세요',
                 }}
-                defaultValue=""
                 render={({ field }) => (
                   <CodeField
                     field={field}
@@ -255,38 +266,32 @@ const SignUp = () => {
                     setCodeSendStatus={setCodeSendStatus}
                     submitCode={submitCode}
                     isSubmitting={isSubmitting}
+                    error={errors?.code}
                   />
                 )}
               />
-              {(errors?.code && (
-                <Typography color="error">{errors.code.message}</Typography>
-              )) || <Typography>&nbsp;</Typography>}
               <Controller
                 name="password"
                 control={control}
                 rules={{
                   required: '비밀번호를 입력하세요',
-                  pattern: {
-                    value:
-                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*<>])[A-Za-z\d~!@#$%^&*<>]{8,}$/i,
-                    message:
-                      '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
+                  validate: {
+                    minLength: (value) =>
+                      value.length >= 8 || '비밀번호는 8자 이상이어야 합니다',
+                    includeNumber: (value) =>
+                      /\d/.test(value) || '숫자를 포함해야 합니다',
+                    includeSpecial: (value) =>
+                      /[~!@#$%^&*<>]/.test(value) ||
+                      '특수문자를 포함해야 합니다',
+                    includeAlphabet: (value) =>
+                      (/[A-Z]/.test(value) && /[a-z]/.test(value)) ||
+                      '대소문자를 포함해야 합니다',
                   },
                 }}
-                defaultValue=""
-                render={({ field }) => (
-                  <PasswordField
-                    field={field}
-                    showPassword={showPassword}
-                    setShowPassword={setShowPassword}
-                  />
-                )}
+                render={({ field }) => <PasswordField field={field} />}
               />
-              {(errors?.password && (
-                <Typography color="error">{errors.password.message}</Typography>
-              )) || <Typography>&nbsp;</Typography>}
               <Button
-                sx={buttonStyle}
+                sx={nextButtonStyle}
                 variant="contained"
                 onClick={clickNext}
                 disabled={isSubmitting}
@@ -307,12 +312,10 @@ const SignUp = () => {
                     message: '한글 2 ~ 4자로 입력하세요',
                   },
                 }}
-                defaultValue=""
-                render={({ field }) => <NameField field={field} />}
+                render={({ field }) => (
+                  <NameField field={field} error={errors?.name} />
+                )}
               />
-              {(errors?.name && (
-                <Typography color="error">{errors.name.message}</Typography>
-              )) || <Typography>&nbsp;</Typography>}
               <Controller
                 name="nickName"
                 control={control}
@@ -327,7 +330,6 @@ const SignUp = () => {
                     message: '닉네임은 7자 이하여야 합니다',
                   },
                 }}
-                defaultValue=""
                 render={({ field }) => (
                   <NickNameField
                     field={field}
@@ -335,12 +337,10 @@ const SignUp = () => {
                     setNickNameSendStatus={setNickNameSendStatus}
                     submitNickName={submitNickName}
                     isSubmitting={isSubmitting}
+                    error={errors?.nickName}
                   />
                 )}
               />
-              {(errors?.nickName && (
-                <Typography color="error">{errors.nickName.message}</Typography>
-              )) || <Typography>&nbsp;</Typography>}
               <Button
                 sx={buttonStyle}
                 type="submit"
