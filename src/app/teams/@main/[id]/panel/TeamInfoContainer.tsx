@@ -97,8 +97,6 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
       />
     </>
   )
-
-  // 모달 컴포넌트도 추가할 것.
 }
 
 export default TeamInfoContainer
