@@ -10,6 +10,8 @@ import {
   TTeamType,
   TTeamStatus,
 } from '@/types/ITeamInfo'
+import CuModal from '@/components/CuModal'
+import useModal from '@/hook/useModal'
 
 interface ITeamInfoContainerProps {
   id: number
@@ -40,14 +42,14 @@ type TIconType = 'MEMBER' | 'LEADER' | 'DATE'
 interface IIconInfoProps {
   type: TIconType
   text: string
-  // clickHandler가 필요하면 추가
+  onClick?: () => void
 }
 
-const IconInfo = ({ type, text }: IIconInfoProps) => {
+const IconInfo = ({ type, text, onClick }: IIconInfoProps) => {
   switch (type) {
     case 'MEMBER':
       return (
-        <Stack direction={'row'}>
+        <Stack direction={'row'} onClick={onClick} sx={{ cursor: 'pointer' }}>
           <GroupsOutlinedIcon />
           <Typography>{text}</Typography>
         </Stack>
@@ -108,7 +110,33 @@ const TypeInfo = ({ type }: ITypeInfoProps) => {
   }
 }
 
+interface ITeamMemberModalProps {
+  teamId: number
+  open: boolean
+  handleClose: () => void
+}
+
+const TeamMemberModal = ({
+  teamId,
+  open,
+  handleClose,
+}: ITeamMemberModalProps) => {
+  // TODO : 팀원 목록 받아오기
+  void teamId
+  return (
+    <CuModal
+      open={open}
+      handleClose={handleClose}
+      ariaTitle={'팀원 목록'}
+      ariaDescription={'팀원 목록을 확인할 수 있습니다.'}
+    >
+      헤이헤이헤이
+    </CuModal>
+  )
+}
+
 const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
+  const { isOpen, closeModal, openModal } = useModal()
   // TODO : id를 이용해서 데이터 받아오기
   //   const { data, error, isLoading } = useSWR<ITeamInfo>(
   //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/main/${id}`,
@@ -148,34 +176,45 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
   }
   // render 3 : 정상
   return (
-    <Stack direction={'row'} spacing={1}>
-      <Avatar
-        alt="team logo"
-        variant="rounded"
-        sx={{ width: 89, height: 92, border: 1, borderRadius: 1.2 }}
-        src={data.teamPicturePath ? data.teamPicturePath : defaultLogoPath}
-      />
-      <Stack>
-        <Stack direction={'row'}>
-          <Typography variant="h5">{data.name}</Typography>
-          <StatusIcon status={data.status} />
-        </Stack>
-        <Stack direction={'row'}>
-          <IconInfo type="MEMBER" text={data.memberCount} />
-          <IconInfo type="LEADER" text={data.leaderName} />
-          <IconInfo type="DATE" text={data.dueTo.toString()} />
-        </Stack>
-        <Stack direction={'row'}>
-          <TypeInfo type={data.type} />
-          <OperationFormInfo operationForm={data.operationForm} />
-        </Stack>
-        <Stack direction={'row'}>
-          {data.region.map((region, idx) => (
-            <RegionInfo key={idx} region={region} />
-          ))}
+    <>
+      <Stack direction={'row'} spacing={1}>
+        <Avatar
+          alt="team logo"
+          variant="rounded"
+          sx={{ width: 89, height: 92, border: 1, borderRadius: 1.2 }}
+          src={data.teamPicturePath ? data.teamPicturePath : defaultLogoPath}
+        />
+        <Stack>
+          <Stack direction={'row'}>
+            <Typography variant="h5">{data.name}</Typography>
+            <StatusIcon status={data.status} />
+          </Stack>
+          <Stack direction={'row'}>
+            <IconInfo
+              type="MEMBER"
+              text={data.memberCount}
+              onClick={() => openModal()}
+            />
+            <IconInfo type="LEADER" text={data.leaderName} />
+            <IconInfo type="DATE" text={data.dueTo.toString()} />
+          </Stack>
+          <Stack direction={'row'}>
+            <TypeInfo type={data.type} />
+            <OperationFormInfo operationForm={data.operationForm} />
+          </Stack>
+          <Stack direction={'row'}>
+            {data.region.map((region, idx) => (
+              <RegionInfo key={idx} region={region} />
+            ))}
+          </Stack>
         </Stack>
       </Stack>
-    </Stack>
+      <TeamMemberModal
+        teamId={data.id}
+        open={isOpen}
+        handleClose={closeModal}
+      />
+    </>
   )
 
   // 모달 컴포넌트도 추가할 것.
