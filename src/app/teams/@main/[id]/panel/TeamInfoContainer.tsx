@@ -7,7 +7,7 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import {
   ITeamInfo,
   TOperationForm,
-  //   TTeamType,
+  TTeamType,
   TTeamStatus,
 } from '@/types/ITeamInfo'
 
@@ -94,6 +94,20 @@ const OperationFormInfo = ({ operationForm }: IOperationFormInfoProps) => {
   }
 }
 
+interface ITypeInfoProps {
+  type: TTeamType
+}
+
+const TypeInfo = ({ type }: ITypeInfoProps) => {
+  // TODO : 디자인 확정되지 않음
+  switch (type) {
+    case 'PROJECT':
+      return <Chip label={'project'} />
+    case 'STUDY':
+      return <Chip label={'study'} />
+  }
+}
+
 const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
   // TODO : id를 이용해서 데이터 받아오기
   //   const { data, error, isLoading } = useSWR<ITeamInfo>(
@@ -150,7 +164,7 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
           <IconInfo type="DATE" text={data.dueTo.toString()} />
         </Stack>
         <Stack direction={'row'}>
-          <Typography>{data.type}</Typography>
+          <TypeInfo type={data.type} />
           <OperationFormInfo operationForm={data.operationForm} />
         </Stack>
         <Stack direction={'row'}>
