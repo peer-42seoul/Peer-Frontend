@@ -22,11 +22,16 @@ interface IStatusIconProps {
 }
 
 const StatusIcon = ({ status }: IStatusIconProps) => {
+  // TODO : 디자인 확정되지 않음
   switch (status) {
     case 'RECRUITING':
-      return <div>모집중</div>
-    default:
-      return <div>아아아</div>
+      return <Chip label={'모집 중'} sx={{ backgroundColor: '#FFFBDB' }} />
+    case 'BEFORE':
+      return <Chip label={'시작 전'} sx={{ backgroundColor: '#B5B5B5' }} />
+    case 'ONGOING':
+      return <Chip label={'진행 중'} sx={{ backgroundColor: '#EADFFF' }} />
+    case 'COMPLETE':
+      return <Chip label={'진행 완료'} sx={{ backgroundColor: '#F7C5C5' }} />
   }
 }
 
@@ -61,8 +66,6 @@ const IconInfo = ({ type, text }: IIconInfoProps) => {
           <Typography>{text}</Typography>
         </Box>
       )
-    // default:
-    //   return <div>아아아</div>
   }
 }
 
@@ -90,7 +93,7 @@ const TeamInfoContainer = ({ id }: ITeamInfoContainerProps) => {
       id: id,
       name: '프로젝트 스페이스도그 🐶🚀',
       teamPicturePath: null,
-      status: 'RECRUITING',
+      status: 'BEFORE',
       memberCount: '1/3',
       leaderName: '야채',
       type: 'STUDY',
