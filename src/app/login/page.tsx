@@ -98,7 +98,7 @@ const Login = () => {
     console.log(data)
     setIsLoading(true)
     axios
-      .post(`${API_URL}/login/`, {
+      .post(`${API_URL}/api/v1/signin`, {
         userEmail: data.userEmail,
         password: data.password,
       })
@@ -109,7 +109,7 @@ const Login = () => {
       })
       .catch((error) => {
         console.log(error.message)
-        if (error.statusText == 'Unathorized')
+        if (error.statusText == 'Unauthorized')
           setErrorMessage('이메일과 비밀번호를 다시 확인해주세요.')
         else setErrorMessage('알 수 없는 오류가 발생했습니다.')
         openToast()

@@ -7,14 +7,16 @@ const CuTextFieldLabel = ({
   htmlFor,
   style,
   muiProps,
+  id,
 }: {
   children: React.ReactNode
   htmlFor: string
   style?: SxProps
   muiProps?: any
+  id?: string
 }) => {
   return (
-    <InputLabel sx={style} htmlFor={htmlFor} {...muiProps}>
+    <InputLabel sx={style} htmlFor={htmlFor} {...muiProps} id={id}>
       {children}
     </InputLabel>
   )
