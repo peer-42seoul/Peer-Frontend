@@ -5,7 +5,6 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import { TOperationForm, TTeamStatus, TTeamType } from '@/types/ITeamInfo'
 
 export const StatusIcon = ({ status }: { status: TTeamStatus }) => {
-  // TODO : 디자인 확정되지 않음
   switch (status) {
     case 'RECRUITING':
       return <Chip label={'모집 중'} sx={{ backgroundColor: '#FFFBDB' }} />
@@ -53,7 +52,6 @@ export const IconInfo = ({ type, text, onClick }: IIconInfoProps) => {
 }
 
 export const RegionInfo = ({ region }: { region: string }) => {
-  // TODO : 디자인 확정되지 않음
   return <Chip label={region} />
 }
 
@@ -62,7 +60,6 @@ export const OperationFormInfo = ({
 }: {
   operationForm: TOperationForm
 }) => {
-  // TODO : 디자인 확정되지 않음
   switch (operationForm) {
     case 'ONLINE':
       return <Chip label={'온라인'} />
@@ -73,7 +70,6 @@ export const OperationFormInfo = ({
   }
 }
 export const TypeInfo = ({ type }: { type: TTeamType }) => {
-  // TODO : 디자인 확정되지 않음
   switch (type) {
     case 'PROJECT':
       return <Chip label={'project'} />

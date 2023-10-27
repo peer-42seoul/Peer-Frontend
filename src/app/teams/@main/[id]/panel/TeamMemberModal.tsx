@@ -14,7 +14,7 @@ const TeamMemberModal = ({
 }: ITeamMemberModalProps) => {
   // TODO : 팀원 목록 받아오기
   // const { data, error, isLoading } = useSWR<Array<ITeamMember>>(
-  //   `/api/v1/team/main/member/${teamId}`,
+  //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/main/member/${teamId}`,
   //   defaultGetFetcher,
   // )
   void teamId // no unused var error 방지
@@ -41,22 +41,16 @@ const TeamMemberModal = ({
     isLoading: false,
   }
 
-  // render 1 : 로딩중
   if (isLoading) {
-    // 로딩 컴포넌트 구체화
-    return <div>로딩중</div>
+    return <Typography>로딩중...</Typography>
   }
 
-  // render 2 : 에러
   if (error || !data) {
-    // 에러 컴포넌트 구체화
-    // 에러 알림?!
-    return <div>에러!</div>
+    // TODO : 에러 종류에 따라 에러 메시지 다르게 표시
+    return <Typography>에러!!!</Typography>
   }
 
-  // render 3 : 정상
   return (
-    // TODO: 디자인 확정되지 않음
     <CuModal
       open={open}
       handleClose={handleClose}
