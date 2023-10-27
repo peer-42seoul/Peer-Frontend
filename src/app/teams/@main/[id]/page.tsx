@@ -1,16 +1,23 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { Typography, Stack, Box } from '@mui/material'
-import TeamInfoContainer from './panel/TeamInfoContainer'
 import CuButton from '@/components/CuButton'
+import TeamInfoContainer from './panel/TeamInfoContainer'
 
 const TeamsPage = ({ params }: { params: { id: string } }) => {
+  const router = useRouter()
   const { id } = params
 
   return (
     <Stack spacing={2}>
       {/* 팀 리스트로 가는 기능 추가하기 */}
-      <Typography sx={{ color: '#9B9B9B' }}>팀리스트로 돌아가기</Typography>
+      <Typography
+        onClick={() => router.push('/team-list')}
+        sx={{ color: '#9B9B9B', cursor: 'pointer' }}
+      >
+        팀리스트로 돌아가기
+      </Typography>
       <TeamInfoContainer id={Number(id)} />
       {/* 임시 컴포넌트 */}
       <Box
