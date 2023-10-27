@@ -16,3 +16,11 @@ export interface ITeamInfo {
   operationForm: TOperationForm
   region: string[]
 }
+
+export type TTeamRole = 'LEADER' | 'MEMBER'
+
+export interface ITeamMember {
+  id: number
+  name: string
+  role: TTeamRole
+}
