@@ -1,4 +1,5 @@
 'use client'
+import useAxiosWithAuth from '@/api/config'
 import BackButton from '@/components/BackButton'
 import CuButton from '@/components/CuButton'
 import CuModal from '@/components/CuModal'
@@ -7,7 +8,6 @@ import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import { AlertColor, Box, Button, Chip, Stack, Typography } from '@mui/material'
-import axios from 'axios'
 import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
 
@@ -45,6 +45,7 @@ const KeywordAddingField = ({
 }) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
   const textFieldRef = useRef<HTMLInputElement | null>(null)
+  const axiosWithAuth = useAxiosWithAuth()
 
   const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -58,8 +59,10 @@ const KeywordAddingField = ({
         })
         return
       }
-      await axios
-        .post(`http://localhost:4000/alarmAdd`, { newKeyword: trimmed })
+      await axiosWithAuth
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/add`, {
+          newKeyword: trimmed,
+        })
         .then(() => {
           setToastMessage({
             severity: 'success',
@@ -115,10 +118,11 @@ const ChipsArray = ({
   isLoading: boolean
   setToastMessage: (message: IToastProps) => void
 }) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const handleDelete = async (chip: IChip) =>
-    await axios
+    await axiosWithAuth
       .delete(
-        `https://6a33dc92-80a8-466d-b83a-c2d3ce9b6a1d.mock.pstmn.io/api/v1/alarm/delete?keyword=${chip.label}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete?keyword=${chip.label}`,
       )
       .then(() => {
         mutate()
@@ -249,9 +253,10 @@ const KeywordSetting = ({
 }) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
+  const axiosWithAuth = useAxiosWithAuth()
 
   const getKeywords = async (url: string) =>
-    await axios.get<{ keyword: string } | null>(url).then((res) => {
+    await axiosWithAuth.get<{ keyword: string } | null>(url).then((res) => {
       if (res.data?.keyword) {
         const newKeywords = res.data?.keyword.split('^&%')
         const newChipData = [] as Array<IChip>
@@ -264,7 +269,7 @@ const KeywordSetting = ({
     })
 
   const { isLoading, data, mutate, error } = useSWR<Array<IChip> | null>(
-    'http://localhost:4000/alarm/1',
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm`,
     getKeywords,
   )
 
