@@ -11,17 +11,19 @@ interface IToastProps {
   severity?: AlertColor
   message: string
 }
-
+// TODO auth 추가하기
 const ProfileLinkEditor = ({
   closeModal,
   links,
   setToastMessage,
   setToastOpen,
+  mutate,
 }: {
   closeModal: () => void
   links?: Array<IUserProfileLink>
   setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (open: boolean) => void
+  mutate: () => void
 }) => {
   // const [linkError, setLinkError] = useState<number>(-1)
   const defaultValues: Array<IUserProfileLink> = links
@@ -75,7 +77,7 @@ const ProfileLinkEditor = ({
     }
     console.log('제출중!', isSubmitting)
     await axios
-      .put(`process.env.NEXT_PUBLIC_API_URL/api/v1/profile/link`, data)
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/link`, data)
       .then(() => {
         setToastMessage({
           severity: 'success',
@@ -83,6 +85,7 @@ const ProfileLinkEditor = ({
         })
         setToastOpen(true)
         closeModal()
+        mutate()
       })
       .catch(() => {
         setToastMessage({

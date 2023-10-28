@@ -19,8 +19,6 @@ import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
 import ClearIcon from '@mui/icons-material/Clear'
 import axios from 'axios'
 import CuButton from '@/components/CuButton'
-// import { ChildProcessWithoutNullStreams } from 'child_process'
-// import { File } from 'buffer'
 
 interface IFormInput {
   nickname: string
@@ -38,11 +36,13 @@ const ProfileBioEditor = ({
   closeModal,
   setToastMessage,
   setToastOpen,
+  mutate,
 }: {
   data: IProfileCard
   closeModal: () => void
   setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (isOpen: boolean) => void
+  mutate: () => void
 }) => {
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
   const [nicknameError, setNicknameError] = useState<boolean>(false)
@@ -114,7 +114,7 @@ const ProfileBioEditor = ({
       setIsLoading(true)
       const checkIsNicknameUnique = async () => {
         axios
-          .post('process.env.NEXT_PUBLIC_API_URL/api/v1/signup/nickname', {
+          .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/signup/nickname`, {
             nickname,
           })
           .then(() => {
@@ -178,7 +178,7 @@ const ProfileBioEditor = ({
 
     await axios
       .put(
-        'process.env.NEXT_PUBLIC_API_URL//api/v1/profile/introduction/edit',
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/introduction/edit`,
         submitData,
       )
       .then(() => {
@@ -187,6 +187,7 @@ const ProfileBioEditor = ({
           message: '프로필 변경에 성공하였습니다.',
         })
         setToastOpen(true)
+        mutate()
         closeModal()
       })
       .catch(() => {
