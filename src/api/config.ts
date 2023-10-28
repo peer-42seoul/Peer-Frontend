@@ -40,9 +40,12 @@ const useAxiosWithAuth = () => {
         } else {
           try {
             // accessToken 갱신 요청
-            const response = await axiosInstance.post('/accessToken', {
-              refreshToken: refreshToken,
-            })
+            const response = await axiosInstance.post(
+              '/api/v1/signin/reissue',
+              {
+                refreshToken: refreshToken,
+              },
+            )
 
             const newAccessToken = response.data.accessToken
             useAuthStore.getState().login(newAccessToken)
