@@ -42,7 +42,7 @@ const MyInterests = () => {
 
   // TODO 토큰 있는 fetcher로 바꾸기
   const { data, isLoading, mutate } = useSWR<IInterestResponse>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}&page=&pagesize=`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=10`,
     defaultGetFetcher,
   )
 
