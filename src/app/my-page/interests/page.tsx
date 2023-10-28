@@ -1,16 +1,33 @@
 'use client'
 import { defaultGetFetcher } from '@/api/fetchers'
 import MainCard from '@/app/panel/MainCard'
+import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
-import { IProject } from '@/types/IProejct'
-import { Grid, MenuItem, Tab, Tabs, Typography } from '@mui/material'
+import { IPost } from '@/types/IPostDetail'
+import {
+  Box,
+  CircularProgress,
+  Grid,
+  MenuItem,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import React, { useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
+
+interface IInterestResponse {
+  postList: IPost[]
+  isLast: boolean
+}
 
 const MyInterests = () => {
   const { isPc } = useMedia()
-  const [type, setType] = React.useState('projects')
+  const [type, setType] = useState('projects')
+  const [page, setPage] = useState<number>(1)
+  const [pageLimit, setPageLimit] = useState<number>(1)
+  const [postList, setPostList] = useState<Array<IPost>>([] as Array<IPost>)
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     console.log('event.target.value as string : ', event.target.value as string)
@@ -23,59 +40,69 @@ const MyInterests = () => {
     setType(newValue as string)
   }
 
-  const { data, isLoading } = useSWR<Array<IProject>>(
-    `process.env.NEXT_PUBLIC_API_URL/${type}-sort-recent`,
+  // TODO 토큰 있는 fetcher로 바꾸기
+  const { data, isLoading, mutate } = useSWR<IInterestResponse>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}&page=&pagesize=`,
     defaultGetFetcher,
   )
 
-  const TypeToggle = useCallback(
-    ({
-      type,
-      handleChange,
-    }: {
-      type: string
-      handleChange: (e: SelectChangeEvent) => void
-    }) => {
-      console.log('dropdown', type)
-      return (
-        <Select value={type} onChange={handleChange} variant="standard">
-          <MenuItem value={'projects'}>프로젝트</MenuItem>
-          <MenuItem value={'studies'}>스터디</MenuItem>
-          {/* <MenuItem value={'showcase'}>쇼케이스</MenuItem> 2step */}
-        </Select>
-      )
-    },
-    [type],
-  )
+  useEffect(() => {
+    if (!isLoading && data && !data.isLast) {
+      setPostList((prev) => prev.concat(data.postList))
+      setPageLimit((prev) => prev + 1)
+    }
+  }, [isLoading, data])
 
-  const TypeTabs = useCallback(
-    ({
-      type,
-      handleChange,
-    }: {
-      type: string
-      handleChange: (e: React.SyntheticEvent, newValue: string) => void
-    }) => {
-      console.log('tab', type)
+  const { target, spinner } = useInfiniteScroll({
+    setPage,
+    mutate,
+    pageLimit,
+    page,
+  })
 
-      return (
-        <Tabs
-          value={type}
-          onChange={handleChange}
-          aria-label="menu tabs"
-          variant="fullWidth"
-        >
-          <Tab label="프로젝트" value={'projects'} />
-          <Tab label="스터디" value={'studies'} />
-          {/* <Tab label="쇼케이스" value={'showcase'} /> */}
-        </Tabs>
-      )
-    },
-    [type],
-  )
+  const TypeToggle = ({
+    type,
+    handleChange,
+  }: {
+    type: string
+    handleChange: (e: SelectChangeEvent) => void
+  }) => {
+    console.log('dropdown', type)
+    return (
+      <Select value={type} onChange={handleChange} variant="standard">
+        <MenuItem value={'projects'}>프로젝트</MenuItem>
+        <MenuItem value={'studies'}>스터디</MenuItem>
+        {/* <MenuItem value={'showcase'}>쇼케이스</MenuItem> 2step */}
+      </Select>
+    )
+  }
+
+  const TypeTabs = ({
+    type,
+    handleChange,
+  }: {
+    type: string
+    handleChange: (e: React.SyntheticEvent, newValue: string) => void
+  }) => {
+    console.log('tab', type)
+
+    return (
+      <Tabs
+        value={type}
+        onChange={handleChange}
+        aria-label="menu tabs"
+        variant="fullWidth"
+      >
+        <Tab label="프로젝트" value={'projects'} />
+        <Tab label="스터디" value={'studies'} />
+        {/* <Tab label="쇼케이스" value={'showcase'} /> */}
+      </Tabs>
+    )
+  }
 
   if (isLoading) return <Typography>로딩중 입니다.</Typography>
   if (!data) return <Typography>데이터가 없습니다.</Typography>
+
   return (
     <div>
       {isPc ? (
@@ -91,12 +118,16 @@ const MyInterests = () => {
         sx={{ width: '100%' }}
         direction="row"
       >
-        {data.map((item) => (
-          <Grid item key={item.id} xs={10} sm={4}>
+        {postList.map((item) => (
+          <Grid item key={item.post_id} xs={10} sm={4}>
             <MainCard {...item} />
           </Grid>
         ))}
+        <Grid item xs={10} sm={4}>
+          <Box ref={target}></Box>
+        </Grid>
       </Grid>
+      {spinner && <CircularProgress />}
     </div>
   )
 }
