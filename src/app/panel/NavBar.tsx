@@ -12,8 +12,7 @@ import {
   Button,
   IconButton,
   Paper,
-  Stack,
-  useMediaQuery,
+  Stack
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
