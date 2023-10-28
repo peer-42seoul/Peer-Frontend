@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import SearchButton from './SearchButton'
 import Link from 'next/link'
+import useMedia from '@/hook/useMedia'
 
 export const MobileNav = () => {
   const [value, setValue] = useState(0)
@@ -82,7 +83,7 @@ export const MobileNav = () => {
 //추후 url에 따라 버튼이 달라지도록 구현 필요
 export const PcNav = () => {
   const [value, setValue] = useState(0)
-  const isTablet = useMediaQuery('(max-width:700px)');
+  const { isTablet } = useMedia();
   const router = useRouter()
 
   return (
