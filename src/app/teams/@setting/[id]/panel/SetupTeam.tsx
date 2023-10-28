@@ -131,7 +131,30 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
       })
   }
 
+  const handleDeleteImage = () => {
+    axios
+      .delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/image/${team.team.id}`,
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setTeamInfo({
+            ...teamInfo,
+            team: {
+              ...teamInfo.team,
+              imageUrl: null,
+            },
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   const validation = () => {
+    // 한글, 영문, 숫자만 입력 가능
+    // 2~12자리
     let check = /^[\d|a-zA-Z|가-힣]{2,12}$/
 
     console.log(check.test(teamInfo.team.name))
@@ -183,6 +206,7 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
               height={100}
             />
             <input type="file" accept="image/*" onChange={handleImage} />
+            <Button onClick={handleDeleteImage}>이미지 삭제</Button>
           </Stack>
         </Stack>
         <Stack>

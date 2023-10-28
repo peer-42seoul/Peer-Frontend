@@ -46,7 +46,7 @@ export interface ITeam {
     dueTo: string
     operationForm: TeamOperationForm
     region: string[]
-    imageUrl: string
+    imageUrl: string | null
   }
   member: IMember[]
 }
