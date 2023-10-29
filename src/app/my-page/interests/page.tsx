@@ -1,9 +1,10 @@
 'use client'
 import { defaultGetFetcher } from '@/api/fetchers'
+import { ProjectType } from '@/app/page'
 import MainCard from '@/app/panel/MainCard'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
-import { IPost } from '@/types/IPostDetail'
+import { Tag } from '@/types/IPostDetail'
 import {
   Box,
   CircularProgress,
@@ -17,8 +18,21 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
+interface IMainCard {
+  title: string
+  image: string
+  user_id: string
+  user_nickname: string
+  user_thumbnail: string
+  status: string
+  tagList: Tag[]
+  isFavorite: boolean
+  post_id: string
+  type: ProjectType
+}
+
 interface IInterestResponse {
-  postList: IPost[]
+  postList: IMainCard[]
   isLast: boolean
 }
 
@@ -27,7 +41,9 @@ const MyInterests = () => {
   const [type, setType] = useState('projects')
   const [page, setPage] = useState<number>(1)
   const [pageLimit, setPageLimit] = useState<number>(1)
-  const [postList, setPostList] = useState<Array<IPost>>([] as Array<IPost>)
+  const [postList, setPostList] = useState<Array<IMainCard>>(
+    [] as Array<IMainCard>,
+  )
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     console.log('event.target.value as string : ', event.target.value as string)
