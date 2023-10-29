@@ -12,12 +12,13 @@ import {
   Button,
   IconButton,
   Paper,
-  Stack,
+  Stack
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import SearchButton from './SearchButton'
 import Link from 'next/link'
+import useMedia from '@/hook/useMedia'
 
 export const MobileNav = () => {
   const [value, setValue] = useState(0)
@@ -81,6 +82,7 @@ export const MobileNav = () => {
 //추후 url에 따라 버튼이 달라지도록 구현 필요
 export const PcNav = () => {
   const [value, setValue] = useState(0)
+  const { isTablet } = useMedia();
   const router = useRouter()
 
   return (
@@ -104,12 +106,6 @@ export const PcNav = () => {
           setValue(newValue)
         }}
       >
-        <BottomNavigationAction
-          label="로고"
-          onClick={() => {
-            router.push('/')
-          }}
-        />
         <BottomNavigationAction
           label="홈"
           onClick={() => {
@@ -136,25 +132,25 @@ export const PcNav = () => {
           }}
         />
       </BottomNavigation>
-      <Stack direction={'row'}>
+      <Stack direction={'row'} alignItems={"center"}>
         <IconButton color="inherit" aria-label="menu">
           <NotificationsNoneOutlined />
         </IconButton>
-        {/* <IconButton color="inherit" aria-label="menu"> SearchButton이 이미 IconButton이어서 임시적으로 주석 처리했습니다~ */}
         <SearchButton />
-        {/* </IconButton> */}
-        {/*<Link>*/}
-        <IconButton aria-label="favorites">
-          <Favorite />
-        </IconButton>
-        {/*</Link>*/}
-        <Link href={'/my-page/profile'}>
-          <Avatar alt="profile" src="" />
+        <Link href="/my-page/interests">
+          <IconButton aria-label="favorites">
+            <Favorite />
+          </IconButton>
+        </Link>
+        <Link href="/my-page/profile">
+          <Avatar />
         </Link>
         <Link href={'/recruitment'}>
-          <Button variant="outlined" startIcon={<BorderColor />}>
-            새 글쓰기
-          </Button>
+          {isTablet ?
+            <IconButton>
+              <BorderColor />
+            </IconButton> :
+            <Button variant="outlined" startIcon={<BorderColor />}>새 글쓰기</Button>}
         </Link>
       </Stack>
     </Stack>

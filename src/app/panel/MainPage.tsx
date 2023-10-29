@@ -90,7 +90,7 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
           <Stack alignItems={'center'} gap={2}>
             {data?.map((project: IPost) => (
               <Box key={project.user_id}>
-                <MainCard {...project} />
+                <MainCard {...project} type={type} />
               </Box>
             ))}
           </Stack>

@@ -35,6 +35,6 @@ export interface IFormInterview {
 }
 
 export interface IRole {
-  roleName: string
+  name: string
   number: number
 }
