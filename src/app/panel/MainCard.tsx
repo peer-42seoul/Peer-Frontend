@@ -31,7 +31,6 @@ interface IMainCard {
 const MainCard = ({
   title,
   image,
-  // user_id,
   user_nickname,
   user_thumbnail,
   status,
@@ -43,8 +42,7 @@ const MainCard = ({
   const [favorite, setFavorite] = useState(isFavorite)
   const changeFavorite = async () => {
     try {
-      // 추후에 이게 어떤 type인지 api 수정해야.
-      // await fetch(`/recruitement/favorite/${study_id}`
+      await fetch(`/api/v1/recruit/favorite/${post_id}`)
       setFavorite(!favorite)
     } catch (e) {
       console.log('error', e)
@@ -93,7 +91,6 @@ const MainCard = ({
           title={user_nickname}
         />
         <CardContent>
-          {/* title로 바꾸기 */}
           <Typography variant="body2" color="text.secondary">
             {title}
           </Typography>
