@@ -25,7 +25,7 @@ const MyInterests = () => {
   }
 
   const { data, isLoading } = useSWR<Array<IPost>>(
-    `process.env.NEXT_PUBLIC_API_URL/${type}-sort-recent`,
+    `${process.env.NEXT_PUBLIC_API_URL}/${type}-sort-recent`,
     defaultGetFetcher,
   )
 
@@ -93,8 +93,8 @@ const MyInterests = () => {
         direction="row"
       >
         {data.map((item) => (
-          <Grid item key={item.post_id} xs={10} sm={4} >
-            <MainCard {...item} type={type as ProjectType}/>
+          <Grid item key={item.post_id} xs={10} sm={4}>
+            <MainCard {...item} type={type as ProjectType} />
           </Grid>
         ))}
       </Grid>

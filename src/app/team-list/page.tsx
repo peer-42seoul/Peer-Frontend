@@ -25,7 +25,7 @@ const TeamsListPage = () => {
 
   //실제 동작해야할 API
   const { data, isLoading } = useSWR(
-    `/api/v1/team/list/${userId}?teamStatus=${showTeams}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/list/${userId}?teamStatus=${showTeams}`,
     defaultGetFetcher,
   )
 

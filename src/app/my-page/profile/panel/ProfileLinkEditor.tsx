@@ -75,7 +75,7 @@ const ProfileLinkEditor = ({
     }
     console.log('제출중!', isSubmitting)
     await axios
-      .put(`process.env.NEXT_PUBLIC_API_URL/api/v1/profile/link`, data)
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/link`, data)
       .then(() => {
         setToastMessage({
           severity: 'success',
