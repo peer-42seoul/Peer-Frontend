@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import MessageForm from '../MessageForm'
 import useMedia from '@/hook/useMedia'
@@ -7,7 +9,12 @@ const MessageViewPage = () => {
 
   return (
     <>
-      <MessageForm type={'existingMessage'} nickname={undefined} isPc={isPc} />
+      <MessageForm
+        type={'existingMessage'}
+        targetId={0}
+        nickname={undefined}
+        isPc={isPc}
+      />
     </>
   )
 }
