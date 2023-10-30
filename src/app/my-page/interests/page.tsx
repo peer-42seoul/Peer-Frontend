@@ -236,7 +236,7 @@ const MyInterests = () => {
       >
         {postList.map((item) => (
           <Grid item key={item.post_id} xs={10} sm={4}>
-            <MainCard {...item} />
+            <MainCard {...item} type={type as ProjectType} />
           </Grid>
         ))}
         <Grid item xs={10} sm={4}>

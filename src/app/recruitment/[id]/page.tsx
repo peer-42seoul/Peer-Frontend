@@ -1,12 +1,14 @@
 'use client'
 
 import { Box, Typography, Button, Stack, Chip, Drawer, ListItem, ListItemButton, List } from "@mui/material"
-import { Tag } from "@/types/IPostDetail"
+import { IPostDetail, Tag } from "@/types/IPostDetail"
 import Image from "next/image";
 import React, { useMemo } from "react";
 import RecruitFormModal from "./panel/RecruitFormModal";
 import { useSearchParams } from "next/navigation";
 import RecruitFormText from "./panel/RecruitFormText";
+import { defaultGetFetcher } from "@/api/fetchers";
+import useSWR from "swr";
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     const type = useSearchParams().get('type') ?? 'projects';
@@ -14,33 +16,8 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     const [roleOpen, setRoleOpen] = React.useState(false);
     const [role, setRole] = React.useState<string>("");
 
-    // const { data, isLoading, error } = useSWR<IPostDetail>(`/api/v1/recruit/${params.id}`, defaultGetFetcher);
-    const data = useMemo(() => ({
-        title: "Software Engineer Position",
-        status: "모집중",
-        due: "1개월",
-        content: `### We are looking for a skilled software engineer to join our team
-        This is a great opportunity to work on exciting projects and collaborate with a talented team of developers.
-        `,
-        place: "온라인",
-        user_id: "user123", // 사용자 ID의 데이터 타입에 따라 변경
-        region: "Seoul, South Korea",
-        link: "https://example.com/job-posting",
-        tagList: [{ tagName: "JavaScript", tagColor: "red" },],
-        role: [
-            { name: "프론트", number: 3 },
-            { name: "백엔드", number: 1 },
-        ],
-        interviewList: [
-            { question: "Tell us about your experience with React.", type: "text", optionList: [] },
-            { question: "How would you handle a project with tight deadlines?", type: "multiple-choice", optionList: ["Prioritize tasks", "Delegate", "Work overtime"] },
-        ],
-    }), []);
-
-    const userData = {
-        nickname: "user123",
-        profileUrl: "https://picsum.photos/100/100"
-    }
+    const { data, isLoading, error } = useSWR<IPostDetail>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`, defaultGetFetcher);
+    const { data: userData } = useSWR<{nickname: string; profileImageUrl: string}>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/other/?userId=${data?.user_id}?infoList=profileImageUrl&infoList=nickname`, defaultGetFetcher);
 
     const total = useMemo(() => {
         if (!data)
@@ -49,6 +26,10 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             return acc + cur.number;
         }, 0)
     }, [data]);
+
+    if (isLoading) return <Typography>로딩중...</Typography>
+    if (error) return <Typography>에러 발생</Typography>
+    if (!data) return <Typography>데이터가 없습니다</Typography>
 
     return (
         <>
@@ -69,7 +50,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                     ))}
                 </List>
             </Drawer>
-            <RecruitFormModal open={open} setOpen={setOpen} post_id={params.id} role={role} user_id={data?.user_id} />
+            <RecruitFormModal open={open} setOpen={setOpen} post_id={params.id} role={role} user_id={data.user_id} />
             <Typography variant="h5">{data?.title}</Typography>
             <Chip label={data?.status} size="medium" />
             <Stack gap={2} direction="row">
@@ -78,7 +59,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 <Typography>{data?.place}</Typography>
             </Stack>
             <Image
-                src={userData?.profileUrl}
+                src={userData?.profileImageUrl ?? ""}
                 alt="leader_profile"
                 width={300}
                 height={300}

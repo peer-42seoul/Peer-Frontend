@@ -51,7 +51,6 @@ const RecruitFormModal = ({ open, setOpen, user_id, post_id, role }: { open: boo
     };
 
     const onSubmit = async (data: any) => {
-        console.log("data", data);
         const array = Object.values(data);
         const answerList = array?.map((res: any) => {
             if (typeof res !== 'string') {
@@ -69,10 +68,9 @@ const RecruitFormModal = ({ open, setOpen, user_id, post_id, role }: { open: boo
             role,
             answerList
         }
-        console.log("value", value);
 
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${post_id}`, value);
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${post_id}`, value);
             setOpenConfirm(false);
             openSuccessToast();
         } catch (e) {
