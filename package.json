@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.199",
+    "@types/react-slick": "^0.23.11",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "eslint": "^8.48.0",
