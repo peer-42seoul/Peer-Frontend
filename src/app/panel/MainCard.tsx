@@ -43,7 +43,7 @@ const MainCard = ({
   const [favorite, setFavorite] = useState(isFavorite)
   const changeFavorite = async () => {
     try {
-      await axios(`/api/v1/recruit/favorite/${post_id}`)
+      await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${post_id}`)
       setFavorite(!favorite)
     } catch (e) {
       console.log('error', e)
