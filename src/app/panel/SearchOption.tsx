@@ -55,7 +55,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
       statusdone,
     } = data
     const makeCommaString = (obj: Object) => {
-      const trueKeys = Object.keys(obj).filter((key) => obj ?? [key ?? ''])
+      const trueKeys = Object.keys(obj).filter((key) => obj ?? [key ?? '']) // QA 필요
       const resultString = trueKeys.join(',')
       return resultString
     }
