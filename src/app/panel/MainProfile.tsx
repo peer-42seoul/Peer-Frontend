@@ -4,7 +4,8 @@ import { Avatar, Stack, Typography } from "@mui/material";
 import useSWR from "swr";
 
 const MainProfile = () => {
-    const { data } = useSWR<IUserProfile>('http://localhost:4000/profile/1', defaultGetFetcher);
+    const { data } = useSWR<IUserProfile>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`, defaultGetFetcher);
+    
     return (
         <Stack height="150px" alignItems="center" border="1px solid black">
             <Avatar alt="avatar" src={data?.profileImageUrl} sx={{ width: 56, height: 56 }} />
