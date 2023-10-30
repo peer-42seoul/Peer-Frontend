@@ -55,7 +55,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
       statusdone,
     } = data
     const makeCommaString = (obj: Object) => {
-      const trueKeys = Object.keys(obj).filter((key) => obj[key])
+      const trueKeys = Object.keys(obj).filter((key) => obj ?? [key ?? ''])
       const resultString = trueKeys.join(',')
       return resultString
     }
@@ -177,7 +177,7 @@ const Option = ({ setDetailOption }: { setDetailOption: any }) => {
           </Stack>
         </Grid>
       </Grid>
-    </form >
+    </form>
   )
 }
 

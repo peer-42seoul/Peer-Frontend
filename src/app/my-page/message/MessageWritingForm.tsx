@@ -5,13 +5,14 @@ import React, { useCallback, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
-import useAuthStore from '@/states/useAuthStore'
+// import useAuthStore from '@/states/useAuthStore'
 import useMessageStore from '@/states/useMessageStore'
 import Image from 'next/image'
 
 interface IProps {
   userInfo?: ILetterTarget
   type: string
+  nickname: string | undefined
   keyword?: string
   setMessageData?: (prevData: any) => void | IMessageInformation[] | undefined
   handleClose?: any | undefined
@@ -79,11 +80,14 @@ const MessageForm = ({
   type,
   keyword,
   setMessageData,
+  nickname,
   handleClose,
 }: IProps) => {
   const router = useRouter()
   const [content, setContent] = useState('')
-  const { userId } = useAuthStore()
+  // const { userId } = useAuthStore()
+  const userId = 1
+  console.log(nickname)
   const { storedSelectedUser } = useMessageStore()
   const updateMessageData = (newMessage: IMessageInformation) => {
     setMessageData?.((prevData: any) => [...prevData, newMessage])
@@ -189,6 +193,7 @@ const MessageWritingForm = ({ handleClose }: any) => {
           type={'newMessage'}
           keyword={keyword}
           handleClose={handleClose}
+          nickname=""
         />
       </Container>
     </>
