@@ -11,7 +11,7 @@ interface IToastProps {
   severity?: AlertColor
   message: string
 }
-// TODO auth 추가하기
+
 const ProfileLinkEditor = ({
   closeModal,
   links,
