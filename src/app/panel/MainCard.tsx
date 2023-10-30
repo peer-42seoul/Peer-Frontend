@@ -15,6 +15,7 @@ import {
 import { red } from '@mui/material/colors'
 import { useState } from 'react'
 import { ProjectType } from '../page'
+import axios from 'axios'
 
 interface IMainCard {
   title: string
@@ -42,7 +43,7 @@ const MainCard = ({
   const [favorite, setFavorite] = useState(isFavorite)
   const changeFavorite = async () => {
     try {
-      await fetch(`/api/v1/recruit/favorite/${post_id}`)
+      await axios(`/api/v1/recruit/favorite/${post_id}`)
       setFavorite(!favorite)
     } catch (e) {
       console.log('error', e)
