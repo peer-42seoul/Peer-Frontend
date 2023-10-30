@@ -42,6 +42,7 @@ interface ICuModal {
   children: React.ReactNode
   ariaTitle: string
   ariaDescription: string
+  sx?: SxProps
   style?: SxProps
 }
 
@@ -51,6 +52,7 @@ const CuModal = ({
   children,
   ariaTitle,
   ariaDescription,
+  sx,
   style = defaultstyle,
 }: ICuModal) => {
   const { isPc } = useMedia()
@@ -62,6 +64,7 @@ const CuModal = ({
         onClose={handleClose}
         aria-labelledby={ariaTitle}
         aria-describedby={ariaDescription}
+        sx={sx}
       >
         <Box sx={isPc ? style : MobileMessagetstyle}>{children}</Box>
       </Modal>
