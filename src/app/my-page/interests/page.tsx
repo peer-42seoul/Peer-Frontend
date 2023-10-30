@@ -1,8 +1,9 @@
 'use client'
 import { defaultGetFetcher } from '@/api/fetchers'
+import { ProjectType } from '@/app/page'
 import MainCard from '@/app/panel/MainCard'
 import useMedia from '@/hook/useMedia'
-import { IProject } from '@/types/IProejct'
+import { IPost } from '@/types/IPostDetail'
 import { Grid, MenuItem, Tab, Tabs, Typography } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import React, { useCallback } from 'react'
@@ -23,7 +24,7 @@ const MyInterests = () => {
     setType(newValue as string)
   }
 
-  const { data, isLoading } = useSWR<Array<IProject>>(
+  const { data, isLoading } = useSWR<Array<IPost>>(
     `process.env.NEXT_PUBLIC_API_URL/${type}-sort-recent`,
     defaultGetFetcher,
   )
@@ -92,8 +93,8 @@ const MyInterests = () => {
         direction="row"
       >
         {data.map((item) => (
-          <Grid item key={item.id} xs={10} sm={4}>
-            <MainCard {...item} />
+          <Grid item key={item.post_id} xs={10} sm={4} >
+            <MainCard {...item} type={type as ProjectType}/>
           </Grid>
         ))}
       </Grid>
