@@ -87,7 +87,7 @@ const SignUp = () => {
       return
     }
     try {
-      await axios.post(`http://${API_URL}/api/v1/signup/email`, {
+      await axios.post(`${API_URL}/api/v1/signup/email`, {
         email: email,
       })
       setEmailSendStatus('submit')
@@ -120,7 +120,7 @@ const SignUp = () => {
       return
     }
     try {
-      await axios.post(`http://${API_URL}/api/v1/signup/code`, {
+      await axios.post(`${API_URL}/api/v1/signup/code`, {
         email: email,
         code: code,
       })
@@ -171,7 +171,7 @@ const SignUp = () => {
       return
     }
     try {
-      await axios.post(`http://${API_URL}/api/v1/signup/nickname`, {
+      await axios.post(`${API_URL}/api/v1/signup/nickname`, {
         nickName: nickName,
       })
       setNickNameSendStatus('submit')
@@ -198,7 +198,7 @@ const SignUp = () => {
     }
     const { email, password, name, nickName } = data
     try {
-      await axios.post(`http://${API_URL}/api/v1/signup/form`, {
+      await axios.post(`${API_URL}/api/v1/signup/form`, {
         email: email,
         password: password,
         name: name,

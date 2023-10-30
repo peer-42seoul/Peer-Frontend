@@ -53,7 +53,7 @@ const ApplicantList = ({
     console.log('reject')
     axios
       .put(
-        `process.env.NEXT_PUBLIC_API_URL/api/v1/team/deny/${teamId}?userId=${
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/deny/${teamId}?userId=${
           member!.id
         }`,
       )
