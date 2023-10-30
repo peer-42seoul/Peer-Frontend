@@ -5,7 +5,7 @@ import { AlertColor, Box, Grid } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
-import axios from 'axios'
+import useAxiosWithAuth from '@/api/config'
 
 interface IToastProps {
   severity?: AlertColor
@@ -25,7 +25,7 @@ const ProfileLinkEditor = ({
   setToastOpen: (open: boolean) => void
   mutate: () => void
 }) => {
-  // const [linkError, setLinkError] = useState<number>(-1)
+  const axiosWithAuth = useAxiosWithAuth()
   const defaultValues: Array<IUserProfileLink> = links
     ? links.map((link) => ({
         id: link.id,
@@ -76,7 +76,7 @@ const ProfileLinkEditor = ({
       }
     }
     console.log('제출중!', isSubmitting)
-    await axios
+    await axiosWithAuth
       .put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/link`, data)
       .then(() => {
         setToastMessage({

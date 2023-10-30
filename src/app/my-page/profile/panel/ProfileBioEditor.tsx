@@ -17,8 +17,8 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
 import ClearIcon from '@mui/icons-material/Clear'
-import axios from 'axios'
 import CuButton from '@/components/CuButton'
+import useAxiosWithAuth from '@/api/config'
 
 interface IFormInput {
   nickname: string
@@ -44,6 +44,7 @@ const ProfileBioEditor = ({
   setToastOpen: (isOpen: boolean) => void
   mutate: () => void
 }) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
   const [nicknameError, setNicknameError] = useState<boolean>(false)
   // const [image, setImage] = useState<File | null>(null)
@@ -113,7 +114,7 @@ const ProfileBioEditor = ({
     const onClick = useCallback(() => {
       setIsLoading(true)
       const checkIsNicknameUnique = async () => {
-        axios
+        axiosWithAuth
           .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/signup/nickname`, {
             nickname,
           })
@@ -176,7 +177,7 @@ const ProfileBioEditor = ({
       return
     }
 
-    await axios
+    await axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/introduction/edit`,
         submitData,
