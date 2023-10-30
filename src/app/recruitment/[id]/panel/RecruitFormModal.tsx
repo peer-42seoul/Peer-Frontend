@@ -7,13 +7,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import axios from 'axios'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ConfirmModal from './ConfirmModal'
 import CloseQuestionForm, { CloseQuestionList } from './CloseQuestionForm'
 import CheckQuestionForm, { CheckQuestionList } from './CheckQuestionForm'
 import RatioQuestionForm, { RatioQuestionList } from './RatioQuestionForm'
+import useAxiosWithAuth from '@/api/config'
 interface IInterviewData {
   question: string
   type: 'close' | 'open' | 'ratio' | 'check'
@@ -83,6 +83,8 @@ const RecruitFormModal = ({
     handleSubmit(onSubmit)()
   }
 
+  const axiosWithAuth = useAxiosWithAuth()
+
   const onSubmit = async (data: any) => {
     console.log('data', data)
     const array = Object.values(data)
@@ -105,7 +107,7 @@ const RecruitFormModal = ({
     console.log('value', value)
 
     try {
-      await axios.post(
+      await axiosWithAuth.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${post_id}`,
         value,
       )
