@@ -14,6 +14,7 @@ import PasswordField from './panel/PasswordField'
 import NameField from './panel/NameField'
 import NickNameField from './panel/NickNameField'
 import { ISignUpInputs } from '@/types/ISignUpInputs'
+import CodeTimer from './panel/CodeTimer'
 // import useToast from '@/hook/useToast'
 
 const mainStyle = {
@@ -68,7 +69,7 @@ const SignUp = () => {
   const [signUpStep, setSignUpStep] = useState<number>(0)
   const [emailSendStatus, setEmailSendStatus] = useState<
     'before' | 'submit' | 'error'
-  >('before')
+  >('submit')
   const [codeSendStatus, setCodeSendStatus] = useState<
     'before' | 'submit' | 'error'
   >('before')
@@ -263,10 +264,13 @@ const SignUp = () => {
                       codeSendStatus={codeSendStatus}
                       submitCode={submitCode}
                       isSubmitting={isSubmitting}
-                      error={errors?.code}
                     />
                   )}
                 />
+                {(emailSendStatus === 'submit' &&
+                  codeSendStatus !== 'submit' && (
+                    <CodeTimer setEmailSendStatus={setEmailSendStatus} />
+                  )) || <Typography>&nbsp;</Typography>}
                 <Controller
                   name="password"
                   control={control}

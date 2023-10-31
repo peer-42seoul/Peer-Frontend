@@ -1,7 +1,7 @@
 import { InputAdornment, Button, Typography } from '@mui/material'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
-import { ControllerRenderProps, FieldError } from 'react-hook-form'
+import { ControllerRenderProps } from 'react-hook-form'
 import { ISignUpInputs } from '@/types/ISignUpInputs'
 
 const CodeField = ({
@@ -9,13 +9,11 @@ const CodeField = ({
   codeSendStatus,
   submitCode,
   isSubmitting,
-  error,
 }: {
   field: ControllerRenderProps<ISignUpInputs, 'code'>
   codeSendStatus: 'before' | 'submit' | 'error'
   submitCode: () => void
   isSubmitting: boolean
-  error: FieldError | undefined
 }) => {
   return (
     <>
@@ -44,9 +42,6 @@ const CodeField = ({
           ),
         }}
       />
-      {(error && <Typography color="error">{error.message}</Typography>) || (
-        <Typography>&nbsp;</Typography>
-      )}
     </>
   )
 }
