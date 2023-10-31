@@ -62,7 +62,7 @@ const CreateTeam = () => {
     }
     await axios
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/recruitement/write?type="${type}"`,
+        `${process.env.NEXT_PUBLIC_API_URL}/recruit/write`,
         {
           place,
           image,

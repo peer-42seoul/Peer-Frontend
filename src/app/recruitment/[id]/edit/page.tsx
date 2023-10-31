@@ -52,15 +52,9 @@ const CreateTeam = () => {
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
 
-  // interview {
-  //   question : string,
-  //   type : string,
-  //   optionList : string[]
-  //  }
-
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/recruitement/write`)
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/${recruit_id}`) // 팀페이지 들어올때 받아와야함
       .then((res) => {
         setTitle(res.data.title)
         setPreviewImage(res.data.previewImage)
@@ -88,8 +82,8 @@ const CreateTeam = () => {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
     await axios
-      .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/recruitement/write?type="${type}"`,
+      .put(
+        `${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/${recruit_id}`, // 팀페이지 들어올때 받아와야함
         {
           place,
           image,

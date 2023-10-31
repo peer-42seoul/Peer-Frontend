@@ -40,7 +40,7 @@ const TagAutoComplete = ({
   const [list, setList] = useState<tag[]>(dummyDatas)
 
   useEffect(() => {
-    axios.get('http://localhost:3000/recruitement/write').then((res) => {
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/recruit/write`).then((res) => {
       console.log(res)
       setList(res.data.tagList)
     }).catch((err) => {

@@ -39,7 +39,7 @@ const TagAutoComplete = ({
 }) => {
   const [list, setList] = useState<tag[]>(dummyDatas)
 
-  useEffect(() => {
+  useEffect(() => { // 중복코드 이후 리팩토링예정
     axios.get('http://localhost:3000/recruitement/write').then((res) => {
       console.log(res)
       setList(res.data.tagList)
