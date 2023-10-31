@@ -110,7 +110,7 @@ const Login = () => {
         setCookie('refreshToken', res.data.refreshToken, { path: '/' })
       })
       .catch((error) => {
-        console.log(error.message)
+        //console.log(error.message)
         if (error.statusText == 'Unauthorized')
           setErrorMessage('이메일과 비밀번호를 다시 확인해주세요.')
         else setErrorMessage('알 수 없는 오류가 발생했습니다.')

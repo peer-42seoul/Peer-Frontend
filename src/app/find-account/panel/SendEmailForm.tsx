@@ -6,6 +6,7 @@ import { Box, Typography, Button, Container } from '@mui/material'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import CuTextField from '@/components/CuTextField'
 import SendCodeForm from './SendCodeForm'
+import useToast from '@/hook/useToast'
 
 const Form = {
   display: 'flex',
@@ -27,6 +28,10 @@ const LabelBox = {
 const SendEmailForm = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [isEmailSuccessful, setIsEmailSuccessful] = useState(false)
+
+  const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const [errorMessage, setErrorMessage] = useState('')
+
   const {
     handleSubmit,
     control,
@@ -34,28 +39,29 @@ const SendEmailForm = () => {
   } = useForm<{ email: string }>()
 
   const onSubmit = async (data: { email: string }) => {
-    console.log(data)
-
-    try {
-      console.log('isSubmitting:', isSubmitting)
-      // 테스트용 post요청 코드
-      const res = await axios.post(`${API_URL}/api/v1/find`, {
+    axios
+      .post(`${API_URL}/api/v1/find`, {
         data,
       })
-      console.log(res)
-
-      setIsEmailSuccessful(true)
-    } catch (error) {
-      console.log(error)
-      // 테스트 용 (추후 삭제)
-      setIsEmailSuccessful(true)
-    }
+      .then((res) => {
+        if (res.status == 200) setIsEmailSuccessful(true)
+      })
+      .catch((error) => {
+        if (error.statusText == 'Not Found')
+          setErrorMessage('존재하지 않는 회원입니다.')
+        else setErrorMessage('알 수 없는 오류가 발생했습니다.')
+        openToast()
+      })
   }
 
   return (
     <>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={Form}>
-        <Box sx={{ display: 'flex', width: '100%' }}>
+      <Box sx={Form}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}
+        >
           <Controller
             name="email"
             control={control}
@@ -72,7 +78,6 @@ const SendEmailForm = () => {
                 <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
                 <CuTextField
                   field={field}
-                  type="email"
                   id="email"
                   placeholder="이메일을 입력하세요"
                   style={{ width: '100%' }}
@@ -84,21 +89,27 @@ const SendEmailForm = () => {
               </Container>
             )}
           />
+          {!isEmailSuccessful && (
+            <Button type="submit" disabled={isSubmitting}>
+              코드 발송
+            </Button>
+          )}
         </Box>
-        {!isEmailSuccessful ? (
-          <Button type="submit" disabled={isSubmitting}>
-            코드 발송
-          </Button>
-        ) : (
+        {isEmailSuccessful && (
           <Box sx={{ display: 'flex', width: '100%' }}>
             <SendCodeForm
               email={
                 control._fields.email ? control._fields.email._f.value : ''
               }
+              setErrorMessage={setErrorMessage}
+              openToast={openToast}
             />
           </Box>
         )}
       </Box>
+      <CuToast open={isOpen} onClose={closeToast} severity="error">
+        <Typography>{errorMessage}</Typography>
+      </CuToast>
     </>
   )
 }

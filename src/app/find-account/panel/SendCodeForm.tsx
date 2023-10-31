@@ -31,7 +31,15 @@ const Form = {
   gap: '24px',
 }
 
-const SendCodeForm = ({ email }: { email: string }) => {
+const SendCodeForm = ({
+  email,
+  setErrorMessage,
+  openToast,
+}: {
+  email: string
+  setErrorMessage: (message: string) => void
+  openToast: () => void
+}) => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
   const {
     handleSubmit,
@@ -55,7 +63,7 @@ const SendCodeForm = ({ email }: { email: string }) => {
   useEffect(() => {
     if (timer === 0) {
       alert('인증 코드가 만료되었습니다.')
-      location.reload() // 페이지 새로고침
+      router.push('/find-account')
     }
   }, [timer])
 
@@ -68,24 +76,31 @@ const SendCodeForm = ({ email }: { email: string }) => {
   )
 
   const onSubmit = async (data: { code: string }) => {
-    const codeData = JSON.stringify({ email, data })
-    console.log(codeData)
+    const code = data.code
+    const codeData = JSON.stringify({ email, code })
+    //console.log(codeData)
 
-    try {
-      // 테스트용 post요청 코드
-      const res = await axios.post(`${API_URL}/api/v1/password_change`, {
+    axios
+      .post(`${API_URL}/api/v1/find_password`, {
         codeData,
       })
-      console.log(res)
-      // 추후 모달로 변경
-      alert(
-        '메일로 임시 비밀번호가 전송되었습니다. 로그인 페이지로 이동합니다.',
-      )
-      router.push('/login')
-    } catch (error) {
-      console.log(error)
-      alert('인증 코드가 일치하지 않습니다.')
-    }
+      .then((res) => {
+        if (res.status == 200) {
+          alert(
+            '메일로 임시 비밀번호가 전송되었습니다. 로그인 페이지로 이동합니다.',
+          )
+          router.push('/login')
+        }
+      })
+      .catch((error) => {
+        if (error.statusText == 'Unauthorized') {
+          setErrorMessage('올바른 코드가 아닙니다.')
+          openToast()
+        } else {
+          alert('알 수 없는 오류가 발생했습니다.')
+          window.location.reload()
+        }
+      })
   }
 
   return (
