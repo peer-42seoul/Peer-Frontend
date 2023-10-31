@@ -54,7 +54,7 @@ const CreateTeam = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/${recruit_id}`) // 팀페이지 들어올때 받아와야함
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/recruit_id`) // 팀페이지 들어올때 받아와야함
       .then((res) => {
         setTitle(res.data.title)
         setPreviewImage(res.data.previewImage)
@@ -83,7 +83,7 @@ const CreateTeam = () => {
     }
     await axios
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/${recruit_id}`, // 팀페이지 들어올때 받아와야함
+        `${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/recruit_id`, // 팀페이지 들어올때 받아와야함
         {
           place,
           image,
