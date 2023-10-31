@@ -65,14 +65,14 @@ export interface IApplicant {
 const TeamsSetupPage = ({ id }: { id: number }) => {
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   console.log(id)
-  // const { data, isLoading } = useSWR<ITeam>(
-  //   'process.env.NEXT_PUBLIC_API_URL/api/v1/team/setting/${param}',
-  //   defaultGetFetcher,
-  // )
   const { data, isLoading } = useSWR<ITeam>(
-    'process.env.NEXT_PUBLIC_API_URL/api/v1/team/setting/1',
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${id}`,
     defaultGetFetcher,
   )
+  // const { data, isLoading } = useSWR<ITeam>(
+  //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/1`,
+  //   defaultGetFetcher,
+  // )
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)

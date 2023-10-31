@@ -5,7 +5,7 @@ import useShowTeams from '@/states/useShowTeams'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 import { Stack } from '@mui/material'
-import useAuthStore from '@/states/useAuthStore'
+// import useAuthStore from '@/states/useAuthStore'
 
 export interface ITeamInfo {
   id: string
@@ -20,11 +20,12 @@ export interface ITeamInfo {
 
 const TeamsListPage = () => {
   const { showTeams } = useShowTeams()
-  const { userId } = useAuthStore()
+  // const { userId } = useAuthStore()
+  const userId = 1
 
   //실제 동작해야할 API
   const { data, isLoading } = useSWR(
-    `/api/v1/team/list/${userId}?teamStatus=${showTeams}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/list/${userId}?teamStatus=${showTeams}`,
     defaultGetFetcher,
   )
 
