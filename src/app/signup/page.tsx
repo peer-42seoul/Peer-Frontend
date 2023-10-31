@@ -145,7 +145,7 @@ const SignUp = () => {
     setIsSubmitting(true)
     const password = getValues('password')
     if (password === '' || errors.password) {
-      return
+      setToastMessage('비밀번호를 확인해주세요')
     } else if (emailSendStatus !== 'submit') {
       setEmailSendStatus('error')
       setToastMessage('이메일을 인증해주세요')
@@ -366,9 +366,10 @@ const SignUp = () => {
         severity={
           emailSendStatus === 'error' ||
           codeSendStatus === 'error' ||
-          nickNameSendStatus === 'error'
+          nickNameSendStatus === 'error' ||
+          toastMessage.includes('확인')
             ? 'error'
-            : 'success'
+            : 'info'
         }
       >
         <Typography>{toastMessage}</Typography>
