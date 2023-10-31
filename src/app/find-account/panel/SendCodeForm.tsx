@@ -81,7 +81,7 @@ const SendCodeForm = ({
     //console.log(codeData)
 
     axios
-      .post(`${API_URL}/api/v1/find_password`, {
+      .post(`${API_URL}/api/v1/signin/find_password`, {
         codeData,
       })
       .then((res) => {

@@ -40,7 +40,7 @@ const SendEmailForm = () => {
 
   const onSubmit = async (data: { email: string }) => {
     axios
-      .post(`${API_URL}/api/v1/find`, {
+      .post(`${API_URL}/api/v1/signin/find`, {
         data,
       })
       .then((res) => {
