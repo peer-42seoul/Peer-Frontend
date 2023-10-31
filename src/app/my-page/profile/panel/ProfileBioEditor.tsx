@@ -17,10 +17,8 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
 import ClearIcon from '@mui/icons-material/Clear'
-import axios from 'axios'
 import CuButton from '@/components/CuButton'
-// import { ChildProcessWithoutNullStreams } from 'child_process'
-// import { File } from 'buffer'
+import useAxiosWithAuth from '@/api/config'
 
 interface IFormInput {
   nickname: string
@@ -38,12 +36,15 @@ const ProfileBioEditor = ({
   closeModal,
   setToastMessage,
   setToastOpen,
+  mutate,
 }: {
   data: IProfileCard
   closeModal: () => void
   setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (isOpen: boolean) => void
+  mutate: () => void
 }) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
   const [nicknameError, setNicknameError] = useState<boolean>(false)
   // const [image, setImage] = useState<File | null>(null)
@@ -113,8 +114,8 @@ const ProfileBioEditor = ({
     const onClick = useCallback(() => {
       setIsLoading(true)
       const checkIsNicknameUnique = async () => {
-        axios
-          .post('process.env.NEXT_PUBLIC_API_URL/api/v1/signup/nickname', {
+        axiosWithAuth
+          .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/signup/nickname`, {
             nickname,
           })
           .then(() => {
@@ -176,7 +177,7 @@ const ProfileBioEditor = ({
       return
     }
 
-    await axios
+    await axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/introduction/edit`,
         submitData,
@@ -187,6 +188,7 @@ const ProfileBioEditor = ({
           message: '프로필 변경에 성공하였습니다.',
         })
         setToastOpen(true)
+        mutate()
         closeModal()
       })
       .catch(() => {

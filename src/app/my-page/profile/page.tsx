@@ -11,7 +11,9 @@ import ProfileLinkEditor from './panel/ProfileLinkEditor'
 import useToast from '@/hook/useToast'
 import useMedia from '@/hook/useMedia'
 import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
+import { getFetcherWithInstance } from '@/api/fetchers'
+import useAxiosWithAuth from '@/api/config'
+import { AxiosInstance } from 'axios'
 
 interface IModals {
   introduction: boolean
@@ -25,14 +27,33 @@ interface IToastProps {
   message: string
 }
 
+const mobileStyle = {
+  width: '100vmax',
+  height: '100vmax',
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+}
+
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
-// TODO Grid 쓸지 말지 결정하기 (모바일과 PC 모두 한 줄로 되어있음)
+// TODO fetcher auth 포함하는 것으로 변경할 것
 const MyProfile = () => {
+  const axiosWithAuth = useAxiosWithAuth()
   const {
     data: userInfo,
     error,
     isLoading,
-  } = useSWR<IUserProfile>('http://localhost:4000/profile/1', defaultGetFetcher)
+    mutate,
+  } = useSWR<IUserProfile>(
+    [`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`, axiosWithAuth],
+    ([url, axiosWithAuth]) =>
+      getFetcherWithInstance(url, axiosWithAuth as AxiosInstance),
+  )
 
   const [modalType, setModalType] = useState<string>('' as string)
   const [modalOpen, setModalOpen] = useState<IModals>({
@@ -73,7 +94,7 @@ const MyProfile = () => {
   const { CuToast, isOpen: isToastOpen, openToast, closeToast } = useToast()
 
   if (error) {
-    return <Typography>데이터를 가져오는 것을 실패했습니다.</Typography>
+    return <Typography>데이터 조회에 실패했습니다.</Typography>
   }
   if (isLoading) {
     return <Typography>로딩중 입니다.</Typography>
@@ -124,22 +145,7 @@ const MyProfile = () => {
         handleClose={() => setModalType('')}
         ariaTitle="profile-introduction-setting-modal-title"
         ariaDescription="profile-introduction-setting-modal-description"
-        style={
-          isPc
-            ? undefined
-            : {
-                width: '100vmax',
-                height: '100vmax',
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                bgcolor: 'background.paper',
-                border: '2px solid #000',
-                boxShadow: 24,
-                p: 4,
-              }
-        }
+        style={isPc ? undefined : mobileStyle}
       >
         <ProfileBioEditor
           data={{
@@ -152,6 +158,7 @@ const MyProfile = () => {
           setToastMessage={setToastMessage}
           setToastOpen={openToast}
           closeModal={() => setModalType('')}
+          mutate={mutate}
         />
       </CuModal>
       <CuModal
@@ -159,28 +166,14 @@ const MyProfile = () => {
         handleClose={() => setModalType('')}
         ariaTitle="profile-links-setting-modal-title"
         ariaDescription="profile-links-setting-modal-description"
-        style={
-          isPc
-            ? undefined
-            : {
-                width: '100vmax',
-                height: '100vmax',
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                bgcolor: 'background.paper',
-                border: '2px solid #000',
-                boxShadow: 24,
-                p: 4,
-              }
-        }
+        style={isPc ? undefined : mobileStyle}
       >
         <ProfileLinkEditor
           links={userInfo?.linkList}
           closeModal={() => setModalType('')}
           setToastMessage={setToastMessage}
           setToastOpen={openToast}
+          mutate={mutate}
         />
       </CuModal>
       {/* toast */}
