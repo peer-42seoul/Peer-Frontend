@@ -13,6 +13,7 @@ import SelectPlace from './panel/SelectRegion'
 import useToast from '@/hook/useToast'
 import SelectRegion from './panel/SelectRegion'
 import ImageUploadButton from '@/components/ImageUploadButton'
+import Image from 'next/image'
 
 export interface IRoleData {
   role: string | null
@@ -34,7 +35,9 @@ export interface IFormInterview {
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
   const [image, setImage] = useState<File[]>([])
-  const [previewImage, setPreviewImage] = useState<string>('')
+  const [previewImage, setPreviewImage] = useState<string>(
+    '/images/defaultImage.png',
+  )
   const [name, setName] = useState<string>('')
   const [type, setType] = useState<string>('project')
   const [tagList, setTagList] = useState<tag[]>([])
@@ -56,6 +59,31 @@ const CreateTeam = () => {
   //   optionList : string[]
   //  }
 
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/recruitement/write`)
+      .then((res) => {
+        setTitle(res.data.title)
+        setPreviewImage(res.data.previewImage)
+        setName(res.data.name)
+        setType(res.data.type)
+        setTagList(res.data.tagList)
+        setRegion(res.data.region)
+        setPlace(res.data.place)
+        setMonth(res.data.due)
+        setTeamsize(res.data.teamsize)
+        setCommunicationTool(res.data.link)
+        setContent(res.data.content)
+        setRoleList(res.data.roleList)
+        setInterviewList(res.data.interviewList)
+      })
+      .catch((err) => {
+        console.log('error ocurred!!', err)
+        setToastMessage('데이터를 불러오는데 실패했습니다.')
+        openToast()
+      })
+  }, [])
+
   const onHandlerFinish = async () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
@@ -64,11 +92,12 @@ const CreateTeam = () => {
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/recruitement/write?type="${type}"`,
         {
-          place, // 대표이미지 추가해야함
-          title, // 모집 글 제목
-          name, // 팀이름 빠져있다.
-          due, // due 로 이름 바꿔야함.
-          type, // 팀 분류 스터디 or 프로젝트
+          place,
+          image,
+          title,
+          name,
+          due,
+          type,
           content,
           region,
           link,
@@ -88,12 +117,18 @@ const CreateTeam = () => {
         <Typography variant="h3">모집 글 쓰기</Typography>
         <Box>
           <ImageUploadButton
-            accept={'default'}
-            id={'1'}
             setImage={setImage}
             setPreviewImage={setPreviewImage}
-            children={<Typography>대표이미지를 등록하세요</Typography>}
-          />
+          >
+            <Box>
+              <Image
+                src={previewImage}
+                width={218}
+                height={144}
+                alt="Picture of the author"
+              />
+            </Box>
+          </ImageUploadButton>
         </Box>
         <Box>
           <Typography variant="h6">모집글 제목</Typography>
