@@ -12,7 +12,7 @@ const RatioQuestionForm = ({
   control,
   idx,
   value,
-  disabled = false,
+  disabled,
 }: {
   optionList: RatioQuestionList
   control: any

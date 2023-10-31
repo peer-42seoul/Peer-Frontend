@@ -8,7 +8,7 @@ const CheckQuestionForm = ({
   control,
   idx,
   value,
-  disabled = false,
+  disabled,
 }: {
   optionList: CheckQuestionList
   control: any

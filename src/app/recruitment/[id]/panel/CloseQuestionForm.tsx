@@ -8,7 +8,7 @@ const CloseQuestionForm = ({
   control,
   idx,
   value,
-  disabled = false,
+  disabled,
 }: {
   optionList: CloseQuestionList
   control: any
