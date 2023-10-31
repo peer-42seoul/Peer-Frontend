@@ -8,7 +8,7 @@ const CodeTimer = ({
 }: {
   setEmailSendStatus: Dispatch<SetStateAction<'before' | 'submit' | 'error'>>
 }) => {
-  const [timer, setTimer] = useState(5)
+  const [timer, setTimer] = useState(5 * 60)
 
   useEffect(() => {
     const countdown = setInterval(() => {
