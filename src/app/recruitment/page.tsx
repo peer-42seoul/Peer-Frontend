@@ -13,7 +13,7 @@ import axios from 'axios'
 import SetTeamIntroduction from './panel/SetTeamIntroduction/SetTeamIntroduction'
 
 export interface IRoleData {
-  role: string
+  name: string
   member: number
 }
 export interface IFormInterview {
@@ -167,7 +167,7 @@ const CreateTeam = () => {
         )}
         <Box>
           <Typography variant="h6">팀 소개</Typography>
-          <SetTeamIntroduction value={teamIntroduction} setValue={setTeamIntroduction}/>
+          <SetTeamIntroduction value={teamIntroduction} setValue={setTeamIntroduction} />
           <TextField
             variant="outlined"
             sx={{ width: '80vw', height: 'auto' }}

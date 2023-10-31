@@ -21,7 +21,7 @@ import MainShowcase from './MainShowcase'
 import MainCarousel from './MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
-import { IPost } from '@/types/IPost'
+import { IPost } from '@/types/IPostDetail'
 
 const MainPage = ({ initData }: { initData: IPost[] }) => {
   const [page, setPage] = useState<number>(1)
@@ -38,21 +38,15 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
   }>({ due: '', region: '', place: '', status: '', tag: '' })
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
-  // json server용 url
+
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
-  const { data, isLoading, mutate } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main?type=projects&sort=recent&page=1&pagesize=10&keyword=&due=&region=&place=&status=&tag=`,
+  const pagesize = 10
+  const { data, isLoading, error, mutate } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pagesize=${pagesize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
     defaultGetFetcher,
     { fallbackData: initData },
   )
 
-  const pagesize = 10
-  //실제 api 서버용 url. mockup 데이터 만들기 어려워서 보류중
-  //모바일인지 pc인지에 따라서도 pagesize가 달라져야
-  const url = `http://localhost:3001?type=${type}&sort=${sort}&page=${page}&pagesize=${pagesize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
-  console.log('url', url)
-
-  /* 무한 스크롤 */
   const pageLimit = 2
   const { target, spinner } = useInfiniteScroll({
     setPage,
@@ -62,7 +56,7 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
   })
 
   if (isLoading) return <Typography>로딩중...</Typography>
-
+  if (error) return <Typography>에러 발생</Typography>
   if (!data) return <Typography>데이터가 없습니다</Typography>
 
   return (
@@ -90,7 +84,7 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
           <Stack alignItems={'center'} gap={2}>
             {data?.map((project: IPost) => (
               <Box key={project.user_id}>
-                <MainCard {...project} />
+                <MainCard {...project} type={type} />
               </Box>
             ))}
           </Stack>
@@ -145,7 +139,7 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
             <Grid container spacing={2}>
               {data?.map((project: IPost) => (
                 <Grid item key={project.user_id} sm={12} md={4}>
-                  <MainCard {...project} />
+                  <MainCard {...project} type={type}/>
                 </Grid>
               ))}
             </Grid>

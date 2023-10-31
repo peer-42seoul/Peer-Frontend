@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import LocalStorage from './localStorage'
+import axios from 'axios'
 
 interface IAuthStore {
   isLogin: boolean
-  userId: number | null
   accessToken: string | null
   login: (accessToken: string) => void
   logout: () => void
@@ -15,9 +15,9 @@ const useAuthStore = create<IAuthStore>((set) => {
     ? JSON.parse(authDataJSON)
     : { accessToken: null }
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
   return {
     isLogin: !!authData.accessToken,
-    userId: authData.userId,
     accessToken: authData.accessToken,
     login: (accessToken) => {
       // save userId, accessToken to LocalStorage
@@ -29,12 +29,18 @@ const useAuthStore = create<IAuthStore>((set) => {
         accessToken,
       }))
     },
-    logout: () => {
+    logout: async () => {
+      if (authData.accessToken) {
+        axios.get(`${API_URL}/logout`, {
+          headers: {
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+        })
+      }
       LocalStorage.removeItem('authData')
       set(() => ({
         isLogin: false,
         accessToken: null,
-        refreshToken: null,
       }))
     },
   }

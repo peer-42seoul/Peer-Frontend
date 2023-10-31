@@ -12,6 +12,7 @@ import useSWR from 'swr'
 import Image from 'next/image'
 import axios from 'axios'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
+import { fetchServerData } from '@/api/fetchers'
 
 interface IMessageData {
   MsgList: {
@@ -166,14 +167,14 @@ const MessageChatPage = () => {
   const [Owner, setOwner] = useState<IUser>()
   const [Target, setTarget] = useState<IUser>()
 
-  const fetcherWithParams = async (url: string, params: {}) => {
-    const response = await axios.get(url, { params })
-    return response.data
-  }
+  // const fetcherWithParams = async (url: string, params: {}) => {
+  //   const response = await axios.get(url, { params })
+  //   return response.data
+  // }
   // FIXME: 해당 부분을 나중에 post로 다 바꿔야함
   const { data, mutate, isLoading } = useSWR(
     `http://localhost:4000/test_detail_${page}`,
-    fetcherWithParams, // FIXME: 여기의 userid는 내 uid
+    fetchServerData, // FIXME: 여기의 userid는 내 uid
   )
   console.log('값 까보ㅈ', updatedData?.MsgList?.Msg)
   const { target, spinner } = useInfiniteScroll({

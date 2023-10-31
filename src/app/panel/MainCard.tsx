@@ -1,4 +1,4 @@
-import { IPost, Tag } from '@/types/IPostDetail'
+import { Tag } from '@/types/IPostDetail'
 import { Favorite } from '@mui/icons-material'
 import {
   Avatar,
@@ -14,23 +14,36 @@ import {
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 import { useState } from 'react'
+import { ProjectType } from '../page'
+import axios from 'axios'
 
+interface IMainCard {
+  title: string
+  image: string
+  user_id: string
+  user_nickname: string
+  user_thumbnail: string
+  status: string
+  tagList: Tag[]
+  isFavorite: boolean
+  post_id: string
+  type: ProjectType
+}
 const MainCard = ({
   title,
   image,
-  // user_id,
   user_nickname,
   user_thumbnail,
   status,
   tagList,
   isFavorite,
   post_id,
-}: IPost) => {
+  type,
+}: IMainCard) => {
   const [favorite, setFavorite] = useState(isFavorite)
   const changeFavorite = async () => {
     try {
-      // 추후에 이게 어떤 type인지 api 수정해야.
-      // await fetch(`/recruitement/favorite/${study_id}`
+      await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${post_id}`)
       setFavorite(!favorite)
     } catch (e) {
       console.log('error', e)
@@ -38,7 +51,7 @@ const MainCard = ({
   }
 
   return (
-    <Link href={`/recruitment/${post_id}`} style={{ textDecoration: 'none' }}>
+    <Link href={`/recruitment/${post_id}?type=${type}`} style={{ textDecoration: 'none' }}>
       <Card sx={{ maxWidth: 345 }}>
         <Box sx={{ position: 'relative' }}>
           <CardMedia
@@ -79,7 +92,6 @@ const MainCard = ({
           title={user_nickname}
         />
         <CardContent>
-          {/* title로 바꾸기 */}
           <Typography variant="body2" color="text.secondary">
             {title}
           </Typography>

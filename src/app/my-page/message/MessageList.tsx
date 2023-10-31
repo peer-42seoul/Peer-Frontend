@@ -16,7 +16,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { IMessagObject } from '@/types/IMessageInformation'
-import useAuthStore from '@/states/useAuthStore'
+// import useAuthStore from '@/states/useAuthStore'
 import useToast from '@/hook/useToast'
 
 interface IMessageList {
@@ -43,10 +43,10 @@ const MessageItem = ({
     (targetUser: number) => {
       console.log('삭제 타게팅된 유저', targetUser)
 
-      setSelectedUser((prevSelectedUsers: Array<{ targetId: string }>) => [
-        ...prevSelectedUsers,
-        { targetId: String(targetUser) }, //FIXME: targetId로 바꿔야함
-      ])
+      // setSelectedUser((prevSelectedUsers: Array<{ targetId: string }>) => [
+      //   ...prevSelectedUsers,
+      //   { targetId: String(targetUser) }, //FIXME: targetId로 바꿔야함
+      // ])
     },
     [setSelectedUser],
   )
@@ -118,7 +118,8 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
   )
 
   const { CuToast, isOpen, openToast, closeToast } = useToast()
-  const { userId } = useAuthStore()
+  // const { userId } = useAuthStore()
+  const userId = 1
   const searchMessageItemHandler = useCallback(() => {
     const filteredResults = data.filter((user: IMessagObject) =>
       user.targetNickname.includes(searchText),

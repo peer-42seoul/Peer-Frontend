@@ -1,6 +1,6 @@
 'use client'
 
-import useAuthStore from '@/states/useAuthStore'
+// import useAuthStore from '@/states/useAuthStore'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import { Box, Button, TextField } from '@mui/material'
 import axios from 'axios'
@@ -10,6 +10,7 @@ import React, { useCallback, useState } from 'react'
 interface IProps {
   targetId: number
   type: string
+  nickname: string | undefined
   keyword?: string
   setMessageData?: (prevData: any) => void | IMessageInformation[] | undefined
   handleClose?: any | undefined
@@ -26,15 +27,17 @@ const MessageForm = ({
   type,
   targetId,
   keyword,
+  nickname,
   setMessageData,
   setMessageFormVisible,
   handleClose,
   isPc,
 }: IProps) => {
   const router = useRouter()
-  const { userId } = useAuthStore()
+  // const { userId } = useAuthStore()
+  const userId = 1
   const [content, setContent] = useState('')
-
+  console.log(nickname)
   const updateMessageData = (newMessage: IMessageInformation) => {
     setMessageData?.((prevData: any) => [...prevData, newMessage])
   }

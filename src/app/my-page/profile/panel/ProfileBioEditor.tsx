@@ -178,7 +178,7 @@ const ProfileBioEditor = ({
 
     await axios
       .put(
-        'process.env.NEXT_PUBLIC_API_URL//api/v1/profile/introduction/edit',
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/introduction/edit`,
         submitData,
       )
       .then(() => {

@@ -1,36 +1,35 @@
-import { Control, FieldError } from 'react-hook-form'
+import CuTextField from '@/components/CuTextField'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+import Typography from '@mui/material/Typography'
+import { ControllerRenderProps, FieldError } from 'react-hook-form'
 
-import { ISignUpField, ISignUpInputs } from '@/types/ISignUpInputs'
-import SignUpField from './SignUpField'
+import { ISignUpInputs } from '@/types/ISignUpInputs'
 
 const NameField = ({
-  control,
+  field,
   error,
 }: {
-  control: Control<ISignUpInputs, any>
+  field: ControllerRenderProps<ISignUpInputs, 'name'>
   error: FieldError | undefined
 }) => {
-  const name: ISignUpField = {
-    label: '이름',
-    name: 'name',
-    control: control,
-    error: error,
-    placeholder: '이름을 입력하세요',
-    rules: {
-      required: '이름을 입력하세요',
-      minLength: {
-        value: 2,
-        message: '이름은 2자 이상이어야 합니다',
-      },
-    },
-    inValidInput: error?.message ? true : false,
-    inputProps: {
-      minLength: 2,
-      maxLength: 10,
-    },
-    type: 'text',
-  }
-  return <SignUpField {...name} />
+  return (
+    <>
+      <CuTextFieldLabel htmlFor="name">이름</CuTextFieldLabel>
+      <CuTextField
+        field={field}
+        autoComplete="off"
+        error={false}
+        type="text"
+        placeholder="이름을 입력하세요"
+        inputProps={{
+          maxLength: 5,
+        }}
+      />
+      {(error && <Typography color="error">{error.message}</Typography>) || (
+        <Typography>&nbsp;</Typography>
+      )}
+    </>
+  )
 }
 
 export default NameField

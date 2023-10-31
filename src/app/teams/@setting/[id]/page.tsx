@@ -89,6 +89,10 @@ const TeamsSetupPage = ({ id }: { id: number }) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/1`,
     defaultGetFetcher,
   )
+  // const { data, isLoading } = useSWR<ITeam>(
+  //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/1`,
+  //   defaultGetFetcher,
+  // )
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)

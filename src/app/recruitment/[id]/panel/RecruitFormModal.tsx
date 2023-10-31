@@ -7,13 +7,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import axios from 'axios'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ConfirmModal from './ConfirmModal'
 import CloseQuestionForm, { CloseQuestionList } from './CloseQuestionForm'
 import CheckQuestionForm, { CheckQuestionList } from './CheckQuestionForm'
 import RatioQuestionForm, { RatioQuestionList } from './RatioQuestionForm'
+import useAxiosWithAuth from '@/api/config'
 interface IInterviewData {
   question: string
   type: 'close' | 'open' | 'ratio' | 'check'
@@ -35,7 +35,7 @@ const data: IInterviewData[] = [
     question: '질문내용 3',
     type: 'ratio',
     optionList: {
-      number: '10',
+      number: '5',
       option1: '일번옵션',
       option2: '마지막옵션',
     },
@@ -97,6 +97,8 @@ const RecruitFormModal = ({
     handleSubmit(onSubmit)()
   }
 
+  const axiosWithAuth = useAxiosWithAuth()
+
   const onSubmit = async (data: any) => {
     console.log('data', data)
     const array = Object.values(data)
@@ -119,7 +121,7 @@ const RecruitFormModal = ({
     console.log('value', value)
 
     try {
-      await axios.post(
+      await axiosWithAuth.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${post_id}`,
         value,
       )
@@ -156,7 +158,7 @@ const RecruitFormModal = ({
           setOpen={setOpenConfirm}
           submitForm={submitForm}
         />
-        <Modal open={open} onClose={() => setOpen(false)}>
+        <Modal open={open} onClose={() => setOpen(false)} sx={{ zIndex: 1400 }}>
           <Box
             bgcolor={'white'}
             padding={4}
@@ -185,6 +187,7 @@ const RecruitFormModal = ({
                     optionList={quest?.optionList as CloseQuestionList}
                     control={control}
                     idx={idx}
+                    disabled={false}
                   />
                 )}
                 {quest.type === 'ratio' && (
@@ -192,6 +195,7 @@ const RecruitFormModal = ({
                     optionList={quest?.optionList as RatioQuestionList}
                     control={control}
                     idx={idx}
+                    disabled={false}
                   />
                 )}
                 {quest.type === 'check' && (
@@ -199,6 +203,7 @@ const RecruitFormModal = ({
                     optionList={quest?.optionList as CheckQuestionList}
                     control={control}
                     idx={idx}
+                    disabled={false}
                   />
                 )}
                 {errors[idx] && (
