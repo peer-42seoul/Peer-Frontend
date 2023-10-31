@@ -69,7 +69,7 @@ const SignUp = () => {
   const [signUpStep, setSignUpStep] = useState<number>(0)
   const [emailSendStatus, setEmailSendStatus] = useState<
     'before' | 'submit' | 'error'
-  >('submit')
+  >('before')
   const [codeSendStatus, setCodeSendStatus] = useState<
     'before' | 'submit' | 'error'
   >('before')
