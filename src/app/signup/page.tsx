@@ -245,7 +245,6 @@ const SignUp = () => {
                     <EmailField
                       field={field}
                       emailSendStatus={emailSendStatus}
-                      setEmailSendStatus={setEmailSendStatus}
                       submitEmail={submitEmail}
                       isSubmitting={isSubmitting}
                       error={errors?.email}
@@ -262,7 +261,6 @@ const SignUp = () => {
                     <CodeField
                       field={field}
                       codeSendStatus={codeSendStatus}
-                      setCodeSendStatus={setCodeSendStatus}
                       submitCode={submitCode}
                       isSubmitting={isSubmitting}
                       error={errors?.code}

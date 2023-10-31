@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react'
-
 import { InputAdornment, Button, Typography } from '@mui/material'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
@@ -9,14 +7,12 @@ import { ISignUpInputs } from '@/types/ISignUpInputs'
 const CodeField = ({
   field,
   codeSendStatus,
-  setCodeSendStatus,
   submitCode,
   isSubmitting,
   error,
 }: {
   field: ControllerRenderProps<ISignUpInputs, 'code'>
   codeSendStatus: 'before' | 'submit' | 'error'
-  setCodeSendStatus: Dispatch<SetStateAction<'before' | 'submit' | 'error'>>
   submitCode: () => void
   isSubmitting: boolean
   error: FieldError | undefined
@@ -25,13 +21,8 @@ const CodeField = ({
     <>
       <CuTextFieldLabel htmlFor="code">인증번호</CuTextFieldLabel>
       <CuTextField
-        field={{
-          ...field,
-          onChange: (e: any) => {
-            field.onChange(e)
-            setCodeSendStatus('before')
-          },
-        }}
+        field={field}
+        disabled={codeSendStatus === 'submit'}
         autoComplete="off"
         error={codeSendStatus === 'error'}
         type="text"
@@ -44,7 +35,7 @@ const CodeField = ({
             <InputAdornment position="end">
               <Button
                 variant="contained"
-                disabled={isSubmitting}
+                disabled={isSubmitting || codeSendStatus === 'submit'}
                 onClick={submitCode}
               >
                 인증번호 확인
