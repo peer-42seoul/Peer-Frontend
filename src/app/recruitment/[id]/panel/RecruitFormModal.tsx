@@ -20,33 +20,6 @@ interface IInterviewData {
   optionList?: CloseQuestionList | RatioQuestionList | CheckQuestionList | null
 }
 
-const data: IInterviewData[] = [
-  {
-    question: '질문내용 1',
-    type: 'close',
-    optionList: ['1번선택지', '2번선택지'],
-  },
-  {
-    question: '질문내용 2',
-    type: 'open',
-    optionList: null,
-  },
-  {
-    question: '질문내용 3',
-    type: 'ratio',
-    optionList: {
-      number: '5',
-      option1: '일번옵션',
-      option2: '마지막옵션',
-    },
-  },
-  {
-    question: '질문내용 4',
-    type: 'check',
-    optionList: ['1번선택지', '2번선택지', '3번선택지'],
-  },
-]
-
 const RecruitFormModal = ({
   open,
   setOpen,

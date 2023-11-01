@@ -12,7 +12,7 @@ import {
   List,
   Container,
 } from '@mui/material'
-import { Tag } from '@/types/IPostDetail'
+import { IPostDetail, Tag } from '@/types/IPostDetail'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
 import RecruitFormModal from './panel/RecruitFormModal'
@@ -21,6 +21,8 @@ import RecruitFormText from './panel/RecruitFormText'
 import useMedia from '@/hook/useMedia'
 import ApplyButton from './panel/ApplyButton'
 import LinkButton from './panel/LinkButton'
+import useSWR from 'swr'
+import { defaultGetFetcher } from '@/api/fetchers'
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const type = useSearchParams().get('type') ?? 'projects'
@@ -30,7 +32,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
 
   const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPostDetail>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`, defaultGetFetcher);
-  const { data: userData } = useSWR<{nickname: string; profileImageUrl: string}>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/other/?userId=${data?.user_id}?infoList=profileImageUrl&infoList=nickname`, defaultGetFetcher);
+  const { data: userData } = useSWR<{ nickname: string; profileImageUrl: string }>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/other/?userId=${data?.user_id}?infoList=profileImageUrl&infoList=nickname`, defaultGetFetcher);
 
   const total = useMemo(() => {
     if (!data) return 0
@@ -48,7 +50,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   if (isLoading) return <Typography>로딩중...</Typography>
   if (error) return <Typography>에러 발생</Typography>
   if (!data) return <Typography>데이터가 없습니다</Typography>
-          
+
   return (
     <>
       <RecruitFormModal
@@ -62,7 +64,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
         <Container>
           <Stack direction={'row'} gap={4} marginBottom={6}>
             <Image
-              src={userData?.profileUrl}
+              src={userData?.profileImageUrl ?? ""}
               alt="leader_profile"
               width={300}
               height={300}
@@ -146,7 +148,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             <Typography>{data?.place}</Typography>
           </Stack>
           <Image
-            src={userData?.profileUrl}
+            src={userData?.profileImageUrl ?? ""}
             alt="leader_profile"
             width={300}
             height={300}
