@@ -153,11 +153,10 @@ const MessageWritingForm = ({ handleClose }: any) => {
     }
 
     try {
-      const response = await axios.get(
-        // `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/searching`,
-        'http://localhost:4000/test_options',
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/searching`,
         {
-          params: {
+          body: {
             keyword,
           },
         },
