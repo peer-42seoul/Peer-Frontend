@@ -26,8 +26,8 @@ const ImageUploadButton = ({
   register,
 }: {
   children?: React.ReactNode
-  accept: string
-  id: string
+  accept?: string
+  id?: string
   setImage: (image: File[]) => void
   setPreviewImage: (imageUrl: string) => void
   onChange?: () => void

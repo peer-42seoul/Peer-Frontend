@@ -2,7 +2,7 @@ import { Box, Button, TextField, Typography } from '@mui/material'
 import { SelectInterviewType } from './SelectInterviewType'
 import WriteAnswers from './WriteAnswers'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { IFormInterview } from '@/app/recruitment/page'
+import { IFormInterview } from '@/app/recruitment/write/page'
 
 const AreaForAddInterviewForm = ({
   question,
@@ -41,7 +41,11 @@ const AreaForAddInterviewForm = ({
           valueOfMin === '' ||
           valueOfMax === ''
         )
+        {
+          console.log("모든 값을 입력해주세요")
+          alert('모든 값을 입력해주세요')
           return
+        }
         setInterviewData((prev) => [
           ...prev,
           {
@@ -59,7 +63,11 @@ const AreaForAddInterviewForm = ({
         return
       }
       case '주관식': {
-        if (question === '') return
+        if (question === '') {
+          console.log("모든 값을 입력해주세요")
+          alert('모든 값을 입력해주세요')
+          return
+        }
         break
       }
       default: {
