@@ -185,10 +185,13 @@ const KeywordSettingBox = ({
   setToastMessage: (message: IToastProps) => void
 }) => {
   const { isOpen, closeModal, openModal } = useModal()
+  const axiosWithAuth = useAxiosWithAuth()
 
   const deleteAll = async () => {
     console.log('전체 삭제')
-    // await axios.delete('/api/v1/alarm/delete/all')
+    await axiosWithAuth.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete/all`,
+    )
     closeModal()
   }
 
