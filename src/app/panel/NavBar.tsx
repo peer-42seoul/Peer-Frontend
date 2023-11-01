@@ -19,11 +19,13 @@ import { useEffect, useState } from 'react'
 import SearchButton from './SearchButton'
 import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
+import useAuthStore from '@/states/useAuthStore'
 
 export const MobileNav = () => {
   const [value, setValue] = useState(0)
   const pathname = usePathname()
   const router = useRouter()
+  const { isLogin } = useAuthStore()
 
   useEffect(() => {
     if (pathname === '/') {
@@ -82,7 +84,7 @@ export const MobileNav = () => {
         <BottomNavigationAction
           label="내 프로필"
           onClick={() => {
-            router.push('/my-page')
+            router.push(isLogin ? '/my-page' : '/login')
           }}
         />
       </BottomNavigation>
@@ -90,12 +92,12 @@ export const MobileNav = () => {
   )
 }
 
-//추후 url에 따라 버튼이 달라지도록 구현 필요
 export const PcNav = () => {
   const [value, setValue] = useState(0)
   const { isTablet } = useMedia();
   const pathname = usePathname()
   const router = useRouter()
+  const { isLogin } = useAuthStore()
 
   useEffect(() => {
     if (pathname === '/') {
@@ -161,9 +163,7 @@ export const PcNav = () => {
             <Favorite />
           </IconButton>
         </Link>
-        <Link href="/my-page/profile">
-          <Avatar />
-        </Link>
+        <Avatar onClick={() => router.push(isLogin ? '/my-page/profile' : '/login')} />
         <Link href={'/recruitment'}>
           {isTablet ?
             <IconButton>

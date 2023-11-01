@@ -16,18 +16,18 @@ const SelectType = ({
       <ButtonGroup>
         <Button
           variant="text"
-          sx={{ color: type === 'study' ? 'blue' : 'black' }}
+          sx={{ color: type === 'Study' ? 'blue' : 'black' }}
           onClick={() => {
-            setType('study')
+            setType('Study')
           }}
         >
           스터디
         </Button>
         <Button
           variant="text"
-          sx={{ color: type === 'project' ? 'blue' : 'black' }}
+          sx={{ color: type === 'Project' ? 'blue' : 'black' }}
           onClick={() => {
-            setType('project')
+            setType('Project')
           }}
         >
           프로젝트
@@ -39,7 +39,7 @@ const SelectType = ({
   return (
     <ButtonGroup
       variant="contained"
-      aria-label="study or project button"
+      aria-label="Study or Project button"
       fullWidth
       sx={{
         justifyContent: 'space-evenly',
@@ -47,17 +47,17 @@ const SelectType = ({
       }}
     >
       <Button
-        sx={{ backgroundColor: type === 'study' ? 'blue' : 'gray' }}
+        sx={{ backgroundColor: type === 'Study' ? 'blue' : 'gray' }}
         onClick={() => {
-          setType('study')
+          setType('Study')
         }}
       >
         스터디
       </Button>
       <Button
-        sx={{ backgroundColor: type === 'project' ? 'blue' : 'gray' }}
+        sx={{ backgroundColor: type === 'Project' ? 'blue' : 'gray' }}
         onClick={() => {
-          setType('project')
+          setType('Project')
         }}
       >
         프로젝트

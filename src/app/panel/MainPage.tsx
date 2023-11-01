@@ -26,11 +26,11 @@ import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 //latest, hit
 export type ProjectSort = 'latest' | 'hit'
-export type ProjectType = 'study' | 'project'
+export type ProjectType = 'Study' | 'Project'
 
 const MainPage = ({ initData }: { initData: IPost[] }) => {
   const [page, setPage] = useState<number>(1)
-  const [type, setType] = useState<ProjectType>('study')
+  const [type, setType] = useState<ProjectType>('Study')
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort>('latest')
   /* 추후 디자인 추가되면 schedule 추가하기 */

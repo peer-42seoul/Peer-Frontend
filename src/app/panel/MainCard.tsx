@@ -14,10 +14,10 @@ import {
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 import { useState } from 'react'
-import { ProjectType } from '../page'
 import axios from 'axios'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
+import { ProjectType } from './MainPage'
 
 interface IMainCard {
   title: string
@@ -47,9 +47,8 @@ const MainCard = ({
   const router = useRouter()
 
   const changeFavorite = async () => {
-    if (!isLogin) {
+    if (!isLogin)
       return router.push('/login');
-    }
     try {
       await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${post_id}`)
       setFavorite(!favorite)
