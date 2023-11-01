@@ -16,6 +16,8 @@ import { red } from '@mui/material/colors'
 import { useState } from 'react'
 import { ProjectType } from '../page'
 import axios from 'axios'
+import useAuthStore from '@/states/useAuthStore'
+import { useRouter } from 'next/navigation'
 
 interface IMainCard {
   title: string
@@ -25,7 +27,7 @@ interface IMainCard {
   user_thumbnail: string
   status: string
   tagList: Tag[]
-  isFavorite: boolean
+  isFavorite?: boolean
   post_id: string
   type: ProjectType
 }
@@ -41,7 +43,13 @@ const MainCard = ({
   type,
 }: IMainCard) => {
   const [favorite, setFavorite] = useState(isFavorite)
+  const { isLogin } = useAuthStore()
+  const router = useRouter()
+
   const changeFavorite = async () => {
+    if (!isLogin) {
+      return router.push('/login');
+    }
     try {
       await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${post_id}`)
       setFavorite(!favorite)

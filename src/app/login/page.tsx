@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import axios from 'axios'
 import useAuthStore from '@/states/useAuthStore'
@@ -19,6 +19,7 @@ import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import OauthLoginBox from './panel/OauthLoginBox'
 import useMedia from '@/hook/useMedia'
 import useToast from '@/hook/useToast'
+import { useRouter } from 'next/navigation'
 
 interface ILoginFormInput {
   userEmail: string
@@ -83,10 +84,11 @@ const Login = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const { login } = useAuthStore()
+  const { isLogin, login } = useAuthStore()
   const [, setCookie] = useCookies(['refreshToken'])
   const [errorMessage, setErrorMessage] = useState('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const router = useRouter()
 
   const {
     handleSubmit,
@@ -108,7 +110,7 @@ const Login = () => {
         setCookie('refreshToken', res.data.refreshToken, { path: '/' })
       })
       .catch((error) => {
-        console.log(error.message)
+        //console.log(error.message)
         if (error.statusText == 'Unauthorized')
           setErrorMessage('이메일과 비밀번호를 다시 확인해주세요.')
         else setErrorMessage('알 수 없는 오류가 발생했습니다.')
@@ -116,6 +118,11 @@ const Login = () => {
       })
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    if (isLogin) router.push('/')
+  }, [isLogin])
+
   return (
     <>
       <Container sx={isPc ? PCBase : MobileBase}>

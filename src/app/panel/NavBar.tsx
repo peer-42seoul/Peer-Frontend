@@ -14,15 +14,26 @@ import {
   Paper,
   Stack
 } from '@mui/material'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import SearchButton from './SearchButton'
 import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
 
 export const MobileNav = () => {
   const [value, setValue] = useState(0)
+  const pathname = usePathname()
   const router = useRouter()
+
+  useEffect(() => {
+    if (pathname === '/') {
+      setValue(0)
+    } else if (pathname === '/team-list') {
+      setValue(3)
+    } else if (pathname === '/my-page') {
+      setValue(4)
+    }
+  }, [pathname])
 
   return (
     <Paper
@@ -83,8 +94,16 @@ export const MobileNav = () => {
 export const PcNav = () => {
   const [value, setValue] = useState(0)
   const { isTablet } = useMedia();
+  const pathname = usePathname()
   const router = useRouter()
 
+  useEffect(() => {
+    if (pathname === '/') {
+      setValue(0)
+    } else if (pathname === '/team-list') {
+      setValue(3)
+    }
+  }, [pathname])
   return (
     <Stack
       direction={'row'}

@@ -1,6 +1,6 @@
 import { Button, ButtonGroup } from '@mui/material'
 import { Dispatch, SetStateAction } from 'react'
-import { ProjectType } from '../page'
+import { ProjectType } from './MainPage'
 
 const SelectType = ({
   type,
@@ -16,18 +16,18 @@ const SelectType = ({
       <ButtonGroup>
         <Button
           variant="text"
-          sx={{ color: type === 'studies' ? 'blue' : 'black' }}
+          sx={{ color: type === 'study' ? 'blue' : 'black' }}
           onClick={() => {
-            setType('studies')
+            setType('study')
           }}
         >
           스터디
         </Button>
         <Button
           variant="text"
-          sx={{ color: type === 'projects' ? 'blue' : 'black' }}
+          sx={{ color: type === 'project' ? 'blue' : 'black' }}
           onClick={() => {
-            setType('projects')
+            setType('project')
           }}
         >
           프로젝트
@@ -47,17 +47,17 @@ const SelectType = ({
       }}
     >
       <Button
-        sx={{ backgroundColor: type === 'studies' ? 'blue' : 'gray' }}
+        sx={{ backgroundColor: type === 'study' ? 'blue' : 'gray' }}
         onClick={() => {
-          setType('studies')
+          setType('study')
         }}
       >
         스터디
       </Button>
       <Button
-        sx={{ backgroundColor: type === 'projects' ? 'blue' : 'gray' }}
+        sx={{ backgroundColor: type === 'project' ? 'blue' : 'gray' }}
         onClick={() => {
-          setType('projects')
+          setType('project')
         }}
       >
         프로젝트

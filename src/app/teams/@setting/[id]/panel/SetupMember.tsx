@@ -29,14 +29,16 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
     if (member.grant === 'leader') {
       axios
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.userId}&role=member`,
         )
         .then((res) => {
           console.log(res)
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
-                m.id === member.id ? { ...m, grant: TeamGrant.MEMBER } : m,
+                m.userId === member.userId
+                  ? { ...m, grant: TeamGrant.MEMBER }
+                  : m,
               ),
             )
           } else console.log(res.status)
@@ -47,14 +49,16 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
     } else {
       axios
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.userId}&role=leader`,
         )
         .then((res) => {
           console.log(res)
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
-                m.id === member.id ? { ...m, grant: TeamGrant.LEADER } : m,
+                m.userId === member.userId
+                  ? { ...m, grant: TeamGrant.LEADER }
+                  : m,
               ),
             )
           } else console.log(res.status)
@@ -76,7 +80,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
     if (!member) return console.log('팀원이 없습니다.')
     axios
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/delete/${teamId}?userId=${member.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/delete/${teamId}?userId=${member.userId}`,
       )
       .then((res) => {
         if (res.status === 200) {

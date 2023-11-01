@@ -21,7 +21,7 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
             border: '1px solid',
           }}
         >
-          <CardActionArea onClick={() => router.push(`/teams/${team.id}`)}>
+          <CardActionArea onClick={() => router.push(`/teams/${team.userId}`)}>
             {/* 기획상 문제로 임시로 주석처리 */}
             {/* {team.myRole && (
                 <IconButton

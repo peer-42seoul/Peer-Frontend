@@ -8,6 +8,10 @@ export const defaultGetFetcher = (url: string) =>
       throw error
     })
 
+/* useSWR에 적용하는 법
+  const {data} = useSWR([url, axiosInstance], ([url, axiosInstance]) => getFetcherWithInstance(url, axiosInstance))
+*/
+
 export const getFetcherWithInstance = (
   url: string,
   axiosInstance: AxiosInstance,

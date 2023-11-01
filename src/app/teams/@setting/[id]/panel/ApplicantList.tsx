@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 import axios from 'axios'
+import useMedia from '@/hook/useMedia'
+import FormAnswer from './RecuitFormAnswer'
 
 const ApplicantList = ({
   close,
@@ -15,6 +17,7 @@ const ApplicantList = ({
   teamId: string
 }) => {
   console.log(teamId)
+  const { isPc } = useMedia()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -34,12 +37,12 @@ const ApplicantList = ({
       .put(
         `${
           process.env.NEXT_PUBLIC_API_URL
-        }/api/v1/team/accept/${teamId}?userId=${member!.id}`,
+        }/api/v1/team/accept/${teamId}?userId=${member!.userId}`,
       )
       .then((res) => {
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
-          setMembers(data.applicants)
+          setMembers(data)
 
           if (index > 0) setIndex(index - 1)
         }
@@ -54,13 +57,13 @@ const ApplicantList = ({
     axios
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/deny/${teamId}?userId=${
-          member!.id
+          member!.userId
         }`,
       )
       .then((res) => {
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
-          setMembers(data.applicants)
+          setMembers(data)
 
           if (index > 0) setIndex(index - 1)
         }
@@ -122,7 +125,7 @@ const ApplicantList = ({
 
   return (
     <>
-      <Stack border="1px solid" borderRadius={2} height={400}>
+      <Stack border="1px solid" borderRadius={2} height={isPc ? 600 : 400}>
         <Stack
           direction="row"
           display="flex"
@@ -158,7 +161,7 @@ const ApplicantList = ({
             borderRadius={2}
             p={2}
             overflow="auto"
-            height={100}
+            height={isPc ? 300 : 100}
             ref={scrollRef}
           >
             {member ? (
@@ -167,7 +170,7 @@ const ApplicantList = ({
                   <Typography fontWeight="bold">
                     {interview.question}
                   </Typography>
-                  <Typography>{interview.answer}</Typography>
+                  <FormAnswer interview={interview} index={index} />
                 </Stack>
               ))
             ) : (

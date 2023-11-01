@@ -38,7 +38,6 @@ const ProfileImageModal = ({
           outline: 'none',
           transform: 'translate(-50%, -50%)',
         }}
-        onClick={handleModalClose}
       />
     </Modal>
   )
