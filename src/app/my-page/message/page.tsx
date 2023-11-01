@@ -1,7 +1,8 @@
 'use client'
 
-import { defaultGetFetcher } from '@/api/fetchers'
-import MessageList from '@/app/my-page/message/MessageList'
+import { AxiosInstance } from 'axios'
+import useAxiosWithAuth from '@/api/config'
+import { getFetcherWithInstance } from '@/api/fetchers'
 import { Box, Button, Container } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
@@ -18,9 +19,11 @@ const MessageMain = () => {
   const [messageList, setMessageList] = useState<IMessagObject[]>([])
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
-  const { data, error, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/list?userId=${1}`, // FIXME:  내 userId 넣기
-    defaultGetFetcher,
+  const axiosInstance = useAxiosWithAuth()
+  const { data, error, isLoading } = useSWR<IMessagObject[]>(
+    [`${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/list`, axiosInstance],
+    ([url, axiosInstance]) =>
+      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
   )
 
   useEffect(() => {
@@ -29,7 +32,6 @@ const MessageMain = () => {
     }
   }, [data])
 
-  console.log('data의 값은', data)
   return (
     <Container sx={{ height: '90vh' }}>
       {isOpen && (
