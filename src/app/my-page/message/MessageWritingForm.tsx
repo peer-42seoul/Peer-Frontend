@@ -102,16 +102,14 @@ const MessageForm = ({
         return
       }
 
-      const data: IMessageData = {
-        targetId: storedSelectedUser,
-        content,
-      }
-      const url = `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/new-message?userId=${userId}`
-      // const url = `/api/v1/message/new-message?userId=${1}`
-
       const response = await axios.post(
-        url, //FIXME:이 주소도 임시라서 api구성할 때 삭제하기
-        data,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/new-message`,
+        {
+          body: {
+            targetId: storedSelectedUser,
+            content,
+          },
+        },
       )
       setContent('')
       updateMessageData(response.data)
