@@ -3,13 +3,7 @@ import { Avatar, Stack, Typography } from '@mui/material'
 // import { defaultGetFetcher } from '@/api/fetchers'
 import { ITeamInfo } from '@/types/ITeamInfo'
 import useModal from '@/hook/useModal'
-import {
-  StatusIcon,
-  IconInfo,
-  RegionInfo,
-  OperationFormInfo,
-  TypeInfo,
-} from './TeamInfoComponent'
+import { StatusIcon, IconInfo } from './TeamInfoComponent'
 import TeamMemberModal from './TeamMemberModal'
 
 const defaultLogoPath = '/images/profile.jpeg' // TODO : 기본 로고 path 확인하기
@@ -75,15 +69,6 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
             />
             <IconInfo type="LEADER" text={data.leaderName} />
             <IconInfo type="DATE" text={data.dueTo.toString()} />
-          </Stack>
-          <Stack direction={'row'}>
-            <TypeInfo type={data.type} />
-            <OperationFormInfo operationForm={data.operationForm} />
-          </Stack>
-          <Stack direction={'row'}>
-            {data.region.map((region, idx) => (
-              <RegionInfo key={idx} region={region} />
-            ))}
           </Stack>
         </Stack>
       </Stack>
