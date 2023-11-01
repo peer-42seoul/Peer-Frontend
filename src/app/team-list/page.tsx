@@ -8,6 +8,7 @@ import { Stack } from '@mui/material'
 // import useAuthStore from '@/states/useAuthStore'
 
 export interface ITeamInfo {
+  // userId: string
   id: string
   name: string
   dueTo: string

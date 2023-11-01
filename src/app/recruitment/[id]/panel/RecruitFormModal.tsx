@@ -41,6 +41,20 @@ const data: IInterviewData[] = [
     },
   },
   {
+    question: '질문내용 2',
+    type: 'open',
+    optionList: null,
+  },
+  {
+    question: '질문내용 3',
+    type: 'ratio',
+    optionList: {
+      number: '5',
+      option1: '일번옵션',
+      option2: '마지막옵션',
+    },
+  },
+  {
     question: '질문내용 4',
     type: 'check',
     optionList: ['1번선택지', '2번선택지', '3번선택지'],
@@ -173,6 +187,7 @@ const RecruitFormModal = ({
                     optionList={quest?.optionList as CloseQuestionList}
                     control={control}
                     idx={idx}
+                    disabled={false}
                   />
                 )}
                 {quest.type === 'ratio' && (
@@ -180,6 +195,7 @@ const RecruitFormModal = ({
                     optionList={quest?.optionList as RatioQuestionList}
                     control={control}
                     idx={idx}
+                    disabled={false}
                   />
                 )}
                 {quest.type === 'check' && (
@@ -187,6 +203,7 @@ const RecruitFormModal = ({
                     optionList={quest?.optionList as CheckQuestionList}
                     control={control}
                     idx={idx}
+                    disabled={false}
                   />
                 )}
                 {errors[idx] && (
