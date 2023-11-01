@@ -1,3 +1,4 @@
+import { locationData } from '@/api/location'
 import {
   FormControl,
   InputLabel,
@@ -9,13 +10,16 @@ import {
 const SetupSelect = ({
   type,
   value,
+  parentLocation,
   setValue,
 }: {
   type: string
   value: string
+  parentLocation?: string
   setValue: (event: SelectChangeEvent) => void
 }) => {
   if (type === 'location') {
+    console.log('parent', parentLocation)
     return (
       <FormControl sx={{ m: 0, minWidth: 80 }} size="small">
         <InputLabel id="demo-select-small-label">지역</InputLabel>
@@ -26,13 +30,20 @@ const SetupSelect = ({
           label="지역"
           onChange={setValue}
         >
-          {['공백', '서울', '부산', '인천', '대구', '대전', '광주', '울산'].map(
-            (region, idx) => (
-              <MenuItem key={'region' + idx} value={region}>
-                {region}
+          {!parentLocation &&
+            locationData.map((region, idx) => (
+              <MenuItem key={'region' + idx} value={region.name}>
+                {region.name}
               </MenuItem>
-            ),
-          )}
+            ))}
+          {parentLocation &&
+            locationData
+              .find((region) => region.name === parentLocation)
+              ?.subArea.map((region, idx) => (
+                <MenuItem key={'region' + idx} value={region}>
+                  {region}
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
     )
