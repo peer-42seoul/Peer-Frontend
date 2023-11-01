@@ -7,8 +7,13 @@ import {
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useEffect, useState } from 'react'
+import { FieldValues, UseFormSetValue } from 'react-hook-form'
 
-export default function SearchHistory() {
+export default function SearchHistory({
+  searchwordSet,
+}: {
+  searchwordSet: UseFormSetValue<FieldValues>
+}) {
   const [searchKeywords, setSearchKeywords] = useState<string[]>([])
 
   // 컴포넌트가 마운트 될 때 localStorage에서 검색어 가져오기
@@ -31,6 +36,7 @@ export default function SearchHistory() {
         <Typography padding={1} fontSize={'small'} color={'grey'}>
           최근 검색어
         </Typography>
+
         {searchKeywords.map((keyword, index) => (
           <ListItem
             key={index}
@@ -44,7 +50,9 @@ export default function SearchHistory() {
               </IconButton>
             }
           >
-            <ListItemText primary={keyword} />
+            <IconButton onClick={() => searchwordSet('searchWord', keyword)}>
+              <ListItemText primary={keyword} />
+            </IconButton>
           </ListItem>
         ))}
       </List>
