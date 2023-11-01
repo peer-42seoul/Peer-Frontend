@@ -45,7 +45,7 @@ export const IconInfo = ({ type, text, onClick }: IIconInfoProps) => {
       return (
         <Stack direction={'row'}>
           <CalendarMonthOutlinedIcon />
-          <Typography>{text}</Typography>
+          <Typography>{text} ~</Typography>
         </Stack>
       )
   }

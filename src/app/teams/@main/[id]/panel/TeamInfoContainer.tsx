@@ -27,12 +27,9 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
       name: '프로젝트 스페이스도그 🐶🚀',
       teamPicturePath: null,
       status: 'BEFORE',
-      memberCount: '1/3',
+      memberCount: 1,
       leaderName: '야채',
-      type: 'STUDY',
-      dueTo: 12,
-      operationForm: 'ONLINE',
-      region: ['서울', '인천'],
+      createdAt: '2023.09.10',
     },
     error: false,
     isLoading: false,
@@ -64,11 +61,11 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
           <Stack direction={'row'}>
             <IconInfo
               type="MEMBER"
-              text={data.memberCount}
+              text={data.memberCount.toString()}
               onClick={() => openModal()}
             />
             <IconInfo type="LEADER" text={data.leaderName} />
-            <IconInfo type="DATE" text={data.dueTo.toString()} />
+            <IconInfo type="DATE" text={data.createdAt} />
           </Stack>
         </Stack>
       </Stack>
