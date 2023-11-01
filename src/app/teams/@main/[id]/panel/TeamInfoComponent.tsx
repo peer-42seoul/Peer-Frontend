@@ -22,14 +22,13 @@ type TIconType = 'MEMBER' | 'LEADER' | 'DATE'
 interface IIconInfoProps {
   type: TIconType
   text: string
-  onClick?: () => void
 }
 
-export const IconInfo = ({ type, text, onClick }: IIconInfoProps) => {
+export const IconInfo = ({ type, text }: IIconInfoProps) => {
   switch (type) {
     case 'MEMBER':
       return (
-        <Stack direction={'row'} onClick={onClick} sx={{ cursor: 'pointer' }}>
+        <Stack direction={'row'}>
           <GroupsOutlinedIcon />
           <Typography>{text}</Typography>
         </Stack>

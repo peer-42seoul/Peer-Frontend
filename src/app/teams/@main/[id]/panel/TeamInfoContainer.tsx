@@ -2,14 +2,11 @@
 import { Avatar, Stack, Typography } from '@mui/material'
 // import { defaultGetFetcher } from '@/api/fetchers'
 import { ITeamInfo } from '@/types/ITeamInfo'
-import useModal from '@/hook/useModal'
 import { StatusIcon, IconInfo } from './TeamInfoComponent'
-import TeamMemberModal from './TeamMemberModal'
 
 const defaultLogoPath = '/images/profile.jpeg' // TODO : 기본 로고 path 확인하기
 
 const TeamInfoContainer = ({ id }: { id: number }) => {
-  const { isOpen, closeModal, openModal } = useModal()
   // TODO : id를 이용해서 데이터 받아오기
   //   const { data, error, isLoading } = useSWR<ITeamInfo>(
   //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/main/${id}`,
@@ -59,21 +56,12 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
             <StatusIcon status={data.status} />
           </Stack>
           <Stack direction={'row'}>
-            <IconInfo
-              type="MEMBER"
-              text={data.memberCount.toString()}
-              onClick={() => openModal()}
-            />
+            <IconInfo type="MEMBER" text={data.memberCount.toString()} />
             <IconInfo type="LEADER" text={data.leaderName} />
             <IconInfo type="DATE" text={data.createdAt} />
           </Stack>
         </Stack>
       </Stack>
-      <TeamMemberModal
-        teamId={data.id}
-        open={isOpen}
-        handleClose={closeModal}
-      />
     </>
   )
 }
