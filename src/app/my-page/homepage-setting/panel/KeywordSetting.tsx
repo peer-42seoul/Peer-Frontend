@@ -38,10 +38,12 @@ const KeywordAddingField = ({
   mutate,
   isPc,
   setToastMessage,
+  keywordList,
 }: {
   mutate: () => void
   isPc: boolean
   setToastMessage: (message: IToastProps) => void
+  keywordList: Array<IChip> | undefined | null
 }) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
   const textFieldRef = useRef<HTMLInputElement | null>(null)
@@ -56,6 +58,12 @@ const KeywordAddingField = ({
           severity: 'error',
           message:
             '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
+        })
+        return
+      } else if (keywordList?.find((keyword) => keyword.label === trimmed)) {
+        setToastMessage({
+          severity: 'error',
+          message: '이미 등록된 알림 키워드입니다.',
         })
         return
       }
@@ -190,6 +198,7 @@ const KeywordSettingBox = ({
         setToastMessage={setToastMessage}
         mutate={mutate}
         isPc={isPc}
+        keywordList={data}
       />
       <CuButton
         variant="text"
