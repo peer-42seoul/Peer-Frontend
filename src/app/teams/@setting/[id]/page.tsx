@@ -7,6 +7,7 @@ import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
+import { useRouter } from 'next/navigation'
 
 export enum TeamType {
   PROJECT = 'project',
@@ -83,16 +84,12 @@ export interface IApplicant {
 }
 
 const TeamsSetupPage = ({ id }: { id: number }) => {
-  console.log(id)
+  const router = useRouter()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const { data, isLoading } = useSWR<ITeam>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/1`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${id}`,
     defaultGetFetcher,
   )
-  // const { data, isLoading } = useSWR<ITeam>(
-  //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/1`,
-  //   defaultGetFetcher,
-  // )
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
@@ -132,8 +129,18 @@ const TeamsSetupPage = ({ id }: { id: number }) => {
       ) : (
         <Typography>팀을 추가해주세요</Typography>
       )}
-      <Button variant="contained">모집 글 보기</Button>
-      <Button variant="contained">모집 글 수정하기</Button>
+      <Button
+        variant="contained"
+        onClick={() => router.push(`/recruitment/${id}`)}
+      >
+        모집 글 보기
+      </Button>
+      <Button
+        variant="contained"
+        onClick={() => router.push(`/recruitment/${id}`)} // TODO: 수정 url 적용
+      >
+        모집 글 수정하기
+      </Button>
     </Stack>
   )
 }
