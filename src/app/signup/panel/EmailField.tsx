@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react'
-
 import { InputAdornment, Button, Typography } from '@mui/material'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
@@ -10,14 +8,12 @@ import { ISignUpInputs } from '@/types/ISignUpInputs'
 const EmailField = ({
   field,
   emailSendStatus,
-  setEmailSendStatus,
   submitEmail,
   isSubmitting,
   error,
 }: {
   field: ControllerRenderProps<ISignUpInputs, 'email'>
   emailSendStatus: 'before' | 'submit' | 'error'
-  setEmailSendStatus: Dispatch<SetStateAction<'before' | 'submit' | 'error'>>
   submitEmail: () => void
   isSubmitting: boolean
   error: FieldError | undefined
@@ -26,13 +22,8 @@ const EmailField = ({
     <>
       <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
       <CuTextField
-        field={{
-          ...field,
-          onChange: (e: any) => {
-            field.onChange(e)
-            setEmailSendStatus('before')
-          },
-        }}
+        field={field}
+        disabled={emailSendStatus === 'submit'}
         autoComplete="off"
         error={emailSendStatus === 'error'}
         type="text"
@@ -45,7 +36,7 @@ const EmailField = ({
             <InputAdornment position="end">
               <Button
                 variant="contained"
-                disabled={isSubmitting}
+                disabled={isSubmitting || emailSendStatus === 'submit'}
                 onClick={submitEmail}
               >
                 이메일 인증
