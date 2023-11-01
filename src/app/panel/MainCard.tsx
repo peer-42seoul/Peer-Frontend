@@ -28,7 +28,7 @@ interface IMainCard {
   status: string
   tagList: Tag[]
   isFavorite?: boolean
-  post_id: string
+  post_id: number
   type: ProjectType
 }
 const MainCard = ({
