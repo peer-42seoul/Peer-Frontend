@@ -118,8 +118,6 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
   )
 
   const { CuToast, isOpen, openToast, closeToast } = useToast()
-  // const { userId } = useAuthStore()
-  const userId = 1
   const searchMessageItemHandler = useCallback(() => {
     const filteredResults = data.filter((user: IMessagObject) =>
       user.targetNickname.includes(searchText),
@@ -135,11 +133,12 @@ const MessageList = ({ data, error, isLoading }: IMessageList) => {
         console.log('deleteList', selectedUser)
         axios
           .delete(
-            `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/delete-message?userId=${userId}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/delete-message`,
             {
               data: {
                 target: selectedUser,
               },
+              headers: { 'Cache-Control': 'no-store' },
             },
           )
           .then((response: AxiosResponse<IMessagObject[]>) => {
