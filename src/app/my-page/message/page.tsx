@@ -11,6 +11,7 @@ import MessageWritingForm from './MessageWritingForm'
 import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
 import useMedia from '@/hook/useMedia'
+import MessageList from './MessageList'
 
 // import useAuthStore from '@/states/useAuthStore'
 
