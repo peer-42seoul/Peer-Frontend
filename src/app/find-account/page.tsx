@@ -1,10 +1,12 @@
 'use client'
 
+import React, { useEffect } from 'react'
 import { Typography, Container, IconButton, Box } from '@mui/material'
 import SendEmailForm from './panel/SendEmailForm'
 import useMedia from '@/hook/useMedia'
 import { NavigateBefore } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
+import useAuthStore from '@/states/useAuthStore'
 
 const PCBase = {
   display: 'flex',
@@ -45,6 +47,11 @@ const MobileBox = {
 const FindAccount = () => {
   const { isPc } = useMedia()
   const router = useRouter()
+  const { isLogin } = useAuthStore()
+
+  useEffect(() => {
+    if (isLogin) router.push('/')
+  }, [isLogin])
 
   return (
     <Container sx={isPc ? PCBase : MobileBase}>
