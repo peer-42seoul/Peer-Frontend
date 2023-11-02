@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import { IMessagObject } from '@/types/IMessageInformation'
 import CuButton from '@/components/CuButton'
+import MessageList from './MessageList'
 
 interface ISearchBarProps {
   setSearchKeyword: (keyword: string) => void
@@ -109,7 +110,7 @@ const MessageContainer = ({
   if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
 
   return (
-    <Stack>
+    <Stack spacing={2}>
       {isManageMode ? (
         <ManageBar
           handleSelectAll={handleSelectAll}
@@ -122,6 +123,11 @@ const MessageContainer = ({
           handleMessageSearch={handleMessageSearch}
         />
       )}
+      <MessageList
+        messages={messageData}
+        isManageMode={isManageMode}
+        setSelectedUser={setSelectedUser}
+      />
     </Stack>
   )
 }
