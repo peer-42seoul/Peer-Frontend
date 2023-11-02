@@ -2,7 +2,7 @@ import { Chip, Stack, Typography } from '@mui/material'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
-import { TOperationForm, TTeamStatus, TTeamType } from '@/types/ITeamInfo'
+import { TTeamStatus } from '@/types/ITeamInfo'
 
 export const StatusIcon = ({ status }: { status: TTeamStatus }) => {
   switch (status) {
@@ -22,14 +22,13 @@ type TIconType = 'MEMBER' | 'LEADER' | 'DATE'
 interface IIconInfoProps {
   type: TIconType
   text: string
-  onClick?: () => void
 }
 
-export const IconInfo = ({ type, text, onClick }: IIconInfoProps) => {
+export const IconInfo = ({ type, text }: IIconInfoProps) => {
   switch (type) {
     case 'MEMBER':
       return (
-        <Stack direction={'row'} onClick={onClick} sx={{ cursor: 'pointer' }}>
+        <Stack direction={'row'}>
           <GroupsOutlinedIcon />
           <Typography>{text}</Typography>
         </Stack>
@@ -45,35 +44,8 @@ export const IconInfo = ({ type, text, onClick }: IIconInfoProps) => {
       return (
         <Stack direction={'row'}>
           <CalendarMonthOutlinedIcon />
-          <Typography>{text}</Typography>
+          <Typography>{text} ~</Typography>
         </Stack>
       )
-  }
-}
-
-export const RegionInfo = ({ region }: { region: string }) => {
-  return <Chip label={region} />
-}
-
-export const OperationFormInfo = ({
-  operationForm,
-}: {
-  operationForm: TOperationForm
-}) => {
-  switch (operationForm) {
-    case 'ONLINE':
-      return <Chip label={'온라인'} />
-    case 'OFFLINE':
-      return <Chip label={'오프라인'} />
-    case 'MIX':
-      return <Chip label={'온/오프라인'} />
-  }
-}
-export const TypeInfo = ({ type }: { type: TTeamType }) => {
-  switch (type) {
-    case 'PROJECT':
-      return <Chip label={'project'} />
-    case 'STUDY':
-      return <Chip label={'study'} />
   }
 }
