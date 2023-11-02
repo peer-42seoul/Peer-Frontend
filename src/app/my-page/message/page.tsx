@@ -3,16 +3,17 @@
 import { AxiosInstance } from 'axios'
 import useAxiosWithAuth from '@/api/config'
 import { defaultGetFetcher, getFetcherWithInstance } from '@/api/fetchers'
-import { Box, Button, Container } from '@mui/material'
-import { useRef } from 'react'
+import { Box, Container } from '@mui/material'
+// import { useRef } from 'react'
 import useSWR from 'swr'
 import CuModal from '@/components/CuModal'
 import MessageWritingForm from './MessageWritingForm'
 import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
 import useMedia from '@/hook/useMedia'
-import MessageList from './MessageList'
+// import MessageList from './MessageList'
 import CuButton from '@/components/CuButton'
+import MessageContainer from './panel/MessageContainer'
 
 // import useAuthStore from '@/states/useAuthStore'
 
@@ -53,11 +54,11 @@ const MessageMain = () => {
           style={{ marginBottom: '32px' }}
         />
         {/* <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}> */}
-        <MessageList
-          data={data || []}
+        <MessageContainer
+          messages={data || []}
           error={error}
           isLoading={isLoading}
-          isPc={isPc}
+          isPC={isPc}
         />
         {/* </Box> */}
       </Box>

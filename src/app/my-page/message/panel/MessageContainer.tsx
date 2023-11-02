@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { Button, Stack, TextField } from '@mui/material'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import { IMessagObject } from '@/types/IMessageInformation'
 import CuButton from '@/components/CuButton'
 
@@ -62,7 +62,7 @@ const MessageContainer = ({
   isLoading,
   isPC,
 }: IMessageContainerProps) => {
-  const [messageData, setMessageData] = useState<IMessagObject[]>(messages)
+  const [messageData, setMessageData] = useState<IMessagObject[]>([])
   const [isManageMode, setIsManageMode] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
   const [selectedUser, setSelectedUser] = useState<{ targetId: number }[]>([])
@@ -70,6 +70,10 @@ const MessageContainer = ({
   useEffect(() => {
     if (isManageMode) setSelectedUser([])
   }, [isManageMode])
+
+  useEffect(() => {
+    setMessageData(messages)
+  }, [messages])
 
   // event handler
 
@@ -97,6 +101,12 @@ const MessageContainer = ({
     // TODO : delete message
     console.log('delete message')
   }
+
+  if (error || !messageData)
+    return <Typography>데이터 불러오기에 실패했습니다.</Typography>
+  if (messageData.length === 0)
+    return <Typography>쪽지함이 비었습니다.</Typography>
+  if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
 
   return (
     <Stack>
