@@ -16,10 +16,17 @@ import {
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import { fetchServerData } from '@/api/fetchers'
 
+interface IMessage {
+  userId: number // 이 쪽지의 주인
+  msgId: number
+  content: string
+  date: string
+  isEnd: boolean
+}
 interface IMessageData {
   MsgTarget: IUser
   MsgOwner: IUser
-  Msg: any[]
+  Msg: IMessage[]
 }
 
 interface IUser {
@@ -28,17 +35,13 @@ interface IUser {
   userNickname: string
 }
 
-interface IMessageUser extends IUser {
-  content: string
-  date: string
-}
-
-interface IMessageItemProps {
-  user: IMessageUser
-  owner: IUser
-  target: IUser
-}
-const MessageForm = ({ data }: { data: IMessageData }) => {
+const MessageForm = ({
+  targetId,
+  addNewMessage,
+}: {
+  targetId: number
+  addNewMessage: (newMessage: IMessage) => void
+}) => {
   const [content, setContent] = useState('')
 
   const messageSubmit = useCallback(async () => {
@@ -48,21 +51,26 @@ const MessageForm = ({ data }: { data: IMessageData }) => {
         return
       }
       const messageData = {
-        targetId: data.MsgTarget.userId,
+        targetId: targetId,
         content,
       }
-
-      setContent('')
-      const url = `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/back-message?userId=${data.MsgList.MsgOwner.userId}`
-
-      const response = await axios.post(url, messageData)
+      const response = await axios.post(
+        `/api/v1/message/back-message`,
+        messageData,
+        {
+          headers: { 'Cache-Control': 'no-store' },
+        },
+      )
       if (response.status === 201) {
+        addNewMessage(response.data.Msg)
         alert('메시지가 성공적으로 전송되었습니다.')
+        setContent('')
       }
     } catch (error) {
+      // TODO : 에러 구체화
       alert('메시지 전송에 실패하였습니다.')
     }
-  }, [content, data])
+  }, [content])
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -82,7 +90,7 @@ const MessageForm = ({ data }: { data: IMessageData }) => {
   )
 }
 
-const OwnerMessageItem = ({ message }: { message: IMessageUser }) => {
+const OwnerMessageItem = ({ message }: { message: IMessage }) => {
   return (
     <Box
       sx={{
@@ -103,7 +111,7 @@ const TargetMessageItem = ({
   message,
   target,
 }: {
-  message: IMessageUser
+  message: IMessage
   target: IUser
 }) => {
   return (
@@ -128,13 +136,19 @@ const TargetMessageItem = ({
   )
 }
 
-const MessageItem = ({ user, owner, target }: IMessageItemProps) => {
+interface IMessageItemProps {
+  msg: IMessage
+  owner: IUser
+  target: IUser
+}
+
+const MessageItem = ({ msg, owner, target }: IMessageItemProps) => {
   return (
     <>
-      {user.userId === owner?.userId ? (
-        <OwnerMessageItem message={user} />
+      {msg.userId === owner.userId ? (
+        <OwnerMessageItem message={msg} />
       ) : (
-        <TargetMessageItem message={user} target={target} />
+        <TargetMessageItem message={msg} target={target} />
       )}
     </>
   )
@@ -142,9 +156,9 @@ const MessageItem = ({ user, owner, target }: IMessageItemProps) => {
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const searchParams = useSearchParams()
-  const [updatedData, setUpdatedData] = useState<IMessageData | undefined>()
-  const [Owner, setOwner] = useState<IUser>()
-  const [Target, setTarget] = useState<IUser>()
+  const [updatedData, setUpdatedData] = useState<IMessage[] | undefined>()
+  const [owner, setOwner] = useState<IUser>()
+  const [target, setTarget] = useState<IUser>()
 
   useEffect(() => {
     const targetId = searchParams.get('target')
@@ -161,7 +175,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         },
       )
       .then((response) => {
-        setUpdatedData(response.data.MsgList)
+        setUpdatedData(response.data.MsgList.Msg)
         setOwner(response.data.MsgList.MsgOwner)
         setTarget(response.data.MsgList.MsgTarget)
       })
@@ -170,6 +184,14 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         alert('쪽지를 불러오는데 실패하였습니다.')
       })
   }, [searchParams, params])
+
+  const addNewMessage = (newMessage: IMessage) => {
+    if (!updatedData) return
+    setUpdatedData((prevData: IMessage[] | undefined) => {
+      if (!prevData) return [newMessage]
+      return [...prevData, newMessage]
+    })
+  }
 
   // const fetcherWithParams = async (url: string, params: {}) => {
   //   const response = await axios.get(url, { params })
@@ -210,7 +232,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   // if (!data) return <Box>빈 쪽지함 입니다!</Box>
   // console.log('최초 데이터', data.MsgList.MsgOwner)
 
-  if (!updatedData || !Owner || !Target) return <Box>빈 쪽지함 입니다!</Box>
+  if (!updatedData || !owner || !target) return <Box>빈 쪽지함 입니다!</Box>
 
   return (
     <Box sx={{ width: '100%', height: '90vh' }}>
@@ -226,15 +248,15 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
           backgroundColor: '#D8D8D8',
         }}
       >
-        <Typography>{Target?.userNickname}</Typography>
+        <Typography>{target.userNickname}</Typography>
       </Box>
       <Box sx={{ width: '100%', height: '90%', overflowY: 'auto' }}>
-        {updatedData.Msg.map((msgObj: any) => (
+        {updatedData.map((msgObj: IMessage) => (
           <MessageItem
             key={msgObj.msgId}
-            user={msgObj}
-            owner={Owner}
-            target={Target}
+            msg={msgObj}
+            owner={owner}
+            target={target}
           />
         ))}
         {/* {spinner && <CircularProgress />} */}
@@ -247,7 +269,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
           // ref={target}
         />
       </Box>
-      <MessageForm data={updatedData} />
+      <MessageForm targetId={target.userId} addNewMessage={addNewMessage} />
     </Box>
   )
 }
