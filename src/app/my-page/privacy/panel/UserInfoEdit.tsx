@@ -1,9 +1,11 @@
 'use client'
 
+import { Dispatch, SetStateAction } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Typography, Container } from '@mui/material'
-import axios from 'axios'
 import CuTextField from '@/components/CuTextField'
+import useAxiosWithAuth from '@/api/config'
+import IToastProps from '@/types/IToastProps'
 
 interface IChangePassword {
   currentPassword: string
@@ -14,9 +16,13 @@ interface IChangePassword {
 export default function UserInfoEdit({
   local,
   authentication,
+  setToastProps,
+  openToast,
 }: {
   local?: string
   authentication?: string
+  setToastProps: Dispatch<SetStateAction<IToastProps>>
+  openToast: () => void
 }) {
   const {
     handleSubmit,
@@ -25,14 +31,27 @@ export default function UserInfoEdit({
     getValues,
   } = useForm<IChangePassword>({ mode: 'onChange' })
 
+  const axiosWithAuth = useAxiosWithAuth()
   const changePassword: SubmitHandler<IChangePassword> = async (data) => {
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
     try {
-      await axios.post(`${API_URL}api/v1/info`, data)
-    } catch (error) {
+      await axiosWithAuth.post(`${API_URL}api/v1/info`, data)
+      setToastProps({
+        severity: 'success',
+        message: '비밀번호가 변경되었습니다',
+      })
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        setToastProps({
+          severity: 'error',
+          message: error.response.data.message,
+        })
+      }
       console.log(error)
     }
+    openToast()
   }
+
   return (
     <>
       <Container
