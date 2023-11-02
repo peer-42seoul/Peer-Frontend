@@ -95,7 +95,6 @@ const MessageForm = ({
 }: IProps) => {
   const router = useRouter()
   const [content, setContent] = useState('')
-  const { storedSelectedUser } = useMessageStore()
   const updateMessageData = (newMessage: IMessageInformation) => {
     setMessageData?.((prevData: any) => [...prevData, newMessage])
   }
@@ -108,7 +107,6 @@ const MessageForm = ({
         alert('받는 사람을 입력하세요.')
         return
       }
-      console.log('userInfo', userInfo)
       // const response = await axios.post(
       //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/new-message`,
       //   {
@@ -194,9 +192,10 @@ const MessageWritingForm = ({ handleClose }: any) => {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/searching`,
         {
-          body: {
-            keyword,
-          },
+          keyword: keyword,
+        },
+        {
+          headers: { 'Cache-Control': 'no-store' },
         },
       )
       setLetterTargetList(response.data)
