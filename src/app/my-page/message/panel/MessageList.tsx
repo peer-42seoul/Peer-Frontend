@@ -7,10 +7,14 @@ import { IMessagObject } from '@/types/IMessageInformation'
 interface IMessageItemProps {
   message: IMessagObject
   isManageMode: boolean
-  userSelector: (newValue: Array<{ targetId: number }>) => void
+  toggleSelectUser: (targetId: number) => void
 }
 
-const MessageItem = ({ message, isManageMode }: IMessageItemProps) => {
+const MessageItem = ({
+  message,
+  isManageMode,
+  toggleSelectUser,
+}: IMessageItemProps) => {
   const router = useRouter()
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const {
@@ -32,13 +36,15 @@ const MessageItem = ({ message, isManageMode }: IMessageItemProps) => {
   //   }
 
   return (
-    <Stack direction={'row'}>
-      {isManageMode && <Checkbox {...label} />}
+    <Stack direction={'row'} spacing={1}>
+      {isManageMode && (
+        <Checkbox {...label} onChange={() => toggleSelectUser(targetId)} />
+      )}
       <Grid
         container
         onClick={() => router.push(`/my-page/message/${targetId}`)}
         sx={{ cursor: 'pointer' }}
-        spacing={2}
+        spacing={1}
         alignItems="center"
       >
         <Grid item xs={2}>
@@ -74,13 +80,13 @@ const MessageItem = ({ message, isManageMode }: IMessageItemProps) => {
 interface IMessageListProps {
   messages: IMessagObject[]
   isManageMode: boolean
-  setSelectedUser: (newValue: Array<{ targetId: number }>) => void
+  toggleSelectUser: (targetId: number) => void
 }
 
 const MessageList = ({
   messages,
   isManageMode,
-  setSelectedUser,
+  toggleSelectUser,
 }: IMessageListProps) => {
   return (
     <Stack spacing={2}>
@@ -89,7 +95,7 @@ const MessageList = ({
           key={message.targetId}
           message={message}
           isManageMode={isManageMode}
-          userSelector={setSelectedUser}
+          toggleSelectUser={toggleSelectUser}
         />
       ))}
     </Stack>

@@ -66,10 +66,10 @@ const MessageContainer = ({
   const [messageData, setMessageData] = useState<IMessagObject[]>([])
   const [isManageMode, setIsManageMode] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
-  const [selectedUser, setSelectedUser] = useState<{ targetId: number }[]>([])
+  const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set())
 
   useEffect(() => {
-    if (isManageMode) setSelectedUser([])
+    if (isManageMode) setSelectedUsers(new Set())
   }, [isManageMode])
 
   useEffect(() => {
@@ -90,17 +90,22 @@ const MessageContainer = ({
   }, [messages, searchKeyword])
 
   const handleSelectAll = () => {
-    setSelectedUser(
-      Array.from(messageData, (message) => {
-        return { targetId: message.targetId }
-      }),
-    )
-    console.log('select all message')
+    setSelectedUsers(new Set(messageData.map((message) => message.targetId)))
   }
 
   const handleDelete = () => {
-    // TODO : delete message
-    console.log('delete message')
+    // NOTE : 삭제 요청 보내기
+    console.log(selectedUsers)
+  }
+
+  const toggleSelectUser = (targetId: number) => {
+    if (selectedUsers.has(targetId)) {
+      selectedUsers.delete(targetId)
+      setSelectedUsers(selectedUsers)
+    } else {
+      selectedUsers.add(targetId)
+      setSelectedUsers(selectedUsers)
+    }
   }
 
   if (error || !messageData)
@@ -126,7 +131,7 @@ const MessageContainer = ({
       <MessageList
         messages={messageData}
         isManageMode={isManageMode}
-        setSelectedUser={setSelectedUser}
+        toggleSelectUser={toggleSelectUser}
       />
     </Stack>
   )
