@@ -44,23 +44,26 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
-  const axiosInstance: AxiosInstance = useAxiosWithAuth();
+  const axiosInstance: AxiosInstance = useAxiosWithAuth()
 
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const pageSize = 10
   const swrKey = isLogin
     ? [
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
-      axiosInstance,
-    ]
-    : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`;
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
+        axiosInstance,
+      ]
+    : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
 
   const fetcher = isLogin
-    ? ([url, axiosInstance]: [string, AxiosInstance]) => getFetcherWithInstance(url, axiosInstance)
-    : defaultGetFetcher;
+    ? ([url, axiosInstance]: [string, AxiosInstance]) =>
+        getFetcherWithInstance(url, axiosInstance)
+    : defaultGetFetcher
 
-  const { data, isLoading, error, mutate } = useSWR(swrKey, fetcher, { fallbackData: initData });
-  const pageLimit = data?.totalPages;
+  const { data, isLoading, error, mutate } = useSWR(swrKey, fetcher, {
+    fallbackData: initData,
+  })
+  const pageLimit = data?.totalPages
   const { target, spinner } = useInfiniteScroll({
     setPage,
     mutate,
@@ -90,38 +93,41 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
               </Stack>
             </Grid>
           </Grid>
-          {
-            isLoading ? <Typography>로딩중...</Typography> :
-              error ? <Typography>에러 발생</Typography> :
-                data?.content.length == 0 ? <Typography>데이터가 없습니다</Typography> :
-                  <>
-                    <Stack alignItems={'center'} gap={2}>
-                      {data?.content.map((project: IPost) => (
-                        <Box key={project.user_id}>
-                          <MainCard {...project} type={type} />
-                        </Box>
-                      ))}
-                    </Stack>
-                    <Box
-                      sx={{
-                        position: 'fixed',
-                        right: 20,
-                        bottom: 80,
-                      }}
-                    >
-                      <EditButton />
-                    </Box>
-                    {spinner && <CircularProgress />}
-                    <Box
-                      sx={{
-                        bottom: 0,
-                        height: '1vh',
-                        backgroundColor: 'primary.main',
-                      }}
-                      ref={target}
-                    />
-                  </>
-          }
+          {isLoading ? (
+            <Typography>로딩중...</Typography>
+          ) : error ? (
+            <Typography>에러 발생</Typography>
+          ) : data?.content.length == 0 ? (
+            <Typography>데이터가 없습니다</Typography>
+          ) : (
+            <>
+              <Stack alignItems={'center'} gap={2}>
+                {data?.content.map((project: IPost) => (
+                  <Box key={project.user_id}>
+                    <MainCard {...project} type={type} />
+                  </Box>
+                ))}
+              </Stack>
+              <Box
+                sx={{
+                  position: 'fixed',
+                  right: 20,
+                  bottom: 80,
+                }}
+              >
+                <EditButton />
+              </Box>
+              {spinner && <CircularProgress />}
+              <Box
+                sx={{
+                  bottom: 0,
+                  height: '1vh',
+                  backgroundColor: 'primary.main',
+                }}
+                ref={target}
+              />
+            </>
+          )}
         </Box>
       </Container>
       {/* pc view */}
@@ -152,29 +158,32 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
                 </Stack>
               </Grid>
             </Grid>
-            {
-              isLoading ? <Typography>로딩중...</Typography> :
-                error ? <Typography>에러 발생</Typography> :
-                  data?.content.length == 0 ? <Typography>데이터가 없습니다</Typography> :
-                    <>
-                      <Grid container spacing={2}>
-                        {data?.content.map((project: IPost) => (
-                          <Grid item key={project.user_id} sm={12} md={4}>
-                            <MainCard {...project} type={type} />
-                          </Grid>
-                        ))}
-                      </Grid>
-                      {spinner && <CircularProgress />}
-                      <Box
-                        sx={{
-                          bottom: 0,
-                          height: '1vh',
-                          backgroundColor: 'primary.main',
-                        }}
-                        ref={target}
-                      />
-                    </>
-            }
+            {isLoading ? (
+              <Typography>로딩중...</Typography>
+            ) : error ? (
+              <Typography>에러 발생</Typography>
+            ) : data?.content.length == 0 ? (
+              <Typography>데이터가 없습니다</Typography>
+            ) : (
+              <>
+                <Grid container spacing={2}>
+                  {data?.content.map((project: IPost) => (
+                    <Grid item key={project.user_id} sm={12} md={4}>
+                      <MainCard {...project} type={type} />
+                    </Grid>
+                  ))}
+                </Grid>
+                {spinner && <CircularProgress />}
+                <Box
+                  sx={{
+                    bottom: 0,
+                    height: '1vh',
+                    backgroundColor: 'primary.main',
+                  }}
+                  ref={target}
+                />
+              </>
+            )}
           </Stack>
           <Stack width={'250px'} height={'100%'}>
             <MainProfile />

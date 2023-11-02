@@ -47,10 +47,11 @@ const MainCard = ({
   const router = useRouter()
 
   const changeFavorite = async () => {
-    if (!isLogin)
-      return router.push('/login');
+    if (!isLogin) return router.push('/login')
     try {
-      await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${post_id}`)
+      await axios(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${post_id}`,
+      )
       setFavorite(!favorite)
     } catch (e) {
       console.log('error', e)
@@ -58,7 +59,10 @@ const MainCard = ({
   }
 
   return (
-    <Link href={`/recruitment/${post_id}?type=${type}`} style={{ textDecoration: 'none' }}>
+    <Link
+      href={`/recruitment/${post_id}?type=${type}`}
+      style={{ textDecoration: 'none' }}
+    >
       <Card sx={{ maxWidth: 345 }}>
         <Box sx={{ position: 'relative' }}>
           <CardMedia

@@ -12,7 +12,7 @@ import {
   Button,
   IconButton,
   Paper,
-  Stack
+  Stack,
 } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -94,7 +94,7 @@ export const MobileNav = () => {
 
 export const PcNav = () => {
   const [value, setValue] = useState(0)
-  const { isTablet } = useMedia();
+  const { isTablet } = useMedia()
   const pathname = usePathname()
   const router = useRouter()
   const { isLogin } = useAuthStore()
@@ -153,7 +153,7 @@ export const PcNav = () => {
           }}
         />
       </BottomNavigation>
-      <Stack direction={'row'} alignItems={"center"}>
+      <Stack direction={'row'} alignItems={'center'}>
         <IconButton color="inherit" aria-label="menu">
           <NotificationsNoneOutlined />
         </IconButton>
@@ -163,16 +163,21 @@ export const PcNav = () => {
             <Favorite />
           </IconButton>
         </Link>
-        <Avatar onClick={() => router.push(isLogin ? '/my-page/profile' : '/login')} />
+        <Avatar
+          onClick={() => router.push(isLogin ? '/my-page/profile' : '/login')}
+        />
         <Link href={'/recruitment'}>
-          {isTablet ?
+          {isTablet ? (
             <IconButton>
               <BorderColor />
-            </IconButton> :
-            <Button variant="outlined" startIcon={<BorderColor />}>새 글쓰기</Button>}
+            </IconButton>
+          ) : (
+            <Button variant="outlined" startIcon={<BorderColor />}>
+              새 글쓰기
+            </Button>
+          )}
         </Link>
       </Stack>
     </Stack>
   )
 }
-

@@ -17,9 +17,13 @@ const FormCheckbox = ({
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
-          value ? <Checkbox {...field} checked={!!value} /> : <Checkbox {...field} />
-        )}
+        render={({ field }) =>
+          value ? (
+            <Checkbox {...field} checked={!!value} />
+          ) : (
+            <Checkbox {...field} />
+          )
+        }
       />
       <Box>{label}</Box>
     </Stack>

@@ -1,10 +1,5 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
-import {
-  Grid,
-  IconButton,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Grid, IconButton, Stack, Typography } from '@mui/material'
 import Options from './Options'
 
 const SearchOption = ({
