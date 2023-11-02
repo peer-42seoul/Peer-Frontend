@@ -7,6 +7,7 @@ import {
   Stack,
   TextField,
   Typography,
+  Avatar,
 } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import axios from 'axios'
@@ -36,48 +37,44 @@ export interface ILetterTarget {
   targetProfile: string
 }
 
-function MenuItems({ letterTarget }: any) {
+interface ITargetItemProps {
+  letterTarget: ILetterTarget
+}
+
+function TargetItem({ letterTarget }: ITargetItemProps) {
   const selectMessageTarget = (targetId: number) => {
     console.log('targetId', targetId)
     useMessageStore.setState({
       storedSelectedUser: targetId,
     })
   }
-  console.log(`이미지 값`, letterTarget[0].targetProfile)
+
+  const { targetId, targetEmail, targetNickname, targetProfile } = letterTarget
+
   return (
-    <Box>
-      {letterTarget.map((item: any) => {
-        return (
-          <>
-            <Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  ':hover': { backgroundColor: '#e6e6e6' },
-                }}
-                onClick={() => selectMessageTarget(item.targetId)}
-                key={item.targetId}
-              >
-                <Image
-                  src={`${letterTarget[0].targetProfile}`}
-                  alt="picture_of_sender"
-                  width={100}
-                  height={100}
-                  style={{ borderRadius: '50%' }}
-                ></Image>
-                <Box>
-                  {item.targetNickname ? (
-                    <span>{item.targetNickname}</span>
-                  ) : (
-                    <span>{item.targetEmail}</span>
-                  )}
-                </Box>
-              </Box>
-            </Box>
-          </>
-        )
-      })}
-    </Box>
+    <Stack
+      direction={'row'}
+      alignItems={'center'}
+      spacing={1}
+      sx={{ cursor: 'pointer' }}
+    >
+      <Avatar src={targetProfile} />
+      <Typography>{`${targetNickname} (${targetEmail})`}</Typography>
+    </Stack>
+  )
+}
+
+interface ITargetListProps {
+  letterTargetList: ILetterTarget[]
+}
+
+const TargetList = ({ letterTargetList }: ITargetListProps) => {
+  return (
+    <Stack>
+      {letterTargetList.map((target: ILetterTarget) => (
+        <TargetItem key={target.targetId} letterTarget={target} />
+      ))}
+    </Stack>
   )
 }
 
@@ -147,7 +144,16 @@ const MessageForm = ({
 
 const MessageWritingForm = ({ handleClose }: any) => {
   const [keyword, setKeyword] = useState('')
-  const [letterTarget, setLetterTarget] = useState<ILetterTarget | undefined>()
+  const [letterTargetList, setLetterTargetList] = useState<
+    ILetterTarget[] | undefined
+  >([
+    {
+      targetId: 0,
+      targetEmail: 'heyheyhey',
+      targetNickname: 'hey',
+      targetProfile: 'https://picsum.photos/200',
+    },
+  ])
 
   //TODO: 반환된 검색 결과 state 에 실어서 보내기 (받는 사람 정보)
 
@@ -166,7 +172,7 @@ const MessageWritingForm = ({ handleClose }: any) => {
           },
         },
       )
-      setLetterTarget(response.data)
+      setLetterTargetList(response.data)
     } catch (error) {
       alert('존재하지 않는 사람입니다.')
     }
@@ -185,14 +191,14 @@ const MessageWritingForm = ({ handleClose }: any) => {
         />
         <Button onClick={searchUserWithKeyword}>검색</Button>
       </Stack>
-      {letterTarget && <MenuItems letterTarget={letterTarget} />}
-      <MessageForm
+      {letterTargetList && <TargetList letterTargetList={letterTargetList} />}
+      {/* <MessageForm
         userInfo={letterTarget}
         type={'newMessage'}
         keyword={keyword}
         handleClose={handleClose}
         nickname=""
-      />
+      /> */}
     </Stack>
   )
 }
