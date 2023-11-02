@@ -12,11 +12,13 @@ import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
 import useMedia from '@/hook/useMedia'
 import MessageList from './MessageList'
+import CuButton from '@/components/CuButton'
 
 // import useAuthStore from '@/states/useAuthStore'
 
 const MessageMain = () => {
-  const MessageBox = useRef<HTMLDivElement | null>(null)
+  // NOTE : useRef가 필요한 이유? - 필요없음이 확인되면 지우기
+  // const MessageBox = useRef<HTMLDivElement | null>(null)
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
   // const axiosInstance = useAxiosWithAuth()
@@ -43,25 +45,21 @@ const MessageMain = () => {
           <MessageWritingForm handleClose={closeModal} />
         </CuModal>
       )}
-      <Box sx={{ display: 'grid', width: '100%' }}>
-        <Box>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              openModal()
-            }}
-          >
-            쪽지 보내기
-          </Button>
-          <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}>
-            <MessageList
-              data={data || []}
-              error={error}
-              isLoading={isLoading}
-              isPc={isPc}
-            />
-          </Box>
-        </Box>
+      <Box sx={{ width: '100%' }}>
+        <CuButton
+          variant="outlined"
+          action={() => openModal()}
+          message="새 쪽지 보내기"
+          style={{ marginBottom: '32px' }}
+        />
+        {/* <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}> */}
+        <MessageList
+          data={data || []}
+          error={error}
+          isLoading={isLoading}
+          isPc={isPc}
+        />
+        {/* </Box> */}
       </Box>
     </Container>
   )
