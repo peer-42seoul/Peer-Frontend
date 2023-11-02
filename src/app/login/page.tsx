@@ -151,7 +151,6 @@ const Login = () => {
                     </CuTextFieldLabel>
                     <CuTextField
                       field={field}
-                      id="userEmail"
                       style={{ width: '100%' }}
                       placeholder="이메일을 입력하세요."
                     />
@@ -180,7 +179,6 @@ const Login = () => {
                       비밀번호
                     </CuTextFieldLabel>
                     <CuTextField
-                      id="password"
                       type={showPassword ? 'text' : 'password'}
                       field={field}
                       style={{ width: '100%' }}
