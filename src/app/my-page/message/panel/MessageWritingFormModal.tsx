@@ -1,27 +1,14 @@
 'use client'
 
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  TextField,
-  Typography,
-  Avatar,
-} from '@mui/material'
+import { Button, Stack, TextField, Typography, Avatar } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
-import { IMessageInformation } from '@/types/IMessageInformation'
-import useMessageStore from '@/states/useMessageStore'
+import { IMessagObject } from '@/types/IMessageInformation'
 import CuModal from '@/components/CuModal'
 
 interface IProps {
   userInfo?: ILetterTarget
-  type: string
-  nickname: string | undefined
-  keyword?: string
-  setMessageData?: (prevData: any) => void | IMessageInformation[] | undefined
+  setMessageData: (newMessageData: IMessagObject[]) => void
   handleClose?: any | undefined
 }
 
@@ -43,12 +30,6 @@ interface ITargetItemProps {
 }
 
 function TargetItem({ letterTarget, setTargetUser }: ITargetItemProps) {
-  // const selectMessageTarget = (targetId: number) => {
-  //   console.log('targetId', targetId)
-  //   useMessageStore.setState({
-  //     storedSelectedUser: targetId,
-  //   })
-  // }
   const { targetEmail, targetNickname, targetProfile } = letterTarget
 
   return (
@@ -86,19 +67,8 @@ const TargetList = ({ letterTargetList, setTargetUser }: ITargetListProps) => {
   )
 }
 
-const MessageForm = ({
-  userInfo,
-  // type,
-  // keyword,
-  setMessageData,
-  // nickname,
-  handleClose,
-}: IProps) => {
-  const router = useRouter()
+const MessageForm = ({ userInfo, setMessageData, handleClose }: IProps) => {
   const [content, setContent] = useState('')
-  const updateMessageData = (newMessage: IMessageInformation) => {
-    setMessageData?.((prevData: any) => [...prevData, newMessage])
-  }
   const messageSubmitHandler = useCallback(async () => {
     try {
       if (!content) {
@@ -108,22 +78,24 @@ const MessageForm = ({
         alert('받는 사람을 입력하세요.')
         return
       }
-      // const response = await axios.post(
-      //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/new-message`,
-      //   {
-      //     body: {
-      //       targetId: storedSelectedUser,
-      //       content,
-      //     },
-      //   },
-      // )
-      // setContent('')
-      // updateMessageData(response.data)
-      // handleClose()
+      const reqBody: IMessageData = {
+        targetId: userInfo.targetId,
+        content: content,
+      }
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/new-message`,
+        reqBody,
+        {
+          headers: { 'Cache-Control': 'no-store' },
+        },
+      )
+      setContent('')
+      setMessageData(response.data)
+      handleClose()
     } catch (error) {
       alert('쪽지 전송에 실패하였습니다. 다시 시도해주세요.')
     }
-  }, [content, router, updateMessageData])
+  }, [content, userInfo])
 
   return (
     <>
@@ -151,43 +123,22 @@ const MessageForm = ({
   )
 }
 
-// TODO : 반드시 삭제
-
-const dummySearchResult = [
-  {
-    targetId: 0,
-    targetEmail: 'heyheyhey',
-    targetNickname: 'hey',
-    targetProfile: 'https://picsum.photos/200',
-  },
-  {
-    targetId: 1,
-    targetEmail: 'hihihi',
-    targetNickname: 'hi',
-    targetProfile: 'https://picsum.photos/200',
-  },
-  {
-    targetId: 2,
-    targetEmail: 'hellohello',
-    targetNickname: 'hello',
-    targetProfile: 'https://picsum.photos/200',
-  },
-]
-
 interface IMessageWritingFormModalProps {
   isOpen: boolean
   handleClose: () => void
+  setMessageData: (newMessageData: IMessagObject[]) => void
 }
 
 const MessageWritingFormModal = ({
   isOpen,
   handleClose,
+  setMessageData,
 }: IMessageWritingFormModalProps) => {
   const [keyword, setKeyword] = useState('')
   const [targetUser, setTargetUser] = useState<ILetterTarget | undefined>()
   const [letterTargetList, setLetterTargetList] = useState<
     ILetterTarget[] | undefined
-  >(dummySearchResult)
+  >()
 
   //TODO: 반환된 검색 결과 state 에 실어서 보내기 (받는 사람 정보)
   // TODO : 전역 상태가 필요한지 확인해보기...
@@ -241,10 +192,8 @@ const MessageWritingFormModal = ({
         )}
         <MessageForm
           userInfo={targetUser}
-          type={'newMessage'}
-          keyword={keyword}
           handleClose={handleClose}
-          nickname=""
+          setMessageData={setMessageData}
         />
       </Stack>
     </CuModal>

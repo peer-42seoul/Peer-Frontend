@@ -168,6 +168,7 @@ const MessageContainer = ({
         <MessageWritingFormModal
           isOpen={isNewMessageModalOpen}
           handleClose={newMessageModalClose}
+          setMessageData={setMessageData}
         />
       )}
     </>
