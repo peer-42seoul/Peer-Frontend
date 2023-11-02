@@ -1,5 +1,9 @@
 'use client'
 
+import axios from 'axios'
+import { useSearchParams } from 'next/navigation'
+import useSWR from 'swr'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Avatar,
   Box,
@@ -9,19 +13,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
-import useSWR from 'swr'
-import Image from 'next/image'
-import axios from 'axios'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import { fetchServerData } from '@/api/fetchers'
 
 interface IMessageData {
-  MsgList: {
-    MsgTarget: IUser
-    MsgOwner: IUser
-    Msg: any[]
-  }
+  MsgTarget: IUser
+  MsgOwner: IUser
+  Msg: any[]
 }
 
 interface IUser {
@@ -50,7 +48,7 @@ const MessageForm = ({ data }: { data: IMessageData }) => {
         return
       }
       const messageData = {
-        targetId: data.MsgList.MsgTarget.userId,
+        targetId: data.MsgTarget.userId,
         content,
       }
 
@@ -142,56 +140,36 @@ const MessageItem = ({ user, owner, target }: IMessageItemProps) => {
   )
 }
 
-const MessageChatPage = () => {
-  const [updatedData, setUpdatedData] = useState<IMessageData>({
-    MsgList: {
-      MsgOwner: {
-        userId: 28109,
-        userNickname: 'haryu',
-        userProfile: 'https://picsum.photos/200',
-      },
-      MsgTarget: {
-        userId: 1273,
-        userNickname: 'jujeon',
-        userProfile: 'https://picsum.photos/200',
-      },
-      Msg: [
+const MessageChatPage = ({ params }: { params: { id: string } }) => {
+  const searchParams = useSearchParams()
+  const [updatedData, setUpdatedData] = useState<IMessageData | undefined>()
+  const [Owner, setOwner] = useState<IUser>()
+  const [Target, setTarget] = useState<IUser>()
+
+  useEffect(() => {
+    const targetId = searchParams.get('target')
+    const conversationalId = params.id
+    axios
+      .post(
+        `/api/v1/message/conversation-list`,
         {
-          userId: 1273, // 이 쪽지의 주인
-          msgId: 89,
-          content: '안녕',
-          date: '2023년 10월 11일 09:00',
-          isEnd: false,
+          targetId,
+          conversationalId,
         },
         {
-          userId: 28109, // 이 쪽지의 주인
-          msgId: 90,
-          content: '야 전화받아라',
-          date: '2023년 10월 11일 09:03',
-          isEnd: false,
+          headers: { 'Cache-Control': 'no-store' },
         },
-        {
-          userId: 1273, // 이 쪽지의 주인
-          msgId: 92,
-          content: '안녕',
-          date: '2023년 10월 11일 09:12',
-          isEnd: false,
-        },
-      ],
-    },
-  })
-  const [page, setPage] = useState<number>(1)
-  const pageLimit = 3
-  const [Owner, setOwner] = useState<IUser>({
-    userId: 28109,
-    userNickname: 'haryu',
-    userProfile: 'https://picsum.photos/200',
-  })
-  const [Target, setTarget] = useState<IUser>({
-    userId: 1273,
-    userNickname: 'jujeon',
-    userProfile: 'https://picsum.photos/200',
-  })
+      )
+      .then((response) => {
+        setUpdatedData(response.data.MsgList)
+        setOwner(response.data.MsgList.MsgOwner)
+        setTarget(response.data.MsgList.MsgTarget)
+      })
+      .catch(() => {
+        // TODO : 에러 구체화
+        alert('쪽지를 불러오는데 실패하였습니다.')
+      })
+  }, [searchParams, params])
 
   // const fetcherWithParams = async (url: string, params: {}) => {
   //   const response = await axios.get(url, { params })
@@ -231,6 +209,9 @@ const MessageChatPage = () => {
   // if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
   // if (!data) return <Box>빈 쪽지함 입니다!</Box>
   // console.log('최초 데이터', data.MsgList.MsgOwner)
+
+  if (!updatedData || !Owner || !Target) return <Box>빈 쪽지함 입니다!</Box>
+
   return (
     <Box sx={{ width: '100%', height: '90vh' }}>
       <Box
@@ -248,7 +229,7 @@ const MessageChatPage = () => {
         <Typography>{Target?.userNickname}</Typography>
       </Box>
       <Box sx={{ width: '100%', height: '90%', overflowY: 'auto' }}>
-        {updatedData?.MsgList?.Msg.map((msgObj: any) => (
+        {updatedData.Msg.map((msgObj: any) => (
           <MessageItem
             key={msgObj.msgId}
             user={msgObj}
