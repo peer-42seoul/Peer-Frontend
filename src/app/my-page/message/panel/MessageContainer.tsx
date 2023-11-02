@@ -1,24 +1,30 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Button, Stack, TextField } from '@mui/material'
 import { IMessagObject } from '@/types/IMessageInformation'
-// import MessageList from './MessageList'
 import CuButton from '@/components/CuButton'
 
 interface ISearchBarProps {
   setSearchKeyword: (keyword: string) => void
   setIsManageMode: (isManageMode: boolean) => void
+  handleMessageSearch: () => void
 }
 
-const SearchBar = ({ setSearchKeyword, setIsManageMode }: ISearchBarProps) => {
+const SearchBar = ({
+  setSearchKeyword,
+  setIsManageMode,
+  handleMessageSearch,
+}: ISearchBarProps) => {
   return (
     <Stack direction="row">
       <TextField
         placeholder="사람을 검색해 주세요."
         onChange={(e) => setSearchKeyword(e.target.value)}
       />
-      <Button variant="contained">검색</Button>
+      <Button variant="contained" onClick={handleMessageSearch}>
+        검색
+      </Button>
       <CuButton
         variant="text"
         action={() => setIsManageMode(true)}
@@ -67,6 +73,17 @@ const MessageContainer = ({
 
   // event handler
 
+  const handleMessageSearch = useCallback(() => {
+    // NOTE : 검색어가 없는 경우에는 모든 메시지를 보여준다?
+    if (!searchKeyword) setMessageData(messages)
+    else
+      setMessageData(
+        messages.filter((message) => {
+          return message.targetNickname.includes(searchKeyword)
+        }),
+      )
+  }, [messages, searchKeyword])
+
   const handleSelectAll = () => {
     setSelectedUser(
       Array.from(messageData, (message) => {
@@ -92,6 +109,7 @@ const MessageContainer = ({
         <SearchBar
           setSearchKeyword={setSearchKeyword}
           setIsManageMode={setIsManageMode}
+          handleMessageSearch={handleMessageSearch}
         />
       )}
     </Stack>
