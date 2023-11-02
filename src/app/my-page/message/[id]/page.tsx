@@ -1,9 +1,11 @@
 'use client'
 
 import {
+  Avatar,
   Box,
   Button,
   CircularProgress,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material'
@@ -23,15 +25,20 @@ interface IMessageData {
 }
 
 interface IUser {
-  userId?: string
-  userProfile?: string
-  userNickname?: string
+  userId: number
+  userProfile: string
+  userNickname: string
+}
+
+interface IMessageUser extends IUser {
+  content: string
+  date: string
 }
 
 interface IMessageItemProps {
-  user: IUser & { content?: string; date?: string }
-  Owner?: IUser
-  Target?: IUser
+  user: IMessageUser
+  owner: IUser
+  target: IUser
 }
 const MessageForm = ({ data }: { data: IMessageData }) => {
   const [content, setContent] = useState('')
@@ -77,134 +84,153 @@ const MessageForm = ({ data }: { data: IMessageData }) => {
   )
 }
 
-const MessageItem = ({ user, Owner, Target }: IMessageItemProps) => {
+const OwnerMessageItem = ({ message }: { message: IMessageUser }) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+      }}
+    >
+      <Stack sx={{ bgcolor: '#EFEFEF', alignItems: 'flex-end' }}>
+        <Typography>{message.content}</Typography>
+        <Typography>{message.date}</Typography>
+      </Stack>
+    </Box>
+  )
+}
+
+const TargetMessageItem = ({
+  message,
+  target,
+}: {
+  message: IMessageUser
+  target: IUser
+}) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+      }}
+    >
+      <Stack sx={{ bgcolor: '#D8D8D8', alignItems: 'flex-start' }} spacing={1}>
+        <Stack direction={'row'} alignItems={'center'} spacing={1}>
+          <Avatar src={target.userProfile} />
+          <Typography sx={{ fontWeight: 'bold' }}>
+            {target.userNickname}
+          </Typography>
+        </Stack>
+        <Typography>{message.content}</Typography>
+        <Typography>{message.date}</Typography>
+      </Stack>
+    </Box>
+  )
+}
+
+const MessageItem = ({ user, owner, target }: IMessageItemProps) => {
   return (
     <>
-      {user.userId === Owner?.userId ? (
-        <Box
-          key={user.userId}
-          sx={{
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'flex-end',
-            margin: '1rem',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '35rem',
-              padding: '1rem', // Corrected padding syntax
-              alignItems: 'flex-end', // Corrected value and removed the extra comma
-              background: '#EFEFEF',
-            }}
-          >
-            {Owner?.userProfile ? (
-              <Image
-                style={{ borderRadius: '50%' }}
-                width={100}
-                height={100}
-                src={Owner?.userProfile}
-                alt="picture_of_owner"
-              />
-            ) : (
-              <div>No image</div>
-            )}
-            <Typography sx={{ fontWeight: 'bold' }}>
-              {Owner?.userNickname}
-            </Typography>
-            <Typography>{user.content}</Typography>
-            <Typography>{user.date}</Typography>
-          </Box>
-        </Box>
+      {user.userId === owner?.userId ? (
+        <OwnerMessageItem message={user} />
       ) : (
-        <Box
-          key={user.userId}
-          sx={{
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'flex-start',
-            margin: '1rem',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '35rem',
-              padding: '0.5rem 1rem 1rem 0.5rem',
-              background: '#EFEFEF',
-            }}
-          >
-            {Target?.userProfile ? (
-              <Image
-                style={{ borderRadius: '50%' }}
-                width={100}
-                height={100}
-                src={Target?.userProfile}
-                alt="picture_of_target"
-              />
-            ) : (
-              <div>No image</div>
-            )}
-            <Typography sx={{ fontWeight: 'bold' }}>
-              {Target?.userNickname}
-            </Typography>
-            <Typography>{user.content}</Typography>
-            <Typography>{user.date}</Typography>
-          </Box>
-        </Box>
+        <TargetMessageItem message={user} target={target} />
       )}
     </>
   )
 }
 
 const MessageChatPage = () => {
-  const [updatedData, setUpdatedData] = useState<IMessageData>()
+  const [updatedData, setUpdatedData] = useState<IMessageData>({
+    MsgList: {
+      MsgOwner: {
+        userId: 28109,
+        userNickname: 'haryu',
+        userProfile: 'https://picsum.photos/200',
+      },
+      MsgTarget: {
+        userId: 1273,
+        userNickname: 'jujeon',
+        userProfile: 'https://picsum.photos/200',
+      },
+      Msg: [
+        {
+          userId: 1273, // 이 쪽지의 주인
+          msgId: 89,
+          content: '안녕',
+          date: '2023년 10월 11일 09:00',
+          isEnd: false,
+        },
+        {
+          userId: 28109, // 이 쪽지의 주인
+          msgId: 90,
+          content: '야 전화받아라',
+          date: '2023년 10월 11일 09:03',
+          isEnd: false,
+        },
+        {
+          userId: 1273, // 이 쪽지의 주인
+          msgId: 92,
+          content: '안녕',
+          date: '2023년 10월 11일 09:12',
+          isEnd: false,
+        },
+      ],
+    },
+  })
   const [page, setPage] = useState<number>(1)
   const pageLimit = 3
-  const [Owner, setOwner] = useState<IUser>()
-  const [Target, setTarget] = useState<IUser>()
+  const [Owner, setOwner] = useState<IUser>({
+    userId: 28109,
+    userNickname: 'haryu',
+    userProfile: 'https://picsum.photos/200',
+  })
+  const [Target, setTarget] = useState<IUser>({
+    userId: 1273,
+    userNickname: 'jujeon',
+    userProfile: 'https://picsum.photos/200',
+  })
 
   // const fetcherWithParams = async (url: string, params: {}) => {
   //   const response = await axios.get(url, { params })
   //   return response.data
   // }
   // FIXME: 해당 부분을 나중에 post로 다 바꿔야함
-  const { data, mutate, isLoading } = useSWR(
-    `http://localhost:4000/test_detail_${page}`,
-    fetchServerData, // FIXME: 여기의 userid는 내 uid
-  )
-  console.log('값 까보ㅈ', updatedData?.MsgList?.Msg)
-  const { target, spinner } = useInfiniteScroll({
-    setPage,
-    mutate,
-    pageLimit,
-    page,
-  })
+  // const { data, mutate, isLoading } = useSWR(
+  //   `http://localhost:4000/test_detail_${page}`,
+  //   fetchServerData, // FIXME: 여기의 userid는 내 uid
+  // )
+  // console.log('값 까보ㅈ', updatedData?.MsgList?.Msg)
+  // const { target, spinner } = useInfiniteScroll({
+  //   setPage,
+  //   mutate,
+  //   pageLimit,
+  //   page,
+  // })
 
-  useEffect(() => {
-    setOwner(data?.MsgList.MsgOwner)
-    setTarget(data?.MsgList.MsgTarget)
+  // useEffect(() => {
+  //   setOwner(data?.MsgList.MsgOwner)
+  //   setTarget(data?.MsgList.MsgTarget)
 
-    setUpdatedData((prevData: any) => {
-      return {
-        ...prevData,
-        MsgList: {
-          ...prevData?.MsgList, // 이전 데이터를 그대로 가져오고 새로운 Mag데이터를 추가한다.
-          Msg: [
-            ...(prevData?.MsgList?.Msg || []),
-            ...(data?.MsgList.Msg || []),
-          ],
-        },
-      }
-    })
-  }, [data])
+  //   setUpdatedData((prevData: any) => {
+  //     return {
+  //       ...prevData,
+  //       MsgList: {
+  //         ...prevData?.MsgList, // 이전 데이터를 그대로 가져오고 새로운 Mag데이터를 추가한다.
+  //         Msg: [
+  //           ...(prevData?.MsgList?.Msg || []),
+  //           ...(data?.MsgList.Msg || []),
+  //         ],
+  //       },
+  //     }
+  //   })
+  // }, [data])
 
-  if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
-  if (!data) return <Box>빈 쪽지함 입니다!</Box>
-  console.log('최초 데이터', data.MsgList.MsgOwner)
+  // if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
+  // if (!data) return <Box>빈 쪽지함 입니다!</Box>
+  // console.log('최초 데이터', data.MsgList.MsgOwner)
   return (
     <Box sx={{ width: '100%', height: '90vh' }}>
       <Box
@@ -226,21 +252,21 @@ const MessageChatPage = () => {
           <MessageItem
             key={msgObj.msgId}
             user={msgObj}
-            Owner={Owner}
-            Target={Target}
+            owner={Owner}
+            target={Target}
           />
         ))}
-        {spinner && <CircularProgress />}
+        {/* {spinner && <CircularProgress />} */}
         <Box
           sx={{
             bottom: 0,
             height: '1vh',
             backgroundColor: 'primary.main',
           }}
-          ref={target}
+          // ref={target}
         />
       </Box>
-      <MessageForm data={data} />
+      <MessageForm data={updatedData} />
     </Box>
   )
 }
