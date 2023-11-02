@@ -1,11 +1,17 @@
 'use client'
 
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
-// import useAuthStore from '@/states/useAuthStore'
 import useMessageStore from '@/states/useMessageStore'
 import Image from 'next/image'
 
@@ -85,9 +91,6 @@ const MessageForm = ({
 }: IProps) => {
   const router = useRouter()
   const [content, setContent] = useState('')
-  // const { userId } = useAuthStore()
-  const userId = 1
-  console.log(nickname)
   const { storedSelectedUser } = useMessageStore()
   const updateMessageData = (newMessage: IMessageInformation) => {
     setMessageData?.((prevData: any) => [...prevData, newMessage])
@@ -130,10 +133,14 @@ const MessageForm = ({
         rows={3}
         onChange={(e) => setContent(e.target.value)}
       />
-      <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-        <Button onClick={() => handleClose()}>취소</Button>
-        <Button onClick={messageSubmitHandler}>보내기</Button>
-      </Box>
+      <Stack direction={'row'} justifyContent={'space-around'} spacing={3}>
+        <Button variant="contained" onClick={() => handleClose()}>
+          취소
+        </Button>
+        <Button variant="contained" onClick={messageSubmitHandler}>
+          보내기
+        </Button>
+      </Stack>
     </>
   )
 }
@@ -165,35 +172,28 @@ const MessageWritingForm = ({ handleClose }: any) => {
     }
   }, [keyword])
 
-  console.log('레터 밖', letterTarget)
   return (
-    <>
-      <Container>
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Typography>받는 사람</Typography>
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <TextField
-              sx={{ width: '100%' }}
-              value={keyword}
-              placeholder="닉네임 혹은 이메일을 입력하세요"
-              variant="outlined"
-              onChange={(e) => setKeyword(e.target.value)}
-            />
-            <Button onClick={searchUserWithKeyword}>검색</Button>
-          </Box>
-          {letterTarget && <MenuItems letterTarget={letterTarget} />}
-        </Box>
-        <MessageForm
-          userInfo={letterTarget}
-          type={'newMessage'}
-          keyword={keyword}
-          handleClose={handleClose}
-          nickname=""
+    <Stack alignItems={'center'} spacing={2}>
+      <Typography>새 쪽지</Typography>
+      <Stack direction={'row'} alignItems={'stretch'} sx={{ width: '100%' }}>
+        <TextField
+          sx={{ width: '100%' }}
+          value={keyword}
+          placeholder="닉네임 혹은 이메일을 입력하세요"
+          variant="outlined"
+          onChange={(e) => setKeyword(e.target.value)}
         />
-      </Container>
-    </>
+        <Button onClick={searchUserWithKeyword}>검색</Button>
+      </Stack>
+      {letterTarget && <MenuItems letterTarget={letterTarget} />}
+      <MessageForm
+        userInfo={letterTarget}
+        type={'newMessage'}
+        keyword={keyword}
+        handleClose={handleClose}
+        nickname=""
+      />
+    </Stack>
   )
 }
 
