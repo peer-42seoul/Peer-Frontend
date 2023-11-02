@@ -19,7 +19,7 @@ const SetTeamRole = ({
 
   const onHandlerAddRole = () => {
     if (role === '' || member === '') return
-    setRoleData([...roleData, { name: role, member: parseInt(member) }])
+    setRoleData([...roleData, { role: role, member: parseInt(member) }])
     setRole('')
     setMember('')
   }
@@ -53,7 +53,7 @@ const SetTeamRole = ({
         <Button onClick={onHandlerAddRole}>역할 추가</Button>
       </Box>
       {roleData.map((data, index) => {
-        if (data.name === '' || data.member === 0) {
+        if (data.role === '' || data.member === 0) {
           console.log('error')
           return
         }
@@ -72,7 +72,7 @@ const SetTeamRole = ({
                 flexDirection: 'row',
               }}
             >
-              <TextField value={data.name} disabled={true}></TextField>
+              <TextField value={data.role} disabled={true}></TextField>
               <TextField value={data.member} disabled={true}></TextField>
               <Button onClick={onHandlerRemove(index)}>제거</Button>
             </Box>
