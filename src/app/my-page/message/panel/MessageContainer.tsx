@@ -1,9 +1,11 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { Box, Button, Stack, TextField, Typography } from '@mui/material'
+import axios, { AxiosResponse } from 'axios'
+import { Button, Stack, TextField, Typography } from '@mui/material'
 import { IMessagObject } from '@/types/IMessageInformation'
 import CuButton from '@/components/CuButton'
+import useToast from '@/hook/useToast'
 import MessageList from './MessageList'
 
 interface ISearchBarProps {
@@ -63,6 +65,7 @@ const MessageContainer = ({
   isLoading,
   isPC,
 }: IMessageContainerProps) => {
+  const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [messageData, setMessageData] = useState<IMessagObject[]>([])
   const [isManageMode, setIsManageMode] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -94,8 +97,26 @@ const MessageContainer = ({
   }
 
   const handleDelete = () => {
-    // NOTE : 삭제 요청 보내기
-    console.log(selectedUsers)
+    const requestBody = Array.from(selectedUsers).map((targetId) => ({
+      targetId,
+    }))
+    axios
+      .delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/delete-message`,
+        {
+          data: {
+            target: requestBody,
+          },
+          headers: { 'Cache-Control': 'no-store' },
+        },
+      )
+      .then((response: AxiosResponse<IMessagObject[]>) => {
+        setMessageData(response.data)
+        setIsManageMode(false)
+      })
+      .catch(() => {
+        openToast()
+      })
   }
 
   const toggleSelectUser = (targetId: number) => {
@@ -108,11 +129,11 @@ const MessageContainer = ({
     }
   }
 
+  if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
   if (error || !messageData)
     return <Typography>데이터 불러오기에 실패했습니다.</Typography>
   if (messageData.length === 0)
     return <Typography>쪽지함이 비었습니다.</Typography>
-  if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
 
   return (
     <Stack spacing={2}>
@@ -133,6 +154,9 @@ const MessageContainer = ({
         isManageMode={isManageMode}
         toggleSelectUser={toggleSelectUser}
       />
+      <CuToast open={isOpen} onClose={closeToast} severity="error">
+        <Typography>삭제에 실패하였습니다.</Typography>
+      </CuToast>
     </Stack>
   )
 }
