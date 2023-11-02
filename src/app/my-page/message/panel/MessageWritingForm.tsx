@@ -14,7 +14,6 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import useMessageStore from '@/states/useMessageStore'
-import Image from 'next/image'
 
 interface IProps {
   userInfo?: ILetterTarget
@@ -39,17 +38,17 @@ export interface ILetterTarget {
 
 interface ITargetItemProps {
   letterTarget: ILetterTarget
+  setTargetUser: (targetUser: ILetterTarget) => void
 }
 
-function TargetItem({ letterTarget }: ITargetItemProps) {
-  const selectMessageTarget = (targetId: number) => {
-    console.log('targetId', targetId)
-    useMessageStore.setState({
-      storedSelectedUser: targetId,
-    })
-  }
-
-  const { targetId, targetEmail, targetNickname, targetProfile } = letterTarget
+function TargetItem({ letterTarget, setTargetUser }: ITargetItemProps) {
+  // const selectMessageTarget = (targetId: number) => {
+  //   console.log('targetId', targetId)
+  //   useMessageStore.setState({
+  //     storedSelectedUser: targetId,
+  //   })
+  // }
+  const { targetEmail, targetNickname, targetProfile } = letterTarget
 
   return (
     <Stack
@@ -57,6 +56,9 @@ function TargetItem({ letterTarget }: ITargetItemProps) {
       alignItems={'center'}
       spacing={1}
       sx={{ cursor: 'pointer' }}
+      onClick={() => {
+        setTargetUser(letterTarget)
+      }}
     >
       <Avatar src={targetProfile} />
       <Typography>{`${targetNickname} (${targetEmail})`}</Typography>
@@ -66,13 +68,18 @@ function TargetItem({ letterTarget }: ITargetItemProps) {
 
 interface ITargetListProps {
   letterTargetList: ILetterTarget[]
+  setTargetUser: (targetUser: ILetterTarget) => void
 }
 
-const TargetList = ({ letterTargetList }: ITargetListProps) => {
+const TargetList = ({ letterTargetList, setTargetUser }: ITargetListProps) => {
   return (
     <Stack>
       {letterTargetList.map((target: ILetterTarget) => (
-        <TargetItem key={target.targetId} letterTarget={target} />
+        <TargetItem
+          key={target.targetId}
+          letterTarget={target}
+          setTargetUser={setTargetUser}
+        />
       ))}
     </Stack>
   )
@@ -83,7 +90,7 @@ const MessageForm = ({
   type,
   keyword,
   setMessageData,
-  nickname,
+  // nickname,
   handleClose,
 }: IProps) => {
   const router = useRouter()
@@ -97,23 +104,23 @@ const MessageForm = ({
       if (!content) {
         alert('내용을 입력하세요.')
         return
-      } else if (!keyword || !userInfo) {
+      } else if (!userInfo) {
         alert('받는 사람을 입력하세요.')
         return
       }
-
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/new-message`,
-        {
-          body: {
-            targetId: storedSelectedUser,
-            content,
-          },
-        },
-      )
-      setContent('')
-      updateMessageData(response.data)
-      handleClose()
+      console.log('userInfo', userInfo)
+      // const response = await axios.post(
+      //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/new-message`,
+      //   {
+      //     body: {
+      //       targetId: storedSelectedUser,
+      //       content,
+      //     },
+      //   },
+      // )
+      // setContent('')
+      // updateMessageData(response.data)
+      // handleClose()
     } catch (error) {
       alert('쪽지 전송에 실패하였습니다. 다시 시도해주세요.')
     }
@@ -121,6 +128,9 @@ const MessageForm = ({
 
   return (
     <>
+      <Typography>{`받는 사람 : ${
+        userInfo ? userInfo.targetNickname : ''
+      }`}</Typography>
       <TextField
         sx={{ width: '100%' }}
         value={content}
@@ -142,18 +152,35 @@ const MessageForm = ({
   )
 }
 
+// TODO : 반드시 삭제
+
+const dummySearchResult = [
+  {
+    targetId: 0,
+    targetEmail: 'heyheyhey',
+    targetNickname: 'hey',
+    targetProfile: 'https://picsum.photos/200',
+  },
+  {
+    targetId: 1,
+    targetEmail: 'hihihi',
+    targetNickname: 'hi',
+    targetProfile: 'https://picsum.photos/200',
+  },
+  {
+    targetId: 2,
+    targetEmail: 'hellohello',
+    targetNickname: 'hello',
+    targetProfile: 'https://picsum.photos/200',
+  },
+]
+
 const MessageWritingForm = ({ handleClose }: any) => {
   const [keyword, setKeyword] = useState('')
+  const [targetUser, setTargetUser] = useState<ILetterTarget | undefined>()
   const [letterTargetList, setLetterTargetList] = useState<
     ILetterTarget[] | undefined
-  >([
-    {
-      targetId: 0,
-      targetEmail: 'heyheyhey',
-      targetNickname: 'hey',
-      targetProfile: 'https://picsum.photos/200',
-    },
-  ])
+  >(dummySearchResult)
 
   //TODO: 반환된 검색 결과 state 에 실어서 보내기 (받는 사람 정보)
 
@@ -191,14 +218,19 @@ const MessageWritingForm = ({ handleClose }: any) => {
         />
         <Button onClick={searchUserWithKeyword}>검색</Button>
       </Stack>
-      {letterTargetList && <TargetList letterTargetList={letterTargetList} />}
-      {/* <MessageForm
-        userInfo={letterTarget}
+      {letterTargetList && (
+        <TargetList
+          letterTargetList={letterTargetList}
+          setTargetUser={setTargetUser}
+        />
+      )}
+      <MessageForm
+        userInfo={targetUser}
         type={'newMessage'}
         keyword={keyword}
         handleClose={handleClose}
         nickname=""
-      /> */}
+      />
     </Stack>
   )
 }
