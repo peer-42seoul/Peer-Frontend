@@ -7,7 +7,7 @@ import { Box, Container } from '@mui/material'
 // import { useRef } from 'react'
 import useSWR from 'swr'
 import CuModal from '@/components/CuModal'
-import MessageWritingForm from './panel/MessageWritingForm'
+import MessageWritingForm from './panel/MessageWritingFormModal'
 import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
 import useMedia from '@/hook/useMedia'
@@ -36,16 +36,6 @@ const MessageMain = () => {
 
   return (
     <Container sx={{ height: '90vh' }}>
-      {isOpen && (
-        <CuModal
-          open={isOpen}
-          handleClose={closeModal}
-          ariaTitle={'create_message'}
-          ariaDescription={'create_message'}
-        >
-          <MessageWritingForm handleClose={closeModal} />
-        </CuModal>
-      )}
       <Box sx={{ width: '100%' }}>
         <CuButton
           variant="outlined"
@@ -59,6 +49,8 @@ const MessageMain = () => {
           error={error}
           isLoading={isLoading}
           isPC={isPc}
+          isNewMessageModalOpen={isOpen}
+          newMessageModalClose={closeModal}
         />
         {/* </Box> */}
       </Box>

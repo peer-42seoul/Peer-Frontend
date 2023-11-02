@@ -7,6 +7,7 @@ import { IMessagObject } from '@/types/IMessageInformation'
 import CuButton from '@/components/CuButton'
 import useToast from '@/hook/useToast'
 import MessageList from './MessageList'
+import MessageWritingFormModal from './MessageWritingFormModal'
 
 interface ISearchBarProps {
   setSearchKeyword: (keyword: string) => void
@@ -57,6 +58,8 @@ interface IMessageContainerProps {
   error: any
   isLoading: boolean
   isPC: boolean
+  isNewMessageModalOpen: boolean
+  newMessageModalClose: () => void
 }
 
 const MessageContainer = ({
@@ -64,6 +67,8 @@ const MessageContainer = ({
   error,
   isLoading,
   isPC,
+  isNewMessageModalOpen,
+  newMessageModalClose,
 }: IMessageContainerProps) => {
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [messageData, setMessageData] = useState<IMessagObject[]>([])
@@ -136,28 +141,36 @@ const MessageContainer = ({
     return <Typography>쪽지함이 비었습니다.</Typography>
 
   return (
-    <Stack spacing={2}>
-      {isManageMode ? (
-        <ManageBar
-          handleSelectAll={handleSelectAll}
-          handleDelete={handleDelete}
+    <>
+      <Stack spacing={2}>
+        {isManageMode ? (
+          <ManageBar
+            handleSelectAll={handleSelectAll}
+            handleDelete={handleDelete}
+          />
+        ) : (
+          <SearchBar
+            setSearchKeyword={setSearchKeyword}
+            setIsManageMode={setIsManageMode}
+            handleMessageSearch={handleMessageSearch}
+          />
+        )}
+        <MessageList
+          messages={messageData}
+          isManageMode={isManageMode}
+          toggleSelectUser={toggleSelectUser}
         />
-      ) : (
-        <SearchBar
-          setSearchKeyword={setSearchKeyword}
-          setIsManageMode={setIsManageMode}
-          handleMessageSearch={handleMessageSearch}
+        <CuToast open={isOpen} onClose={closeToast} severity="error">
+          <Typography>삭제에 실패하였습니다.</Typography>
+        </CuToast>
+      </Stack>
+      {isNewMessageModalOpen && (
+        <MessageWritingFormModal
+          isOpen={isNewMessageModalOpen}
+          handleClose={newMessageModalClose}
         />
       )}
-      <MessageList
-        messages={messageData}
-        isManageMode={isManageMode}
-        toggleSelectUser={toggleSelectUser}
-      />
-      <CuToast open={isOpen} onClose={closeToast} severity="error">
-        <Typography>삭제에 실패하였습니다.</Typography>
-      </CuToast>
-    </Stack>
+    </>
   )
 }
 

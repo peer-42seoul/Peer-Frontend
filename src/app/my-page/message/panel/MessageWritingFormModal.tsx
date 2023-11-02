@@ -14,6 +14,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { IMessageInformation } from '@/types/IMessageInformation'
 import useMessageStore from '@/states/useMessageStore'
+import CuModal from '@/components/CuModal'
 
 interface IProps {
   userInfo?: ILetterTarget
@@ -87,8 +88,8 @@ const TargetList = ({ letterTargetList, setTargetUser }: ITargetListProps) => {
 
 const MessageForm = ({
   userInfo,
-  type,
-  keyword,
+  // type,
+  // keyword,
   setMessageData,
   // nickname,
   handleClose,
@@ -122,7 +123,7 @@ const MessageForm = ({
     } catch (error) {
       alert('쪽지 전송에 실패하였습니다. 다시 시도해주세요.')
     }
-  }, [keyword, content, router, type, updateMessageData])
+  }, [content, router, updateMessageData])
 
   return (
     <>
@@ -173,7 +174,15 @@ const dummySearchResult = [
   },
 ]
 
-const MessageWritingForm = ({ handleClose }: any) => {
+interface IMessageWritingFormModalProps {
+  isOpen: boolean
+  handleClose: () => void
+}
+
+const MessageWritingFormModal = ({
+  isOpen,
+  handleClose,
+}: IMessageWritingFormModalProps) => {
   const [keyword, setKeyword] = useState('')
   const [targetUser, setTargetUser] = useState<ILetterTarget | undefined>()
   const [letterTargetList, setLetterTargetList] = useState<
@@ -181,6 +190,7 @@ const MessageWritingForm = ({ handleClose }: any) => {
   >(dummySearchResult)
 
   //TODO: 반환된 검색 결과 state 에 실어서 보내기 (받는 사람 정보)
+  // TODO : 전역 상태가 필요한지 확인해보기...
 
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {
@@ -205,33 +215,40 @@ const MessageWritingForm = ({ handleClose }: any) => {
   }, [keyword])
 
   return (
-    <Stack alignItems={'center'} spacing={2}>
-      <Typography>새 쪽지</Typography>
-      <Stack direction={'row'} alignItems={'stretch'} sx={{ width: '100%' }}>
-        <TextField
-          sx={{ width: '100%' }}
-          value={keyword}
-          placeholder="닉네임 혹은 이메일을 입력하세요"
-          variant="outlined"
-          onChange={(e) => setKeyword(e.target.value)}
+    <CuModal
+      open={isOpen}
+      handleClose={handleClose}
+      ariaTitle={'create_message'}
+      ariaDescription={'create_message'}
+    >
+      <Stack alignItems={'center'} spacing={2}>
+        <Typography>새 쪽지</Typography>
+        <Stack direction={'row'} alignItems={'stretch'} sx={{ width: '100%' }}>
+          <TextField
+            sx={{ width: '100%' }}
+            value={keyword}
+            placeholder="닉네임 혹은 이메일을 입력하세요"
+            variant="outlined"
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+          <Button onClick={searchUserWithKeyword}>검색</Button>
+        </Stack>
+        {letterTargetList && (
+          <TargetList
+            letterTargetList={letterTargetList}
+            setTargetUser={setTargetUser}
+          />
+        )}
+        <MessageForm
+          userInfo={targetUser}
+          type={'newMessage'}
+          keyword={keyword}
+          handleClose={handleClose}
+          nickname=""
         />
-        <Button onClick={searchUserWithKeyword}>검색</Button>
       </Stack>
-      {letterTargetList && (
-        <TargetList
-          letterTargetList={letterTargetList}
-          setTargetUser={setTargetUser}
-        />
-      )}
-      <MessageForm
-        userInfo={targetUser}
-        type={'newMessage'}
-        keyword={keyword}
-        handleClose={handleClose}
-        nickname=""
-      />
-    </Stack>
+    </CuModal>
   )
 }
 
-export default MessageWritingForm
+export default MessageWritingFormModal
