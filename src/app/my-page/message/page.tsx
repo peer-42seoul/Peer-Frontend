@@ -4,7 +4,7 @@ import { AxiosInstance } from 'axios'
 import useAxiosWithAuth from '@/api/config'
 import { getFetcherWithInstance } from '@/api/fetchers'
 import { Box, Button, Container } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import useSWR from 'swr'
 import CuModal from '@/components/CuModal'
 import MessageWritingForm from './MessageWritingForm'
@@ -17,7 +17,6 @@ import MessageList from './MessageList'
 
 const MessageMain = () => {
   const MessageBox = useRef<HTMLDivElement | null>(null)
-  const [messageList, setMessageList] = useState<IMessagObject[]>([])
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
   const axiosInstance = useAxiosWithAuth()
@@ -26,12 +25,6 @@ const MessageMain = () => {
     ([url, axiosInstance]) =>
       getFetcherWithInstance(url, axiosInstance as AxiosInstance),
   )
-
-  useEffect(() => {
-    if (data) {
-      setMessageList((prevMessages) => [...prevMessages, ...data])
-    }
-  }, [data])
 
   return (
     <Container sx={{ height: '90vh' }}>
@@ -57,7 +50,7 @@ const MessageMain = () => {
           </Button>
           <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}>
             <MessageList
-              data={messageList || []}
+              data={data || []}
               error={error}
               isLoading={isLoading}
               isPc={isPc}
