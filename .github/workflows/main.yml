@@ -1,9 +1,11 @@
 name: CI/CD
 
 on:
+  push:
+    branches: ['main', 'dev']
   pull_request:
-    branches:
-      - develop
+    branches: ['main', dev]
+    types: ['opened', 'reopened', 'synchronize', 'closed']
 
 jobs:
   CI:
@@ -44,6 +46,7 @@ jobs:
 
   CD:
     name: Deployment
+    if: github.ref == 'refs/heads/dev' && (github.event.pull_request.merged == true || github.event_name == 'push')
     runs-on: ubuntu-latest
     needs: CI
     steps:
