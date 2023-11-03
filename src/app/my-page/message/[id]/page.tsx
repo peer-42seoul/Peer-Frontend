@@ -1,41 +1,43 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import useSWRMutation from 'swr/mutation'
 import {
+  Avatar,
   Box,
   Button,
   CircularProgress,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
-import useSWR from 'swr'
-import Image from 'next/image'
-import axios from 'axios'
-import useInfiniteScroll from '@/hook/useInfiniteScroll'
-import { fetchServerData } from '@/api/fetchers'
+import useAxiosWithAuth from '@/api/config'
+import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 
-interface IMessageData {
-  MsgList: {
-    MsgTarget: IUser
-    MsgOwner: IUser
-    Msg: any[]
-  }
+interface IMessage {
+  userId: number // 이 쪽지의 주인
+  msgId: number
+  content: string
+  date: string
+  isEnd: boolean
 }
 
 interface IUser {
-  userId?: string
-  userProfile?: string
-  userNickname?: string
+  userId: number
+  userProfile: string
+  userNickname: string
 }
 
-interface IMessageItemProps {
-  user: IUser & { content?: string; date?: string }
-  Owner?: IUser
-  Target?: IUser
-}
-const MessageForm = ({ data }: { data: IMessageData }) => {
+const MessageForm = ({
+  targetId,
+  addNewMessage,
+}: {
+  targetId: number
+  addNewMessage: (newMessage: IMessage) => void
+}) => {
   const [content, setContent] = useState('')
-
+  const axiosInstance = useAxiosWithAuth()
   const messageSubmit = useCallback(async () => {
     try {
       if (!content) {
@@ -43,21 +45,23 @@ const MessageForm = ({ data }: { data: IMessageData }) => {
         return
       }
       const messageData = {
-        targetId: data.MsgList.MsgTarget.userId,
+        targetId: targetId,
         content,
       }
-
-      setContent('')
-      const url = `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/back-message?userId=${data.MsgList.MsgOwner.userId}`
-
-      const response = await axios.post(url, messageData)
+      const response = await axiosInstance.post(
+        `/api/v1/message/back-message`,
+        messageData,
+      )
       if (response.status === 201) {
+        addNewMessage(response.data.Msg)
         alert('메시지가 성공적으로 전송되었습니다.')
+        setContent('')
       }
     } catch (error) {
+      // TODO : 에러 구체화
       alert('메시지 전송에 실패하였습니다.')
     }
-  }, [content, data])
+  }, [content])
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -77,134 +81,156 @@ const MessageForm = ({ data }: { data: IMessageData }) => {
   )
 }
 
-const MessageItem = ({ user, Owner, Target }: IMessageItemProps) => {
+const OwnerMessageItem = ({ message }: { message: IMessage }) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+      }}
+    >
+      <Stack sx={{ bgcolor: '#EFEFEF', alignItems: 'flex-end' }}>
+        <Typography>{message.content}</Typography>
+        <Typography>{message.date}</Typography>
+      </Stack>
+    </Box>
+  )
+}
+
+const TargetMessageItem = ({
+  message,
+  target,
+}: {
+  message: IMessage
+  target: IUser
+}) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+      }}
+    >
+      <Stack sx={{ bgcolor: '#D8D8D8', alignItems: 'flex-start' }} spacing={1}>
+        <Stack direction={'row'} alignItems={'center'} spacing={1}>
+          <Avatar src={target.userProfile} />
+          <Typography sx={{ fontWeight: 'bold' }}>
+            {target.userNickname}
+          </Typography>
+        </Stack>
+        <Typography>{message.content}</Typography>
+        <Typography>{message.date}</Typography>
+      </Stack>
+    </Box>
+  )
+}
+
+interface IMessageItemProps {
+  msg: IMessage
+  owner: IUser
+  target: IUser
+}
+
+const MessageItem = ({ msg, owner, target }: IMessageItemProps) => {
   return (
     <>
-      {user.userId === Owner?.userId ? (
-        <Box
-          key={user.userId}
-          sx={{
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'flex-end',
-            margin: '1rem',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '35rem',
-              padding: '1rem', // Corrected padding syntax
-              alignItems: 'flex-end', // Corrected value and removed the extra comma
-              background: '#EFEFEF',
-            }}
-          >
-            {Owner?.userProfile ? (
-              <Image
-                style={{ borderRadius: '50%' }}
-                width={100}
-                height={100}
-                src={Owner?.userProfile}
-                alt="picture_of_owner"
-              />
-            ) : (
-              <div>No image</div>
-            )}
-            <Typography sx={{ fontWeight: 'bold' }}>
-              {Owner?.userNickname}
-            </Typography>
-            <Typography>{user.content}</Typography>
-            <Typography>{user.date}</Typography>
-          </Box>
-        </Box>
+      {msg.userId === owner.userId ? (
+        <OwnerMessageItem message={msg} />
       ) : (
-        <Box
-          key={user.userId}
-          sx={{
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'flex-start',
-            margin: '1rem',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '35rem',
-              padding: '0.5rem 1rem 1rem 0.5rem',
-              background: '#EFEFEF',
-            }}
-          >
-            {Target?.userProfile ? (
-              <Image
-                style={{ borderRadius: '50%' }}
-                width={100}
-                height={100}
-                src={Target?.userProfile}
-                alt="picture_of_target"
-              />
-            ) : (
-              <div>No image</div>
-            )}
-            <Typography sx={{ fontWeight: 'bold' }}>
-              {Target?.userNickname}
-            </Typography>
-            <Typography>{user.content}</Typography>
-            <Typography>{user.date}</Typography>
-          </Box>
-        </Box>
+        <TargetMessageItem message={msg} target={target} />
       )}
     </>
   )
 }
 
-const MessageChatPage = () => {
-  const [updatedData, setUpdatedData] = useState<IMessageData>()
-  const [page, setPage] = useState<number>(1)
-  const pageLimit = 3
-  const [Owner, setOwner] = useState<IUser>()
-  const [Target, setTarget] = useState<IUser>()
+const MessageChatPage = ({ params }: { params: { id: string } }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const searchParams = useSearchParams()
+  const [updatedData, setUpdatedData] = useState<IMessage[] | undefined>()
+  const [owner, setOwner] = useState<IUser>()
+  const [target, setTarget] = useState<IUser>()
+  const [isEnd, setIsEnd] = useState<boolean>(false)
+  const axiosInstance = useAxiosWithAuth()
 
-  // const fetcherWithParams = async (url: string, params: {}) => {
-  //   const response = await axios.get(url, { params })
-  //   return response.data
-  // }
-  // FIXME: 해당 부분을 나중에 post로 다 바꿔야함
-  const { data, mutate, isLoading } = useSWR(
-    `http://localhost:4000/test_detail_${page}`,
-    fetchServerData, // FIXME: 여기의 userid는 내 uid
+  const fetchMoreData = useCallback(
+    async (url: string) => {
+      try {
+        const response = await axiosInstance.post(url, {
+          targetId: searchParams.get('target'),
+          conversationalId: params.id,
+          earlyMsgId: updatedData?.[0]?.msgId,
+        })
+        return response.data.MsgList.Msg
+      } catch {
+        // TODO : 에러 구체화
+        alert('쪽지를 불러오는데 실패하였습니다.')
+      }
+    },
+    [searchParams, params, updatedData],
   )
-  console.log('값 까보ㅈ', updatedData?.MsgList?.Msg)
-  const { target, spinner } = useInfiniteScroll({
-    setPage,
-    mutate,
-    pageLimit,
-    page,
-  })
+
+  const { trigger, data } = useSWRMutation(
+    '/api/v1/message/conversation-list/more',
+    fetchMoreData,
+  )
 
   useEffect(() => {
-    setOwner(data?.MsgList.MsgOwner)
-    setTarget(data?.MsgList.MsgTarget)
+    setIsLoading(true)
+    const targetId = searchParams.get('target')
+    const conversationalId = params.id
+    axiosInstance
+      .post('/api/v1/message/conversation-list', {
+        targetId,
+        conversationalId,
+      })
+      .then((response) => {
+        setUpdatedData(response.data.MsgList.Msg)
+        setOwner(response.data.MsgList.MsgOwner)
+        setTarget(response.data.MsgList.MsgTarget)
+      })
+      .catch(() => {
+        // TODO : 에러 구체화
+        alert('쪽지를 불러오는데 실패하였습니다.')
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [searchParams, params])
 
-    setUpdatedData((prevData: any) => {
-      return {
-        ...prevData,
-        MsgList: {
-          ...prevData?.MsgList, // 이전 데이터를 그대로 가져오고 새로운 Mag데이터를 추가한다.
-          Msg: [
-            ...(prevData?.MsgList?.Msg || []),
-            ...(data?.MsgList.Msg || []),
-          ],
-        },
-      }
+  useEffect(() => {
+    if (!data) return
+    setUpdatedData((prevData: IMessage[] | undefined) => {
+      if (!prevData) return data
+      return [...data, ...prevData]
     })
+    setIsEnd(data[0].isEnd)
   }, [data])
 
-  if (isLoading) return <Box>쪽지를 불러오는 중입니다...</Box>
-  if (!data) return <Box>빈 쪽지함 입니다!</Box>
-  console.log('최초 데이터', data.MsgList.MsgOwner)
+  const { ref, spinner } = useMessageInfiniteScroll({
+    trigger, // == mutate
+    isEnd,
+  })
+
+  const addNewMessage = (newMessage: IMessage) => {
+    if (!updatedData) return
+    setUpdatedData((prevData: IMessage[] | undefined) => {
+      if (!prevData) return [newMessage]
+      return [...prevData, newMessage]
+    })
+  }
+
+  const bottomRef = useRef<HTMLDivElement>()
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'instant' })
+  }, [updatedData])
+
+  if (isLoading) return <Typography>로딩중... @_@</Typography>
+  if (!updatedData || !owner || !target)
+    return <Typography>빈 쪽지함 입니다!</Typography>
+
   return (
     <Box sx={{ width: '100%', height: '90vh' }}>
       <Box
@@ -219,28 +245,29 @@ const MessageChatPage = () => {
           backgroundColor: '#D8D8D8',
         }}
       >
-        <Typography>{Target?.userNickname}</Typography>
+        <Typography>{target.userNickname}</Typography>
       </Box>
       <Box sx={{ width: '100%', height: '90%', overflowY: 'auto' }}>
-        {updatedData?.MsgList?.Msg.map((msgObj: any) => (
-          <MessageItem
-            key={msgObj.msgId}
-            user={msgObj}
-            Owner={Owner}
-            Target={Target}
-          />
-        ))}
-        {spinner && <CircularProgress />}
         <Box
           sx={{
             bottom: 0,
             height: '1vh',
             backgroundColor: 'primary.main',
           }}
-          ref={target}
-        />
+          ref={ref}
+        ></Box>
+        {spinner && <CircularProgress />}
+        {updatedData.map((msgObj: IMessage) => (
+          <MessageItem
+            key={msgObj.msgId}
+            msg={msgObj}
+            owner={owner}
+            target={target}
+          />
+        ))}
+        <Box ref={bottomRef}></Box>
       </Box>
-      <MessageForm data={data} />
+      <MessageForm targetId={target.userId} addNewMessage={addNewMessage} />
     </Box>
   )
 }
