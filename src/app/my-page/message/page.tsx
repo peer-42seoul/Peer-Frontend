@@ -2,12 +2,10 @@
 
 import { AxiosInstance } from 'axios'
 import useAxiosWithAuth from '@/api/config'
-import { defaultGetFetcher, getFetcherWithInstance } from '@/api/fetchers'
+import { getFetcherWithInstance } from '@/api/fetchers'
 import { Box, Container } from '@mui/material'
 // import { useRef } from 'react'
 import useSWR from 'swr'
-import CuModal from '@/components/CuModal'
-import MessageWritingForm from './panel/MessageWritingFormModal'
 import useModal from '@/hook/useModal'
 import { IMessagObject } from '@/types/IMessageInformation'
 import useMedia from '@/hook/useMedia'

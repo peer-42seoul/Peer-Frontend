@@ -66,7 +66,7 @@ const MessageContainer = ({
   messages,
   error,
   isLoading,
-  isPC,
+  // isPC,
   isNewMessageModalOpen,
   newMessageModalClose,
 }: IMessageContainerProps) => {

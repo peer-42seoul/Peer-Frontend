@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import useInfiniteScroll from '@/hook/useInfiniteScroll'
+import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 
 interface IMessage {
   userId: number // 이 쪽지의 주인
@@ -222,7 +222,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     setIsEnd(data[0].isEnd)
   }, [data])
 
-  const { ref, spinner } = useInfiniteScroll({
+  const { ref, spinner } = useMessageInfiniteScroll({
     trigger, // == mutate
     isEnd,
   })
