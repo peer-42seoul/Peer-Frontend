@@ -20,14 +20,32 @@ export default function SearchHistory({
   useEffect(() => {
     const storedKeywords = Object.keys(localStorage)
       .filter((key) => key.startsWith('searchWord_'))
+      .sort((a, b) => Number(b.split('_')[1]) - Number(a.split('_')[1]))
       .map((key) => localStorage.getItem(key) || '') // 만약 localStorage에서 아이템을 가져오지 못하는 경우를 대비해서 ''를 추가했습니다.
+
     setSearchKeywords(storedKeywords)
   }, [])
 
   // 검색어 삭제 함수
-  const deleteKeyword = (index: number) => {
-    localStorage.removeItem(`searchWord_${index}`)
-    setSearchKeywords((prev) => prev.filter((_, i) => i !== index))
+  const deleteKeyword = (keyword: string) => {
+    const storedKeywords = Object.keys(localStorage)
+      .filter((key) => key.startsWith('searchWord_'))
+      .sort((a, b) => Number(b.split('_')[1]) - Number(a.split('_')[1]))
+
+    // 키워드에 해당하는 항목을 로컬 스토리지에서 삭제
+    const keywordKey = storedKeywords.find(
+      (key) => localStorage.getItem(key) === keyword,
+    )
+    if (keywordKey) {
+      localStorage.removeItem(keywordKey)
+    }
+
+    // 나머지 키워드들을 가져옴
+    const remainingKeywords = storedKeywords
+      .filter((key) => key !== keywordKey)
+      .map((key) => localStorage.getItem(key) || '')
+
+    setSearchKeywords(remainingKeywords)
   }
 
   return (
@@ -44,7 +62,7 @@ export default function SearchHistory({
               <IconButton
                 edge="end"
                 aria-label="delete"
-                onClick={() => deleteKeyword(index)}
+                onClick={() => deleteKeyword(keyword)}
               >
                 <DeleteIcon />
               </IconButton>
