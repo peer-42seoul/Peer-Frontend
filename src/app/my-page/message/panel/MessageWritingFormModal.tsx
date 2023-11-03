@@ -140,9 +140,6 @@ const MessageWritingFormModal = ({
     ILetterTarget[] | undefined
   >()
 
-  //TODO: 반환된 검색 결과 state 에 실어서 보내기 (받는 사람 정보)
-  // TODO : 전역 상태가 필요한지 확인해보기...
-
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {
       alert('검색어를 입력하세요.')

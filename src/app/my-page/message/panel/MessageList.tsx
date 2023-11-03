@@ -27,14 +27,6 @@ const MessageItem = ({
     unreadMsgNumber,
   } = message
 
-  //   const handleMessageClick = () => {
-  //     // TODO : 전역 상태로 관리할 필요가 있는지 확인해보기 (필요없어보임;)
-  //     useMessageStore.setState({
-  //       storedTargetId: targetId,
-  //       setStoredConversationalId: conversationalId,
-  //     })
-  //   }
-
   return (
     <Stack direction={'row'} spacing={1}>
       {isManageMode && (
