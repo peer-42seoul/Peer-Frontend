@@ -1,6 +1,5 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
-import { getFetcherWithInstance } from '@/api/fetchers'
 import MainCard from '@/app/panel/MainCard'
 import { ProjectType } from '@/app/panel/MainPage'
 import CloseButton from '@/components/CloseButton'
@@ -23,7 +22,7 @@ import {
   Typography,
 } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { AxiosInstance } from 'axios'
+// import { AxiosInstance } from 'axios'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
@@ -156,15 +155,10 @@ const MyInterests = () => {
     setType(newValue as string)
     setPostList([])
   }
-  const axiosInstance: AxiosInstance = useAxiosWithAuth()
-
+  const axiosInstance = useAxiosWithAuth()
   const { data, isLoading, mutate } = useSWR<IInterestResponse>(
-    [
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=10`,
-      axiosInstance,
-    ],
-    ([url, axiosInstance]) =>
-      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=10`,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
   const deleteAll = async () => {
