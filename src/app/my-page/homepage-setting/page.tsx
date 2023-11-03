@@ -23,8 +23,8 @@ const HomepageSetting = () => {
   }, [toastMessage, openToast, isOpen, closeToast])
 
   const clearToast = () => {
-    setToastMessage((prev) => ({ ...prev, message: '' }))
     closeToast()
+    setToastMessage((prev) => ({ ...prev, message: '' }))
   }
 
   return (

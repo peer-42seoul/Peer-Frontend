@@ -8,13 +8,12 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { useState } from 'react'
-import { ProjectType, ProjectSort } from '../page'
 import EditButton from './EditButton'
 import MainCard from './MainCard'
 import SearchOption from './SearchOption'
 import SelectSort from './SelectSort'
 import SelectType from './SelectType'
-import { defaultGetFetcher } from '@/api/fetchers'
+import { defaultGetFetcher, getFetcherWithInstance } from '@/api/fetchers'
 import useSWR from 'swr'
 import MainProfile from './MainProfile'
 import MainShowcase from './MainShowcase'
@@ -22,12 +21,18 @@ import MainCarousel from './MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import { IPost } from '@/types/IPostDetail'
+import useAuthStore from '@/states/useAuthStore'
+import useAxiosWithAuth from '@/api/config'
+import { AxiosInstance } from 'axios'
+//latest, hit
+export type ProjectSort = 'latest' | 'hit'
+export type ProjectType = 'Study' | 'Project'
 
 const MainPage = ({ initData }: { initData: IPost[] }) => {
   const [page, setPage] = useState<number>(1)
-  const [type, setType] = useState<ProjectType>('projects')
+  const [type, setType] = useState<ProjectType>('Study')
   const [openOption, setOpenOption] = useState<boolean>(false)
-  const [sort, setSort] = useState<ProjectSort>('recent')
+  const [sort, setSort] = useState<ProjectSort>('latest')
   /* 추후 디자인 추가되면 schedule 추가하기 */
   const [detailOption, setDetailOption] = useState<{
     due: string
@@ -38,26 +43,33 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
   }>({ due: '', region: '', place: '', status: '', tag: '' })
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
+  const { isLogin } = useAuthStore()
+  const axiosInstance: AxiosInstance = useAxiosWithAuth()
 
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
-  const pagesize = 10
-  const { data, isLoading, error, mutate } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pagesize=${pagesize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
-    defaultGetFetcher,
-    { fallbackData: initData },
-  )
+  const pageSize = 10
+  const swrKey = isLogin
+    ? [
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
+      axiosInstance,
+    ]
+    : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
 
-  const pageLimit = 2
+  const fetcher = isLogin
+    ? (url: string) =>
+      getFetcherWithInstance(url, axiosInstance)
+    : defaultGetFetcher
+
+  const { data, isLoading, error, mutate } = useSWR(swrKey, fetcher, {
+    fallbackData: initData,
+  })
+  const pageLimit = data?.totalPages
   const { target, spinner } = useInfiniteScroll({
     setPage,
     mutate,
     pageLimit,
     page,
   })
-
-  if (isLoading) return <Typography>로딩중...</Typography>
-  if (error) return <Typography>에러 발생</Typography>
-  if (!data) return <Typography>데이터가 없습니다</Typography>
 
   return (
     <>
@@ -81,32 +93,42 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
               </Stack>
             </Grid>
           </Grid>
-          <Stack alignItems={'center'} gap={2}>
-            {data?.map((project: IPost) => (
-              <Box key={project.user_id}>
-                <MainCard {...project} type={type} />
+          {isLoading ? (
+            <Typography>로딩중...</Typography>
+          ) : error ? (
+            <Typography>에러 발생</Typography>
+          ) : data?.content.length == 0 ? (
+            <Typography>데이터가 없습니다</Typography>
+          ) : (
+            <>
+              <Stack alignItems={'center'} gap={2}>
+                {data?.content.map((project: IPost) => (
+                  <Box key={project.user_id}>
+                    <MainCard {...project} type={type} />
+                  </Box>
+                ))}
+              </Stack>
+              <Box
+                sx={{
+                  position: 'fixed',
+                  right: 20,
+                  bottom: 80,
+                }}
+              >
+                <EditButton />
               </Box>
-            ))}
-          </Stack>
-          <Box
-            sx={{
-              position: 'fixed',
-              right: 20,
-              bottom: 80,
-            }}
-          >
-            <EditButton />
-          </Box>
+              {spinner && <CircularProgress />}
+              <Box
+                sx={{
+                  bottom: 0,
+                  height: '1vh',
+                  backgroundColor: 'primary.main',
+                }}
+                ref={target}
+              />
+            </>
+          )}
         </Box>
-        {spinner && <CircularProgress />}
-        <Box
-          sx={{
-            bottom: 0,
-            height: '1vh',
-            backgroundColor: 'primary.main',
-          }}
-          ref={target}
-        />
       </Container>
       {/* pc view */}
       <Container
@@ -136,22 +158,32 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
                 </Stack>
               </Grid>
             </Grid>
-            <Grid container spacing={2}>
-              {data?.map((project: IPost) => (
-                <Grid item key={project.user_id} sm={12} md={4}>
-                  <MainCard {...project} type={type}/>
+            {isLoading ? (
+              <Typography>로딩중...</Typography>
+            ) : error ? (
+              <Typography>에러 발생</Typography>
+            ) : data?.content.length == 0 ? (
+              <Typography>데이터가 없습니다</Typography>
+            ) : (
+              <>
+                <Grid container spacing={2}>
+                  {data?.content.map((project: IPost) => (
+                    <Grid item key={project.user_id} sm={12} md={4}>
+                      <MainCard {...project} type={type} />
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
-            {spinner && <CircularProgress />}
-            <Box
-              sx={{
-                bottom: 0,
-                height: '1vh',
-                backgroundColor: 'primary.main',
-              }}
-              ref={target}
-            />
+                {spinner && <CircularProgress />}
+                <Box
+                  sx={{
+                    bottom: 0,
+                    height: '1vh',
+                    backgroundColor: 'primary.main',
+                  }}
+                  ref={target}
+                />
+              </>
+            )}
           </Stack>
           <Stack width={'250px'} height={'100%'}>
             <MainProfile />

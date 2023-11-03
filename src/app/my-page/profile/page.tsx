@@ -11,9 +11,7 @@ import ProfileLinkEditor from './panel/ProfileLinkEditor'
 import useToast from '@/hook/useToast'
 import useMedia from '@/hook/useMedia'
 import useSWR from 'swr'
-import { getFetcherWithInstance } from '@/api/fetchers'
 import useAxiosWithAuth from '@/api/config'
-import { AxiosInstance } from 'axios'
 
 interface IModals {
   introduction: boolean
@@ -41,7 +39,6 @@ const mobileStyle = {
 }
 
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
-// TODO fetcher auth 포함하는 것으로 변경할 것
 const MyProfile = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const {
@@ -50,9 +47,8 @@ const MyProfile = () => {
     isLoading,
     mutate,
   } = useSWR<IUserProfile>(
-    [`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`, axiosWithAuth],
-    ([url, axiosWithAuth]) =>
-      getFetcherWithInstance(url, axiosWithAuth as AxiosInstance),
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   const [modalType, setModalType] = useState<string>('' as string)

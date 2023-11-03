@@ -2,7 +2,7 @@
 import useMedia from '@/hook/useMedia'
 import { Box, SxProps, Tab, Tabs, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
 const getTabValue = (path: string) => {
@@ -32,10 +32,14 @@ const SubNavBar = () => {
   console.log(router)
   const pathName = usePathname()
   console.log(pathName)
-  const [value, setValue] = useState(getTabValue(pathName))
+  const [value, setValue] = useState(0)
   const { isPc } = useMedia()
 
   const tabStyle: SxProps = { maxWidth: '244px', padding: '0 24px' }
+
+  useEffect(() => {
+    setValue(getTabValue(pathName))
+  }, [pathName])
 
   if (!isPc) {
     return <div></div>

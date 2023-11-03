@@ -12,8 +12,8 @@ import {
   List,
   Container,
 } from '@mui/material'
-import { IPostDetail, Tag } from '@/types/IPostDetail'
-// import Image from 'next/image'
+import { IPostDetail, ITag } from '@/types/IPostDetail'
+import Image from 'next/image'
 import React, { useMemo } from 'react'
 import RecruitFormModal from './panel/RecruitFormModal'
 import { useSearchParams } from 'next/navigation'
@@ -72,12 +72,12 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
       {isPc ? (
         <Container>
           <Stack direction={'row'} gap={4} marginBottom={6}>
-            {/* <Image
-              src={userData?.profileUrl}
+            <Image
+              src={userData?.profileImageUrl ?? ''}
               alt="leader_profile"
               width={300}
               height={300}
-            /> */}
+            />
             <Box display="flex" flexDirection="column" gap={2}>
               <Stack gap={2} direction="row">
                 <Typography variant="h5">{data?.title}</Typography>
@@ -119,7 +119,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           <RecruitFormText label="설명" content={data?.content} />
           <RecruitFormText label="태그">
             <Box>
-              {data?.tagList?.map((tag: Tag, idx: number) => (
+              {data?.tagList?.map((tag: ITag, idx: number) => (
                 <Chip
                   label={tag?.tagName}
                   size="small"
@@ -156,12 +156,12 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             </Typography>
             <Typography>{data?.place}</Typography>
           </Stack>
-          {/* <Image
-            src={userData?.profileUrl}
+          <Image
+            src={userData?.profileImageUrl ?? ''}
             alt="leader_profile"
             width={300}
             height={300}
-          /> */}
+          />
           <RecruitFormText label="총 인원" content={total?.toString() ?? '0'} />
           <RecruitFormText label="목표 작업기간" content={data?.due} />
           <RecruitFormText label="지역" content={data?.region} />
@@ -176,7 +176,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           <RecruitFormText label="설명" content={data?.content} />
           <RecruitFormText label="태그">
             <Box>
-              {data?.tagList?.map((tag: Tag, idx: number) => (
+              {data?.tagList?.map((tag: ITag, idx: number) => (
                 <Chip
                   label={tag?.tagName}
                   size="small"
@@ -194,7 +194,6 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               setRoleOpen(true)
             }}
           >
-            {' '}
             지원하기
           </Button>
         </>
