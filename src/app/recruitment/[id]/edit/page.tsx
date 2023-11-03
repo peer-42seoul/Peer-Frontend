@@ -8,13 +8,15 @@ import { useEffect, useState } from 'react'
 import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
-import axios from 'axios'
+import { AxiosInstance } from 'axios'
 import useToast from '@/hook/useToast'
 import SelectRegion from './panel/SelectRegion'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import Image from 'next/image'
 import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
+import { getFetcherWithInstance } from '@/api/fetchers'
+import useAxiosWithAuth from '@/api/config'
+import { useRouter } from 'next/navigation'
 
 export interface IRoleData {
   role: string | null
@@ -33,7 +35,7 @@ export interface IFormInterview {
   ratioList?: { max: string; valueOfMin: string; valueOfMax: string }
 }
 
-const CreateTeam = () => {
+const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   const [title, setTitle] = useState<string>('')
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
@@ -53,15 +55,23 @@ const CreateTeam = () => {
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
-  const {data} = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/recruit_id`, defaultGetFetcher)
+  const router = useRouter()
+  const axiosInstance = useAxiosWithAuth()
+  const { data } = useSWR(
+    [
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.recruit_id}`,
+      axiosInstance,
+    ],
+    ([url, axiosInstance]) =>
+      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
+  )
 
   useEffect(() => {
     if (!data) {
       console.log('error ocurred!!')
       setToastMessage('데이터를 불러오는데 실패했습니다.')
       openToast()
-    }
-    else { 
+    } else {
       console.log('Tag fetching success', data)
       setTitle(data.title)
       setPreviewImage(data.previewImage)
@@ -83,9 +93,9 @@ const CreateTeam = () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
-    await axios
-      .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/recruit_id`, // 팀페이지 들어올때 받아와야함
+    try {
+      const response = await axiosInstance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.recruit_id}`,
         {
           place,
           image,
@@ -101,9 +111,12 @@ const CreateTeam = () => {
           interviewList,
         },
       )
-      .catch((err) => {
-        console.log(err)
-      })
+      if (response.status === 200) router.push(`/recruitment/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
+    } catch (error) {
+      console.log(error)
+      setToastMessage('모집글 작성 실패, 다시 시도해주세요')
+      openToast()
+    }
   }
 
   return (
@@ -200,6 +213,7 @@ const CreateTeam = () => {
             setData={setTagList}
             openToast={openToast}
             setToastMessage={setToastMessage}
+            params={params}
           />
         </Box>
         {type === 'study' ? null : (

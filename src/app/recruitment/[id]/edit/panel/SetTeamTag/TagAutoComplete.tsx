@@ -1,8 +1,10 @@
 import { Autocomplete, Box, Chip, Stack, TextField } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Tag } from '@/types/IPostDetail'
-import { defaultGetFetcher } from '@/api/fetchers'
+import { ITag } from '@/types/IPostDetail'
+import { getFetcherWithInstance } from '@/api/fetchers'
 import useSWR from 'swr'
+import useAxiosWithAuth from '@/api/config'
+import { AxiosInstance } from 'axios'
 
 /**
  *
@@ -11,53 +13,59 @@ import useSWR from 'swr'
  * @param setData 선택한 값들의 리스트를 변경해주는 함수입니다 (useState로 관리해주세요)
  */
 
-const dummyData1: Tag = {
+const dummyData1: ITag = {
   tagName: 'java',
   tagColor: 'red',
 }
-const dummyData2: Tag = {
+const dummyData2: ITag = {
   tagName: 'spring',
   tagColor: 'blue',
 }
-const dummyData3: Tag = {
+const dummyData3: ITag = {
   tagName: 'react',
   tagColor: 'green',
 }
-const dummyDatas: Tag[] = [dummyData1, dummyData2, dummyData3]
+const dummyDatas: ITag[] = [dummyData1, dummyData2, dummyData3]
 
 const TagAutoComplete = ({
   datas,
   setData,
   placeholder,
   openToast,
-  setToastMessage
+  setToastMessage,
+  params,
 }: {
-  datas: Tag[]
+  datas: ITag[]
   setData: any
   placeholder?: string
   openToast: () => void
   setToastMessage: Dispatch<SetStateAction<string>>
+  params?: { recruit_id: string }
 }) => {
-  const [list, setList] = useState<Tag[]>(dummyDatas)
-  const { data } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`, defaultGetFetcher)
+  const [list, setList] = useState<ITag[]>(dummyDatas)
+  const axiosInstance = useAxiosWithAuth()
+  const { data } = useSWR(
+    [
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params?.recruit_id}`,
+      axiosInstance,
+    ],
+    ([url, axiosInstance]) =>
+      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
+  )
 
   useEffect(() => {
     if (!data) {
       console.log('error ocurred!!')
       setToastMessage('태그를 불러오는데 실패했습니다.')
       openToast()
-    }
-    else { 
-      console.log('Tag fetching success', data)
+    } else {
+      console.log('ITag fetching success', data)
       setList(data.tagList)
     }
   }, [data])
 
   /* 태그를 추가합니다 */
-  const handleInput = (
-    event: React.SyntheticEvent,
-    value: readonly Tag[],
-  ) => {
+  const handleInput = (event: React.SyntheticEvent, value: readonly ITag[]) => {
     setData([...value])
   }
 

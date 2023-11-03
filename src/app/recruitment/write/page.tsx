@@ -8,25 +8,23 @@ import { useState } from 'react'
 import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
-import axios from 'axios'
 import useToast from '@/hook/useToast'
 import SelectRegion from './panel/SelectRegion'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { ITag } from '@/types/IPostDetail'
+import useAxiosWithAuth from '@/api/config'
 // import useAuthStore from '@/states/useAuthStore'
 
 export interface IRoleData {
+  // types 로 병합예정
   role: string | null
   member: number
 }
 
-export interface Itag {
-  tagName: string
-  tagColor: string
-}
-
 export interface IFormInterview {
+  // 수정 및 types로 병합예정
   question: string
   type: string
   optionList?: string[]
@@ -41,7 +39,7 @@ const CreateTeam = () => {
   )
   const [name, setName] = useState<string>('')
   const [type, setType] = useState<string>('project')
-  const [tagList, setTagList] = useState<Itag[]>([])
+  const [tagList, setTagList] = useState<ITag[]>([])
   const [region, setRegion] = useState<string[]>([])
   const [place, setPlace] = useState<string>('')
   const [due, setMonth] = useState<string>('')
@@ -54,6 +52,7 @@ const CreateTeam = () => {
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
+  const axiosInstance = useAxiosWithAuth()
   // const { isLogin } = useAuthStore()
 
   // 로그인 하지 않고 모집글쓰기 들어왓을때 로그인 하러가기 안내가 필요합니다.
@@ -71,29 +70,30 @@ const CreateTeam = () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
-    await axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`, {
-        place,
-        image,
-        title,
-        name,
-        due,
-        type,
-        content,
-        region,
-        link,
-        tagList,
-        roleList,
-        interviewList,
-      })
-      .then((res) => {
-        router.push(`/recruitment/${res.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
-      })
-      .catch((err) => {
-        console.log(err)
-        setToastMessage('모집글 작성 실패, 다시 시도해주세요')
-        openToast()
-      })
+    try {
+      const response = await axiosInstance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
+        {
+          place,
+          image,
+          title,
+          name,
+          due,
+          type,
+          content,
+          region,
+          link,
+          tagList,
+          roleList,
+          interviewList,
+        },
+      )
+      if (response.status === 200) router.push(`/recruitment/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
+    } catch (error) {
+      console.log(error)
+      setToastMessage('모집글 작성 실패, 다시 시도해주세요')
+      openToast()
+    }
   }
 
   return (
