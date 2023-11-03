@@ -35,8 +35,8 @@ const useAxiosWithAuth = () => {
         if (!refreshToken) {
           // 로그아웃 후 리디렉션
           useAuthStore.getState().logout()
-          router.push('/login')
           alert('다시 로그인 해주세요')
+          router.push('/login')
         } else {
           try {
             // accessToken 갱신 요청
