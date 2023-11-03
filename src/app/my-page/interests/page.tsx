@@ -147,12 +147,14 @@ const MyInterests = () => {
   const handleSelectChange = (event: SelectChangeEvent) => {
     console.log('event.target.value as string : ', event.target.value as string)
     setType(event.target.value as string)
+    setPostList([])
   }
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     console.log('newValue: ', newValue)
     console.log('11', event.currentTarget, event.target)
     setType(newValue as string)
+    setPostList([])
   }
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
 
