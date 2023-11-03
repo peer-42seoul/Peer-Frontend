@@ -1,9 +1,9 @@
-name: Check Code Convention
+name: CI/CD
 
 on:
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
   CI:
