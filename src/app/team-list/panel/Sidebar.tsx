@@ -7,16 +7,16 @@ import { useState } from 'react'
 
 const Sidebar = () => {
   const { isPc } = useMedia()
-  const [alignment, setAlignment] = useState('모집 중')
+  const [alignment, setAlignment] = useState('모집중')
   const { setShowTeams } = useShowTeams()
 
   const handleChange = (event: any, newAlignment: any) => {
     setAlignment(newAlignment)
   }
-  const onClickGather = () => setShowTeams('모집 중')
-  const onClickBefore = () => setShowTeams('시작 전')
-  const onClickProgress = () => setShowTeams('진행 중')
-  const onClickComplete = () => setShowTeams('진행 완료')
+  const onClickGather = () => setShowTeams('모집중')
+  const onClickBefore = () => setShowTeams('시작전')
+  const onClickProgress = () => setShowTeams('진행중')
+  const onClickComplete = () => setShowTeams('진행완료')
 
   return (
     <>
@@ -35,7 +35,7 @@ const Sidebar = () => {
           }}
         >
           <ToggleButton
-            value={'모집 중'}
+            value={'모집중'}
             onClick={onClickGather}
             sx={{ m: 'dense' }}
           >
@@ -43,7 +43,7 @@ const Sidebar = () => {
           </ToggleButton>
           <Typography>▾</Typography>
           <ToggleButton
-            value={'시작 전'}
+            value={'시작전'}
             onClick={onClickBefore}
             sx={{ m: 'dense' }}
           >
@@ -51,7 +51,7 @@ const Sidebar = () => {
           </ToggleButton>
           <Typography>▾</Typography>
           <ToggleButton
-            value={'진행 중'}
+            value={'진행중'}
             onClick={onClickProgress}
             sx={{ m: 'dense' }}
           >
@@ -59,7 +59,7 @@ const Sidebar = () => {
           </ToggleButton>
           <Typography>▾</Typography>
           <ToggleButton
-            value={'진행 완료'}
+            value={'진행완료'}
             onClick={onClickComplete}
             sx={{ m: 'dense' }}
           >
@@ -74,7 +74,7 @@ const Sidebar = () => {
           onChange={handleChange}
         >
           <ToggleButton
-            value={'모집 중'}
+            value={'모집중'}
             onClick={onClickGather}
             sx={{ m: 'dense' }}
           >
@@ -82,7 +82,7 @@ const Sidebar = () => {
           </ToggleButton>
 
           <ToggleButton
-            value={'시작 전'}
+            value={'시작전'}
             onClick={onClickBefore}
             sx={{ m: 'dense' }}
           >
@@ -90,7 +90,7 @@ const Sidebar = () => {
           </ToggleButton>
 
           <ToggleButton
-            value={'진행 중'}
+            value={'진행중'}
             onClick={onClickProgress}
             sx={{ m: 'dense' }}
           >
@@ -98,7 +98,7 @@ const Sidebar = () => {
           </ToggleButton>
 
           <ToggleButton
-            value={'진행 완료'}
+            value={'진행완료'}
             onClick={onClickComplete}
             sx={{ m: 'dense' }}
           >

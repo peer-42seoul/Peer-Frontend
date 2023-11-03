@@ -137,7 +137,7 @@ const TeamsSetupPage = ({ id }: { id: number }) => {
       </Button>
       <Button
         variant="contained"
-        onClick={() => router.push(`/recruitment/${id}`)} // TODO: 수정 url 적용
+        onClick={() => router.push(`/recruitment/edit/${id}`)}
       >
         모집 글 수정하기
       </Button>

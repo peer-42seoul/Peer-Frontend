@@ -5,15 +5,25 @@ import useShowTeams from '@/states/useShowTeams'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 import { Stack } from '@mui/material'
-// import useAuthStore from '@/states/useAuthStore'
+
+export enum TeamStatus {
+  RECRUITING = '모집중',
+  BEFORE = '시작전',
+  ONGOING = '진행중',
+  COMPLETE = '진행완료',
+}
+
+export enum TeamType {
+  STUDY = '스터디',
+  PROJECT = '프로젝트',
+}
 
 export interface ITeamInfo {
-  // userId: string
   id: string
   name: string
   dueTo: string
-  type: 'project' | 'study'
-  status: '모집 중' | '시작 전' | '진행 중' | '진행 완료'
+  type: TeamType
+  status: TeamStatus
   myRole: boolean
   region: string
   operationForm: string
@@ -21,12 +31,9 @@ export interface ITeamInfo {
 
 const TeamsListPage = () => {
   const { showTeams } = useShowTeams()
-  // const { userId } = useAuthStore()
-  const userId = 1
-
   //실제 동작해야할 API
   const { data, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/list/${userId}?teamStatus=${showTeams}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/list?teamStatus=${showTeams}`,
     defaultGetFetcher,
   )
 
