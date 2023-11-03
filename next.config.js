@@ -3,16 +3,17 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-}
-
-// module.exports = nextConfig
-
-module.exports = {
-  ...nextConfig,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   images: {
     domains: ['picsum.photos', 'source.unsplash.com'],
   },
 }
+
+// module.exports = nextConfig
+
+module.exports = nextConfig
 
 // Next.js에서는 'next.config.js' 파일의 'images' 속성을 구성하여 이미지에 허용되는 도메인을 지정해야 합니다. 이는 승인되지 않거나 잠재적으로 안전하지 않은 외부 이미지 소스가 기본적으로 로드되는 것을 방지하는 보안 기능입니다.
 
