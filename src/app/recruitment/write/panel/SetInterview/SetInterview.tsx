@@ -5,7 +5,7 @@ import { useState } from 'react'
 import AreaForAddInterviewForm from './AreaForAddInterviewForm'
 import AreaForShowAnswers from './AreaForShowAnswers'
 import { Stack } from '@mui/material'
-import { IFormInterview } from '@/app/recruitment/page'
+import { IFormInterview } from '@/app/recruitment/write/page'
 
 const style = {
   position: 'absolute' as 'absolute',
