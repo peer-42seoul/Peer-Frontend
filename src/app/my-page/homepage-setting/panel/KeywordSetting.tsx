@@ -195,10 +195,12 @@ const KeywordSettingBox = ({
 
   const deleteAll = async () => {
     console.log('전체 삭제')
-    await axiosWithAuth.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete/all`,
-    )
-    closeModal()
+    await axiosWithAuth
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete/all`)
+      .then(() => {
+        closeModal()
+        mutate()
+      })
   }
 
   return (
