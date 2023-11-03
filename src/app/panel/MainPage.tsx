@@ -50,14 +50,14 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
   const pageSize = 10
   const swrKey = isLogin
     ? [
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
-        axiosInstance,
-      ]
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
+      axiosInstance,
+    ]
     : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
 
   const fetcher = isLogin
-    ? ([url, axiosInstance]: [string, AxiosInstance]) =>
-        getFetcherWithInstance(url, axiosInstance)
+    ? (url: string) =>
+      getFetcherWithInstance(url, axiosInstance)
     : defaultGetFetcher
 
   const { data, isLoading, error, mutate } = useSWR(swrKey, fetcher, {
