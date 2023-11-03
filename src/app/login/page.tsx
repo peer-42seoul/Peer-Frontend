@@ -240,7 +240,7 @@ const Login = () => {
               ...(isPc ? {} : { marginTop: '104px' }),
             }}
           >
-            <Button href="/signup">회원가입</Button>
+            <Button href="/privacy">회원가입</Button>
             <Button href="/find-account">비밀번호 찾기</Button>
           </Container>
         </Container>
