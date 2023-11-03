@@ -1,9 +1,12 @@
 export interface ILocation {
   name: string
-  subArea: string[]
+  subArea?: string[]
 }
 
 export const locationData: ILocation[] = [
+  {
+    name: '선택안함'
+  },
   {
     name: '서울',
     subArea: [

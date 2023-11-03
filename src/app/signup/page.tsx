@@ -170,7 +170,7 @@ const SignUp = () => {
     }
     try {
       await axios.post(`${API_URL}/api/v1/signup/nickname`, {
-        nickName: nickName,
+        nickname: nickName,
       })
       setNickNameSendStatus('submit')
       setToastMessage('닉네임이 인증되었습니다')
@@ -202,7 +202,7 @@ const SignUp = () => {
           email: email,
           password: password,
           name: name,
-          nickName: nickName,
+          nickname: nickName,
           socialEmail: social,
         })
         setToastMessage('회원가입이 완료되었습니다')
