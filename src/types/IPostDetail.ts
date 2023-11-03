@@ -1,32 +1,32 @@
-export type Tag = {
+export interface ITag {
   tagName: string
   tagColor: string
 }
 
 export interface IPost {
-  post_id: string;
-  title: string;
-  image: string;
-  user_id: string;
-  user_nickname: string;
-  user_thumbnail: string;
-  status: string;
-  tagList: Tag[];
-  isFavorite: boolean;
+  post_id: number
+  title: string
+  image: string
+  user_id: string
+  user_nickname: string
+  user_thumbnail: string
+  status: string
+  tagList: ITag[]
+  isFavorite: boolean
 }
 
 export interface IPostDetail {
-  title: string;
-  status: string;
-  due: string;
-  content: string;
-  user_id: string;
-  region: string;
-  link: string;
-  tagList: Tag[];
-  role: IRole[];
-  interviewList: IFormInterview[];
-  place: string;
+  title: string
+  status: string
+  due: string
+  content: string
+  user_id: string
+  region: string
+  link: string
+  tagList: ITag[]
+  role: IRole[]
+  interviewList: IFormInterview[]
+  place: string
 }
 
 export interface IFormInterview {

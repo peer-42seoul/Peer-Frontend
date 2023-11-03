@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
 } from '@mui/material'
 
-const SetupSelect = ({
+export const SetupSelect = ({
   type,
   value,
   parentLocation,
@@ -39,7 +39,7 @@ const SetupSelect = ({
           {parentLocation &&
             locationData
               .find((region) => region.name === parentLocation)
-              ?.subArea.map((region, idx) => (
+              ?.subArea?.map((region, idx) => (
                 <MenuItem key={'region' + idx} value={region}>
                   {region}
                 </MenuItem>
