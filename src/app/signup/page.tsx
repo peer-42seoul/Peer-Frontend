@@ -55,6 +55,7 @@ const SignUp = () => {
     control,
     formState: { errors },
     getValues,
+    setValue,
   } = useForm<ISignUpInputs>({
     defaultValues: {
       email: '',
@@ -126,6 +127,7 @@ const SignUp = () => {
           code: code,
         })
         setCodeSendStatus('submit')
+        setToastMessage('인증코드가 인증되었습니다')
       } catch (error: any) {
         setCodeSendStatus('error')
         if (error.response?.status === 401) {
@@ -284,14 +286,16 @@ const SignUp = () => {
                       includeNumber: (value) =>
                         /\d/.test(value) || '숫자를 포함해야 합니다',
                       includeSpecial: (value) =>
-                        /[~!@#$%^&*<>]/.test(value) ||
+                        /[!@#$%^&*]/.test(value) ||
                         '특수문자를 포함해야 합니다',
                       includeAlphabet: (value) =>
                         (/[A-Z]/.test(value) && /[a-z]/.test(value)) ||
                         '대소문자를 포함해야 합니다',
                     },
                   }}
-                  render={({ field }) => <PasswordField field={field} />}
+                  render={({ field }) => (
+                    <PasswordField field={field} setValue={setValue} />
+                  )}
                 />
                 <Button
                   sx={nextButtonStyle}
