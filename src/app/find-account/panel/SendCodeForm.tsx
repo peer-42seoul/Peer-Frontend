@@ -93,8 +93,8 @@ const SendCodeForm = ({
         }
       })
       .catch((error) => {
-        if (error.statusText == 'Unauthorized') {
-          setErrorMessage('올바른 코드가 아닙니다.')
+        if (error.response.status == 401) {
+          setErrorMessage('유효한 코드가 아닙니다.')
           openToast()
         } else {
           alert('알 수 없는 오류가 발생했습니다.')
