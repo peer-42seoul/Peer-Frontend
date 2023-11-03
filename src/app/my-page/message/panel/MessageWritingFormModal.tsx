@@ -2,7 +2,7 @@
 
 import { Button, Stack, TextField, Typography, Avatar } from '@mui/material'
 import React, { useCallback, useState } from 'react'
-import axios from 'axios'
+import useAxiosWithAuth from '@/api/config'
 import { IMessagObject } from '@/types/IMessageInformation'
 import CuModal from '@/components/CuModal'
 
@@ -69,6 +69,7 @@ const TargetList = ({ letterTargetList, setTargetUser }: ITargetListProps) => {
 
 const MessageForm = ({ userInfo, setMessageData, handleClose }: IProps) => {
   const [content, setContent] = useState('')
+  const axiosInstance = useAxiosWithAuth()
   const messageSubmitHandler = useCallback(async () => {
     try {
       if (!content) {
@@ -82,12 +83,9 @@ const MessageForm = ({ userInfo, setMessageData, handleClose }: IProps) => {
         targetId: userInfo.targetId,
         content: content,
       }
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/new-message`,
+      const response = await axiosInstance.post(
+        '/api/v1/message/new-message',
         reqBody,
-        {
-          headers: { 'Cache-Control': 'no-store' },
-        },
       )
       setContent('')
       setMessageData(response.data)
@@ -139,6 +137,7 @@ const MessageWritingFormModal = ({
   const [letterTargetList, setLetterTargetList] = useState<
     ILetterTarget[] | undefined
   >()
+  const axiosInstance = useAxiosWithAuth()
 
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {
@@ -147,15 +146,9 @@ const MessageWritingFormModal = ({
     }
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/searching`,
-        {
-          keyword: keyword,
-        },
-        {
-          headers: { 'Cache-Control': 'no-store' },
-        },
-      )
+      const response = await axiosInstance.post('/api/v1/message/searching', {
+        keyword: keyword,
+      })
       setLetterTargetList(response.data)
     } catch (error) {
       alert('존재하지 않는 사람입니다.')

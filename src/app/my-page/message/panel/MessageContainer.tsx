@@ -1,8 +1,9 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import { Button, Stack, TextField, Typography } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
 import { IMessagObject } from '@/types/IMessageInformation'
 import CuButton from '@/components/CuButton'
 import useToast from '@/hook/useToast'
@@ -76,6 +77,8 @@ const MessageContainer = ({
   const [searchKeyword, setSearchKeyword] = useState('')
   const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set())
 
+  const axiosInstance = useAxiosWithAuth()
+
   useEffect(() => {
     if (isManageMode) setSelectedUsers(new Set())
   }, [isManageMode])
@@ -105,16 +108,12 @@ const MessageContainer = ({
     const requestBody = Array.from(selectedUsers).map((targetId) => ({
       targetId,
     }))
-    axios
-      .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/delete-message`,
-        {
-          data: {
-            target: requestBody,
-          },
-          headers: { 'Cache-Control': 'no-store' },
+    axiosInstance
+      .delete('/api/v1/message/delete-message', {
+        data: {
+          target: requestBody,
         },
-      )
+      })
       .then((response: AxiosResponse<IMessagObject[]>) => {
         setMessageData(response.data)
         setIsManageMode(false)

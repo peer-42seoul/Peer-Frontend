@@ -1,6 +1,5 @@
 'use client'
 
-import axios from 'axios'
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import useSWRMutation from 'swr/mutation'
@@ -13,6 +12,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 
 interface IMessage {
@@ -37,7 +37,7 @@ const MessageForm = ({
   addNewMessage: (newMessage: IMessage) => void
 }) => {
   const [content, setContent] = useState('')
-
+  const axiosInstance = useAxiosWithAuth()
   const messageSubmit = useCallback(async () => {
     try {
       if (!content) {
@@ -48,12 +48,9 @@ const MessageForm = ({
         targetId: targetId,
         content,
       }
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/back-message`,
+      const response = await axiosInstance.post(
+        `/api/v1/message/back-message`,
         messageData,
-        {
-          headers: { 'Cache-Control': 'no-store' },
-        },
       )
       if (response.status === 201) {
         addNewMessage(response.data.Msg)
@@ -155,21 +152,16 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [owner, setOwner] = useState<IUser>()
   const [target, setTarget] = useState<IUser>()
   const [isEnd, setIsEnd] = useState<boolean>(false)
+  const axiosInstance = useAxiosWithAuth()
 
   const fetchMoreData = useCallback(
     async (url: string) => {
       try {
-        const response = await axios.post(
-          url,
-          {
-            targetId: searchParams.get('target'),
-            conversationalId: params.id,
-            earlyMsgId: updatedData?.[0]?.msgId,
-          },
-          {
-            headers: { 'Cache-Control': 'no-store' },
-          },
-        )
+        const response = await axiosInstance.post(url, {
+          targetId: searchParams.get('target'),
+          conversationalId: params.id,
+          earlyMsgId: updatedData?.[0]?.msgId,
+        })
         return response.data.MsgList.Msg
       } catch {
         // TODO : 에러 구체화
@@ -180,7 +172,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   )
 
   const { trigger, data } = useSWRMutation(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/conversation-list/more`,
+    '/api/v1/message/conversation-list/more',
     fetchMoreData,
   )
 
@@ -188,17 +180,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     setIsLoading(true)
     const targetId = searchParams.get('target')
     const conversationalId = params.id
-    axios
-      .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/conversation-list`,
-        {
-          targetId,
-          conversationalId,
-        },
-        {
-          headers: { 'Cache-Control': 'no-store' },
-        },
-      )
+    axiosInstance
+      .post('/api/v1/message/conversation-list', {
+        targetId,
+        conversationalId,
+      })
       .then((response) => {
         setUpdatedData(response.data.MsgList.Msg)
         setOwner(response.data.MsgList.MsgOwner)
