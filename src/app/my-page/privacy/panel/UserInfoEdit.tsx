@@ -1,22 +1,28 @@
 'use client'
 
+import { Dispatch, SetStateAction } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Typography, Container } from '@mui/material'
-import axios from 'axios'
 import CuTextField from '@/components/CuTextField'
+import useAxiosWithAuth from '@/api/config'
+import IToastProps from '@/types/IToastProps'
 
 interface IChangePassword {
-  currentPassword: string
+  presentPassword: string
   newPassword: string
-  newPasswordConfirm: string
+  confirmPassword: string
 }
 
 export default function UserInfoEdit({
   local,
   authentication,
+  setToastProps,
+  openToast,
 }: {
   local?: string
   authentication?: string
+  setToastProps: Dispatch<SetStateAction<IToastProps>>
+  openToast: () => void
 }) {
   const {
     handleSubmit,
@@ -25,14 +31,26 @@ export default function UserInfoEdit({
     getValues,
   } = useForm<IChangePassword>({ mode: 'onChange' })
 
+  const axiosWithAuth = useAxiosWithAuth()
   const changePassword: SubmitHandler<IChangePassword> = async (data) => {
-    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
     try {
-      await axios.post(`${API_URL}api/v1/info`, data)
-    } catch (error) {
+      await axiosWithAuth.put(`/api/v1/info/password`, data)
+      setToastProps({
+        severity: 'success',
+        message: '비밀번호가 변경되었습니다',
+      })
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        setToastProps({
+          severity: 'error',
+          message: error.response.data.message,
+        })
+      }
       console.log(error)
     }
+    openToast()
   }
+
   return (
     <>
       <Container
@@ -51,7 +69,7 @@ export default function UserInfoEdit({
         <form onSubmit={handleSubmit(changePassword)}>
           <Typography>비밀번호</Typography>
           <Controller
-            name="currentPassword"
+            name="presentPassword"
             control={control}
             defaultValue=""
             rules={{ required: true }}
@@ -60,7 +78,7 @@ export default function UserInfoEdit({
                 field={field}
                 type="password"
                 autoComplete="off"
-                error={errors.currentPassword ? true : false}
+                error={errors.presentPassword ? true : false}
                 placeholder="현재 비밀번호"
               />
             )}
@@ -88,7 +106,7 @@ export default function UserInfoEdit({
             )}
           />
           <Controller
-            name="newPasswordConfirm"
+            name="confirmPassword"
             control={control}
             defaultValue=""
             rules={{
@@ -107,7 +125,7 @@ export default function UserInfoEdit({
                 field={field}
                 type="password"
                 autoComplete="off"
-                error={errors.newPasswordConfirm ? true : false}
+                error={errors.confirmPassword ? true : false}
                 placeholder="새로운 비밀번호 재입력"
               />
             )}
@@ -118,9 +136,9 @@ export default function UserInfoEdit({
                 ? errors.newPassword.message
                 : '비밀번호를 입력해주세요'}
             </Typography>
-          ) : errors.newPasswordConfirm ? (
+          ) : errors.confirmPassword ? (
             <Typography color="error">
-              {errors.newPasswordConfirm.message}
+              {errors.confirmPassword.message}
             </Typography>
           ) : (
             <Typography>&nbsp;</Typography>
