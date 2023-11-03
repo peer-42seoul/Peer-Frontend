@@ -72,7 +72,7 @@ const CreateTeam = () => {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/recruit/write`, {
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`, {
         place,
         image,
         title,

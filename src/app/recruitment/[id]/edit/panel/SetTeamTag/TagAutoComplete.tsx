@@ -39,7 +39,7 @@ const TagAutoComplete = ({
   setToastMessage: Dispatch<SetStateAction<string>>
 }) => {
   const [list, setList] = useState<Tag[]>(dummyDatas)
-  const { data } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/recruit/write`, defaultGetFetcher)
+  const { data } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`, defaultGetFetcher)
 
   useEffect(() => {
     if (!data) {

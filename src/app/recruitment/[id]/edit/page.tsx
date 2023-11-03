@@ -85,7 +85,7 @@ const CreateTeam = () => {
     }
     await axios
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/recruit_id`, // 팀페이지 들어올때 받아와야함
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/recruit_id`, // 팀페이지 들어올때 받아와야함
         {
           place,
           image,
