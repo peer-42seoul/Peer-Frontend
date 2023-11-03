@@ -1,8 +1,8 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
 import { getFetcherWithInstance } from '@/api/fetchers'
-import { ProjectType } from '@/app/page'
 import MainCard from '@/app/panel/MainCard'
+import { ProjectType } from '@/app/panel/MainPage'
 import CloseButton from '@/components/CloseButton'
 import CuButton from '@/components/CuButton'
 import CuModal from '@/components/CuModal'
@@ -10,7 +10,7 @@ import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
-import { Tag } from '@/types/IPostDetail'
+import { ITag } from '@/types/IPostDetail'
 import {
   AlertColor,
   Box,
@@ -34,9 +34,9 @@ interface IMainCard {
   user_nickname: string
   user_thumbnail: string
   status: string
-  tagList: Tag[]
+  tagList: ITag[]
   isFavorite: boolean
-  post_id: string
+  post_id: number
   type: ProjectType
 }
 
