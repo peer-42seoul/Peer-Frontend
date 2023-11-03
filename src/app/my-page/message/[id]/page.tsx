@@ -49,7 +49,7 @@ const MessageForm = ({
         content,
       }
       const response = await axios.post(
-        `/api/v1/message/back-message`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/back-message`,
         messageData,
         {
           headers: { 'Cache-Control': 'no-store' },
@@ -180,7 +180,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   )
 
   const { trigger, data } = useSWRMutation(
-    `/api/v1/message/conversation-list/more`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/conversation-list/more`,
     fetchMoreData,
   )
 
@@ -190,7 +190,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     const conversationalId = params.id
     axios
       .post(
-        `/api/v1/message/conversation-list`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/conversation-list`,
         {
           targetId,
           conversationalId,

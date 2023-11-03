@@ -22,16 +22,11 @@ const MessageMain = () => {
   // const MessageBox = useRef<HTMLDivElement | null>(null)
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
-  // const axiosInstance = useAxiosWithAuth()
-  // const { data, error, isLoading } = useSWR<IMessagObject[]>(
-  //   [`${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/list`, axiosInstance],
-  //   ([url, axiosInstance]) =>
-  //     getFetcherWithInstance(url, axiosInstance as AxiosInstance),
-  // )
-  // TODO : PR 전 반드시 지울 것 - mock data 확인용 mock api
+  const axiosInstance = useAxiosWithAuth()
   const { data, error, isLoading } = useSWR<IMessagObject[]>(
-    '/api/v1/message/list',
-    defaultGetFetcher,
+    [`${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/list`, axiosInstance],
+    ([url, axiosInstance]) =>
+      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
   )
 
   return (
