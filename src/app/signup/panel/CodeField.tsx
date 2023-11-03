@@ -26,7 +26,7 @@ const CodeField = ({
         type="text"
         placeholder="인증번호를 입력하세요"
         inputProps={{
-          maxLength: 6,
+          maxLength: 10,
         }}
         InputProps={{
           endAdornment: (

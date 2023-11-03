@@ -37,9 +37,8 @@ const StyleSeachMobile = {
 export default function SearchBody({ onClose }: SearchBodyProps) {
   const router = useRouter()
   const { isPc } = useMedia()
-  const { control, handleSubmit } = useForm()
+  const { control, handleSubmit, setValue } = useForm()
   const [type, setType] = useState<SearchType>(SearchType.STUDY)
-
   const clickStudy = () => setType(SearchType.STUDY)
   const clickProject = () => setType(SearchType.PROJECT)
   const onSubmit = (data: any) => {
@@ -111,7 +110,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
             <Button type="submit">검색</Button>
           </form>
         </Stack>
-        <SearchHistory />
+        <SearchHistory searchwordSet={setValue} />
       </Box>
     </>
   )
