@@ -21,20 +21,27 @@ const UserWithdrawalModal = ({
   const axiosInstance = useAxiosWithAuth()
 
   const handleDelete = async () => {
+    if (password === '') {
+      setToastProps({
+        severity: 'error',
+        message: '비밀번호를 입력해주세요',
+      })
+      openToast()
+      return
+    }
     try {
-      await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/membership/withdrawal`,
-        {
+      await axiosInstance.delete(`/api/v1/signup/withdrawal`, {
+        data: {
           password: password,
         },
-      )
+      })
       alert('계정이 삭제되었습니다')
       handleClose()
     } catch (error: any) {
-      if (error.response?.status === 400) {
+      if (error.response?.status === 401) {
         setToastProps({
           severity: 'error',
-          message: error.response.data.message,
+          message: '비밀번호가 일치하지 않습니다',
         })
         openToast()
       }

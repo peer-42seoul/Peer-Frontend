@@ -8,9 +8,9 @@ import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
 
 interface IChangePassword {
-  currentPassword: string
+  presentPassword: string
   newPassword: string
-  newPasswordConfirm: string
+  confirmPassword: string
 }
 
 export default function UserInfoEdit({
@@ -33,9 +33,8 @@ export default function UserInfoEdit({
 
   const axiosWithAuth = useAxiosWithAuth()
   const changePassword: SubmitHandler<IChangePassword> = async (data) => {
-    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
     try {
-      await axiosWithAuth.post(`${API_URL}api/v1/info`, data)
+      await axiosWithAuth.put(`/api/v1/info/password`, data)
       setToastProps({
         severity: 'success',
         message: '비밀번호가 변경되었습니다',
@@ -70,7 +69,7 @@ export default function UserInfoEdit({
         <form onSubmit={handleSubmit(changePassword)}>
           <Typography>비밀번호</Typography>
           <Controller
-            name="currentPassword"
+            name="presentPassword"
             control={control}
             defaultValue=""
             rules={{ required: true }}
@@ -79,7 +78,7 @@ export default function UserInfoEdit({
                 field={field}
                 type="password"
                 autoComplete="off"
-                error={errors.currentPassword ? true : false}
+                error={errors.presentPassword ? true : false}
                 placeholder="현재 비밀번호"
               />
             )}
@@ -107,7 +106,7 @@ export default function UserInfoEdit({
             )}
           />
           <Controller
-            name="newPasswordConfirm"
+            name="confirmPassword"
             control={control}
             defaultValue=""
             rules={{
@@ -126,7 +125,7 @@ export default function UserInfoEdit({
                 field={field}
                 type="password"
                 autoComplete="off"
-                error={errors.newPasswordConfirm ? true : false}
+                error={errors.confirmPassword ? true : false}
                 placeholder="새로운 비밀번호 재입력"
               />
             )}
@@ -137,9 +136,9 @@ export default function UserInfoEdit({
                 ? errors.newPassword.message
                 : '비밀번호를 입력해주세요'}
             </Typography>
-          ) : errors.newPasswordConfirm ? (
+          ) : errors.confirmPassword ? (
             <Typography color="error">
-              {errors.newPasswordConfirm.message}
+              {errors.confirmPassword.message}
             </Typography>
           ) : (
             <Typography>&nbsp;</Typography>

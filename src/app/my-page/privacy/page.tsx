@@ -10,10 +10,9 @@ import useToast from '@/hook/useToast'
 import IToastProps from '@/types/IToastProps'
 
 const PrivacyPage = () => {
-  const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/info`
   const axiosWithAuth = useAxiosWithAuth()
   const { data, error, isLoading } = useSWR(
-    [`${API_URL}/user`, axiosWithAuth],
+    [`/api/v1/info`, axiosWithAuth],
     ([url, axiosWithAuth]) => getFetcherWithInstance(url, axiosWithAuth),
   )
   const [toastProps, setToastProps] = useState<IToastProps>({
