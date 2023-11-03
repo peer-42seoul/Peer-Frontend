@@ -31,8 +31,17 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const [role, setRole] = React.useState<string>('')
 
   const { isPc } = useMedia()
-  const { data, isLoading, error } = useSWR<IPostDetail>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`, defaultGetFetcher);
-  const { data: userData } = useSWR<{ nickname: string; profileImageUrl: string }>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/other/?userId=${data?.user_id}?infoList=profileImageUrl&infoList=nickname`, defaultGetFetcher);
+  const { data, isLoading, error } = useSWR<IPostDetail>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
+    defaultGetFetcher,
+  )
+  const { data: userData } = useSWR<{
+    nickname: string
+    profileImageUrl: string
+  }>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/other/?userId=${data?.user_id}?infoList=profileImageUrl&infoList=nickname`,
+    defaultGetFetcher,
+  )
 
   const total = useMemo(() => {
     if (!data) return 0
@@ -64,7 +73,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
         <Container>
           <Stack direction={'row'} gap={4} marginBottom={6}>
             <Image
-              src={userData?.profileImageUrl ?? ""}
+              src={userData?.profileImageUrl ?? ''}
               alt="leader_profile"
               width={300}
               height={300}
@@ -148,7 +157,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             <Typography>{data?.place}</Typography>
           </Stack>
           <Image
-            src={userData?.profileImageUrl ?? ""}
+            src={userData?.profileImageUrl ?? ''}
             alt="leader_profile"
             width={300}
             height={300}
@@ -185,7 +194,6 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               setRoleOpen(true)
             }}
           >
-            {' '}
             지원하기
           </Button>
         </>
