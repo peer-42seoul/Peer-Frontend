@@ -3,7 +3,6 @@ import { Typography } from '@mui/material'
 import UserInfoEdit from './panel/UserInfoEdit'
 import UserWithdrawalModal from './panel/UserWithdrawalModal'
 import useSWR from 'swr'
-import { getFetcherWithInstance } from '@/api/fetchers'
 import useAxiosWithAuth from '@/api/config'
 import { useState } from 'react'
 import useToast from '@/hook/useToast'
@@ -11,10 +10,10 @@ import IToastProps from '@/types/IToastProps'
 
 const PrivacyPage = () => {
   const axiosWithAuth = useAxiosWithAuth()
-  const { data, error, isLoading } = useSWR(
-    [`/api/v1/info`, axiosWithAuth],
-    ([url, axiosWithAuth]) => getFetcherWithInstance(url, axiosWithAuth),
+  const { data, error, isLoading } = useSWR('/api/v1/info', (url: string) =>
+    axiosWithAuth.get(url).then((res) => res.data),
   )
+
   const [toastProps, setToastProps] = useState<IToastProps>({
     severity: 'info',
     message: '',
