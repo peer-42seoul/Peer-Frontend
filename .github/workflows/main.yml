@@ -29,17 +29,17 @@ jobs:
           ls -la
 
       - name: Change to project dic
-        run: cd /home/runner/work/FE_CICD/FE_CICD
+        run: cd /home/runner/work/Peer-Frontend/Peer-Frontend
 
       - name: Install packages
-        run: npm i /home/runner/work/FE_CICD/FE_CICD
+        run: npm i /home/runner/work/Peer-Frontend/Peer-Frontend
 
       - name: Prettier
-        working-directory: /home/runner/work/FE_CICD/FE_CICD
+        working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend
         run: npm run format
 
       - name: Lint
-        working-directory: /home/runner/work/FE_CICD/FE_CICD
+        working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend
         run: npm run lint
 
   CD:
@@ -52,8 +52,8 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          touch /home/runner/work/FE_CICD/FE_CICD/.env.production
-          echo "${{ secrets.ENV_FILE }}" >> /home/runner/work/FE_CICD/FE_CICD/.env.production
+          touch /home/runner/work/Peer-Frontend/Peer-Frontend/.env.production
+          echo "${{ secrets.ENV_FILE }}" >> /home/runner/work/Peer-Frontend/Peer-Frontend/.env.production
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin 
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_IMAGE }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_IMAGE }}
