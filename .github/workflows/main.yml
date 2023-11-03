@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: ['main', 'dev']
+    branches: ['main', 'develop']
   pull_request:
-    branches: ['main', dev]
+    branches: ['main', 'develop']
     types: ['opened', 'reopened', 'synchronize', 'closed']
 
 jobs:
