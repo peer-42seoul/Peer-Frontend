@@ -34,7 +34,7 @@ const useAxiosWithAuth = () => {
       const currentPageUrl = window.location.pathname
       console.log(currentPageUrl)
       if (error.response?.status === 401) {
-        if (!refreshToken) {
+        if (!refreshToken || !accessToken) {
           // 로그아웃 후 리디렉션
           useAuthStore.getState().logout()
           router.push('/login?redirect=' + currentPageUrl)

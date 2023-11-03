@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import LocalStorage from './localStorage'
 import axios from 'axios'
+import { useCookies } from 'react-cookie'
 
 interface IAuthStore {
   isLogin: boolean
@@ -16,6 +17,7 @@ const useAuthStore = create<IAuthStore>((set) => {
     : { accessToken: null }
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const [, removeCookie] = useCookies(['refreshToken'])
   return {
     isLogin: !!authData.accessToken,
     accessToken: authData.accessToken,
@@ -37,6 +39,7 @@ const useAuthStore = create<IAuthStore>((set) => {
           },
         })
       }
+      removeCookie('refreshToken', { path: '/' })
       LocalStorage.removeItem('authData')
       set(() => ({
         isLogin: false,
