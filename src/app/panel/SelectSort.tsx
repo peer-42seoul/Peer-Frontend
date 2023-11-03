@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import { ProjectSort } from '../page'
+import { ProjectSort } from './MainPage'
 
 interface ISelectSortProps {
   sort: ProjectSort
@@ -14,9 +14,8 @@ const SelectSort = ({ sort, setSort }: ISelectSortProps) => {
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
       <Select value={sort} onChange={handleChange}>
-        <MenuItem value={'recent'}>최신순</MenuItem>
-        <MenuItem value={'old'}>오래된순</MenuItem>
-        <MenuItem value={'popular'}>인기순</MenuItem>
+        <MenuItem value={'latest'}>최신순</MenuItem>
+        <MenuItem value={'hit'}>인기순</MenuItem>
       </Select>
     </FormControl>
   )

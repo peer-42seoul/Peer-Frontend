@@ -12,17 +12,30 @@ import {
   Button,
   IconButton,
   Paper,
-  Stack
+  Stack,
 } from '@mui/material'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import SearchButton from './SearchButton'
 import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
+import useAuthStore from '@/states/useAuthStore'
 
 export const MobileNav = () => {
   const [value, setValue] = useState(0)
+  const pathname = usePathname()
   const router = useRouter()
+  const { isLogin } = useAuthStore()
+
+  useEffect(() => {
+    if (pathname === '/') {
+      setValue(0)
+    } else if (pathname === '/team-list') {
+      setValue(3)
+    } else if (pathname === '/my-page') {
+      setValue(4)
+    }
+  }, [pathname])
 
   return (
     <Paper
@@ -71,7 +84,7 @@ export const MobileNav = () => {
         <BottomNavigationAction
           label="내 프로필"
           onClick={() => {
-            router.push('/my-page')
+            router.push(isLogin ? '/my-page' : '/login')
           }}
         />
       </BottomNavigation>
@@ -79,12 +92,20 @@ export const MobileNav = () => {
   )
 }
 
-//추후 url에 따라 버튼이 달라지도록 구현 필요
 export const PcNav = () => {
   const [value, setValue] = useState(0)
-  const { isTablet } = useMedia();
+  const { isTablet } = useMedia()
+  const pathname = usePathname()
   const router = useRouter()
+  const { isLogin } = useAuthStore()
 
+  useEffect(() => {
+    if (pathname === '/') {
+      setValue(0)
+    } else if (pathname === '/team-list') {
+      setValue(3)
+    }
+  }, [pathname])
   return (
     <Stack
       direction={'row'}
@@ -132,7 +153,7 @@ export const PcNav = () => {
           }}
         />
       </BottomNavigation>
-      <Stack direction={'row'} alignItems={"center"}>
+      <Stack direction={'row'} alignItems={'center'}>
         <IconButton color="inherit" aria-label="menu">
           <NotificationsNoneOutlined />
         </IconButton>
@@ -142,18 +163,21 @@ export const PcNav = () => {
             <Favorite />
           </IconButton>
         </Link>
-        <Link href="/my-page/profile">
-          <Avatar />
-        </Link>
+        <Avatar
+          onClick={() => router.push(isLogin ? '/my-page/profile' : '/login')}
+        />
         <Link href={'/recruitment'}>
-          {isTablet ?
+          {isTablet ? (
             <IconButton>
               <BorderColor />
-            </IconButton> :
-            <Button variant="outlined" startIcon={<BorderColor />}>새 글쓰기</Button>}
+            </IconButton>
+          ) : (
+            <Button variant="outlined" startIcon={<BorderColor />}>
+              새 글쓰기
+            </Button>
+          )}
         </Link>
       </Stack>
     </Stack>
   )
 }
-

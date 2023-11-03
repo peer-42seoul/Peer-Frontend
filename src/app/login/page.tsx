@@ -99,7 +99,6 @@ const Login = () => {
   } = useForm<ILoginFormInput>()
 
   const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
-    console.log(data)
     setIsLoading(true)
     axios
       .post(`${API_URL}/api/v1/signin`, {
@@ -107,13 +106,12 @@ const Login = () => {
         password: data.password,
       })
       .then((res) => {
-        console.log(res)
         login(res.data.accessToken)
         setCookie('refreshToken', res.data.refreshToken, { path: '/' })
       })
       .catch((error) => {
         //console.log(error.message)
-        if (error.statusText == 'Unauthorized')
+        if (error.response?.status == 401)
           setErrorMessage('이메일과 비밀번호를 다시 확인해주세요.')
         else setErrorMessage('알 수 없는 오류가 발생했습니다.')
         openToast()
@@ -160,7 +158,6 @@ const Login = () => {
                     </CuTextFieldLabel>
                     <CuTextField
                       field={field}
-                      id="userEmail"
                       style={{ width: '100%' }}
                       placeholder="이메일을 입력하세요."
                     />
@@ -189,7 +186,6 @@ const Login = () => {
                       비밀번호
                     </CuTextFieldLabel>
                     <CuTextField
-                      id="password"
                       type={showPassword ? 'text' : 'password'}
                       field={field}
                       style={{ width: '100%' }}
