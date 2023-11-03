@@ -93,7 +93,7 @@ const SendCodeForm = ({
         }
       })
       .catch((error) => {
-        if (error.response.status == 401) {
+        if (error.response.status == 401 || error.response.status == 400) {
           setErrorMessage('유효한 코드가 아닙니다.')
           openToast()
         } else {
