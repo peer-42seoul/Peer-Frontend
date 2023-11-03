@@ -5,6 +5,7 @@ import { MobileNav, PcNav } from './panel/NavBar'
 import Header from './panel/Header'
 import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
 import { Box } from '@mui/material'
+import CuSWRConfig from './panel/CuSWRConfig'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -21,20 +22,22 @@ export default function RootLayout({
     <html lang="ko">
       <head />
       <body>
-        <MuiThemeProvider>
-          <div className="mobile-layout">
-            <Header />
-            {/* 헤더 고정 시 여기에 margin-top: 추가 */}
-            {/* 상하단 여백 어떻게 할지 조정 필요 */}
-            <Box sx={{ marginBottom: '56px' }}>{children}</Box>
-            <MobileNav />
-          </div>
-          <div className="pc-layout">
-            <PcNav />
-            <Box sx={{ marginY: '56px' }}>{children}</Box>
-          </div>
-          <div id="modal-root"></div>
-        </MuiThemeProvider>
+        <CuSWRConfig>
+          <MuiThemeProvider>
+            <div className="mobile-layout">
+              <Header />
+              {/* 헤더 고정 시 여기에 margin-top: 추가 */}
+              {/* 상하단 여백 어떻게 할지 조정 필요 */}
+              <Box sx={{ marginBottom: '56px' }}>{children}</Box>
+              <MobileNav />
+            </div>
+            <div className="pc-layout">
+              <PcNav />
+              <Box sx={{ marginY: '56px' }}>{children}</Box>
+            </div>
+            <div id="modal-root"></div>
+          </MuiThemeProvider>
+        </CuSWRConfig>
       </body>
     </html>
   )
