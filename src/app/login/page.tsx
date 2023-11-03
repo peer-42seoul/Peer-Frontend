@@ -122,7 +122,10 @@ const Login = () => {
   }
 
   useEffect(() => {
-    if (isLogin) router.push('/')
+    if (isLogin) {
+      if (redirect) router.push(redirect)
+      else router.push('/')
+    }
     if (redirect) {
       setErrorMessage('로그인이 필요한 서비스입니다.')
       openToast()
