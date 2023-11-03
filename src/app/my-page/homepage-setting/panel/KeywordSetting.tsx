@@ -79,11 +79,17 @@ const KeywordAddingField = ({
           mutate()
         })
         .catch((error) => {
-          console.log(error)
-          setToastMessage({
-            severity: 'error',
-            message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
-          })
+          if (error.response.status === 400) {
+            setToastMessage({
+              severity: 'error',
+              message: `${error.response.data.message}`,
+            })
+          } else {
+            setToastMessage({
+              severity: 'error',
+              message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
+            })
+          }
         })
       console.log(inputValue)
       setInputValue('' as string)
