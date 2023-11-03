@@ -4,7 +4,7 @@ import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import RowRadioButtonsGroup from './panel/radioGroup'
 import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
 import TagAutoComplete from './panel/SetTeamTag/TagAutoComplete'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
@@ -14,7 +14,7 @@ import SelectRegion from './panel/SelectRegion'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import useAuthStore from '@/states/useAuthStore'
+// import useAuthStore from '@/states/useAuthStore'
 
 export interface IRoleData {
   role: string | null
@@ -56,7 +56,7 @@ const CreateTeam = () => {
   const router = useRouter()
   // const { isLogin } = useAuthStore()
 
-  // 로그인 하지 않고 모집글쓰기 들어왓을때 로그인 하러가기 안내가 필요합니다. 
+  // 로그인 하지 않고 모집글쓰기 들어왓을때 로그인 하러가기 안내가 필요합니다.
   // 새로운 공통컴포넌트 모달창을 만들면 효율적일듯합니다.
   // useEffect(() => {
   //   if (!isLogin) {
@@ -171,7 +171,7 @@ const CreateTeam = () => {
         </Box>
         <Stack>
           <Typography variant="h6" sx={{ paddingRight: '5px' }}>
-            모집인원 인터뷰 등록하기  
+            모집인원 인터뷰 등록하기
           </Typography>
           <Button variant="outlined" onClick={() => setOpenBasicModal(true)}>
             등록
