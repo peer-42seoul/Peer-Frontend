@@ -1,4 +1,4 @@
-export type Tag = {
+export interface ITag {
   tagName: string
   tagColor: string
 }
@@ -11,7 +11,7 @@ export interface IPost {
   user_nickname: string
   user_thumbnail: string
   status: string
-  tagList: Tag[]
+  tagList: ITag[]
   isFavorite: boolean
 }
 
@@ -23,7 +23,7 @@ export interface IPostDetail {
   user_id: string
   region: string
   link: string
-  tagList: Tag[]
+  tagList: ITag[]
   role: IRole[]
   interviewList: IFormInterview[]
   place: string

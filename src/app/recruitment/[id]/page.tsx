@@ -12,7 +12,7 @@ import {
   List,
   Container,
 } from '@mui/material'
-import { IPostDetail, Tag } from '@/types/IPostDetail'
+import { IPostDetail, ITag } from '@/types/IPostDetail'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
 import RecruitFormModal from './panel/RecruitFormModal'
@@ -119,7 +119,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           <RecruitFormText label="설명" content={data?.content} />
           <RecruitFormText label="태그">
             <Box>
-              {data?.tagList?.map((tag: Tag, idx: number) => (
+              {data?.tagList?.map((tag: ITag, idx: number) => (
                 <Chip
                   label={tag?.tagName}
                   size="small"
@@ -176,7 +176,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           <RecruitFormText label="설명" content={data?.content} />
           <RecruitFormText label="태그">
             <Box>
-              {data?.tagList?.map((tag: Tag, idx: number) => (
+              {data?.tagList?.map((tag: ITag, idx: number) => (
                 <Chip
                   label={tag?.tagName}
                   size="small"

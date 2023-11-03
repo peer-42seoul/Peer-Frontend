@@ -10,7 +10,7 @@ import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
-import { Tag } from '@/types/IPostDetail'
+import { ITag } from '@/types/IPostDetail'
 import {
   AlertColor,
   Box,
@@ -34,7 +34,7 @@ interface IMainCard {
   user_nickname: string
   user_thumbnail: string
   status: string
-  tagList: Tag[]
+  tagList: ITag[]
   isFavorite: boolean
   post_id: number
   type: ProjectType
