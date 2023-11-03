@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import RowRadioButtonsGroup from './panel/radioGroup'
 import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
 import TagAutoComplete from './panel/SetTeamTag/TagAutoComplete'
@@ -143,7 +143,7 @@ const CreateTeam = () => {
           <Typography variant="h6">팀 분류</Typography>
           <RowRadioButtonsGroup setValue={setType} />
         </Box>
-        {type === 'project' ? null : (
+        {type === 'study' && (
           <Box>
             <Typography variant="h6">팀 인원</Typography>
             <BasicSelect
@@ -177,7 +177,7 @@ const CreateTeam = () => {
           <Typography variant="h6">커뮤니케이션 툴 링크</Typography>
           <SetCommunicationToolLink setValue={setCommunicationTool} />
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Stack>
           <Typography variant="h6" sx={{ paddingRight: '5px' }}>
             모집인원 인터뷰 등록하기
           </Typography>
@@ -190,7 +190,7 @@ const CreateTeam = () => {
             interviewData={interviewList}
             setInterviewData={setInterviewList}
           />
-        </Box>
+        </Stack>
         <Box>
           <Typography variant="h6">태그</Typography>
           <TagAutoComplete
