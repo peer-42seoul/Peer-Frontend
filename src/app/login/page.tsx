@@ -19,7 +19,7 @@ import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import OauthLoginBox from './panel/OauthLoginBox'
 import useMedia from '@/hook/useMedia'
 import useToast from '@/hook/useToast'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 interface ILoginFormInput {
   userEmail: string
@@ -89,6 +89,8 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect')
 
   const {
     handleSubmit,
@@ -118,8 +120,15 @@ const Login = () => {
   }
 
   useEffect(() => {
-    if (isLogin) router.push('/')
-  }, [isLogin])
+    if (isLogin) {
+      if (redirect) router.push(redirect)
+      else router.push('/')
+    }
+    if (redirect) {
+      setErrorMessage('로그인이 필요한 서비스입니다.')
+      openToast()
+    }
+  }, [isLogin, redirect])
 
   return (
     <>
