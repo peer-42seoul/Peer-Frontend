@@ -2,11 +2,18 @@
 
 import CuModal from '@/components/CuModal'
 
-import { useState } from 'react'
+import { useState, Dispatch, SetStateAction } from 'react'
 import { Box, Button, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import IToastProps from '@/types/IToastProps'
 
-const UserWithdrawalModal = () => {
+const UserWithdrawalModal = ({
+  setToastProps,
+  openToast,
+}: {
+  setToastProps: Dispatch<SetStateAction<IToastProps>>
+  openToast: () => void
+}) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true) // 다른 버튼이나 요소를 얘를 활용해서 모달 핸들링 가능
   const handleClose = () => setOpen(false)
@@ -14,19 +21,29 @@ const UserWithdrawalModal = () => {
   const axiosInstance = useAxiosWithAuth()
 
   const handleDelete = async () => {
-    console.log(password) // 비밀번호를 서버로 보내서 계정 삭제
+    if (password === '') {
+      setToastProps({
+        severity: 'error',
+        message: '비밀번호를 입력해주세요',
+      })
+      openToast()
+      return
+    }
     try {
-      await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/membership/withdrawal`,
-        {
+      await axiosInstance.delete(`/api/v1/signup/withdrawal`, {
+        data: {
           password: password,
         },
-      )
+      })
       alert('계정이 삭제되었습니다')
       handleClose()
     } catch (error: any) {
-      if (error.response?.status === 400) {
-        alert('비밀번호가 일치하지 않습니다')
+      if (error.response?.status === 401) {
+        setToastProps({
+          severity: 'error',
+          message: '비밀번호가 일치하지 않습니다',
+        })
+        openToast()
       }
     }
   }

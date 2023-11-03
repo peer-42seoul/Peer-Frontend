@@ -19,7 +19,7 @@ import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import OauthLoginBox from './panel/OauthLoginBox'
 import useMedia from '@/hook/useMedia'
 import useToast from '@/hook/useToast'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 interface ILoginFormInput {
   userEmail: string
@@ -89,6 +89,8 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect')
 
   const {
     handleSubmit,
@@ -97,7 +99,6 @@ const Login = () => {
   } = useForm<ILoginFormInput>()
 
   const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
-    console.log(data)
     setIsLoading(true)
     axios
       .post(`${API_URL}/api/v1/signin`, {
@@ -105,13 +106,12 @@ const Login = () => {
         password: data.password,
       })
       .then((res) => {
-        console.log(res)
         login(res.data.accessToken)
         setCookie('refreshToken', res.data.refreshToken, { path: '/' })
       })
       .catch((error) => {
         //console.log(error.message)
-        if (error.statusText == 'Unauthorized')
+        if (error.response?.status == 401)
           setErrorMessage('이메일과 비밀번호를 다시 확인해주세요.')
         else setErrorMessage('알 수 없는 오류가 발생했습니다.')
         openToast()
@@ -120,8 +120,15 @@ const Login = () => {
   }
 
   useEffect(() => {
-    if (isLogin) router.push('/')
-  }, [isLogin])
+    if (isLogin) {
+      if (redirect) router.push(redirect)
+      else router.push('/')
+    }
+    if (redirect) {
+      setErrorMessage('로그인이 필요한 서비스입니다.')
+      openToast()
+    }
+  }, [isLogin, redirect])
 
   return (
     <>
@@ -151,7 +158,6 @@ const Login = () => {
                     </CuTextFieldLabel>
                     <CuTextField
                       field={field}
-                      id="userEmail"
                       style={{ width: '100%' }}
                       placeholder="이메일을 입력하세요."
                     />
@@ -180,7 +186,6 @@ const Login = () => {
                       비밀번호
                     </CuTextFieldLabel>
                     <CuTextField
-                      id="password"
                       type={showPassword ? 'text' : 'password'}
                       field={field}
                       style={{ width: '100%' }}
@@ -235,7 +240,7 @@ const Login = () => {
               ...(isPc ? {} : { marginTop: '104px' }),
             }}
           >
-            <Button href="/signup">회원가입</Button>
+            <Button href="/privacy">회원가입</Button>
             <Button href="/find-account">비밀번호 찾기</Button>
           </Container>
         </Container>

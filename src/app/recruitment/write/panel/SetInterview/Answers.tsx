@@ -8,9 +8,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { IFormInterview } from '@/app/recruitment/page'
+import { IFormInterview } from '@/app/recruitment/write/page'
 
-const Answers = ({ data }: { data: IFormInterview; index: number }) => {
+const Answers = ({ data }: { data: IFormInterview;}) => {
   console.log('data.type', data.type)
   switch (data.type) {
     case '객관식': {
@@ -24,9 +24,9 @@ const Answers = ({ data }: { data: IFormInterview; index: number }) => {
               return (
                 <FormControlLabel
                   key={index}
-                  value={`${option}`}
+                  value={option}
                   control={<Radio />}
-                  label={`${option}`}
+                  label={option}
                 />
               )
             })}
@@ -65,7 +65,7 @@ const Answers = ({ data }: { data: IFormInterview; index: number }) => {
       )
     }
     case '선형배율': {
-      if (data.ratioList === undefined) return
+      if (!data?.ratioList) return
       const maxNumber = parseInt(data.ratioList?.max)
 
       return (
@@ -74,18 +74,23 @@ const Answers = ({ data }: { data: IFormInterview; index: number }) => {
             aria-labelledby="muitiple-radio-buttons-group-label"
             name="multiple-radio-buttons-group"
           >
-            <Box sx={{display: 'flex', flexDirection: 'row' }}>
-              {Array.from({ length: maxNumber }, (_, i) => i + 1).map((num, index) => (
-                <Box key={index} sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <FormControlLabel
-                    value={`${num}`}
-                    control={<Radio />}
-                    label={``}
-                  />
-                  {num === 1 ? data.ratioList?.valueOfMin : null}
-                  {num === maxNumber ? data.ratioList?.valueOfMax : null}
-                </Box>
-              ))}
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              {Array.from({ length: maxNumber }, (_, i) => i + 1).map(
+                (num, index) => (
+                  <Box
+                    key={index}
+                    sx={{ display: 'flex', flexDirection: 'column' }}
+                  >
+                    <FormControlLabel
+                      value={`${num}`}
+                      control={<Radio />}
+                      label={``}
+                    />
+                    {num === 1 ? data.ratioList?.valueOfMin : null}
+                    {num === maxNumber ? data.ratioList?.valueOfMax : null}
+                  </Box>
+                ),
+              )}
             </Box>
           </RadioGroup>
         </Box>

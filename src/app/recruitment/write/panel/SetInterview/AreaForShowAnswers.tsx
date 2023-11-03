@@ -1,6 +1,6 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
 import Answers from './Answers'
-import { IFormInterview } from '@/app/recruitment/page'
+import { IFormInterview } from '@/app/recruitment/write/page'
 
 const AreaForShowAnswers = ({
   interviewData,
@@ -34,7 +34,7 @@ const AreaForShowAnswers = ({
                 disabled={true}
               ></TextField>
               <Typography>답변 유형</Typography>
-              <Answers data={data} index={index} />
+              <Answers data={data} />
             </Box>
             <Button onClick={onHandlerRemove(index)}>제거</Button>
           </Box>

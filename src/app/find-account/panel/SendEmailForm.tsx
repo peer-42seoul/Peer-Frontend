@@ -47,7 +47,7 @@ const SendEmailForm = () => {
         if (res.status == 200) setIsEmailSuccessful(true)
       })
       .catch((error) => {
-        if (error.statusText == 'Not Found')
+        if (error.response.status == 404)
           setErrorMessage('존재하지 않는 회원입니다.')
         else setErrorMessage('알 수 없는 오류가 발생했습니다.')
         openToast()
