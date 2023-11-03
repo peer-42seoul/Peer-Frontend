@@ -16,7 +16,7 @@ import { IPostDetail, Tag } from '@/types/IPostDetail'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
 import RecruitFormModal from './panel/RecruitFormModal'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import RecruitFormText from './panel/RecruitFormText'
 import useMedia from '@/hook/useMedia'
 import ApplyButton from './panel/ApplyButton'
@@ -25,29 +25,15 @@ import useSWR from 'swr'
 import { defaultGetFetcher, getFetcherWithInstance } from '@/api/fetchers'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
-import { AxiosInstance } from 'axios'
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
+  const router = useRouter()
   const type = useSearchParams().get('type') ?? 'projects'
   const [open, setOpen] = React.useState(false)
   const [roleOpen, setRoleOpen] = React.useState(false)
   const [role, setRole] = React.useState<string>('')
 
   const { isPc } = useMedia()
-
-  /*const pageSize = 10
-  const swrKey = isLogin
-    ? [
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
-        axiosInstance,
-      ]
-    : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
-
-  const fetcher = isLogin
-    ? ([url, axiosInstance]: [string, AxiosInstance]) =>
-        getFetcherWithInstance(url, axiosInstance)
-    : defaultGetFetcher
-    */
   const { isLogin } = useAuthStore()
   const axiosInstance = useAxiosWithAuth()
 
@@ -79,9 +65,13 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   }, [data])
 
   const handleApply = (selectedRole: string) => {
-    setRole(selectedRole)
-    setRoleOpen(false)
-    setOpen(true)
+    if (isLogin)
+      router.push("/login")
+    else {
+      setRole(selectedRole)
+      setRoleOpen(false)
+      setOpen(true)
+    }
   }
 
   if (isLoading) return <Typography>로딩중...</Typography>
@@ -219,7 +209,10 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             variant="contained"
             size="large"
             onClick={() => {
-              setRoleOpen(true)
+              if (isLogin)
+                router.push("/login")
+              else
+                setRoleOpen(true)
             }}
           >
             지원하기
