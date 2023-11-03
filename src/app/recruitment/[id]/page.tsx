@@ -22,7 +22,10 @@ import useMedia from '@/hook/useMedia'
 import ApplyButton from './panel/ApplyButton'
 import LinkButton from './panel/LinkButton'
 import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
+import { defaultGetFetcher, getFetcherWithInstance } from '@/api/fetchers'
+import useAuthStore from '@/states/useAuthStore'
+import useAxiosWithAuth from '@/api/config'
+import { AxiosInstance } from 'axios'
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const type = useSearchParams().get('type') ?? 'projects'
@@ -31,10 +34,35 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const [role, setRole] = React.useState<string>('')
 
   const { isPc } = useMedia()
-  const { data, isLoading, error } = useSWR<IPostDetail>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
-    defaultGetFetcher,
-  )
+
+  /*const pageSize = 10
+  const swrKey = isLogin
+    ? [
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
+        axiosInstance,
+      ]
+    : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
+
+  const fetcher = isLogin
+    ? ([url, axiosInstance]: [string, AxiosInstance]) =>
+        getFetcherWithInstance(url, axiosInstance)
+    : defaultGetFetcher
+    */
+  const { isLogin } = useAuthStore()
+  const axiosInstance = useAxiosWithAuth()
+
+  const swrKey = isLogin ? [
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit`,
+    axiosInstance,
+  ] : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`
+
+  const fetcher = isLogin
+    ? (url: string) =>
+      getFetcherWithInstance(url, axiosInstance)
+    : defaultGetFetcher
+
+  const { data, isLoading, error } = useSWR<IPostDetail>(swrKey, fetcher)
+
   const { data: userData } = useSWR<{
     nickname: string
     profileImageUrl: string
