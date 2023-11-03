@@ -5,9 +5,10 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Dispatch, SetStateAction } from 'react'
 
 export enum ComponentType {
-  Area = 'Area',
+  // Area = 'Area',
   Month = 'Month',
   TeamSize = 'TeamSize',
+  Place = 'Place',
 }
 
 interface BasicSelectProps {
@@ -29,26 +30,32 @@ export default function BasicSelect({
   let options = null
 
   switch (type) {
-    case ComponentType.Area:
-      options = [
-        <MenuItem key={0} value={0}>
-          구로구
-        </MenuItem>,
-        <MenuItem key={1} value={1}>
-          API 땡겨와서 작업예정
-        </MenuItem>,
-      ]
-      break
+    // case ComponentType.Area:
+    //   options = [
+    //     <MenuItem key={0} value={0}>
+    //       구로구
+    //     </MenuItem>,
+    //     <MenuItem key={1} value={1}>
+    //       API 땡겨와서 작업예정
+    //     </MenuItem>,
+    //   ]
+      // break
     case ComponentType.Month:
-      options = Array.from({ length: 13 }, (_, index) => (
-        <MenuItem key={index} value={index}>
-          {index === 12
-            ? '12개월 이상'
-            : index === 0
-            ? '1개월 미만'
-            : `${index}개월`}
-        </MenuItem>
-      ))
+      options = [
+        ...Array.from({ length: 3 }, (_, index) => (
+          <MenuItem key={index} value={index}>
+            {`${index + 1}주`}
+          </MenuItem>
+        )),
+        ...Array.from({ length: 11 }, (_, index) => (
+          <MenuItem key={index + 3} value={index + 3}>
+            {`${index + 1}개월`}
+          </MenuItem>
+        )),
+        <MenuItem key={14} value={14}>
+          {'12개월 이상'}
+        </MenuItem>,
+      ];
       break
     case ComponentType.TeamSize:
       options = Array.from({ length: 9 }, (_, index) => (
@@ -56,6 +63,19 @@ export default function BasicSelect({
           {index + 2}
         </MenuItem>
       ))
+      break
+    case ComponentType.Place:
+      options = [
+        <MenuItem key={0} value={0}>
+          온라인
+        </MenuItem>,
+        <MenuItem key={1} value={1}>
+          오프라인
+        </MenuItem>,
+        <MenuItem key={2} value={2}>
+          혼합
+        </MenuItem>,
+      ]
       break
     default:
       return null
