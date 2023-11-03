@@ -21,7 +21,7 @@ export interface IRoleData {
   member: number
 }
 
-export interface tag {
+export interface Itag {
   tagName: string
   tagColor: string
 }
@@ -41,7 +41,7 @@ const CreateTeam = () => {
   )
   const [name, setName] = useState<string>('')
   const [type, setType] = useState<string>('project')
-  const [tagList, setTagList] = useState<tag[]>([])
+  const [tagList, setTagList] = useState<Itag[]>([])
   const [region, setRegion] = useState<string[]>([])
   const [place, setPlace] = useState<string>('')
   const [due, setMonth] = useState<string>('')

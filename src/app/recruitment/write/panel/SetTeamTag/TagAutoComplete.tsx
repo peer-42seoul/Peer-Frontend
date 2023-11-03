@@ -1,7 +1,8 @@
 import { Autocomplete, Box, Chip, Stack, TextField } from '@mui/material'
-import axios from 'axios'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { tag } from '../../page'
+import { Tag } from '@/types/IPostDetail'
+import { defaultGetFetcher } from '@/api/fetchers'
+import useSWR from 'swr'
 
 /**
  *
@@ -10,19 +11,19 @@ import { tag } from '../../page'
  * @param setData 선택한 값들의 리스트를 변경해주는 함수입니다 (useState로 관리해주세요)
  */
 
-const dummyData1: tag = {
+const dummyData1: Tag = {
   tagName: 'java',
   tagColor: 'red',
 }
-const dummyData2: tag = {
+const dummyData2: Tag = {
   tagName: 'spring',
   tagColor: 'blue',
 }
-const dummyData3: tag = {
+const dummyData3: Tag = {
   tagName: 'react',
   tagColor: 'green',
 }
-const dummyDatas: tag[] = [dummyData1, dummyData2, dummyData3]
+const dummyDatas: Tag[] = [dummyData1, dummyData2, dummyData3]
 
 const TagAutoComplete = ({
   datas,
@@ -31,29 +32,31 @@ const TagAutoComplete = ({
   openToast,
   setToastMessage
 }: {
-  datas: tag[]
+  datas: Tag[]
   setData: any
   placeholder?: string
   openToast: () => void
   setToastMessage: Dispatch<SetStateAction<string>>
 }) => {
-  const [list, setList] = useState<tag[]>(dummyDatas)
+  const [list, setList] = useState<Tag[]>(dummyDatas)
+  const { data } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/recruit/write`, defaultGetFetcher)
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/recruit/write`).then((res) => {
-      console.log(res)
-      setList(res.data.tagList)
-    }).catch((err) => {
-      console.log('error ocurred!!' ,err)
+    if (!data) {
+      console.log('error ocurred!!')
       setToastMessage('태그를 불러오는데 실패했습니다.')
       openToast()
-    })
-  }, [])
+    }
+    else { 
+      console.log('tag fetching success', data)
+      setList(data.tagList)
+    }
+  }, [data])
 
   /* 태그를 추가합니다 */
   const handleInput = (
     event: React.SyntheticEvent,
-    value: readonly tag[],
+    value: readonly Tag[],
   ) => {
     setData([...value])
   }

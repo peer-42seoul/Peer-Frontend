@@ -13,6 +13,8 @@ import useToast from '@/hook/useToast'
 import SelectRegion from './panel/SelectRegion'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import Image from 'next/image'
+import useSWR from 'swr'
+import { defaultGetFetcher } from '@/api/fetchers'
 
 export interface IRoleData {
   role: string | null
@@ -51,31 +53,31 @@ const CreateTeam = () => {
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
+  const {data} = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/recruit_id`, defaultGetFetcher)
 
   useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/recruit_id`) // 팀페이지 들어올때 받아와야함
-      .then((res) => {
-        setTitle(res.data.title)
-        setPreviewImage(res.data.previewImage)
-        setName(res.data.name)
-        setType(res.data.type)
-        setTagList(res.data.tagList)
-        setRegion(res.data.region)
-        setPlace(res.data.place)
-        setMonth(res.data.due)
-        setTeamsize(res.data.teamsize)
-        setCommunicationTool(res.data.link)
-        setContent(res.data.content)
-        setRoleList(res.data.roleList)
-        setInterviewList(res.data.interviewList)
-      })
-      .catch((err) => {
-        console.log('error ocurred!!', err)
-        setToastMessage('데이터를 불러오는데 실패했습니다.')
-        openToast()
-      })
-  }, [])
+    if (!data) {
+      console.log('error ocurred!!')
+      setToastMessage('데이터를 불러오는데 실패했습니다.')
+      openToast()
+    }
+    else { 
+      console.log('Tag fetching success', data)
+      setTitle(data.title)
+      setPreviewImage(data.previewImage)
+      setName(data.name)
+      setType(data.type)
+      setTagList(data.tagList)
+      setRegion(data.region)
+      setPlace(data.place)
+      setMonth(data.due)
+      setTeamsize(data.teamsize)
+      setCommunicationTool(data.link)
+      setContent(data.content)
+      setRoleList(data.roleList)
+      setInterviewList(data.interviewList)
+    }
+  }, [data])
 
   const onHandlerFinish = async () => {
     if (type === 'project') {
