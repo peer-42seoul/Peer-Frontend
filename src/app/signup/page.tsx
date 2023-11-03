@@ -197,7 +197,6 @@ const SignUp = () => {
       const { email, password, name, nickName } = data
       try {
         const social = socialEmail ? socialEmail : null
-        console.log(email, password, name, nickName, social)
         await axios.post(`${API_URL}/api/v1/signup/form`, {
           email: email,
           password: password,
@@ -206,7 +205,7 @@ const SignUp = () => {
           socialEmail: social,
         })
         setToastMessage('회원가입이 완료되었습니다')
-        router.push('/') // 메인페이지로 이동
+        router.push('/login') // 로그인 페이지로 이동
       } catch (error: any) {
         if (error.response?.status === 400) {
           setToastMessage('유효하지 않은 회원가입 정보입니다')
