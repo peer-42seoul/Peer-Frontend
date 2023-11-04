@@ -8,13 +8,11 @@ import { useEffect, useState } from 'react'
 import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
-import { AxiosInstance } from 'axios'
 import useToast from '@/hook/useToast'
 import SelectRegion from './panel/SelectRegion'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import Image from 'next/image'
 import useSWR from 'swr'
-import { getFetcherWithInstance } from '@/api/fetchers'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
 
@@ -58,12 +56,8 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
   const { data } = useSWR(
-    [
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.recruit_id}`,
-      axiosInstance,
-    ],
-    ([url, axiosInstance]) =>
-      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
+    (url:string) => axiosInstance.get(url).then((res) => res.data),
   )
 
   useEffect(() => {

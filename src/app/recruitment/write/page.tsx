@@ -88,7 +88,7 @@ const CreateTeam = () => {
           interviewList,
         },
       )
-      if (response.status === 200) router.push(`/recruitment/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
+      router.push(`/recruitment/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
     } catch (error) {
       console.log(error)
       setToastMessage('모집글 작성 실패, 다시 시도해주세요')

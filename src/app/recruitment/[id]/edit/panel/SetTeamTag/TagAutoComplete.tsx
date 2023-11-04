@@ -45,12 +45,8 @@ const TagAutoComplete = ({
   const [list, setList] = useState<ITag[]>(dummyDatas)
   const axiosInstance = useAxiosWithAuth()
   const { data } = useSWR(
-    [
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params?.recruit_id}`,
-      axiosInstance,
-    ],
-    ([url, axiosInstance]) =>
-      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
+    (url:string) => axiosInstance.get(url).then((res) => res.data),
   )
 
   useEffect(() => {
