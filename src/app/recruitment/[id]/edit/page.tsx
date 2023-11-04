@@ -15,6 +15,7 @@ import Image from 'next/image'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
+import RowRadioButtonsGroupStatus from './panel/radioGroupStatus'
 
 export interface IRoleData {
   role: string | null
@@ -31,6 +32,15 @@ export interface IFormInterview {
   type: string
   optionList?: string[]
   ratioList?: { max: string; valueOfMin: string; valueOfMax: string }
+}
+
+// I want to make enum of BEFORE, ONGOING, AFTER
+
+
+export enum statusEnum {
+  BEFORE,
+  ONGOING,
+  AFTER,
 }
 
 const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
@@ -51,6 +61,7 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   const [roleList, setRoleList] = useState<IRoleData[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [openBasicModal, setOpenBasicModal] = useState(false)
+  const [status, setStatus] = useState<statusEnum>(statusEnum.BEFORE)
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
@@ -80,6 +91,7 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
       setContent(data.content)
       setRoleList(data.roleList)
       setInterviewList(data.interviewList)
+      setStatus(data.status)
     }
   }, [data])
 
@@ -103,6 +115,7 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
           tagList,
           roleList,
           interviewList,
+          status,
         },
       )
       if (response.status === 200) router.push(`/recruitment/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
@@ -147,6 +160,10 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+        </Box>
+        <Box>
+          <Typography>팀 진행 상태</Typography>
+          <RowRadioButtonsGroupStatus setValue={setStatus} />
         </Box>
         <Box>
           <Typography variant="h6">팀 분류</Typography>
