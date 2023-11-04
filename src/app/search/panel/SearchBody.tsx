@@ -45,19 +45,21 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
     const keyword = data.searchWord
 
     // 기존에 저장된 검색어 개수 확인
-    const storedKeywords = Object.keys(localStorage).filter((key) =>
-      key.startsWith('searchWord_'),
-    )
+    const storedKeywords = Object.keys(localStorage)
+      .filter((key) => key.startsWith('searchWord_'))
+      .sort((a, b) => Number(a.split('_')[1]) - Number(b.split('_')[1])) // 오래된 순으로 정렬
+
     const maxKeywords = 5
 
     // 기존 검색어 개수를 초과하는 경우, 가장 오래된 검색어 삭제
-    if (storedKeywords.length >= maxKeywords) {
-      const oldestKeyword = storedKeywords[0]
-      localStorage.removeItem(oldestKeyword)
+    while (storedKeywords.length >= maxKeywords) {
+      const oldestKeyword = storedKeywords.shift()
+      if (oldestKeyword) localStorage.removeItem(oldestKeyword)
     }
 
     // 새로운 검색어 localStorage에 저장
-    const newKeywordIndex = storedKeywords.length
+    const newKeywordIndex =
+      Math.max(...storedKeywords.map((key) => Number(key.split('_')[1])), 0) + 1
     const newKeywordKey = `searchWord_${newKeywordIndex}`
     localStorage.setItem(newKeywordKey, keyword)
 
