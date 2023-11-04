@@ -13,13 +13,13 @@ const getTabValue = (path: string) => {
     case '/my-page/interests':
       return 1
 
-    case '/my-page/messages':
+    case '/my-page/message':
       return 2
 
     case '/my-page/privacy':
       return 3
 
-    case 'my-page/homepage-setting':
+    case '/my-page/homepage-setting':
       return 4
 
     default:
@@ -94,8 +94,8 @@ const SubNavBar = () => {
         <Tab
           label="홈페이지 설정"
           onClick={() => router.push('/my-page/homepage-setting')}
-          value={4}
           sx={tabStyle}
+          value={4}
         />
       </Tabs>
     </Box>
