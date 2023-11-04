@@ -1,10 +1,8 @@
 import { Autocomplete, Box, Chip, Stack, TextField } from '@mui/material'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ITag } from '@/types/IPostDetail'
-import { getFetcherWithInstance } from '@/api/fetchers'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
-import { AxiosInstance } from 'axios'
 
 /**
  *
