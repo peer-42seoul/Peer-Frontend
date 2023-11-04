@@ -4,7 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
 import { Dispatch, SetStateAction } from 'react'
-import { statusEnum } from '../page'
+import { statusEnum } from '@/types/IPostDetail'
 
 interface RowRadioButtonsGroupProps {
   setValue: Dispatch<SetStateAction<statusEnum>>

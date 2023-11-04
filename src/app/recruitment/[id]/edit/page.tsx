@@ -16,15 +16,11 @@ import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
 import RowRadioButtonsGroupStatus from './panel/radioGroupStatus'
+import { ITag, statusEnum } from '@/types/IPostDetail'
 
 export interface IRoleData {
   role: string | null
   member: number
-}
-
-export interface tag {
-  tagName: string
-  tagColor: string
 }
 
 export interface IFormInterview {
@@ -32,15 +28,6 @@ export interface IFormInterview {
   type: string
   optionList?: string[]
   ratioList?: { max: string; valueOfMin: string; valueOfMax: string }
-}
-
-// I want to make enum of BEFORE, ONGOING, AFTER
-
-
-export enum statusEnum {
-  BEFORE,
-  ONGOING,
-  AFTER,
 }
 
 const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
@@ -51,7 +38,7 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   )
   const [name, setName] = useState<string>('')
   const [type, setType] = useState<string>('project')
-  const [tagList, setTagList] = useState<tag[]>([])
+  const [tagList, setTagList] = useState<ITag[]>([])
   const [region, setRegion] = useState<string[]>([])
   const [place, setPlace] = useState<string>('')
   const [due, setMonth] = useState<string>('')
