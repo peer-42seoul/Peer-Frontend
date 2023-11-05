@@ -15,8 +15,6 @@ import CheckQuestionForm, { CheckQuestionList } from './CheckQuestionForm'
 import RatioQuestionForm, { RatioQuestionList } from './RatioQuestionForm'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
-import { getFetcherWithInstance } from '@/api/fetchers'
-import { AxiosInstance } from 'axios'
 interface IInterviewData {
   question: string
   type: 'close' | 'open' | 'ratio' | 'check'
@@ -37,13 +35,10 @@ const RecruitFormModal = ({
   role: string
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
+
   const { data } = useSWR<IInterviewData[]>(
-    [
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${post_id}`,
-      axiosWithAuth,
-    ],
-    ([url, axiosInstance]) =>
-      getFetcherWithInstance(url, axiosWithAuth),
+      (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   const [openConfirm, setOpenConfirm] = useState(false)
