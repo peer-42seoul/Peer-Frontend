@@ -8,7 +8,7 @@ import {
   Button,
   TextField,
 } from '@mui/material'
-import { ITeam, TeamOperationForm } from '../page'
+import { ITeam, TeamOperationForm, TeamType } from '../page'
 import { ChangeEvent, useState } from 'react'
 import SetupSelect from './SetupSelect'
 import axios from 'axios'
@@ -172,83 +172,180 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
 
   return (
     <>
-      <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
-        <Typography fontWeight="bold">클릭한 프로젝트명 팀 설정 : </Typography>
-        <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
-          <Stack>
-            <Typography>{team.team.type}</Typography>
-            <Stack direction="row" justifyContent={'space-between'}>
-              <Typography>
-                {team.team.type}명: {team.team.name}
-              </Typography>
+      {teamInfo.team.type === TeamType.STUDY ? (
+        <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
+          <Typography fontWeight="bold">클릭한 스터디 팀 설정 : </Typography>
+          <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
+            <Stack>
+              <Typography>스터디</Typography>
+              <Stack direction="row" justifyContent={'space-between'}>
+                <Typography>스터디명: {team.team.name}</Typography>
 
-              <TextField
-                id="outlined-basic"
-                label={`${team.team.type} 이름`}
-                variant="outlined"
-                value={teamInfo.team.name}
-                maxRows={1}
-                size="small"
-                onChange={handleTeamName}
-                error={validation()}
-                helperText={validation() ? '다시 입력' : ''}
-                inputProps={{
-                  style: {
-                    padding: 5,
-                  },
-                }}
-              />
+                <TextField
+                  id="outlined-basic"
+                  label={`스터디 이름`}
+                  variant="outlined"
+                  value={teamInfo.team.name}
+                  maxRows={1}
+                  size="small"
+                  onChange={handleTeamName}
+                  error={validation()}
+                  helperText={validation() ? '다시 입력' : ''}
+                  inputProps={{
+                    style: {
+                      padding: 5,
+                    },
+                  }}
+                />
+              </Stack>
+              <Stack>
+                <Image
+                  src={
+                    teamInfo.team.imageUrl
+                      ? teamInfo.team.imageUrl
+                      : '/images/teamLogo.png'
+                  }
+                  alt="teamLogo"
+                  width={100}
+                  height={100}
+                />
+                <input type="file" accept="image/*" onChange={handleImage} />
+                <Button onClick={openModal}>이미지 삭제</Button>
+              </Stack>
             </Stack>
             <Stack>
-              <Image
-                src={
-                  teamInfo.team.imageUrl
-                    ? teamInfo.team.imageUrl
-                    : '/images/teamLogo.png'
-                }
-                alt="teamLogo"
-                width={100}
-                height={100}
-              />
-              <input type="file" accept="image/*" onChange={handleImage} />
-              <Button onClick={openModal}>이미지 삭제</Button>
-            </Stack>
-          </Stack>
-          <Stack>
-            <Typography>목표 기간: </Typography>
-            <SetupSelect
-              type="dueTo"
-              value={teamInfo.team.dueTo}
-              setValue={handleDate}
-            />
-          </Stack>
-          <Stack direction="column" spacing={1}>
-            <Typography>활동 방식: </Typography>
-            <SetupSelect
-              type="operationForm"
-              value={teamInfo.team.operationForm}
-              setValue={handleOperationForm}
-            />
-          </Stack>
-          <Stack direction="column" spacing={1}>
-            <Typography>팀 활동 지역: </Typography>
-            <Stack direction="row" spacing={1}>
+              <Typography>목표 기간: </Typography>
               <SetupSelect
-                type="location"
-                value={teamInfo.team.region[0]}
-                setValue={handleLocation1}
-              />
-              <SetupSelect
-                type="location"
-                parentLocation={teamInfo.team.region[0]}
-                value={teamInfo.team.region[1]}
-                setValue={handleLocation2}
+                type="dueTo"
+                value={teamInfo.team.dueTo}
+                setValue={handleDate}
               />
             </Stack>
-          </Stack>
+            <Stack direction="column" spacing={1}>
+              <Typography>활동 방식: </Typography>
+              <SetupSelect
+                type="operationForm"
+                value={teamInfo.team.operationForm}
+                setValue={handleOperationForm}
+              />
+            </Stack>
+            <Stack direction="column" spacing={1}>
+              <Typography>팀 활동 지역: </Typography>
+              <Stack direction="row" spacing={1}>
+                <SetupSelect
+                  type="location"
+                  value={teamInfo.team.region[0]}
+                  setValue={handleLocation1}
+                />
+                <SetupSelect
+                  type="location"
+                  parentLocation={teamInfo.team.region[0]}
+                  value={teamInfo.team.region[1]}
+                  setValue={handleLocation2}
+                />
+              </Stack>
+            </Stack>
+          </Box>
+          <Button onClick={sendTeamInfo}>팀 설정</Button>
         </Box>
-        <Button onClick={sendTeamInfo}>팀 설정</Button>
-      </Box>
+      ) : (
+        <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
+          <Typography fontWeight="bold">
+            클릭한 프로젝트명 팀 설정 :{' '}
+          </Typography>
+          <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
+            <Stack>
+              <Typography>프로젝트</Typography>
+              <Stack direction="row" justifyContent={'space-between'}>
+                <Typography>프로젝트명: {team.team.name}</Typography>
+
+                <TextField
+                  id="outlined-basic"
+                  label={`프로젝트 이름`}
+                  variant="outlined"
+                  value={teamInfo.team.name}
+                  maxRows={1}
+                  size="small"
+                  onChange={handleTeamName}
+                  error={validation()}
+                  helperText={validation() ? '다시 입력' : ''}
+                  inputProps={{
+                    style: {
+                      padding: 5,
+                    },
+                  }}
+                />
+              </Stack>
+              <Stack>
+                <Image
+                  src={
+                    teamInfo.team.imageUrl
+                      ? teamInfo.team.imageUrl
+                      : '/images/teamLogo.png'
+                  }
+                  alt="teamLogo"
+                  width={100}
+                  height={100}
+                />
+                <input type="file" accept="image/*" onChange={handleImage} />
+                <Button onClick={openModal}>이미지 삭제</Button>
+              </Stack>
+            </Stack>
+            <Stack>
+              <Typography>목표 기간: </Typography>
+              <SetupSelect
+                type="dueTo"
+                value={teamInfo.team.dueTo}
+                setValue={handleDate}
+              />
+            </Stack>
+            <Stack direction="column" spacing={1}>
+              <Typography>활동 방식: </Typography>
+              <SetupSelect
+                type="operationForm"
+                value={teamInfo.team.operationForm}
+                setValue={handleOperationForm}
+              />
+            </Stack>
+            <Stack direction="column" spacing={1}>
+              <Typography>팀 활동 지역: </Typography>
+              <Stack direction="row" spacing={1}>
+                <SetupSelect
+                  type="location"
+                  value={teamInfo.team.region[0]}
+                  setValue={handleLocation1}
+                />
+                <SetupSelect
+                  type="location"
+                  parentLocation={teamInfo.team.region[0]}
+                  value={teamInfo.team.region[1]}
+                  setValue={handleLocation2}
+                />
+              </Stack>
+            </Stack>
+          </Box>
+          <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
+            <Typography>팀 역활</Typography>
+            <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
+              <Stack>
+                <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
+                  <Typography>FE</Typography>
+                </Box>
+                <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
+                  <Typography>BE</Typography>
+                </Box>
+                <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
+                  <Typography>디자이너</Typography>
+                </Box>
+                <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
+                  <Typography>역활</Typography>
+                </Box>
+              </Stack>
+            </Box>
+          </Box>
+          <Button onClick={sendTeamInfo}>팀 설정</Button>
+        </Box>
+      )}
       <CuModal
         ariaTitle="alert-modal-title"
         ariaDescription="alert-modal-description"

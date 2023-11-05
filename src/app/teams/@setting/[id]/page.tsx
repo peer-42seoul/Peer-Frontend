@@ -10,26 +10,26 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import { useRouter } from 'next/navigation'
 
 export enum TeamType {
-  PROJECT = 'project',
-  STUDY = 'study',
+  PROJECT = 'PROJECT',
+  STUDY = 'STUDY',
 }
 
 export enum TeamStatus {
-  RECRUITING = 'recruiting',
-  BEFORE = 'before',
-  ONGOING = 'ongoing',
-  COMPLETE = 'complete',
+  RECRUITING = 'RECRUITING',
+  BEFORE = 'BEFORE',
+  ONGOING = 'ONGOING',
+  COMPLETE = 'COMPLETE',
 }
 
 export enum TeamGrant {
-  LEADER = 'leader',
-  MEMBER = 'member',
+  LEADER = 'LEADER',
+  MEMBER = 'MEMBER',
 }
 
 export enum TeamOperationForm {
-  OFFLINE = 'offline',
-  ONLINE = 'online',
-  MIX = 'mix',
+  OFFLINE = 'OFFLINE',
+  ONLINE = 'ONLINE',
+  MIX = 'MIX',
 }
 export interface IMember {
   name: string

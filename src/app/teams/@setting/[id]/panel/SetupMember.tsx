@@ -26,7 +26,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
-    if (member.grant === 'leader') {
+    if (member.grant === 'LEADER') {
       axios
         .post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.userId}&role=member`,
@@ -147,7 +147,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
                   <Switch
                     size="small"
                     onChange={() => handleGrant(member)}
-                    checked={member.grant === 'leader' ? true : false}
+                    checked={member.grant === 'LEADER' ? true : false}
                   />
                 </Stack>
               </Box>
