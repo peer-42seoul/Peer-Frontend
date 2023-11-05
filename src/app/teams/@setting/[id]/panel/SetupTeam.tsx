@@ -346,6 +346,65 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
           <Button onClick={sendTeamInfo}>팀 설정</Button>
         </Box>
       )}
+                error={validation()}
+                helperText={validation() ? '다시 입력' : ''}
+                inputProps={{
+                  style: {
+                    padding: 5,
+                  },
+                }}
+              />
+            </Stack>
+            <Stack>
+              <Image
+                src={
+                  teamInfo.team.imageUrl
+                    ? teamInfo.team.imageUrl
+                    : '/images/teamLogo.png'
+                }
+                alt="teamLogo"
+                width={100}
+                height={100}
+              />
+              <input type="file" accept="image/*" onChange={handleImage} />
+              <Button onClick={openModal}>이미지 삭제</Button>
+            </Stack>
+          </Stack>
+          <Stack>
+            <Typography>목표 기간: </Typography>
+            <SetupSelect
+              type="dueTo"
+              value={teamInfo.team.dueTo}
+              setValue={handleDate}
+            />
+          </Stack>
+          <Stack direction="column" spacing={1}>
+            <Typography>활동 방식: </Typography>
+            <SetupSelect
+              type="operationForm"
+              value={teamInfo.team.operationForm}
+              setValue={handleOperationForm}
+            />
+          </Stack>
+          <Stack direction="column" spacing={1}>
+            <Typography>팀 활동 지역: </Typography>
+            <Stack direction="row" spacing={1}>
+              <SetupSelect
+                type="location"
+                value={teamInfo.team.region[0]}
+                setValue={handleLocation1}
+              />
+              <SetupSelect
+                type="location"
+                parentLocation={teamInfo.team.region[0]}
+                value={teamInfo.team.region[1]}
+                setValue={handleLocation2}
+              />
+            </Stack>
+          </Stack>
+        </Box>
+        <Button onClick={sendTeamInfo}>팀 설정</Button>
+      </Box>
       <CuModal
         ariaTitle="alert-modal-title"
         ariaDescription="alert-modal-description"

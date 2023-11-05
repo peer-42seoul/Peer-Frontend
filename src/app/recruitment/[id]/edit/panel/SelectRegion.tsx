@@ -3,7 +3,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { koreaDistrict } from '@/app/recruitment/write/panel/DistrictData'
+import { koreaDistrict } from '@/constant/DistrictData'
 
 interface BasicSelectProps {
   setValue: Dispatch<SetStateAction<string[]>>
