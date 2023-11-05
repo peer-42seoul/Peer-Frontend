@@ -7,7 +7,7 @@ import useSWR from 'swr'
 import { Stack } from '@mui/material'
 import { TeamType } from '../teams/@setting/[id]/page'
 
-export enum TeamStatus {
+enum TeamStatus {
   RECRUITING = '모집중',
   BEFORE = '시작전',
   ONGOING = '진행중',
