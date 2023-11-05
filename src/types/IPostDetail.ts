@@ -39,3 +39,9 @@ export interface IRole {
   name: string
   number: number
 }
+
+export enum statusEnum {
+  BEFORE,
+  ONGOING,
+  AFTER,
+}

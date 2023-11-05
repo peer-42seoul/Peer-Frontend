@@ -1,7 +1,8 @@
 import { Autocomplete, Box, Chip, Stack, TextField } from '@mui/material'
-import axios from 'axios'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { tag } from '../../page'
+import { ITag } from '@/types/IPostDetail'
+import useSWR from 'swr'
+import useAxiosWithAuth from '@/api/config'
 
 /**
  *
@@ -10,51 +11,53 @@ import { tag } from '../../page'
  * @param setData 선택한 값들의 리스트를 변경해주는 함수입니다 (useState로 관리해주세요)
  */
 
-const dummyData1: tag = {
+const dummyData1: ITag = {
   tagName: 'java',
   tagColor: 'red',
 }
-const dummyData2: tag = {
+const dummyData2: ITag = {
   tagName: 'spring',
   tagColor: 'blue',
 }
-const dummyData3: tag = {
+const dummyData3: ITag = {
   tagName: 'react',
   tagColor: 'green',
 }
-const dummyDatas: tag[] = [dummyData1, dummyData2, dummyData3]
+const dummyDatas: ITag[] = [dummyData1, dummyData2, dummyData3]
 
 const TagAutoComplete = ({
   datas,
   setData,
   placeholder,
   openToast,
-  setToastMessage
+  setToastMessage,
 }: {
-  datas: tag[]
+  datas: ITag[]
   setData: any
   placeholder?: string
   openToast: () => void
   setToastMessage: Dispatch<SetStateAction<string>>
 }) => {
-  const [list, setList] = useState<tag[]>(dummyDatas)
+  const [list, setList] = useState<ITag[]>(dummyDatas)
+  const axiosInstance = useAxiosWithAuth()
+  const { data } = useSWR(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
+    (url:string) => axiosInstance.get(url).then((res) => res.data),
+  )
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/recruit/write`).then((res) => {
-      console.log(res)
-      setList(res.data.tagList)
-    }).catch((err) => {
-      console.log('error ocurred!!' ,err)
+    if (!data) {
+      console.log('error ocurred!!')
       setToastMessage('태그를 불러오는데 실패했습니다.')
       openToast()
-    })
-  }, [])
+    } else {
+      console.log('tag fetching success', data)
+      setList(data.tagList)
+    }
+  }, [data])
 
   /* 태그를 추가합니다 */
-  const handleInput = (
-    event: React.SyntheticEvent,
-    value: readonly tag[],
-  ) => {
+  const handleInput = (event: React.SyntheticEvent, value: readonly ITag[]) => {
     setData([...value])
   }
 
