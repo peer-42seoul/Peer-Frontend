@@ -56,13 +56,17 @@ interface ITargetListProps {
 const TargetList = ({ letterTargetList, setTargetUser }: ITargetListProps) => {
   return (
     <Stack>
-      {letterTargetList.map((target: ILetterTarget) => (
-        <TargetItem
-          key={target.targetId}
-          letterTarget={target}
-          setTargetUser={setTargetUser}
-        />
-      ))}
+      {letterTargetList.length === 0 ? (
+        <Typography>검색 결과가 없습니다.</Typography>
+      ) : (
+        letterTargetList.map((target: ILetterTarget) => (
+          <TargetItem
+            key={target.targetId}
+            letterTarget={target}
+            setTargetUser={setTargetUser}
+          />
+        ))
+      )}
     </Stack>
   )
 }
@@ -134,9 +138,7 @@ const MessageWritingFormModal = ({
 }: IMessageWritingFormModalProps) => {
   const [keyword, setKeyword] = useState('')
   const [targetUser, setTargetUser] = useState<ILetterTarget | undefined>()
-  const [letterTargetList, setLetterTargetList] = useState<
-    ILetterTarget[] | undefined
-  >()
+  const [letterTargetList, setLetterTargetList] = useState<ILetterTarget[]>()
   const axiosInstance = useAxiosWithAuth()
 
   const searchUserWithKeyword = useCallback(async () => {
@@ -149,9 +151,11 @@ const MessageWritingFormModal = ({
       const response = await axiosInstance.post('/api/v1/message/searching', {
         keyword: keyword,
       })
-      setLetterTargetList(response.data)
+      response.data
+        ? setLetterTargetList(response.data)
+        : setLetterTargetList([])
     } catch (error) {
-      alert('존재하지 않는 사람입니다.')
+      alert('검색에 실패하였습니다. 다시 시도해주세요.')
     }
   }, [keyword])
 

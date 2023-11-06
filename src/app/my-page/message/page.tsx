@@ -1,31 +1,34 @@
 'use client'
 
-import { AxiosInstance } from 'axios'
-import useAxiosWithAuth from '@/api/config'
-import { getFetcherWithInstance } from '@/api/fetchers'
-import { Box, Container } from '@mui/material'
-// import { useRef } from 'react'
+import { useEffect } from 'react'
 import useSWR from 'swr'
-import useModal from '@/hook/useModal'
-import { IMessagObject } from '@/types/IMessageInformation'
-import useMedia from '@/hook/useMedia'
-// import MessageList from './MessageList'
+import { Box, Container } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
+import useMedia from '@/hook/useMedia'
+import useModal from '@/hook/useModal'
+import useMessageDataState from '@/states/useMessageDataState'
+import { IMessagObject } from '@/types/IMessageInformation'
 import MessageContainer from './panel/MessageContainer'
-
-// import useAuthStore from '@/states/useAuthStore'
+import MessageWritingFormModal from './panel/MessageWritingFormModal'
 
 const MessageMain = () => {
   // NOTE : useRef가 필요한 이유? - 필요없음이 확인되면 지우기
   // const MessageBox = useRef<HTMLDivElement | null>(null)
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
-  const axiosInstance = useAxiosWithAuth()
+  const axiosWithAuth = useAxiosWithAuth()
   const { data, error, isLoading } = useSWR<IMessagObject[]>(
-    [`${process.env.NEXT_PUBLIC_API_URL}/api/v1/message/list`, axiosInstance],
-    ([url, axiosInstance]) =>
-      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
+    '/api/v1/message/list',
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
+  const { setMessages, resetMessages } = useMessageDataState()
+
+  useEffect(() => {
+    return () => {
+      resetMessages()
+    }
+  }, [])
 
   return (
     <Container sx={{ height: '90vh' }}>
@@ -38,15 +41,20 @@ const MessageMain = () => {
         />
         {/* <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}> */}
         <MessageContainer
-          messages={data || []}
+          originalMessageData={data}
           error={error}
           isLoading={isLoading}
           isPC={isPc}
-          isNewMessageModalOpen={isOpen}
-          newMessageModalClose={closeModal}
         />
         {/* </Box> */}
       </Box>
+      {isOpen && (
+        <MessageWritingFormModal
+          isOpen={isOpen}
+          handleClose={closeModal}
+          setMessageData={setMessages}
+        />
+      )}
     </Container>
   )
 }
