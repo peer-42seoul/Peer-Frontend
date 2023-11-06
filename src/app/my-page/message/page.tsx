@@ -1,67 +1,60 @@
 'use client'
 
-import { defaultGetFetcher } from '@/api/fetchers'
-import MessageList from '@/app/my-page/message/MessageList'
-import { Box, Button, Container } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import useSWR from 'swr'
-import CuModal from '@/components/CuModal'
-import MessageWritingForm from './MessageWritingForm'
-import useModal from '@/hook/useModal'
-import { IMessagObject } from '@/types/IMessageInformation'
+import { Box, Container } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
+import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
-
-// import useAuthStore from '@/states/useAuthStore'
+import useModal from '@/hook/useModal'
+import useMessageDataState from '@/states/useMessageDataState'
+import { IMessagObject } from '@/types/IMessageInformation'
+import MessageContainer from './panel/MessageContainer'
+import MessageWritingFormModal from './panel/MessageWritingFormModal'
 
 const MessageMain = () => {
-  const MessageBox = useRef<HTMLDivElement | null>(null)
-  const [messageList, setMessageList] = useState<IMessagObject[]>([])
+  // NOTE : useRef가 필요한 이유? - 필요없음이 확인되면 지우기
+  // const MessageBox = useRef<HTMLDivElement | null>(null)
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
-  const { data, error, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}api/v1/message/list?userId=${1}`, // FIXME:  내 userId 넣기
-    defaultGetFetcher,
+  const axiosWithAuth = useAxiosWithAuth()
+  const { data, error, isLoading } = useSWR<IMessagObject[]>(
+    '/api/v1/message/list',
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
+  const { setMessages, resetMessages } = useMessageDataState()
 
   useEffect(() => {
-    if (data) {
-      setMessageList((prevMessages) => [...prevMessages, ...data])
+    return () => {
+      resetMessages()
     }
-  }, [data])
+  }, [])
 
-  console.log('data의 값은', data)
   return (
     <Container sx={{ height: '90vh' }}>
-      {isOpen && (
-        <CuModal
-          open={isOpen}
-          handleClose={closeModal}
-          ariaTitle={'create_message'}
-          ariaDescription={'create_message'}
-        >
-          <MessageWritingForm handleClose={closeModal} />
-        </CuModal>
-      )}
-      <Box sx={{ display: 'grid', width: '100%' }}>
-        <Box>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              openModal()
-            }}
-          >
-            쪽지 보내기
-          </Button>
-          <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}>
-            <MessageList
-              data={messageList || []}
-              error={error}
-              isLoading={isLoading}
-              isPc={isPc}
-            />
-          </Box>
-        </Box>
+      <Box sx={{ width: '100%' }}>
+        <CuButton
+          variant="outlined"
+          action={() => openModal()}
+          message="새 쪽지 보내기"
+          style={{ marginBottom: '32px' }}
+        />
+        {/* <Box sx={{ height: '85vh', overflow: 'auto' }} ref={MessageBox}> */}
+        <MessageContainer
+          originalMessageData={data}
+          error={error}
+          isLoading={isLoading}
+          isPC={isPc}
+        />
+        {/* </Box> */}
       </Box>
+      {isOpen && (
+        <MessageWritingFormModal
+          isOpen={isOpen}
+          handleClose={closeModal}
+          setMessageData={setMessages}
+        />
+      )}
     </Container>
   )
 }

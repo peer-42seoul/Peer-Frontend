@@ -55,6 +55,7 @@ const SignUp = () => {
     control,
     formState: { errors },
     getValues,
+    setValue,
   } = useForm<ISignUpInputs>({
     defaultValues: {
       email: '',
@@ -126,6 +127,7 @@ const SignUp = () => {
           code: code,
         })
         setCodeSendStatus('submit')
+        setToastMessage('인증코드가 인증되었습니다')
       } catch (error: any) {
         setCodeSendStatus('error')
         if (error.response?.status === 401) {
@@ -197,7 +199,6 @@ const SignUp = () => {
       const { email, password, name, nickName } = data
       try {
         const social = socialEmail ? socialEmail : null
-        console.log(email, password, name, nickName, social)
         await axios.post(`${API_URL}/api/v1/signup/form`, {
           email: email,
           password: password,
@@ -206,7 +207,7 @@ const SignUp = () => {
           socialEmail: social,
         })
         setToastMessage('회원가입이 완료되었습니다')
-        router.push('/') // 메인페이지로 이동
+        router.push('/login') // 로그인 페이지로 이동
       } catch (error: any) {
         if (error.response?.status === 400) {
           setToastMessage('유효하지 않은 회원가입 정보입니다')
@@ -285,14 +286,16 @@ const SignUp = () => {
                       includeNumber: (value) =>
                         /\d/.test(value) || '숫자를 포함해야 합니다',
                       includeSpecial: (value) =>
-                        /[~!@#$%^&*<>]/.test(value) ||
+                        /[!@#$%^&*]/.test(value) ||
                         '특수문자를 포함해야 합니다',
                       includeAlphabet: (value) =>
                         (/[A-Z]/.test(value) && /[a-z]/.test(value)) ||
                         '대소문자를 포함해야 합니다',
                     },
                   }}
-                  render={({ field }) => <PasswordField field={field} />}
+                  render={({ field }) => (
+                    <PasswordField field={field} setValue={setValue} />
+                  )}
                 />
                 <Button
                   sx={nextButtonStyle}

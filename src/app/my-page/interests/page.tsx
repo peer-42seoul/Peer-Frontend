@@ -1,6 +1,5 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
-import { getFetcherWithInstance } from '@/api/fetchers'
 import MainCard from '@/app/panel/MainCard'
 import { ProjectType } from '@/app/panel/MainPage'
 import CloseButton from '@/components/CloseButton'
@@ -10,7 +9,7 @@ import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
-import { Tag } from '@/types/IPostDetail'
+import { ITag } from '@/types/IPostDetail'
 import {
   AlertColor,
   Box,
@@ -23,7 +22,6 @@ import {
   Typography,
 } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { AxiosInstance } from 'axios'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
@@ -34,7 +32,7 @@ interface IMainCard {
   user_nickname: string
   user_thumbnail: string
   status: string
-  tagList: Tag[]
+  tagList: ITag[]
   isFavorite: boolean
   post_id: number
   type: ProjectType
@@ -55,8 +53,8 @@ const TypeToggle = ({
   console.log('dropdown', type)
   return (
     <Select value={type} onChange={handleChange} variant="standard">
-      <MenuItem value={'projects'}>프로젝트</MenuItem>
-      <MenuItem value={'studies'}>스터디</MenuItem>
+      <MenuItem value={'project'}>프로젝트</MenuItem>
+      <MenuItem value={'study'}>스터디</MenuItem>
       {/* <MenuItem value={'showcase'}>쇼케이스</MenuItem> 2step */}
     </Select>
   )
@@ -78,8 +76,8 @@ const TypeTabs = ({
       aria-label="menu tabs"
       variant="fullWidth"
     >
-      <Tab label="프로젝트" value={'projects'} />
-      <Tab label="스터디" value={'studies'} />
+      <Tab label="프로젝트" value={'project'} />
+      <Tab label="스터디" value={'study'} />
       {/* <Tab label="쇼케이스" value={'showcase'} /> */}
     </Tabs>
   )
@@ -129,7 +127,7 @@ const AlertModal = ({
 
 const MyInterests = () => {
   const { isPc } = useMedia()
-  const [type, setType] = useState('projects')
+  const [type, setType] = useState('project')
   const [page, setPage] = useState<number>(1)
   const [pageLimit, setPageLimit] = useState<number>(1)
   const [postList, setPostList] = useState<Array<IMainCard>>(
@@ -156,15 +154,10 @@ const MyInterests = () => {
     setType(newValue as string)
     setPostList([])
   }
-  const axiosInstance: AxiosInstance = useAxiosWithAuth()
-
+  const axiosInstance = useAxiosWithAuth()
   const { data, isLoading, mutate } = useSWR<IInterestResponse>(
-    [
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=10`,
-      axiosInstance,
-    ],
-    ([url, axiosInstance]) =>
-      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=10`,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
   const deleteAll = async () => {

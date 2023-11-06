@@ -38,10 +38,12 @@ const KeywordAddingField = ({
   mutate,
   isPc,
   setToastMessage,
+  keywordList,
 }: {
   mutate: () => void
   isPc: boolean
   setToastMessage: (message: IToastProps) => void
+  keywordList: Array<IChip> | undefined | null
 }) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
   const textFieldRef = useRef<HTMLInputElement | null>(null)
@@ -58,6 +60,12 @@ const KeywordAddingField = ({
             '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
         })
         return
+      } else if (keywordList?.find((keyword) => keyword.label === trimmed)) {
+        setToastMessage({
+          severity: 'error',
+          message: '이미 등록된 알림 키워드입니다.',
+        })
+        return
       }
       await axiosWithAuth
         .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/add`, {
@@ -71,11 +79,17 @@ const KeywordAddingField = ({
           mutate()
         })
         .catch((error) => {
-          console.log(error)
-          setToastMessage({
-            severity: 'error',
-            message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
-          })
+          if (error.response.status === 400) {
+            setToastMessage({
+              severity: 'error',
+              message: `${error.response.data.message}`,
+            })
+          } else {
+            setToastMessage({
+              severity: 'error',
+              message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
+            })
+          }
         })
       console.log(inputValue)
       setInputValue('' as string)
@@ -177,11 +191,16 @@ const KeywordSettingBox = ({
   setToastMessage: (message: IToastProps) => void
 }) => {
   const { isOpen, closeModal, openModal } = useModal()
+  const axiosWithAuth = useAxiosWithAuth()
 
   const deleteAll = async () => {
     console.log('전체 삭제')
-    // await axios.delete('/api/v1/alarm/delete/all')
-    closeModal()
+    await axiosWithAuth
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete/all`)
+      .then(() => {
+        closeModal()
+        mutate()
+      })
   }
 
   return (
@@ -190,6 +209,7 @@ const KeywordSettingBox = ({
         setToastMessage={setToastMessage}
         mutate={mutate}
         isPc={isPc}
+        keywordList={data}
       />
       <CuButton
         variant="text"

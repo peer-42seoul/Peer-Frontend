@@ -1,4 +1,4 @@
-import { Tag } from '@/types/IPostDetail'
+import { ITag } from '@/types/IPostDetail'
 import { Favorite } from '@mui/icons-material'
 import {
   Avatar,
@@ -26,7 +26,7 @@ interface IMainCard {
   user_nickname: string
   user_thumbnail: string
   status: string
-  tagList: Tag[]
+  tagList: ITag[]
   isFavorite?: boolean
   post_id: number
   type: ProjectType
@@ -107,7 +107,7 @@ const MainCard = ({
             {title}
           </Typography>
           <Box>
-            {tagList?.map(({ tagName, tagColor }: Tag, idx: number) => (
+            {tagList?.map(({ tagName, tagColor }: ITag, idx: number) => (
               <Chip
                 label={tagName}
                 size="small"

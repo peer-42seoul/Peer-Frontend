@@ -14,8 +14,12 @@ import SetupSelect from './SetupSelect'
 import axios from 'axios'
 import useShowTeamCategory from '@/states/useShowTeamCategory'
 import Image from 'next/image'
+import useModal from '@/hook/useModal'
+import CuModal from '@/components/CuModal'
+import CuButton from '@/components/CuButton'
 
 const SetupTeam = ({ team }: { team: ITeam }) => {
+  const { isOpen, openModal, closeModal } = useModal()
   const [teamInfo, setTeamInfo] = useState(team)
   const [isEdit, setIsEdit] = useState(false)
   const { setShowTeamPageCategory } = useShowTeamCategory()
@@ -167,83 +171,121 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
   }
 
   return (
-    <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
-      <Typography fontWeight="bold">클릭한 프로젝트명 팀 설정 : </Typography>
-      <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
-        <Stack>
-          <Typography>{team.team.type}</Typography>
-          <Stack direction="row" justifyContent={'space-between'}>
-            <Typography>
-              {team.team.type}명: {team.team.name}
-            </Typography>
+    <>
+      <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
+        <Typography fontWeight="bold">클릭한 프로젝트명 팀 설정 : </Typography>
+        <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
+          <Stack>
+            <Typography>{team.team.type}</Typography>
+            <Stack direction="row" justifyContent={'space-between'}>
+              <Typography>
+                {team.team.type}명: {team.team.name}
+              </Typography>
 
-            <TextField
-              id="outlined-basic"
-              label={`${team.team.type} 이름`}
-              variant="outlined"
-              value={teamInfo.team.name}
-              maxRows={1}
-              size="small"
-              onChange={handleTeamName}
-              error={validation()}
-              helperText={validation() ? '다시 입력' : ''}
-              inputProps={{
-                style: {
-                  padding: 5,
-                },
-              }}
-            />
+              <TextField
+                id="outlined-basic"
+                label={`${team.team.type} 이름`}
+                variant="outlined"
+                value={teamInfo.team.name}
+                maxRows={1}
+                size="small"
+                onChange={handleTeamName}
+                error={validation()}
+                helperText={validation() ? '다시 입력' : ''}
+                inputProps={{
+                  style: {
+                    padding: 5,
+                  },
+                }}
+              />
+            </Stack>
+            <Stack>
+              <Image
+                src={
+                  teamInfo.team.imageUrl
+                    ? teamInfo.team.imageUrl
+                    : '/images/teamLogo.png'
+                }
+                alt="teamLogo"
+                width={100}
+                height={100}
+              />
+              <input type="file" accept="image/*" onChange={handleImage} />
+              <Button onClick={openModal}>이미지 삭제</Button>
+            </Stack>
           </Stack>
           <Stack>
-            <Image
-              src={
-                teamInfo.team.imageUrl
-                  ? teamInfo.team.imageUrl
-                  : '/images/teamLogo.png'
-              }
-              alt="teamLogo"
-              width={100}
-              height={100}
-            />
-            <input type="file" accept="image/*" onChange={handleImage} />
-            <Button onClick={handleDeleteImage}>이미지 삭제</Button>
-          </Stack>
-        </Stack>
-        <Stack>
-          <Typography>목표 기간: </Typography>
-          <SetupSelect
-            type="dueTo"
-            value={teamInfo.team.dueTo}
-            setValue={handleDate}
-          />
-        </Stack>
-        <Stack direction="column" spacing={1}>
-          <Typography>활동 방식: </Typography>
-          <SetupSelect
-            type="operationForm"
-            value={teamInfo.team.operationForm}
-            setValue={handleOperationForm}
-          />
-        </Stack>
-        <Stack direction="column" spacing={1}>
-          <Typography>팀 활동 지역: </Typography>
-          <Stack direction="row" spacing={1}>
+            <Typography>목표 기간: </Typography>
             <SetupSelect
-              type="location"
-              value={teamInfo.team.region[0]}
-              setValue={handleLocation1}
-            />
-            <SetupSelect
-              type="location"
-              parentLocation={teamInfo.team.region[0]}
-              value={teamInfo.team.region[1]}
-              setValue={handleLocation2}
+              type="dueTo"
+              value={teamInfo.team.dueTo}
+              setValue={handleDate}
             />
           </Stack>
-        </Stack>
+          <Stack direction="column" spacing={1}>
+            <Typography>활동 방식: </Typography>
+            <SetupSelect
+              type="operationForm"
+              value={teamInfo.team.operationForm}
+              setValue={handleOperationForm}
+            />
+          </Stack>
+          <Stack direction="column" spacing={1}>
+            <Typography>팀 활동 지역: </Typography>
+            <Stack direction="row" spacing={1}>
+              <SetupSelect
+                type="location"
+                value={teamInfo.team.region[0]}
+                setValue={handleLocation1}
+              />
+              <SetupSelect
+                type="location"
+                parentLocation={teamInfo.team.region[0]}
+                value={teamInfo.team.region[1]}
+                setValue={handleLocation2}
+              />
+            </Stack>
+          </Stack>
+        </Box>
+        <Button onClick={sendTeamInfo}>팀 설정</Button>
       </Box>
-      <Button onClick={sendTeamInfo}>팀 설정</Button>
-    </Box>
+      <CuModal
+        ariaTitle="alert-modal-title"
+        ariaDescription="alert-modal-description"
+        open={isOpen}
+        handleClose={closeModal}
+        style={{
+          position: 'absolute' as 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+        }}
+      >
+        <Box>
+          <Typography id="alert-modal-title">삭제</Typography>
+          <Typography id="alert-modal-description">
+            모든 키워드를 삭제하시겠습니까?
+          </Typography>
+          <CuButton
+            variant="contained"
+            action={closeModal}
+            message="취소"
+            style={{ width: '50%' }}
+          />
+          <CuButton
+            variant="contained"
+            action={handleDeleteImage}
+            message="삭제"
+            style={{ width: '50%' }}
+          />
+        </Box>
+      </CuModal>
+    </>
   )
 }
 
