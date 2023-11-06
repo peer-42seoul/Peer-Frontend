@@ -6,14 +6,14 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 import { Stack } from '@mui/material'
 
-export enum TeamStatus {
+enum TeamStatus {
   RECRUITING = '모집중',
   BEFORE = '시작전',
   ONGOING = '진행중',
   COMPLETE = '진행완료',
 }
 
-export enum TeamType {
+enum TeamType {
   STUDY = '스터디',
   PROJECT = '프로젝트',
 }
