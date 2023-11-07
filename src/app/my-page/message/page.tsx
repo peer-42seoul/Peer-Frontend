@@ -10,7 +10,7 @@ import useModal from '@/hook/useModal'
 import useMessageListState from '@/states/useMessageListState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageContainer from './panel/MessageContainer'
-import MessageWritingFormModal from './panel/MessageWritingFormModal'
+import MessageWritingFormModal from './panel/NewMessageModal'
 import axios from 'axios'
 
 const MessageMain = () => {

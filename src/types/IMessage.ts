@@ -26,3 +26,12 @@ export interface IMessageUser {
   userProfile: string
   userNickname: string
 }
+
+// 메시지 전송 타입
+
+export interface IMessageTarget {
+  targetId: number
+  targetEmail: string
+  targetNickname: string
+  targetProfile: string
+}
