@@ -1,10 +1,7 @@
 import { useCallback, useState } from 'react'
-// import useAxiosWithAuth from '@/api/config'
-import { IMessage } from '@/types/IMessage'
-
-// MOCK API
-import axios from 'axios'
 import { Box, Button, TextField } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
+import { IMessage } from '@/types/IMessage'
 
 const MessageForm = ({
   targetId,
@@ -14,7 +11,7 @@ const MessageForm = ({
   addNewMessage: (newMessage: IMessage) => void
 }) => {
   const [content, setContent] = useState('')
-  // const axiosWithAuth = useAxiosWithAuth()
+  const axiosWithAuth = useAxiosWithAuth()
   const messageSubmit = useCallback(async () => {
     try {
       if (!content) {
@@ -25,7 +22,7 @@ const MessageForm = ({
         targetId: targetId,
         content,
       }
-      const response = await axios.post(
+      const response = await axiosWithAuth.post(
         `/api/v1/message/back-message`,
         messageData,
       )

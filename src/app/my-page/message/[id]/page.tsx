@@ -1,17 +1,14 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import useSWRMutation from 'swr/mutation'
 import { Box, CircularProgress, Typography } from '@mui/material'
-// import useAxiosWithAuth from '@/api/config'
+import useAxiosWithAuth from '@/api/config'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 import { IMessage, IMessageUser } from '@/types/IMessage'
 import MessageItem from './panel/MessageItem'
 import MessageForm from './panel/MessageForm'
-
-// MOCK API
-import axios from 'axios'
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -23,12 +20,12 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
   )
-  // const axiosWithAuth = useAxiosWithAuth()
+  const axiosWithAuth = useAxiosWithAuth()
 
   const fetchMoreData = useCallback(
     async (url: string) => {
       try {
-        const response = await axios.post(url, {
+        const response = await axiosWithAuth.post(url, {
           targetId: searchParams.get('target'),
           conversationalId: params.id,
           earlyMsgId: updatedData?.[0]?.msgId,
@@ -64,7 +61,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     setIsLoading(true)
     const targetId = searchParams.get('target')
     const conversationalId = params.id
-    axios
+    axiosWithAuth
       .post('/api/v1/message/conversation-list', {
         targetId,
         conversationalId,
