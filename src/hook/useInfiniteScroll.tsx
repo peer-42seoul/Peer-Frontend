@@ -14,7 +14,8 @@ export const useMessageInfiniteScroll = ({
   isEnd: boolean
 }) => {
   const [spinner, setSpinner] = useState(false)
-  const ref = useRef<HTMLDivElement>()
+  const targetRef = useRef<HTMLDivElement>() // fetch 여부를 결정할 요소
+  const scrollRef = useRef<HTMLDivElement>() // 스크롤 위치를 결정할 요소
 
   const debouncedFetchData = debounce(async () => {
     // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
@@ -37,20 +38,17 @@ export const useMessageInfiniteScroll = ({
       },
       { threshold: 0.7 },
     )
-
-    const currentRef = ref.current
-
+    const currentRef = targetRef.current
     if (currentRef) {
       observer.observe(currentRef)
     }
-
     // 컴포넌트가 언마운트되면 IntersectionObserver 해제
     return () => {
       if (currentRef) observer.unobserve(currentRef)
     }
-  }, [ref, spinner, debouncedFetchData, isEnd])
+  }, [targetRef, spinner, debouncedFetchData, isEnd])
 
-  return { ref, spinner }
+  return { targetRef, scrollRef, spinner }
 }
 
 /**
