@@ -22,7 +22,7 @@ import useMedia from '@/hook/useMedia'
 import ApplyButton from './panel/ApplyButton'
 import LinkButton from './panel/LinkButton'
 import useSWR from 'swr'
-import { defaultGetFetcher, getFetcherWithInstance } from '@/api/fetchers'
+import { defaultGetFetcher } from '@/api/fetchers'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 
@@ -37,17 +37,9 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const { isLogin } = useAuthStore()
   const axiosInstance = useAxiosWithAuth()
 
-  const swrKey = isLogin ? [
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit`,
-    axiosInstance,
-  ] : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`
-
-  const fetcher = isLogin
-    ? (url: string) =>
-      getFetcherWithInstance(url, axiosInstance)
-    : defaultGetFetcher
-
-  const { data, isLoading, error } = useSWR<IPostDetail>(swrKey, fetcher)
+  const { data, isLoading, error } = useSWR<IPostDetail>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
+    isLogin ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      : defaultGetFetcher)
 
   const { data: userData } = useSWR<{
     nickname: string
