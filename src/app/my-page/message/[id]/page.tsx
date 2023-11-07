@@ -16,6 +16,9 @@ import useAxiosWithAuth from '@/api/config'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 import { IMessage, IMessageUser } from '@/types/IMessage'
 
+// MOCK API
+import axios from 'axios'
+
 const MessageForm = ({
   targetId,
   addNewMessage,
@@ -24,7 +27,7 @@ const MessageForm = ({
   addNewMessage: (newMessage: IMessage) => void
 }) => {
   const [content, setContent] = useState('')
-  const axiosInstance = useAxiosWithAuth()
+  // const axiosWithAuth = useAxiosWithAuth()
   const messageSubmit = useCallback(async () => {
     try {
       if (!content) {
@@ -35,7 +38,7 @@ const MessageForm = ({
         targetId: targetId,
         content,
       }
-      const response = await axiosInstance.post(
+      const response = await axios.post(
         `/api/v1/message/back-message`,
         messageData,
       )
@@ -139,12 +142,12 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [owner, setOwner] = useState<IMessageUser>()
   const [target, setTarget] = useState<IMessageUser>()
   const [isEnd, setIsEnd] = useState<boolean>(false)
-  const axiosInstance = useAxiosWithAuth()
+  // const axiosWithAuth = useAxiosWithAuth()
 
   const fetchMoreData = useCallback(
     async (url: string) => {
       try {
-        const response = await axiosInstance.post(url, {
+        const response = await axios.post(url, {
           targetId: searchParams.get('target'),
           conversationalId: params.id,
           earlyMsgId: updatedData?.[0]?.msgId,
@@ -167,7 +170,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     setIsLoading(true)
     const targetId = searchParams.get('target')
     const conversationalId = params.id
-    axiosInstance
+    axios
       .post('/api/v1/message/conversation-list', {
         targetId,
         conversationalId,
