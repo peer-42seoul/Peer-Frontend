@@ -43,7 +43,17 @@ export default function UserInfoEdit({
       if (error.response?.status === 404) {
         setToastProps({
           severity: 'error',
-          message: error.response.data.message,
+          message: error.response.data.message, // 사용자를 찾을 수 없음. 토큰 문제
+        })
+      } else if (error.response?.status === 400) {
+        setToastProps({
+          severity: 'error',
+          message: error.response.data.message, // 변경할 비밀번호가 일치하지 않음
+        })
+      } else if (error.response?.status === 401) {
+        setToastProps({
+          severity: 'error',
+          message: error.response.data.message, // 현재 비밀번호가 올바르지 않음
         })
       }
       console.log(error)
