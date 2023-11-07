@@ -15,11 +15,13 @@ const convDateFormat = (date: Date) => {
 }
 
 const singleMsg = {
-  msgId: 17,
-  userId: 28109,
-  date: convDateFormat(new Date('2023-11-07T10:30:00')),
-  content: '감사합니다! 다른 추천이 필요하면 물어볼게요.',
-  isEnd: false,
+  Msg: {
+    msgId: 17,
+    userId: 28109,
+    date: convDateFormat(new Date('2023-11-07T10:30:00')),
+    content: '감사합니다! 다른 추천이 필요하면 물어볼게요.',
+    isEnd: false,
+  },
 }
 
 export async function POST() {
