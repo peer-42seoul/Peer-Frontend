@@ -11,6 +11,7 @@ import useMessageDataState from '@/states/useMessageDataState'
 import { IMessagObject } from '@/types/IMessageInformation'
 import MessageContainer from './panel/MessageContainer'
 import MessageWritingFormModal from './panel/MessageWritingFormModal'
+import axios from 'axios'
 
 const MessageMain = () => {
   // NOTE : useRef가 필요한 이유? - 필요없음이 확인되면 지우기
@@ -20,7 +21,7 @@ const MessageMain = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, error, isLoading } = useSWR<IMessagObject[]>(
     '/api/v1/message/list',
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    (url: string) => axios.get(url).then((res) => res.data),
   )
   const { setMessages, resetMessages } = useMessageDataState()
 
