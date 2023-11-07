@@ -3,137 +3,15 @@
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import useSWRMutation from 'swr/mutation'
-import {
-  Avatar,
-  Box,
-  Button,
-  CircularProgress,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
-import useAxiosWithAuth from '@/api/config'
+import { Box, CircularProgress, Typography } from '@mui/material'
+// import useAxiosWithAuth from '@/api/config'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 import { IMessage, IMessageUser } from '@/types/IMessage'
+import MessageItem from './panel/MessageItem'
+import MessageForm from './panel/MessageForm'
 
 // MOCK API
 import axios from 'axios'
-
-const MessageForm = ({
-  targetId,
-  addNewMessage,
-}: {
-  targetId: number
-  addNewMessage: (newMessage: IMessage) => void
-}) => {
-  const [content, setContent] = useState('')
-  // const axiosWithAuth = useAxiosWithAuth()
-  const messageSubmit = useCallback(async () => {
-    try {
-      if (!content) {
-        alert('내용을 입력하세요.')
-        return
-      }
-      const messageData = {
-        targetId: targetId,
-        content,
-      }
-      const response = await axios.post(
-        `/api/v1/message/back-message`,
-        messageData,
-      )
-      if (response.status === 201) {
-        addNewMessage(response.data.Msg)
-        alert('메시지가 성공적으로 전송되었습니다.')
-        setContent('')
-      }
-    } catch (error) {
-      // TODO : 에러 구체화
-      alert('메시지 전송에 실패하였습니다.')
-    }
-  }, [content])
-
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <TextField
-        sx={{ width: '100%' }}
-        value={content}
-        placeholder="내용을 입력하세요"
-        variant="outlined"
-        multiline
-        rows={3}
-        onChange={(e) => setContent(e.target.value)}
-      />
-      <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-        <Button onClick={messageSubmit}>보내기</Button>
-      </Box>
-    </Box>
-  )
-}
-
-const OwnerMessageItem = ({ message }: { message: IMessage }) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-      }}
-    >
-      <Stack sx={{ bgcolor: '#EFEFEF', alignItems: 'flex-end' }}>
-        <Typography>{message.content}</Typography>
-        <Typography>{message.date}</Typography>
-      </Stack>
-    </Box>
-  )
-}
-
-const TargetMessageItem = ({
-  message,
-  target,
-}: {
-  message: IMessage
-  target: IMessageUser
-}) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-      }}
-    >
-      <Stack sx={{ bgcolor: '#D8D8D8', alignItems: 'flex-start' }} spacing={1}>
-        <Stack direction={'row'} alignItems={'center'} spacing={1}>
-          <Avatar src={target.userProfile} />
-          <Typography sx={{ fontWeight: 'bold' }}>
-            {target.userNickname}
-          </Typography>
-        </Stack>
-        <Typography>{message.content}</Typography>
-        <Typography>{message.date}</Typography>
-      </Stack>
-    </Box>
-  )
-}
-
-interface IMessageItemProps {
-  msg: IMessage
-  owner: IMessageUser
-  target: IMessageUser
-}
-
-const MessageItem = ({ msg, owner, target }: IMessageItemProps) => {
-  return (
-    <>
-      {msg.userId === owner.userId ? (
-        <OwnerMessageItem message={msg} />
-      ) : (
-        <TargetMessageItem message={msg} target={target} />
-      )}
-    </>
-  )
-}
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
