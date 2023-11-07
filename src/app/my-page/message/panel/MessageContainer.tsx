@@ -4,11 +4,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { AxiosResponse } from 'axios'
 import { Button, Stack, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import { IMessagObject } from '@/types/IMessageInformation'
+import { IMessageListData } from '@/types/IMessage'
 import CuButton from '@/components/CuButton'
 import useToast from '@/hook/useToast'
 import MessageList from './MessageList'
-import useMessageDataState from '@/states/useMessageDataState'
+import useMessageListState from '@/states/useMessageListState'
 
 interface ISearchBarProps {
   setSearchKeyword: (keyword: string) => void
@@ -55,7 +55,7 @@ const ManageBar = ({ handleSelectAll, handleDelete }: IManageBarProps) => {
 }
 
 interface IMessageContainerProps {
-  originalMessageData: IMessagObject[] | undefined
+  originalMessageData: IMessageListData[] | undefined
   error: any
   isLoading: boolean
   isPC: boolean
@@ -72,15 +72,15 @@ const MessageContainer = ({
   const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set())
 
   const axiosInstance = useAxiosWithAuth()
-  const { messages, setMessages } = useMessageDataState()
+  const { messageList, setMessageList } = useMessageListState()
 
   useEffect(() => {
     if (isManageMode) setSelectedUsers(new Set())
   }, [isManageMode])
 
   useEffect(() => {
-    if (originalMessageData) setMessages(originalMessageData)
-    else setMessages([])
+    if (originalMessageData) setMessageList(originalMessageData)
+    else setMessageList([])
   }, [originalMessageData])
 
   // event handler
@@ -88,9 +88,9 @@ const MessageContainer = ({
   const handleMessageSearch = useCallback(() => {
     // NOTE : 검색어가 없는 경우에는 모든 메시지를 보여준다?
     if (!originalMessageData) return
-    if (!searchKeyword) setMessages(originalMessageData)
+    if (!searchKeyword) setMessageList(originalMessageData)
     else
-      setMessages(
+      setMessageList(
         originalMessageData.filter((message) => {
           return message.targetNickname.includes(searchKeyword)
         }),
@@ -98,7 +98,7 @@ const MessageContainer = ({
   }, [originalMessageData, searchKeyword])
 
   const handleSelectAll = () => {
-    setSelectedUsers(new Set(messages.map((message) => message.targetId)))
+    setSelectedUsers(new Set(messageList.map((message) => message.targetId)))
   }
 
   const handleDelete = () => {
@@ -111,8 +111,8 @@ const MessageContainer = ({
           target: requestBody,
         },
       })
-      .then((response: AxiosResponse<IMessagObject[]>) => {
-        setMessages(response.data)
+      .then((response: AxiosResponse<IMessageListData[]>) => {
+        setMessageList(response.data)
         setIsManageMode(false)
       })
       .catch(() => {
@@ -131,9 +131,9 @@ const MessageContainer = ({
   }
 
   if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
-  if (error || !messages)
+  if (error || !messageList)
     return <Typography>데이터 불러오기에 실패했습니다.</Typography>
-  if (messages.length === 0)
+  if (messageList.length === 0)
     return <Typography>쪽지함이 비었습니다.</Typography>
 
   return (
@@ -152,7 +152,7 @@ const MessageContainer = ({
           />
         )}
         <MessageList
-          messages={messages}
+          messages={messageList}
           isManageMode={isManageMode}
           toggleSelectUser={toggleSelectUser}
         />

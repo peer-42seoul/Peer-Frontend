@@ -3,12 +3,12 @@
 import { Button, Stack, TextField, Typography, Avatar } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
-import { IMessagObject } from '@/types/IMessageInformation'
+import { IMessageListData } from '@/types/IMessage'
 import CuModal from '@/components/CuModal'
 
 interface IProps {
   userInfo?: ILetterTarget
-  setMessageData: (newMessageData: IMessagObject[]) => void
+  setMessageData: (newMessageData: IMessageListData[]) => void
   handleClose?: any | undefined
 }
 
@@ -128,7 +128,7 @@ const MessageForm = ({ userInfo, setMessageData, handleClose }: IProps) => {
 interface IMessageWritingFormModalProps {
   isOpen: boolean
   handleClose: () => void
-  setMessageData: (newMessageData: IMessagObject[]) => void
+  setMessageData: (newMessageData: IMessageListData[]) => void
 }
 
 const MessageWritingFormModal = ({

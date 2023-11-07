@@ -14,20 +14,7 @@ import {
 } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
-
-interface IMessage {
-  userId: number // 이 쪽지의 주인
-  msgId: number
-  content: string
-  date: string
-  isEnd: boolean
-}
-
-interface IUser {
-  userId: number
-  userProfile: string
-  userNickname: string
-}
+import { IMessage, IMessageUser } from '@/types/IMessage'
 
 const MessageForm = ({
   targetId,
@@ -103,7 +90,7 @@ const TargetMessageItem = ({
   target,
 }: {
   message: IMessage
-  target: IUser
+  target: IMessageUser
 }) => {
   return (
     <Box
@@ -129,8 +116,8 @@ const TargetMessageItem = ({
 
 interface IMessageItemProps {
   msg: IMessage
-  owner: IUser
-  target: IUser
+  owner: IMessageUser
+  target: IMessageUser
 }
 
 const MessageItem = ({ msg, owner, target }: IMessageItemProps) => {
@@ -149,8 +136,8 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const searchParams = useSearchParams()
   const [updatedData, setUpdatedData] = useState<IMessage[] | undefined>()
-  const [owner, setOwner] = useState<IUser>()
-  const [target, setTarget] = useState<IUser>()
+  const [owner, setOwner] = useState<IMessageUser>()
+  const [target, setTarget] = useState<IMessageUser>()
   const [isEnd, setIsEnd] = useState<boolean>(false)
   const axiosInstance = useAxiosWithAuth()
 
