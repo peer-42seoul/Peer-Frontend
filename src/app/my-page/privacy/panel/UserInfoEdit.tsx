@@ -139,7 +139,7 @@ export default function UserInfoEdit({
                 required: true,
                 pattern: {
                   value:
-                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*<>])[A-Za-z\d~!@#$%^&*<>]{8,}$/i,
+                    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/i,
                   message: '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
                 },
               }}
