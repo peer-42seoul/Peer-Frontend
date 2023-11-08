@@ -39,9 +39,10 @@ const SendEmailForm = () => {
   } = useForm<{ email: string }>()
 
   const onSubmit = async (data: { email: string }) => {
+    const email = data.email
     axios
       .post(`${API_URL}/api/v1/signin/find`, {
-        data,
+        email: email,
       })
       .then((res) => {
         if (res.status == 200) setIsEmailSuccessful(true)
@@ -49,6 +50,8 @@ const SendEmailForm = () => {
       .catch((error) => {
         if (error.response.status == 404)
           setErrorMessage('존재하지 않는 회원입니다.')
+        else if (error.response.status == 401)
+          setErrorMessage('이메일 전송에 실패했습니다. 다시 시도해주세요.')
         else setErrorMessage('알 수 없는 오류가 발생했습니다.')
         openToast()
       })

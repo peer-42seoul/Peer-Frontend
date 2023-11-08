@@ -62,7 +62,6 @@ const useAxiosWithAuth = () => {
             removeCookie('refreshToken', { path: '/' })
             alert('다시 로그인 해주세요')
             router.push('/login?redirect=' + currentPageUrl)
-            return
           }
         }
       }
