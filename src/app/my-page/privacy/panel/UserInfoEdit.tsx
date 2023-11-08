@@ -7,9 +7,7 @@ import CuTextField from '@/components/CuTextField'
 import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
 
-import IconButton from '@mui/material/IconButton'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import EyeIcon from './EyeIcon'
 
 interface IChangePassword {
   presentPassword: string
@@ -120,21 +118,10 @@ export default function UserInfoEdit({
                   placeholder="현재 비밀번호"
                   InputProps={{
                     endAdornment: (
-                      <IconButton
-                        onClick={() => {
-                          setShowPresentPassword(
-                            showPresentPassword === 'password'
-                              ? 'text'
-                              : 'password',
-                          )
-                        }}
-                      >
-                        {showPresentPassword === 'password' ? (
-                          <VisibilityIcon />
-                        ) : (
-                          <VisibilityOffIcon />
-                        )}
-                      </IconButton>
+                      <EyeIcon
+                        showPassword={showPresentPassword}
+                        setShowPassword={setShowPresentPassword}
+                      />
                     ),
                   }}
                 />
@@ -161,21 +148,10 @@ export default function UserInfoEdit({
                   placeholder="새로운 비밀번호"
                   InputProps={{
                     endAdornment: (
-                      <IconButton
-                        onClick={() => {
-                          setShowNewPassword(
-                            showNewPassword === 'password'
-                              ? 'text'
-                              : 'password',
-                          )
-                        }}
-                      >
-                        {showNewPassword === 'password' ? (
-                          <VisibilityIcon />
-                        ) : (
-                          <VisibilityOffIcon />
-                        )}
-                      </IconButton>
+                      <EyeIcon
+                        showPassword={showNewPassword}
+                        setShowPassword={setShowNewPassword}
+                      />
                     ),
                   }}
                 />
@@ -200,21 +176,10 @@ export default function UserInfoEdit({
                   placeholder="새로운 비밀번호 재입력"
                   InputProps={{
                     endAdornment: (
-                      <IconButton
-                        onClick={() => {
-                          setShowConfirmPassword(
-                            showConfirmPassword === 'password'
-                              ? 'text'
-                              : 'password',
-                          )
-                        }}
-                      >
-                        {showConfirmPassword === 'password' ? (
-                          <VisibilityIcon />
-                        ) : (
-                          <VisibilityOffIcon />
-                        )}
-                      </IconButton>
+                      <EyeIcon
+                        showPassword={showConfirmPassword}
+                        setShowPassword={setShowConfirmPassword}
+                      />
                     ),
                   }}
                 />
