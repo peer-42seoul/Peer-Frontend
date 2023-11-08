@@ -17,7 +17,7 @@ import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 interface IInterviewData {
   question: string
-  type: 'close' | 'open' | 'ratio' | 'check'
+  type: 'CLOSE' | 'OPEN' | 'RATIO' | 'CHECK'
   optionList?: CloseQuestionList | RatioQuestionList | CheckQuestionList | null
 }
 
@@ -25,20 +25,20 @@ const RecruitFormModal = ({
   open,
   setOpen,
   user_id,
-  post_id,
+  recruit_id,
   role,
 }: {
   open: boolean
   setOpen: any
   user_id: string
-  post_id: string
+  recruit_id: string
   role: string
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
 
   const { data } = useSWR<IInterviewData[]>(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${post_id}`,
-      (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   const [openConfirm, setOpenConfirm] = useState(false)
@@ -63,7 +63,7 @@ const RecruitFormModal = ({
   const submitForm = () => {
     handleSubmit(onSubmit)()
   }
-  
+
 
   const onSubmit = async (values: any) => {
     const array = Object.values(values)
@@ -79,7 +79,7 @@ const RecruitFormModal = ({
 
     const value = {
       user_id,
-      post_id,
+      recruit_id,
       role,
       answerList,
     }
@@ -87,7 +87,7 @@ const RecruitFormModal = ({
 
     try {
       await axiosWithAuth.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${post_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${recruit_id}`,
         value,
       )
       setOpenConfirm(false)
@@ -136,7 +136,7 @@ const RecruitFormModal = ({
               <Box key={idx}>
                 <Typography>{idx + 1}번 질문</Typography>
                 <Typography>{quest.question}</Typography>
-                {quest.type === 'open' && (
+                {quest.type === 'OPEN' && (
                   <Controller
                     rules={{
                       required: '답변을 입력해주세요',
@@ -147,7 +147,7 @@ const RecruitFormModal = ({
                     render={({ field }) => <TextField {...field} />}
                   />
                 )}
-                {quest.type === 'close' && (
+                {quest.type === 'CLOSE' && (
                   <CloseQuestionForm
                     optionList={quest?.optionList as CloseQuestionList}
                     control={control}
@@ -155,7 +155,7 @@ const RecruitFormModal = ({
                     disabled={false}
                   />
                 )}
-                {quest.type === 'ratio' && (
+                {quest.type === 'RATIO' && (
                   <RatioQuestionForm
                     optionList={quest?.optionList as RatioQuestionList}
                     control={control}
@@ -163,7 +163,7 @@ const RecruitFormModal = ({
                     disabled={false}
                   />
                 )}
-                {quest.type === 'check' && (
+                {quest.type === 'CHECK' && (
                   <CheckQuestionForm
                     optionList={quest?.optionList as CheckQuestionList}
                     control={control}

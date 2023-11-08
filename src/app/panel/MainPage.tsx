@@ -13,7 +13,7 @@ import MainCard from './MainCard'
 import SearchOption from './SearchOption'
 import SelectSort from './SelectSort'
 import SelectType from './SelectType'
-import { defaultGetFetcher  } from '@/api/fetchers'
+import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 import MainProfile from './MainProfile'
 import MainShowcase from './MainShowcase'
@@ -24,11 +24,12 @@ import { IPost } from '@/types/IPostDetail'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
+import { IPagination } from '@/types/IPagination'
 //latest, hit
 export type ProjectSort = 'latest' | 'hit'
 export type ProjectType = 'STUDY' | 'PROJECT'
 
-const MainPage = ({ initData }: { initData: IPost[] }) => {
+const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType>('STUDY')
   const [openOption, setOpenOption] = useState<boolean>(false)
@@ -49,18 +50,21 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const pageSize = 10
 
-  const { data, isLoading, error, mutate } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`, 
-  isLogin ? (url: string) => axiosInstance.get(url).then((res) => res.data)
-    : defaultGetFetcher, {
+  const { data, isValidating, error, mutate } = useSWR<IPagination<IPost[]>>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
+    isLogin ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      : defaultGetFetcher, {
     fallbackData: initData,
   })
-  const pageLimit = data?.totalPages
+
+  console.log("data?.totalPages", data?.totalPages);
+  const pageLimit = data?.totalPages ?? 1
   const { target, spinner } = useInfiniteScroll({
     setPage,
     mutate,
     pageLimit,
     page,
   })
+  console.log("data", data);
 
   return (
     <>
@@ -84,7 +88,7 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
               </Stack>
             </Grid>
           </Grid>
-          {isLoading ? (
+          {isValidating ? (
             <Typography>로딩중...</Typography>
           ) : error ? (
             <Typography>에러 발생</Typography>
@@ -149,7 +153,7 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
                 </Stack>
               </Grid>
             </Grid>
-            {isLoading ? (
+            {isValidating ? (
               <Typography>로딩중...</Typography>
             ) : error ? (
               <Typography>에러 발생</Typography>

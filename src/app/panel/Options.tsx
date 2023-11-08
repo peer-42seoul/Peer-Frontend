@@ -70,9 +70,9 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     }
 
     const status = makeCommaString({
-      before: statusBefore,
-      onGoing: statusonGoing,
-      done: statusdone,
+      BEFORE: statusBefore,
+      ONGOING: statusonGoing,
+      AFTER: statusdone,
     })
 
     const place = makeCommaString({
