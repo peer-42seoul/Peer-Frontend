@@ -47,7 +47,6 @@ export default function UserInfoEdit({
   const axiosWithAuth = useAxiosWithAuth()
   const changePassword: SubmitHandler<IChangePassword> = async (data) => {
     try {
-      console.log(data)
       await axiosWithAuth.put(`/api/v1/info/password`, data)
       setToastProps({
         severity: 'success',
@@ -64,10 +63,15 @@ export default function UserInfoEdit({
           severity: 'error',
           message: error.response.data.message, // 변경할 비밀번호가 일치하지 않음
         })
-      } else if (error.response?.status === 401) {
+      } else if (error.response?.status === 403) {
         setToastProps({
           severity: 'error',
           message: error.response.data.message, // 현재 비밀번호가 올바르지 않음
+        })
+      } else {
+        setToastProps({
+          severity: 'error',
+          message: '비밀번호 변경에 실패했습니다',
         })
       }
       console.log(error)
@@ -180,7 +184,7 @@ export default function UserInfoEdit({
                   message: '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
                 },
                 validate: (value) =>
-                  value !== getValues('newPassword') &&
+                  value === getValues('newPassword') ||
                   '비밀번호가 일치하지 않습니다',
               }}
               render={({ field }) => (
