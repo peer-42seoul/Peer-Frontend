@@ -65,7 +65,6 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
       setToastMessage('데이터를 불러오는데 실패했습니다.')
       openToast()
     } else {
-      console.log('Tag fetching success', data)
       setTitle(data.title)
       setPreviewImage(data.previewImage)
       setName(data.name)

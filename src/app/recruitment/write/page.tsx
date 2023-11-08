@@ -94,7 +94,6 @@ const CreateTeam = () => {
     } else if (data) {
       console.log('tag fetching success', data)
       setAllTagList(data)
-      console.log('allTagList', allTagList)
     }
   }, [data])
 
