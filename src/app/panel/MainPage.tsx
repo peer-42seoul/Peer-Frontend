@@ -13,7 +13,7 @@ import MainCard from './MainCard'
 import SearchOption from './SearchOption'
 import SelectSort from './SelectSort'
 import SelectType from './SelectType'
-import { defaultGetFetcher, getFetcherWithInstance } from '@/api/fetchers'
+import { defaultGetFetcher  } from '@/api/fetchers'
 import useSWR from 'swr'
 import MainProfile from './MainProfile'
 import MainShowcase from './MainShowcase'
@@ -26,11 +26,11 @@ import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 //latest, hit
 export type ProjectSort = 'latest' | 'hit'
-export type ProjectType = 'Study' | 'Project'
+export type ProjectType = 'STUDY' | 'PROJECT'
 
 const MainPage = ({ initData }: { initData: IPost[] }) => {
   const [page, setPage] = useState<number>(1)
-  const [type, setType] = useState<ProjectType>('Study')
+  const [type, setType] = useState<ProjectType>('STUDY')
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort>('latest')
   /* 추후 디자인 추가되면 schedule 추가하기 */
@@ -48,19 +48,10 @@ const MainPage = ({ initData }: { initData: IPost[] }) => {
 
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const pageSize = 10
-  const swrKey = isLogin
-    ? [
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
-      axiosInstance,
-    ]
-    : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
 
-  const fetcher = isLogin
-    ? (url: string) =>
-      getFetcherWithInstance(url, axiosInstance)
-    : defaultGetFetcher
-
-  const { data, isLoading, error, mutate } = useSWR(swrKey, fetcher, {
+  const { data, isLoading, error, mutate } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region=${detailOption.place}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`, 
+  isLogin ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+    : defaultGetFetcher, {
     fallbackData: initData,
   })
   const pageLimit = data?.totalPages

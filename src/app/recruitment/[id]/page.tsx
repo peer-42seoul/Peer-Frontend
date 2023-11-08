@@ -16,25 +16,31 @@ import { IPostDetail, ITag } from '@/types/IPostDetail'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
 import RecruitFormModal from './panel/RecruitFormModal'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import RecruitFormText from './panel/RecruitFormText'
 import useMedia from '@/hook/useMedia'
 import ApplyButton from './panel/ApplyButton'
 import LinkButton from './panel/LinkButton'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
+import useAuthStore from '@/states/useAuthStore'
+import useAxiosWithAuth from '@/api/config'
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
+  const router = useRouter()
   const type = useSearchParams().get('type') ?? 'projects'
   const [open, setOpen] = React.useState(false)
   const [roleOpen, setRoleOpen] = React.useState(false)
   const [role, setRole] = React.useState<string>('')
 
   const { isPc } = useMedia()
-  const { data, isLoading, error } = useSWR<IPostDetail>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
-    defaultGetFetcher,
-  )
+  const { isLogin } = useAuthStore()
+  const axiosInstance = useAxiosWithAuth()
+
+  const { data, isLoading, error } = useSWR<IPostDetail>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
+    isLogin ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      : defaultGetFetcher)
+
   const { data: userData } = useSWR<{
     nickname: string
     profileImageUrl: string
@@ -51,9 +57,13 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   }, [data])
 
   const handleApply = (selectedRole: string) => {
-    setRole(selectedRole)
-    setRoleOpen(false)
-    setOpen(true)
+    if (isLogin)
+      router.push("/login")
+    else {
+      setRole(selectedRole)
+      setRoleOpen(false)
+      setOpen(true)
+    }
   }
 
   if (isLoading) return <Typography>로딩중...</Typography>
@@ -191,7 +201,10 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             variant="contained"
             size="large"
             onClick={() => {
-              setRoleOpen(true)
+              if (isLogin)
+                router.push("/login")
+              else
+                setRoleOpen(true)
             }}
           >
             지원하기
