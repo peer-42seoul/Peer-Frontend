@@ -1,11 +1,15 @@
 'use client'
 
-import { Dispatch, SetStateAction } from 'react'
+import { useState, Dispatch, SetStateAction } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Typography, Container, Stack } from '@mui/material'
 import CuTextField from '@/components/CuTextField'
 import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
+
+import IconButton from '@mui/material/IconButton'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
 interface IChangePassword {
   presentPassword: string
@@ -30,10 +34,20 @@ export default function UserInfoEdit({
     formState: { errors },
     getValues,
   } = useForm<IChangePassword>({ mode: 'onChange' })
+  const [showPresentPassword, setShowPresentPassword] = useState<
+    'password' | 'text'
+  >('password')
+  const [showNewPassword, setShowNewPassword] = useState<'password' | 'text'>(
+    'password',
+  )
+  const [showConfirmPassword, setShowConfirmPassword] = useState<
+    'password' | 'text'
+  >('password')
 
   const axiosWithAuth = useAxiosWithAuth()
   const changePassword: SubmitHandler<IChangePassword> = async (data) => {
     try {
+      console.log(data)
       await axiosWithAuth.put(`/api/v1/info/password`, data)
       setToastProps({
         severity: 'success',
@@ -87,10 +101,29 @@ export default function UserInfoEdit({
               render={({ field }) => (
                 <CuTextField
                   field={field}
-                  type="password"
+                  type={showPresentPassword}
                   autoComplete="off"
                   error={errors.presentPassword ? true : false}
                   placeholder="현재 비밀번호"
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => {
+                          setShowPresentPassword(
+                            showPresentPassword === 'password'
+                              ? 'text'
+                              : 'password',
+                          )
+                        }}
+                      >
+                        {showPresentPassword === 'password' ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                    ),
+                  }}
                 />
               )}
             />
@@ -109,10 +142,29 @@ export default function UserInfoEdit({
               render={({ field }) => (
                 <CuTextField
                   field={field}
-                  type="password"
+                  type={showNewPassword}
                   autoComplete="off"
                   error={errors.newPassword ? true : false}
                   placeholder="새로운 비밀번호"
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => {
+                          setShowNewPassword(
+                            showNewPassword === 'password'
+                              ? 'text'
+                              : 'password',
+                          )
+                        }}
+                      >
+                        {showNewPassword === 'password' ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                    ),
+                  }}
                 />
               )}
             />
@@ -134,10 +186,29 @@ export default function UserInfoEdit({
               render={({ field }) => (
                 <CuTextField
                   field={field}
-                  type="password"
+                  type={showConfirmPassword}
                   autoComplete="off"
                   error={errors.confirmPassword ? true : false}
                   placeholder="새로운 비밀번호 재입력"
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => {
+                          setShowConfirmPassword(
+                            showConfirmPassword === 'password'
+                              ? 'text'
+                              : 'password',
+                          )
+                        }}
+                      >
+                        {showConfirmPassword === 'password' ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                    ),
+                  }}
                 />
               )}
             />
