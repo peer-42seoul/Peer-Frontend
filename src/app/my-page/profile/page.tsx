@@ -148,6 +148,7 @@ const MyProfile = () => {
         <ProfileSection sectionTitle="links" setModalType={setModalType}>
           <ProfileLinksSection linkList={userInfo.linkList} />
         </ProfileSection>
+        <CuButton variant="text" action={handleLogout} message="로그아웃" />
       </Box>
       {/* profile home end*/}
 
