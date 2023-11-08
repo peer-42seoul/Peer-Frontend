@@ -15,7 +15,7 @@ const OauthLoginBox = () => {
     >
       <Stack alignItems={'center'} spacing={1}>
         <IconButton
-          href={`${API_URL}/api/v1/oauth2/authorization/ft`}
+          href={`${API_URL}/oauth2/authorization/ft`}
           sx={{ width: '40px', height: '40px' }}
         >
           <Image
@@ -32,7 +32,7 @@ const OauthLoginBox = () => {
       </Stack>
       <Stack alignItems={'center'} spacing={1}>
         <IconButton
-          href={`${API_URL}/api/v1/oauth2/authorization/google`}
+          href={`${API_URL}/oauth2/authorization/google`}
           sx={{ width: '40px', height: '40px' }}
         >
           <Image

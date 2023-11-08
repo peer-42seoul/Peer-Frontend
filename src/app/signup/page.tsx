@@ -16,6 +16,7 @@ import NickNameField from './panel/NickNameField'
 import { ISignUpInputs } from '@/types/ISignUpInputs'
 import CodeTimer from './panel/CodeTimer'
 import useToast from '@/hook/useToast'
+import IToastProps from '@/types/IToastProps'
 
 const mainStyle = {
   display: 'flex',
@@ -55,6 +56,7 @@ const SignUp = () => {
     control,
     formState: { errors },
     getValues,
+    setValue,
   } = useForm<ISignUpInputs>({
     defaultValues: {
       email: '',
@@ -77,8 +79,10 @@ const SignUp = () => {
     'before' | 'submit' | 'error'
   >('before')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-
-  const [toastMessage, setToastMessage] = useState('')
+  const [toastProps, setToastProps] = useState<IToastProps>({
+    severity: 'info',
+    message: '',
+  })
   const { CuToast, isOpen, openToast, closeToast } = useToast()
 
   const submitEmail = async () => {
@@ -86,22 +90,37 @@ const SignUp = () => {
     const email = getValues('email')
     if (email === '' || errors.email) {
       setEmailSendStatus('error')
-      setToastMessage('이메일을 확인해주세요')
+      setToastProps({
+        severity: 'error',
+        message: '이메일을 확인해주세요',
+      })
     } else {
       try {
         await axios.post(`${API_URL}/api/v1/signup/email`, {
           email: email,
         })
         setEmailSendStatus('submit')
-        setToastMessage('인증코드가 전송되었습니다')
+        setToastProps({
+          severity: 'info',
+          message: '이메일이 인증되었습니다',
+        })
       } catch (error: any) {
         setEmailSendStatus('error')
         if (error.response?.status === 409) {
-          setToastMessage('이미 가입된 이메일입니다')
+          setToastProps({
+            severity: 'error',
+            message: '이미 가입된 이메일입니다',
+          })
         } else if (error.response?.status === 400) {
-          setToastMessage('유효하지 않은 이메일입니다')
+          setToastProps({
+            severity: 'error',
+            message: '유효하지 않은 이메일입니다',
+          })
         } else {
-          setToastMessage('그 밖의 오류')
+          setToastProps({
+            severity: 'error',
+            message: '알 수 없는 오류가 발생했습니다',
+          })
         }
       }
     }
@@ -114,11 +133,15 @@ const SignUp = () => {
     const email = getValues('email')
     const code = getValues('code')
     if (emailSendStatus !== 'submit') {
-      setToastMessage('이메일을 인증해주세요')
-      setEmailSendStatus('error')
+      setToastProps({
+        severity: 'error',
+        message: '이메일을 인증해주세요',
+      })
     } else if (code === '' || errors.code) {
-      setToastMessage('인증코드를 확인해주세요')
-      setCodeSendStatus('error')
+      setToastProps({
+        severity: 'error',
+        message: '인증코드를 확인해주세요',
+      })
     } else {
       try {
         await axios.post(`${API_URL}/api/v1/signup/code`, {
@@ -126,14 +149,27 @@ const SignUp = () => {
           code: code,
         })
         setCodeSendStatus('submit')
+        setToastProps({
+          severity: 'info',
+          message: '인증코드가 인증되었습니다',
+        })
       } catch (error: any) {
         setCodeSendStatus('error')
         if (error.response?.status === 401) {
-          setToastMessage('유효하지 않은 인증코드입니다')
+          setToastProps({
+            severity: 'error',
+            message: '유효하지 않은 인증코드입니다',
+          })
         } else if (error.response?.status === 400) {
-          setToastMessage('유효하지 않은 이메일입니다')
+          setToastProps({
+            severity: 'error',
+            message: '유효하지 않은 이메일입니다',
+          })
         } else {
-          setToastMessage('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
+          setToastProps({
+            severity: 'error',
+            message: '알 수 없는 오류가 발생했습니다',
+          })
         }
       }
     }
@@ -145,13 +181,20 @@ const SignUp = () => {
     setIsSubmitting(true)
     const password = getValues('password')
     if (password === '' || errors.password) {
-      setToastMessage('비밀번호를 확인해주세요')
+      setToastProps({
+        severity: 'error',
+        message: '비밀번호를 확인해주세요',
+      })
     } else if (emailSendStatus !== 'submit') {
-      setEmailSendStatus('error')
-      setToastMessage('이메일을 인증해주세요')
+      setToastProps({
+        severity: 'error',
+        message: '이메일을 인증해주세요',
+      })
     } else if (codeSendStatus !== 'submit') {
-      setCodeSendStatus('error')
-      setToastMessage('인증코드를 인증해주세요')
+      setToastProps({
+        severity: 'error',
+        message: '인증코드를 인증해주세요',
+      })
     } else {
       setSignUpStep(1)
       setIsSubmitting(false)
@@ -165,23 +208,37 @@ const SignUp = () => {
     setIsSubmitting(true)
     const nickName = getValues('nickName')
     if (nickName === undefined || errors.nickName) {
-      setNickNameSendStatus('error')
-      setToastMessage('닉네임을 확인해주세요')
+      setToastProps({
+        severity: 'error',
+        message: '닉네임을 확인해주세요',
+      })
     }
     try {
       await axios.post(`${API_URL}/api/v1/signup/nickname`, {
         nickname: nickName,
       })
       setNickNameSendStatus('submit')
-      setToastMessage('닉네임이 인증되었습니다')
+      setToastProps({
+        severity: 'info',
+        message: '닉네임이 인증되었습니다',
+      })
     } catch (error: any) {
       setNickNameSendStatus('error')
       if (error.response?.status === 409) {
-        setToastMessage('이미 가입된 닉네임입니다')
+        setToastProps({
+          severity: 'error',
+          message: '이미 가입된 닉네임입니다',
+        })
       } else if (error.response?.status === 400) {
-        setToastMessage('유효하지 않은 닉네임입니다')
+        setToastProps({
+          severity: 'error',
+          message: '유효하지 않은 닉네임입니다',
+        })
       } else {
-        setToastMessage('그 밖의 오류') // 네트워크 오류는 어떻게 처리?
+        setToastProps({
+          severity: 'error',
+          message: '알 수 없는 오류가 발생했습니다',
+        })
       }
     }
     setIsSubmitting(false)
@@ -191,13 +248,14 @@ const SignUp = () => {
   const submitSignUp: SubmitHandler<ISignUpInputs> = async (data) => {
     setIsSubmitting(true)
     if (nickNameSendStatus !== 'submit') {
-      setNickNameSendStatus('error')
-      setToastMessage('닉네임을 인증해주세요')
+      setToastProps({
+        severity: 'error',
+        message: '닉네임을 인증해주세요',
+      })
     } else {
       const { email, password, name, nickName } = data
       try {
         const social = socialEmail ? socialEmail : null
-        console.log(email, password, name, nickName, social)
         await axios.post(`${API_URL}/api/v1/signup/form`, {
           email: email,
           password: password,
@@ -205,15 +263,23 @@ const SignUp = () => {
           nickname: nickName,
           socialEmail: social,
         })
-        setToastMessage('회원가입이 완료되었습니다')
-        router.push('/') // 메인페이지로 이동
+        router.push('/login') // 로그인 페이지로 이동
       } catch (error: any) {
         if (error.response?.status === 400) {
-          setToastMessage('유효하지 않은 회원가입 정보입니다')
+          setToastProps({
+            severity: 'error',
+            message: '유효하지 않은 회원가입 정보입니다',
+          })
         } else if (error.response?.status === 409) {
-          setToastMessage('소셜 로그인 정보가 잘못되었습니다')
+          setToastProps({
+            severity: 'error',
+            message: '소셜 로그인 정보가 유효하지 않습니다',
+          })
         } else {
-          setToastMessage('그 밖의 오류')
+          setToastProps({
+            severity: 'error',
+            message: '알 수 없는 오류가 발생했습니다',
+          })
         }
       }
     }
@@ -285,14 +351,16 @@ const SignUp = () => {
                       includeNumber: (value) =>
                         /\d/.test(value) || '숫자를 포함해야 합니다',
                       includeSpecial: (value) =>
-                        /[~!@#$%^&*<>]/.test(value) ||
+                        /[!@#$%^&*]/.test(value) ||
                         '특수문자를 포함해야 합니다',
                       includeAlphabet: (value) =>
                         (/[A-Z]/.test(value) && /[a-z]/.test(value)) ||
                         '대소문자를 포함해야 합니다',
                     },
                   }}
-                  render={({ field }) => <PasswordField field={field} />}
+                  render={({ field }) => (
+                    <PasswordField field={field} setValue={setValue} />
+                  )}
                 />
                 <Button
                   sx={nextButtonStyle}
@@ -365,16 +433,9 @@ const SignUp = () => {
       <CuToast
         open={isOpen}
         onClose={closeToast}
-        severity={
-          emailSendStatus === 'error' ||
-          codeSendStatus === 'error' ||
-          nickNameSendStatus === 'error' ||
-          toastMessage.includes('확인')
-            ? 'error'
-            : 'info'
-        }
+        severity={toastProps.severity}
       >
-        <Typography>{toastMessage}</Typography>
+        <Typography>{toastProps.message}</Typography>
       </CuToast>
     </>
   )

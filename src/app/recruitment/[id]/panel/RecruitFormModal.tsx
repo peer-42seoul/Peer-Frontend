@@ -14,52 +14,12 @@ import CloseQuestionForm, { CloseQuestionList } from './CloseQuestionForm'
 import CheckQuestionForm, { CheckQuestionList } from './CheckQuestionForm'
 import RatioQuestionForm, { RatioQuestionList } from './RatioQuestionForm'
 import useAxiosWithAuth from '@/api/config'
+import useSWR from 'swr'
 interface IInterviewData {
   question: string
   type: 'close' | 'open' | 'ratio' | 'check'
   optionList?: CloseQuestionList | RatioQuestionList | CheckQuestionList | null
 }
-
-const data: IInterviewData[] = [
-  {
-    question: '질문내용 1',
-    type: 'close',
-    optionList: ['1번선택지', '2번선택지'],
-  },
-  {
-    question: '질문내용 2',
-    type: 'open',
-    optionList: null,
-  },
-  {
-    question: '질문내용 3',
-    type: 'ratio',
-    optionList: {
-      number: '5',
-      option1: '일번옵션',
-      option2: '마지막옵션',
-    },
-  },
-  {
-    question: '질문내용 2',
-    type: 'open',
-    optionList: null,
-  },
-  {
-    question: '질문내용 3',
-    type: 'ratio',
-    optionList: {
-      number: '5',
-      option1: '일번옵션',
-      option2: '마지막옵션',
-    },
-  },
-  {
-    question: '질문내용 4',
-    type: 'check',
-    optionList: ['1번선택지', '2번선택지', '3번선택지'],
-  },
-]
 
 const RecruitFormModal = ({
   open,
@@ -74,6 +34,13 @@ const RecruitFormModal = ({
   post_id: string
   role: string
 }) => {
+  const axiosWithAuth = useAxiosWithAuth()
+
+  const { data } = useSWR<IInterviewData[]>(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${post_id}`,
+      (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  )
+
   const [openConfirm, setOpenConfirm] = useState(false)
   const {
     handleSubmit,
@@ -96,12 +63,10 @@ const RecruitFormModal = ({
   const submitForm = () => {
     handleSubmit(onSubmit)()
   }
+  
 
-  const axiosWithAuth = useAxiosWithAuth()
-
-  const onSubmit = async (data: any) => {
-    console.log('data', data)
-    const array = Object.values(data)
+  const onSubmit = async (values: any) => {
+    const array = Object.values(values)
     const answerList = array?.map((res: any) => {
       if (typeof res !== 'string') {
         const idxArr = res?.map((item: any, idx: number) =>

@@ -7,22 +7,29 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import { ControllerRenderProps } from 'react-hook-form'
+import { ControllerRenderProps, UseFormSetValue } from 'react-hook-form'
 import { ISignUpInputs } from '@/types/ISignUpInputs'
 import CheckIcon from '@mui/icons-material/Check'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
 const PasswordField = ({
   field,
+  setValue,
 }: {
   field: ControllerRenderProps<ISignUpInputs, 'password'>
+  setValue: UseFormSetValue<ISignUpInputs>
 }) => {
   const [showPassword, setShowPassword] = useState<'password' | 'text'>(
     'password',
   )
 
+  const deletePassword = () => {
+    setValue('password', '')
+  }
+
   const isLengthValid = field.value.length >= 8
   const isNumberValid = /\d/.test(field.value)
-  const isSpecialValid = /[!@#$%^&*(),.?":{}|<>]/.test(field.value)
+  const isSpecialValid = /[!@#$%^&*]/.test(field.value)
   const isAlphabetValid = /[A-Z]/.test(field.value) && /[a-z]/.test(field.value)
 
   return (
@@ -40,19 +47,24 @@ const PasswordField = ({
         }}
         InputProps={{
           endAdornment: (
-            <IconButton
-              onClick={() => {
-                setShowPassword(
-                  showPassword === 'password' ? 'text' : 'password',
-                )
-              }}
-            >
-              {showPassword === 'password' ? (
-                <VisibilityIcon />
-              ) : (
-                <VisibilityOffIcon />
-              )}
-            </IconButton>
+            <>
+              <IconButton
+                onClick={() => {
+                  setShowPassword(
+                    showPassword === 'password' ? 'text' : 'password',
+                  )
+                }}
+              >
+                {showPassword === 'password' ? (
+                  <VisibilityIcon />
+                ) : (
+                  <VisibilityOffIcon />
+                )}
+              </IconButton>
+              <IconButton onClick={deletePassword} size="small">
+                <HighlightOffIcon />
+              </IconButton>
+            </>
           ),
         }}
       />

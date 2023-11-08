@@ -156,16 +156,12 @@ const ProfileBioEditor = ({
   }
 
   const onSubmit = async (formData: IFormInput) => {
-    const submitData: {
-      profileImage: File | null
-      nickname: string
-      imageChanged: boolean
-      introduction: string
-    } = {
-      ...formData,
-      imageChanged: imageChanged,
-      profileImage: formData.profileImage ? formData.profileImage[0] : null,
-    }
+    const submitData = new FormData()
+    submitData.append('nickname', formData.nickname)
+    submitData.append('introduction', formData.introduction)
+    submitData.append('profileImage', formData.profileImage![0])
+    submitData.append('imageChange', imageChanged.toString().toUpperCase())
+
     console.log('닉네임 중복확인', isNicknameUnique)
     if (!isNicknameUnique) {
       setToastMessage({

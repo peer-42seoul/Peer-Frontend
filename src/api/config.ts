@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 const useAxiosWithAuth = () => {
   const accessToken = useAuthStore.getState().accessToken
-  const [cookies] = useCookies(['refreshToken'])
+  const [cookies, , removeCookie] = useCookies(['refreshToken'])
   const refreshToken = cookies.refreshToken
 
   const router = useRouter()
@@ -31,12 +31,16 @@ const useAxiosWithAuth = () => {
       return response
     },
     async (error) => {
+      const currentPageUrl = window.location.pathname
+      console.log(currentPageUrl)
       if (error.response?.status === 401) {
-        if (!refreshToken) {
+        console.log('successful error handling')
+        if (!refreshToken || !accessToken) {
           // 로그아웃 후 리디렉션
           useAuthStore.getState().logout()
-          router.push('/login')
-          alert('다시 로그인 해주세요')
+          removeCookie('refreshToken', { path: '/' })
+          router.push('/login?redirect=' + currentPageUrl)
+          return
         } else {
           try {
             // accessToken 갱신 요청
@@ -55,8 +59,10 @@ const useAxiosWithAuth = () => {
           } catch (refreshError) {
             // 로그아웃 후 리디렉션
             useAuthStore.getState().logout()
+            removeCookie('refreshToken', { path: '/' })
             alert('다시 로그인 해주세요')
-            router.push('/login')
+            router.push('/login?redirect=' + currentPageUrl)
+            return
           }
         }
       }

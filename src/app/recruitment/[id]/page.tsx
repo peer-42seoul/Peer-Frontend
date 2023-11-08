@@ -12,29 +12,35 @@ import {
   List,
   Container,
 } from '@mui/material'
-import { IPostDetail, Tag } from '@/types/IPostDetail'
-// import Image from 'next/image'
+import { IPostDetail, ITag } from '@/types/IPostDetail'
+import Image from 'next/image'
 import React, { useMemo } from 'react'
 import RecruitFormModal from './panel/RecruitFormModal'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import RecruitFormText from './panel/RecruitFormText'
 import useMedia from '@/hook/useMedia'
 import ApplyButton from './panel/ApplyButton'
 import LinkButton from './panel/LinkButton'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
+import useAuthStore from '@/states/useAuthStore'
+import useAxiosWithAuth from '@/api/config'
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
+  const router = useRouter()
   const type = useSearchParams().get('type') ?? 'projects'
   const [open, setOpen] = React.useState(false)
   const [roleOpen, setRoleOpen] = React.useState(false)
   const [role, setRole] = React.useState<string>('')
 
   const { isPc } = useMedia()
-  const { data, isLoading, error } = useSWR<IPostDetail>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
-    defaultGetFetcher,
-  )
+  const { isLogin } = useAuthStore()
+  const axiosInstance = useAxiosWithAuth()
+
+  const { data, isLoading, error } = useSWR<IPostDetail>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
+    isLogin ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      : defaultGetFetcher)
+
   const { data: userData } = useSWR<{
     nickname: string
     profileImageUrl: string
@@ -51,9 +57,13 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   }, [data])
 
   const handleApply = (selectedRole: string) => {
-    setRole(selectedRole)
-    setRoleOpen(false)
-    setOpen(true)
+    if (isLogin)
+      router.push("/login")
+    else {
+      setRole(selectedRole)
+      setRoleOpen(false)
+      setOpen(true)
+    }
   }
 
   if (isLoading) return <Typography>로딩중...</Typography>
@@ -72,12 +82,12 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
       {isPc ? (
         <Container>
           <Stack direction={'row'} gap={4} marginBottom={6}>
-            {/* <Image
-              src={userData?.profileUrl}
+            <Image
+              src={userData?.profileImageUrl ?? ''}
               alt="leader_profile"
               width={300}
               height={300}
-            /> */}
+            />
             <Box display="flex" flexDirection="column" gap={2}>
               <Stack gap={2} direction="row">
                 <Typography variant="h5">{data?.title}</Typography>
@@ -119,7 +129,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           <RecruitFormText label="설명" content={data?.content} />
           <RecruitFormText label="태그">
             <Box>
-              {data?.tagList?.map((tag: Tag, idx: number) => (
+              {data?.tagList?.map((tag: ITag, idx: number) => (
                 <Chip
                   label={tag?.tagName}
                   size="small"
@@ -156,12 +166,12 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             </Typography>
             <Typography>{data?.place}</Typography>
           </Stack>
-          {/* <Image
-            src={userData?.profileUrl}
+          <Image
+            src={userData?.profileImageUrl ?? ''}
             alt="leader_profile"
             width={300}
             height={300}
-          /> */}
+          />
           <RecruitFormText label="총 인원" content={total?.toString() ?? '0'} />
           <RecruitFormText label="목표 작업기간" content={data?.due} />
           <RecruitFormText label="지역" content={data?.region} />
@@ -176,7 +186,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           <RecruitFormText label="설명" content={data?.content} />
           <RecruitFormText label="태그">
             <Box>
-              {data?.tagList?.map((tag: Tag, idx: number) => (
+              {data?.tagList?.map((tag: ITag, idx: number) => (
                 <Chip
                   label={tag?.tagName}
                   size="small"
@@ -191,10 +201,12 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             variant="contained"
             size="large"
             onClick={() => {
-              setRoleOpen(true)
+              if (isLogin)
+                router.push("/login")
+              else
+                setRoleOpen(true)
             }}
           >
-            {' '}
             지원하기
           </Button>
         </>
