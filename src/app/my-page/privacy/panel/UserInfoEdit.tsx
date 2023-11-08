@@ -33,7 +33,15 @@ export default function UserInfoEdit({
     control,
     formState: { errors },
     getValues,
-  } = useForm<IChangePassword>({ mode: 'onChange' })
+    reset,
+  } = useForm<IChangePassword>({
+    defaultValues: {
+      presentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
+    mode: 'onChange',
+  })
   const [showPresentPassword, setShowPresentPassword] = useState<
     'password' | 'text'
   >('password')
@@ -52,6 +60,7 @@ export default function UserInfoEdit({
         severity: 'success',
         message: '비밀번호가 변경되었습니다',
       })
+      reset()
     } catch (error: any) {
       if (error.response?.status === 404) {
         setToastProps({
@@ -178,11 +187,6 @@ export default function UserInfoEdit({
               defaultValue=""
               rules={{
                 required: true,
-                pattern: {
-                  value:
-                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*<>])[A-Za-z\d~!@#$%^&*<>]{8,}$/i,
-                  message: '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
-                },
                 validate: (value) =>
                   value === getValues('newPassword') ||
                   '비밀번호가 일치하지 않습니다',
