@@ -7,7 +7,15 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
-import { AlertColor, Box, Button, Chip, Stack, Typography } from '@mui/material'
+import {
+  AlertColor,
+  Box,
+  Button,
+  Chip,
+  InputAdornment,
+  Stack,
+  Typography,
+} from '@mui/material'
 import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
 
@@ -49,51 +57,66 @@ const KeywordAddingField = ({
   const textFieldRef = useRef<HTMLInputElement | null>(null)
   const axiosWithAuth = useAxiosWithAuth()
 
+  const validateData = (inputValue: string) => {
+    const trimmed = inputValue.trim()
+    if (trimmed.length < 2) {
+      setToastMessage({
+        severity: 'error',
+        message: '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
+      })
+      return false
+    } else if (keywordList?.find((keyword) => keyword.label === trimmed)) {
+      setToastMessage({
+        severity: 'error',
+        message: '이미 등록된 알림 키워드입니다.',
+      })
+      return false
+    }
+    return true
+  }
+
+  const addKeyword = async (trimmed: string) => {
+    await axiosWithAuth
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/add`, {
+        newKeyword: trimmed,
+      })
+      .then(() => {
+        setToastMessage({
+          severity: 'success',
+          message: `'${trimmed}'를 알림 키워드 목록에 추가하였습니다.`,
+        })
+        mutate()
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          setToastMessage({
+            severity: 'error',
+            message: `${error.response.data.message}`,
+          })
+        } else {
+          setToastMessage({
+            severity: 'error',
+            message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
+          })
+        }
+      })
+  }
+
   const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      const trimmed = inputValue.trim()
-      if (trimmed.length < 2) {
-        setToastMessage({
-          severity: 'error',
-          message:
-            '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
-        })
-        return
-      } else if (keywordList?.find((keyword) => keyword.label === trimmed)) {
-        setToastMessage({
-          severity: 'error',
-          message: '이미 등록된 알림 키워드입니다.',
-        })
-        return
-      }
-      await axiosWithAuth
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/add`, {
-          newKeyword: trimmed,
-        })
-        .then(() => {
-          setToastMessage({
-            severity: 'success',
-            message: `'${trimmed}'를 알림 키워드 목록에 추가하였습니다.`,
-          })
-          mutate()
-        })
-        .catch((error) => {
-          if (error.response.status === 400) {
-            setToastMessage({
-              severity: 'error',
-              message: `${error.response.data.message}`,
-            })
-          } else {
-            setToastMessage({
-              severity: 'error',
-              message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
-            })
-          }
-        })
+      if (validateData(inputValue) === false) return
+      await addKeyword(inputValue.trim())
       console.log(inputValue)
       setInputValue('' as string)
     }
+  }
+
+  const handleOnClick = async () => {
+    if (validateData(inputValue) === false) return
+    await addKeyword(inputValue.trim())
+    console.log(inputValue)
+    setInputValue('' as string)
   }
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,6 +139,17 @@ const KeywordAddingField = ({
         }}
         inputProps={{ maxLength: 7 }}
         fullWidth
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <CuButton
+                action={handleOnClick}
+                variant="contained"
+                message="추가"
+              />
+            </InputAdornment>
+          ),
+        }}
       />
     </Box>
   )
