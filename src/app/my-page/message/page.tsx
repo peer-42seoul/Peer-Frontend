@@ -10,7 +10,7 @@ import useModal from '@/hook/useModal'
 import useMessageListState from '@/states/useMessageListState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageContainer from './panel/MessageContainer'
-import MessageWritingFormModal from './panel/NewMessageModal'
+import NewMessageModal from './panel/NewMessageModal'
 
 interface INewMessageButtonProps {
   isPc: boolean
@@ -68,7 +68,7 @@ const MessageMain = () => {
         />
       </Box>
       {isOpen && (
-        <MessageWritingFormModal
+        <NewMessageModal
           isOpen={isOpen}
           handleClose={closeModal}
           setMessageData={setMessageList}
