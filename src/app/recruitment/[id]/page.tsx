@@ -180,7 +180,13 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             content={(total?.toString() ?? '0') + ' 명'}
           />
           <RecruitFormText label="목표 작업기간" content={data?.due} />
-          <RecruitFormText label="지역" content={data?.region} />
+          <RecruitFormText label="지역">
+            {data?.region ? (
+              <Typography>{data.region[0] + ' ' + data.region?.[1]}</Typography>
+            ) : (
+              <Typography>없음</Typography>
+            )}
+          </RecruitFormText>
           <RecruitFormText label="역할">
             <Box>
               {data?.roleList?.map(({ name, number }, idx: number) => (
