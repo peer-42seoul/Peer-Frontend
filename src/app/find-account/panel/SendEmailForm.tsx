@@ -39,11 +39,8 @@ const SendEmailForm = () => {
   } = useForm<{ email: string }>()
 
   const onSubmit = async (data: { email: string }) => {
-    const email = data.email
     axios
-      .post(`${API_URL}/api/v1/signin/find`, {
-        email: email,
-      })
+      .post(`${API_URL}/api/v1/signin/find`, data)
       .then((res) => {
         if (res.status == 200) setIsEmailSuccessful(true)
       })
