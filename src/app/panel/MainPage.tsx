@@ -51,11 +51,15 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const pageSize = 5
 
-  const { data, isValidating, error, mutate } = useSWR<IPagination<IPost[]>>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region1=${detailOption.region1}&region2=${detailOption.region2}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
-    isLogin ? (url: string) => axiosInstance.get(url).then((res) => res.data)
-      : defaultGetFetcher, {
-    fallbackData: initData,
-  })
+  const { data, isValidating, error, mutate } = useSWR<IPagination<IPost[]>>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region1=${detailOption.region1}&region2=${detailOption.region2}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
+    isLogin
+      ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      : defaultGetFetcher,
+    {
+      fallbackData: initData,
+    },
+  )
   const pageLimit = data?.totalPages ?? 1
   const { target, spinner } = useInfiniteScroll({
     setPage,

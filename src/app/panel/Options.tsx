@@ -1,12 +1,19 @@
-import {Box, Button, FormGroup, Grid, SelectChangeEvent, Stack,} from '@mui/material'
+import {
+  Box,
+  Button,
+  FormGroup,
+  Grid,
+  SelectChangeEvent,
+  Stack,
+} from '@mui/material'
 
-import {useState} from 'react'
-import {useForm} from 'react-hook-form'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import FormCheckbox from './FormCheckbox'
 import TagAutoComplete from '@/components/TagAutoComplete'
 import SetupSelect from '../teams/@setting/[id]/panel/SetupSelect'
-import useSWR from "swr";
-import {defaultGetFetcher} from "@/api/fetchers";
+import useSWR from 'swr'
+import { defaultGetFetcher } from '@/api/fetchers'
 
 const Options = ({ setDetailOption }: { setDetailOption: any }) => {
   const { handleSubmit, control, reset } = useForm({
@@ -19,20 +26,18 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
       statusdone: false,
     },
   })
-  const { data: listData } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`, defaultGetFetcher)
-    const [due, setDue] = useState('');
+  const { data: listData } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
+    defaultGetFetcher,
+  )
+  const [due, setDue] = useState('')
   const [tagData, setTagData] = useState<string[]>([])
   const [location, setLocation] = useState<string>('')
   const [parentLocation, setParentLocation] = useState<string>('선택안함')
 
   const onSubmit = (data: any) => {
-    const {
-      placeOnline,
-      placeOffline,
-      placemix,
-      statusonGoing,
-      statusdone,
-    } = data
+    const { placeOnline, placeOffline, placemix, statusonGoing, statusdone } =
+      data
 
     const makeCommaString = (obj: { [key: string]: boolean }) => {
       const trueKeys = Object.keys(obj).filter((key) => obj[key])
@@ -40,21 +45,20 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     }
 
     const status = makeCommaString({
-      "ONGOING": statusonGoing,
-      "DONE": statusdone,
+      ONGOING: statusonGoing,
+      DONE: statusdone,
     })
 
     const place = makeCommaString({
-      "ONLINE": placeOnline,
-      "OFFLINE": placeOffline,
-      "MIX": placemix
+      ONLINE: placeOnline,
+      OFFLINE: placeOffline,
+      MIX: placemix,
     })
 
     const tag = tagData.length ? tagData.join(',') : ''
     setDetailOption({
-      due: due === "선택안함" ? '' : due,
-      region1:
-        parentLocation === '선택안함' ? '' : parentLocation,
+      due: due === '선택안함' ? '' : due,
+      region1: parentLocation === '선택안함' ? '' : parentLocation,
       region2: parentLocation === '선택안함' ? '' : location,
       place,
       status,
@@ -76,9 +80,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         <Grid item xs={12}>
           <Box>작업 스택</Box>
           <TagAutoComplete
-            list={listData?.map(({name}: {name: string}) => (
-                name
-            ))}
+            list={listData?.map(({ name }: { name: string }) => name)}
             datas={tagData}
             setData={setTagData}
           />
@@ -86,11 +88,9 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         <Grid item xs={12} sm={6}>
           <Box>목표 기간</Box>
           <SetupSelect
-              value={due}
-              setValue={(event: SelectChangeEvent) =>
-                  setDue(event.target.value)
-              }
-              type="dueToSearch"
+            value={due}
+            setValue={(event: SelectChangeEvent) => setDue(event.target.value)}
+            type="dueToSearch"
           />
         </Grid>
         <Grid item xs={12} sm={6}>

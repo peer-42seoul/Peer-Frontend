@@ -15,7 +15,7 @@ import CheckQuestionForm, { CheckQuestionList } from './CheckQuestionForm'
 import RatioQuestionForm, { RatioQuestionList } from './RatioQuestionForm'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
-import useAuthStore from "@/states/useAuthStore";
+import useAuthStore from '@/states/useAuthStore'
 interface IInterviewData {
   question: string
   type: 'CLOSE' | 'OPEN' | 'RATIO' | 'CHECK'
@@ -38,8 +38,10 @@ const RecruitFormModal = ({
   const axiosWithAuth = useAxiosWithAuth()
   const { isLogin } = useAuthStore()
 
-  const { data } = useSWR<IInterviewData[]>(isLogin ?
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}` : null,
+  const { data } = useSWR<IInterviewData[]>(
+    isLogin
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`
+      : null,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
@@ -65,7 +67,6 @@ const RecruitFormModal = ({
   const submitForm = () => {
     handleSubmit(onSubmit)()
   }
-
 
   const onSubmit = async (values: any) => {
     const array = Object.values(values)

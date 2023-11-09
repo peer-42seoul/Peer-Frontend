@@ -37,9 +37,12 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const { isLogin } = useAuthStore()
   const axiosInstance = useAxiosWithAuth()
 
-  const { data, isLoading, error } = useSWR<IPostDetail>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
-    isLogin ? (url: string) => axiosInstance.get(url).then((res) => res.data)
-      : defaultGetFetcher)
+  const { data, isLoading, error } = useSWR<IPostDetail>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
+    isLogin
+      ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      : defaultGetFetcher,
+  )
 
   const total = useMemo(() => {
     if (!data) return 0
@@ -49,8 +52,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   }, [data])
 
   const handleApply = (selectedRole: string) => {
-    if (!isLogin)
-      router.push("/login")
+    if (!isLogin) router.push('/login')
     else {
       setRole(selectedRole)
       setRoleOpen(false)
@@ -108,10 +110,17 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               />
             </Box>
           </Stack>
-          <RecruitFormText label="총 인원" content={(total?.toString() ?? '0') + " 명"} />
+          <RecruitFormText
+            label="총 인원"
+            content={(total?.toString() ?? '0') + ' 명'}
+          />
           <RecruitFormText label="목표 작업기간" content={data?.due} />
-          <RecruitFormText label="지역" >
-            {data?.region ? <Typography>{data.region[0] + " " + data.region?.[1]}</Typography> : <Typography>없음</Typography>}
+          <RecruitFormText label="지역">
+            {data?.region ? (
+              <Typography>{data.region[0] + ' ' + data.region?.[1]}</Typography>
+            ) : (
+              <Typography>없음</Typography>
+            )}
           </RecruitFormText>
           <RecruitFormText label="역할">
             <Box>
@@ -133,7 +142,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               ))}
             </Box>
           </RecruitFormText>
-        </Container >
+        </Container>
       ) : (
         <>
           <Drawer
@@ -166,7 +175,10 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             width={300}
             height={300}
           />
-          <RecruitFormText label="총 인원" content={(total?.toString() ?? '0') + " 명"} />
+          <RecruitFormText
+            label="총 인원"
+            content={(total?.toString() ?? '0') + ' 명'}
+          />
           <RecruitFormText label="목표 작업기간" content={data?.due} />
           <RecruitFormText label="지역" content={data?.region} />
           <RecruitFormText label="역할">
@@ -195,10 +207,8 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             variant="contained"
             size="large"
             onClick={() => {
-              if (!isLogin)
-                router.push("/login")
-              else
-                setRoleOpen(true)
+              if (!isLogin) router.push('/login')
+              else setRoleOpen(true)
             }}
           >
             지원하기

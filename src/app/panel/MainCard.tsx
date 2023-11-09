@@ -63,7 +63,10 @@ const MainCard = ({
 
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <Link href={`/recruitment/${recruit_id}?type=${type}`} style={{ textDecoration: "none" }} >
+      <Link
+        href={`/recruitment/${recruit_id}?type=${type}`}
+        style={{ textDecoration: 'none' }}
+      >
         <Box sx={{ position: 'relative' }}>
           <CardMedia
             component="img"
@@ -87,7 +90,10 @@ const MainCard = ({
       </Link>
       <CardHeader
         avatar={
-          <Link href={`/recruitment/${recruit_id}?type=${type}`} style={{ textDecoration: "none" }}>
+          <Link
+            href={`/recruitment/${recruit_id}?type=${type}`}
+            style={{ textDecoration: 'none' }}
+          >
             <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
               <Box
                 component="img"
@@ -103,9 +109,19 @@ const MainCard = ({
             <Favorite sx={{ color: isFavorite ? 'red' : 'gray' }} />
           </IconButton>
         }
-        title={<Link href={`/recruitment/${recruit_id}?type=${type}`} style={{ textDecoration: "none" }}>{user_nickname}</Link>}
+        title={
+          <Link
+            href={`/recruitment/${recruit_id}?type=${type}`}
+            style={{ textDecoration: 'none' }}
+          >
+            {user_nickname}
+          </Link>
+        }
       />
-      <Link href={`/recruitment/${recruit_id}?type=${type}`} style={{ textDecoration: "none" }}>
+      <Link
+        href={`/recruitment/${recruit_id}?type=${type}`}
+        style={{ textDecoration: 'none' }}
+      >
         <CardContent>
           <Typography variant="body2" color="text.secondary">
             {title}
