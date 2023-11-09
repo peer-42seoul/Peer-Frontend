@@ -60,20 +60,14 @@ export default function UserInfoEdit({
       })
       reset()
     } catch (error: any) {
-      if (error.response?.status === 404) {
+      if (
+        error.response?.status === 404 || // 사용자를 찾을 수 없음
+        error.response?.status === 400 || // 변경할 비밀번호와 확인 비밀번호가 일치하지 않음
+        error.response?.status === 403 // 현재 비밀번호가 올바르지 않음
+      ) {
         setToastProps({
           severity: 'error',
-          message: error.response.data.message, // 사용자를 찾을 수 없음. 토큰 문제
-        })
-      } else if (error.response?.status === 400) {
-        setToastProps({
-          severity: 'error',
-          message: error.response.data.message, // 변경할 비밀번호가 일치하지 않음
-        })
-      } else if (error.response?.status === 403) {
-        setToastProps({
-          severity: 'error',
-          message: error.response.data.message, // 현재 비밀번호가 올바르지 않음
+          message: error.response.data.message,
         })
       } else {
         setToastProps({
