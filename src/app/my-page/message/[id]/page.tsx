@@ -82,9 +82,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (!data) return
-    setUpdatedData((prevData: IMessage[] | undefined) => {
-      if (!prevData) return data
-      return [...data, ...prevData]
+    // data : 새로 불러온 데이터 (예전 메시지)
+    // currentData : 현재 데이터 (최근 메시지)
+    setUpdatedData((currentData: IMessage[] | undefined) => {
+      if (!currentData) return data
+      return [...data, ...currentData]
     })
     setIsEnd(data[0].isEnd)
     setPrevScrollHeight(scrollRef.current?.scrollHeight)
@@ -103,9 +105,9 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   const addNewMessage = (newMessage: IMessage) => {
     if (!updatedData) return
-    setUpdatedData((prevData: IMessage[] | undefined) => {
-      if (!prevData) return [newMessage]
-      return [...prevData, newMessage]
+    setUpdatedData((currentData: IMessage[] | undefined) => {
+      if (!currentData) return [newMessage]
+      return [...currentData, newMessage]
     })
   }
 
