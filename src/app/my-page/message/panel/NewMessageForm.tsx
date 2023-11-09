@@ -6,7 +6,7 @@ import { IMessageListData, IMessageTarget } from '@/types/IMessage'
 interface INewMessageFormProps {
   userInfo?: IMessageTarget
   setMessageData: (newMessageData: IMessageListData[]) => void
-  handleClose?: any | undefined
+  handleClose: () => void
 }
 
 interface IMessageData {
