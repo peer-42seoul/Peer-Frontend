@@ -7,10 +7,10 @@ import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
-import useMessageDataState from '@/states/useMessageDataState'
-import { IMessagObject } from '@/types/IMessageInformation'
+import useMessageListState from '@/states/useMessageListState'
+import { IMessageListData } from '@/types/IMessage'
 import MessageContainer from './panel/MessageContainer'
-import MessageWritingFormModal from './panel/MessageWritingFormModal'
+import MessageWritingFormModal from './panel/NewMessageModal'
 
 const MessageMain = () => {
   // NOTE : useRef가 필요한 이유? - 필요없음이 확인되면 지우기
@@ -18,15 +18,15 @@ const MessageMain = () => {
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
   const axiosWithAuth = useAxiosWithAuth()
-  const { data, error, isLoading } = useSWR<IMessagObject[]>(
+  const { data, error, isLoading } = useSWR<IMessageListData[]>(
     '/api/v1/message/list',
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
-  const { setMessages, resetMessages } = useMessageDataState()
+  const { setMessageList, resetMessageList } = useMessageListState()
 
   useEffect(() => {
     return () => {
-      resetMessages()
+      resetMessageList()
     }
   }, [])
 
@@ -52,7 +52,7 @@ const MessageMain = () => {
         <MessageWritingFormModal
           isOpen={isOpen}
           handleClose={closeModal}
-          setMessageData={setMessages}
+          setMessageData={setMessageList}
         />
       )}
     </Container>
