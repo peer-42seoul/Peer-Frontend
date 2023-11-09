@@ -122,7 +122,6 @@ const AlertModal = ({
   )
 }
 
-// TODO 리스폰스 에러 시 유저에게 알려주는 코드 구현 필요. swr error 객체 확인하기
 const MyInterests = () => {
   const { isPc } = useMedia()
   const [type, setType] = useState('PROJECT')
