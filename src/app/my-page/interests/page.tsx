@@ -1,6 +1,5 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
-import MainCard from '@/app/panel/MainCard'
 import { ProjectType } from '@/app/panel/MainPage'
 import CloseButton from '@/components/CloseButton'
 import CuButton from '@/components/CuButton'
@@ -12,9 +11,6 @@ import useToast from '@/hook/useToast'
 import { ITag } from '@/types/IPostDetail'
 import {
   AlertColor,
-  Box,
-  CircularProgress,
-  Grid,
   MenuItem,
   Stack,
   Tab,
@@ -24,6 +20,7 @@ import {
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
+import InterestsContents from './panel/InterestsContents'
 
 interface IMainCard {
   title: string
@@ -53,8 +50,8 @@ const TypeToggle = ({
   console.log('dropdown', type)
   return (
     <Select value={type} onChange={handleChange} variant="standard">
-      <MenuItem value={'project'}>프로젝트</MenuItem>
-      <MenuItem value={'study'}>스터디</MenuItem>
+      <MenuItem value={'PROJECT'}>프로젝트</MenuItem>
+      <MenuItem value={'STUDY'}>스터디</MenuItem>
       {/* <MenuItem value={'showcase'}>쇼케이스</MenuItem> 2step */}
     </Select>
   )
@@ -76,8 +73,8 @@ const TypeTabs = ({
       aria-label="menu tabs"
       variant="fullWidth"
     >
-      <Tab label="프로젝트" value={'project'} />
-      <Tab label="스터디" value={'study'} />
+      <Tab label="프로젝트" value={'PROJECT'} />
+      <Tab label="스터디" value={'STUDY'} />
       {/* <Tab label="쇼케이스" value={'showcase'} /> */}
     </Tabs>
   )
@@ -125,9 +122,10 @@ const AlertModal = ({
   )
 }
 
+// TODO 리스폰스 에러 시 유저에게 알려주는 코드 구현 필요. swr error 객체 확인하기
 const MyInterests = () => {
   const { isPc } = useMedia()
-  const [type, setType] = useState('project')
+  const [type, setType] = useState('PROJECT')
   const [page, setPage] = useState<number>(1)
   const [pageLimit, setPageLimit] = useState<number>(1)
   const [postList, setPostList] = useState<Array<IMainCard>>(
@@ -193,9 +191,6 @@ const MyInterests = () => {
     page,
   })
 
-  if (isLoading) return <Typography>로딩중 입니다.</Typography>
-  if (!data) return <Typography>데이터가 없습니다.</Typography>
-
   return (
     <div>
       <CuToast
@@ -221,24 +216,19 @@ const MyInterests = () => {
         action={openModal}
         disabled={isDeleting}
       />
-      <Grid
-        container
-        spacing={[0, 2]}
-        alignItems="center"
-        justifyContent={['space-evenly', 'flex-start']}
-        sx={{ width: '100%' }}
-        direction="row"
-      >
-        {postList.map((item) => (
-          <Grid item key={item.post_id} xs={10} sm={4}>
-            <MainCard {...item} type={type as ProjectType} />
-          </Grid>
-        ))}
-        <Grid item xs={10} sm={4}>
-          <Box ref={target}></Box>
-        </Grid>
-      </Grid>
-      {spinner && <CircularProgress />}
+
+      {postList.length ? (
+        <InterestsContents
+          postList={postList}
+          spinner={spinner}
+          target={target}
+          type={type as ProjectType}
+        />
+      ) : isLoading ? (
+        <Typography>로딩 중</Typography>
+      ) : (
+        <Typography>관심있다고 표시한 페이지가 없습니다.</Typography>
+      )}
     </div>
   )
 }
