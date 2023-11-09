@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import useSWR from 'swr'
-import { Box, Container } from '@mui/material'
+import { Box, Container, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
@@ -11,6 +11,33 @@ import useMessageListState from '@/states/useMessageListState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageContainer from './panel/MessageContainer'
 import MessageWritingFormModal from './panel/NewMessageModal'
+
+interface INewMessageButtonProps {
+  isPc: boolean
+  openModal: () => void
+}
+
+const NewMessageButton = ({ isPc, openModal }: INewMessageButtonProps) => {
+  return (
+    <Stack direction="row" justifyContent={'flex-end'}>
+      {isPc ? (
+        <CuButton
+          variant="outlined"
+          action={openModal}
+          message="새 쪽지 보내기"
+          style={{ marginBottom: '32px' }}
+        />
+      ) : (
+        <CuButton
+          variant="text"
+          action={openModal}
+          message="+"
+          style={{ marginBottom: '32px' }}
+        />
+      )}
+    </Stack>
+  )
+}
 
 const MessageMain = () => {
   const { isPc } = useMedia()
@@ -32,12 +59,7 @@ const MessageMain = () => {
   return (
     <Container sx={{ height: '90vh' }}>
       <Box sx={{ width: '100%' }}>
-        <CuButton
-          variant="outlined"
-          action={() => openModal()}
-          message="새 쪽지 보내기"
-          style={{ marginBottom: '32px' }}
-        />
+        <NewMessageButton isPc={isPc} openModal={openModal} />
         <MessageContainer
           originalMessageData={data}
           error={error}
