@@ -4,7 +4,6 @@ import {
   Avatar,
   Box,
   Card,
-  CardActions,
   CardContent,
   CardHeader,
   CardMedia,
@@ -13,8 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { red } from '@mui/material/colors'
-import { use, useState } from 'react'
-import axios from 'axios'
+import { useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
 import { ProjectType } from './MainPage'
