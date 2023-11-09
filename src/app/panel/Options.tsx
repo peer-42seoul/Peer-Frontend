@@ -1,25 +1,16 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormGroup,
-  Grid,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Stack,
-} from '@mui/material'
+import {Box, Button, FormGroup, Grid, SelectChangeEvent, Stack,} from '@mui/material'
 
-import { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import {useState} from 'react'
+import {useForm} from 'react-hook-form'
 import FormCheckbox from './FormCheckbox'
 import TagAutoComplete from '@/components/TagAutoComplete'
 import SetupSelect from '../teams/@setting/[id]/panel/SetupSelect'
+import useSWR from "swr";
+import {defaultGetFetcher} from "@/api/fetchers";
 
 const Options = ({ setDetailOption }: { setDetailOption: any }) => {
   const { handleSubmit, control, reset } = useForm({
     defaultValues: {
-      due: -1,
       placeOnline: false,
       placeOffline: false,
       placemix: false,
@@ -28,72 +19,52 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
       statusdone: false,
     },
   })
+  const { data: listData } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`, defaultGetFetcher)
+    const [due, setDue] = useState('');
   const [tagData, setTagData] = useState<string[]>([])
   const [location, setLocation] = useState<string>('')
   const [parentLocation, setParentLocation] = useState<string>('선택안함')
-  const stackList = ['javaScript', 'react', 'TypeScript', 'NextJs']
-  const dueList = [
-    '1주일',
-    '2주일',
-    '3주일',
-    '4주일',
-    '1개월',
-    '2개월',
-    '3개월',
-    '4개월',
-    '5개월',
-    '6개월',
-    '7개월',
-    '8개월',
-    '9개월',
-    '10개월',
-    '11개월',
-    '12개월',
-    '12개월 이상',
-  ]
 
   const onSubmit = (data: any) => {
     const {
-      due,
       placeOnline,
       placeOffline,
       placemix,
-      statusBefore,
       statusonGoing,
       statusdone,
     } = data
 
     const makeCommaString = (obj: { [key: string]: boolean }) => {
       const trueKeys = Object.keys(obj).filter((key) => obj[key])
-      const resultString = trueKeys.join(',')
-      return resultString
+      return trueKeys.join(',')
     }
 
     const status = makeCommaString({
-      BEFORE: statusBefore,
-      ONGOING: statusonGoing,
-      AFTER: statusdone,
+      "ONGOING": statusonGoing,
+      "DONE": statusdone,
     })
 
     const place = makeCommaString({
-      online: placeOnline,
-      offline: placeOffline,
-      mix: placemix,
+      "ONLINE": placeOnline,
+      "OFFLINE": placeOffline,
+      "MIX": placemix
     })
 
     const tag = tagData.length ? tagData.join(',') : ''
     setDetailOption({
-      due: due == -1 || !due ? '' : due,
-      region:
-        parentLocation === '선택안함' ? '' : parentLocation + ' ' + location,
-      place: place,
-      status: status,
-      tag: tag,
+      due: due === "선택안함" ? '' : due,
+      region1:
+        parentLocation === '선택안함' ? '' : parentLocation,
+      region2: parentLocation === '선택안함' ? '' : location,
+      place,
+      status,
+      tag,
     })
   }
 
   const handleReset = () => {
     reset()
+    setDue('')
     setTagData([])
     setLocation('')
     setParentLocation('')
@@ -105,28 +76,21 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         <Grid item xs={12}>
           <Box>작업 스택</Box>
           <TagAutoComplete
-            list={stackList}
+            list={listData?.map(({name}: {name: string}) => (
+                name
+            ))}
             datas={tagData}
             setData={setTagData}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Box>목표 기간</Box>
-          <Controller
-            name="due"
-            control={control}
-            render={({ field }) => (
-              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                <Select {...field}>
-                  <MenuItem value={-1}>선택안함</MenuItem>
-                  {dueList.map((item, index) => (
-                    <MenuItem key={index} value={index}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
+          <SetupSelect
+              value={due}
+              setValue={(event: SelectChangeEvent) =>
+                  setDue(event.target.value)
+              }
+              type="dueToSearch"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -162,11 +126,6 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         <Grid item xs={12} sm={6}>
           <Box>작업 단계</Box>
           <FormGroup row>
-            <FormCheckbox
-              name="statusBefore"
-              label="모집전"
-              control={control}
-            />
             <FormCheckbox
               name="statusonGoing"
               label="모집중"
