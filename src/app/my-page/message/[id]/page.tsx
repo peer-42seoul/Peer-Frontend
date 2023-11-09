@@ -146,7 +146,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
           />
         ))}
       </Box>
-      <MessageForm targetId={target.userId} addNewMessage={addNewMessage} />
+      <MessageForm
+        view={'PC_VIEW'}
+        targetId={target.userId}
+        addNewMessage={addNewMessage}
+      />
     </Box>
   )
 }
