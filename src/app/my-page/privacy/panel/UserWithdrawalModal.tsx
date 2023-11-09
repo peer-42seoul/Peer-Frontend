@@ -6,6 +6,9 @@ import { useState, Dispatch, SetStateAction } from 'react'
 import { Box, Button, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
+import useAuthStore from '@/states/useAuthStore'
+import { useRouter } from 'next/navigation'
+import { useCookies } from 'react-cookie'
 
 const UserWithdrawalModal = ({
   setToastProps,
@@ -19,6 +22,8 @@ const UserWithdrawalModal = ({
   const handleClose = () => setOpen(false)
   const [password, setPassword] = useState('')
   const axiosInstance = useAxiosWithAuth()
+  const router = useRouter()
+  const [, , removeCookie] = useCookies(['refreshToken'])
 
   const handleDelete = async () => {
     if (password === '') {
@@ -35,8 +40,11 @@ const UserWithdrawalModal = ({
           password: password,
         },
       })
+      useAuthStore.getState().logout()
+      removeCookie('refreshToken', { path: '/' })
       alert('계정이 삭제되었습니다')
       handleClose()
+      router.push('/')
     } catch (error: any) {
       if (error.response?.status === 401) {
         setToastProps({
