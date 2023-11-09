@@ -152,8 +152,9 @@ const MyInterests = () => {
     setType(newValue as string)
     setPostList([])
   }
+
   const axiosInstance = useAxiosWithAuth()
-  const { data, isLoading, mutate } = useSWR<IInterestResponse>(
+  const { data, isLoading, mutate, error } = useSWR<IInterestResponse>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=10`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
@@ -182,7 +183,14 @@ const MyInterests = () => {
       setPostList((prev) => prev.concat(data.postList))
       setPageLimit((prev) => prev + 1)
     }
-  }, [isLoading, data])
+    if (error && error?.response?.data?.message) {
+      setToastMessage({
+        severity: 'error',
+        message: `${error.response.data.message}`,
+      })
+      openToast()
+    }
+  }, [error, isLoading, data])
 
   const { target, spinner } = useInfiniteScroll({
     setPage,
