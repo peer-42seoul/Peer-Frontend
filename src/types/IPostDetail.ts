@@ -42,7 +42,7 @@ export interface IRole {
   number: number
 }
 
-export type TPostStatus = 'BEFORE' | 'ONGOING' | 'AFTER'
+export type TPostStatus = 'BEFORE' | 'ONGOING' | 'DONE'
 
 export enum statusEnum {
   BEFORE,

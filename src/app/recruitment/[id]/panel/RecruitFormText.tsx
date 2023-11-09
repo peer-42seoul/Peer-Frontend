@@ -6,7 +6,7 @@ const RecruitFormText = ({
   children,
 }: {
   label: string
-  content?: string | string[]
+  content?: string
   children?: React.ReactNode
 }) => (
   <>
