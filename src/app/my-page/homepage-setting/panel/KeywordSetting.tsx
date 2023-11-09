@@ -57,8 +57,7 @@ const KeywordAddingField = ({
   const textFieldRef = useRef<HTMLInputElement | null>(null)
   const axiosWithAuth = useAxiosWithAuth()
 
-  const validateData = (inputValue: string) => {
-    const trimmed = inputValue.trim()
+  const validateData = (trimmed: string) => {
     if (trimmed.length < 2) {
       setToastMessage({
         severity: 'error',
@@ -105,17 +104,17 @@ const KeywordAddingField = ({
   const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      if (validateData(inputValue) === false) return
-      await addKeyword(inputValue.trim())
-      console.log(inputValue)
+      const trimmed = inputValue.trim()
+      if (validateData(trimmed) === false) return
+      await addKeyword(trimmed)
       setInputValue('' as string)
     }
   }
 
   const handleOnClick = async () => {
-    if (validateData(inputValue) === false) return
-    await addKeyword(inputValue.trim())
-    console.log(inputValue)
+    const trimmed = inputValue.trim()
+    if (validateData(trimmed) === false) return
+    await addKeyword(trimmed)
     setInputValue('' as string)
   }
 
