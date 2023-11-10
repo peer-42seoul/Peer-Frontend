@@ -1,7 +1,7 @@
 export interface IUserProfile {
   id: number
   nickname: string
-  profileteamImage: string
+  profileImageURL: string
   introduction: string
   linkList: Array<IUserProfileLink>
   representAchievement: string // 2스텝에서 사용/ 임시/ 1스텝에서넌 신경 x
@@ -17,7 +17,7 @@ export interface IUserProfileLink {
 }
 
 export interface IProfileCard {
-  profileteamImage: string | null
+  profileImageURL: string | null
   nickname: string
   association: string | null
   introduction: string
