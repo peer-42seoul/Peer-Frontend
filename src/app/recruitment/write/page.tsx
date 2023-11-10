@@ -1,21 +1,36 @@
 'use client'
 
-import { Box, Button, Stack, TextField, Typography } from '@mui/material'
-import RowRadioButtonsGroup from './panel/radioGroup'
-import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
-import TagAutoComplete from './panel/SetTeamTag/TagAutoComplete'
-import { useState } from 'react'
-import BasicSelect, { ComponentType } from './panel/BasicSelect'
-import SetInterview from './panel/SetInterview/SetInterview'
-import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
-import useToast from '@/hook/useToast'
-import SelectRegion from './panel/SelectRegion'
-import ImageUploadButton from '@/components/ImageUploadButton'
-import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import useToast from '@/hook/useToast'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
+import Image from 'next/image'
+import ImageUploadButton from '@/components/ImageUploadButton'
+import RowRadioButtonsGroup from '../[id]/edit/panel/radioGroup'
+import SetTeamRole from '../[id]/edit/panel/SetTeamRole/SetTeamRole'
+import TagAutoComplete from '../[id]/edit/panel/SetTeamTag/TagAutoComplete'
+import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
+import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
+import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
+import SelectRegion from '../[id]/edit/panel/SelectRegion'
 import { ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
+import useSWR from 'swr'
 // import useAuthStore from '@/states/useAuthStore'
+
+const dummyData1: ITag = {
+  name: 'java',
+  color: 'red',
+}
+const dummyData2: ITag = {
+  name: 'spring',
+  color: 'blue',
+}
+const dummyData3: ITag = {
+  name: 'react',
+  color: 'green',
+}
+const dummyDatas: ITag[] = [dummyData1, dummyData2, dummyData3]
 
 export interface IRoleData {
   // types 로 병합예정
@@ -48,6 +63,7 @@ const CreateTeam = () => {
   const [content, setContent] = useState<string>('')
   const [roleList, setRoleList] = useState<IRoleData[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
+  const [allTagList, setAllTagList] = useState<ITag[]>(dummyDatas)
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
@@ -65,7 +81,22 @@ const CreateTeam = () => {
   //   }
   // }, [isLogin])
 
-  // 모집글 작성완료시 모지 글로 이동해야 자연스럽습니다. 백엔드로부터 모집글의 id를 받아와야합니다.
+  const { data, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
+  )
+
+  useEffect(() => {
+    if (error) {
+      console.log('error ocurred!!')
+      setToastMessage('태그를 불러오는데 실패했습니다.')
+      openToast()
+    } else if (data) {
+      console.log('tag fetching success', data)
+      setAllTagList(data)
+    }
+  }, [data])
+
   const onHandlerFinish = async () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
@@ -185,12 +216,13 @@ const CreateTeam = () => {
         </Stack>
         <Box>
           <Typography variant="h6">태그</Typography>
-          <TagAutoComplete
-            datas={tagList}
-            setData={setTagList}
-            openToast={openToast}
-            setToastMessage={setToastMessage}
-          />
+          {allTagList ? (
+            <TagAutoComplete
+              datas={tagList}
+              setData={setTagList}
+              allTagList={allTagList}
+            />
+          ) : null}
         </Box>
         {type === 'study' ? null : (
           <Box>

@@ -1,6 +1,6 @@
 export interface ITag {
-  tagName: string
-  tagColor: string
+  name: string
+  color: string
 }
 
 export interface IPost {

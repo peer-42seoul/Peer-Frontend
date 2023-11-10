@@ -1,163 +1,31 @@
 'use client'
 
+import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
 import useSWRMutation from 'swr/mutation'
-import {
-  Avatar,
-  Box,
-  Button,
-  CircularProgress,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
-
-interface IMessage {
-  userId: number // 이 쪽지의 주인
-  msgId: number
-  content: string
-  date: string
-  isEnd: boolean
-}
-
-interface IUser {
-  userId: number
-  userProfile: string
-  userNickname: string
-}
-
-const MessageForm = ({
-  targetId,
-  addNewMessage,
-}: {
-  targetId: number
-  addNewMessage: (newMessage: IMessage) => void
-}) => {
-  const [content, setContent] = useState('')
-  const axiosInstance = useAxiosWithAuth()
-  const messageSubmit = useCallback(async () => {
-    try {
-      if (!content) {
-        alert('내용을 입력하세요.')
-        return
-      }
-      const messageData = {
-        targetId: targetId,
-        content,
-      }
-      const response = await axiosInstance.post(
-        `/api/v1/message/back-message`,
-        messageData,
-      )
-      if (response.status === 201) {
-        addNewMessage(response.data.Msg)
-        alert('메시지가 성공적으로 전송되었습니다.')
-        setContent('')
-      }
-    } catch (error) {
-      // TODO : 에러 구체화
-      alert('메시지 전송에 실패하였습니다.')
-    }
-  }, [content])
-
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <TextField
-        sx={{ width: '100%' }}
-        value={content}
-        placeholder="내용을 입력하세요"
-        variant="outlined"
-        multiline
-        rows={3}
-        onChange={(e) => setContent(e.target.value)}
-      />
-      <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-        <Button onClick={messageSubmit}>보내기</Button>
-      </Box>
-    </Box>
-  )
-}
-
-const OwnerMessageItem = ({ message }: { message: IMessage }) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-      }}
-    >
-      <Stack sx={{ bgcolor: '#EFEFEF', alignItems: 'flex-end' }}>
-        <Typography>{message.content}</Typography>
-        <Typography>{message.date}</Typography>
-      </Stack>
-    </Box>
-  )
-}
-
-const TargetMessageItem = ({
-  message,
-  target,
-}: {
-  message: IMessage
-  target: IUser
-}) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-      }}
-    >
-      <Stack sx={{ bgcolor: '#D8D8D8', alignItems: 'flex-start' }} spacing={1}>
-        <Stack direction={'row'} alignItems={'center'} spacing={1}>
-          <Avatar src={target.userProfile} />
-          <Typography sx={{ fontWeight: 'bold' }}>
-            {target.userNickname}
-          </Typography>
-        </Stack>
-        <Typography>{message.content}</Typography>
-        <Typography>{message.date}</Typography>
-      </Stack>
-    </Box>
-  )
-}
-
-interface IMessageItemProps {
-  msg: IMessage
-  owner: IUser
-  target: IUser
-}
-
-const MessageItem = ({ msg, owner, target }: IMessageItemProps) => {
-  return (
-    <>
-      {msg.userId === owner.userId ? (
-        <OwnerMessageItem message={msg} />
-      ) : (
-        <TargetMessageItem message={msg} target={target} />
-      )}
-    </>
-  )
-}
+import { IMessage, IMessageUser } from '@/types/IMessage'
+import MessageItem from './panel/MessageItem'
+import MessageForm from './panel/MessageForm'
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const searchParams = useSearchParams()
   const [updatedData, setUpdatedData] = useState<IMessage[] | undefined>()
-  const [owner, setOwner] = useState<IUser>()
-  const [target, setTarget] = useState<IUser>()
+  const [owner, setOwner] = useState<IMessageUser>()
+  const [target, setTarget] = useState<IMessageUser>()
   const [isEnd, setIsEnd] = useState<boolean>(false)
-  const axiosInstance = useAxiosWithAuth()
+  const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
+    undefined,
+  )
+  const axiosWithAuth = useAxiosWithAuth()
 
   const fetchMoreData = useCallback(
     async (url: string) => {
       try {
-        const response = await axiosInstance.post(url, {
+        const response = await axiosWithAuth.post(url, {
           targetId: searchParams.get('target'),
           conversationalId: params.id,
           earlyMsgId: updatedData?.[0]?.msgId,
@@ -176,11 +44,24 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     fetchMoreData,
   )
 
+  const { targetRef, scrollRef, spinner } = useMessageInfiniteScroll({
+    trigger, // == mutate
+    isEnd,
+  })
+
+  const scrollTo = useCallback(
+    (height: number) => {
+      if (!scrollRef.current) return
+      scrollRef.current.scrollTo({ top: height })
+    },
+    [scrollRef],
+  )
+
   useEffect(() => {
     setIsLoading(true)
     const targetId = searchParams.get('target')
     const conversationalId = params.id
-    axiosInstance
+    axiosWithAuth
       .post('/api/v1/message/conversation-list', {
         targetId,
         conversationalId,
@@ -201,38 +82,41 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (!data) return
-    setUpdatedData((prevData: IMessage[] | undefined) => {
-      if (!prevData) return data
-      return [...data, ...prevData]
+    // data : 새로 불러온 데이터 (예전 메시지)
+    // currentData : 현재 데이터 (최근 메시지)
+    setUpdatedData((currentData: IMessage[] | undefined) => {
+      if (!currentData) return data
+      return [...data, ...currentData]
     })
     setIsEnd(data[0].isEnd)
+    setPrevScrollHeight(scrollRef.current?.scrollHeight)
   }, [data])
 
-  const { ref, spinner } = useMessageInfiniteScroll({
-    trigger, // == mutate
-    isEnd,
-  })
+  useEffect(() => {
+    // FIXME : 깜빡임 현상 해결 필요할듯...
+    if (!scrollRef.current) return
+    if (prevScrollHeight) {
+      scrollTo(scrollRef.current.scrollHeight - prevScrollHeight)
+      setPrevScrollHeight(undefined)
+      return
+    }
+    scrollTo(scrollRef.current.scrollHeight - scrollRef.current.clientHeight)
+  }, [updatedData])
 
   const addNewMessage = (newMessage: IMessage) => {
     if (!updatedData) return
-    setUpdatedData((prevData: IMessage[] | undefined) => {
-      if (!prevData) return [newMessage]
-      return [...prevData, newMessage]
+    setUpdatedData((currentData: IMessage[] | undefined) => {
+      if (!currentData) return [newMessage]
+      return [...currentData, newMessage]
     })
   }
-
-  const bottomRef = useRef<HTMLDivElement>()
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'instant' })
-  }, [updatedData])
 
   if (isLoading) return <Typography>로딩중... @_@</Typography>
   if (!updatedData || !owner || !target)
     return <Typography>빈 쪽지함 입니다!</Typography>
 
   return (
-    <Box sx={{ width: '100%', height: '90vh' }}>
+    <Box sx={{ width: '100%', height: '50vh' }}>
       <Box
         sx={{
           display: 'flex',
@@ -247,15 +131,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
       >
         <Typography>{target.userNickname}</Typography>
       </Box>
-      <Box sx={{ width: '100%', height: '90%', overflowY: 'auto' }}>
-        <Box
-          sx={{
-            bottom: 0,
-            height: '1vh',
-            backgroundColor: 'primary.main',
-          }}
-          ref={ref}
-        ></Box>
+      <Box
+        ref={scrollRef}
+        sx={{ width: '100%', height: '90%', overflowY: 'auto' }}
+      >
+        <Box ref={targetRef}></Box>
         {spinner && <CircularProgress />}
         {updatedData.map((msgObj: IMessage) => (
           <MessageItem
@@ -265,7 +145,6 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
             target={target}
           />
         ))}
-        <Box ref={bottomRef}></Box>
       </Box>
       <MessageForm targetId={target.userId} addNewMessage={addNewMessage} />
     </Box>
