@@ -4,6 +4,7 @@ import { ITeamInfo } from '../page'
 
 const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
   const router = useRouter()
+  console.log('prop', prop)
   return (
     <Stack
       spacing={1}

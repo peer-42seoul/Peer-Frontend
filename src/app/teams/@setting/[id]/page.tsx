@@ -124,11 +124,12 @@ export interface IApplicant {
   interview: IInterview[]
 }
 
-const TeamsSetupPage = ({ id }: { id: number }) => {
+const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
+  console.log('id', params.id)
   const router = useRouter()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const { data, isLoading } = useSWR<ITeam>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
     defaultGetFetcher,
   )
 
@@ -184,13 +185,13 @@ const TeamsSetupPage = ({ id }: { id: number }) => {
       )}
       <Button
         variant="contained"
-        onClick={() => router.push(`/recruitment/${id}`)}
+        onClick={() => router.push(`/recruitment/${params.id}`)}
       >
         모집 글 보기
       </Button>
       <Button
         variant="contained"
-        onClick={() => router.push(`/recruitment/edit/${id}`)}
+        onClick={() => router.push(`/recruitment/edit/${params.id}`)}
       >
         모집 글 수정하기
       </Button>
