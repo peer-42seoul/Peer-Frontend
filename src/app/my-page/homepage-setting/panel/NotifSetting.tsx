@@ -3,7 +3,7 @@ import {
   AlertColor,
   Box,
   FormControlLabel,
-  Grid,
+  Stack,
   Switch,
   Typography,
 } from '@mui/material'
@@ -24,11 +24,9 @@ const Notif = ({
   type: string
 }) => {
   return (
-    <Grid item container justifyContent={'space-between'}>
-      <Grid item>
+    <Box>
+      <Stack direction={'row'} justifyContent={'space-between'}>
         <Typography>{type}</Typography>
-      </Grid>
-      <Grid item>
         <FormControlLabel
           control={
             <Switch
@@ -40,8 +38,8 @@ const Notif = ({
           label={checked ? 'ON' : 'OFF'}
           labelPlacement="start"
         />
-      </Grid>
-    </Grid>
+      </Stack>
+    </Box>
   )
 }
 
@@ -57,26 +55,22 @@ const NotifSetting = ({
   console.log(setToastMessage)
   return (
     <Box>
-      <Grid container rowSpacing={2}>
-        <Grid item>
-          <Typography>알림 설정</Typography>
-        </Grid>
-        <Notif
-          type="키워드 알림"
-          checked={keyword}
-          handleChange={() => setKeyword((prev) => !prev)}
-        />
-        <Notif
-          type="프로젝트/스터디 알림"
-          checked={team}
-          handleChange={() => setTeam((prev) => !prev)}
-        />
-        <Notif
-          type="쪽지 알림"
-          checked={message}
-          handleChange={() => setMessage((prev) => !prev)}
-        />
-      </Grid>
+      <Typography>알림 설정</Typography>
+      <Notif
+        type="키워드 알림"
+        checked={keyword}
+        handleChange={() => setKeyword((prev) => !prev)}
+      />
+      <Notif
+        type="프로젝트/스터디 알림"
+        checked={team}
+        handleChange={() => setTeam((prev) => !prev)}
+      />
+      <Notif
+        type="쪽지 알림"
+        checked={message}
+        handleChange={() => setMessage((prev) => !prev)}
+      />
     </Box>
   )
 }
