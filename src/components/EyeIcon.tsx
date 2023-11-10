@@ -1,3 +1,5 @@
+'use client'
+
 import { Dispatch, SetStateAction } from 'react'
 import IconButton from '@mui/material/IconButton'
 import VisibilityIcon from '@mui/icons-material/Visibility'
