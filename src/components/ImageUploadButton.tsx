@@ -29,7 +29,7 @@ const ImageUploadButton = ({
   accept?: string
   id?: string
   setImage: (image: File[]) => void
-  setPreviewImage: (teamImage: string) => void
+  setPreviewImage: (imageUrl: string) => void
   onChange?: () => void
   register?: any
 }) => {
