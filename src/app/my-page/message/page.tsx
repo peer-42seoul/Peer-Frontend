@@ -20,21 +20,12 @@ interface INewMessageButtonProps {
 const NewMessageButton = ({ isPc, openModal }: INewMessageButtonProps) => {
   return (
     <Stack direction="row" justifyContent={'flex-end'}>
-      {isPc ? (
-        <CuButton
-          variant="outlined"
-          action={openModal}
-          message="새 쪽지 보내기"
-          style={{ marginBottom: '32px' }}
-        />
-      ) : (
-        <CuButton
-          variant="text"
-          action={openModal}
-          message="+"
-          style={{ marginBottom: '32px' }}
-        />
-      )}
+      <CuButton
+        variant="outlined"
+        action={openModal}
+        message={isPc ? '새 쪽지 보내기' : '+'}
+        style={{ marginBottom: '32px' }}
+      />
     </Stack>
   )
 }
