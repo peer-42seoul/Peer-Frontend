@@ -44,10 +44,9 @@ const InterestsContents = ({
           </Grid>
         ))}
         <Grid item xs={10} sm={4}>
-          <Box ref={target}></Box>
+          <Box ref={target}>{spinner && <CircularProgress />}</Box>
         </Grid>
       </Grid>
-      {spinner && <CircularProgress />}
     </div>
   )
 }
