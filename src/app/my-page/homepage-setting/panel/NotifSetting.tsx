@@ -25,7 +25,11 @@ const Notif = ({
 }) => {
   return (
     <Box>
-      <Stack direction={'row'} justifyContent={'space-between'}>
+      <Stack
+        direction={'row'}
+        alignItems={'baseline'}
+        justifyContent={'space-between'}
+      >
         <Typography>{type}</Typography>
         <FormControlLabel
           control={
