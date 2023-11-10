@@ -134,10 +134,10 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             <Box>
               {data?.tagList?.map((tag: ITag, idx: number) => (
                 <Chip
-                  label={tag?.tagName}
+                  label={tag?.name}
                   size="small"
                   key={idx}
-                  sx={{ backgroundColor: tag?.tagColor }}
+                  sx={{ backgroundColor: tag?.color }}
                 />
               ))}
             </Box>
@@ -200,10 +200,10 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             <Box>
               {data?.tagList?.map((tag: ITag, idx: number) => (
                 <Chip
-                  label={tag?.tagName}
+                  label={tag?.name}
                   size="small"
                   key={idx}
-                  sx={{ backgroundColor: tag?.tagColor }}
+                  sx={{ backgroundColor: tag?.color }}
                 />
               ))}
             </Box>

@@ -1,6 +1,21 @@
+import { ProjectType } from '@/app/panel/MainPage'
+
 export interface ITag {
   name: string
   color: string
+}
+
+export interface IMainCard {
+  title: string
+  image: string
+  user_id: string
+  user_nickname: string
+  user_thumbnail: string
+  status: string
+  tagList: ITag[]
+  favorite?: boolean
+  recruit_id: number
+  type: ProjectType
 }
 
 export interface IPost {
