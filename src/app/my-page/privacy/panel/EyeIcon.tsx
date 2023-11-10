@@ -17,7 +17,11 @@ const EyeIcon = ({
           setShowPassword(showPassword === 'password' ? 'text' : 'password')
         }}
       >
-        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+        {showPassword === 'password' ? (
+          <VisibilityIcon />
+        ) : (
+          <VisibilityOffIcon />
+        )}
       </IconButton>
     </>
   )
