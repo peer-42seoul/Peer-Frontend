@@ -85,7 +85,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { isLogin, login } = useAuthStore()
-  const [, setCookie] = useCookies(['refreshToken'])
+  const [cookies] = useCookies(['refreshToken'])
   const [errorMessage, setErrorMessage] = useState('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const router = useRouter()
@@ -98,6 +98,11 @@ const Login = () => {
     formState: { errors },
   } = useForm<ILoginFormInput>()
 
+  const getCookie = () => {
+    const refreshToken = cookies.refreshToken
+    console.log('refreshToken?', refreshToken)
+  }
+
   const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
     setIsLoading(true)
     axios
@@ -107,7 +112,6 @@ const Login = () => {
       })
       .then((res) => {
         login(res.data.accessToken)
-        setCookie('refreshToken', res.data.refreshToken, { path: '/' })
       })
       .catch((error) => {
         //console.log(error.message)
@@ -121,6 +125,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isLogin) {
+      getCookie()
       if (redirect) {
         console.log('redirect in login', redirect)
         router.push(redirect)
@@ -130,7 +135,7 @@ const Login = () => {
       setErrorMessage('로그인이 필요한 서비스입니다.')
       openToast()
     }
-  }, [isLogin, redirect])
+  }, [isLogin, redirect, cookies.refreshToken])
 
   return (
     <>

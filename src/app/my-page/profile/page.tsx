@@ -15,6 +15,7 @@ import useAxiosWithAuth from '@/api/config'
 import { useCookies } from 'react-cookie'
 import useAuthStore from '@/states/useAuthStore'
 import CuButton from '@/components/CuButton'
+import { useRouter } from 'next/navigation'
 
 interface IModals {
   introduction: boolean
@@ -92,12 +93,13 @@ const MyProfile = () => {
 
   const { CuToast, isOpen: isToastOpen, openToast, closeToast } = useToast()
 
+  const router = useRouter()
   const { logout } = useAuthStore.getState()
   const [, , removeCookie] = useCookies(['refreshToken'])
   const handleLogout = () => {
     logout()
     removeCookie('refreshToken', { path: '/' })
-    window.location.reload()
+    router.push('/')
   }
 
   if (error) {
