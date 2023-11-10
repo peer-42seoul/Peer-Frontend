@@ -9,15 +9,15 @@ import {
   CardMedia,
   Chip,
   IconButton,
-  Link,
   Typography,
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 import { useState } from 'react'
-import axios from 'axios'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
 import { ProjectType } from './MainPage'
+import useAxiosWithAuth from '@/api/config'
+import Link from 'next/link'
 
 interface IMainCard {
   title: string
@@ -27,8 +27,8 @@ interface IMainCard {
   user_thumbnail: string
   status: string
   tagList: ITag[]
-  isFavorite?: boolean
-  post_id: number
+  favorite?: boolean
+  recruit_id: number
   type: ProjectType
 }
 const MainCard = ({
@@ -38,32 +38,33 @@ const MainCard = ({
   user_thumbnail,
   status,
   tagList,
-  isFavorite,
-  post_id,
+  favorite,
+  recruit_id,
   type,
 }: IMainCard) => {
-  const [favorite, setFavorite] = useState(isFavorite)
+  const [isFavorite, setIsFavorite] = useState(favorite)
   const { isLogin } = useAuthStore()
   const router = useRouter()
 
+  const axiosInstance = useAxiosWithAuth()
   const changeFavorite = async () => {
     if (!isLogin) return router.push('/login')
     try {
-      await axios(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${post_id}`,
+      await axiosInstance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
       )
-      setFavorite(!favorite)
+      setIsFavorite(!isFavorite)
     } catch (e) {
       console.log('error', e)
     }
   }
 
   return (
-    <Link
-      href={`/recruit/${post_id}?type=${type}`}
-      style={{ textDecoration: 'none' }}
-    >
-      <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345 }}>
+      <Link
+        href={`/recruit/${recruit_id}?type=${type}`}
+        style={{ textDecoration: 'none' }}
+      >
         <Box sx={{ position: 'relative' }}>
           <CardMedia
             component="img"
@@ -84,8 +85,13 @@ const MainCard = ({
             size="medium"
           />
         </Box>
-        <CardHeader
-          avatar={
+      </Link>
+      <CardHeader
+        avatar={
+          <Link
+            href={`/recruitment/${recruit_id}?type=${type}`}
+            style={{ textDecoration: 'none' }}
+          >
             <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
               <Box
                 component="img"
@@ -94,14 +100,26 @@ const MainCard = ({
                 alt="profile image"
               />
             </Avatar>
-          }
-          action={
-            <IconButton aria-label="add to favorites" onClick={changeFavorite}>
-              <Favorite sx={{ color: favorite ? 'red' : 'gray' }} />
-            </IconButton>
-          }
-          title={user_nickname}
-        />
+          </Link>
+        }
+        action={
+          <IconButton aria-label="add to favorites" onClick={changeFavorite}>
+            <Favorite sx={{ color: isFavorite ? 'red' : 'gray' }} />
+          </IconButton>
+        }
+        title={
+          <Link
+            href={`/recruitment/${recruit_id}?type=${type}`}
+            style={{ textDecoration: 'none' }}
+          >
+            {user_nickname}
+          </Link>
+        }
+      />
+      <Link
+        href={`/recruitment/${recruit_id}?type=${type}`}
+        style={{ textDecoration: 'none' }}
+      >
         <CardContent>
           <Typography variant="body2" color="text.secondary">
             {title}
@@ -117,8 +135,8 @@ const MainCard = ({
             ))}
           </Box>
         </CardContent>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   )
 }
 
