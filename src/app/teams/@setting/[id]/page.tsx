@@ -6,8 +6,8 @@ import { useState } from 'react'
 import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
 import { useRouter } from 'next/navigation'
+import useAxiosWithAuth from '@/api/config'
 
 export enum TeamType {
   PROJECT = 'PROJECT',
@@ -47,50 +47,9 @@ export interface ITeam {
     dueTo: string
     operationForm: TeamOperationForm
     region: string[]
-    imageUrl: string | null
+    teamImage: string | null
   }
   member: IMember[]
-}
-
-const mockdate: ITeam = {
-  team: {
-    id: '1',
-    type: TeamType.PROJECT,
-    name: 'Sample',
-    maxMember: '5',
-    status: TeamStatus.RECRUITING,
-    dueTo: '2021-10-10',
-    operationForm: TeamOperationForm.MIX,
-    region: ['서울', '경기'],
-    imageUrl: null,
-  },
-  member: [
-    {
-      name: '이름',
-      userId: '1',
-      grant: TeamGrant.LEADER,
-    },
-    {
-      name: '이름',
-      userId: '2',
-      grant: TeamGrant.MEMBER,
-    },
-    {
-      name: '이름',
-      userId: '3',
-      grant: TeamGrant.MEMBER,
-    },
-    {
-      name: '이름',
-      userId: '4',
-      grant: TeamGrant.MEMBER,
-    },
-    {
-      name: '이름',
-      userId: '5',
-      grant: TeamGrant.MEMBER,
-    },
-  ],
 }
 
 export enum EInterviewType {
@@ -125,18 +84,22 @@ export interface IApplicant {
 }
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
-  console.log('id', params.id)
   const router = useRouter()
+  const axiosInstance = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const { data, isLoading } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
-    defaultGetFetcher,
+    (url: string) => axiosInstance(url).then((res) => res.data),
   )
+
+  console.log(data)
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
   if (isLoading) return <Typography>로딩중</Typography>
+
+  if (!data) return <Typography>데이터가 없습니다.</Typography>
 
   return (
     <Stack
@@ -150,7 +113,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
     >
       {data ? (
         <>
-          <SetupPage team={data} />
+          <SetupPage team={data.team} />
           {!showApplicant ? (
             <>
               <SetupMember team={data.member} teamId={data.team.id} />
@@ -170,17 +133,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         </>
       ) : (
         <>
-          <SetupPage team={mockdate} />
-          <SetupMember team={mockdate.member} teamId={mockdate.team.id} />
-          <Button
-            onClick={openApplicant}
-            sx={{ mt: 1 }}
-            variant="contained"
-            color="primary"
-            fullWidth
-          >
-            신청 대기자 보기
-          </Button>
+          <Typography>데이터가 없습니다.</Typography>
         </>
       )}
       <Button

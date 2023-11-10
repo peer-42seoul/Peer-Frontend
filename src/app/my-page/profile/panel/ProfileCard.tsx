@@ -8,14 +8,14 @@ import React, { useState } from 'react'
 interface IProfileImageModalProps {
   open: boolean
   handleModalClose: () => void
-  profileImageURL: string | null
+  profileteamImage: string | null
 }
 
 // 프로필 이미지 확대 모달
 const ProfileImageModal = ({
   open,
   handleModalClose,
-  profileImageURL,
+  profileteamImage,
 }: IProfileImageModalProps) => {
   return (
     <Modal
@@ -26,7 +26,7 @@ const ProfileImageModal = ({
     >
       <Box
         component="img"
-        src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
+        src={profileteamImage ? profileteamImage : '/images/profile.jpeg'}
         aria-labelledby="유저 이미지"
         aria-describedby="확대된 유저 이미지"
         sx={{
@@ -44,7 +44,7 @@ const ProfileImageModal = ({
 }
 
 const ProfileCard = ({
-  profileImageURL,
+  profileteamImage,
   nickname,
   association,
   introduction,
@@ -67,7 +67,7 @@ const ProfileCard = ({
           }}
         >
           <Avatar
-            src={profileImageURL ? profileImageURL : '/images/profile.jpeg'}
+            src={profileteamImage ? profileteamImage : '/images/profile.jpeg'}
             onClick={() => setOpen(true)}
             sx={{
               width: '100%',
@@ -97,7 +97,7 @@ const ProfileCard = ({
       <ProfileImageModal
         open={open}
         handleModalClose={handleModalClose}
-        profileImageURL={profileImageURL}
+        profileteamImage={profileteamImage}
       />
     </div>
   )

@@ -7,18 +7,32 @@ import {
   Typography,
   Button,
   TextField,
+  IconButton,
 } from '@mui/material'
-import { ITeam, TeamOperationForm, TeamType } from '../page'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { TeamOperationForm, TeamStatus, TeamType } from '../page'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import SetupSelect from './SetupSelect'
-import axios from 'axios'
-import useShowTeamCategory from '@/states/useShowTeamCategory'
 import Image from 'next/image'
 import useModal from '@/hook/useModal'
 import CuModal from '@/components/CuModal'
 import CuButton from '@/components/CuButton'
+import useAxiosWithAuth from '@/api/config'
+import ClearIcon from '@mui/icons-material/Clear'
+import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
 
-const SetupTeam = ({ team }: { team: ITeam }) => {
+interface ISetupTeam {
+  id: string
+  type: TeamType
+  name: string
+  maxMember: String
+  status: TeamStatus
+  dueTo: string
+  operationForm: TeamOperationForm
+  region: string[]
+  teamImage: string | null
+}
+
+const SetupTeam = ({ team }: { team: ISetupTeam }) => {
   const { isOpen, openModal, closeModal } = useModal()
   const {
     isOpen: isConfirmOpen,
@@ -27,41 +41,33 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
   } = useModal()
   const [teamInfo, setTeamInfo] = useState(team)
   const [isEdit, setIsEdit] = useState(false)
-  const { setShowTeamPageCategory } = useShowTeamCategory()
+  const axiosWithAuth = useAxiosWithAuth()
 
   const sendTeamInfo = () => {
-    console.log(teamInfo)
     if (validation()) return alert('한글, 영문, 숫자만 입력 가능합니다.')
     if (isEdit === false) return alert('변경된 사항이 없습니다.')
-    axios
+    axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${team.team.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${team.id}`,
         teamInfo,
       )
       .then((res) => {
         if (res.status == 200) {
           console.log('서버에 저장 완료')
-          setShowTeamPageCategory('메인')
           setIsEdit(false)
         }
       })
       .catch((err) => {
         console.log(err)
       })
+    closeConfirmModel()
   }
 
   const handleLocation1 = (event: SelectChangeEvent) => {
     setIsEdit(true)
     setTeamInfo({
       ...teamInfo,
-      team: {
-        ...teamInfo.team,
-        region: [
-          event.target.value,
-          teamInfo.team.region[1],
-          teamInfo.team.region[2],
-        ],
-      },
+      region: [event.target.value, teamInfo.region[1], teamInfo.region[2]],
     })
   }
 
@@ -69,14 +75,8 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
     setIsEdit(true)
     setTeamInfo({
       ...teamInfo,
-      team: {
-        ...teamInfo.team,
-        region: [
-          teamInfo.team.region[0],
-          event.target.value,
-          teamInfo.team.region[2],
-        ],
-      },
+
+      region: [teamInfo.region[0], event.target.value, teamInfo.region[2]],
     })
   }
 
@@ -84,10 +84,7 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
     setIsEdit(true)
     setTeamInfo({
       ...teamInfo,
-      team: {
-        ...teamInfo.team,
-        operationForm: event.target.value as TeamOperationForm,
-      },
+      operationForm: event.target.value as TeamOperationForm,
     })
   }
 
@@ -95,10 +92,7 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
     setIsEdit(true)
     setTeamInfo({
       ...teamInfo,
-      team: {
-        ...teamInfo.team,
-        dueTo: event.target.value,
-      },
+      dueTo: event.target.value,
     })
   }
 
@@ -106,50 +100,44 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
     setIsEdit(true)
     setTeamInfo({
       ...teamInfo,
-      team: {
-        ...teamInfo.team,
-        name: event.target.value,
-      },
+      name: event.target.value,
     })
   }
 
-  const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
-    if (file?.length && file) {
-      setIsEdit(true)
-      const reader = new FileReader()
+  const handleImage = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files && e.target.files[0]
+      console.log(file)
+      if (e.target.files && e.target.files[0]) {
+        setIsEdit(true)
+        const reader = new FileReader()
 
-      reader.onload = () => {
-        setTeamInfo({
-          ...teamInfo,
-          team: {
-            ...teamInfo.team,
-            imageUrl: reader.result as string,
-          },
-        })
+        reader.onload = () => {
+          setTeamInfo({
+            ...teamInfo,
+            teamImage: reader.result as string,
+          })
+        }
+        reader.readAsDataURL(file!)
       }
-      reader.readAsDataURL(file)
-    }
-  }
+    },
+    [teamInfo.teamImage],
+  )
 
-  const handleDeleteImage = () => {
+  const handleDeleteImage = useCallback(() => {
     setTeamInfo({
       ...teamInfo,
-      team: {
-        ...teamInfo.team,
-        imageUrl: null,
-      },
+      teamImage: null,
     })
-  }
+    closeModal()
+  }, [teamInfo.teamImage])
 
   const validation = () => {
     // 한글, 영문, 숫자만 입력 가능
     // 2~12자리
     let check = /^[\d|a-zA-Z|가-힣]{2,12}$/
 
-    console.log(check.test(teamInfo.team.name))
-
-    if (check.test(teamInfo.team.name)) {
+    if (check.test(teamInfo.name)) {
       return false
     }
 
@@ -171,20 +159,20 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
 
   return (
     <>
-      {teamInfo.team.type === TeamType.STUDY ? (
+      {teamInfo.type === TeamType.STUDY ? (
         <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
           <Typography fontWeight="bold">클릭한 스터디 팀 설정 : </Typography>
           <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
             <Stack>
               <Typography>스터디</Typography>
               <Stack direction="row" justifyContent={'space-between'}>
-                <Typography>스터디명: {team.team.name}</Typography>
+                <Typography>스터디명: {team.name}</Typography>
 
                 <TextField
                   id="outlined-basic"
                   label={`스터디 이름`}
                   variant="outlined"
-                  value={teamInfo.team.name}
+                  value={teamInfo.name}
                   maxRows={1}
                   size="small"
                   onChange={handleTeamName}
@@ -197,26 +185,77 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
                   }}
                 />
               </Stack>
-              <Stack>
-                <Image
-                  src={
-                    teamInfo.team.imageUrl
-                      ? teamInfo.team.imageUrl
-                      : '/images/teamLogo.png'
-                  }
-                  alt="teamLogo"
-                  width={100}
-                  height={100}
-                />
-                <input type="file" accept="image/*" onChange={handleImage} />
-                <Button onClick={openModal}>이미지 삭제</Button>
-              </Stack>
+              <Box>
+                <Box
+                  width={[56, 100]}
+                  height={[56, 100]}
+                  sx={{ position: 'relative' }}
+                >
+                  <IconButton
+                    sx={{
+                      position: 'absolute',
+                      top: '0',
+                      right: '6px',
+                      width: '16px',
+                      height: '16px',
+                      borderRadius: '50px',
+                      borderColor: 'lightgray',
+                      border: '1px',
+                      padding: '4px',
+                      backgroundColor: 'white',
+                      zIndex: '9999',
+                    }}
+                    onClick={openModal}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                  <Button
+                    component="label"
+                    sx={{ position: 'relative', width: '100%', height: '100%' }}
+                  >
+                    <Image
+                      src={
+                        teamInfo.teamImage
+                          ? teamInfo.teamImage
+                          : '/images/teamLogo.png'
+                      }
+                      alt="teamLogo"
+                      width={100}
+                      height={100}
+                    />
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: '0',
+                        right: '6px',
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50px',
+                        borderColor: 'lightgray',
+                        border: '1px',
+                        padding: '4px',
+                        backgroundColor: 'white',
+                      }}
+                    >
+                      <PhotoCameraOutlinedIcon />
+                    </Box>
+                    <input
+                      type="file"
+                      accept={'image/*'}
+                      style={{ display: 'none' }}
+                      id="profileImage"
+                      name="profileImage"
+                      onChange={handleImage}
+                    />
+                  </Button>
+                </Box>
+              </Box>
             </Stack>
             <Stack>
               <Typography>목표 기간: </Typography>
               <SetupSelect
                 type="dueTo"
-                value={teamInfo.team.dueTo}
+                value={teamInfo.dueTo}
                 setValue={handleDate}
               />
             </Stack>
@@ -224,7 +263,7 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
               <Typography>활동 방식: </Typography>
               <SetupSelect
                 type="operationForm"
-                value={teamInfo.team.operationForm}
+                value={teamInfo.operationForm}
                 setValue={handleOperationForm}
               />
             </Stack>
@@ -233,13 +272,13 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
               <Stack direction="row" spacing={1}>
                 <SetupSelect
                   type="location"
-                  value={teamInfo.team.region[0]}
+                  value={teamInfo.region[0]}
                   setValue={handleLocation1}
                 />
                 <SetupSelect
                   type="location"
-                  parentLocation={teamInfo.team.region[0]}
-                  value={teamInfo.team.region[1]}
+                  parentLocation={teamInfo.region[0]}
+                  value={teamInfo.region[1]}
                   setValue={handleLocation2}
                 />
               </Stack>
@@ -256,13 +295,13 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
             <Stack>
               <Typography>프로젝트</Typography>
               <Stack direction="row" justifyContent={'space-between'}>
-                <Typography>프로젝트명: {team.team.name}</Typography>
+                <Typography>프로젝트명: {team.name}</Typography>
 
                 <TextField
                   id="outlined-basic"
                   label={`프로젝트 이름`}
                   variant="outlined"
-                  value={teamInfo.team.name}
+                  value={teamInfo.name}
                   maxRows={1}
                   size="small"
                   onChange={handleTeamName}
@@ -275,26 +314,77 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
                   }}
                 />
               </Stack>
-              <Stack>
-                <Image
-                  src={
-                    teamInfo.team.imageUrl
-                      ? teamInfo.team.imageUrl
-                      : '/images/teamLogo.png'
-                  }
-                  alt="teamLogo"
-                  width={100}
-                  height={100}
-                />
-                <input type="file" accept="image/*" onChange={handleImage} />
-                <Button onClick={openModal}>이미지 삭제</Button>
-              </Stack>
+              <Box>
+                <Box
+                  width={[56, 100]}
+                  height={[56, 100]}
+                  sx={{ position: 'relative' }}
+                >
+                  <IconButton
+                    sx={{
+                      position: 'absolute',
+                      top: '0',
+                      right: '6px',
+                      width: '16px',
+                      height: '16px',
+                      borderRadius: '50px',
+                      borderColor: 'lightgray',
+                      border: '1px',
+                      padding: '4px',
+                      backgroundColor: 'white',
+                      zIndex: '9999',
+                    }}
+                    onClick={openModal}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                  <Button
+                    component="label"
+                    sx={{ position: 'relative', width: '100%', height: '100%' }}
+                  >
+                    <Image
+                      src={
+                        teamInfo.teamImage
+                          ? teamInfo.teamImage
+                          : '/images/teamLogo.png'
+                      }
+                      alt="teamLogo"
+                      width={100}
+                      height={100}
+                    />
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: '0',
+                        right: '6px',
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50px',
+                        borderColor: 'lightgray',
+                        border: '1px',
+                        padding: '4px',
+                        backgroundColor: 'white',
+                      }}
+                    >
+                      <PhotoCameraOutlinedIcon />
+                    </Box>
+                    <input
+                      type="file"
+                      accept={'image/*'}
+                      style={{ display: 'none' }}
+                      id="profileImage"
+                      name="profileImage"
+                      onChange={handleImage}
+                    />
+                  </Button>
+                </Box>
+              </Box>
             </Stack>
             <Stack>
               <Typography>목표 기간: </Typography>
               <SetupSelect
                 type="dueTo"
-                value={teamInfo.team.dueTo}
+                value={teamInfo.dueTo}
                 setValue={handleDate}
               />
             </Stack>
@@ -302,7 +392,7 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
               <Typography>활동 방식: </Typography>
               <SetupSelect
                 type="operationForm"
-                value={teamInfo.team.operationForm}
+                value={teamInfo.operationForm}
                 setValue={handleOperationForm}
               />
             </Stack>
@@ -311,13 +401,13 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
               <Stack direction="row" spacing={1}>
                 <SetupSelect
                   type="location"
-                  value={teamInfo.team.region[0]}
+                  value={teamInfo.region[0]}
                   setValue={handleLocation1}
                 />
                 <SetupSelect
                   type="location"
-                  parentLocation={teamInfo.team.region[0]}
-                  value={teamInfo.team.region[1]}
+                  parentLocation={teamInfo.region[0]}
+                  value={teamInfo.region[1]}
                   setValue={handleLocation2}
                 />
               </Stack>
