@@ -8,7 +8,7 @@ import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
-import { ITag } from '@/types/IPostDetail'
+import { IMainCard } from '@/types/IPostDetail'
 import {
   AlertColor,
   MenuItem,
@@ -21,19 +21,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
-
-interface IMainCard {
-  title: string
-  image: string
-  user_id: string
-  user_nickname: string
-  user_thumbnail: string
-  status: string
-  tagList: ITag[]
-  favorite?: boolean
-  recruit_id: number
-  type: ProjectType
-}
 
 interface IInterestResponse {
   postList: IMainCard[]
