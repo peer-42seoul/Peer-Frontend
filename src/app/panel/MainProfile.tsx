@@ -8,10 +8,8 @@ const MainProfile = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const { isLogin } = useAuthStore()
   const { data } = useSWR<IUserProfile>(
-    isLogin
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`
-      : undefined,
-      (url: string) => axiosWithAuth.get(url).then((res) => res.data)
+    isLogin ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile` : undefined,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   return (
