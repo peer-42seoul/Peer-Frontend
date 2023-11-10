@@ -9,7 +9,7 @@ import {
   TextField,
 } from '@mui/material'
 import { ITeam, TeamOperationForm, TeamType } from '../page'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import SetupSelect from './SetupSelect'
 import axios from 'axios'
 import useShowTeamCategory from '@/states/useShowTeamCategory'
@@ -113,52 +113,33 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
     })
   }
 
-  const handleImage = (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    if (!event.target.files) return alert('파일이 없습니다.')
-    const file = event.target.files[0]
-    const formData = new FormData()
-    formData.append('file', file)
-    axios
-      .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/image/${team.team.id}`,
-        formData,
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          setTeamInfo({
-            ...teamInfo,
-            team: {
-              ...teamInfo.team,
-              imageUrl: res.data,
-            },
-          })
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+  const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0]
+    if (file?.length && file) {
+      setIsEdit(true)
+      const reader = new FileReader()
+
+      reader.onload = () => {
+        setTeamInfo({
+          ...teamInfo,
+          team: {
+            ...teamInfo.team,
+            imageUrl: reader.result as string,
+          },
+        })
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   const handleDeleteImage = () => {
-    axios
-      .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/image/${team.team.id}`,
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          setTeamInfo({
-            ...teamInfo,
-            team: {
-              ...teamInfo.team,
-              imageUrl: null,
-            },
-          })
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    setTeamInfo({
+      ...teamInfo,
+      team: {
+        ...teamInfo.team,
+        imageUrl: null,
+      },
+    })
   }
 
   const validation = () => {
@@ -174,6 +155,19 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
 
     return true
   }
+
+  useEffect(() => {
+    window.history.pushState(null, '', location.href)
+
+    window.onpopstate = () => {
+      if (isEdit) {
+        console.log("You can't go back")
+        history.go(1)
+
+        alert('팀 정보 수정을 완료해주세요.')
+      }
+    }
+  }, [isEdit])
 
   return (
     <>
