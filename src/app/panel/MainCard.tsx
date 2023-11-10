@@ -1,4 +1,4 @@
-import { ITag } from '@/types/IPostDetail'
+import { IMainCard, ITag } from '@/types/IPostDetail'
 import { Favorite } from '@mui/icons-material'
 import {
   Avatar,
@@ -19,18 +19,6 @@ import { ProjectType } from './MainPage'
 import useAxiosWithAuth from '@/api/config'
 import Link from 'next/link'
 
-interface IMainCard {
-  title: string
-  image: string
-  user_id: string
-  user_nickname: string
-  user_thumbnail: string
-  status: string
-  tagList: ITag[]
-  favorite?: boolean
-  recruit_id: number
-  type: ProjectType
-}
 const MainCard = ({
   title,
   image,
@@ -125,12 +113,12 @@ const MainCard = ({
             {title}
           </Typography>
           <Box>
-            {tagList?.map(({ tagName, tagColor }: ITag, idx: number) => (
+            {tagList?.map(({ name, color }: ITag, idx: number) => (
               <Chip
-                label={tagName}
+                label={name}
                 size="small"
                 key={idx}
-                style={{ color: tagColor }}
+                style={{ color: color }}
               />
             ))}
           </Box>
