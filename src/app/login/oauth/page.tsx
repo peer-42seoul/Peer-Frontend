@@ -3,21 +3,30 @@
 import { Typography } from '@mui/material'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import { useCookies } from 'react-cookie'
+//import { useCookies } from 'react-cookie'
 import useAuthStore from '@/states/useAuthStore'
+import axios from 'axios'
 
 const OauthLogin = () => {
-  const [, setCookie] = useCookies(['refreshToken'])
+  //const [cookies, setCookie] = useCookies(['refreshToken'])
   const router = useRouter()
   const searchParams = useSearchParams()
   const { login } = useAuthStore()
 
+  const getCookie = () => {
+    axios.get('/login/oauth', { withCredentials: true }).then((res) => {
+      console.log(res)
+    })
+    // const refreshToken = cookies.refreshToken
+    // setCookie('refreshToken', refreshToken, { path: '/' })
+  }
+
   useEffect(() => {
     const accessToken = searchParams.get('accessToken')
-    const refreshToken = searchParams.get('refreshToken')
-    if (accessToken && refreshToken) {
+    // 쿠키 받기
+    getCookie()
+    if (accessToken) {
       login(accessToken)
-      setCookie('refreshToken', refreshToken, { path: '/' })
       router.push('/')
     } else {
       window.alert('로그인에 실패했습니다')
