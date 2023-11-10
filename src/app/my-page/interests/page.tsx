@@ -166,14 +166,11 @@ const MyInterests = () => {
   }
 
   useEffect(() => {
-    if (
-      !isLoading &&
-      data &&
-      !data.isLast &&
-      data.postList.length === pagesize
-    ) {
+    if (!isLoading && data && !data.isLast) {
       setPostList((prev) => prev.concat(data.postList))
-      setPageLimit((prev) => prev + 1)
+      if (data.postList.length === pagesize) {
+        setPageLimit((prev) => prev + 1)
+      }
     }
     if (error && error?.response?.data?.message) {
       setToastMessage({
