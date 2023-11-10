@@ -2,7 +2,7 @@ import { Box, Button, TextField, Typography } from '@mui/material'
 import { SelectInterviewType } from './SelectInterviewType'
 import WriteAnswers from './WriteAnswers'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { IFormInterview } from '@/app/recruitment/write/page'
+import { IFormInterview } from '@/app/recruit/write/page'
 
 const AreaForAddInterviewForm = ({
   question,

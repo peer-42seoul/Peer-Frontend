@@ -166,7 +166,7 @@ export const PcNav = () => {
         <Avatar
           onClick={() => router.push(isLogin ? '/my-page/profile' : '/login')}
         />
-        <Link href={'/recruitment'}>
+        <Link href={'/recruit'}>
           {isTablet ? (
             <IconButton>
               <BorderColor />

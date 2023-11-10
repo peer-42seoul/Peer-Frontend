@@ -60,7 +60,7 @@ const MainCard = ({
 
   return (
     <Link
-      href={`/recruitment/${post_id}?type=${type}`}
+      href={`/recruit/${post_id}?type=${type}`}
       style={{ textDecoration: 'none' }}
     >
       <Card sx={{ maxWidth: 345 }}>
