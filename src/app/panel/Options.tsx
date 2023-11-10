@@ -45,14 +45,14 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     }
 
     const status = makeCommaString({
-      "ONGOING": statusonGoing,
-      "DONE": statusdone,
+      ONGOING: statusonGoing,
+      DONE: statusdone,
     })
 
     const place = makeCommaString({
-      "ONLINE": placeOnline,
-      "OFFLINE": placeOffline,
-      "MIX": placemix,
+      ONLINE: placeOnline,
+      OFFLINE: placeOffline,
+      MIX: placemix,
     })
 
     const tag = tagData.length ? tagData.join(',') : ''

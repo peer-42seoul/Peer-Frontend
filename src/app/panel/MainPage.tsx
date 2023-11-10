@@ -7,6 +7,7 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material'
+
 import { useEffect, useState } from 'react'
 import EditButton from './EditButton'
 import MainCard from './MainCard'
@@ -19,18 +20,18 @@ import MainProfile from './MainProfile'
 import MainShowcase from './MainShowcase'
 import MainCarousel from './MainCarousel'
 import { useSearchParams } from 'next/navigation'
-import useInfiniteScroll from '@/hook/useInfiniteScroll'
+import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
 import { IPost } from '@/types/IPostDetail'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
-//latest, hit
+
 export type ProjectSort = 'latest' | 'hit'
 export type ProjectType = 'STUDY' | 'PROJECT'
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  const [data, setData] = useState<IPagination<IPost[]>>(initData)
+  const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType>('STUDY')
   const [openOption, setOpenOption] = useState<boolean>(false)
@@ -49,29 +50,34 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
 
-  // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
-  const pageSize = 5
-
-  const { data: newData, isValidating, error, mutate } = useSWR<IPagination<IPost[]>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region1=${detailOption.region1}&region2=${detailOption.region2}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
+  const pageSize = 3
+  /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
+  const {
+    data: newData,
+    isValidating,
+    error,
+    mutate,
+  } = useSWR<IPagination<IPost[]>>(
+    page !== 1
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region1=${detailOption.region1}&region2=${detailOption.region2}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
+      : null,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
 
-  // useEffect(() => {
-  //   if (!newData) return
-  //   setData([...data, ...newData]);
+  useEffect(() => {
+    if (!newData) return
+    if (newData && newData?.last)
+      setContent([...content, ...(newData?.content ?? [])])
+  }, [content, newData])
 
-  // }, [])
-
-  const pageLimit = data?.totalPages ?? 1
-  const { target, spinner } = useInfiniteScroll({
+  const { target, spinner } = useInfiniteScrollHook(
     setPage,
     mutate,
-    pageLimit,
+    (initData?.last || newData?.last) ?? false,
     page,
-  })
+  )
 
   return (
     <>
@@ -99,12 +105,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <Typography>로딩중...</Typography>
           ) : error ? (
             <Typography>에러 발생</Typography>
-          ) : data?.content.length == 0 ? (
+          ) : content?.length == 0 ? (
             <Typography>데이터가 없습니다</Typography>
           ) : (
             <>
               <Stack alignItems={'center'} gap={2}>
-                {data?.content.map((project: IPost) => (
+                {content?.map((project: IPost) => (
                   <Box key={project.user_id}>
                     <MainCard {...project} type={type} />
                   </Box>
@@ -164,12 +170,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               <Typography>로딩중...</Typography>
             ) : error ? (
               <Typography>에러 발생</Typography>
-            ) : data?.content.length == 0 ? (
+            ) : content?.length == 0 ? (
               <Typography>데이터가 없습니다</Typography>
             ) : (
               <>
                 <Grid container spacing={2}>
-                  {data?.content.map((project: IPost) => (
+                  {content?.map((project: IPost) => (
                     <Grid item key={project.user_id} sm={12} md={4}>
                       <MainCard {...project} type={type} />
                     </Grid>
