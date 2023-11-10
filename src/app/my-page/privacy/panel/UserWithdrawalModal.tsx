@@ -25,6 +25,12 @@ const UserWithdrawalModal = ({
   const router = useRouter()
   const [, , removeCookie] = useCookies(['refreshToken'])
 
+  const handlekeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter') {
+      handleDelete()
+    }
+  }
+
   const handleDelete = async () => {
     if (password === '') {
       setToastProps({
@@ -78,6 +84,7 @@ const UserWithdrawalModal = ({
             value={password}
             type="password"
             autoComplete="current-password"
+            onKeyDown={handlekeyDown}
           />
           <Typography id="modal-description">
             계정을 삭제하시겠습니까? <br />
