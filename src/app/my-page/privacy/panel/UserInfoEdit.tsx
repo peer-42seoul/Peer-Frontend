@@ -107,7 +107,7 @@ export default function UserInfoEdit({
                 <CuTextField
                   field={field}
                   type={showPresentPassword}
-                  autoComplete="off"
+                  autoComplete="current-password"
                   error={errors.presentPassword ? true : false}
                   placeholder="현재 비밀번호"
                   InputProps={{
@@ -137,7 +137,7 @@ export default function UserInfoEdit({
                 <CuTextField
                   field={field}
                   type={showNewPassword}
-                  autoComplete="off"
+                  autoComplete="new-password"
                   error={errors.newPassword ? true : false}
                   placeholder="새로운 비밀번호"
                   InputProps={{
@@ -165,7 +165,7 @@ export default function UserInfoEdit({
                 <CuTextField
                   field={field}
                   type={showConfirmPassword}
-                  autoComplete="off"
+                  autoComplete="new-password"
                   error={errors.confirmPassword ? true : false}
                   placeholder="새로운 비밀번호 재입력"
                   InputProps={{
