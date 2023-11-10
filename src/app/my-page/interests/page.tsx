@@ -140,8 +140,9 @@ const MyInterests = () => {
   }
 
   const axiosInstance = useAxiosWithAuth()
+  const pagesize = 10
   const { data, isLoading, mutate, error } = useSWR<IInterestResponse>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=10`,
+    `/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=${pagesize}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
@@ -165,7 +166,12 @@ const MyInterests = () => {
   }
 
   useEffect(() => {
-    if (!isLoading && data && !data.isLast) {
+    if (
+      !isLoading &&
+      data &&
+      !data.isLast &&
+      data.postList.length === pagesize
+    ) {
       setPostList((prev) => prev.concat(data.postList))
       setPageLimit((prev) => prev + 1)
     }
