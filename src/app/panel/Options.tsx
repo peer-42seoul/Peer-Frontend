@@ -45,14 +45,14 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     }
 
     const status = makeCommaString({
-      ONGOING: statusonGoing,
-      DONE: statusdone,
+      "ONGOING": statusonGoing,
+      "DONE": statusdone,
     })
 
     const place = makeCommaString({
-      ONLINE: placeOnline,
-      OFFLINE: placeOffline,
-      MIX: placemix,
+      "ONLINE": placeOnline,
+      "OFFLINE": placeOffline,
+      "MIX": placemix,
     })
 
     const tag = tagData.length ? tagData.join(',') : ''
@@ -80,7 +80,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         <Grid item xs={12}>
           <Box>작업 스택</Box>
           <TagAutoComplete
-            list={listData?.map(({ name }: { name: string }) => name)}
+            list={listData?.map(({ name }: { name: string }) => name) || []}
             datas={tagData}
             setData={setTagData}
           />

@@ -90,7 +90,7 @@ const RecruitFormModal = ({
 
     try {
       await axiosWithAuth.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/interview/${recruit_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`,
         value,
       )
       setOpenConfirm(false)

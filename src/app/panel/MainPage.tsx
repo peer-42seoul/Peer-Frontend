@@ -14,7 +14,6 @@ import SearchOption from './SearchOption'
 import SelectSort from './SelectSort'
 import SelectType from './SelectType'
 import { defaultGetFetcher } from '@/api/fetchers'
-import useSWR from 'swr'
 import MainProfile from './MainProfile'
 import MainShowcase from './MainShowcase'
 import MainCarousel from './MainCarousel'
@@ -25,12 +24,12 @@ import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
+import useSWRInfinite from 'swr/infinite'
 //latest, hit
 export type ProjectSort = 'latest' | 'hit'
 export type ProjectType = 'STUDY' | 'PROJECT'
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType>('STUDY')
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort>('latest')
@@ -51,22 +50,28 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   // useswr의 초기값을 initdata로 설정하려했으나 실패. 지금 코드는 초기에 서버와 클라이언트 둘다 리퀘스트를 보내게 됨
   const pageSize = 5
 
-  const { data, isValidating, error, mutate } = useSWR<IPagination<IPost[]>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region1=${detailOption.region1}&region2=${detailOption.region2}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
+  const getKey = (pageIndex, previousPageData) => {
+    if (previousPageData && !previousPageData.length) return null // reached the end
+    return `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${pageIndex}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region1=${detailOption.region1}&region2=${detailOption.region2}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`                  // SWR key
+  }
+
+  const { data, isValidating, error, mutate, size, setSize } = useSWRInfinite(
+    getKey,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
-    {
-      fallbackData: initData,
-    },
+    // { fallbackData: initData },
   )
-  const pageLimit = data?.totalPages ?? 1
-  const { target, spinner } = useInfiniteScroll({
-    setPage,
-    mutate,
-    pageLimit,
-    page,
-  })
+
+  console.log("Data", data);
+
+  // const pageLimit = data?.totalPages ?? 1
+  // const { target, spinner } = useInfiniteScroll({
+  //   setSize,
+  //   mutate,
+  //   pageLimit,
+  //   size,
+  // })
 
   return (
     <>
@@ -94,12 +99,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <Typography>로딩중...</Typography>
           ) : error ? (
             <Typography>에러 발생</Typography>
-          ) : data?.content.length == 0 ? (
+          ) : data?.content?.length == 0 ? (
             <Typography>데이터가 없습니다</Typography>
           ) : (
             <>
               <Stack alignItems={'center'} gap={2}>
-                {data?.content.map((project: IPost) => (
+                {data?.content?.map((project: IPost) => (
                   <Box key={project.user_id}>
                     <MainCard {...project} type={type} />
                   </Box>
@@ -159,12 +164,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               <Typography>로딩중...</Typography>
             ) : error ? (
               <Typography>에러 발생</Typography>
-            ) : data?.content.length == 0 ? (
+            ) : data?.content?.length == 0 ? (
               <Typography>데이터가 없습니다</Typography>
             ) : (
               <>
                 <Grid container spacing={2}>
-                  {data?.content.map((project: IPost) => (
+                  {data?.content?.map((project: IPost) => (
                     <Grid item key={project.user_id} sm={12} md={4}>
                       <MainCard {...project} type={type} />
                     </Grid>
@@ -194,3 +199,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 }
 
 export default MainPage
+function useuseSWRInfinite<T>(arg0: string, arg1: (url: string) => Promise<any>, arg2: { fallbackData: IPagination<IPost[]> }): { data: any; isValidating: any; error: any; mutate: any } {
+  throw new Error('Function not implemented.')
+}
+
