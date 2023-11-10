@@ -150,7 +150,7 @@ const MyInterests = () => {
     setIsDeleting(true)
     return await axiosWithAuth
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recriut/favorite?type=${type}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}`,
       )
       .then(() => {
         setToastMessage({
