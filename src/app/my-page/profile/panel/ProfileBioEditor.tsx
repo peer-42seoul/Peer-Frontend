@@ -49,7 +49,7 @@ const ProfileBioEditor = ({
   const [nicknameError, setNicknameError] = useState<boolean>(false)
   // const [image, setImage] = useState<File | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(
-    data.profileImageURL,
+    data.profileImageUrl,
   )
   const [imageChanged, setImageChanged] = useState<boolean>(false)
 
@@ -240,8 +240,8 @@ const ProfileBioEditor = ({
                     src={
                       previewImage
                         ? previewImage
-                        : // : data.profileImageURL
-                          // ? data.profileImageURL
+                        : // : data.profileImageUrl
+                          // ? data.profileImageUrl
                           '/images/profile.jpeg'
                     }
                     alt="profile image"
@@ -283,7 +283,7 @@ const ProfileBioEditor = ({
             </Box>
 
             {/* )}
-              name={'profileImageURL'}
+              name={'profileImageUrl'}
               control={control}
             /> */}
           </Grid>

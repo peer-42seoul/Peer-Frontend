@@ -131,7 +131,7 @@ const MyProfile = () => {
       >
         {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
         <ProfileCard
-          profileImageURL={userInfo.profileImageURL}
+          profileImageUrl={userInfo.profileImageUrl}
           nickname={userInfo.nickname}
           association={userInfo?.association}
           email={userInfo.email}
@@ -164,7 +164,7 @@ const MyProfile = () => {
       >
         <ProfileBioEditor
           data={{
-            profileImageURL: userInfo.profileImageURL,
+            profileImageUrl: userInfo.profileImageUrl,
             nickname: userInfo.nickname,
             association: userInfo.association,
             email: userInfo.email,

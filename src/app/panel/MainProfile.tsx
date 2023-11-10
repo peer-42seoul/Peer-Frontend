@@ -21,7 +21,7 @@ const MainProfile = () => {
     >
       <Avatar
         alt="avatar"
-        src={data?.profileImageURL}
+        src={data?.profileImageUrl}
         sx={{ width: 56, height: 56 }}
       />
       {isLogin ? (
