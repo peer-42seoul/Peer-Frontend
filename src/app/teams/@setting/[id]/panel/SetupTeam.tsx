@@ -414,7 +414,7 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
             </Stack>
           </Box>
           <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
-            <Typography>팀 역활</Typography>
+            <Typography>팀 역할</Typography>
             <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
               <Stack>
                 <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
@@ -427,7 +427,7 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
                   <Typography>디자이너</Typography>
                 </Box>
                 <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
-                  <Typography>역활</Typography>
+                  <Typography>역할</Typography>
                 </Box>
               </Stack>
             </Box>
