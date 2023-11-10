@@ -15,7 +15,6 @@ import { red } from '@mui/material/colors'
 import { useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
-import { ProjectType } from './MainPage'
 import useAxiosWithAuth from '@/api/config'
 import Link from 'next/link'
 
