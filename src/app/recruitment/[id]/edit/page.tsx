@@ -49,22 +49,22 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const [status, setStatus] = useState<statusEnum>(statusEnum.BEFORE)
+  const [allTagList, setAllTagList] = useState<ITag[]>([])
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
-  const { data } = useSWR(
+  const { data, error } = useSWR(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.recruit_id}`,
     (url:string) => axiosInstance.get(url).then((res) => res.data),
   )
 
   useEffect(() => {
-    if (!data) {
+    if (error) {
       console.log('error ocurred!!')
       setToastMessage('데이터를 불러오는데 실패했습니다.')
       openToast()
     } else {
-      console.log('Tag fetching success', data)
       setTitle(data.title)
       setPreviewImage(data.previewImage)
       setName(data.name)
@@ -79,6 +79,7 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
       setRoleList(data.roleList)
       setInterviewList(data.interviewList)
       setStatus(data.status)
+      setAllTagList(data.tagList)
     }
   }, [data])
 
@@ -209,9 +210,7 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
           <TagAutoComplete
             datas={tagList}
             setData={setTagList}
-            openToast={openToast}
-            setToastMessage={setToastMessage}
-            params={params}
+            allTagList={allTagList}
           />
         </Box>
         {type === 'study' ? null : (

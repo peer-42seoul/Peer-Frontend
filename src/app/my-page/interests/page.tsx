@@ -30,8 +30,8 @@ interface IMainCard {
   user_thumbnail: string
   status: string
   tagList: ITag[]
-  isFavorite: boolean
-  post_id: number
+  favorite?: boolean
+  recruit_id: number
   type: ProjectType
 }
 

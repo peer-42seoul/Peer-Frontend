@@ -1,9 +1,7 @@
 'use client'
-import { Avatar, Box, Modal, Stack, Typography, Button } from '@mui/material'
+import { Avatar, Box, Modal, Stack, Typography } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import React, { useState } from 'react'
-import useAuthStore from '@/states/useAuthStore'
-import { useCookies } from 'react-cookie'
 
 // TODO css 다른 파일로 빼기
 
@@ -57,16 +55,8 @@ const ProfileCard = ({
     setOpen(false)
   }
 
-  const { logout } = useAuthStore.getState()
-  const [, , removeCookie] = useCookies(['refreshToken'])
-  const handleLogout = () => {
-    logout()
-    removeCookie('refreshToken', { path: '/' })
-    window.location.reload()
-  }
   return (
     <div>
-      <Button onClick={handleLogout}>로그아웃</Button>
       <Stack direction="row">
         {/* image component */}
         <div

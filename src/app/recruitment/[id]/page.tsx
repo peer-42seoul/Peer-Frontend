@@ -37,28 +37,22 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const { isLogin } = useAuthStore()
   const axiosInstance = useAxiosWithAuth()
 
-  const { data, isLoading, error } = useSWR<IPostDetail>(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
-    isLogin ? (url: string) => axiosInstance.get(url).then((res) => res.data)
-      : defaultGetFetcher)
-
-  const { data: userData } = useSWR<{
-    nickname: string
-    profileImageUrl: string
-  }>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/other/?userId=${data?.user_id}?infoList=profileImageUrl&infoList=nickname`,
-    defaultGetFetcher,
+  const { data, isLoading, error } = useSWR<IPostDetail>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
+    isLogin
+      ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      : defaultGetFetcher,
   )
 
   const total = useMemo(() => {
     if (!data) return 0
-    return data.role.reduce((acc, cur) => {
+    return data?.roleList?.reduce((acc, cur) => {
       return acc + cur.number
     }, 0)
   }, [data])
 
   const handleApply = (selectedRole: string) => {
-    if (isLogin)
-      router.push("/login")
+    if (!isLogin) router.push('/login')
     else {
       setRole(selectedRole)
       setRoleOpen(false)
@@ -75,7 +69,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
       <RecruitFormModal
         open={open}
         setOpen={setOpen}
-        post_id={params.id}
+        recruit_id={params.id}
         role={role}
         user_id={data?.user_id}
       />
@@ -83,7 +77,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
         <Container>
           <Stack direction={'row'} gap={4} marginBottom={6}>
             <Image
-              src={userData?.profileImageUrl ?? ''}
+              src={data?.user_thumbnail ?? ''}
               alt="leader_profile"
               width={300}
               height={300}
@@ -94,7 +88,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 <Chip label={data?.status} size="medium" />
               </Stack>
               <Stack gap={2} direction="row">
-                <Typography>{userData?.nickname}</Typography>
+                <Typography>{data?.user_nickname}</Typography>
                 <Typography>
                   {type === 'project' ? '프로젝트' : '스터디'}
                 </Typography>
@@ -111,17 +105,26 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 <LinkButton href={data?.link} />
               </Stack>
               <ApplyButton
-                role={data?.role?.map((item) => item.name) || []}
+                role={data?.roleList?.map((item) => item.name) || []}
                 onApply={handleApply}
               />
             </Box>
           </Stack>
-          <RecruitFormText label="총 인원" content={total?.toString() ?? '0'} />
+          <RecruitFormText
+            label="총 인원"
+            content={(total?.toString() ?? '0') + ' 명'}
+          />
           <RecruitFormText label="목표 작업기간" content={data?.due} />
-          <RecruitFormText label="지역" content={data?.region} />
+          <RecruitFormText label="지역">
+            {data?.region ? (
+              <Typography>{data.region[0] + ' ' + data.region?.[1]}</Typography>
+            ) : (
+              <Typography>없음</Typography>
+            )}
+          </RecruitFormText>
           <RecruitFormText label="역할">
             <Box>
-              {data?.role?.map(({ name, number }, idx: number) => (
+              {data?.roleList?.map(({ name, number }, idx: number) => (
                 <Chip label={`${name} ${number} 명`} size="small" key={idx} />
               ))}
             </Box>
@@ -148,7 +151,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             onClose={() => setRoleOpen(false)}
           >
             <List>
-              {data?.role.map(({ name }) => (
+              {data?.roleList.map(({ name }) => (
                 <ListItem key={name}>
                   <ListItemButton onClick={() => handleApply(name)}>
                     {name}
@@ -160,24 +163,33 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           <Typography variant="h5">{data?.title}</Typography>
           <Chip label={data?.status} size="medium" />
           <Stack gap={2} direction="row">
-            <Typography>{userData?.nickname}</Typography>
+            <Typography>{data?.user_nickname}</Typography>
             <Typography>
               {type === 'project' ? '프로젝트' : '스터디'}
             </Typography>
             <Typography>{data?.place}</Typography>
           </Stack>
           <Image
-            src={userData?.profileImageUrl ?? ''}
+            src={data?.user_thumbnail ?? ''}
             alt="leader_profile"
             width={300}
             height={300}
           />
-          <RecruitFormText label="총 인원" content={total?.toString() ?? '0'} />
+          <RecruitFormText
+            label="총 인원"
+            content={(total?.toString() ?? '0') + ' 명'}
+          />
           <RecruitFormText label="목표 작업기간" content={data?.due} />
-          <RecruitFormText label="지역" content={data?.region} />
+          <RecruitFormText label="지역">
+            {data?.region ? (
+              <Typography>{data.region[0] + ' ' + data.region?.[1]}</Typography>
+            ) : (
+              <Typography>없음</Typography>
+            )}
+          </RecruitFormText>
           <RecruitFormText label="역할">
             <Box>
-              {data?.role?.map(({ name, number }, idx: number) => (
+              {data?.roleList?.map(({ name, number }, idx: number) => (
                 <Chip label={`${name} ${number} 명`} size="small" key={idx} />
               ))}
             </Box>
@@ -201,10 +213,8 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             variant="contained"
             size="large"
             onClick={() => {
-              if (isLogin)
-                router.push("/login")
-              else
-                setRoleOpen(true)
+              if (!isLogin) router.push('/login')
+              else setRoleOpen(true)
             }}
           >
             지원하기

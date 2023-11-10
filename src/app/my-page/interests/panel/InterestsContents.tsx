@@ -12,8 +12,8 @@ interface IMainCard {
   user_thumbnail: string
   status: string
   tagList: ITag[]
-  isFavorite: boolean
-  post_id: number
+  favorite?: boolean
+  recruit_id: number
   type: ProjectType
 }
 
@@ -39,7 +39,7 @@ const InterestsContents = ({
         direction="row"
       >
         {postList.map((item) => (
-          <Grid item key={item.post_id} xs={10} sm={4}>
+          <Grid item key={item.recruit_id} xs={10} sm={4}>
             <MainCard {...item} type={type as ProjectType} />
           </Grid>
         ))}
