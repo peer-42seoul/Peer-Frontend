@@ -12,6 +12,9 @@ import useToast from '@/hook/useToast'
 import useMedia from '@/hook/useMedia'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
+import { useCookies } from 'react-cookie'
+import useAuthStore from '@/states/useAuthStore'
+import CuButton from '@/components/CuButton'
 
 interface IModals {
   introduction: boolean
@@ -89,11 +92,24 @@ const MyProfile = () => {
 
   const { CuToast, isOpen: isToastOpen, openToast, closeToast } = useToast()
 
+  const { logout } = useAuthStore.getState()
+  const [, , removeCookie] = useCookies(['refreshToken'])
+  const handleLogout = () => {
+    logout()
+    removeCookie('refreshToken', { path: '/' })
+    window.location.reload()
+  }
+
   if (error) {
     return <Typography>데이터 조회에 실패했습니다.</Typography>
   }
   if (isLoading) {
-    return <Typography>로딩중 입니다.</Typography>
+    return (
+      <>
+        <Typography>로딩중 입니다.</Typography>
+        <CuButton variant="text" action={handleLogout} message="로그아웃" />
+      </>
+    )
   }
   if (!userInfo) {
     return <Typography>데이터가 없습니다.</Typography>
@@ -132,6 +148,7 @@ const MyProfile = () => {
         <ProfileSection sectionTitle="links" setModalType={setModalType}>
           <ProfileLinksSection linkList={userInfo.linkList} />
         </ProfileSection>
+        <CuButton variant="text" action={handleLogout} message="로그아웃" />
       </Box>
       {/* profile home end*/}
 

@@ -4,22 +4,23 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
 import { Dispatch, SetStateAction } from 'react'
+import { statusEnum } from '@/types/IPostDetail'
 
 interface RowRadioButtonsGroupProps {
-  setValue: Dispatch<SetStateAction<string>>
+  setValue: Dispatch<SetStateAction<statusEnum>>
 }
 
-export default function RowRadioButtonsGroup({
+export default function RowRadioButtonsGroupStatus({
   setValue,
 }: RowRadioButtonsGroupProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value)
+    setValue(event.target.value as unknown as statusEnum)
   }
 
   return (
     <FormControl>
       <FormLabel id="demo-row-radio-buttons-group-label">
-        스터디 or 프로젝트
+        팀 모집 현황
       </FormLabel>
       <RadioGroup
         row
@@ -28,15 +29,17 @@ export default function RowRadioButtonsGroup({
         onChange={handleChange}
         defaultValue="project"
       >
+        <FormControlLabel value="BEFORE" control={<Radio />} label="모집전" />
         <FormControlLabel
-          value="study"
+          value="ONGOING"
           control={<Radio />}
-          label="Study-group"
+          label="모집중"
+          defaultChecked
         />
         <FormControlLabel
-          value="project"
+          value="AFTER"
           control={<Radio />}
-          label="Project-team"
+          label="모집완료"
           defaultChecked
         />
       </RadioGroup>

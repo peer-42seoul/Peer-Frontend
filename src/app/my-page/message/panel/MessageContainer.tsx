@@ -4,11 +4,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { AxiosResponse } from 'axios'
 import { Button, Stack, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import { IMessagObject } from '@/types/IMessageInformation'
+import { IMessageListData } from '@/types/IMessage'
 import CuButton from '@/components/CuButton'
 import useToast from '@/hook/useToast'
 import MessageList from './MessageList'
-import MessageWritingFormModal from './MessageWritingFormModal'
+import useMessageListState from '@/states/useMessageListState'
 
 interface ISearchBarProps {
   setSearchKeyword: (keyword: string) => void
@@ -55,53 +55,50 @@ const ManageBar = ({ handleSelectAll, handleDelete }: IManageBarProps) => {
 }
 
 interface IMessageContainerProps {
-  messages: IMessagObject[]
+  originalMessageData: IMessageListData[] | undefined
   error: any
   isLoading: boolean
   isPC: boolean
-  isNewMessageModalOpen: boolean
-  newMessageModalClose: () => void
 }
 
 const MessageContainer = ({
-  messages,
+  originalMessageData,
   error,
-  isLoading,
-  // isPC,
-  isNewMessageModalOpen,
-  newMessageModalClose,
+  isLoading, // isPC,
 }: IMessageContainerProps) => {
   const { CuToast, isOpen, openToast, closeToast } = useToast()
-  const [messageData, setMessageData] = useState<IMessagObject[]>([])
   const [isManageMode, setIsManageMode] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
   const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set())
 
   const axiosInstance = useAxiosWithAuth()
+  const { messageList, setMessageList } = useMessageListState()
 
   useEffect(() => {
     if (isManageMode) setSelectedUsers(new Set())
   }, [isManageMode])
 
   useEffect(() => {
-    setMessageData(messages)
-  }, [messages])
+    if (originalMessageData) setMessageList(originalMessageData)
+    else setMessageList([])
+  }, [originalMessageData])
 
   // event handler
 
   const handleMessageSearch = useCallback(() => {
     // NOTE : 검색어가 없는 경우에는 모든 메시지를 보여준다?
-    if (!searchKeyword) setMessageData(messages)
+    if (!originalMessageData) return
+    if (!searchKeyword) setMessageList(originalMessageData)
     else
-      setMessageData(
-        messages.filter((message) => {
+      setMessageList(
+        originalMessageData.filter((message) => {
           return message.targetNickname.includes(searchKeyword)
         }),
       )
-  }, [messages, searchKeyword])
+  }, [originalMessageData, searchKeyword])
 
   const handleSelectAll = () => {
-    setSelectedUsers(new Set(messageData.map((message) => message.targetId)))
+    setSelectedUsers(new Set(messageList.map((message) => message.targetId)))
   }
 
   const handleDelete = () => {
@@ -114,8 +111,8 @@ const MessageContainer = ({
           target: requestBody,
         },
       })
-      .then((response: AxiosResponse<IMessagObject[]>) => {
-        setMessageData(response.data)
+      .then((response: AxiosResponse<IMessageListData[]>) => {
+        setMessageList(response.data)
         setIsManageMode(false)
       })
       .catch(() => {
@@ -134,9 +131,9 @@ const MessageContainer = ({
   }
 
   if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
-  if (error || !messageData)
+  if (error || !messageList)
     return <Typography>데이터 불러오기에 실패했습니다.</Typography>
-  if (messageData.length === 0)
+  if (messageList.length === 0)
     return <Typography>쪽지함이 비었습니다.</Typography>
 
   return (
@@ -155,7 +152,7 @@ const MessageContainer = ({
           />
         )}
         <MessageList
-          messages={messageData}
+          messages={messageList}
           isManageMode={isManageMode}
           toggleSelectUser={toggleSelectUser}
         />
@@ -163,13 +160,6 @@ const MessageContainer = ({
           <Typography>삭제에 실패하였습니다.</Typography>
         </CuToast>
       </Stack>
-      {isNewMessageModalOpen && (
-        <MessageWritingFormModal
-          isOpen={isNewMessageModalOpen}
-          handleClose={newMessageModalClose}
-          setMessageData={setMessageData}
-        />
-      )}
     </>
   )
 }

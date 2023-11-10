@@ -77,12 +77,12 @@ const SendCodeForm = ({
 
   const onSubmit = async (data: { code: string }) => {
     const code = data.code
-    const codeData = JSON.stringify({ email, code })
     //console.log(codeData)
 
     axios
-      .post(`${API_URL}/api/v1/signin/find_password`, {
-        codeData,
+      .post(`${API_URL}/api/v1/signin/find-password`, {
+        email: email,
+        code: code,
       })
       .then((res) => {
         if (res.status == 200) {

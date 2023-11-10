@@ -1,30 +1,45 @@
 'use client'
 
-import { Box, Button, TextField, Typography } from '@mui/material'
-import RowRadioButtonsGroup from './panel/radioGroup'
-import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
-import TagAutoComplete from './panel/SetTeamTag/TagAutoComplete'
-import { useState } from 'react'
-import BasicSelect, { ComponentType } from './panel/BasicSelect'
-import SetInterview from './panel/SetInterview/SetInterview'
-import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
-import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import useToast from '@/hook/useToast'
-import SelectRegion from './panel/SelectRegion'
-import ImageUploadButton from '@/components/ImageUploadButton'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import Image from 'next/image'
+import ImageUploadButton from '@/components/ImageUploadButton'
+import RowRadioButtonsGroup from '../[id]/edit/panel/radioGroup'
+import SetTeamRole from '../[id]/edit/panel/SetTeamRole/SetTeamRole'
+import TagAutoComplete from '../[id]/edit/panel/SetTeamTag/TagAutoComplete'
+import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
+import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
+import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
+import SelectRegion from '../[id]/edit/panel/SelectRegion'
+import { ITag } from '@/types/IPostDetail'
+import useAxiosWithAuth from '@/api/config'
+import useSWR from 'swr'
+// import useAuthStore from '@/states/useAuthStore'
+
+const dummyData1: ITag = {
+  name: 'java',
+  color: 'red',
+}
+const dummyData2: ITag = {
+  name: 'spring',
+  color: 'blue',
+}
+const dummyData3: ITag = {
+  name: 'react',
+  color: 'green',
+}
+const dummyDatas: ITag[] = [dummyData1, dummyData2, dummyData3]
 
 export interface IRoleData {
+  // types 로 병합예정
   role: string | null
   member: number
 }
 
-export interface tag {
-  tagName: string
-  tagColor: string
-}
-
 export interface IFormInterview {
+  // 수정 및 types로 병합예정
   question: string
   type: string
   optionList?: string[]
@@ -34,10 +49,12 @@ export interface IFormInterview {
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
   const [image, setImage] = useState<File[]>([])
-  const [previewImage, setPreviewImage] = useState<string>('/images/defaultImage.png')
+  const [previewImage, setPreviewImage] = useState<string>(
+    '/images/defaultImage.png',
+  )
   const [name, setName] = useState<string>('')
   const [type, setType] = useState<string>('project')
-  const [tagList, setTagList] = useState<tag[]>([])
+  const [tagList, setTagList] = useState<ITag[]>([])
   const [region, setRegion] = useState<string[]>([])
   const [place, setPlace] = useState<string>('')
   const [due, setMonth] = useState<string>('')
@@ -46,23 +63,47 @@ const CreateTeam = () => {
   const [content, setContent] = useState<string>('')
   const [roleList, setRoleList] = useState<IRoleData[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
+  const [allTagList, setAllTagList] = useState<ITag[]>(dummyDatas)
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
+  const router = useRouter()
+  const axiosInstance = useAxiosWithAuth()
+  // const { isLogin } = useAuthStore()
 
-  // interview {
-  //   question : string,
-  //   type : string,
-  //   optionList : string[]
-  //  }
+  // 로그인 하지 않고 모집글쓰기 들어왓을때 로그인 하러가기 안내가 필요합니다.
+  // 새로운 공통컴포넌트 모달창을 만들면 효율적일듯합니다.
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     setToastMessage('로그인이 필요합니다')
+  //     openToast()
+  //     router.push('/')
+  //   }
+  // }, [isLogin])
+
+  const { data, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
+  )
+
+  useEffect(() => {
+    if (error) {
+      console.log('error ocurred!!')
+      setToastMessage('태그를 불러오는데 실패했습니다.')
+      openToast()
+    } else if (data) {
+      console.log('tag fetching success', data)
+      setAllTagList(data)
+    }
+  }, [data])
 
   const onHandlerFinish = async () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
-    await axios
-      .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/recruit/write`,
+    try {
+      const response = await axiosInstance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
         {
           place,
           image,
@@ -78,9 +119,12 @@ const CreateTeam = () => {
           interviewList,
         },
       )
-      .catch((err) => {
-        console.log(err)
-      })
+      router.push(`/recruitment/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
+    } catch (error) {
+      console.log(error)
+      setToastMessage('모집글 작성 실패, 다시 시도해주세요')
+      openToast()
+    }
   }
 
   return (
@@ -122,7 +166,7 @@ const CreateTeam = () => {
           <Typography variant="h6">팀 분류</Typography>
           <RowRadioButtonsGroup setValue={setType} />
         </Box>
-        {type === 'project' ? null : (
+        {type === 'study' && (
           <Box>
             <Typography variant="h6">팀 인원</Typography>
             <BasicSelect
@@ -156,7 +200,7 @@ const CreateTeam = () => {
           <Typography variant="h6">커뮤니케이션 툴 링크</Typography>
           <SetCommunicationToolLink setValue={setCommunicationTool} />
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Stack>
           <Typography variant="h6" sx={{ paddingRight: '5px' }}>
             모집인원 인터뷰 등록하기
           </Typography>
@@ -169,15 +213,16 @@ const CreateTeam = () => {
             interviewData={interviewList}
             setInterviewData={setInterviewList}
           />
-        </Box>
+        </Stack>
         <Box>
           <Typography variant="h6">태그</Typography>
-          <TagAutoComplete
-            datas={tagList}
-            setData={setTagList}
-            openToast={openToast}
-            setToastMessage={setToastMessage}
-          />
+          {allTagList ? (
+            <TagAutoComplete
+              datas={tagList}
+              setData={setTagList}
+              allTagList={allTagList}
+            />
+          ) : null}
         </Box>
         {type === 'study' ? null : (
           <Box>

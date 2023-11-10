@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import RowRadioButtonsGroup from './panel/radioGroup'
 import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
 import TagAutoComplete from './panel/SetTeamTag/TagAutoComplete'
@@ -8,20 +8,19 @@ import { useEffect, useState } from 'react'
 import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
-import axios from 'axios'
 import useToast from '@/hook/useToast'
 import SelectRegion from './panel/SelectRegion'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import Image from 'next/image'
+import useSWR from 'swr'
+import useAxiosWithAuth from '@/api/config'
+import { useRouter } from 'next/navigation'
+import RowRadioButtonsGroupStatus from './panel/radioGroupStatus'
+import { ITag, statusEnum } from '@/types/IPostDetail'
 
 export interface IRoleData {
   role: string | null
   member: number
-}
-
-export interface tag {
-  tagName: string
-  tagColor: string
 }
 
 export interface IFormInterview {
@@ -31,7 +30,7 @@ export interface IFormInterview {
   ratioList?: { max: string; valueOfMin: string; valueOfMax: string }
 }
 
-const CreateTeam = () => {
+const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   const [title, setTitle] = useState<string>('')
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
@@ -39,7 +38,7 @@ const CreateTeam = () => {
   )
   const [name, setName] = useState<string>('')
   const [type, setType] = useState<string>('project')
-  const [tagList, setTagList] = useState<tag[]>([])
+  const [tagList, setTagList] = useState<ITag[]>([])
   const [region, setRegion] = useState<string[]>([])
   const [place, setPlace] = useState<string>('')
   const [due, setMonth] = useState<string>('')
@@ -49,41 +48,48 @@ const CreateTeam = () => {
   const [roleList, setRoleList] = useState<IRoleData[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [openBasicModal, setOpenBasicModal] = useState(false)
+  const [status, setStatus] = useState<statusEnum>(statusEnum.BEFORE)
+  const [allTagList, setAllTagList] = useState<ITag[]>([])
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
+  const router = useRouter()
+  const axiosInstance = useAxiosWithAuth()
+  const { data, error } = useSWR(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.recruit_id}`,
+    (url:string) => axiosInstance.get(url).then((res) => res.data),
+  )
 
   useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/recruit_id`) // 팀페이지 들어올때 받아와야함
-      .then((res) => {
-        setTitle(res.data.title)
-        setPreviewImage(res.data.previewImage)
-        setName(res.data.name)
-        setType(res.data.type)
-        setTagList(res.data.tagList)
-        setRegion(res.data.region)
-        setPlace(res.data.place)
-        setMonth(res.data.due)
-        setTeamsize(res.data.teamsize)
-        setCommunicationTool(res.data.link)
-        setContent(res.data.content)
-        setRoleList(res.data.roleList)
-        setInterviewList(res.data.interviewList)
-      })
-      .catch((err) => {
-        console.log('error ocurred!!', err)
-        setToastMessage('데이터를 불러오는데 실패했습니다.')
-        openToast()
-      })
-  }, [])
+    if (error) {
+      console.log('error ocurred!!')
+      setToastMessage('데이터를 불러오는데 실패했습니다.')
+      openToast()
+    } else {
+      setTitle(data.title)
+      setPreviewImage(data.previewImage)
+      setName(data.name)
+      setType(data.type)
+      setTagList(data.tagList)
+      setRegion(data.region)
+      setPlace(data.place)
+      setMonth(data.due)
+      setTeamsize(data.teamsize)
+      setCommunicationTool(data.link)
+      setContent(data.content)
+      setRoleList(data.roleList)
+      setInterviewList(data.interviewList)
+      setStatus(data.status)
+      setAllTagList(data.tagList)
+    }
+  }, [data])
 
   const onHandlerFinish = async () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
-    await axios
-      .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/recruit/edit/recruit_id`, // 팀페이지 들어올때 받아와야함
+    try {
+      const response = await axiosInstance.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.recruit_id}`,
         {
           place,
           image,
@@ -97,11 +103,15 @@ const CreateTeam = () => {
           tagList,
           roleList,
           interviewList,
+          status,
         },
       )
-      .catch((err) => {
-        console.log(err)
-      })
+      if (response.status === 200) router.push(`/recruitment/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
+    } catch (error) {
+      console.log(error)
+      setToastMessage('모집글 작성 실패, 다시 시도해주세요')
+      openToast()
+    }
   }
 
   return (
@@ -140,10 +150,14 @@ const CreateTeam = () => {
           />
         </Box>
         <Box>
+          <Typography>팀 진행 상태</Typography>
+          <RowRadioButtonsGroupStatus setValue={setStatus} />
+        </Box>
+        <Box>
           <Typography variant="h6">팀 분류</Typography>
           <RowRadioButtonsGroup setValue={setType} />
         </Box>
-        {type === 'project' ? null : (
+        {type === 'study' && (
           <Box>
             <Typography variant="h6">팀 인원</Typography>
             <BasicSelect
@@ -177,7 +191,7 @@ const CreateTeam = () => {
           <Typography variant="h6">커뮤니케이션 툴 링크</Typography>
           <SetCommunicationToolLink setValue={setCommunicationTool} />
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Stack>
           <Typography variant="h6" sx={{ paddingRight: '5px' }}>
             모집인원 인터뷰 등록하기
           </Typography>
@@ -190,14 +204,13 @@ const CreateTeam = () => {
             interviewData={interviewList}
             setInterviewData={setInterviewList}
           />
-        </Box>
+        </Stack>
         <Box>
           <Typography variant="h6">태그</Typography>
           <TagAutoComplete
             datas={tagList}
             setData={setTagList}
-            openToast={openToast}
-            setToastMessage={setToastMessage}
+            allTagList={allTagList}
           />
         </Box>
         {type === 'study' ? null : (

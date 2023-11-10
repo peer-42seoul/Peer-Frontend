@@ -1,6 +1,6 @@
 export interface ITag {
-  tagName: string
-  tagColor: string
+  name: string
+  color: string
 }
 
 export interface IPost {
@@ -38,4 +38,10 @@ export interface IFormInterview {
 export interface IRole {
   name: string
   number: number
+}
+
+export enum statusEnum {
+  BEFORE,
+  ONGOING,
+  AFTER,
 }

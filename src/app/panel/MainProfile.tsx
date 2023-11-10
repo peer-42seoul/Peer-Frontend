@@ -1,9 +1,7 @@
 import useAxiosWithAuth from '@/api/config'
-import { getFetcherWithInstance } from '@/api/fetchers'
 import useAuthStore from '@/states/useAuthStore'
 import { IUserProfile } from '@/types/IUserProfile'
 import { Avatar, Stack, Typography } from '@mui/material'
-import { AxiosInstance } from 'axios'
 import useSWR from 'swr'
 
 const MainProfile = () => {
@@ -11,10 +9,9 @@ const MainProfile = () => {
   const { isLogin } = useAuthStore()
   const { data } = useSWR<IUserProfile>(
     isLogin
-      ? [`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`, axiosWithAuth]
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`
       : undefined,
-    ([url, axiosWithAuth]) =>
-      getFetcherWithInstance(url, axiosWithAuth as AxiosInstance),
+      (url: string) => axiosWithAuth.get(url).then((res) => res.data)
   )
 
   return (

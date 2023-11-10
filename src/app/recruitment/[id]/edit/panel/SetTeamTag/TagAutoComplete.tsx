@@ -1,60 +1,26 @@
 import { Autocomplete, Box, Chip, Stack, TextField } from '@mui/material'
-import axios from 'axios'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { tag } from '../../page'
+import { ITag } from '@/types/IPostDetail'
 
 /**
  *
- * @param list 드롭다운 시 나올 리스트입니다.
+ * @param allTagList 드롭다운 시 나올 리스트입니다.
  * @param data 선택한 값들의 리스트입니다 (useState로 관리해주세요)
  * @param setData 선택한 값들의 리스트를 변경해주는 함수입니다 (useState로 관리해주세요)
  */
 
-const dummyData1: tag = {
-  tagName: 'java',
-  tagColor: 'red',
-}
-const dummyData2: tag = {
-  tagName: 'spring',
-  tagColor: 'blue',
-}
-const dummyData3: tag = {
-  tagName: 'react',
-  tagColor: 'green',
-}
-const dummyDatas: tag[] = [dummyData1, dummyData2, dummyData3]
-
 const TagAutoComplete = ({
   datas,
   setData,
+  allTagList,
   placeholder,
-  openToast,
-  setToastMessage
 }: {
-  datas: tag[]
+  datas: ITag[]
   setData: any
+  allTagList: ITag[]
   placeholder?: string
-  openToast: () => void
-  setToastMessage: Dispatch<SetStateAction<string>>
 }) => {
-  const [list, setList] = useState<tag[]>(dummyDatas)
-
-  useEffect(() => { // 중복코드 이후 리팩토링예정
-    axios.get('http://localhost:3000/recruitement/write').then((res) => {
-      console.log(res)
-      setList(res.data.tagList)
-    }).catch((err) => {
-      console.log('error ocurred!!' ,err)
-      setToastMessage('태그를 불러오는데 실패했습니다.')
-      openToast()
-    })
-  }, [])
-
   /* 태그를 추가합니다 */
-  const handleInput = (
-    event: React.SyntheticEvent,
-    value: readonly tag[],
-  ) => {
+  const handleInput = (event: React.SyntheticEvent, value: readonly ITag[]) => {
     setData([...value])
   }
 
@@ -70,10 +36,10 @@ const TagAutoComplete = ({
       <Autocomplete
         disableClearable
         multiple
-        options={list}
+        options={allTagList}
         onChange={(event, value) => handleInput(event, value)}
         value={datas}
-        getOptionLabel={(option) => option.tagName}
+        getOptionLabel={(option) => option.name}
         renderTags={() => <></>}
         renderInput={(params) => (
           <TextField
@@ -89,7 +55,7 @@ const TagAutoComplete = ({
           return (
             <Box key={index}>
               <Chip
-                label={data.tagName}
+                label={data.name}
                 variant="outlined"
                 onDelete={() => {
                   handleDelete(index)

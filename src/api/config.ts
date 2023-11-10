@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 const useAxiosWithAuth = () => {
   const accessToken = useAuthStore.getState().accessToken
-  const [cookies] = useCookies(['refreshToken'])
+  const [cookies, , removeCookie] = useCookies(['refreshToken'])
   const refreshToken = cookies.refreshToken
 
   const router = useRouter()
@@ -13,6 +13,9 @@ const useAxiosWithAuth = () => {
   const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
   })
+
+  //무한 요청 방지
+  let isRefreshing = false
 
   axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
@@ -31,14 +34,16 @@ const useAxiosWithAuth = () => {
       return response
     },
     async (error) => {
+      console.log('is refreshing?', isRefreshing)
+      isRefreshing = true
       const currentPageUrl = window.location.pathname
-      console.log(currentPageUrl)
       if (error.response?.status === 401) {
-        if (!refreshToken) {
+        if (!refreshToken || !accessToken || isRefreshing) {
           // 로그아웃 후 리디렉션
+
           useAuthStore.getState().logout()
+          removeCookie('refreshToken', { path: '/' })
           router.push('/login?redirect=' + currentPageUrl)
-          return
         } else {
           try {
             // accessToken 갱신 요청
@@ -48,18 +53,17 @@ const useAxiosWithAuth = () => {
                 refreshToken: refreshToken,
               },
             )
-
             const newAccessToken = response.data.accessToken
             useAuthStore.getState().login(newAccessToken)
-
+            error.config.headers['Authorization'] = `Bearer ${newAccessToken}`
             // 이전 요청을 재시도
-            return axiosInstance(error.config)
+            return axios.request(error.config)
+            //return axiosInstance(error.config)
           } catch (refreshError) {
             // 로그아웃 후 리디렉션
             useAuthStore.getState().logout()
-            alert('다시 로그인 해주세요')
+            removeCookie('refreshToken', { path: '/' })
             router.push('/login?redirect=' + currentPageUrl)
-            return
           }
         }
       }

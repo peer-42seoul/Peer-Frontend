@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation'
 import { Avatar, Checkbox, Grid, Stack, Typography } from '@mui/material'
-import { IMessagObject } from '@/types/IMessageInformation'
+import { IMessageListData } from '@/types/IMessage'
 
 interface IMessageItemProps {
-  message: IMessagObject
+  message: IMessageListData
   isManageMode: boolean
   toggleSelectUser: (targetId: number) => void
 }
@@ -72,7 +72,7 @@ const MessageItem = ({
 }
 
 interface IMessageListProps {
-  messages: IMessagObject[]
+  messages: IMessageListData[]
   isManageMode: boolean
   toggleSelectUser: (targetId: number) => void
 }

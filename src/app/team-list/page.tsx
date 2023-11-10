@@ -5,13 +5,17 @@ import useShowTeams from '@/states/useShowTeams'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 import { Stack } from '@mui/material'
-import { TeamType } from '../teams/@setting/[id]/page'
 
 enum TeamStatus {
   RECRUITING = '모집중',
   BEFORE = '시작전',
   ONGOING = '진행중',
   COMPLETE = '진행완료',
+}
+
+enum TeamType {
+  STUDY = '스터디',
+  PROJECT = '프로젝트',
 }
 
 export interface ITeamInfo {
