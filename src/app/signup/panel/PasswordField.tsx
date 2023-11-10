@@ -37,7 +37,7 @@ const PasswordField = ({
       <CuTextFieldLabel htmlFor="password">비밀번호</CuTextFieldLabel>
       <CuTextField
         field={field}
-        autoComplete="off"
+        autoComplete="new-password"
         error={false}
         type={showPassword}
         placeholder="비밀번호를 입력하세요"
