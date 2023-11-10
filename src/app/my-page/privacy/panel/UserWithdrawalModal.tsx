@@ -6,7 +6,7 @@ import { useState, Dispatch, SetStateAction } from 'react'
 import { Box, Button, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
-import useAuthStore from '@/states/useAuthStore'
+import LocalStorage from '@/states/localStorage'
 import { useRouter } from 'next/navigation'
 import { useCookies } from 'react-cookie'
 
@@ -40,19 +40,24 @@ const UserWithdrawalModal = ({
           password: password,
         },
       })
-      useAuthStore.getState().logout()
+      LocalStorage.removeItem('authData')
       removeCookie('refreshToken', { path: '/' })
       alert('계정이 삭제되었습니다')
       handleClose()
       router.push('/')
     } catch (error: any) {
-      if (error.response?.status === 401) {
+      if (error.response?.status === 403) {
         setToastProps({
           severity: 'error',
           message: '비밀번호가 일치하지 않습니다',
         })
-        openToast()
+      } else {
+        setToastProps({
+          severity: 'error',
+          message: '계정 삭제에 실패했습니다',
+        })
       }
+      openToast()
     }
   }
 
@@ -71,6 +76,8 @@ const UserWithdrawalModal = ({
             placeholder="계정 삭제를 위해 비밀번호를 입력하세요"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            type="password"
+            autoComplete="current-password"
           />
           <Typography id="modal-description">
             계정을 삭제하시겠습니까? <br />
