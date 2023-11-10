@@ -20,6 +20,11 @@ import CuButton from '@/components/CuButton'
 
 const SetupTeam = ({ team }: { team: ITeam }) => {
   const { isOpen, openModal, closeModal } = useModal()
+  const {
+    isOpen: isConfirmOpen,
+    openModal: openConfirmModel,
+    closeModal: closeConfirmModel,
+  } = useModal()
   const [teamInfo, setTeamInfo] = useState(team)
   const [isEdit, setIsEdit] = useState(false)
   const { setShowTeamPageCategory } = useShowTeamCategory()
@@ -246,7 +251,7 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
               </Stack>
             </Stack>
           </Box>
-          <Button onClick={sendTeamInfo}>팀 설정</Button>
+          <Button onClick={openConfirmModel}>팀 설정</Button>
         </Box>
       ) : (
         <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
@@ -343,68 +348,47 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
               </Stack>
             </Box>
           </Box>
-          <Button onClick={sendTeamInfo}>팀 설정</Button>
+          <Button onClick={openConfirmModel}>팀 설정</Button>
         </Box>
       )}
-                error={validation()}
-                helperText={validation() ? '다시 입력' : ''}
-                inputProps={{
-                  style: {
-                    padding: 5,
-                  },
-                }}
-              />
-            </Stack>
-            <Stack>
-              <Image
-                src={
-                  teamInfo.team.imageUrl
-                    ? teamInfo.team.imageUrl
-                    : '/images/teamLogo.png'
-                }
-                alt="teamLogo"
-                width={100}
-                height={100}
-              />
-              <input type="file" accept="image/*" onChange={handleImage} />
-              <Button onClick={openModal}>이미지 삭제</Button>
-            </Stack>
-          </Stack>
-          <Stack>
-            <Typography>목표 기간: </Typography>
-            <SetupSelect
-              type="dueTo"
-              value={teamInfo.team.dueTo}
-              setValue={handleDate}
-            />
-          </Stack>
-          <Stack direction="column" spacing={1}>
-            <Typography>활동 방식: </Typography>
-            <SetupSelect
-              type="operationForm"
-              value={teamInfo.team.operationForm}
-              setValue={handleOperationForm}
-            />
-          </Stack>
-          <Stack direction="column" spacing={1}>
-            <Typography>팀 활동 지역: </Typography>
-            <Stack direction="row" spacing={1}>
-              <SetupSelect
-                type="location"
-                value={teamInfo.team.region[0]}
-                setValue={handleLocation1}
-              />
-              <SetupSelect
-                type="location"
-                parentLocation={teamInfo.team.region[0]}
-                value={teamInfo.team.region[1]}
-                setValue={handleLocation2}
-              />
-            </Stack>
-          </Stack>
+
+      <CuModal
+        ariaTitle="alert-modal-title"
+        ariaDescription="alert-modal-description"
+        open={isConfirmOpen}
+        handleClose={closeConfirmModel}
+        style={{
+          position: 'absolute' as 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          border: '2px solid #000',
+          boxShadow: 24,
+          p: 4,
+        }}
+      >
+        <Box>
+          <Typography id="alert-modal-title">팀 정보 수정 확인</Typography>
+          <Typography id="alert-modal-description">
+            팀 정보를 수정하시겠습니다.
+          </Typography>
+          <CuButton
+            variant="contained"
+            action={closeConfirmModel}
+            message="취소"
+            style={{ width: '50%' }}
+          />
+          <CuButton
+            variant="contained"
+            action={sendTeamInfo}
+            message="수정"
+            style={{ width: '50%' }}
+          />
         </Box>
-        <Button onClick={sendTeamInfo}>팀 설정</Button>
-      </Box>
+      </CuModal>
+
       <CuModal
         ariaTitle="alert-modal-title"
         ariaDescription="alert-modal-description"
@@ -423,9 +407,9 @@ const SetupTeam = ({ team }: { team: ITeam }) => {
         }}
       >
         <Box>
-          <Typography id="alert-modal-title">삭제</Typography>
+          <Typography id="alert-modal-title">팀 로고 삭제</Typography>
           <Typography id="alert-modal-description">
-            모든 키워드를 삭제하시겠습니까?
+            사진을 삭제하시겠습니까?
           </Typography>
           <CuButton
             variant="contained"

@@ -52,11 +52,52 @@ export interface ITeam {
   member: IMember[]
 }
 
+const mockdate: ITeam = {
+  team: {
+    id: '1',
+    type: TeamType.PROJECT,
+    name: 'Sample',
+    maxMember: '5',
+    status: TeamStatus.RECRUITING,
+    dueTo: '2021-10-10',
+    operationForm: TeamOperationForm.MIX,
+    region: ['서울', '경기'],
+    imageUrl: null,
+  },
+  member: [
+    {
+      name: '이름',
+      userId: '1',
+      grant: TeamGrant.LEADER,
+    },
+    {
+      name: '이름',
+      userId: '2',
+      grant: TeamGrant.MEMBER,
+    },
+    {
+      name: '이름',
+      userId: '3',
+      grant: TeamGrant.MEMBER,
+    },
+    {
+      name: '이름',
+      userId: '4',
+      grant: TeamGrant.MEMBER,
+    },
+    {
+      name: '이름',
+      userId: '5',
+      grant: TeamGrant.MEMBER,
+    },
+  ],
+}
+
 export enum EInterviewType {
   CLOSE = 'close',
-  OPEN = 'open',
-  RATIO = 'ratio',
-  CHECK = 'check',
+  OPEN = 'OPEN',
+  RATIO = 'RATIO',
+  CHECK = 'CHECK',
 }
 
 //TODO: 타입 묶기
@@ -127,7 +168,19 @@ const TeamsSetupPage = ({ id }: { id: number }) => {
           )}
         </>
       ) : (
-        <Typography>팀을 추가해주세요</Typography>
+        <>
+          <SetupPage team={mockdate} />
+          <SetupMember team={mockdate.member} teamId={mockdate.team.id} />
+          <Button
+            onClick={openApplicant}
+            sx={{ mt: 1 }}
+            variant="contained"
+            color="primary"
+            fullWidth
+          >
+            신청 대기자 보기
+          </Button>
+        </>
       )}
       <Button
         variant="contained"
