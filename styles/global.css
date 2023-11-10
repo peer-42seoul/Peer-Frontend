@@ -2,23 +2,19 @@
   .mobile-layout {
     display: flex;
     flex-direction: column;
-    background-color: gray;
   }
   .pc-layout {
     display: none;
-    background-color: bisque;
   }
 }
 
 @media only screen and (min-width: 481px) {
   .mobile-layout {
     display: none;
-    background-color: gray;
   }
 
   .pc-layout {
     display: flex;
     flex-direction: column;
-    background-color: bisque;
   }
 }
