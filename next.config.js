@@ -1,5 +1,17 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+
+const prod = process.env.NODE_ENV === 'production'
+const runtimeCaching = require('next-pwa/cache')
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: false,
+  // disable: prod ? false : true, 나중에 true로 바꿔야함
+  // runtimeCaching,
+})
+
+const nextConfig = withPWA({
   compiler: {
     styledComponents: true,
   },
@@ -9,7 +21,7 @@ const nextConfig = {
   images: {
     domains: ['picsum.photos', 'source.unsplash.com'],
   },
-}
+})
 
 // module.exports = nextConfig
 
