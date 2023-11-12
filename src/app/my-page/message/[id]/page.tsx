@@ -112,13 +112,12 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   //   scrollTo(scrollRef.current.scrollHeight - scrollRef.current.clientHeight)
   // }, [updatedData])
 
-  const addNewMessage = (newMessage: IMessage) => {
-    if (!updatedData) return
-    setUpdatedData((currentData: IMessage[] | undefined) => {
+  const addNewMessage = useCallback((newMessage: IMessage) => {
+    setUpdatedData((currentData) => {
       if (!currentData) return [newMessage]
       return [...currentData, newMessage]
     })
-  }
+  }, [])
 
   if (isLoading) return <Typography>로딩중... @_@</Typography>
   if (!updatedData || !owner || !target)
