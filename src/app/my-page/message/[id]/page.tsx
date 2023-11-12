@@ -76,6 +76,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         setUpdatedData(response.data.msgList)
         setOwner(response.data.msgOwner)
         setTarget(response.data.msgTarget)
+        setIsEnd(response.data.msgList[0].isEnd)
       })
       .catch(() => {
         // TODO : 에러 구체화
