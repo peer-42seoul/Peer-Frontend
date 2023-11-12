@@ -36,7 +36,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
           conversationalId: params.id,
           earlyMsgId: updatedData?.[0]?.msgId,
         })
-        return response.data.MsgList.Msg
+        return response.data.msgList
       } catch {
         // TODO : 에러 구체화
         alert('쪽지를 불러오는데 실패하였습니다.')
@@ -73,9 +73,9 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         conversationalId,
       })
       .then((response) => {
-        setUpdatedData(response.data.MsgList.Msg)
-        setOwner(response.data.MsgList.MsgOwner)
-        setTarget(response.data.MsgList.MsgTarget)
+        setUpdatedData(response.data.msgList)
+        setOwner(response.data.msgOwner)
+        setTarget(response.data.msgTarget)
       })
       .catch(() => {
         // TODO : 에러 구체화
