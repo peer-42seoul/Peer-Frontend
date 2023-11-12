@@ -143,7 +143,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         <Typography>{target.userNickname}</Typography>
       </Box>
       <Box
-        // ref={scrollRef}
+        ref={scrollRef}
         sx={{ width: '100%', height: '90%', overflowY: 'auto' }}
       >
         <Box ref={targetRef}></Box>
