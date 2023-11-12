@@ -97,7 +97,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     // TODO : 데이터 순서 논의해보기
     const reversedData = data.reverse()
     setUpdatedData((currentData: IMessage[] | undefined) => {
-      if (!currentData) return data
+      if (!currentData) return reversedData
       return [...reversedData, ...currentData]
     })
     setIsEnd(reversedData[0].isEnd)
