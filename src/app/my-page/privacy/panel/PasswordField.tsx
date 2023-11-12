@@ -10,12 +10,12 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
 const PasswordField = ({
   field,
-  autoComplet,
+  autoComplete,
   placeholder,
   error,
 }: {
   field: ControllerRenderProps<IChangePassword, any>
-  autoComplet: string
+  autoComplete: string
   placeholder: string
   error: boolean
 }) => {
@@ -30,7 +30,7 @@ const PasswordField = ({
     <CuTextField
       field={field}
       type={showPassword}
-      autoComplete={autoComplet}
+      autoComplete={autoComplete}
       placeholder={placeholder}
       error={error}
       InputProps={{
