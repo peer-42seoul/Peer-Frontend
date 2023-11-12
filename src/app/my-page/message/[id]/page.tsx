@@ -28,40 +28,41 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const { isOpen, openModal, closeModal } = useModal()
   const { isPc } = useMedia()
 
-  const fetchMoreData = useCallback(
-    async (url: string) => {
-      try {
-        const response = await axiosWithAuth.post(url, {
-          targetId: Number(searchParams.get('target')),
-          conversationalId: Number(params.id),
-          earlyMsgId: updatedData?.[0]?.msgId, // FIXME : earlyMsgId 의미 확인 필요함.
-        })
-        return response.data.msgList
-      } catch {
-        // TODO : 에러 구체화
-        alert('쪽지를 불러오는데 실패하였습니다.')
-      }
-    },
-    [searchParams, params, updatedData],
-  )
+  // NOTE : 무한 스크롤에 오류 발생하여 모두 주석처리함
+  // const fetchMoreData = useCallback(
+  //   async (url: string) => {
+  //     try {
+  //       const response = await axiosWithAuth.post(url, {
+  //         targetId: Number(searchParams.get('target')),
+  //         conversationalId: Number(params.id),
+  //         earlyMsgId: updatedData?.[0]?.msgId, // FIXME : earlyMsgId 의미 확인 필요함.
+  //       })
+  //       return response.data.msgList
+  //     } catch {
+  //       // TODO : 에러 구체화
+  //       alert('쪽지를 불러오는데 실패하였습니다.')
+  //     }
+  //   },
+  //   [searchParams, params, updatedData],
+  // )
 
-  const { trigger, data } = useSWRMutation(
-    '/api/v1/message/conversation-list/more',
-    fetchMoreData,
-  )
+  // const { trigger, data } = useSWRMutation(
+  //   '/api/v1/message/conversation-list/more',
+  //   fetchMoreData,
+  // )
 
-  const { targetRef, scrollRef, spinner } = useMessageInfiniteScroll({
-    trigger, // == mutate
-    isEnd,
-  })
+  // const { targetRef, scrollRef, spinner } = useMessageInfiniteScroll({
+  //   trigger, // == mutate
+  //   isEnd,
+  // })
 
-  const scrollTo = useCallback(
-    (height: number) => {
-      if (!scrollRef.current) return
-      scrollRef.current.scrollTo({ top: height })
-    },
-    [scrollRef],
-  )
+  // const scrollTo = useCallback(
+  //   (height: number) => {
+  //     if (!scrollRef.current) return
+  //     scrollRef.current.scrollTo({ top: height })
+  //   },
+  //   [scrollRef],
+  // )
 
   useEffect(() => {
     setIsLoading(true)
@@ -88,28 +89,28 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
       })
   }, [searchParams, params])
 
-  useEffect(() => {
-    if (!data) return
-    // data : 새로 불러온 데이터 (예전 메시지)
-    // currentData : 현재 데이터 (최근 메시지)
-    setUpdatedData((currentData: IMessage[] | undefined) => {
-      if (!currentData) return data
-      return [...data.reverse(), ...currentData]
-    })
-    setIsEnd(data[0].isEnd)
-    setPrevScrollHeight(scrollRef.current?.scrollHeight)
-  }, [data])
+  // useEffect(() => {
+  //   if (!data) return
+  //   // data : 새로 불러온 데이터 (예전 메시지)
+  //   // currentData : 현재 데이터 (최근 메시지)
+  //   setUpdatedData((currentData: IMessage[] | undefined) => {
+  //     if (!currentData) return data
+  //     return [...data.reverse(), ...currentData]
+  //   })
+  //   setIsEnd(data[0].isEnd)
+  //   setPrevScrollHeight(scrollRef.current?.scrollHeight)
+  // }, [data])
 
-  useEffect(() => {
-    // FIXME : 깜빡임 현상 해결 필요할듯...
-    if (!scrollRef.current) return
-    if (prevScrollHeight) {
-      scrollTo(scrollRef.current.scrollHeight - prevScrollHeight)
-      setPrevScrollHeight(undefined)
-      return
-    }
-    scrollTo(scrollRef.current.scrollHeight - scrollRef.current.clientHeight)
-  }, [updatedData])
+  // useEffect(() => {
+  //   // FIXME : 깜빡임 현상 해결 필요할듯...
+  //   if (!scrollRef.current) return
+  //   if (prevScrollHeight) {
+  //     scrollTo(scrollRef.current.scrollHeight - prevScrollHeight)
+  //     setPrevScrollHeight(undefined)
+  //     return
+  //   }
+  //   scrollTo(scrollRef.current.scrollHeight - scrollRef.current.clientHeight)
+  // }, [updatedData])
 
   const addNewMessage = (newMessage: IMessage) => {
     if (!updatedData) return
@@ -140,11 +141,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         <Typography>{target.userNickname}</Typography>
       </Box>
       <Box
-        ref={scrollRef}
+        // ref={scrollRef}
         sx={{ width: '100%', height: '90%', overflowY: 'auto' }}
       >
-        <Box ref={targetRef}></Box>
-        {spinner && <CircularProgress />}
+        {/* <Box ref={targetRef}></Box>
+        {spinner && <CircularProgress />} */}
         {updatedData.map((msgObj: IMessage) => (
           <MessageItem
             key={msgObj.msgId}
