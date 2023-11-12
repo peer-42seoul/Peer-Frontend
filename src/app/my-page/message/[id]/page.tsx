@@ -75,10 +75,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
       })
       .then((response) => {
         // TODO : 데이터 순서 논의해보기
-        setUpdatedData(response.data.msgList.reverse())
+        const reversedData = response.data.msgList.reverse()
+        setUpdatedData(reversedData)
         setOwner(response.data.msgOwner)
         setTarget(response.data.msgTarget)
-        setIsEnd(response.data.msgList[0].isEnd)
+        setIsEnd(reversedData[0].isEnd)
       })
       .catch(() => {
         // TODO : 에러 구체화
@@ -93,11 +94,13 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     if (!data) return
     // data : 새로 불러온 데이터 (예전 메시지)
     // currentData : 현재 데이터 (최근 메시지)
+    // TODO : 데이터 순서 논의해보기
+    const reversedData = data.reverse()
     setUpdatedData((currentData: IMessage[] | undefined) => {
       if (!currentData) return data
-      return [...data.reverse(), ...currentData]
+      return [...reversedData, ...currentData]
     })
-    setIsEnd(data[0].isEnd)
+    setIsEnd(reversedData[0].isEnd)
     setPrevScrollHeight(scrollRef.current?.scrollHeight)
   }, [data])
 
