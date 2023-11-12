@@ -32,9 +32,9 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     async (url: string) => {
       try {
         const response = await axiosWithAuth.post(url, {
-          targetId: searchParams.get('target'),
-          conversationalId: params.id,
-          earlyMsgId: updatedData?.[0]?.msgId,
+          targetId: Number(searchParams.get('target')),
+          conversationalId: Number(params.id),
+          earlyMsgId: updatedData?.[0]?.msgId, // FIXME : earlyMsgId 의미 확인 필요함.
         })
         return response.data.msgList
       } catch {
@@ -65,15 +65,16 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     setIsLoading(true)
-    const targetId = searchParams.get('target')
-    const conversationalId = params.id
+    const targetId = Number(searchParams.get('target'))
+    const conversationalId = Number(params.id)
     axiosWithAuth
       .post('/api/v1/message/conversation-list', {
         targetId,
         conversationalId,
       })
       .then((response) => {
-        setUpdatedData(response.data.msgList)
+        // TODO : 데이터 순서 논의해보기
+        setUpdatedData(response.data.msgList.reverse())
         setOwner(response.data.msgOwner)
         setTarget(response.data.msgTarget)
         setIsEnd(response.data.msgList[0].isEnd)
@@ -93,7 +94,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     // currentData : 현재 데이터 (최근 메시지)
     setUpdatedData((currentData: IMessage[] | undefined) => {
       if (!currentData) return data
-      return [...data, ...currentData]
+      return [...data.reverse(), ...currentData]
     })
     setIsEnd(data[0].isEnd)
     setPrevScrollHeight(scrollRef.current?.scrollHeight)
