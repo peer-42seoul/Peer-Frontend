@@ -85,8 +85,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       : defaultGetFetcher,
   )
 
-  console.log('content', content)
-
   useEffect(() => {
     if (!newData || !newData?.content) return
     //newData가 있어야 업데이트
