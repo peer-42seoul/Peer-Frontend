@@ -44,7 +44,10 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
   const axiosWithAuth = useAxiosWithAuth()
 
   const sendTeamInfo = () => {
-    if (validation(teamInfo.name) || validation(teamInfo.maxMember as string))
+    if (
+      validation(teamInfo.name) ||
+      validationNumber(teamInfo.maxMember as string)
+    )
       return alert('한글, 영문, 숫자만 입력 가능합니다.')
     if (isEdit === false) return alert('변경된 사항이 없습니다.')
     const formdata = new FormData()
