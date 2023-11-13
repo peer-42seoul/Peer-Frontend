@@ -5,10 +5,14 @@ import { useSearchParams } from 'next/navigation'
 import useSWRMutation from 'swr/mutation'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import CuButton from '@/components/CuButton'
+import useMedia from '@/hook/useMedia'
+import useModal from '@/hook/useModal'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 import { IMessage, IMessageUser } from '@/types/IMessage'
 import MessageItem from './panel/MessageItem'
 import MessageForm from './panel/MessageForm'
+import MessageFormModal from './panel/MessageFormModal'
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -21,6 +25,8 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     undefined,
   )
   const axiosWithAuth = useAxiosWithAuth()
+  const { isOpen, openModal, closeModal } = useModal()
+  const { isPc } = useMedia()
 
   const fetchMoreData = useCallback(
     async (url: string) => {
@@ -146,7 +152,28 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
           />
         ))}
       </Box>
-      <MessageForm targetId={target.userId} addNewMessage={addNewMessage} />
+      {isPc ? (
+        <MessageForm
+          view={'PC_VIEW'}
+          targetId={target.userId}
+          addNewMessage={addNewMessage}
+        />
+      ) : (
+        <>
+          <CuButton
+            variant="contained"
+            action={() => openModal()}
+            message="답하기"
+            fullWidth
+          />
+          <MessageFormModal
+            isOpen={isOpen}
+            targetId={target.userId}
+            addNewMessage={addNewMessage}
+            handleClose={closeModal}
+          />
+        </>
+      )}
     </Box>
   )
 }
