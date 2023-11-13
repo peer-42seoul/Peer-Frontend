@@ -19,7 +19,7 @@ const CodeField = ({
     <>
       <CuTextFieldLabel htmlFor="code">인증번호</CuTextFieldLabel>
       <CuTextField
-        field={field}
+        {...field}
         disabled={codeSendStatus === 'submit'}
         autoComplete="off"
         error={codeSendStatus === 'error'}

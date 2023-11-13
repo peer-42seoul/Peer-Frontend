@@ -117,7 +117,7 @@ const SendCodeForm = ({
             <Container sx={LabelBox}>
               <CuTextFieldLabel htmlFor="code">인증코드</CuTextFieldLabel>
               <CuTextField
-                field={field}
+                {...field}
                 type="code"
                 id="code"
                 placeholder="이메일로 받은 코드를 입력하세요"

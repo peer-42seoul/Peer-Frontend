@@ -105,7 +105,7 @@ export default function UserInfoEdit({
               rules={{ required: true }}
               render={({ field }) => (
                 <CuTextField
-                  field={field}
+                  {...field}
                   type={showPresentPassword}
                   autoComplete="off"
                   error={errors.presentPassword ? true : false}
@@ -135,7 +135,7 @@ export default function UserInfoEdit({
               }}
               render={({ field }) => (
                 <CuTextField
-                  field={field}
+                  {...field}
                   type={showNewPassword}
                   autoComplete="off"
                   error={errors.newPassword ? true : false}
@@ -163,7 +163,7 @@ export default function UserInfoEdit({
               }}
               render={({ field }) => (
                 <CuTextField
-                  field={field}
+                  {...field}
                   type={showConfirmPassword}
                   autoComplete="off"
                   error={errors.confirmPassword ? true : false}

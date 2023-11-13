@@ -77,7 +77,7 @@ const SendEmailForm = () => {
               <Container sx={LabelBox}>
                 <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
                 <CuTextField
-                  field={field}
+                  {...field}
                   id="email"
                   placeholder="이메일을 입력하세요"
                   style={{ width: '100%' }}
