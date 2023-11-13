@@ -46,15 +46,22 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
   const sendTeamInfo = () => {
     if (validation()) return alert('한글, 영문, 숫자만 입력 가능합니다.')
     if (isEdit === false) return alert('변경된 사항이 없습니다.')
+    const formdata = new FormData()
+    formdata.append('name', teamInfo.name)
+    formdata.append('dueTo', teamInfo.dueTo)
+    formdata.append('operationForm', teamInfo.operationForm)
+    formdata.append('region', teamInfo.region[1])
+    formdata.append('region', teamInfo.region[0])
+    formdata.append('teamImage', teamInfo.teamImage as string)
+    formdata.append('maxMember', teamInfo.maxMember as string)
+    formdata.append('type', teamInfo.type)
+    formdata.append('status', teamInfo.status)
+    formdata.append('id', teamInfo.id)
+
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${team.id}`,
-        {
-          headers: {
-            'Content-Type': 'form-data',
-            teamInfo,
-          },
-        },
+        formdata,
       )
       .then((res) => {
         if (res.status == 200) {
@@ -287,6 +294,14 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
                   setValue={handleLocation2}
                 />
               </Stack>
+            </Stack>
+            <Stack>
+              <Typography>팀원 모집 인원: </Typography>
+              <SetupSelect
+                type="maxMember"
+                value={teamInfo.maxMember as string}
+                setValue={handleDate}
+              />
             </Stack>
           </Box>
           <Button onClick={openConfirmModel}>팀 설정</Button>
