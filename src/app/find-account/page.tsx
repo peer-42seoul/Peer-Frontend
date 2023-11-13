@@ -7,6 +7,7 @@ import useMedia from '@/hook/useMedia'
 import { NavigateBefore } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
 import useAuthStore from '@/states/useAuthStore'
+import FindComplete from './panel/FindComplete'
 
 const PCBase = {
   display: 'flex',
@@ -49,6 +50,8 @@ const FindAccount = () => {
   const router = useRouter()
   const { isLogin } = useAuthStore()
 
+  const [isCodeSuccessful, setIsCodeSuccessful] = React.useState<boolean>(false)
+
   useEffect(() => {
     if (isLogin) router.push('/')
   }, [isLogin])
@@ -56,29 +59,35 @@ const FindAccount = () => {
   return (
     <Container sx={isPc ? PCBase : MobileBase}>
       <Container sx={isPc ? PCBox : MobileBox}>
-        {isPc ? (
-          <Typography>비밀번호 찾기</Typography>
+        {isCodeSuccessful ? (
+          <FindComplete />
         ) : (
-          <Box
-            sx={{
-              display: 'flex',
-              width: '100%',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '16px',
-            }}
-          >
-            <IconButton
-              sx={{ width: '40px', height: '40px' }}
-              onClick={() => router.back()}
-            >
-              <NavigateBefore />
-            </IconButton>
-            <Typography>비밀번호 찾기</Typography>
-            <IconButton sx={{ width: '40px', height: '40px' }} disabled />
-          </Box>
+          <>
+            {isPc ? (
+              <Typography>비밀번호 찾기</Typography>
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: '100%',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '16px',
+                }}
+              >
+                <IconButton
+                  sx={{ width: '40px', height: '40px' }}
+                  onClick={() => router.back()}
+                >
+                  <NavigateBefore />
+                </IconButton>
+                <Typography>비밀번호 찾기</Typography>
+                <IconButton sx={{ width: '40px', height: '40px' }} disabled />
+              </Box>
+            )}
+            <SendEmailForm setIsCodeSuccessful={setIsCodeSuccessful} />
+          </>
         )}
-        <SendEmailForm />
       </Container>
     </Container>
   )
