@@ -35,7 +35,7 @@ const MessageForm = ({
         messageData,
       )
       if (response.status === 201) {
-        addNewMessage(response.data.Msg)
+        addNewMessage(response.data)
         alert('메시지가 성공적으로 전송되었습니다.')
         setContent('')
         handleClose && handleClose()
