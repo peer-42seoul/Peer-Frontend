@@ -90,9 +90,6 @@ export const theme = createTheme({
       },
     },
   },
-  typography: {
-    fontFamily: 'Pretendard Variable, sans-serif',
-  },
 })
 
 const typoTheme = createTheme({
@@ -120,6 +117,7 @@ const typoTheme = createTheme({
     },
   },
   typography: {
+    fontFamily: 'Pretendard Variable, sans-serif',
     HeadlineEmphasis: {
       fontSize: '32px',
       fontStyle: 'normal',
