@@ -7,6 +7,7 @@ const withPWA = require('next-pwa')({
   register: true,
   skipWaiting: true,
   disable: false,
+  customWorkerDir: './public/worker/index.js',
   // disable: prod ? false : true, 나중에 true로 바꿔야함
   // runtimeCaching,
 })
