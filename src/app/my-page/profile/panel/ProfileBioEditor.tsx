@@ -159,7 +159,13 @@ const ProfileBioEditor = ({
     const submitData = new FormData()
     submitData.append('nickname', formData.nickname)
     submitData.append('introduction', formData.introduction)
-    submitData.append('profileImage', formData.profileImage![0])
+    if (formData.profileImage) {
+      submitData.append(
+        'profileImage',
+        formData.profileImage![0],
+        formData.profileImage[0].name,
+      )
+    }
     submitData.append('imageChange', imageChanged.toString().toUpperCase())
 
     console.log('닉네임 중복확인', isNicknameUnique)

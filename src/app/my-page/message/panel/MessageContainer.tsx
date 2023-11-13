@@ -130,12 +130,6 @@ const MessageContainer = ({
     }
   }
 
-  if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
-  if (error || !messageList)
-    return <Typography>데이터 불러오기에 실패했습니다.</Typography>
-  if (messageList.length === 0)
-    return <Typography>쪽지함이 비었습니다.</Typography>
-
   return (
     <>
       <Stack spacing={2}>
@@ -152,8 +146,8 @@ const MessageContainer = ({
           />
         )}
         <MessageList
-          messages={messageList}
-          isManageMode={isManageMode}
+          messageList={messageList}
+          state={{ isManageMode, isLoading, error }}
           toggleSelectUser={toggleSelectUser}
         />
         <CuToast open={isOpen} onClose={closeToast} severity="error">

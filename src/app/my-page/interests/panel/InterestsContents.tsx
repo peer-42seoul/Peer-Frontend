@@ -1,8 +1,8 @@
 import MainCard from '@/app/panel/MainCard'
 import { ProjectType } from '@/app/panel/MainPage'
+import { IMainCard } from '@/types/IPostDetail'
 import { Box, CircularProgress, Grid } from '@mui/material'
 import React from 'react'
-import { IMainCard } from '@/types/IPostDetail'
 
 const InterestsContents = ({
   postList,
