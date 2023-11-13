@@ -33,18 +33,27 @@ export type ProjectType = 'STUDY' | 'PROJECT'
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
-  const [type, setType] = useState<ProjectType>('STUDY')
+  const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
-  const [sort, setSort] = useState<ProjectSort>('latest')
+  const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   /* 추후 디자인 추가되면 schedule 추가하기 */
   const [detailOption, setDetailOption] = useState<{
+    isInit?: boolean
     due: string
     region1: string
     region2: string
     place: string
     status: string
     tag: string
-  }>({ due: '', region1: '', region2: '', place: '', status: '', tag: '' })
+  }>({
+    isInit: true,
+    due: '',
+    region1: '',
+    region2: '',
+    place: '',
+    status: '',
+    tag: '',
+  })
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
@@ -58,13 +67,25 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     isValidating,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    page == 1
+    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region1=${detailOption.region1}&region2=${detailOption.region2}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
+          type ?? 'STUDY'
+        }&sort=${
+          sort ?? 'latest'
+        }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
+          detailOption.due
+        }&region1=${detailOption.region1}&region2=${
+          detailOption.region2
+        }&place=${detailOption.place}&status=${detailOption.status}&tag=${
+          detailOption.tag
+        }`,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
+
+  console.log('content', content)
 
   useEffect(() => {
     if (!newData || !newData?.content) return

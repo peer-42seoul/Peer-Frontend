@@ -15,7 +15,7 @@ export interface IMainCard {
   tagList: ITag[]
   favorite?: boolean
   recruit_id: number
-  type: ProjectType
+  type: ProjectType | undefined
 }
 
 export interface IPost {

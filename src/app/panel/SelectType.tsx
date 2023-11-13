@@ -7,16 +7,19 @@ const SelectType = ({
   setType,
   pc,
 }: {
-  type: ProjectType
-  setType: Dispatch<SetStateAction<ProjectType>>
+  type: ProjectType | undefined
+  setType: Dispatch<SetStateAction<ProjectType | undefined>>
   pc?: boolean
 }) => {
+  {
+    /*type이 null일시 (최초값일시) study 활성화*/
+  }
   if (pc) {
     return (
       <ButtonGroup>
         <Button
           variant="text"
-          sx={{ color: type === 'STUDY' ? 'blue' : 'black' }}
+          sx={{ color: !type || type === 'STUDY' ? 'blue' : 'black' }}
           onClick={() => {
             setType('STUDY')
           }}
@@ -47,7 +50,9 @@ const SelectType = ({
       }}
     >
       <Button
-        sx={{ backgroundColor: type === 'STUDY' ? 'blue' : 'gray' }}
+        sx={{
+          backgroundColor: !type || type === 'STUDY' ? 'blue' : 'gray',
+        }}
         onClick={() => {
           setType('STUDY')
         }}

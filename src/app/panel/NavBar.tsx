@@ -103,7 +103,7 @@ export const PcNav = () => {
     if (pathname === '/') {
       setValue(0)
     } else if (pathname === '/team-list') {
-      setValue(3)
+      setValue(2)
     }
   }, [pathname])
   return (
