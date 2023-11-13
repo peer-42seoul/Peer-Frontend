@@ -53,7 +53,7 @@ export const useMessageInfiniteScroll = ({
 
 export const useInfiniteScrollHook = (
   setPage: Dispatch<SetStateAction<number>>,
-  mutate: any,
+  isLoading: boolean,
   isEnd: boolean,
   page: number
 ) => {
@@ -64,9 +64,12 @@ export const useInfiniteScrollHook = (
     // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
     setSpinner(true)
     setPage(page + 1)
-    await mutate()
-    setSpinner(false)
   }, 1000)
+
+  useEffect(() => {
+    if (!isLoading && spinner)
+      setSpinner(false)
+  }, [isLoading, spinner]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

@@ -49,33 +49,34 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-
   const pageSize = 3
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
+
   const {
     data: newData,
+    isLoading,
     isValidating,
     error,
-    mutate,
   } = useSWR<IPagination<IPost[]>>(
-    page !== 1
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region1=${detailOption.region1}&region2=${detailOption.region2}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`
-      : null,
+    page == 1
+      ? null
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type}&sort=${sort}&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due}&region1=${detailOption.region1}&region2=${detailOption.region2}&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag}`,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
 
   useEffect(() => {
-    if (!newData) return
-    if (newData && newData?.last)
-      setContent([...content, ...(newData?.content ?? [])])
-  }, [content, newData])
+    if (!newData || !newData?.content) return
+    //newData가 있어야 업데이트
+    setContent([...content, ...newData.content])
+  }, [newData])
 
   const { target, spinner } = useInfiniteScrollHook(
     setPage,
-    mutate,
-    (initData?.last || newData?.last) ?? false,
+    isLoading,
+    // (newData?.last || initData?.last) ?? true, //isEnd
+    false,
     page,
   )
 
@@ -110,8 +111,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           ) : (
             <>
               <Stack alignItems={'center'} gap={2}>
-                {content?.map((project: IPost) => (
-                  <Box key={project.user_id}>
+                {content?.map((project: IPost, index: number) => (
+                  <Box key={index}>
                     <MainCard {...project} type={type} />
                   </Box>
                 ))}
@@ -175,8 +176,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             ) : (
               <>
                 <Grid container spacing={2}>
-                  {content?.map((project: IPost) => (
-                    <Grid item key={project.user_id} sm={12} md={4}>
+                  {content?.map((project: IPost, index: number) => (
+                    <Grid item key={index} sm={12} md={4}>
                       <MainCard {...project} type={type} />
                     </Grid>
                   ))}
