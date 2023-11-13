@@ -63,20 +63,26 @@ const ProfileLinkEditor = ({
     }
     for (let i = 0; i < 3; i++) {
       if (data[i].linkUrl && !data[i].linkName) {
-        setToastMessage({
-          severity: 'error',
-          message: `${i + 1}번째 링크의 제목이 없습니다. 확인해주세요!`,
+        // setToastMessage({
+        //   severity: 'error',
+        //   message: `${i + 1}번째 링크의 제목이 없습니다. 확인해주세요!`,
+        // })
+        // setToastOpen(true)
+        setError(`${i}.linkName`, {
+          type: 'required',
+          message: '아래 링크에 제목이 없습니다.',
         })
-        setToastOpen(true)
-        setError(`${i}.linkName`, { type: 'required' })
         return
       } else if (data[i].linkName && !data[i].linkUrl) {
-        setToastMessage({
-          severity: 'error',
-          message: `${data[i].linkName}의 링크 주소가 없습니다. 확인해주세요!`,
+        // setToastMessage({
+        //   severity: 'error',
+        //   message: `${data[i].linkName}의 링크 주소가 없습니다. 확인해주세요!`,
+        // })
+        // setToastOpen(true)
+        setError(`${i}.linkUrl`, {
+          type: 'required',
+          message: '위 링크 제목에 링크가 없습니다.',
         })
-        setError(`${i}.linkUrl`, { type: 'required' })
-        setToastOpen(true)
         return
       }
       requestBody.linkList.push({
@@ -131,14 +137,23 @@ const ProfileLinkEditor = ({
                         <CuTextField
                           variant="outlined"
                           id={`${i}.linkName`}
-                          field={{ ...field, fullWidth: true }}
+                          {...field}
                           autoComplete="off"
                           error={errors[i]?.linkName ? true : false}
                           fullWidth
+                          inputProps={{ maxLength: 20 }}
+                          helperText={errors[i]?.linkName?.message}
                         />
                       )}
                       name={`${i}.linkName`}
                       control={control}
+                      rules={{
+                        maxLength: {
+                          value: 20,
+                          message:
+                            '링크 제목은 최대 20글자까지만 적용 가능합니다.',
+                        },
+                      }}
                     />
                   </Grid>
                   <Grid item container xs={12}>
@@ -153,14 +168,23 @@ const ProfileLinkEditor = ({
                           <CuTextField
                             variant="outlined"
                             id={`${i}.linkUrl`}
-                            field={{ ...field, fullWidth: true }}
+                            {...field}
                             autoComplete="off"
                             error={errors[i]?.linkUrl ? true : false}
                             fullWidth
+                            helperText={errors[i]?.linkUrl?.message}
+                            inputProps={{ maxLength: 300 }}
                           />
                         )}
                         name={`${i}.linkUrl`}
                         control={control}
+                        rules={{
+                          maxLength: {
+                            value: 300,
+                            message:
+                              '링크는 최대 300글자까지만 적용 가능합니다.',
+                          },
+                        }}
                       />
                     </Grid>
                   </Grid>
