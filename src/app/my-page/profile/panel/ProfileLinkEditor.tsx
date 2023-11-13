@@ -56,6 +56,11 @@ const ProfileLinkEditor = ({
   })
 
   const onSubmit = async (data: Array<IUserProfileLink>) => {
+    const requestBody: {
+      linkList: Array<{ linkName: string; linkUrl: string }>
+    } = {
+      linkList: [] as Array<{ linkName: string; linkUrl: string }>,
+    }
     for (let i = 0; i < 3; i++) {
       if (data[i].linkUrl && !data[i].linkName) {
         setToastMessage({
@@ -74,10 +79,17 @@ const ProfileLinkEditor = ({
         setToastOpen(true)
         return
       }
+      requestBody.linkList.push({
+        linkName: data[i].linkName,
+        linkUrl: data[i].linkUrl,
+      })
     }
     console.log('제출중!', isSubmitting)
     await axiosWithAuth
-      .put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/link`, data)
+      .put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/link`,
+        requestBody,
+      )
       .then(() => {
         setToastMessage({
           severity: 'success',
