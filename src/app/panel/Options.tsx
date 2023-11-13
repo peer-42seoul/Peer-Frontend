@@ -35,7 +35,6 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
   const [parentLocation, setParentLocation] = useState<string>('선택안함')
 
   const onSubmit = (data: any) => {
-    console.log('onSubmit', data)
     const { placeOnline, placeOffline, placemix, statusonGoing, statusdone } =
       data
 
