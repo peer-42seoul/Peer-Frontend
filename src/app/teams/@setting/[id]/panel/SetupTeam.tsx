@@ -49,7 +49,12 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${team.id}`,
-        teamInfo,
+        {
+          headers: {
+            'Content-Type': 'form-data',
+            teamInfo,
+          },
+        },
       )
       .then((res) => {
         if (res.status == 200) {
