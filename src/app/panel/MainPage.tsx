@@ -75,8 +75,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { target, spinner } = useInfiniteScrollHook(
     setPage,
     isLoading,
-    // (newData?.last || initData?.last) ?? true, //isEnd
-    false,
+    (newData?.last || initData?.last) ?? true, //isEnd
     page,
   )
 
