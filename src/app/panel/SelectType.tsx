@@ -1,5 +1,4 @@
 import { Button, ButtonGroup } from '@mui/material'
-import { Dispatch, SetStateAction } from 'react'
 import { ProjectType } from './MainPage'
 
 const SelectType = ({
@@ -8,7 +7,7 @@ const SelectType = ({
   pc,
 }: {
   type: ProjectType | undefined
-  setType: Dispatch<SetStateAction<ProjectType | undefined>>
+  setType: (value: ProjectType) => void
   pc?: boolean
 }) => {
   {

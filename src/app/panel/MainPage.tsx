@@ -29,6 +29,15 @@ import { IPagination } from '@/types/IPagination'
 
 export type ProjectSort = 'latest' | 'hit'
 export type ProjectType = 'STUDY' | 'PROJECT'
+export interface IDetailOption {
+  isInit?: boolean
+  due: string
+  region1: string
+  region2: string
+  place: string
+  status: string
+  tag: string
+}
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [content, setContent] = useState<IPost[]>(initData?.content)
@@ -37,15 +46,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   /* 추후 디자인 추가되면 schedule 추가하기 */
-  const [detailOption, setDetailOption] = useState<{
-    isInit?: boolean
-    due: string
-    region1: string
-    region2: string
-    place: string
-    status: string
-    tag: string
-  }>({
+  const [detailOption, setDetailOption] = useState<IDetailOption>({
     isInit: true,
     due: '',
     region1: '',
@@ -88,6 +89,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   useEffect(() => {
     if (!newData || !newData?.content) return
     //newData가 있어야 업데이트
+    if (page == 1) return setContent(newData.content)
     setContent([...content, ...newData.content])
   }, [newData])
 
@@ -98,17 +100,32 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     page,
   )
 
+  const handleType = (value: ProjectType) => {
+    setType(value)
+    setPage(1) //옵션이 변경되었으므로 page를 1로 초기화
+  }
+
+  const handleSort = (value: ProjectSort) => {
+    setSort(value)
+    setPage(1)
+  }
+
+  const handleOption = (value: IDetailOption) => {
+    setDetailOption(value)
+    setPage(1)
+  }
+
   return (
     <>
       {/* mobile view */}
       <Container className="mobile-layout">
         <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
-          <SelectType type={type} setType={setType} />
+          <SelectType type={type} setType={handleType} />
           <Grid container p={2}>
             <SearchOption
               openOption={openOption}
               setOpenOption={setOpenOption}
-              setDetailOption={setDetailOption}
+              setDetailOption={handleOption}
             />
             <Grid item xs={12}>
               <Stack
@@ -116,7 +133,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 alignItems={'center'}
                 justifyContent={'flex-end'}
               >
-                <SelectSort sort={sort} setSort={setSort} />
+                <SelectSort sort={sort} setSort={handleSort} />
               </Stack>
             </Grid>
           </Grid>
@@ -167,12 +184,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <Box height={'200px'} border="1px solid black">
               피어 소개 배너
             </Box>
-            <SelectType type={type} setType={setType} pc />
+            <SelectType type={type} setType={handleType} pc />
             <Grid container p={2}>
               <SearchOption
                 openOption={openOption}
                 setOpenOption={setOpenOption}
-                setDetailOption={setDetailOption}
+                setDetailOption={handleOption}
               />
               <Grid item xs={12}>
                 <Stack
@@ -181,7 +198,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   justifyContent={'space-between'}
                 >
                   <Typography>모집글</Typography>
-                  <SelectSort sort={sort} setSort={setSort} />
+                  <SelectSort sort={sort} setSort={handleSort} />
                 </Stack>
               </Grid>
             </Grid>

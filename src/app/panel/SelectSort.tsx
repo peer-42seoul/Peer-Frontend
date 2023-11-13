@@ -3,7 +3,7 @@ import { ProjectSort } from './MainPage'
 
 interface ISelectSortProps {
   sort: ProjectSort | undefined
-  setSort: React.Dispatch<React.SetStateAction<ProjectSort | undefined>>
+  setSort: (value: ProjectSort) => void
 }
 
 const SelectSort = ({ sort, setSort }: ISelectSortProps) => {
