@@ -19,7 +19,7 @@ const MessageItem = ({
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const {
     targetId,
-    conversationalId,
+    conversationId,
     targetNickname,
     latestDate,
     latestContent,
@@ -35,7 +35,7 @@ const MessageItem = ({
       <Grid
         container
         onClick={() =>
-          router.push(`/my-page/message/${conversationalId}?target=${targetId}`)
+          router.push(`/my-page/message/${conversationId}?target=${targetId}`)
         }
         sx={{ cursor: 'pointer' }}
         spacing={1}

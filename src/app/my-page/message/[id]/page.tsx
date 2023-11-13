@@ -30,13 +30,14 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   const fetchMoreData = useCallback(
     async (url: string) => {
+      if (!updatedData) return []
       try {
         const response = await axiosWithAuth.post(url, {
-          targetId: searchParams.get('target'),
-          conversationalId: params.id,
-          earlyMsgId: updatedData?.[0]?.msgId,
+          targetId: Number(searchParams.get('target')),
+          conversationId: Number(params.id),
+          earlyMsgId: updatedData[0]?.msgId,
         })
-        return response.data.MsgList.Msg
+        return response.data.msgList
       } catch {
         // TODO : 에러 구체화
         alert('쪽지를 불러오는데 실패하였습니다.')
@@ -65,17 +66,20 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     setIsLoading(true)
-    const targetId = searchParams.get('target')
-    const conversationalId = params.id
+    const targetId = Number(searchParams.get('target'))
+    const conversationalId = Number(params.id)
     axiosWithAuth
       .post('/api/v1/message/conversation-list', {
         targetId,
         conversationalId,
       })
       .then((response) => {
-        setUpdatedData(response.data.MsgList.Msg)
-        setOwner(response.data.MsgList.MsgOwner)
-        setTarget(response.data.MsgList.MsgTarget)
+        // TODO : 데이터 순서 논의해보기
+        const reversedData = response.data.msgList.reverse()
+        setUpdatedData(reversedData)
+        setOwner(response.data.msgOwner)
+        setTarget(response.data.msgTarget)
+        setIsEnd(reversedData[0].isEnd)
       })
       .catch(() => {
         // TODO : 에러 구체화
@@ -90,11 +94,13 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     if (!data) return
     // data : 새로 불러온 데이터 (예전 메시지)
     // currentData : 현재 데이터 (최근 메시지)
+    // TODO : 데이터 순서 논의해보기
+    const reversedData = data.reverse()
     setUpdatedData((currentData: IMessage[] | undefined) => {
-      if (!currentData) return data
-      return [...data, ...currentData]
+      if (!currentData) return reversedData
+      return [...reversedData, ...currentData]
     })
-    setIsEnd(data[0].isEnd)
+    setIsEnd(reversedData[0].isEnd)
     setPrevScrollHeight(scrollRef.current?.scrollHeight)
   }, [data])
 
@@ -109,13 +115,12 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     scrollTo(scrollRef.current.scrollHeight - scrollRef.current.clientHeight)
   }, [updatedData])
 
-  const addNewMessage = (newMessage: IMessage) => {
-    if (!updatedData) return
-    setUpdatedData((currentData: IMessage[] | undefined) => {
+  const addNewMessage = useCallback((newMessage: IMessage) => {
+    setUpdatedData((currentData) => {
       if (!currentData) return [newMessage]
       return [...currentData, newMessage]
     })
-  }
+  }, [])
 
   if (isLoading) return <Typography>로딩중... @_@</Typography>
   if (!updatedData || !owner || !target)
