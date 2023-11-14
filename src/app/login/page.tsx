@@ -106,10 +106,14 @@ const Login = () => {
   const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
     setIsLoading(true)
     axios
-      .post(`${API_URL}/api/v1/signin`, {
-        userEmail: data.userEmail,
-        password: data.password,
-      })
+      .post(
+        `${API_URL}/api/v1/signin`,
+        {
+          userEmail: data.userEmail,
+          password: data.password,
+        },
+        { withCredentials: true },
+      )
       .then((res) => {
         login(res.data.accessToken)
       })
@@ -205,9 +209,9 @@ const Login = () => {
                               edge="end"
                             >
                               {showPassword ? (
-                                <Visibility />
-                              ) : (
                                 <VisibilityOff />
+                              ) : (
+                                <Visibility />
                               )}
                             </IconButton>
                           </InputAdornment>
