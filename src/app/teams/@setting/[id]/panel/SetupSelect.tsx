@@ -18,6 +18,25 @@ export const SetupSelect = ({
   parentLocation?: string
   setValue: (event: SelectChangeEvent) => void
 }) => {
+  const dueList = [
+    '1주일',
+    '2주일',
+    '3주일',
+    '4주일',
+    '1개월',
+    '2개월',
+    '3개월',
+    '4개월',
+    '5개월',
+    '6개월',
+    '7개월',
+    '8개월',
+    '9개월',
+    '10개월',
+    '11개월',
+    '12개월 이상',
+  ]
+
   if (type === 'location') {
     return (
       <FormControl sx={{ m: 0, minWidth: 80 }} size="small">
@@ -76,25 +95,7 @@ export const SetupSelect = ({
           label="목표 기간"
           onChange={setValue}
         >
-          {[
-            '1주일',
-            '2주일',
-            '3주일',
-            '4주일',
-            '1개월',
-            '2개월',
-            '3개월',
-            '4개월',
-            '5개월',
-            '6개월',
-            '7개월',
-            '8개월',
-            '9개월',
-            '10개월',
-            '11개월',
-            '12개월',
-            '12개월 이상',
-          ].map((dueTo, idx) => (
+          {dueList.map((dueTo, idx) => (
             <MenuItem key={'dueTo' + idx} value={dueTo}>
               {dueTo}
             </MenuItem>
@@ -115,26 +116,7 @@ export const SetupSelect = ({
             onChange={setValue}
             defaultValue={'선택안함'}
           >
-            {[
-              '선택안함',
-              '1주일',
-              '2주일',
-              '3주일',
-              '4주일',
-              '1개월',
-              '2개월',
-              '3개월',
-              '4개월',
-              '5개월',
-              '6개월',
-              '7개월',
-              '8개월',
-              '9개월',
-              '10개월',
-              '11개월',
-              '12개월',
-              '12개월 이상',
-            ].map((dueTo, idx) => (
+            {dueList.map((dueTo, idx) => (
               <MenuItem key={'dueTo' + idx} value={dueTo}>
                 {dueTo}
               </MenuItem>

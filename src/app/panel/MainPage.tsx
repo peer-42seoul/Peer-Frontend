@@ -8,7 +8,7 @@ import {
   CircularProgress,
 } from '@mui/material'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import EditButton from './EditButton'
 import MainCard from './MainCard'
 import SearchOption from './SearchOption'
@@ -63,13 +63,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     undefined,
   )
 
-  const pageSize = 1
+  const pageSize = 6
   const {
     data: newData,
     isLoading,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
+    (page == 1 && !type && !sort && detailOption.isInit && keyword == '')
       ? null
       : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type ?? 'STUDY'
       }&sort=${sort ?? 'latest'
@@ -97,42 +97,22 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     setContent([...content, ...newData.content])
     //이전 스크롤 높이로 설정
     setPrevScrollHeight(target.current?.scrollHeight)
+    if (target.current && prevScrollHeight)
+      scrollTo(target.current.scrollHeight - prevScrollHeight)
   }, [newData])
 
-  const { target, spinner } = useInfiniteScrollHook(
+  const { target, spinner, scrollTo } = useInfiniteScrollHook(
     setPage,
     isLoading,
     (newData?.last || initData?.last) ?? true, //isEnd
     page,
   )
 
-  console.log("scrollRef.current?.scrollHeight", target.current);
-  console.log("scrollRef.current?.scrollHeight", target.current?.scrollHeight);
-
-  const scrollTo = useCallback(
-    (height: number) => {
-      if (!target.current) return
-      target.current.scrollTo({ top: height })
-    },
-    [target],
-  )
-
-  useEffect(() => {
-    if (!target.current) return
-    if (prevScrollHeight) {
-      scrollTo(target.current.scrollHeight - prevScrollHeight)
-      setPrevScrollHeight(undefined)
-      return
-    }
-    scrollTo(target.current.scrollHeight - target.current.clientHeight)
-  }, [content])
-
   const handleType = (value: ProjectType) => {
     setType(value)
     //type이 변경될 경우 초기화 
     setPage(1)
     setDetailOption({
-      isInit: true,
       due: '',
       region1: '',
       region2: '',
