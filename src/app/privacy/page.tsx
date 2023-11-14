@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import useAuthStore from '@/states/useAuthStore'
 
 const PCLoginBox = {
   display: 'flex',
@@ -56,6 +57,12 @@ const Privacy = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const socialEmail = searchParams.get('social-email')
+
+  // 로그인 상태일 경우 메인 페이지로 이동
+  useEffect(() => {
+    const isLogin = useAuthStore.getState().isLogin
+    if (isLogin) router.replace('/')
+  }, [])
 
   useEffect(() => {
     if (!checkStatus[0] || !checkStatus[1]) {
