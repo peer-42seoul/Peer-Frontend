@@ -85,7 +85,6 @@ const MessageContainer = ({
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [isManageMode, setIsManageMode] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
-  // const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set())
   const {
     selectedSet: selectedUsers,
     isSelectedAll,
@@ -161,6 +160,7 @@ const MessageContainer = ({
         <MessageList
           messageList={messageList}
           state={{ isManageMode, isLoading, error }}
+          selectedUsers={selectedUsers}
           toggleSelectUser={toggleSelect}
         />
         <CuToast open={isOpen} onClose={closeToast} severity="error">
