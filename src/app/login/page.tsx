@@ -106,10 +106,14 @@ const Login = () => {
   const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
     setIsLoading(true)
     axios
-      .post(`${API_URL}/api/v1/signin`, {
-        userEmail: data.userEmail,
-        password: data.password,
-      })
+      .post(
+        `${API_URL}/api/v1/signin`,
+        {
+          userEmail: data.userEmail,
+          password: data.password,
+        },
+        { withCredentials: true },
+      )
       .then((res) => {
         login(res.data.accessToken)
       })
@@ -164,7 +168,7 @@ const Login = () => {
                       이메일
                     </CuTextFieldLabel>
                     <CuTextField
-                      field={field}
+                      {...field}
                       style={{ width: '100%' }}
                       placeholder="이메일을 입력하세요."
                     />
@@ -194,7 +198,7 @@ const Login = () => {
                     </CuTextFieldLabel>
                     <CuTextField
                       type={showPassword ? 'text' : 'password'}
-                      field={field}
+                      {...field}
                       style={{ width: '100%' }}
                       InputProps={{
                         endAdornment: (
@@ -205,9 +209,9 @@ const Login = () => {
                               edge="end"
                             >
                               {showPassword ? (
-                                <Visibility />
-                              ) : (
                                 <VisibilityOff />
+                              ) : (
+                                <Visibility />
                               )}
                             </IconButton>
                           </InputAdornment>

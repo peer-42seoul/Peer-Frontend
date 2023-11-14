@@ -21,7 +21,6 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
       placeOnline: false,
       placeOffline: false,
       placemix: false,
-      statusBefore: false,
       statusonGoing: false,
       statusdone: false,
     },
@@ -80,7 +79,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         <Grid item xs={12}>
           <Box>작업 스택</Box>
           <TagAutoComplete
-            list={listData?.map(({ name }: { name: string }) => name)}
+            list={listData?.map(({ name }: { name: string }) => name) || []}
             datas={tagData}
             setData={setTagData}
           />

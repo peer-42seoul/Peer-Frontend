@@ -56,7 +56,6 @@ const SignUp = () => {
     control,
     formState: { errors },
     getValues,
-    setValue,
   } = useForm<ISignUpInputs>({
     defaultValues: {
       email: '',
@@ -358,9 +357,7 @@ const SignUp = () => {
                         '대소문자를 포함해야 합니다',
                     },
                   }}
-                  render={({ field }) => (
-                    <PasswordField field={field} setValue={setValue} />
-                  )}
+                  render={({ field }) => <PasswordField field={field} />}
                 />
                 <Button
                   sx={nextButtonStyle}

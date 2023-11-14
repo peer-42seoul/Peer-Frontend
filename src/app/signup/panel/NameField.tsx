@@ -16,7 +16,7 @@ const NameField = ({
     <>
       <CuTextFieldLabel htmlFor="name">이름</CuTextFieldLabel>
       <CuTextField
-        field={field}
+        {...field}
         autoComplete="off"
         error={false}
         type="text"

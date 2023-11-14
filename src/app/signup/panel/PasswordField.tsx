@@ -5,26 +5,23 @@ import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import { ControllerRenderProps, UseFormSetValue } from 'react-hook-form'
+import EyeIcon from '@/components/EyeIcon'
+import { ControllerRenderProps } from 'react-hook-form'
 import { ISignUpInputs } from '@/types/ISignUpInputs'
 import CheckIcon from '@mui/icons-material/Check'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
 const PasswordField = ({
   field,
-  setValue,
 }: {
   field: ControllerRenderProps<ISignUpInputs, 'password'>
-  setValue: UseFormSetValue<ISignUpInputs>
 }) => {
   const [showPassword, setShowPassword] = useState<'password' | 'text'>(
     'password',
   )
 
   const deletePassword = () => {
-    setValue('password', '')
+    field.onChange('')
   }
 
   const isLengthValid = field.value.length >= 8
@@ -36,7 +33,7 @@ const PasswordField = ({
     <>
       <CuTextFieldLabel htmlFor="password">비밀번호</CuTextFieldLabel>
       <CuTextField
-        field={field}
+        {...field}
         autoComplete="off"
         error={false}
         type={showPassword}
@@ -48,19 +45,10 @@ const PasswordField = ({
         InputProps={{
           endAdornment: (
             <>
-              <IconButton
-                onClick={() => {
-                  setShowPassword(
-                    showPassword === 'password' ? 'text' : 'password',
-                  )
-                }}
-              >
-                {showPassword === 'password' ? (
-                  <VisibilityIcon />
-                ) : (
-                  <VisibilityOffIcon />
-                )}
-              </IconButton>
+              <EyeIcon
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+              />
               <IconButton onClick={deletePassword} size="small">
                 <HighlightOffIcon />
               </IconButton>

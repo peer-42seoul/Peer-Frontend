@@ -2,7 +2,7 @@
 
 export interface IMessageListData {
   targetId: number
-  conversationalId: number
+  conversationId: number
   targetNickname: string
   targetProfile: string
   unreadMsgNumber: number // 아직 확인하지 않은 메시지 데이터 수
