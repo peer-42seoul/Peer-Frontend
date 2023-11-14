@@ -28,7 +28,7 @@ const PasswordField = ({
 
   return (
     <CuTextField
-      field={field}
+      {...field}
       type={showPassword}
       autoComplete={autoComplete}
       placeholder={placeholder}
