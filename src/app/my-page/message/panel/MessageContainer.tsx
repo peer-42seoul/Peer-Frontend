@@ -6,6 +6,7 @@ import { Button, Stack, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import { IMessageListData } from '@/types/IMessage'
 import CuButton from '@/components/CuButton'
+import useSelectCheckBox from '@/hook/useSelectCheckbox'
 import useToast from '@/hook/useToast'
 import MessageList from './MessageList'
 import useMessageListState from '@/states/useMessageListState'
@@ -69,13 +70,19 @@ const MessageContainer = ({
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [isManageMode, setIsManageMode] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
-  const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set())
+  // const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set())
+  const {
+    selectedSet: selectedUsers,
+    selectAll,
+    unselectAll,
+    toggleSelect,
+  } = useSelectCheckBox(new Set<number>())
 
   const axiosInstance = useAxiosWithAuth()
   const { messageList, setMessageList } = useMessageListState()
 
   useEffect(() => {
-    if (isManageMode) setSelectedUsers(new Set())
+    if (isManageMode) unselectAll()
   }, [isManageMode])
 
   useEffect(() => {
@@ -97,10 +104,6 @@ const MessageContainer = ({
       )
   }, [originalMessageData, searchKeyword])
 
-  const handleSelectAll = () => {
-    setSelectedUsers(new Set(messageList.map((message) => message.targetId)))
-  }
-
   const handleDelete = () => {
     const requestBody = Array.from(selectedUsers).map((targetId) => ({
       targetId,
@@ -120,22 +123,14 @@ const MessageContainer = ({
       })
   }
 
-  const toggleSelectUser = (targetId: number) => {
-    if (selectedUsers.has(targetId)) {
-      selectedUsers.delete(targetId)
-      setSelectedUsers(selectedUsers)
-    } else {
-      selectedUsers.add(targetId)
-      setSelectedUsers(selectedUsers)
-    }
-  }
-
   return (
     <>
       <Stack spacing={2}>
         {isManageMode ? (
           <ManageBar
-            handleSelectAll={handleSelectAll}
+            handleSelectAll={() =>
+              selectAll(messageList.map((message) => message.targetId))
+            }
             handleDelete={handleDelete}
           />
         ) : (
@@ -148,7 +143,7 @@ const MessageContainer = ({
         <MessageList
           messageList={messageList}
           state={{ isManageMode, isLoading, error }}
-          toggleSelectUser={toggleSelectUser}
+          toggleSelectUser={toggleSelect}
         />
         <CuToast open={isOpen} onClose={closeToast} severity="error">
           <Typography>삭제에 실패하였습니다.</Typography>
