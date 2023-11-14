@@ -83,7 +83,7 @@ const UserWithdrawalModal = ({
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             type="password"
-            autoComplete="current-password"
+            autoComplete="off"
             onKeyDown={handlekeyDown}
           />
           <Typography id="modal-description">
