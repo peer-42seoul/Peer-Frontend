@@ -103,10 +103,22 @@ export default function UserInfoEdit({
               defaultValue=""
               rules={{
                 required: true,
-                pattern: {
-                  value:
-                    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/i,
-                  message: '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
+                validate: {
+                  minLength: (value) =>
+                    value.length >= 8 || '비밀번호는 8자 이상이어야 합니다',
+                  maxLength: (value) =>
+                    value.length <= 20 || '비밀번호는 20자 이하여야 합니다',
+                  includeNumber: (value) =>
+                    /\d/.test(value) || '비밀번호에 숫자가 포함되어야 합니다',
+                  includeSpecial: (value) =>
+                    /[!@#$%^&*]/.test(value) ||
+                    '비밀번호에 특수문자가 포함되어야 합니다',
+                  includeCapital: (value) =>
+                    /[A-Z]/.test(value) ||
+                    '비밀번호에 대문자가 포함되어야 합니다',
+                  includeSmall: (value) =>
+                    /[a-z]/.test(value) ||
+                    '비밀번호에 소문자가 포함되어야 합니다',
                 },
               }}
               render={({ field }) => (
