@@ -58,7 +58,7 @@ export const useInfiniteScrollHook = (
   page: number
 ) => {
   const [spinner, setSpinner] = useState(false)
-  const target = useRef(null)
+  const target = useRef<HTMLDivElement>(null)
 
   const debouncedFetchData = debounce(async () => {
     // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
@@ -148,6 +148,8 @@ const useInfiniteScroll = ({
     if (currentTarget) {
       observer.observe(currentTarget)
     }
+
+    console.log("target.current", target.current);
 
     // 컴포넌트가 언마운트되면 IntersectionObserver 해제
     return () => {
