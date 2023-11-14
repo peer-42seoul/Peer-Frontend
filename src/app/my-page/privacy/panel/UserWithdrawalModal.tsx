@@ -4,6 +4,7 @@ import CuModal from '@/components/CuModal'
 
 import { useState, Dispatch, SetStateAction } from 'react'
 import { Box, Button, TextField, Typography } from '@mui/material'
+import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
 import LocalStorage from '@/states/localStorage'
@@ -48,6 +49,10 @@ const UserWithdrawalModal = ({
       })
       LocalStorage.removeItem('authData')
       removeCookie('refreshToken', { path: '/' })
+      useAuthStore.setState({
+        isLogin: false,
+        accessToken: null,
+      })
       alert('계정이 삭제되었습니다')
       handleClose()
       router.push('/')
