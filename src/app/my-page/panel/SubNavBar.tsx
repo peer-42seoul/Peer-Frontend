@@ -6,25 +6,12 @@ import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
 const getTabValue = (path: string) => {
-  switch (path) {
-    case '/my-page/profile':
-      return 0
-
-    case '/my-page/interests':
-      return 1
-
-    case '/my-page/message':
-      return 2
-
-    case '/my-page/privacy':
-      return 3
-
-    case '/my-page/homepage-setting':
-      return 4
-
-    default:
-      return 0
-  }
+  if (path.startsWith('/my-page')) return 1
+  else if (path.startsWith('/my-page/interests')) return 2
+  else if (path.startsWith('/my-page/message')) return 3
+  else if (path.startsWith('/my-page/privacy')) return 4
+  else if (path.startsWith('/my-page/homepage-setting')) return 5
+  else return 0
 }
 
 const SubNavBar = () => {
