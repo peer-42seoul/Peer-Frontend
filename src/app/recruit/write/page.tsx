@@ -40,7 +40,7 @@ export interface IRoleData {
 
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
-  const [image, setImage] = useState<File[]>([])
+  const [thumbnailUrl, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
     '/images/defaultImage.png',
   )
@@ -78,7 +78,7 @@ const CreateTeam = () => {
   }, [interviewList])
 
   const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
+    `${process.env.NEXT_PUBLIC_API_URL}api/v1/recruit/allTags`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
@@ -97,23 +97,45 @@ const CreateTeam = () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
+    const submitData = new FormData()
+    submitData.append('place', place)
+    submitData.append('thumbnailUrl', thumbnailUrl[0], thumbnailUrl[0].name)
+    submitData.append('title', title)
+    submitData.append('name', name)
+    submitData.append('due', due)
+    submitData.append('type', type)
+    submitData.append('content', content)
+    submitData.append('region', JSON.stringify(region))
+    submitData.append('link', link)
+    submitData.append('tagList', JSON.stringify(tagList))
+    submitData.append('roleList', JSON.stringify(roleList))
+    submitData.append('interviewList', JSON.stringify(interviewList))
+    console.log(submitData)
+
     try {
       const response = await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
+        `${process.env.NEXT_PUBLIC_API_URL}api/v1/recruit/write`,
         {
-          place,
-          image,
-          title,
-          name,
-          due,
-          type,
-          content,
-          region,
-          link,
-          tagList,
-          roleList,
-          interviewList,
+          // place,
+          // // image,
+          // thumbnailUrl,
+          // title,
+          // name,
+          // due,
+          // type,
+          // content,
+          // region,
+          // link,
+          // tagList,
+          // roleList,
+          // interviewList,
+          submitData
         },
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
       )
       router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
     } catch (error) {
