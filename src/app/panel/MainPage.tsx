@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
   CircularProgress,
+  Button,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import EditButton from './EditButton'
@@ -27,6 +28,7 @@ import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
 import useMedia from '@/hook/useMedia'
+import { set } from 'lodash'
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -51,6 +53,11 @@ export interface IDetailOption {
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { isPc } = useMedia()
+  const [isShowInstall, setIsShowInstall] = useState<boolean>(
+    localStorage.getItem('isShowInstall') === 'true' || undefined
+      ? true
+      : false,
+  )
   const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
@@ -120,10 +127,15 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       e.preventDefault()
       setDeferredPrompt(e)
+      setIsShowInstall(true)
     }
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-  }, [deferredPrompt])
+    window.addEventListener('appinstalled', () => {
+      console.log('installed')
+      setIsShowInstall(false)
+    })
+  }, [deferredPrompt, isShowInstall])
 
   useEffect(() => {
     if (!newData || !newData?.content) return
@@ -156,24 +168,33 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   return (
     <>
-      <Box height={'50px'} border="1px solid black">
-        <Stack>
-          사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
-          {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
-          <Stack direction="row">
-            <button
-              onClick={() => {
-                if (!deferredPrompt) return
-                // @ts-ignore
-                deferredPrompt.prompt()
-              }}
-            >
-              설치
-            </button>
-            <button>닫기</button>
+      {isShowInstall ? (
+        <Box height={'50px'} border="1px solid black">
+          <Stack>
+            사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
+            {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
+            <Stack direction="row">
+              <Button
+                onClick={() => {
+                  if (!deferredPrompt) return
+                  // @ts-ignore
+                  deferredPrompt.prompt()
+                }}
+              >
+                설치
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsShowInstall(false)
+                  localStorage.setItem('isShowInstall', 'false')
+                }}
+              >
+                닫기
+              </Button>
+            </Stack>
           </Stack>
-        </Stack>
-      </Box>
+        </Box>
+      ) : null}
       {/* mobile view */}
       <Container className="mobile-layout">
         <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
