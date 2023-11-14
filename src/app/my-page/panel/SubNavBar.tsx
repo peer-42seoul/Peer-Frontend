@@ -6,19 +6,17 @@ import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
 const getTabValue = (path: string) => {
-  if (path.startsWith('/my-page')) return 1
-  else if (path.startsWith('/my-page/interests')) return 2
-  else if (path.startsWith('/my-page/message')) return 3
-  else if (path.startsWith('/my-page/privacy')) return 4
-  else if (path.startsWith('/my-page/homepage-setting')) return 5
+  if (path.startsWith('/my-page/profile')) return 0
+  else if (path.startsWith('/my-page/interests')) return 1
+  else if (path.startsWith('/my-page/message')) return 2
+  else if (path.startsWith('/my-page/privacy')) return 3
+  else if (path.startsWith('/my-page/homepage-setting')) return 4
   else return 0
 }
 
 const SubNavBar = () => {
   const router = useRouter()
-  console.log(router)
   const pathName = usePathname()
-  console.log(pathName)
   const [value, setValue] = useState(0)
   const { isPc } = useMedia()
 
@@ -31,8 +29,6 @@ const SubNavBar = () => {
   if (!isPc) {
     return <div></div>
   }
-
-  // console.log(pathName)
 
   return (
     <Box
