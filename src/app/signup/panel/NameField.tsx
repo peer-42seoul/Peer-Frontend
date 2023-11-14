@@ -16,8 +16,8 @@ const NameField = ({
     <>
       <CuTextFieldLabel htmlFor="name">이름</CuTextFieldLabel>
       <CuTextField
-        field={field}
-        autoComplete="off"
+        {...field}
+        autoComplete="name"
         error={false}
         type="text"
         placeholder="이름을 입력하세요"

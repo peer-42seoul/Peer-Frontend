@@ -46,8 +46,6 @@ const ProfileBioEditor = ({
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
-  const [nicknameError, setNicknameError] = useState<boolean>(false)
-  // const [image, setImage] = useState<File | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(
     data.profileImageUrl,
   )
@@ -64,9 +62,10 @@ const ProfileBioEditor = ({
     control,
     formState: { errors, isSubmitting },
     register,
-    // getValues,
     watch,
     setValue,
+    setError,
+    clearErrors,
   } = useForm<IFormInput>({
     defaultValues: defaultValues,
     mode: 'onChange',
@@ -124,19 +123,26 @@ const ProfileBioEditor = ({
               severity: 'success',
               message: '사용할 수 있는 닉네임 입니다.',
             })
+            if (errors.nickname?.type === 'notUnique') {
+              clearErrors('nickname')
+            }
             setToastOpen(true)
-            if (nicknameError) setNicknameError(false) // 중복확인 안했을 경우 닉네임 폼 에러 띄우기 위해 true로 되어있었음. 중복확인을 했으므로 false 처리
             setIsLoading(false)
           })
           .catch((error) => {
+            setIsNicknameUnique(false)
             console.log(error)
             setToastMessage({
               severity: 'error',
               message: '중복된 닉네임 입니다.',
             })
             setToastOpen(true)
+            setError('nickname', {
+              type: 'notUnique',
+              message: '새로운 닉네임을 입력해주세요.',
+            })
             setIsLoading(false)
-            setNicknameError(true)
+            // setNicknameError(true)
           })
       }
       if (!isLoading) {
@@ -148,7 +154,13 @@ const ProfileBioEditor = ({
     return (
       <CuButton
         variant="contained"
-        disabled={errors.nickname ? isLoading : false}
+        disabled={
+          data.nickname === nickname ||
+          isNicknameUnique ||
+          (errors.nickname && errors.nickname?.type !== 'notUnique')
+            ? true
+            : isLoading
+        }
         action={onClick}
         message="중복 확인"
       />
@@ -159,17 +171,27 @@ const ProfileBioEditor = ({
     const submitData = new FormData()
     submitData.append('nickname', formData.nickname)
     submitData.append('introduction', formData.introduction)
-    submitData.append('profileImage', formData.profileImage![0])
+    if (formData.profileImage?.length) {
+      submitData.append(
+        'profileImage',
+        formData.profileImage![0],
+        formData.profileImage[0]?.name,
+      )
+    }
     submitData.append('imageChange', imageChanged.toString().toUpperCase())
 
     console.log('닉네임 중복확인', isNicknameUnique)
     if (!isNicknameUnique) {
-      setToastMessage({
-        severity: 'error',
+      // setToastMessage({
+      //   severity: 'error',
+      //   message: '닉네임 중복확인이 필요합니다.',
+      // })
+      // setToastOpen(true)
+      // setNicknameError(true)
+      setError('nickname', {
+        type: 'notUnique',
         message: '닉네임 중복확인이 필요합니다.',
       })
-      setToastOpen(true)
-      setNicknameError(true)
       return
     }
 
@@ -177,6 +199,11 @@ const ProfileBioEditor = ({
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/introduction/edit`,
         submitData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
       )
       .then(() => {
         setToastMessage({
@@ -237,13 +264,7 @@ const ProfileBioEditor = ({
                   sx={{ position: 'relative', width: '100%', height: '100%' }}
                 >
                   <Avatar
-                    src={
-                      previewImage
-                        ? previewImage
-                        : // : data.profileImageUrl
-                          // ? data.profileImageUrl
-                          '/images/profile.jpeg'
-                    }
+                    src={previewImage ? previewImage : '/images/profile.jpeg'}
                     alt="profile image"
                     sx={{
                       position: 'absolute',
@@ -299,16 +320,16 @@ const ProfileBioEditor = ({
                   <CuTextField
                     id="nickname"
                     variant="outlined"
-                    field={{
-                      ...field,
-                      onChange: (e: any[]) => {
-                        field.onChange(e)
-                        if (isNicknameUnique) setIsNicknameUnique(false)
-                        if (nicknameError) setNicknameError(false)
-                      },
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e)
+                      if (isNicknameUnique) setIsNicknameUnique(false)
+                      if (errors?.nickname?.type === 'notUnique')
+                        clearErrors('nickname')
                     }}
+                    helperText={errors.nickname?.message}
                     fullWidth={true}
-                    error={(errors.nickname ? true : false) || nicknameError}
+                    error={errors.nickname ? true : false}
                     autoComplete="off"
                     placeholder="닉네임은 두 글자 이상이어야 합니다."
                     inputProps={{ minLength: 2, maxLength: 7 }}
@@ -326,7 +347,17 @@ const ProfileBioEditor = ({
                 )}
                 name="nickname"
                 control={control}
-                rules={{ required: true, maxLength: 7, minLength: 2 }}
+                rules={{
+                  required: '닉네임은 필수로 기입해야 합니다.',
+                  maxLength: {
+                    value: 7,
+                    message: '닉네임은 최대 7글자까지만 적용 가능합니다.',
+                  },
+                  minLength: {
+                    value: 2,
+                    message: '닉네임은 최소 두 글자 이상 작성해야 합니다.',
+                  },
+                }}
               />
             </Grid>
             {/* association */}
@@ -358,7 +389,7 @@ const ProfileBioEditor = ({
                     label=""
                     variant="outlined"
                     id="introduction"
-                    field={field}
+                    {...field}
                     autoComplete="off"
                     fullWidth
                     inputProps={{ maxLength: 150 }}
@@ -369,7 +400,12 @@ const ProfileBioEditor = ({
                 )}
                 name="introduction"
                 control={control}
-                rules={{ maxLength: 150 }}
+                rules={{
+                  maxLength: {
+                    value: 150,
+                    message: '자기소개는 최대 150자까지만 입력 가능합니다.',
+                  },
+                }}
               />
             </Grid>
           </Grid>

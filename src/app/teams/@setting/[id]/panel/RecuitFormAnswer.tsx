@@ -6,9 +6,9 @@ import {
   IInterview,
   RatioQuestionList,
 } from '../page'
-import CloseQuestionForm from '@/app/recruitment/[id]/panel/CloseQuestionForm'
-import RatioQuestionForm from '@/app/recruitment/[id]/panel/RatioQuestionForm'
-import CheckQuestionForm from '@/app/recruitment/[id]/panel/CheckQuestionForm'
+import CloseQuestionForm from '@/app/recruit/[id]/panel/CloseQuestionForm'
+import RatioQuestionForm from '@/app/recruit/[id]/panel/RatioQuestionForm'
+import CheckQuestionForm from '@/app/recruit/[id]/panel/CheckQuestionForm'
 import { useForm } from 'react-hook-form'
 
 const FormAnswer = ({

@@ -130,12 +130,10 @@ const KeywordAddingField = ({
       <CuTextField
         id="keyword-field"
         placeholder="ex. JS"
-        field={{
-          onChange: onChangeHandler,
-          onKeyDown: handleKeyPress,
-          inputRef: textFieldRef,
-          value: inputValue,
-        }}
+        onChange={onChangeHandler}
+        onKeyDown={handleKeyPress}
+        inputRef={textFieldRef}
+        value={inputValue}
         inputProps={{ maxLength: 7 }}
         fullWidth
         InputProps={{

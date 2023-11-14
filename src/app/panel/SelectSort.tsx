@@ -2,8 +2,8 @@ import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { ProjectSort } from './MainPage'
 
 interface ISelectSortProps {
-  sort: ProjectSort
-  setSort: React.Dispatch<React.SetStateAction<ProjectSort>>
+  sort: ProjectSort | undefined
+  setSort: (value: ProjectSort) => void
 }
 
 const SelectSort = ({ sort, setSort }: ISelectSortProps) => {
@@ -13,7 +13,7 @@ const SelectSort = ({ sort, setSort }: ISelectSortProps) => {
 
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <Select value={sort} onChange={handleChange}>
+      <Select value={sort ?? 'latest'} onChange={handleChange}>
         <MenuItem value={'latest'}>최신순</MenuItem>
         <MenuItem value={'hit'}>인기순</MenuItem>
       </Select>

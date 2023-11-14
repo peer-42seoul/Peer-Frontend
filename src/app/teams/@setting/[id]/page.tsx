@@ -138,13 +138,13 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       )}
       <Button
         variant="contained"
-        onClick={() => router.push(`/recruitment/${params.id}`)}
+        onClick={() => router.push(`/recruit/${params.id}`)}
       >
         모집 글 보기
       </Button>
       <Button
         variant="contained"
-        onClick={() => router.push(`/recruitment/edit/${params.id}`)}
+        onClick={() => router.push(`/recruit/edit/${params.id}`)}
       >
         모집 글 수정하기
       </Button>

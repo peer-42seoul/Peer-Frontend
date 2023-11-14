@@ -8,9 +8,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { IFormInterview } from '@/app/recruitment/write/page'
+import { IFormInterview } from '@/app/recruit/write/page'
 
-const Answers = ({ data }: { data: IFormInterview;}) => {
+const Answers = ({ data }: { data: IFormInterview }) => {
   console.log('data.type', data.type)
   switch (data.type) {
     case '객관식': {

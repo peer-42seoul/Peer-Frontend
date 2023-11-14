@@ -103,7 +103,7 @@ export const PcNav = () => {
     if (pathname === '/') {
       setValue(0)
     } else if (pathname === '/team-list') {
-      setValue(3)
+      setValue(2)
     }
   }, [pathname])
   return (
@@ -166,7 +166,7 @@ export const PcNav = () => {
         <Avatar
           onClick={() => router.push(isLogin ? '/my-page/profile' : '/login')}
         />
-        <Link href={'/recruitment'}>
+        <Link href={'/recruit/write'}>
           {isTablet ? (
             <IconButton>
               <BorderColor />

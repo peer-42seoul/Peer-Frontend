@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-
+import { useState, useEffect } from 'react'
+import useAuthStore from '@/states/useAuthStore'
 import { Button, Typography, Box } from '@mui/material'
 import axios from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -56,7 +56,6 @@ const SignUp = () => {
     control,
     formState: { errors },
     getValues,
-    setValue,
   } = useForm<ISignUpInputs>({
     defaultValues: {
       email: '',
@@ -67,6 +66,12 @@ const SignUp = () => {
     },
     mode: 'onChange',
   })
+
+  // 로그인 상태일 경우 메인 페이지로 이동
+  useEffect(() => {
+    const isLogin = useAuthStore.getState().isLogin
+    if (isLogin) router.replace('/')
+  }, [])
 
   const [signUpStep, setSignUpStep] = useState<number>(0)
   const [emailSendStatus, setEmailSendStatus] = useState<
@@ -358,9 +363,7 @@ const SignUp = () => {
                         '대소문자를 포함해야 합니다',
                     },
                   }}
-                  render={({ field }) => (
-                    <PasswordField field={field} setValue={setValue} />
-                  )}
+                  render={({ field }) => <PasswordField field={field} />}
                 />
                 <Button
                   sx={nextButtonStyle}

@@ -1,19 +1,13 @@
 'use client'
 
-import { useState, Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Typography, Container, Stack } from '@mui/material'
-import CuTextField from '@/components/CuTextField'
 import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
+import IChangePassword from '../types/IChangePassword'
 
-import EyeIcon from './EyeIcon'
-
-interface IChangePassword {
-  presentPassword: string
-  newPassword: string
-  confirmPassword: string
-}
+import PasswordField from './PasswordField'
 
 export default function UserInfoEdit({
   local,
@@ -40,15 +34,6 @@ export default function UserInfoEdit({
     },
     mode: 'onChange',
   })
-  const [showPresentPassword, setShowPresentPassword] = useState<
-    'password' | 'text'
-  >('password')
-  const [showNewPassword, setShowNewPassword] = useState<'password' | 'text'>(
-    'password',
-  )
-  const [showConfirmPassword, setShowConfirmPassword] = useState<
-    'password' | 'text'
-  >('password')
 
   const axiosWithAuth = useAxiosWithAuth()
   const changePassword: SubmitHandler<IChangePassword> = async (data) => {
@@ -104,20 +89,11 @@ export default function UserInfoEdit({
               defaultValue=""
               rules={{ required: true }}
               render={({ field }) => (
-                <CuTextField
+                <PasswordField
                   field={field}
-                  type={showPresentPassword}
                   autoComplete="off"
-                  error={errors.presentPassword ? true : false}
                   placeholder="현재 비밀번호"
-                  InputProps={{
-                    endAdornment: (
-                      <EyeIcon
-                        showPassword={showPresentPassword}
-                        setShowPassword={setShowPresentPassword}
-                      />
-                    ),
-                  }}
+                  error={errors.presentPassword ? true : false}
                 />
               )}
             />
@@ -127,27 +103,30 @@ export default function UserInfoEdit({
               defaultValue=""
               rules={{
                 required: true,
-                pattern: {
-                  value:
-                    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/i,
-                  message: '8자 이상의 영문, 숫자, 특수문자 조합이어야 합니다',
+                validate: {
+                  minLength: (value) =>
+                    value.length >= 8 || '비밀번호는 8자 이상이어야 합니다',
+                  maxLength: (value) =>
+                    value.length <= 20 || '비밀번호는 20자 이하여야 합니다',
+                  includeNumber: (value) =>
+                    /\d/.test(value) || '비밀번호에 숫자가 포함되어야 합니다',
+                  includeSpecial: (value) =>
+                    /[!@#$%^&*]/.test(value) ||
+                    '비밀번호에 특수문자가 포함되어야 합니다',
+                  includeCapital: (value) =>
+                    /[A-Z]/.test(value) ||
+                    '비밀번호에 대문자가 포함되어야 합니다',
+                  includeSmall: (value) =>
+                    /[a-z]/.test(value) ||
+                    '비밀번호에 소문자가 포함되어야 합니다',
                 },
               }}
               render={({ field }) => (
-                <CuTextField
+                <PasswordField
                   field={field}
-                  type={showNewPassword}
                   autoComplete="off"
-                  error={errors.newPassword ? true : false}
                   placeholder="새로운 비밀번호"
-                  InputProps={{
-                    endAdornment: (
-                      <EyeIcon
-                        showPassword={showNewPassword}
-                        setShowPassword={setShowNewPassword}
-                      />
-                    ),
-                  }}
+                  error={errors.newPassword ? true : false}
                 />
               )}
             />
@@ -162,20 +141,11 @@ export default function UserInfoEdit({
                   '비밀번호가 일치하지 않습니다',
               }}
               render={({ field }) => (
-                <CuTextField
+                <PasswordField
                   field={field}
-                  type={showConfirmPassword}
                   autoComplete="off"
+                  placeholder="새로운 비밀번호 확인"
                   error={errors.confirmPassword ? true : false}
-                  placeholder="새로운 비밀번호 재입력"
-                  InputProps={{
-                    endAdornment: (
-                      <EyeIcon
-                        showPassword={showConfirmPassword}
-                        setShowPassword={setShowConfirmPassword}
-                      />
-                    ),
-                  }}
                 />
               )}
             />
