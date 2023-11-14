@@ -30,7 +30,7 @@ const useAuthStore = create<IAuthStore>((set) => {
         accessToken,
       }))
     },
-    logout: async () => {
+    logout: () => {
       if (authData.accessToken) {
         axios.get(`${API_URL}/api/v1/logout`, {
           headers: {

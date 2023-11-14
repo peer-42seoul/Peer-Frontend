@@ -22,7 +22,7 @@ const EmailField = ({
     <>
       <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
       <CuTextField
-        field={field}
+        {...field}
         disabled={emailSendStatus === 'submit'}
         autoComplete="email"
         error={emailSendStatus === 'error'}

@@ -16,14 +16,14 @@ const LinkButton = ({ href }: { href: string }) => {
   }
 
   return (
-    <>
+    <div>
       <Button
         aria-describedby={id}
         variant="contained"
         size="large"
         href={href}
         onMouseEnter={handlePopoverOpen}
-        sx={{ zIndex: 1301 }}
+        sx={{ zIndex: 1304 }}
       >
         소통링크
       </Button>
@@ -40,11 +40,12 @@ const LinkButton = ({ href }: { href: string }) => {
           vertical: 'top',
           horizontal: 'left',
         }}
-        sx={{ zIndex: 1302 }}
+        sx={{ zIndex: 1303 }}
+        container={() => document.getElementById('modal-root')}
       >
         <Typography sx={{ padding: 2 }}>{href}</Typography>
       </Popover>
-    </>
+    </div>
   )
 }
 

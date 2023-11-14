@@ -19,7 +19,7 @@ const MessageItem = ({
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const {
     targetId,
-    conversationalId,
+    conversationId,
     targetNickname,
     latestDate,
     latestContent,
@@ -35,7 +35,7 @@ const MessageItem = ({
       <Grid
         container
         onClick={() =>
-          router.push(`/my-page/message/${conversationalId}?target=${targetId}`)
+          router.push(`/my-page/message/${conversationId}?target=${targetId}`)
         }
         sx={{ cursor: 'pointer' }}
         spacing={1}
@@ -72,19 +72,30 @@ const MessageItem = ({
 }
 
 interface IMessageListProps {
-  messages: IMessageListData[]
-  isManageMode: boolean
+  messageList: IMessageListData[]
+  state: {
+    isManageMode: boolean
+    isLoading: boolean
+    error: any
+  }
   toggleSelectUser: (targetId: number) => void
 }
 
 const MessageList = ({
-  messages,
-  isManageMode,
+  messageList,
+  state,
   toggleSelectUser,
 }: IMessageListProps) => {
+  const { isManageMode, isLoading, error } = state
+
+  if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
+  if (error) return <Typography>데이터 불러오기에 실패했습니다.</Typography>
+  if (messageList.length === 0)
+    return <Typography>쪽지함이 비었습니다.</Typography>
+
   return (
     <Stack spacing={2}>
-      {messages.map((message) => (
+      {messageList.map((message) => (
         <MessageItem
           key={message.targetId}
           message={message}
