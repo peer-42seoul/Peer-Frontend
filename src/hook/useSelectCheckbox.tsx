@@ -3,8 +3,11 @@ import { useState } from 'react'
 const useSelectCheckBox = <T,>(initalSet: Set<T>) => {
   const [selectedSet, setSelectedSet] = useState<any>(initalSet)
 
-  // NOTE : 타입을 지정할 수 있는 방법이 있을까?
-  const selectAll = (allData: any) => {
+  const isSelectedAll = (allData: Array<T>) => {
+    return allData.length === selectedSet.size
+  }
+
+  const selectAll = (allData: Array<T>) => {
     setSelectedSet(new Set(allData))
   }
 
@@ -39,6 +42,7 @@ const useSelectCheckBox = <T,>(initalSet: Set<T>) => {
 
   return {
     selectedSet,
+    isSelectedAll,
     selectAll,
     selectOne,
     unselectAll,
