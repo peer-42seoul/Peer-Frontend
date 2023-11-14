@@ -24,7 +24,6 @@ const ReportForm = () => {
   //console.log(targetUrl)
   // 신고 대상의 id(글, 사용자)
 
-
   const axiosInstance = useAxiosWithAuth()
 
   const onSubmit: SubmitHandler<IReportFormInput> = (data) => {
@@ -49,14 +48,18 @@ const ReportForm = () => {
     formState: { errors },
   } = useForm<IReportFormInput>({
     defaultValues: {
-      targetUrl: targetUrl? targetUrl : '',
+      targetUrl: targetUrl ? targetUrl : '',
       reportType: '',
       content: '',
     },
   })
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{display: "flex", flexDirection: "column", gap: "10px"}}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+    >
       <Controller
         name="targetUrl"
         control={control}
@@ -65,15 +68,12 @@ const ReportForm = () => {
         }}
         render={({ field }) => (
           <>
-            <Box sx={{display: 'flex', alignItems: 'center'}}>
-              <CuTextFieldLabel
-                htmlFor="targetUrl"
-                style={{ width: '120px' }}
-              >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <CuTextFieldLabel htmlFor="targetUrl" style={{ width: '120px' }}>
                 신고 대상 url
               </CuTextFieldLabel>
               <CuTextField
-                field={field}
+                {...field}
                 id="targetUrl"
                 style={{ width: 'calc(100% - 120px)' }}
                 disabled
@@ -114,12 +114,12 @@ const ReportForm = () => {
           <Box>
             <CuTextFieldLabel
               htmlFor="content"
-              style={{marginBottom: "10px"}}
+              style={{ marginBottom: '10px' }}
             >
               신고 내용
             </CuTextFieldLabel>
             <CuTextField
-              field={field}
+              {...field}
               id="content"
               style={{ width: '100%' }}
               placeholder="신고 내용을 작성해주세요"
