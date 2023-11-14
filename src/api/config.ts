@@ -1,13 +1,9 @@
 import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import useAuthStore from '@/states/useAuthStore'
-import { useCookies } from 'react-cookie'
 import { useRouter } from 'next/navigation'
 
 const useAxiosWithAuth = () => {
   const accessToken = useAuthStore.getState().accessToken
-  const [cookies, , removeCookie] = useCookies(['refreshToken'])
-  const refreshToken = cookies.refreshToken
-
   const router = useRouter()
 
   const axiosInstance = axios.create({
@@ -38,31 +34,26 @@ const useAxiosWithAuth = () => {
       isRefreshing = true
       const currentPageUrl = window.location.pathname
       if (error.response?.status === 401) {
-        if (!refreshToken || !accessToken || isRefreshing) {
+        if (!accessToken || isRefreshing) {
           // 로그아웃 후 리디렉션
 
           useAuthStore.getState().logout()
-          removeCookie('refreshToken', { path: '/' })
           router.push('/login?redirect=' + currentPageUrl)
         } else {
           try {
             // accessToken 갱신 요청
             const response = await axiosInstance.post(
               '/api/v1/signin/reissue',
-              {
-                refreshToken: refreshToken,
-              },
+              { withCredentials: true },
             )
             const newAccessToken = response.data.accessToken
             useAuthStore.getState().login(newAccessToken)
             error.config.headers['Authorization'] = `Bearer ${newAccessToken}`
             // 이전 요청을 재시도
             return axios.request(error.config)
-            //return axiosInstance(error.config)
           } catch (refreshError) {
             // 로그아웃 후 리디렉션
             useAuthStore.getState().logout()
-            removeCookie('refreshToken', { path: '/' })
             router.push('/login?redirect=' + currentPageUrl)
           }
         }
