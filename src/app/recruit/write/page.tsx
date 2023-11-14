@@ -13,21 +13,21 @@ import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
 import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import SelectRegion from '../[id]/edit/panel/SelectRegion'
-import { ITag } from '@/types/IPostDetail'
+import { IFormInterview, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 // import useAuthStore from '@/states/useAuthStore'
 
 const dummyData1: ITag = {
-  name: 'java',
+  name: 'java-test',
   color: 'red',
 }
 const dummyData2: ITag = {
-  name: 'spring',
+  name: 'spring-test',
   color: 'blue',
 }
 const dummyData3: ITag = {
-  name: 'react',
+  name: 'react-test',
   color: 'green',
 }
 const dummyDatas: ITag[] = [dummyData1, dummyData2, dummyData3]
@@ -36,14 +36,6 @@ export interface IRoleData {
   // types 로 병합예정
   role: string | null
   member: number
-}
-
-export interface IFormInterview {
-  // 수정 및 types로 병합예정
-  question: string
-  type: string
-  optionList?: string[]
-  ratioList?: { max: string; valueOfMin: string; valueOfMax: string }
 }
 
 const CreateTeam = () => {
@@ -81,8 +73,12 @@ const CreateTeam = () => {
   //   }
   // }, [isLogin])
 
+  useEffect(() => {
+    console.log(interviewList)
+  }, [interviewList])
+
   const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
@@ -103,7 +99,7 @@ const CreateTeam = () => {
     }
     try {
       const response = await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
         {
           place,
           image,

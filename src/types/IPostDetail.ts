@@ -49,7 +49,7 @@ export interface IPostDetail {
 export interface IFormInterview {
   question: string
   type: string
-  optionList: string[]
+  optionList: string[] | null
 }
 
 export interface IRole {
