@@ -47,7 +47,7 @@ const ProfileBioEditor = ({
   const axiosWithAuth = useAxiosWithAuth()
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
   const [previewImage, setPreviewImage] = useState<string | null>(
-    data.profileImageURL,
+    data.profileImageUrl,
   )
   const [imageChanged, setImageChanged] = useState<boolean>(false)
 
@@ -304,7 +304,7 @@ const ProfileBioEditor = ({
             </Box>
 
             {/* )}
-              name={'profileImageURL'}
+              name={'profileImageUrl'}
               control={control}
             /> */}
           </Grid>
