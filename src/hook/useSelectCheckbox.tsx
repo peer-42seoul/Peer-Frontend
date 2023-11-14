@@ -3,7 +3,7 @@ import { useState } from 'react'
 const useSelectCheckBox = <T,>(initalSet: Set<T>) => {
   const [selectedSet, setSelectedSet] = useState<any>(initalSet)
 
-  const isSelectedAll = (allData: Array<T>) => {
+  const isSelectedAll = (allData: Array<any>) => {
     return allData.length === selectedSet.size
   }
 

@@ -41,15 +41,30 @@ const SearchBar = ({
 }
 
 interface IManageBarProps {
+  isSelectAll: boolean
   handleSelectAll: () => void
+  handleUnselectAll: () => void
   handleDelete: () => void
 }
 
-const ManageBar = ({ handleSelectAll, handleDelete }: IManageBarProps) => {
+const ManageBar = ({
+  isSelectAll,
+  handleSelectAll,
+  handleUnselectAll,
+  handleDelete,
+}: IManageBarProps) => {
   return (
     // 관리 모드 나가기 버튼?
     <Stack direction="row">
-      <CuButton variant="text" action={handleSelectAll} message="전체 선택" />
+      {isSelectAll ? (
+        <CuButton
+          variant="text"
+          action={handleUnselectAll}
+          message="전체 선택 해제"
+        />
+      ) : (
+        <CuButton variant="text" action={handleSelectAll} message="전체 선택" />
+      )}
       <CuButton variant="text" action={handleDelete} message="삭제" />
     </Stack>
   )
@@ -73,6 +88,7 @@ const MessageContainer = ({
   // const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set())
   const {
     selectedSet: selectedUsers,
+    isSelectedAll,
     selectAll,
     unselectAll,
     toggleSelect,
@@ -128,9 +144,11 @@ const MessageContainer = ({
       <Stack spacing={2}>
         {isManageMode ? (
           <ManageBar
+            isSelectAll={isSelectedAll(messageList)}
             handleSelectAll={() =>
               selectAll(messageList.map((message) => message.targetId))
             }
+            handleUnselectAll={() => unselectAll()}
             handleDelete={handleDelete}
           />
         ) : (
