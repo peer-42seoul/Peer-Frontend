@@ -35,10 +35,12 @@ const SendCodeForm = ({
   email,
   setErrorMessage,
   openToast,
+  setIsCodeSuccessful,
 }: {
   email: string
   setErrorMessage: (message: string) => void
   openToast: () => void
+  setIsCodeSuccessful: (isCodeSuccessful: boolean) => void
 }) => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
   const {
@@ -49,7 +51,6 @@ const SendCodeForm = ({
   const [timer, setTimer] = useState(5 * 60)
   const router = useRouter()
 
-  console.log(email)
   useEffect(() => {
     const countdown = setInterval(() => {
       setTimer((prevTimer) => prevTimer - 1)
@@ -79,28 +80,23 @@ const SendCodeForm = ({
     const code = data.code
     //console.log(codeData)
 
-    axios
-      .post(`${API_URL}/api/v1/signin/find-password`, {
+    try {
+      const res = await axios.post(`${API_URL}/api/v1/signin/find-password`, {
         email: email,
         code: code,
       })
-      .then((res) => {
-        if (res.status == 200) {
-          alert(
-            '메일로 임시 비밀번호가 전송되었습니다. 로그인 페이지로 이동합니다.',
-          )
-          router.push('/login')
-        }
-      })
-      .catch((error) => {
-        if (error.response.status == 401 || error.response.status == 400) {
-          setErrorMessage('유효한 코드가 아닙니다.')
-          openToast()
-        } else {
-          alert('알 수 없는 오류가 발생했습니다.')
-          window.location.reload()
-        }
-      })
+      if (res.status == 200) {
+        setIsCodeSuccessful(true)
+      }
+    } catch (error: any) {
+      if (error.response.status == 401 || error.response.status == 400) {
+        setErrorMessage('유효한 코드가 아닙니다.')
+        openToast()
+      } else {
+        alert('알 수 없는 오류가 발생했습니다.')
+        window.location.reload()
+      }
+    }
   }
 
   return (
