@@ -44,12 +44,28 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
   const axiosWithAuth = useAxiosWithAuth()
 
   const sendTeamInfo = () => {
-    if (validation()) return alert('한글, 영문, 숫자만 입력 가능합니다.')
+    if (
+      validation(teamInfo.name) ||
+      validationNumber(teamInfo.maxMember as string)
+    )
+      return alert('한글, 영문, 숫자만 입력 가능합니다.')
     if (isEdit === false) return alert('변경된 사항이 없습니다.')
+    const formdata = new FormData()
+    formdata.append('name', teamInfo.name)
+    formdata.append('dueTo', teamInfo.dueTo)
+    formdata.append('operationForm', teamInfo.operationForm)
+    formdata.append('region', teamInfo.region[1])
+    formdata.append('region', teamInfo.region[0])
+    formdata.append('teamImage', teamInfo.teamImage as string)
+    formdata.append('maxMember', teamInfo.maxMember as string)
+    formdata.append('type', teamInfo.type)
+    formdata.append('status', teamInfo.status)
+    formdata.append('id', teamInfo.id)
+
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${team.id}`,
-        teamInfo,
+        formdata,
       )
       .then((res) => {
         if (res.status == 200) {
@@ -132,12 +148,32 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
     closeModal()
   }, [teamInfo.teamImage])
 
-  const validation = () => {
+  const handleMaxMember = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsEdit(true)
+    setTeamInfo({
+      ...teamInfo,
+      maxMember: event.target.value,
+    })
+  }
+
+  const validation = (target: string) => {
     // 한글, 영문, 숫자만 입력 가능
     // 2~12자리
     let check = /^[\d|a-zA-Z|가-힣]{2,12}$/
 
-    if (check.test(teamInfo.name)) {
+    if (check.test(target)) {
+      return false
+    }
+
+    return true
+  }
+
+  const validationNumber = (target: string) => {
+    // 숫자만 입력 가능
+    // 1~2자리
+    let check = /^[0-9]{1,2}$/
+
+    if (check.test(target)) {
       return false
     }
 
@@ -176,8 +212,8 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
                   maxRows={1}
                   size="small"
                   onChange={handleTeamName}
-                  error={validation()}
-                  helperText={validation() ? '다시 입력' : ''}
+                  error={validation(teamInfo.name)}
+                  helperText={validation(teamInfo.name) ? '다시 입력' : ''}
                   inputProps={{
                     style: {
                       padding: 5,
@@ -283,6 +319,29 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
                 />
               </Stack>
             </Stack>
+            <Stack>
+              <Typography>팀원 모집 인원: </Typography>
+              <TextField
+                id="outlined-basic"
+                label={`팀원 모집 최대 인원`}
+                variant="outlined"
+                value={teamInfo.maxMember}
+                maxRows={1}
+                size="small"
+                onChange={handleMaxMember}
+                error={validationNumber(teamInfo.maxMember as string)}
+                helperText={
+                  validationNumber(teamInfo.maxMember as string)
+                    ? '다시 입력'
+                    : ''
+                }
+                inputProps={{
+                  style: {
+                    padding: 5,
+                  },
+                }}
+              />
+            </Stack>
           </Box>
           <Button onClick={openConfirmModel}>팀 설정</Button>
         </Box>
@@ -305,8 +364,8 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
                   maxRows={1}
                   size="small"
                   onChange={handleTeamName}
-                  error={validation()}
-                  helperText={validation() ? '다시 입력' : ''}
+                  error={validation(teamInfo.name)}
+                  helperText={validation(teamInfo.name) ? '다시 입력' : ''}
                   inputProps={{
                     style: {
                       padding: 5,
