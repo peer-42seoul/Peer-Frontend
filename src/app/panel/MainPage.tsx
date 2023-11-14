@@ -28,7 +28,6 @@ import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
 import useMedia from '@/hook/useMedia'
-import { set } from 'lodash'
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
