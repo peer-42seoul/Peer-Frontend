@@ -43,7 +43,7 @@ const MyPage = () => {
       />
       <CuButton
         variant="text"
-        action={() => router.push('/my-page/')}
+        action={() => router.push('/my-page/privacy')}
         message="개인정보"
         startIcon={<HomeIcon />}
         fullWidth
@@ -51,7 +51,7 @@ const MyPage = () => {
       />
       <CuButton
         variant="text"
-        action={() => router.push('/my-page')}
+        action={() => router.push('/my-page/homepage-setting')}
         message="홈페이지 설정"
         startIcon={<HomeIcon />}
         fullWidth
