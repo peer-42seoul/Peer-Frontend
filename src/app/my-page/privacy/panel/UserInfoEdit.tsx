@@ -89,10 +89,6 @@ export default function UserInfoEdit({
               defaultValue=""
               rules={{ required: true }}
               render={({ field }) => (
-<<<<<<< HEAD
-=======
-
->>>>>>> af6364b9ab23aa8adfdf46bd70189c7f959413eb
                 <PasswordField
                   field={field}
                   autoComplete="current-password"
@@ -133,10 +129,6 @@ export default function UserInfoEdit({
                   '비밀번호가 일치하지 않습니다',
               }}
               render={({ field }) => (
-<<<<<<< HEAD
-=======
-
->>>>>>> af6364b9ab23aa8adfdf46bd70189c7f959413eb
                 <PasswordField
                   field={field}
                   autoComplete="new-password"
