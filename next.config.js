@@ -1,13 +1,12 @@
 /** @type {import('next').NextConfig} */
 
 const prod = process.env.NODE_ENV === 'production'
-const runtimeCaching = require('next-pwa/cache')
-const withPWA = require('next-pwa')({
+const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: false,
-  customWorkerDir: './public/worker/index.js',
+  swSrc: 'service-worker.js',
   // disable: prod ? false : true, 나중에 true로 바꿔야함
   // runtimeCaching,
 })
