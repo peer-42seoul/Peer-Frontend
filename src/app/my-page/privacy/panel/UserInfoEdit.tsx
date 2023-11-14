@@ -91,7 +91,7 @@ export default function UserInfoEdit({
               render={({ field }) => (
                 <PasswordField
                   field={field}
-                  autoComplete="current-password"
+                  autoComplete="off"
                   placeholder="현재 비밀번호"
                   error={errors.presentPassword ? true : false}
                 />
@@ -124,7 +124,7 @@ export default function UserInfoEdit({
               render={({ field }) => (
                 <PasswordField
                   field={field}
-                  autoComplete="new-password"
+                  autoComplete="off"
                   placeholder="새로운 비밀번호"
                   error={errors.newPassword ? true : false}
                 />
@@ -143,7 +143,7 @@ export default function UserInfoEdit({
               render={({ field }) => (
                 <PasswordField
                   field={field}
-                  autoComplete="new-password"
+                  autoComplete="off"
                   placeholder="새로운 비밀번호 확인"
                   error={errors.confirmPassword ? true : false}
                 />
