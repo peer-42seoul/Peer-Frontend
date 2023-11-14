@@ -11,22 +11,8 @@ const useSelectCheckBox = <T,>(initalSet: Set<T>) => {
     setSelectedSet(new Set(allData))
   }
 
-  const selectOne = (id: T) => {
-    if (selectedSet.has(id)) return
-    const newSet = new Set(selectedSet)
-    newSet.add(id)
-    setSelectedSet(newSet)
-  }
-
   const unselectAll = () => {
     setSelectedSet(new Set())
-  }
-
-  const unselectOne = (id: T) => {
-    if (!selectedSet.has(id)) return
-    const newSet = new Set(selectedSet)
-    newSet.delete(id)
-    setSelectedSet(newSet)
   }
 
   const toggleSelect = (id: T) => {
@@ -44,9 +30,7 @@ const useSelectCheckBox = <T,>(initalSet: Set<T>) => {
     selectedSet,
     isSelectedAll,
     selectAll,
-    selectOne,
     unselectAll,
-    unselectOne,
     toggleSelect,
   }
 }
