@@ -53,11 +53,7 @@ export interface IDetailOption {
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { isPc } = useMedia()
-  const [isShowInstall, setIsShowInstall] = useState<boolean>(
-    localStorage.getItem('isShowInstall') === 'true' || undefined
-      ? true
-      : false,
-  )
+  const [isShowInstall, setIsShowInstall] = useState<boolean>(true)
   const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
@@ -107,6 +103,9 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   )
 
   useEffect(() => {
+    if (localStorage && localStorage.getItem('isShowInstall') === 'false') {
+      setIsShowInstall(false)
+    }
     Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
         console.log('Notification granted')
