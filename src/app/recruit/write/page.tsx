@@ -16,6 +16,7 @@ import SelectRegion from '../[id]/edit/panel/SelectRegion'
 import { IFormInterview, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
+import axios from 'axios'
 
 // react-base64-image.js
 export const convertImageToBase64 = (file: any) => {
@@ -89,7 +90,7 @@ const CreateTeam = () => {
 
   const { data, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
-    (url: string) => axiosInstance.get(url).then((res) => res.data),
+    (url: string) => axios.get(url).then((res) => res.data),
   )
 
   useEffect(() => {
