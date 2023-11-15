@@ -30,7 +30,7 @@ const useAxiosWithAuth = () => {
       return response
     },
     async (error) => {
-      console.log('is refreshing?', isRefreshing)
+      //console.log('is refreshing?', isRefreshing)
       isRefreshing = true
       const currentPageUrl = window.location.pathname
       if (error.response?.status === 401) {

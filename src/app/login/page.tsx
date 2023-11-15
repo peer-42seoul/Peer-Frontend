@@ -113,11 +113,9 @@ const Login = () => {
         },
       )
       .then((res) => {
-        console.log(res.headers)
         login(res.data.accessToken)
       })
       .catch((error) => {
-        //console.log(error.message)
         if (error.response?.status == 401)
           setErrorMessage('이메일과 비밀번호를 다시 확인해주세요.')
         else setErrorMessage('알 수 없는 오류가 발생했습니다.')
