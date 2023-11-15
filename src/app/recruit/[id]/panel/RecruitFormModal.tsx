@@ -153,7 +153,7 @@ const RecruitFormModal = ({
                     name={idx.toString()}
                     control={control}
                     defaultValue=""
-                    render={({ field }) => <TextField {...field} />}
+                    render={({ field }) => <TextField {...field} error={!!errors[idx]} helperText={errors[idx]?.message as string} />}
                   />
                 )}
                 {quest.type === 'CLOSE' && (
@@ -179,11 +179,6 @@ const RecruitFormModal = ({
                     idx={idx}
                     disabled={false}
                   />
-                )}
-                {errors[idx] && (
-                  <Typography color="error">
-                    {errors[idx]?.message as string}
-                  </Typography>
                 )}
               </Box>
             ))}

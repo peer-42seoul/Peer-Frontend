@@ -9,6 +9,7 @@ const CloseQuestionForm = ({
   idx,
   value,
   disabled,
+  error,
 }: {
   optionList: CloseQuestionList
   control: any

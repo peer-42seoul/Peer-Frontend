@@ -26,7 +26,7 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 
-const RecruitDetailPage = ({ params, searchParams }: { params: { id: string }, searchParams: any }) => {
+const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
   const type = useSearchParams().get('type') ?? 'projects'
   const [open, setOpen] = React.useState(false)
@@ -36,7 +36,7 @@ const RecruitDetailPage = ({ params, searchParams }: { params: { id: string }, s
   const { isPc } = useMedia()
   const { isLogin } = useAuthStore()
   const axiosInstance = useAxiosWithAuth()
-  const currentUrl = "/login?redirect=/recruit/1?type=" + searchParams.get('type')
+  const currentUrl = "/login?redirect=/recruit/1?type=" + type
   const { data, isLoading, error } = useSWR<IPostDetail>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
     isLogin
