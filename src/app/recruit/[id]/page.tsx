@@ -36,8 +36,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string }, searchParams: a
   const { isPc } = useMedia()
   const { isLogin } = useAuthStore()
   const axiosInstance = useAxiosWithAuth()
-  const searchParams = useSearchParams()
-  const currentUrl = "/login?redirect=/recruit/1?type=" + searchParams.get('type')
+  const currentUrl = "/login?redirect=/recruit/1?type=" + type
   const { data, isLoading, error } = useSWR<IPostDetail>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
     isLogin
