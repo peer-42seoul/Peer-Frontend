@@ -38,14 +38,14 @@ const MobileBase = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  paddingTop: '20px',
+  padding: '80px 16px 0 16px',
 }
 
 const PCLoginBox = {
   display: 'flex',
   position: 'relative',
-  width: '496px',
-  padding: '24px 24px 40px 24px',
+  width: '544px',
+  padding: '40px 64px',
   flexDirection: 'column',
   alignItems: 'center',
   gap: '48px',
@@ -58,7 +58,10 @@ const MobileLoginBox = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '0 32px 15px 32px',
+  padding: '40px 16px',
+  gap: '24px',
+  borderRadius: '16px',
+  border: '1px solid #000',
 }
 
 const Form = {
@@ -140,8 +143,14 @@ const Login = () => {
   return (
     <>
       <Container sx={isPc ? PCBase : MobileBase}>
-        <Container sx={isPc ? PCLoginBox : MobileLoginBox}>
-          <Typography margin={3}>Peer</Typography>
+        <Container
+          disableGutters={true}
+          sx={isPc ? PCLoginBox : MobileLoginBox}
+        >
+          <Typography>피어 로그인</Typography>
+          <Box sx={Form}>
+            <OauthLoginBox />
+          </Box>
           <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={Form}>
             <Box sx={{ display: 'flex', width: '100%' }}>
               <Controller
@@ -222,34 +231,30 @@ const Login = () => {
                 )}
               />
             </Box>
-            <Button type="submit" disabled={isLoading}>
+            <Button
+              fullWidth
+              variant="contained"
+              type="submit"
+              disabled={isLoading}
+            >
               로그인
             </Button>
           </Box>
-          <Box sx={Form}>
-            {isPc ? (
-              <Typography sx={{ color: '#868686' }}>간편 로그인</Typography>
-            ) : (
-              <Typography
-                sx={{ color: '#868686', fontSize: '10px', marginTop: '24px' }}
-              >
-                또는
-              </Typography>
-            )}
-            <OauthLoginBox />
-          </Box>
-          <Container
+
+          <Box
             sx={{
               display: 'flex',
+              flexDirection: 'column',
               width: '100%',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              ...(isPc ? {} : { marginTop: '104px' }),
+              gap: '16px',
+              alignItems: 'flex-end',
             }}
           >
-            <Button href="/privacy">회원가입</Button>
+            <Button fullWidth variant="outlined" href="/privacy">
+              피어가 처음이에요!
+            </Button>
             <Button href="/find-account">비밀번호 찾기</Button>
-          </Container>
+          </Box>
         </Container>
       </Container>
       <CuToast open={isOpen} onClose={closeToast} severity="error">
