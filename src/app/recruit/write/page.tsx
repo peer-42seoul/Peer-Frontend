@@ -16,7 +16,27 @@ import SelectRegion from '../[id]/edit/panel/SelectRegion'
 import { IFormInterview, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
-// import useAuthStore from '@/states/useAuthStore'
+
+// react-base64-image.js
+export const convertImageToBase64 = (file: any) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result.split(',')[1]) // Base64 데이터에서 실제 데이터 부분만 추출
+      } else {
+        reject(new Error('Unexpected result type'))
+      }
+    }
+
+    reader.onerror = (error) => {
+      reject(error)
+    }
+
+    reader.readAsDataURL(file)
+  })
+}
 
 const dummyData1: ITag = {
   name: 'java-test',
@@ -40,7 +60,7 @@ export interface IRoleData {
 
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
-  const [thumbnailUrl, setImage] = useState<File[]>([])
+  const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
     '/images/defaultImage.png',
   )
@@ -61,24 +81,14 @@ const CreateTeam = () => {
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
-  // const { isLogin } = useAuthStore()
-
-  // 로그인 하지 않고 모집글쓰기 들어왓을때 로그인 하러가기 안내가 필요합니다.
-  // 새로운 공통컴포넌트 모달창을 만들면 효율적일듯합니다.
-  // useEffect(() => {
-  //   if (!isLogin) {
-  //     setToastMessage('로그인이 필요합니다')
-  //     openToast()
-  //     router.push('/')
-  //   }
-  // }, [isLogin])
+  const [selectedImage, setSelectedImage] = useState<any>(null)
 
   useEffect(() => {
     console.log(interviewList)
   }, [interviewList])
 
   const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}api/v1/recruit/allTags`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
@@ -97,45 +107,25 @@ const CreateTeam = () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
-    const submitData = new FormData()
-    submitData.append('place', place)
-    submitData.append('thumbnailUrl', thumbnailUrl[0], thumbnailUrl[0].name)
-    submitData.append('title', title)
-    submitData.append('name', name)
-    submitData.append('due', due)
-    submitData.append('type', type)
-    submitData.append('content', content)
-    submitData.append('region', JSON.stringify(region))
-    submitData.append('link', link)
-    submitData.append('tagList', JSON.stringify(tagList))
-    submitData.append('roleList', JSON.stringify(roleList))
-    submitData.append('interviewList', JSON.stringify(interviewList))
-    console.log(submitData)
-
+    const base64Data = await convertImageToBase64(image[0])
+    setSelectedImage(base64Data)
     try {
       const response = await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}api/v1/recruit/write`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
         {
-          // place,
-          // // image,
-          // thumbnailUrl,
-          // title,
-          // name,
-          // due,
-          // type,
-          // content,
-          // region,
-          // link,
-          // tagList,
-          // roleList,
-          // interviewList,
-          submitData
+          place: place,
+          image: selectedImage,
+          title: title,
+          name: name,
+          due: due,
+          type: type,
+          content: content,
+          region: region,
+          link: link,
+          tagList: tagList,
+          roleList: roleList,
+          interviewList: interviewList,
         },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
       )
       router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
     } catch (error) {
