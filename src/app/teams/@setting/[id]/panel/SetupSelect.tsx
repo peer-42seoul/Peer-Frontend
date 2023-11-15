@@ -110,7 +110,7 @@ export const SetupSelect = ({
         </Select>
       </FormControl>
     )
-  } else if (type == "dueToSearch") {
+  } else if (type == 'dueToSearch') {
     {
       return (
         <FormControl sx={{ m: 0, minWidth: 80 }} size="small">
@@ -123,9 +123,7 @@ export const SetupSelect = ({
             onChange={setValue}
             defaultValue={'선택안함'}
           >
-            <MenuItem value={'선택안함'}>
-              선택안함
-            </MenuItem>
+            <MenuItem value={'선택안함'}>선택안함</MenuItem>
             {dueList.map((dueTo, idx) => (
               <MenuItem key={'dueTo' + idx} value={dueTo}>
                 {dueTo}
@@ -135,8 +133,7 @@ export const SetupSelect = ({
         </FormControl>
       )
     }
-  }
-  else {
+  } else {
     return <div></div>
   }
 }
