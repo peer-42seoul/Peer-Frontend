@@ -2,13 +2,30 @@ self.addEventListener('push', (event) => {
   // 알림 푸시
   console.log('[Service Worker] Push Received.')
   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
-  const { title, body } = event.data.json()
+  const data = event.data.json().notification
 
-  event.waitUntil(self.registration.showNotification(title, { body }))
+  const title = data.title
+  const options = {
+    body: data.body,
+    icon: '/images/icons/icon-192x192.png',
+  }
+
+  event.waitUntil(registration.showNotification(title, options))
 })
 
 self.addEventListener('notificationclick', (event) => {
   // 알림 클릭
   console.log('[Service Worker] Notification click Received.')
-  clients.openWindow(event.notification.data.link)
+  event.waitUntil(clients.openWindow('/'))
+})
+
+self.addEventListener('install', (event) => {
+  // 서비스 워커 설치
+  console.log('[Service Worker] Install')
+  self.skipWaiting()
+})
+
+self.addEventListener('activate', (event) => {
+  // 서비스 워커 활성화
+  console.log('[Service Worker] Activate')
 })

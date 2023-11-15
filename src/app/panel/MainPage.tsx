@@ -105,20 +105,30 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     if (localStorage && localStorage.getItem('isShowInstall') === 'false') {
       setIsShowInstall(false)
     }
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log('Notification granted')
+
+    const requestPermission = async () => {
+      const permission = await window.Notification.requestPermission()
+      if (permission !== 'granted') {
+        console.log('Permission denied')
+      } else {
+        console.log('Permission granted')
       }
-    })
+    }
+
+    if (window.Notification) {
+      requestPermission()
+    }
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register('/sw.js')
+        .register('sw.js')
         .then((reg) => {
-          console.log('Service worker registered', reg)
+          reg.pushManager.subscribe().then((sub) => {
+            console.log('endpoint:', sub.endpoint)
+          })
         })
         .catch((err) => {
-          console.warn('Service worker failed', err.message)
+          console.log('Service worker failed', err.message)
         })
     }
 
