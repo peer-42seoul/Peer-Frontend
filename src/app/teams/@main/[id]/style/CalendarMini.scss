@@ -1,0 +1,49 @@
+@import 'react-big-calendar/lib/sass/styles';
+
+@mixin flex-box($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+.rbc-calendar {
+  // 기본적으로 적용되어있는 border 제거
+  .rbc-month-view,
+  .rbc-header,
+  .rbc-month-row,
+  .rbc-day-bg {
+    border: none;
+  }
+  // 현재 달 외의 날짜는 보이지 않게
+  .rbc-off-range {
+    visibility: hidden;
+    cursor: pointer;
+  }
+
+  .rbc-row-segment {
+    display: none;
+  }
+
+  .rbc-row-content {
+    .rbc-row {
+      // 날짜 숫자 공간
+      .rbc-date-cell {
+        // @include flex-box(column, flex-start);
+        height: 24px;
+        padding: 0px 10px;
+        .rbc-day-header {
+          color: #000000;
+          &.is-today {
+            color: #877cfe;
+          }
+          .event-icon {
+            color: #cb62d0;
+            width: 10px;
+            height: 10px;
+          }
+        }
+      }
+    }
+  }
+}
