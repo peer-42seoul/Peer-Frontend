@@ -81,7 +81,7 @@ const DayCell = () => {
   return <div className="rbc-day-bg" />
 }
 
-// 날짜 (숫자) 컴포넌트
+// 날짜 (숫자) 컴포넌트 (Large와 100% 동일. 디자인, 기능에 따라 합칠 수 있다면 합칠 예정)
 const DayHeader = (props: DateHeaderProps) => {
   const { date } = props
   const today = new Date()
@@ -129,7 +129,7 @@ const CalendarMini = () => {
   )
 
   return (
-    <Box sx={{ height: '300px' }}>
+    <Box sx={{ height: '300px' }} className={'calendar-mini'}>
       <Calendar
         localizer={localizer}
         formats={formats}
