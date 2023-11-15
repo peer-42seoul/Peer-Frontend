@@ -158,8 +158,6 @@ const useInfiniteScroll = ({
       observer.observe(currentTarget)
     }
 
-    console.log("target.current", target.current);
-
     // 컴포넌트가 언마운트되면 IntersectionObserver 해제
     return () => {
       if (currentTarget) observer.unobserve(currentTarget)
