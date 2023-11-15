@@ -6,6 +6,7 @@ import CuButton from '@/components/CuButton'
 
 // test import
 import CalendarMini from './panel/CalendarMini'
+import CalendarLarge from './panel/CalendarLarge'
 
 const TeamsPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
@@ -21,7 +22,10 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
       </Typography>
       {/* <TeamInfoContainer id={Number(id)} /> */}
       {/* 임시 컴포넌트 */}
-      <CalendarMini />
+      <Stack direction={'row'} spacing={2}>
+        <CalendarMini />
+        <CalendarLarge />
+      </Stack>
       <CuButton
         message={'팀페이지 수정'}
         action={() => {}}

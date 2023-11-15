@@ -10,7 +10,7 @@ import { Event } from 'react-big-calendar'
 //   resource?: any
 // }
 
-export type TEventColor = '#CB62D0' | 'F4CE14' // 임시 데이터
+export type TEventColor = '#CB62D0' | 'F4CE14' | '#FFD976' // 임시 데이터
 
 export interface IEvent extends Event {
   id: number
