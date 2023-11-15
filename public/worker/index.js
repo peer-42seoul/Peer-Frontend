@@ -1,24 +1,14 @@
-self.addEventListener('push', function (event) {
+self.addEventListener('push', (event) => {
   // 알림 푸시
   console.log('[Service Worker] Push Received.')
   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
-  const data = event.data.json()
-  const options = {
-    body: data.body,
-    icon: data.icon,
-    badge: data.badge,
-    image: data.image,
-    tag: data.tag,
-    renotify: data.renotify,
-    data: {
-      url: data.url,
-    },
-  }
+  const { title, body } = event.data.json()
 
-  event.waitUntil(self.registration.showNotification(title, options))
+  event.waitUntil(self.registration.showNotification(title, { body }))
 })
 
-self.addEventListener('sync', function (event) {
-  //백그라운드 동기화
-  console.log('sync event', event)
+self.addEventListener('notificationclick', (event) => {
+  // 알림 클릭
+  console.log('[Service Worker] Notification click Received.')
+  clients.openWindow(event.notification.data.link)
 })
