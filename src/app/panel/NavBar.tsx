@@ -84,7 +84,7 @@ export const MobileNav = () => {
         <BottomNavigationAction
           label="내 프로필"
           onClick={() => {
-            router.push(isLogin ? '/my-page' : '/login')
+            router.push(isLogin ? '/my-page' : '/login?redirect=/my-page')
           }}
         />
       </BottomNavigation>
@@ -164,7 +164,7 @@ export const PcNav = () => {
           </IconButton>
         </Link>
         <Avatar
-          onClick={() => router.push(isLogin ? '/my-page/profile' : '/login')}
+          onClick={() => router.push(isLogin ? '/my-page/profile' : '/login?redirect=/my-page/profile')}
         />
         <Link href={'/recruit/write'}>
           {isTablet ? (
