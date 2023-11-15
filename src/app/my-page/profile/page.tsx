@@ -12,7 +12,6 @@ import useToast from '@/hook/useToast'
 import useMedia from '@/hook/useMedia'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
-import { useCookies } from 'react-cookie'
 import useAuthStore from '@/states/useAuthStore'
 import CuButton from '@/components/CuButton'
 import { useRouter } from 'next/navigation'
@@ -95,10 +94,8 @@ const MyProfile = () => {
 
   const router = useRouter()
   const { logout } = useAuthStore.getState()
-  const [, , removeCookie] = useCookies(['refreshToken'])
   const handleLogout = () => {
     logout()
-    removeCookie('refreshToken', { path: '/' })
     router.push('/')
   }
 
@@ -131,7 +128,7 @@ const MyProfile = () => {
       >
         {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
         <ProfileCard
-          profileImageURL={userInfo.profileImageUrl}
+          profileImageUrl={userInfo.profileImageUrl}
           nickname={userInfo.nickname}
           association={userInfo?.association}
           email={userInfo.email}
@@ -164,7 +161,7 @@ const MyProfile = () => {
       >
         <ProfileBioEditor
           data={{
-            profileImageURL: userInfo.profileImageUrl,
+            profileImageUrl: userInfo.profileImageUrl,
             nickname: userInfo.nickname,
             association: userInfo.association,
             email: userInfo.email,
