@@ -16,7 +16,6 @@ const CheckQuestionForm = ({
   value?: string
   disabled: boolean
 }) => {
-  console.log('check', value)
   return (
     <FormControl disabled={disabled ? true : false} component="fieldset">
       <FormGroup defaultValue={value}>

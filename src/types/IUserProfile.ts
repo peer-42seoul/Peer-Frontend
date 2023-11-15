@@ -17,7 +17,7 @@ export interface IUserProfileLink {
 }
 
 export interface IProfileCard {
-  profileImageURL: string | null
+  profileImageUrl: string | null
   nickname: string
   association: string | null
   introduction: string

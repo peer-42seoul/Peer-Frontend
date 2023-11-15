@@ -6,6 +6,7 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material'
+import { TeamOperationForm } from '../page'
 
 export const SetupSelect = ({
   type,
@@ -76,9 +77,15 @@ export const SetupSelect = ({
           label="활동 방식"
           onChange={setValue}
         >
-          {['온라인', '오프라인', '혼합'].map((operation, idx) => (
+          {[
+            TeamOperationForm.OFFLINE,
+            TeamOperationForm.ONLINE,
+            TeamOperationForm.MIX,
+          ].map((operation, idx) => (
             <MenuItem key={'operation' + idx} value={operation}>
-              {operation}
+              {operation === TeamOperationForm.OFFLINE && '오프라인'}
+              {operation === TeamOperationForm.ONLINE && '온라인'}
+              {operation === TeamOperationForm.MIX && '온/오프라인'}
             </MenuItem>
           ))}
         </Select>
@@ -116,6 +123,9 @@ export const SetupSelect = ({
             onChange={setValue}
             defaultValue={'선택안함'}
           >
+            <MenuItem value={'선택안함'}>
+              선택안함
+            </MenuItem>
             {dueList.map((dueTo, idx) => (
               <MenuItem key={'dueTo' + idx} value={dueTo}>
                 {dueTo}
