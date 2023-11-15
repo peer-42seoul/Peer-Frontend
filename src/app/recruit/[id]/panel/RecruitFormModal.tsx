@@ -52,6 +52,7 @@ const RecruitFormModal = ({
     handleSubmit,
     control,
     formState: { errors },
+    triggerValidation
   } = useForm()
   const {
     CuToast: CuSuccessToast,
@@ -71,6 +72,9 @@ const RecruitFormModal = ({
   }
 
   const onSubmit = async (values: any) => {
+    if (errors)
+      return;
+
     const array = Object.values(values)
     const answerList = array?.map((res: any) => {
       if (typeof res !== 'string') {
@@ -130,6 +134,7 @@ const RecruitFormModal = ({
         <ConfirmModal
           open={openConfirm}
           setOpen={setOpenConfirm}
+          triggerValidation={triggerValidation}
           submitForm={submitForm}
         />
         <Modal open={open} onClose={() => setOpen(false)} sx={{ zIndex: 1400 }}>
