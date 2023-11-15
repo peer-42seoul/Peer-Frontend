@@ -15,14 +15,7 @@ const localizer = dayjsLocalizer(dayjs)
 
 // ============= 이벤트 mock data ==============
 
-type TEventColor = '#CB62D0' | 'F4CE14' // 임시 데이터
-
-interface IEvent extends Event {
-  id: number
-  color: TEventColor // 그 이벤트에 해당하는 색깔. (디자인에 따라서 위젯에서는 색깔을 다르게 보여주지 않을수도 있음)
-}
-
-// NOTE : 이벤트 타입은 이거 확장해서 쓰는게 안전할듯..?
+// NOTE : 이벤트 타입은 이거 확장해서 쓰는게 안전할듯
 // export interface Event {
 //   allDay?: boolean | undefined
 //   title?: React.ReactNode | undefined
@@ -30,6 +23,13 @@ interface IEvent extends Event {
 //   end?: Date | undefined
 //   resource?: any
 // }
+
+type TEventColor = '#CB62D0' | 'F4CE14' // 임시 데이터
+
+interface IEvent extends Event {
+  id: number
+  color: TEventColor // 그 이벤트에 해당하는 색깔. (위젯 뷰에서는 색깔을 구분하지 않음)
+}
 
 const events: IEvent[] = [
   {
@@ -62,7 +62,7 @@ const events: IEvent[] = [
   },
 ]
 
-// ========================================
+// ============= 위젯 뷰 커스텀 컴포넌트 ==============
 
 // 상단 달 표시 컴포넌트
 function Toolbar(props: ToolbarProps) {
@@ -92,8 +92,6 @@ function Toolbar(props: ToolbarProps) {
   )
 }
 
-// ============= 위젯 뷰 커스텀 컴포넌트 ==============
-
 // 날짜 칸 컴포넌트 (기본 스타일 제거용)
 const DayCell = () => {
   return <div className="rbc-day-bg" />
@@ -116,7 +114,7 @@ const DayHeader = (props: DateHeaderProps) => {
       className={`rbc-day-header ${isToday ? 'is-today' : ''}`}
     >
       {date.getDate()}
-      {isEventDay && <CircleIcon className="event-icon" />}
+      {isEventDay ? <CircleIcon className="event-icon" /> : null}
     </Stack>
   )
 }

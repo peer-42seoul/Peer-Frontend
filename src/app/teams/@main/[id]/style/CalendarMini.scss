@@ -21,16 +21,15 @@
     cursor: pointer;
   }
 
+  // 이벤트가 표시되는 줄 : 위젯에는 이벤트가 표시되지 않으므로 숨김
   .rbc-row-segment {
     display: none;
   }
 
   .rbc-row-content {
     .rbc-row {
-      // 날짜 숫자 공간
       .rbc-date-cell {
-        // @include flex-box(column, flex-start);
-        height: 24px;
+        @include flex-box(column, flex-start);
         padding: 0px 10px;
         .rbc-day-header {
           color: #000000;
