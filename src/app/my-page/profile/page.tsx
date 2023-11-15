@@ -12,7 +12,6 @@ import useToast from '@/hook/useToast'
 import useMedia from '@/hook/useMedia'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
-import { useCookies } from 'react-cookie'
 import useAuthStore from '@/states/useAuthStore'
 import CuButton from '@/components/CuButton'
 import { useRouter } from 'next/navigation'
@@ -95,10 +94,8 @@ const MyProfile = () => {
 
   const router = useRouter()
   const { logout } = useAuthStore.getState()
-  const [, , removeCookie] = useCookies(['refreshToken'])
   const handleLogout = () => {
     logout()
-    removeCookie('refreshToken', { path: '/' })
     router.push('/')
   }
 
