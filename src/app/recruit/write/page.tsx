@@ -19,7 +19,7 @@ import useSWR from 'swr'
 import axios from 'axios'
 
 // react-base64-image.js
-export const convertImageToBase64 = (file: any) => {
+const convertImageToBase64 = (file: any) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
 
