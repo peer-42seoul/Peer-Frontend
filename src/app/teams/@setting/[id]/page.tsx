@@ -6,30 +6,30 @@ import { useState } from 'react'
 import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
 import { useRouter } from 'next/navigation'
+import useAxiosWithAuth from '@/api/config'
 
 export enum TeamType {
-  PROJECT = 'project',
-  STUDY = 'study',
+  PROJECT = 'PROJECT',
+  STUDY = 'STUDY',
 }
 
 export enum TeamStatus {
-  RECRUITING = 'recruiting',
-  BEFORE = 'before',
-  ONGOING = 'ongoing',
-  COMPLETE = 'complete',
+  RECRUITING = 'RECRUITING',
+  BEFORE = 'BEFORE',
+  ONGOING = 'ONGOING',
+  COMPLETE = 'COMPLETE',
 }
 
 export enum TeamGrant {
-  LEADER = 'leader',
-  MEMBER = 'member',
+  LEADER = 'LEADER',
+  MEMBER = 'MEMBER',
 }
 
 export enum TeamOperationForm {
-  OFFLINE = 'offline',
-  ONLINE = 'online',
-  MIX = 'mix',
+  OFFLINE = 'OFFLINE',
+  ONLINE = 'ONLINE',
+  MIX = 'MIX',
 }
 export interface IMember {
   name: string
@@ -47,16 +47,16 @@ export interface ITeam {
     dueTo: string
     operationForm: TeamOperationForm
     region: string[]
-    imageUrl: string | null
+    teamImage: string | null
   }
   member: IMember[]
 }
 
 export enum EInterviewType {
   CLOSE = 'close',
-  OPEN = 'open',
-  RATIO = 'ratio',
-  CHECK = 'check',
+  OPEN = 'OPEN',
+  RATIO = 'RATIO',
+  CHECK = 'CHECK',
 }
 
 //TODO: 타입 묶기
@@ -83,18 +83,23 @@ export interface IApplicant {
   interview: IInterview[]
 }
 
-const TeamsSetupPage = ({ id }: { id: number }) => {
+const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
+  const axiosInstance = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const { data, isLoading } = useSWR<ITeam>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${id}`,
-    defaultGetFetcher,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
+    (url: string) => axiosInstance(url).then((res) => res.data),
   )
+
+  console.log(data)
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
   if (isLoading) return <Typography>로딩중</Typography>
+
+  if (!data) return <Typography>데이터가 없습니다.</Typography>
 
   return (
     <Stack
@@ -108,7 +113,7 @@ const TeamsSetupPage = ({ id }: { id: number }) => {
     >
       {data ? (
         <>
-          <SetupPage team={data} />
+          <SetupPage team={data.team} />
           {!showApplicant ? (
             <>
               <SetupMember team={data.member} teamId={data.team.id} />
@@ -127,17 +132,19 @@ const TeamsSetupPage = ({ id }: { id: number }) => {
           )}
         </>
       ) : (
-        <Typography>팀을 추가해주세요</Typography>
+        <>
+          <Typography>데이터가 없습니다.</Typography>
+        </>
       )}
       <Button
         variant="contained"
-        onClick={() => router.push(`/recruitment/${id}`)}
+        onClick={() => router.push(`/recruit/${params.id}`)}
       >
         모집 글 보기
       </Button>
       <Button
         variant="contained"
-        onClick={() => router.push(`/recruitment/edit/${id}`)}
+        onClick={() => router.push(`/recruit/edit/${params.id}`)}
       >
         모집 글 수정하기
       </Button>

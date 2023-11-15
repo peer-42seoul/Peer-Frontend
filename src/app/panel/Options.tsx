@@ -21,7 +21,6 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
       placeOnline: false,
       placeOffline: false,
       placemix: false,
-      statusBefore: false,
       statusonGoing: false,
       statusdone: false,
     },

@@ -1,5 +1,6 @@
 'use client'
 
+import { TeamStatus } from '@/app/teams/@setting/[id]/page'
 import useMedia from '@/hook/useMedia'
 import useShowTeams from '@/states/useShowTeams'
 import { Typography, ToggleButtonGroup, ToggleButton } from '@mui/material'
@@ -7,16 +8,16 @@ import { useState } from 'react'
 
 const Sidebar = () => {
   const { isPc } = useMedia()
-  const [alignment, setAlignment] = useState('모집중')
+  const [alignment, setAlignment] = useState(TeamStatus.RECRUITING)
   const { setShowTeams } = useShowTeams()
 
   const handleChange = (event: any, newAlignment: any) => {
     setAlignment(newAlignment)
   }
-  const onClickGather = () => setShowTeams('모집중')
-  const onClickBefore = () => setShowTeams('시작전')
-  const onClickProgress = () => setShowTeams('진행중')
-  const onClickComplete = () => setShowTeams('진행완료')
+  const onClickGather = () => setShowTeams(TeamStatus.RECRUITING)
+  const onClickBefore = () => setShowTeams(TeamStatus.BEFORE)
+  const onClickProgress = () => setShowTeams(TeamStatus.ONGOING)
+  const onClickComplete = () => setShowTeams(TeamStatus.COMPLETE)
 
   return (
     <>

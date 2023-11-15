@@ -26,14 +26,12 @@ const NickNameField = ({
     <>
       <CuTextFieldLabel htmlFor="nickName">닉네임</CuTextFieldLabel>
       <CuTextField
-        field={{
-          ...field,
-          onChange: (e: any) => {
-            field.onChange(e)
-            setNickNameSendStatus('before')
-          },
+        {...field}
+        onChange={(e) => {
+          field.onChange(e)
+          setNickNameSendStatus('before')
         }}
-        autoComplete="off"
+        autoComplete="nickname"
         error={nickNameSendStatus === 'error'}
         type="text"
         placeholder="닉네임을 입력하세요"

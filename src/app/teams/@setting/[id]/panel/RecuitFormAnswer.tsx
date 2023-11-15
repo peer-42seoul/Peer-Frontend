@@ -2,12 +2,13 @@ import { Typography } from '@mui/material'
 import {
   CheckQuestionList,
   CloseQuestionList,
+  EInterviewType,
   IInterview,
   RatioQuestionList,
 } from '../page'
-import CloseQuestionForm from '@/app/recruitment/[id]/panel/CloseQuestionForm'
-import RatioQuestionForm from '@/app/recruitment/[id]/panel/RatioQuestionForm'
-import CheckQuestionForm from '@/app/recruitment/[id]/panel/CheckQuestionForm'
+import CloseQuestionForm from '@/app/recruit/[id]/panel/CloseQuestionForm'
+import RatioQuestionForm from '@/app/recruit/[id]/panel/RatioQuestionForm'
+import CheckQuestionForm from '@/app/recruit/[id]/panel/CheckQuestionForm'
 import { useForm } from 'react-hook-form'
 
 const FormAnswer = ({
@@ -20,8 +21,10 @@ const FormAnswer = ({
   const { control } = useForm()
   return (
     <>
-      {interview.type === 'open' && <Typography>{interview.answer}</Typography>}
-      {interview.type === 'close' && (
+      {interview.type === EInterviewType.OPEN && (
+        <Typography>{interview.answer}</Typography>
+      )}
+      {interview.type === EInterviewType.CLOSE && (
         <CloseQuestionForm
           optionList={interview?.optionList as CloseQuestionList}
           control={control}
@@ -30,7 +33,7 @@ const FormAnswer = ({
           disabled={true}
         />
       )}
-      {interview.type === 'ratio' && (
+      {interview.type === EInterviewType.RATIO && (
         <RatioQuestionForm
           optionList={interview?.optionList as RatioQuestionList}
           control={control}
@@ -39,7 +42,7 @@ const FormAnswer = ({
           disabled={true}
         />
       )}
-      {interview.type === 'check' && (
+      {interview.type === EInterviewType.CHECK && (
         <CheckQuestionForm
           optionList={interview?.optionList as CheckQuestionList}
           control={control}
