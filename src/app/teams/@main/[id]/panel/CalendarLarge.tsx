@@ -1,4 +1,3 @@
-'use client'
 import { useCallback, useMemo } from 'react'
 import { DateHeaderProps, Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
