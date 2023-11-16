@@ -38,11 +38,13 @@
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
     "swr": "^2.2.4",
+    "web-push": "^3.6.6",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.199",
     "@types/react-slick": "^0.23.11",
+    "@types/web-push": "^3.6.3",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "eslint": "^8.48.0",

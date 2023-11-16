@@ -8,6 +8,7 @@ self.addEventListener('push', (event) => {
   const options = {
     body: data.body,
     icon: '/images/icons/icon-192x192.png',
+    link: '/', // 추후 변경
   }
 
   event.waitUntil(registration.showNotification(title, options))
@@ -16,7 +17,9 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   // 알림 클릭
   console.log('[Service Worker] Notification click Received.')
-  event.waitUntil(clients.openWindow('/'))
+  event.notification.close()
+  // 터치하면 리다이렉션
+  event.waitUntil(clients.openWindow(event.notification.data.link))
 })
 
 self.addEventListener('install', (event) => {
