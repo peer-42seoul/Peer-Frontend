@@ -10,7 +10,18 @@ import '../style/CalendarLarge.scss'
 
 const localizer = dayjsLocalizer(dayjs)
 
-const CalendarLarge = () => {
+interface ICalendarLargeProps {
+  // events: IEvent[]
+  selectedDate: Date | undefined
+  onSelectedEvent: (event: IEvent | null) => void
+  onDrillDown: (date: Date) => void
+}
+
+const CalendarLarge = ({
+  selectedDate,
+  onSelectedEvent,
+  onDrillDown,
+}: ICalendarLargeProps) => {
   const formats = useMemo(
     () => ({
       weekdayFormat: (date: Date) =>
@@ -24,7 +35,7 @@ const CalendarLarge = () => {
       toolbar: LargeToolbar,
       month: {
         dateHeader: (props: DateHeaderProps) => {
-          const { date } = props
+          const { date, onDrillDown } = props
           const today = new Date()
           const isToday = dayjs(date).isSame(today, 'day')
           const isEventDay = events.some(
@@ -33,14 +44,16 @@ const CalendarLarge = () => {
               dayjs(event.end).isSame(date, 'day'),
           )
           return (
-            <Stack
-              alignItems={'center'}
-              justifyContent={'center'}
-              className={`rbc-day-header ${isToday ? 'is-today' : ''}`}
-            >
-              {date.getDate()}
-              {isEventDay ? <CircleIcon className="event-icon" /> : null}
-            </Stack>
+            <button onClick={onDrillDown} className="rbc-button-link">
+              <Stack
+                alignItems={'center'}
+                justifyContent={'center'}
+                className={`${isToday ? 'is-today' : ''}`}
+              >
+                {date.getDate()}
+                {isEventDay ? <CircleIcon className="event-icon" /> : null}
+              </Stack>
+            </button>
           )
         },
         event: LargeDayEvent,
@@ -66,6 +79,8 @@ const CalendarLarge = () => {
         components={components}
         events={events}
         eventPropGetter={coloredEvents}
+        onSelectEvent={onSelectedEvent}
+        onDrillDown={onDrillDown}
       />
     </Box>
   )

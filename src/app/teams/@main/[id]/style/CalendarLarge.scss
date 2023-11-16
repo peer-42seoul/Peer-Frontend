@@ -1,5 +1,12 @@
 @import 'react-big-calendar/lib/sass/styles';
 
+@mixin flex-box($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
 .calendar-large > .rbc-calendar {
   // 현재 달 외의 날짜는 보이지 않게
   .rbc-off-range {
@@ -14,24 +21,23 @@
     .rbc-row {
       // 날짜 숫자
       .rbc-date-cell {
+        @include flex-box(column, flex-start);
         padding: 8px 10px;
-        .rbc-day-header {
-          color: #000000;
-          &.is-today {
-            color: #877cfe;
-          }
-          .event-icon {
-            color: #9b9b9b;
-            width: 5px;
-            height: 5px;
-          }
+        color: #000000;
+        .is-today {
+          color: #877cfe;
+        }
+        .event-icon {
+          color: #9b9b9b;
+          width: 5px;
+          height: 5px;
         }
       }
-      .rbc-event {
-        border-radius: 0;
-        background-color: transparent;
-        // 색깔은 컴포넌트 내에서 동적으로 지정
-      }
+    }
+    .rbc-event {
+      border-radius: 0;
+      background-color: transparent;
+      // 색깔은 컴포넌트 내에서 동적으로 지정
     }
   }
 }
