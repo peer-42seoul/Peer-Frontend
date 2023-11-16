@@ -13,7 +13,6 @@ const localizer = dayjsLocalizer(dayjs)
 const CalendarLarge = () => {
   const formats = useMemo(
     () => ({
-      // 요일 표시 포맷
       weekdayFormat: (date: Date) =>
         ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][date.getDay()],
     }),

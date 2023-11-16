@@ -13,12 +13,9 @@ import '../style/CalendarMini.scss'
 
 const localizer = dayjsLocalizer(dayjs)
 
-// ===============================================
-
 const CalendarMini = () => {
   const formats = useMemo(
     () => ({
-      // 요일 표시 포맷
       weekdayFormat: (date: Date) =>
         ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()],
     }),
