@@ -31,16 +31,14 @@
       .rbc-date-cell {
         @include flex-box(column, flex-start);
         padding: 0px 10px;
-        .rbc-day-header {
-          color: #000000;
-          &.is-today {
-            color: #877cfe;
-          }
-          .event-icon {
-            color: #cb62d0;
-            width: 10px;
-            height: 10px;
-          }
+        color: #000000;
+        .is-today {
+          color: #877cfe;
+        }
+        .event-icon {
+          color: #cb62d0;
+          width: 10px;
+          height: 10px;
         }
       }
     }
