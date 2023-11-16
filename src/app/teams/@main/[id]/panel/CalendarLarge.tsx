@@ -1,11 +1,10 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { DateHeaderProps, Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
 import { Box, Stack } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import { IEvent } from '@/types/WidgetDataTypes'
 import { LargeToolbar, LargeDayEvent, events } from './CalendarComponent'
-
 import '../style/CalendarLarge.scss'
 
 const localizer = dayjsLocalizer(dayjs)
@@ -20,6 +19,9 @@ const CalendarLarge = ({
   onSelectedEvent,
   onDrillDown,
 }: ICalendarLargeProps) => {
+  const [currentMonth, setCurrentMonth] = useState<Number>(
+    new Date().getMonth(),
+  )
   const formats = useMemo(
     () => ({
       weekdayFormat: (date: Date) =>
@@ -60,14 +62,34 @@ const CalendarLarge = ({
     [],
   )
 
-  const coloredEvents = useCallback((event: IEvent) => {
-    return {
-      style: {
-        backgroundColor: event.color,
-        color: 'white',
-      },
-    }
-  }, [])
+  const styleEvent = useCallback(
+    (event: IEvent) => {
+      // 현재 선택된 달의 이벤트만 표시
+      if (event.start?.getMonth() !== currentMonth) {
+        return {
+          style: {
+            display: 'none',
+          },
+        }
+      }
+      return {
+        style: {
+          backgroundColor: event.color,
+          color: 'white',
+        },
+      }
+    },
+    [currentMonth],
+  )
+
+  const onNavigate = useCallback(
+    (currentDate: Date) => {
+      if (currentDate.getMonth() !== currentMonth) {
+        setCurrentMonth(currentDate.getMonth())
+      }
+    },
+    [currentMonth],
+  )
 
   return (
     <Box sx={{ height: '600px', width: '500px' }} className={'calendar-large'}>
@@ -76,9 +98,10 @@ const CalendarLarge = ({
         formats={formats}
         components={components}
         events={events}
-        eventPropGetter={coloredEvents}
+        eventPropGetter={styleEvent}
         onSelectEvent={onSelectedEvent}
         onDrillDown={onDrillDown}
+        onNavigate={onNavigate}
       />
     </Box>
   )
