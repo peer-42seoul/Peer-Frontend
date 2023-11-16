@@ -12,13 +12,11 @@ const localizer = dayjsLocalizer(dayjs)
 
 interface ICalendarLargeProps {
   // events: IEvent[]
-  selectedDate: Date | undefined
   onSelectedEvent: (event: IEvent | null) => void
   onDrillDown: (date: Date) => void
 }
 
 const CalendarLarge = ({
-  selectedDate,
   onSelectedEvent,
   onDrillDown,
 }: ICalendarLargeProps) => {

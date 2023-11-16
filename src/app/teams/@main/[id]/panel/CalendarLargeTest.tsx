@@ -13,7 +13,6 @@ const CalendarLargeTest = () => {
   return (
     <Stack>
       <CalendarLarge
-        selectedDate={selectedDate}
         onSelectedEvent={setSelectedEvent}
         onDrillDown={setSelectedDate}
       />
