@@ -5,7 +5,7 @@ export interface ILocation {
 
 export const locationData: ILocation[] = [
   {
-    name: '선택안함'
+    name: '선택안함',
   },
   {
     name: '서울',

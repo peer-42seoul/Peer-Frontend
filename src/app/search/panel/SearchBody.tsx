@@ -20,8 +20,8 @@ interface SearchBodyProps {
 }
 
 enum SearchType {
-  STUDY = 'study',
-  PROJECT = 'project',
+  STUDY = 'STUDY',
+  PROJECT = 'PROJECT',
 }
 
 const StyleSeachPc = {
@@ -101,7 +101,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
                 <TextField
                   sx={{ width: '100%' }}
                   placeholder={
-                    type === 'project'
+                    type === SearchType.PROJECT
                       ? '프로젝트를 찾는 중...'
                       : '스터디를 찾는 중...'
                   }

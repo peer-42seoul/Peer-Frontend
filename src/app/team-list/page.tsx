@@ -2,20 +2,20 @@
 
 import TeamsList from './panel/TeamsList'
 import useShowTeams from '@/states/useShowTeams'
-import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
 import { Stack } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
 
 enum TeamStatus {
-  RECRUITING = '모집중',
-  BEFORE = '시작전',
-  ONGOING = '진행중',
-  COMPLETE = '진행완료',
+  RECRUITING = 'RECRUITING',
+  BEFORE = 'BEFORE',
+  ONGOING = 'ONGOING',
+  COMPLETE = 'COMPLETE',
 }
 
 enum TeamType {
-  STUDY = '스터디',
-  PROJECT = '프로젝트',
+  STUDY = 'STUDY',
+  PROJECT = 'PROJECT',
 }
 
 export interface ITeamInfo {
@@ -31,10 +31,11 @@ export interface ITeamInfo {
 
 const TeamsListPage = () => {
   const { showTeams } = useShowTeams()
+  const axiosInstance = useAxiosWithAuth()
   //실제 동작해야할 API
-  const { data, isLoading } = useSWR(
+  const { data, isLoading } = useSWR<ITeamInfo[]>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/list?teamStatus=${showTeams}`,
-    defaultGetFetcher,
+    (url: string) => axiosInstance(url).then((res) => res.data),
   )
 
   if (isLoading)
