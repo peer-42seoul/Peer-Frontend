@@ -1,13 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Typography, Stack } from '@mui/material'
+import { Typography, Stack, Box } from '@mui/material'
 import CuButton from '@/components/CuButton'
-
-// test import
-import CalendarMini from './panel/CalendarMini'
-import CalendarLarge from './panel/CalendarLarge'
-import CalendarLargeTest from './panel/CalendarLargeTest'
+import TeamInfoContainer from './panel/TeamInfoContainer'
 
 const TeamsPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
@@ -21,12 +17,18 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
       >
         팀리스트로 돌아가기
       </Typography>
-      {/* <TeamInfoContainer id={Number(id)} /> */}
+      <TeamInfoContainer id={Number(id)} />
       {/* 임시 컴포넌트 */}
-      <Stack direction={'row'} spacing={2}>
-        <CalendarMini />
-        <CalendarLargeTest />
-      </Stack>
+      <Box
+        sx={{
+          width: 600,
+          height: 300,
+          border: 1.55,
+          padding: 2,
+        }}
+      >
+        Drag And Drop
+      </Box>
       <CuButton
         message={'팀페이지 수정'}
         action={() => {}}
