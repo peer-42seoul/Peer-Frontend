@@ -139,6 +139,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       console.log('installed')
       setIsShowInstall(false)
     })
+
+    // 테스트 용
     window.addEventListener('push', (event) => {
       const options = {
         body: 'This is a test message!',
