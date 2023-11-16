@@ -10,6 +10,7 @@ interface IMessageFormProps {
   targetId: number
   addNewMessage: (newMessage: IMessage) => void
   handleClose?: () => void // MOBILE_VIEW에서 모달을 닫기 위함
+  disabled?: boolean // PC_VIEW에서 채팅방이 삭제되었을 때 메시지 전송을 막기 위함
 }
 
 const MessageForm = ({
@@ -17,6 +18,7 @@ const MessageForm = ({
   targetId,
   addNewMessage,
   handleClose,
+  disabled,
 }: IMessageFormProps) => {
   const [content, setContent] = useState('')
   const axiosWithAuth = useAxiosWithAuth()
@@ -56,6 +58,7 @@ const MessageForm = ({
             placeholder="내용을 입력하세요"
             variant="outlined"
             onChange={(e) => setContent(e.target.value)}
+            disabled={disabled}
           />
           <CuButton
             variant="text"

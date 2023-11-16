@@ -9,7 +9,7 @@ import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
-import { IMessage, IMessageUser } from '@/types/IMessage'
+import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
 import MessageItem from './panel/MessageItem'
 import MessageForm from './panel/MessageForm'
 import MessageFormModal from './panel/MessageFormModal'
@@ -19,7 +19,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const searchParams = useSearchParams()
   const [updatedData, setUpdatedData] = useState<IMessage[] | undefined>()
   const [owner, setOwner] = useState<IMessageUser>()
-  const [target, setTarget] = useState<IMessageUser>()
+  const [target, setTarget] = useState<IMessageTargetUser>()
   const [isEnd, setIsEnd] = useState<boolean>(false)
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
@@ -162,6 +162,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
           view={'PC_VIEW'}
           targetId={target.userId}
           addNewMessage={addNewMessage}
+          disabled={target.deleted}
         />
       ) : (
         <>
@@ -170,6 +171,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
             action={() => openModal()}
             message="답하기"
             fullWidth
+            disabled={target.deleted}
           />
           <MessageFormModal
             isOpen={isOpen}
