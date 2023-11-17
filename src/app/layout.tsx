@@ -6,11 +6,14 @@ import Header from './panel/Header'
 import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
 import { Box } from '@mui/material'
 import CuSWRConfig from './panel/CuSWRConfig'
+import { io } from 'socket.io-client'
 
 export const metadata: Metadata = {
   title: 'peer',
   description: 'This is a website of the peer, by the peer, for the peer.',
 }
+
+export const socket = io('http://localhost:8081')
 
 // 개선 필요, 레이아웃 쉬프트 현상 고쳐야함
 export default function RootLayout({
