@@ -45,7 +45,14 @@ const PwaInstallBanner = () => {
   return (
     <>
       {isShowInstall && (
-        <Box height={'50px'} border="1px solid black">
+        <Box
+          position={'fixed'}
+          bottom={0}
+          width={'100%'}
+          height={'50px'}
+          border="1px solid black"
+          sx={{ backgroundColor: 'white', zIndex: 9999 }}
+        >
           <Stack>
             사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
             {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
