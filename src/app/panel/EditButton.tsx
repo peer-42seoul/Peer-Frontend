@@ -5,7 +5,7 @@ import Link from 'next/link'
 const EditButton = () => {
   return (
     <Fab color="secondary" aria-label="edit">
-      <Link href={'/recruitment'}>
+      <Link href={'/recruit/write'}>
         <Edit />
       </Link>
     </Fab>

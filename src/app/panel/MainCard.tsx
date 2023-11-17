@@ -48,7 +48,7 @@ const MainCard = ({
   return (
     <Card sx={{ maxWidth: 345 }}>
       <Link
-        href={`/recruitment/${recruit_id}?type=${type ?? 'STUDY'}`}
+        href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}
       >
         <Box sx={{ position: 'relative' }}>
@@ -75,7 +75,7 @@ const MainCard = ({
       <CardHeader
         avatar={
           <Link
-            href={`/recruitment/${recruit_id}?type=${type ?? 'STUDY'}`}
+            href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
             style={{ textDecoration: 'none' }}
           >
             <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
@@ -95,7 +95,7 @@ const MainCard = ({
         }
         title={
           <Link
-            href={`/recruitment/${recruit_id}?type=${type ?? 'STUDY'}`}
+            href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
             style={{ textDecoration: 'none' }}
           >
             {user_nickname}
@@ -103,7 +103,7 @@ const MainCard = ({
         }
       />
       <Link
-        href={`/recruitment/${recruit_id}?type=${type ?? 'STUDY'}`}
+        href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}
       >
         <CardContent>
