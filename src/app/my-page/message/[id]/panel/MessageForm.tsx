@@ -41,17 +41,21 @@ const MessageForm = ({
       )
       if (response.status === 201) {
         addNewMessage(response.data)
-        alert('메시지가 성공적으로 전송되었습니다.')
         setContent('')
       }
     } catch (error) {
       if (isAxiosError(error) && error.response?.status === 410) {
         // 채팅방이 삭제되었을 때
         updateTarget &&
-          updateTarget((prev) => ({
-            ...prev,
-            isDeleted: true,
-          }))
+          updateTarget((prev) => {
+            if (prev) {
+              return {
+                ...prev,
+                isDeleted: true,
+              }
+            }
+            return prev
+          })
       }
       alert('메시지 전송에 실패하였습니다.')
     } finally {
