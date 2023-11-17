@@ -2,57 +2,14 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { AxiosResponse } from 'axios'
-import { Button, Stack, TextField, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import { IMessageListData } from '@/types/IMessage'
-import CuButton from '@/components/CuButton'
+import useSelectCheckBox from '@/hook/useSelectCheckbox'
 import useToast from '@/hook/useToast'
 import MessageList from './MessageList'
 import useMessageListState from '@/states/useMessageListState'
-
-interface ISearchBarProps {
-  setSearchKeyword: (keyword: string) => void
-  setIsManageMode: (isManageMode: boolean) => void
-  handleMessageSearch: () => void
-}
-
-const SearchBar = ({
-  setSearchKeyword,
-  setIsManageMode,
-  handleMessageSearch,
-}: ISearchBarProps) => {
-  return (
-    <Stack direction="row">
-      <TextField
-        placeholder="사람을 검색해 주세요."
-        onChange={(e) => setSearchKeyword(e.target.value)}
-      />
-      <Button variant="contained" onClick={handleMessageSearch}>
-        검색
-      </Button>
-      <CuButton
-        variant="text"
-        action={() => setIsManageMode(true)}
-        message="관리"
-      />
-    </Stack>
-  )
-}
-
-interface IManageBarProps {
-  handleSelectAll: () => void
-  handleDelete: () => void
-}
-
-const ManageBar = ({ handleSelectAll, handleDelete }: IManageBarProps) => {
-  return (
-    // 관리 모드 나가기 버튼?
-    <Stack direction="row">
-      <CuButton variant="text" action={handleSelectAll} message="전체 선택" />
-      <CuButton variant="text" action={handleDelete} message="삭제" />
-    </Stack>
-  )
-}
+import { SearchBar, ManageBar } from './MessageBar'
 
 interface IMessageContainerProps {
   originalMessageData: IMessageListData[] | undefined
@@ -69,13 +26,19 @@ const MessageContainer = ({
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [isManageMode, setIsManageMode] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
-  const [selectedUsers, setSelectedUsers] = useState<Set<number>>(new Set())
+  const {
+    selectedSet: selectedUsers,
+    isSelectedAll,
+    selectAll,
+    unselectAll,
+    toggleSelect,
+  } = useSelectCheckBox(new Set<number>())
 
   const axiosInstance = useAxiosWithAuth()
   const { messageList, setMessageList } = useMessageListState()
 
   useEffect(() => {
-    if (isManageMode) setSelectedUsers(new Set())
+    if (isManageMode) unselectAll()
   }, [isManageMode])
 
   useEffect(() => {
@@ -97,10 +60,6 @@ const MessageContainer = ({
       )
   }, [originalMessageData, searchKeyword])
 
-  const handleSelectAll = () => {
-    setSelectedUsers(new Set(messageList.map((message) => message.targetId)))
-  }
-
   const handleDelete = () => {
     const requestBody = Array.from(selectedUsers).map((targetId) => ({
       targetId,
@@ -120,22 +79,16 @@ const MessageContainer = ({
       })
   }
 
-  const toggleSelectUser = (targetId: number) => {
-    if (selectedUsers.has(targetId)) {
-      selectedUsers.delete(targetId)
-      setSelectedUsers(selectedUsers)
-    } else {
-      selectedUsers.add(targetId)
-      setSelectedUsers(selectedUsers)
-    }
-  }
-
   return (
     <>
       <Stack spacing={2}>
         {isManageMode ? (
           <ManageBar
-            handleSelectAll={handleSelectAll}
+            isSelectedAll={isSelectedAll(messageList)}
+            handleSelectAll={() =>
+              selectAll(messageList.map((message) => message.targetId))
+            }
+            handleUnselectAll={unselectAll}
             handleDelete={handleDelete}
           />
         ) : (
@@ -148,7 +101,8 @@ const MessageContainer = ({
         <MessageList
           messageList={messageList}
           state={{ isManageMode, isLoading, error }}
-          toggleSelectUser={toggleSelectUser}
+          selectedUsers={selectedUsers}
+          toggleSelectUser={toggleSelect}
         />
         <CuToast open={isOpen} onClose={closeToast} severity="error">
           <Typography>삭제에 실패하였습니다.</Typography>
