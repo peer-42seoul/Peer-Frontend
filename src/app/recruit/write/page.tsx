@@ -13,7 +13,7 @@ import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
 import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import SelectRegion from '../[id]/edit/panel/SelectRegion'
-import { IFormInterview, ITag } from '@/types/IPostDetail'
+import { IFormInterview, IRoleData, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import axios from 'axios'
@@ -39,26 +39,6 @@ const convertImageToBase64 = (file: any) => {
   })
 }
 
-const dummyData1: ITag = {
-  name: 'java-test',
-  color: 'red',
-}
-const dummyData2: ITag = {
-  name: 'spring-test',
-  color: 'blue',
-}
-const dummyData3: ITag = {
-  name: 'react-test',
-  color: 'green',
-}
-const dummyDatas: ITag[] = [dummyData1, dummyData2, dummyData3]
-
-export interface IRoleData {
-  // types 로 병합예정
-  role: string | null
-  member: number
-}
-
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
   const [image, setImage] = useState<File[]>([])
@@ -76,17 +56,13 @@ const CreateTeam = () => {
   const [content, setContent] = useState<string>('')
   const [roleList, setRoleList] = useState<IRoleData[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
-  const [allTagList, setAllTagList] = useState<ITag[]>(dummyDatas)
+  const [allTagList, setAllTagList] = useState<ITag[]>()
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
   const [selectedImage, setSelectedImage] = useState<any>(null)
-
-  useEffect(() => {
-    console.log(interviewList)
-  }, [interviewList])
 
   const { data, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,

@@ -64,3 +64,8 @@ export enum statusEnum {
   ONGOING,
   AFTER,
 }
+
+export interface IRoleData {
+  role: string | null
+  member: number
+}
