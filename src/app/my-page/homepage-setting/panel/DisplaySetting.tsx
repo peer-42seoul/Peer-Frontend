@@ -5,21 +5,21 @@ import { Box } from '@mui/system'
 // import React, { useEffect, useState } from 'react'
 
 const ImageButton = ({
-  imageUrl,
+  teamImage,
   alt,
   text,
   action,
 }: {
-  imageUrl: string
+  teamImage: string
   alt: string
   text: string
   action: () => void
 }) => {
-  console.log(imageUrl, alt)
+  console.log(teamImage, alt)
   return (
     <Button onClick={action}>
       <Stack>
-        {/* <Image src={imageUrl} alt={alt} width={100} height={100} /> 이미지가 없어서 우선 스켈레톤으로 적용 해두었습니다.*/}
+        {/* <Image src={teamImage} alt={alt} width={100} height={100} /> 이미지가 없어서 우선 스켈레톤으로 적용 해두었습니다.*/}
         <Skeleton variant="rectangular" width={100} height={100} />
         <Typography>{text}</Typography>
       </Stack>
@@ -43,19 +43,19 @@ const DisplaySetting = () => {
     <Box>
       <Typography>화면 스타일</Typography>
       <ImageButton
-        imageUrl="https://picsum.photos/200"
+        teamImage="https://picsum.photos/200"
         alt="라이트 모드 이미지"
         text="라이트 모드"
         action={() => apiCall('light')}
       />
       <ImageButton
-        imageUrl="https://picsum.photos/200"
+        teamImage="https://picsum.photos/200"
         alt="다크 모드 이미지"
         text="다크 모드"
         action={() => apiCall('dark')}
       />
       <ImageButton
-        imageUrl="https://picsum.photos/200"
+        teamImage="https://picsum.photos/200"
         alt="기기 설정 이미지"
         text="기기 설정"
         action={() => apiCall('system')}

@@ -56,7 +56,7 @@ const MainCard = ({
             component="img"
             height="194"
             image={image}
-            alt="Paella dish"
+            alt="userImage"
           />
           <Chip
             label={status}
