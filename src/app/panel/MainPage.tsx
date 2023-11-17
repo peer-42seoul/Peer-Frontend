@@ -7,7 +7,6 @@ import {
   Stack,
   Typography,
   CircularProgress,
-  Button,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import EditButton from './EditButton'
@@ -27,9 +26,10 @@ import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
-import useMedia from '@/hook/useMedia'
+import PwaInstallBanner from './PwaInstallBanner'
+import PushAlertBanner from './PushAlertBanner'
 
-interface BeforeInstallPromptEvent extends Event {
+export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
   readonly userChoice: Promise<{
     outcome: 'accepted' | 'dismissed'
@@ -51,8 +51,6 @@ export interface IDetailOption {
 }
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  const { isPc } = useMedia()
-  const [isShowInstall, setIsShowInstall] = useState<boolean>(true)
   const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
@@ -72,11 +70,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
+
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
   )
-  const [deferredPrompt, setDeferredPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null)
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
 
   const pageSize = 6
@@ -85,56 +82,27 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     isLoading,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    (page == 1 && !type && !sort && detailOption.isInit && keyword == '')
+    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type ?? 'STUDY'
-      }&sort=${sort ?? 'latest'
-      }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due
-      }&region1=${detailOption.region1}&region2=${detailOption.region2
-      }&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag
-      }`,
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
+          type ?? 'STUDY'
+        }&sort=${
+          sort ?? 'latest'
+        }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
+          detailOption.due
+        }&region1=${detailOption.region1}&region2=${
+          detailOption.region2
+        }&place=${detailOption.place}&status=${detailOption.status}&tag=${
+          detailOption.tag
+        }`,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
 
   useEffect(() => {
-    if (localStorage && localStorage.getItem('isShowInstall') === 'false') {
-      setIsShowInstall(false)
-    }
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log('Notification granted')
-      }
-    })
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((reg) => {
-          console.log('Service worker registered', reg)
-        })
-        .catch((err) => {
-          console.warn('Service worker failed', err.message)
-        })
-    }
-
-    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
-      e.preventDefault()
-      setDeferredPrompt(e)
-      setIsShowInstall(true)
-    }
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-    window.addEventListener('appinstalled', () => {
-      console.log('installed')
-      setIsShowInstall(false)
-    })
-  }, [deferredPrompt, isShowInstall])
-
-  useEffect(() => {
     if (!newData || !newData?.content) return
-    //page가 1일 경우 == initData가 설정되어있을경우, 무한스크롤시 page는 무조건 2부터 시작함. 
+    //page가 1일 경우 == initData가 설정되어있을경우, 무한스크롤시 page는 무조건 2부터 시작함.
     //따라서 page가 1일 경우에는 옵션이 달라진 것임. 고로 무조건 새로운 데이터로 setContent를 해준다.
     if (page == 1) {
       setContent(newData.content)
@@ -159,7 +127,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   const handleType = (value: ProjectType) => {
     setType(value)
-    //type이 변경될 경우 초기화 
+    //type이 변경될 경우 초기화
     setPage(1)
     setDetailOption({
       due: '',
@@ -169,7 +137,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       status: '',
       tag: '',
     })
-    setSort("latest")
+    setSort('latest')
   }
 
   const handleSort = (value: ProjectSort) => {
@@ -184,33 +152,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   return (
     <>
-      {isShowInstall ? (
-        <Box height={'50px'} border="1px solid black">
-          <Stack>
-            사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
-            {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
-            <Stack direction="row">
-              <Button
-                onClick={() => {
-                  if (!deferredPrompt) return
-                  // @ts-ignore
-                  deferredPrompt.prompt()
-                }}
-              >
-                설치
-              </Button>
-              <Button
-                onClick={() => {
-                  setIsShowInstall(false)
-                  localStorage.setItem('isShowInstall', 'false')
-                }}
-              >
-                닫기
-              </Button>
-            </Stack>
-          </Stack>
-        </Box>
-      ) : null}
+      <PushAlertBanner />
+
       {/* mobile view */}
       <Container className="mobile-layout">
         <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
@@ -330,6 +273,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           </Stack>
         </Stack>
       </Container>
+      <PwaInstallBanner />
     </>
   )
 }
