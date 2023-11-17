@@ -138,7 +138,10 @@ const ProfileBioEditor = ({
             // Create a FormData object and append the original file
             const image = getValues('profileImage')
             if (image) {
-              const newImage = new File([blob], image[0].name)
+              const newImage = new File([blob], image[0].name, {
+                type: `image/${image[0].type.split('/')[1]}`,
+              })
+
               setValue('profileImage', [newImage])
 
               const reader = new FileReader()
