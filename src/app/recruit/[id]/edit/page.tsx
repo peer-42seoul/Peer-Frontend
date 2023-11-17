@@ -16,19 +16,7 @@ import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
 import RowRadioButtonsGroupStatus from './panel/radioGroupStatus'
-import { ITag, statusEnum } from '@/types/IPostDetail'
-
-export interface IRoleData {
-  role: string | null
-  member: number
-}
-
-export interface IFormInterview {
-  question: string
-  type: string
-  optionList?: string[]
-  ratioList?: { max: string; valueOfMin: string; valueOfMax: string }
-}
+import { IFormInterview, IRoleData, ITag, statusEnum } from '@/types/IPostDetail'
 
 const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   const [title, setTitle] = useState<string>('')
