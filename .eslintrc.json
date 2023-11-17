@@ -28,6 +28,6 @@
     "no-undef": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"],
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": 0
   }
 }

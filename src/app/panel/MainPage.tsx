@@ -7,7 +7,6 @@ import {
   Stack,
   Typography,
   CircularProgress,
-  Button,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import EditButton from './EditButton'
@@ -27,7 +26,6 @@ import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
-import webpush from 'web-push'
 import PwaInstallBanner from './PwaInstallBanner'
 import PushAlertBanner from './PushAlertBanner'
 

@@ -1,7 +1,7 @@
 import useAxiosWithAuth from '@/api/config'
 import { Box, Button, Stack } from '@mui/material'
 import { AxiosInstance } from 'axios'
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import webpush from 'web-push'
 
 const PushAlertBanner = () => {
