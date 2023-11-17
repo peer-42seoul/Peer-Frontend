@@ -18,8 +18,8 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const searchParams = useSearchParams()
   const [updatedData, setUpdatedData] = useState<IMessage[] | undefined>()
-  const [owner, setOwner] = useState<IMessageUser>()
-  const [target, setTarget] = useState<IMessageTargetUser>()
+  const [owner, setOwner] = useState<IMessageUser | undefined>()
+  const [target, setTarget] = useState<IMessageTargetUser | undefined>()
   const [isEnd, setIsEnd] = useState<boolean>(false)
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
@@ -161,6 +161,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         <MessageForm
           view={'PC_VIEW'}
           targetId={target.userId}
+          updateTarget={setTarget}
           addNewMessage={addNewMessage}
           disabled={target.deleted}
         />

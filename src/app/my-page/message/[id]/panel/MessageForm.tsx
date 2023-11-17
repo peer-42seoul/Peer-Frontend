@@ -1,13 +1,15 @@
-import { useCallback, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
+import { isAxiosError } from 'axios'
 import { Stack, TextField } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
-import { IMessage } from '@/types/IMessage'
+import { IMessage, IMessageTargetUser } from '@/types/IMessage'
 
 type TMessageSendView = 'PC_VIEW' | 'MOBILE_VIEW'
 interface IMessageFormProps {
   view: TMessageSendView
   targetId: number
+  updateTarget?: Dispatch<SetStateAction<IMessageTargetUser | undefined>>
   addNewMessage: (newMessage: IMessage) => void
   handleClose?: () => void // MOBILE_VIEW에서 모달을 닫기 위함
   disabled?: boolean // PC_VIEW에서 채팅방이 삭제되었을 때 메시지 전송을 막기 위함
@@ -16,6 +18,7 @@ interface IMessageFormProps {
 const MessageForm = ({
   view,
   targetId,
+  updateTarget,
   addNewMessage,
   handleClose,
   disabled,
@@ -40,11 +43,19 @@ const MessageForm = ({
         addNewMessage(response.data)
         alert('메시지가 성공적으로 전송되었습니다.')
         setContent('')
-        handleClose && handleClose()
       }
     } catch (error) {
-      // TODO : 에러 구체화
+      if (isAxiosError(error) && error.response?.status === 410) {
+        // 채팅방이 삭제되었을 때
+        updateTarget &&
+          updateTarget((prev) => ({
+            ...prev,
+            isDeleted: true,
+          }))
+      }
       alert('메시지 전송에 실패하였습니다.')
+    } finally {
+      handleClose && handleClose()
     }
   }, [content])
 
