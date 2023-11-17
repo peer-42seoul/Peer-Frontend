@@ -46,7 +46,7 @@ const CreateTeam = () => {
     '/images/defaultImage.png',
   )
   const [name, setName] = useState<string>('')
-  const [type, setType] = useState<string>('project')
+  const [type, setType] = useState<string>('PROJECT')
   const [tagList, setTagList] = useState<ITag[]>([])
   const [region, setRegion] = useState<string[]>([])
   const [place, setPlace] = useState<string>('')
@@ -71,11 +71,9 @@ const CreateTeam = () => {
 
   useEffect(() => {
     if (error) {
-      console.log('error ocurred!!')
       setToastMessage('태그를 불러오는데 실패했습니다.')
       openToast()
     } else if (data) {
-      console.log('tag fetching success', data)
       setAllTagList(data)
     }
   }, [data])
@@ -151,7 +149,7 @@ const CreateTeam = () => {
           <Typography variant="h6">팀 분류</Typography>
           <RowRadioButtonsGroup setValue={setType} />
         </Box>
-        {type === 'study' && (
+        {type === 'STUDY' && (
           <Box>
             <Typography variant="h6">팀 인원</Typography>
             <BasicSelect
@@ -209,7 +207,7 @@ const CreateTeam = () => {
             />
           ) : null}
         </Box>
-        {type === 'study' ? null : (
+        {type === 'STUDY' ? null : (
           <Box>
             <Typography variant="h6">팀 역할</Typography>
             <SetTeamRole roleData={roleList} setRoleData={setRoleList} />

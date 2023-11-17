@@ -5,7 +5,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Dispatch, SetStateAction } from 'react'
 
 export enum ComponentType {
-  // Area = 'Area',
   Month = 'Month',
   TeamSize = 'TeamSize',
   Place = 'Place',
@@ -30,32 +29,46 @@ export default function BasicSelect({
   let options = null
 
   switch (type) {
-    // case ComponentType.Area:
-    //   options = [
-    //     <MenuItem key={0} value={0}>
-    //       구로구
-    //     </MenuItem>,
-    //     <MenuItem key={1} value={1}>
-    //       API 땡겨와서 작업예정
-    //     </MenuItem>,
-    //   ]
-      // break
     case ComponentType.Month:
-      options = [
-        ...Array.from({ length: 3 }, (_, index) => (
-          <MenuItem key={index} value={index}>
-            {`${index + 1}주`}
+      // options = [
+      //   ...Array.from({ length: 3 }, (_, index) => (
+      //     <MenuItem key={index} value={index}>
+      //       {`${index + 1}주`}
+      //     </MenuItem>
+      //   )),
+      //   ...Array.from({ length: 11 }, (_, index) => (
+      //     <MenuItem key={index + 3} value={index + 3}>
+      //       {`${index + 1}개월`}
+      //     </MenuItem>
+      //   )),
+      //   <MenuItem key={14} value={14}>
+      //     {'12개월 이상'}
+      //   </MenuItem>,
+      options = 
+        [
+          '1주일',
+          '2주일',
+          '3주일',
+          '4주일',
+          '1개월',
+          '2개월',
+          '3개월',
+          '4개월',
+          '5개월',
+          '6개월',
+          '7개월',
+          '8개월',
+          '9개월',
+          '10개월',
+          '11개월',
+          '12개월',
+          '12개월 이상',
+        ].map((dueTo, idx) => (
+          <MenuItem key={'dueTo' + idx} value={dueTo}>
+            {dueTo}
           </MenuItem>
-        )),
-        ...Array.from({ length: 11 }, (_, index) => (
-          <MenuItem key={index + 3} value={index + 3}>
-            {`${index + 1}개월`}
-          </MenuItem>
-        )),
-        <MenuItem key={14} value={14}>
-          {'12개월 이상'}
-        </MenuItem>,
-      ];
+        ))
+      ;
       break
     case ComponentType.TeamSize:
       options = Array.from({ length: 9 }, (_, index) => (
@@ -66,13 +79,13 @@ export default function BasicSelect({
       break
     case ComponentType.Place:
       options = [
-        <MenuItem key={0} value={0}>
+        <MenuItem key={0} value={'온라인'}>
           온라인
         </MenuItem>,
-        <MenuItem key={1} value={1}>
+        <MenuItem key={1} value={'오프라인'}>
           오프라인
         </MenuItem>,
-        <MenuItem key={2} value={2}>
+        <MenuItem key={2} value={'혼합'}>
           혼합
         </MenuItem>,
       ]
