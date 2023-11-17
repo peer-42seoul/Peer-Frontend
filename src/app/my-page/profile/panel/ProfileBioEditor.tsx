@@ -35,8 +35,6 @@ interface IToastProps {
   message: string
 }
 
-// TODO 크롭된 이미지 프리뷰 만들어주기
-// TODO 이미지 리사이즈
 const ProfileBioEditor = ({
   data,
   closeModal,
@@ -211,7 +209,6 @@ const ProfileBioEditor = ({
               message: '새로운 닉네임을 입력해주세요.',
             })
             setIsLoading(false)
-            // setNicknameError(true)
           })
       }
       if (!isLoading) {
