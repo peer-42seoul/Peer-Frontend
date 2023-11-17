@@ -2,7 +2,7 @@ import { Box, Button, TextField, Typography } from '@mui/material'
 import { SelectInterviewType } from './SelectInterviewType'
 import WriteAnswers from './WriteAnswers'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { IFormInterview } from '@/app/recruit/write/page'
+import { IFormInterview } from '@/types/IPostDetail'
 
 const AreaForAddInterviewForm = ({
   question,
@@ -50,7 +50,8 @@ const AreaForAddInterviewForm = ({
           {
             question: question,
             type: formType,
-            ratioList: { max, valueOfMin, valueOfMax },
+            // ratioList: { max, valueOfMin, valueOfMax },
+            optionList: [max, valueOfMin, valueOfMax],
           },
         ])
         setQuestion('')

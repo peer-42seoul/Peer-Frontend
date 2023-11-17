@@ -1,3 +1,4 @@
+import { IFormInterview } from '@/types/IPostDetail'
 import {
   Box,
   Checkbox,
@@ -8,7 +9,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { IFormInterview } from '@/app/recruit/write/page'
 
 const Answers = ({ data }: { data: IFormInterview }) => {
   console.log('data.type', data.type)
@@ -65,8 +65,10 @@ const Answers = ({ data }: { data: IFormInterview }) => {
       )
     }
     case '선형배율': {
-      if (!data?.ratioList) return
-      const maxNumber = parseInt(data.ratioList?.max)
+      // if (!data?.ratioList) return
+      if (!data?.optionList) return
+      // const maxNumber = parseInt(data.ratioList?.max)
+      const maxNumber = parseInt(data.optionList[0])
 
       return (
         <Box>
@@ -86,8 +88,12 @@ const Answers = ({ data }: { data: IFormInterview }) => {
                       control={<Radio />}
                       label={``}
                     />
-                    {num === 1 ? data.ratioList?.valueOfMin : null}
-                    {num === maxNumber ? data.ratioList?.valueOfMax : null}
+                    {/* {num === 1 ? data.ratioList?.valueOfMin : null} */}
+                    {/* {num === maxNumber ? data.ratioList?.valueOfMax : null} */}
+                    {num === 1 && data.optionList ? data.optionList[1] : null}
+                    {num === maxNumber && data.optionList
+                      ? data.optionList[2]
+                      : null}
                   </Box>
                 ),
               )}

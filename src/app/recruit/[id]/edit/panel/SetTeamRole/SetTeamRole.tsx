@@ -1,7 +1,7 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import BasicSelectMember from './BasicSelectMember'
-import { IRoleData } from '../../page'
+import { IRoleData } from '@/types/IPostDetail'
 
 const SetTeamRole = ({
   roleData,
