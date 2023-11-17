@@ -7,12 +7,14 @@ import { IMessageListData } from '@/types/IMessage'
 interface IMessageItemProps {
   message: IMessageListData
   isManageMode: boolean
+  isChecked: boolean
   toggleSelectUser: (targetId: number) => void
 }
 
 const MessageItem = ({
   message,
   isManageMode,
+  isChecked,
   toggleSelectUser,
 }: IMessageItemProps) => {
   const router = useRouter()
@@ -30,7 +32,11 @@ const MessageItem = ({
   return (
     <Stack direction={'row'} spacing={1}>
       {isManageMode && (
-        <Checkbox {...label} onChange={() => toggleSelectUser(targetId)} />
+        <Checkbox
+          {...label}
+          checked={isChecked}
+          onChange={() => toggleSelectUser(targetId)}
+        />
       )}
       <Grid
         container
@@ -78,12 +84,14 @@ interface IMessageListProps {
     isLoading: boolean
     error: any
   }
+  selectedUsers: Set<number>
   toggleSelectUser: (targetId: number) => void
 }
 
 const MessageList = ({
   messageList,
   state,
+  selectedUsers,
   toggleSelectUser,
 }: IMessageListProps) => {
   const { isManageMode, isLoading, error } = state
@@ -100,6 +108,7 @@ const MessageList = ({
           key={message.targetId}
           message={message}
           isManageMode={isManageMode}
+          isChecked={selectedUsers.has(message.targetId)}
           toggleSelectUser={toggleSelectUser}
         />
       ))}

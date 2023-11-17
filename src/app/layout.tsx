@@ -20,7 +20,35 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <head />
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="manifest" href="/manifest.json" />
+        {/* 사파리 설정*/}
+        <link
+          rel="apple-touch-icon"
+          sizes="72x72"
+          href="/images/icons/icon-72x72.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="96x96"
+          href="/images/icons/icon-96x96.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="128x128"
+          href="/images/icons/icon-128x128.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="144x144"
+          href="/images/icons/icon-144x144.png"
+        />
+        <meta name="apple-mobile-web-app-title" content="peer" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" />
+        <meta name="theme-color" content="#8936FF" />
+      </head>
       <body>
         <CuSWRConfig>
           <MuiThemeProvider>

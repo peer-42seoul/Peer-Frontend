@@ -1,8 +1,6 @@
-import { AxiosInstance } from 'axios'
 import useSWR from 'swr'
 import { Avatar, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import { getFetcherWithInstance } from '@/api/fetchers'
 import { ITeamInfo } from '@/types/ITeamInfo'
 import { StatusIcon, IconInfo } from './TeamInfoComponent'
 
@@ -11,13 +9,10 @@ const defaultLogoPath = '/images/profile.jpeg' // TODO : 기본 로고 path 확�
 const TeamInfoContainer = ({ id }: { id: number }) => {
   const axiosInstance = useAxiosWithAuth()
   const { data, error, isLoading } = useSWR<ITeamInfo>(
-    [
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/main/${id}`,
-      axiosInstance,
-    ],
-    ([url, axiosInstance]) =>
-      getFetcherWithInstance(url, axiosInstance as AxiosInstance),
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/main/${id}`,
+    (url: string) => axiosInstance(url).then((res) => res.data),
   )
+
   if (isLoading) {
     return <Typography>로딩중...</Typography>
   }

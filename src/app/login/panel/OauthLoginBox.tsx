@@ -2,7 +2,7 @@ import { Box, Stack, Typography, IconButton } from '@mui/material'
 import Image from 'next/image'
 
 const OauthLoginBox = () => {
-  const API_URL = 'http://redirect.peer-test.co.kr'
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
 
   return (
     <Box
