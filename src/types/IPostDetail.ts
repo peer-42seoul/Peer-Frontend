@@ -49,7 +49,7 @@ export interface IPostDetail {
 export interface IFormInterview {
   question: string
   type: string
-  optionList: string[]
+  optionList: string[] | null
 }
 
 export interface IRole {
@@ -63,4 +63,9 @@ export enum statusEnum {
   BEFORE,
   ONGOING,
   AFTER,
+}
+
+export interface IRoleData {
+  role: string | null
+  member: number
 }
