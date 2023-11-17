@@ -79,6 +79,7 @@ const MessageForm = ({
             variant="text"
             action={() => messageSubmit()}
             message="전송"
+            disabled={disabled}
           />
         </Stack>
       ) : (
