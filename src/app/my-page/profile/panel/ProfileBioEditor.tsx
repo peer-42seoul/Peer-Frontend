@@ -58,6 +58,7 @@ const ProfileBioEditor = ({
   const [imageChanged, setImageChanged] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement>(null)
   const [cropper, setCropper] = useState<any>(null)
+  const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
@@ -74,7 +75,6 @@ const ProfileBioEditor = ({
     setValue,
     setError,
     clearErrors,
-    getValues,
   } = useForm<IFormInput>({
     defaultValues: defaultValues,
     mode: 'onChange',
@@ -97,11 +97,8 @@ const ProfileBioEditor = ({
     const file = e.target.files && e.target.files[0]
     if (e.target.files && e.target.files?.length && e.target.files[0]) {
       const reader = new FileReader()
-      setValue('profileImage', [e.target.files[0]])
-      reader.onload = (e) => {
-        setPreviewImage(e.target?.result as string)
-        setImageChanged(true)
-
+      setSelectedFile([e.target.files[0]])
+      reader.onload = () => {
         // 크로퍼 설정
         const imageElement: any = imageRef.current
         imageElement.src = reader.result
@@ -129,14 +126,14 @@ const ProfileBioEditor = ({
   }
 
   const handleCrop = () => {
-    if (cropper && getValues('profileImage')) {
+    if (cropper && selectedFile) {
       // Get the cropped data as a Blob
       cropper
         .getCroppedCanvas({ width: 48, height: 48 })
         .toBlob((blob: Blob | null) => {
           if (blob) {
             // Create a FormData object and append the original file
-            const image = getValues('profileImage')
+            const image = selectedFile
             if (image) {
               const newImage = new File([blob], image[0].name, {
                 type: `image/${image[0].type.split('/')[1]}`,
@@ -147,6 +144,7 @@ const ProfileBioEditor = ({
               const reader = new FileReader()
               reader.onload = (e) => {
                 setPreviewImage(e.target?.result as string)
+                setImageChanged(true)
               }
               reader.readAsDataURL(newImage)
             }
@@ -156,6 +154,11 @@ const ProfileBioEditor = ({
           }
         })
     }
+  }
+
+  const handleCancelCrop = () => {
+    closeCropModal()
+    setSelectedFile(null)
   }
 
   const handleImageDelete = () => {
@@ -494,7 +497,7 @@ const ProfileBioEditor = ({
 
             <CuButton
               variant="contained"
-              action={closeCropModal}
+              action={handleCancelCrop}
               message="취소"
             ></CuButton>
             <CuButton
