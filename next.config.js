@@ -6,7 +6,6 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   register: true,
   skipWaiting: true,
   disable: false,
-  swSrc: 'service-worker.js',
   // disable: prod ? false : true, 나중에 true로 바꿔야함
   // runtimeCaching,
 })
