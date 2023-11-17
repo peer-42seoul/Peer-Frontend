@@ -1,4 +1,5 @@
 import { EventProps, ToolbarProps } from 'react-big-calendar'
+import dayjs from 'dayjs'
 import { IconButton } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
@@ -10,24 +11,7 @@ export const MiniToolbar = (props: ToolbarProps) => {
 
   return (
     <div className="rbc-toolbar">
-      <span className="rbc-toolbar-label">
-        {
-          [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'Octobor',
-            'November',
-            'December',
-          ][date.getMonth()]
-        }
-      </span>
+      <span className="rbc-toolbar-label">{dayjs(date).format('MMMM')}</span>
     </div>
   )
 }

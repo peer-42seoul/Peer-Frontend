@@ -16,8 +16,7 @@ const localizer = dayjsLocalizer(dayjs)
 const CalendarMini = () => {
   const formats = useMemo(
     () => ({
-      weekdayFormat: (date: Date) =>
-        ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()],
+      weekdayFormat: (date: Date) => dayjs(date).format('dd')[0],
     }),
     [],
   )

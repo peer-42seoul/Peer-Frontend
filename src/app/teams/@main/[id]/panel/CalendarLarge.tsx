@@ -24,8 +24,7 @@ const CalendarLarge = ({
   )
   const formats = useMemo(
     () => ({
-      weekdayFormat: (date: Date) =>
-        ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][date.getDay()],
+      weekdayFormat: (date: Date) => dayjs(date).format('ddd').toUpperCase(),
     }),
     [],
   )
