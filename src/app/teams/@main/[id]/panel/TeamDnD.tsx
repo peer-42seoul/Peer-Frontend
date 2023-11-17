@@ -1,98 +1,75 @@
-import { Box, Input, Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import useSWR from 'swr'
-import { IPostDetail } from '@/types/IPostDetail'
-import { defaultGetFetcher } from '@/api/fetchers'
-import { useRouter } from 'next/navigation'
 import useAxiosWithAuth from '@/api/config'
 import 'react-grid-layout/css/styles.css'
-import 'react-resizable/css/styles.css'
 import GridLayout from 'react-grid-layout'
-import { ITeamDnDLayout, IWidget } from '@/types/ITeamDnDLayout'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  IDataGrid,
+  ITeamDnDLayout,
+  IWidget,
+  SizeType,
+  WidgetType,
+} from '@/types/ITeamDnDLayout'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import TeamDnDWidgetList from '@/app/teams/@main/[id]/panel/TeamDnDWidgetList'
 import TmpWidget from '@/app/teams/@main/[id]/panel/TmpWidget'
 
-type WidgetType =
-  | 'Notice'
-  | 'Board'
-  | 'Calender'
-  | 'Attendance'
-  | 'Text'
-  | 'Image'
-  | 'LinkTable'
-
-const data: ITeamDnDLayout = {
-  teamId: 1,
-  type: 'teamPage',
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  widgets: [
-    {
-      key: 1,
-      size: 'M',
-      grid: { x: 0, y: 0, w: 2, h: 2 },
-      type: 'Text',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      data: {
-        /* 실제 위젯 데이터 */
-      },
-    },
-    {
-      key: 2,
-      size: 'S',
-      grid: { x: 2, y: 0, w: 1, h: 1 },
-      type: 'Text',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      data: {
-        /* 실제 위젯 데이터 */
-      },
-    },
-  ],
+export const sizeRatio = {
+  S: { w: 1, h: 1 },
+  M: { w: 2, h: 1 },
+  L: { w: 2, h: 2 },
 }
 
-const TeamDnD = ({ id }: { id: string }) => {
+const TeamDnD = () => {
   // const axiosInstance = useAxiosWithAuth()
-  const [layout, setLayout] = useState<IWidget[]>([])
+  const [widgets, setWidgets] = useState<IWidget[]>([])
   const [index, setIndex] = useState(1)
-  const [type, setType] = useState<'input' | 'image'>('input')
+  const [type, setType] = useState<WidgetType>('text')
+  const [droppingItem, setDroppingItem] = useState({
+    i: '__dropping-elem__',
+    w: 1,
+    h: 1,
+  })
   const [isDropping, setIsDropping] = useState(false)
   const [widgetSize, setWidgetSize] = useState(0)
+  const [size, setSize] = useState<SizeType>('S')
   const layoutRef = useRef(null)
   const { isPc } = useMedia()
-  const size = isPc ? 2 : 1
+  const ratio = isPc ? 2 : 1
   const maxRows = 4
+  const cols = ratio * 2
 
-  // const { data, isLoading, error } = useSWR<ITeamDnDLayout>(
-  //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params?.id}`,
-  //   (url: string) => axiosInstance.get(url).then((res) => res.data),
-  // )
-  //onDrop 함수는 드래그한 요소를 놓았을 때 호출되는 함수입니다.
-  //currentLayout은 현재 그리드의 레이아웃 정보를 담고 있습니다.
-  //layoutItem은 드래그한 요소의 레이아웃 정보를 담고 있습니다.
-  //event는 이벤트 객체입니다.
+  const axiosInstance = useAxiosWithAuth()
+  const { data, isLoading } = useSWR<ITeamDnDLayout>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/read`,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
+  )
 
   useEffect(() => {
-    const newLayout = data.widgets.map((widget, index) => {
+    let i = 0
+    const newLayout = data?.widgets?.map((widget, index) => {
+      i = index
       return {
         ...widget,
         grid: {
-          i: index,
           ...widget.grid,
+          i: index,
         },
       }
     })
-    setLayout(newLayout)
+    if (!newLayout) return
+    setWidgets(newLayout)
+    setIndex(i + 1) //인덱스는 각 요소들의 식별자. 중복되지 않기 위해서 setIndex로 관리
   }, [data])
 
+  /* 페이지 사이즈의 resize가 일어날때마다 handleResize 호출 */
   useEffect(() => {
     const handleResize = () => {
-      setWidgetSize(layoutRef.current?.offsetWidth / 4 - 4 ?? 0)
+      setWidgetSize(layoutRef.current?.offsetWidth / cols - 4 ?? 0) //layoutRef(레이아웃 바탕)의 길이의 4만큼 나눔 (
     }
 
-    setWidgetSize(layoutRef.current?.offsetWidth / 4 - 4 ?? 0)
+    setWidgetSize(layoutRef.current?.offsetWidth / cols - 4 ?? 0)
     // 컴포넌트가 마운트될 때 실행되는 부분
     window.addEventListener('resize', handleResize)
 
@@ -102,54 +79,52 @@ const TeamDnD = ({ id }: { id: string }) => {
     }
   }, [])
 
+  /* drop시 호출 */
   const onDrop = useCallback(
-    (currentLayout, layoutItem, _event) => {
-      console.log('currentLayout', currentLayout)
-      //   console.log('onDrop')
-      //   setLayout([
-      //     ...layout,
-      //     {
-      //       ...layoutItem,
-      //       i: index.toString(),
-      //       type: type,
-      //       w: type === 'image' ? 2 : 1,
-      //       minW: null,
-      //       maxW: null,
-      //     },
-      //   ])
-      //   setIndex(index + 1)
+    (currentLayout: IDataGrid[], layoutItem: IDataGrid) => {
+      setWidgets([
+        ...widgets,
+        {
+          key: index,
+          grid: {
+            ...layoutItem,
+            i: index,
+          },
+          type,
+          size,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          data: null,
+        },
+      ])
+      setIndex(index + 1)
     },
-    [index, layout, type],
+    [widgets, index, type, size],
   )
 
   const onLayoutChange = useCallback(
-    (currentLayout) => {
-      console.log('onLayoutChange', currentLayout)
-      console.log('layout22', layout)
-      // const newHeight =
-      //   document?.querySelector('.react-grid-layout')?.offsetHeight
-      // console.log('newHeight', newHeight)
-      //
-      // if (newHeight > widgetSize * maxRows) {
-      //   console.log('newHeight!!', newHeight)
-      //   const prevLayout = [...layout]
-      //   // setLayout([
-      //   //     {i: 0, x: 0, y: 0, w: 1, h: 1, minW: null, maxW: null, type: "input"}
-      //   // ])
-      //   setLayout(prevLayout)
-      //   return
-      // }
-      // if (!isDropping) {
-      //   console.log('isDropping', isDropping)
-      //   const updatedCurrentLayout = currentLayout.map((item, i) => {
-      //     item.type = layout[i].type
-      //     return item
-      //   })
-      //   setLayout(updatedCurrentLayout)
-      // }
+    (currentLayout: IDataGrid[]) => {
+      //레이아웃 범위를 넘어갈 시 처리
+      const newHeight =
+        document?.querySelector('.react-grid-layout')?.offsetHeight
+      if (newHeight > widgetSize * maxRows) return
+
+      //드롭중일 경우 이미 onDrop에서 처리하고 있으므로 처리x
+      if (!isDropping) {
+        const updatedCurrentWidget = currentLayout.map(
+          (grid: IDataGrid, i: number) => ({
+            ...widgets[i],
+            grid,
+          }),
+        )
+        setWidgets(updatedCurrentWidget)
+      }
     },
-    [isDropping, layout],
+    [isDropping, widgetSize, widgets],
   )
+
+  if (isLoading) return <>로딩중입니다</>
+  // if (error) return <>에러 발생</>
 
   return (
     <Box
@@ -163,7 +138,10 @@ const TeamDnD = ({ id }: { id: string }) => {
       <TeamDnDWidgetList
         widgetSize={widgetSize}
         setIsDropping={setIsDropping}
+        type={type}
         setType={setType}
+        setSize={setSize}
+        setDroppingItem={setDroppingItem}
       />
       <Box
         ref={layoutRef}
@@ -173,34 +151,43 @@ const TeamDnD = ({ id }: { id: string }) => {
       >
         <GridLayout
           className="layout"
-          cols={size * 2} //그리드의 열 수. pc면 4, 모바일이면 2
+          cols={cols} //그리드의 열 수. pc면 4, 모바일이면 2
           rowHeight={widgetSize} //그리드 항목의 높이
-          width={widgetSize * size * 2}
+          width={widgetSize * ratio * 2} //레이아웃 너비. pc일 경우 widgetSize 4칸, 모바일이면 2칸
           preventCollision={true} //true면 그리드 항목을 드래그해도 위치가 변경되지 않음
           onDrop={onDrop}
           isDroppable={true} //true면 draggable={true}인 요소를 드래그 가능
           onLayoutChange={onLayoutChange}
           maxRows={maxRows}
+          isResizable={false}
+          droppingItem={droppingItem}
         >
-          {layout.map(({ grid, type }) => {
+          {widgets?.map(({ grid, type, size: wgSize }) => {
             return (
-              <Box
+              <Stack
                 key={grid.i}
-                data-grid={grid}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                data-grid={{
+                  ...grid,
+                  w: grid.w * sizeRatio[wgSize].w, //size에 따라 w, h 비율 설정
+                  h: grid.h * sizeRatio[wgSize].h,
                 }}
+                flexDirection={'row'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                bgcolor={'white'}
               >
-                {type === 'Notice' && <TmpWidget data={data} />}
-                {type === 'Board' && <TmpWidget data={data} />}
-                {type === 'Calender' && <TmpWidget data={data} />}
-                {type === 'Attendance' && <TmpWidget data={data} />}
-                {type === 'Text' && <TmpWidget data={data} />}
-                {type === 'Image' && <TmpWidget data={data} />}
-                {type === 'LinkTable' && <TmpWidget data={data} />}
-              </Box>
+                {type === 'notice' && <TmpWidget data={data} size={wgSize} />}
+                {type === 'board' && <TmpWidget data={data} size={wgSize} />}
+                {type === 'calender' && <TmpWidget data={data} size={wgSize} />}
+                {type === 'attendance' && (
+                  <TmpWidget data={data} size={wgSize} />
+                )}
+                {type === 'text' && <TmpWidget data={data} size={wgSize} />}
+                {type === 'image' && <TmpWidget data={data} size={wgSize} />}
+                {type === 'linkTable' && (
+                  <TmpWidget data={data} size={wgSize} />
+                )}
+              </Stack>
             )
           })}
         </GridLayout>
