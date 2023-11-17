@@ -19,7 +19,7 @@ import useSWR from 'swr'
 import axios from 'axios'
 
 // react-base64-image.js
-const convertImageToBase64 = (file: any) => {
+export const convertImageToBase64 = (file: any) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
 
@@ -82,6 +82,22 @@ const CreateTeam = () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
+    if (
+      !image ||
+      !title ||
+      !name ||
+      !due ||
+      !region ||
+      !place ||
+      !link ||
+      !tagList ||
+      !roleList ||
+      !interviewList ||
+      !content
+    ) {
+      alert('빈칸을 모두 채워주세요')
+      return
+    }
     const base64Data = await convertImageToBase64(image[0])
     setSelectedImage(base64Data)
     try {
@@ -134,15 +150,24 @@ const CreateTeam = () => {
           <TextField
             variant="outlined"
             value={title}
-            onChange={(e) => setTitle(e.target.value as string)}
+            onChange={(e) => {
+              if (e.target.value.length > 20)
+                setTitle(e.target.value.slice(0, 20) as string)
+              else setTitle(e.target.value as string)
+            }}
           />
         </Box>
-        <Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h6">팀 이름</Typography>
           <TextField
+            sx={{ width: '80vw' }}
             variant="outlined"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length > 20)
+                setName(e.target.value.slice(0, 20) as string)
+              else setName(e.target.value as string)
+            }}
           />
         </Box>
         <Box>
@@ -184,7 +209,7 @@ const CreateTeam = () => {
           <SetCommunicationToolLink setValue={setCommunicationTool} />
         </Box>
         <Stack>
-          <Typography variant="h6" sx={{ paddingRight: '5px' }}>
+          <Typography variant="h6" sx={{ paddingRight: '5px', width: '70%' }}>
             모집인원 인터뷰 등록하기
           </Typography>
           <Button variant="outlined" onClick={() => setOpenBasicModal(true)}>
@@ -217,8 +242,13 @@ const CreateTeam = () => {
           <Typography variant="h6">팀 소개</Typography>
           <TextField
             variant="outlined"
+            value={content}
             sx={{ width: '80vw', height: 'auto' }}
-            onChange={(e) => setContent(e.target.value as string)}
+            onChange={(e) => {
+              if (e.target.value.length > 1000)
+                setContent(e.target.value.slice(0, 1000) as string)
+              else setContent(e.target.value as string)
+            }}
             multiline
           />
         </Box>
