@@ -31,7 +31,7 @@ const NickNameField = ({
           field.onChange(e)
           setNickNameSendStatus('before')
         }}
-        autoComplete="off"
+        autoComplete="nickname"
         error={nickNameSendStatus === 'error'}
         type="text"
         placeholder="닉네임을 입력하세요"

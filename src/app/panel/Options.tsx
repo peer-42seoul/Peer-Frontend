@@ -71,6 +71,14 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     setTagData([])
     setLocation('')
     setParentLocation('')
+    setDetailOption({
+      due: '',
+      region1: '',
+      region2: '',
+      place: '',
+      status: '',
+      tag: '',
+    })
   }
 
   return (

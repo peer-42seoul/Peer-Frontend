@@ -1,3 +1,4 @@
+import { TeamStatus } from '@/app/teams/@setting/[id]/page'
 import { create } from 'zustand'
 
 interface IShowTeams {
@@ -6,7 +7,7 @@ interface IShowTeams {
 }
 
 const useShowTeams = create<IShowTeams>((set) => ({
-  showTeams: '모집 중',
+  showTeams: TeamStatus.RECRUITING,
   setShowTeams: (showTeams: string) => set({ showTeams }),
 }))
 

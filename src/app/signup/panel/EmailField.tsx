@@ -24,7 +24,7 @@ const EmailField = ({
       <CuTextField
         {...field}
         disabled={emailSendStatus === 'submit'}
-        autoComplete="off"
+        autoComplete="email"
         error={emailSendStatus === 'error'}
         type="text"
         placeholder="이메일을 입력하세요"

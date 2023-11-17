@@ -1,5 +1,5 @@
 import { debounce } from 'lodash'
-import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react'
+import { useState, useEffect, useRef, Dispatch, SetStateAction, useCallback } from 'react'
 
 /**
  * 메시지 무한 스크롤 훅
@@ -55,21 +55,29 @@ export const useInfiniteScrollHook = (
   setPage: Dispatch<SetStateAction<number>>,
   isLoading: boolean,
   isEnd: boolean,
-  page: number
+  page: number,
 ) => {
   const [spinner, setSpinner] = useState(false)
-  const target = useRef(null)
+  const target = useRef<HTMLDivElement>(null)
 
-  const debouncedFetchData = debounce(async () => {
-    // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
-    setSpinner(true)
-    setPage(page + 1)
-  }, 1000)
+  /** scrollTo 스크롤 위치 조정을 위한 함수 */
+  const scrollTo = useCallback(
+    (height: number) => {
+      if (!target.current) return
+      target.current.scrollTo({ top: height })
+    },
+    [target],
+  )
 
   useEffect(() => {
     if (!isLoading && spinner)
       setSpinner(false)
-  }, [isLoading, spinner]);
+  }, [isLoading]);
+
+  const debouncedFetchData = debounce(async () => {
+    // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
+    setPage(page + 1)
+  }, 1000)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -78,6 +86,7 @@ export const useInfiniteScrollHook = (
           if (!spinner && !isEnd) {
             // 스피너를 표시하고 페이지 번호를 증가시킨 후 디바운스된 데이터 가져오기 함수 호출
             // 가능한 페이지 양을 도달했다면 더이상 로딩하지 않는다.
+            setSpinner(true)
             debouncedFetchData()
           }
         }
@@ -97,7 +106,7 @@ export const useInfiniteScrollHook = (
     }
   }, [target, spinner, debouncedFetchData, page, isEnd])
 
-  return { target, spinner }
+  return { target, spinner, scrollTo }
 }
 
 /**
