@@ -73,8 +73,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const pageSize = 3
-  const [deferredPrompt, setDeferredPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null)
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
 
   const {
