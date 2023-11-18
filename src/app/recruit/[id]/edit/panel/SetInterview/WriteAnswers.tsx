@@ -176,13 +176,13 @@ const WriteAnswers = ({
               variant="standard"
               value={valueOfMin}
               onChange={onHandlerEditValueOfMin}
-            ></TextField>
+            />
             <Typography>최대값</Typography>
             <TextField
               variant="standard"
               value={valueOfMax}
               onChange={onHandlerEditValueOfMax}
-            ></TextField>
+            />
           </Box>
         </>
       )

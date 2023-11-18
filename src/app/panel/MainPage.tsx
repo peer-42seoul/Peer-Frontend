@@ -7,7 +7,6 @@ import {
   Stack,
   Typography,
   CircularProgress,
-  Button,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import EditButton from './EditButton'
@@ -27,9 +26,10 @@ import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
-import useMedia from '@/hook/useMedia'
+import PwaInstallBanner from './PwaInstallBanner'
+import PushAlertBanner from './PushAlertBanner'
 
-interface BeforeInstallPromptEvent extends Event {
+export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
   readonly userChoice: Promise<{
     outcome: 'accepted' | 'dismissed'
@@ -51,8 +51,6 @@ export interface IDetailOption {
 }
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  const { isPc } = useMedia()
-  const [isShowInstall, setIsShowInstall] = useState<boolean>(true)
   const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
@@ -72,15 +70,16 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-  const pageSize = 3
-  const [deferredPrompt, setDeferredPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null)
+
+  const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
+    undefined,
+  )
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
 
+  const pageSize = 6
   const {
     data: newData,
     isLoading,
-    isValidating,
     error,
   } = useSWR<IPagination<IPost[]>>(
     page == 1 && !type && !sort && detailOption.isInit && keyword == ''
@@ -102,47 +101,24 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   )
 
   useEffect(() => {
-    if (localStorage && localStorage.getItem('isShowInstall') === 'false') {
-      setIsShowInstall(false)
-    }
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log('Notification granted')
-      }
-    })
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((reg) => {
-          console.log('Service worker registered', reg)
-        })
-        .catch((err) => {
-          console.warn('Service worker failed', err.message)
-        })
-    }
-
-    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
-      e.preventDefault()
-      setDeferredPrompt(e)
-      setIsShowInstall(true)
-    }
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-    window.addEventListener('appinstalled', () => {
-      console.log('installed')
-      setIsShowInstall(false)
-    })
-  }, [deferredPrompt, isShowInstall])
-
-  useEffect(() => {
     if (!newData || !newData?.content) return
-    //newData가 있어야 업데이트
-    if (page == 1) return setContent(newData.content)
+    //page가 1일 경우 == initData가 설정되어있을경우, 무한스크롤시 page는 무조건 2부터 시작함.
+    //따라서 page가 1일 경우에는 옵션이 달라진 것임. 고로 무조건 새로운 데이터로 setContent를 해준다.
+    if (page == 1) {
+      setContent(newData.content)
+      return
+    }
+    //여기서부터는 무한스크롤 영역. 길이가 0이면 더해주지 않는다.
+    if (newData?.content.length == 0) return
+    //이전 데이터와 새로운 데이터를 더해준다
     setContent([...content, ...newData.content])
+    //이전 스크롤 높이로 설정
+    setPrevScrollHeight(target.current?.scrollHeight)
+    if (target.current && prevScrollHeight)
+      scrollTo(target.current.scrollHeight - prevScrollHeight)
   }, [newData])
 
-  const { target, spinner } = useInfiniteScrollHook(
+  const { target, spinner, scrollTo } = useInfiniteScrollHook(
     setPage,
     isLoading,
     (newData?.last || initData?.last) ?? true, //isEnd
@@ -151,7 +127,17 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   const handleType = (value: ProjectType) => {
     setType(value)
-    setPage(1) //옵션이 변경되었으므로 page를 1로 초기화
+    //type이 변경될 경우 초기화
+    setPage(1)
+    setDetailOption({
+      due: '',
+      region1: '',
+      region2: '',
+      place: '',
+      status: '',
+      tag: '',
+    })
+    setSort('latest')
   }
 
   const handleSort = (value: ProjectSort) => {
@@ -166,33 +152,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   return (
     <>
-      {isShowInstall ? (
-        <Box height={'50px'} border="1px solid black">
-          <Stack>
-            사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
-            {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
-            <Stack direction="row">
-              <Button
-                onClick={() => {
-                  if (!deferredPrompt) return
-                  // @ts-ignore
-                  deferredPrompt.prompt()
-                }}
-              >
-                설치
-              </Button>
-              <Button
-                onClick={() => {
-                  setIsShowInstall(false)
-                  localStorage.setItem('isShowInstall', 'false')
-                }}
-              >
-                닫기
-              </Button>
-            </Stack>
-          </Stack>
-        </Box>
-      ) : null}
+      <PushAlertBanner />
+
       {/* mobile view */}
       <Container className="mobile-layout">
         <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
@@ -213,9 +174,9 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               </Stack>
             </Grid>
           </Grid>
-          {isValidating ? (
+          {isLoading && page == 1 ? (
             <Typography>로딩중...</Typography>
-          ) : error ? (
+          ) : error || !initData ? (
             <Typography>에러 발생</Typography>
           ) : content?.length == 0 ? (
             <Typography>데이터가 없습니다</Typography>
@@ -278,7 +239,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 </Stack>
               </Grid>
             </Grid>
-            {isValidating ? (
+            {isLoading && page == 1 ? (
               <Typography>로딩중...</Typography>
             ) : error ? (
               <Typography>에러 발생</Typography>
@@ -312,6 +273,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           </Stack>
         </Stack>
       </Container>
+      <PwaInstallBanner />
     </>
   )
 }
