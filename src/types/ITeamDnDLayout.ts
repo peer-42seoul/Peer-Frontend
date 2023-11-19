@@ -1,8 +1,8 @@
 export interface ITeamDnDLayout {
   teamId: number
   type: string // teamPage, peerLog
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Date | number[]
+  updatedAt: Date | number[] // LocalDateTime
   widgets: IWidget[]
 }
 
@@ -40,3 +40,9 @@ export type WidgetType =
   | 'linkTable'
 
 export type SizeType = 'S' | 'M' | 'L'
+
+export interface IDroppingItem {
+  i: string | number
+  w: number
+  h: number
+}

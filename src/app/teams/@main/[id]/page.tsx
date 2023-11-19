@@ -22,13 +22,6 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
       </Typography>
       <TeamInfoContainer id={Number(id)} />
       <TeamDnDNoSSR id={id} />
-      <CuButton
-        message={'팀페이지 수정'}
-        action={() => {}}
-        variant={'contained'}
-        fullWidth={false}
-        disabled
-      />
     </Stack>
   )
 }
