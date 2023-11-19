@@ -11,13 +11,11 @@ import TmpImageWidget from '@/app/teams/@main/[id]/panel/widgets/TmpImageWidget'
 import TmpLinkWidget from '@/app/teams/@main/[id]/panel/widgets/TmpLinkWidget'
 
 interface ITeamDnDWidgetListProps {
-  widgetSize: number
   setIsDropping: (isDropping: boolean) => void
   type: WidgetType
   setType: (type: WidgetType) => void
   setSize: (size: SizeType) => void
   setDroppingItem: any
-  ratio: number
 }
 
 interface IToolSizeType {
@@ -32,13 +30,11 @@ interface IToolSizeType {
 
 /* 툴 박스 */
 const WidgetList = ({
-  widgetSize,
   setIsDropping,
   type,
   setType,
   setSize,
   setDroppingItem,
-  ratio,
 }: ITeamDnDWidgetListProps) => {
   const [toolSize, setToolSize] = useState<IToolSizeType>({
     notice: 'S',
@@ -72,27 +68,21 @@ const WidgetList = ({
       else setDroppingItem({ i: '__dropping-elem__', w: 1, h: 1 })
       e.dataTransfer.setData('text/plain', '')
     },
-    [setDroppingItem, setIsDropping, setType, type, toolSize, setSize],
+    [setDroppingItem, setIsDropping, setType, toolSize, setSize],
   )
 
   return (
-    <Box bgcolor={'skyblue'} padding={2} sx={{ overflowX: 'scroll' }}>
-      <Stack
-        height={widgetSize}
-        width={widgetSize * ratio * 2}
-        alignItems={'center'}
-        justifyContent={'center'}
-        direction={'row'}
-        gap={1}
-      >
+    <Box
+      bgcolor={'skyblue'}
+      padding={1}
+      width={'100%'}
+      sx={{
+        overflowX: 'auto',
+      }}
+    >
+      <Stack direction={'row'} gap={1}>
         {typeList?.map((typeValue: WidgetType) => (
-          <Stack
-            direction={'column'}
-            key={typeValue}
-            width={widgetSize * 2}
-            height={widgetSize}
-            bgcolor={'lightgray'}
-          >
+          <Box key={typeValue} bgcolor={'lightgray'}>
             <Stack direction={'row'} gap={1}>
               {['S', 'M', 'L'].map((size) => (
                 <Button
@@ -121,12 +111,8 @@ const WidgetList = ({
                 key={typeValue}
                 margin={1}
                 flexDirection={'row'}
-                height={
-                  widgetSize * 0.38 * sizeRatio[toolSize[typeValue] ?? 'S'].w
-                }
-                width={
-                  widgetSize * 0.38 * sizeRatio[toolSize[typeValue] ?? 'S'].h
-                }
+                height={200 * 0.38 * sizeRatio[toolSize[typeValue] ?? 'S'].w}
+                width={200 * 0.38 * sizeRatio[toolSize[typeValue] ?? 'S'].h}
                 className="droppable-element"
                 draggable={true}
                 unselectable="on"
@@ -179,7 +165,7 @@ const WidgetList = ({
                 )}
               </Stack>
             </Stack>
-          </Stack>
+          </Box>
         ))}
       </Stack>
     </Box>

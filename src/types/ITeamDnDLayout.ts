@@ -18,6 +18,10 @@ export interface IDataGrid {
   isDraggable?: boolean
 }
 
+export interface IWidgets {
+  xs: IWidget[]
+  sm: IWidget[]
+}
 // 위젯의 데이터
 //new Date
 export interface IWidget {

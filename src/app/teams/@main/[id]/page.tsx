@@ -10,7 +10,6 @@ import dynamic from 'next/dynamic'
 const TeamsPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
   const { id } = params
-  const TeamDnDNoSSR = dynamic(() => import('./panel/TeamDnD'), { ssr: false })
 
   return (
     <Stack spacing={2} flex={1}>
@@ -21,7 +20,7 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
         팀리스트로 돌아가기
       </Typography>
       <TeamInfoContainer id={Number(id)} />
-      <TeamDnDNoSSR id={id} />
+      <TeamDnD id={id} />
     </Stack>
   )
 }

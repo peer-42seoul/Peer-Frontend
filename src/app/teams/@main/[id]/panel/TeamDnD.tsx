@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import 'react-grid-layout/css/styles.css'
@@ -43,22 +43,21 @@ const TeamDnD = ({ id }: { id: string }) => {
   // if (error) return <>에러 발생</>
 
   return (
-    <Box
+    <Stack
       sx={{
         width: '100%',
         height: '100%',
         border: 1.55,
         padding: 2,
       }}
+      bgcolor={'beige'}
     >
       <WidgetList
-        widgetSize={widgetSize}
         setIsDropping={setIsDropping}
         type={type}
         setType={setType}
         setSize={setSize}
         setDroppingItem={setDroppingItem}
-        ratio={ratio}
       />
       <WidgetsRender
         key={data}
@@ -71,7 +70,7 @@ const TeamDnD = ({ id }: { id: string }) => {
         droppingItem={droppingItem}
         ratio={ratio}
       />
-    </Box>
+    </Stack>
   )
 }
 
