@@ -4,11 +4,10 @@ import WidgetCard from './WidgetCard'
 
 /* 임시 위젯 */
 const TmpTextWidget = ({ data, size }: { data: any; size: SizeType }) => {
-  /* 추후에 들어올 data */
-  console.log('data', data)
   return (
     <WidgetCard bgcolor={'pink'}>
       <Typography>{'Text ' + size}</Typography>
+      <Typography>{data}</Typography>
       <TextField label="Multiline" multiline maxRows={4} />
     </WidgetCard>
   )

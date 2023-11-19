@@ -1,11 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Typography, Stack, Box } from '@mui/material'
-import CuButton from '@/components/CuButton'
+import { Typography, Stack } from '@mui/material'
 import TeamInfoContainer from './panel/TeamInfoContainer'
 import TeamDnD from './panel/TeamDnD'
-import dynamic from 'next/dynamic'
 
 const TeamsPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()

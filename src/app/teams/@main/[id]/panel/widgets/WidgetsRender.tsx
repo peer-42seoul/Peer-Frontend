@@ -1,4 +1,11 @@
-import { Box, Stack } from '@mui/material'
+import {
+  Box,
+  Button,
+  IconButton,
+  Portal,
+  Stack,
+  Typography,
+} from '@mui/material'
 import TmpNoticeWidget from '@/app/teams/@main/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/@main/[id]/panel/widgets/TmpBoardWidget'
 import TmpCalenderWidget from '@/app/teams/@main/[id]/panel/widgets/TmpCalenderWidget'
@@ -6,62 +13,88 @@ import TmpAttendWidget from '@/app/teams/@main/[id]/panel/widgets/TmpAttendWidge
 import TmpTextWidget from '@/app/teams/@main/[id]/panel/widgets/TmpTextWidget'
 import TmpImageWidget from '@/app/teams/@main/[id]/panel/widgets/TmpImageWidget'
 import TmpLinkWidget from '@/app/teams/@main/[id]/panel/widgets/TmpLinkWidget'
-import { useCallback, useState } from 'react'
-import { Responsive, WidthProvider } from 'react-grid-layout'
+import React, { useCallback, useMemo, useState } from 'react'
+import ReactGridLayout, {
+  Layout,
+  Responsive,
+  WidthProvider,
+} from 'react-grid-layout'
 import {
-  IDataGrid,
-  IDroppingItem,
   ITeamDnDLayout,
   IWidget,
   SizeType,
   WidgetType,
 } from '@/types/ITeamDnDLayout'
 import CuButton from '@/components/CuButton'
+import useToast from '@/hook/useToast'
+import useAxiosWithAuth from '@/api/config'
+
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
+import CuModal from '@/components/CuModal'
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
 interface IWidgetsRenderProps {
-  data: ITeamDnDLayout
+  id: number | string
+  data: ITeamDnDLayout | undefined
   type: WidgetType
   size: SizeType
   isDropping: boolean
-  droppingItem: IDroppingItem
+  droppingItem: ReactGridLayout.CoreProps['droppingItem']
+  edit: boolean
+  setEdit: (edit: boolean) => void
 }
 const WidgetsRender = ({
+  id,
   data,
   type,
   size,
   isDropping,
   droppingItem,
+  edit,
+  setEdit,
 }: IWidgetsRenderProps) => {
-  const setInitWidgets = () => {
+  /* 초기 widget값을 만드는 함수 */
+  const setInitWidgets: IWidget[] = useMemo(() => {
     if (!data) return []
-    const initWidgets = data?.widgets?.map((widget, index) => {
+    return data?.widgets?.map((widget, index) => {
       if (index === widgets.length - 1) setIndex(index)
       return {
         ...widget,
         grid: {
           ...widget.grid,
-          i: index,
+          i: index.toString(),
         },
       }
     })
-
-    return initWidgets
-  }
-
+  }, [data])
   const [index, setIndex] = useState(0)
   const [widgets, setWidgets] = useState<IWidget[]>(setInitWidgets)
-  const [edit, setEdit] = useState(false)
-  /* drop시 호출 */
+  const [isOpen, setOpen] = useState(false)
+  const axiosInstance = useAxiosWithAuth()
+  const {
+    CuToast: CuSuccessToast,
+    isOpen: isSuccessOpen,
+    openToast: openSuccessToast,
+    closeToast: closeSuccessToast,
+  } = useToast()
+  const {
+    CuToast: CuFailedToast,
+    isOpen: isFailedOpen,
+    openToast: openFailedToast,
+    closeToast: closeFailedToast,
+  } = useToast()
+
+  /* 드롭 시 호출 */
   const onDrop = useCallback(
-    (currentLayout: IDataGrid[], layoutItem: IDataGrid) => {
+    (layout: Layout[], layoutItem: Layout) => {
+      if (!edit) return
       setWidgets([
         ...widgets,
         {
           key: index,
           grid: {
             ...layoutItem,
-            i: index,
+            i: index.toString(),
           },
           type,
           size,
@@ -72,17 +105,18 @@ const WidgetsRender = ({
       ])
       setIndex(index + 1)
     },
-    [widgets, index, type, size],
+    [widgets, index, type, size, edit],
   )
 
+  /* 레이아웃이 변경될때마다 호출 */
   const onLayoutChange = useCallback(
-    (currentLayout: IDataGrid[]) => {
-      //레이아웃 범위를 넘어갈 시 처리
+    (currentLayout: Layout[]) => {
+      //레이아웃 범위를 넘어갈 시 처리 필요
 
       //드롭중일 경우 이미 onDrop에서 처리하고 있으므로 처리x
       if (!isDropping) {
-        const updatedCurrentWidget = currentLayout.map(
-          (grid: IDataGrid, i: number) => ({
+        const updatedCurrentWidget: IWidget[] = currentLayout.map(
+          (grid: Layout, i: number) => ({
             ...widgets[i],
             grid,
           }),
@@ -93,11 +127,75 @@ const WidgetsRender = ({
     [isDropping, widgets],
   )
 
+  /* 변경된 팀페이지 위젯 request */
+  const handleSave = useCallback(async () => {
+    try {
+      const teamWidgetInfo = {
+        teamId: id,
+        type: 'team',
+        widgets: widgets,
+      }
+      console.log('teamWidgetInfo', teamWidgetInfo)
+      if (!data) {
+        await axiosInstance.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/create`,
+          teamWidgetInfo,
+        )
+      } else
+        await axiosInstance.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/update`,
+          teamWidgetInfo,
+        )
+      openSuccessToast()
+      setOpen(false)
+    } catch (e) {
+      console.log('e', e)
+      openFailedToast()
+    }
+  }, [data, id, widgets])
+
   return (
     <Box>
+      {/*request와 관련된 toast*/}
+      <Portal>
+        <CuSuccessToast
+          open={isSuccessOpen}
+          onClose={closeSuccessToast}
+          severity="success"
+        >
+          <Typography>수정에 성공하였습니다.</Typography>
+        </CuSuccessToast>
+        <CuFailedToast
+          open={isFailedOpen}
+          onClose={closeFailedToast}
+          severity="error"
+        >
+          <Typography>수정에 실패하였습니다.</Typography>
+        </CuFailedToast>
+      </Portal>
+      {/*확인 모달*/}
+      <CuModal
+        open={isOpen}
+        ariaDescription={'modal-description'}
+        ariaTitle={'modal-title'}
+        handleClose={() => setOpen(false)}
+      >
+        <Box bgcolor={'white'}>
+          <Typography variant="h4" id="modal-title">
+            팀페이지 저장
+          </Typography>
+          <Typography id="modal-description">
+            팀 페이지를 저장하시겠습니까?
+          </Typography>
+          <Box>
+            <Button onClick={() => setOpen(false)}>취소</Button>
+            <Button onClick={handleSave}>확인</Button>
+          </Box>
+        </Box>
+      </CuModal>
+      {/* react-grid-layout 영역 */}
       <ResponsiveGridLayout
         className="layout"
-        layout={widgets}
         breakpoints={{
           sm: 768,
           xs: 480,
@@ -110,18 +208,46 @@ const WidgetsRender = ({
         isDroppable={true} //true면 draggable={true}인 요소를 드래그 가능
         onLayoutChange={onLayoutChange}
         isResizable={false}
-        isDraggable={edit}
         droppingItem={droppingItem}
         style={{
-          minHeight: '900px',
-          maxHeight: '900px',
+          minHeight: edit ? '900px' : undefined,
+          maxHeight: edit ? '900px' : undefined,
           borderRadius: '5px',
           backgroundColor: 'yellow',
         }}
       >
         {widgets?.map(({ grid, type, size: wgSize }) => {
           return (
-            <Box key={grid.i} data-grid={grid} width={'100%'} height={'100%'}>
+            <Box
+              key={grid.i}
+              data-grid={{ ...grid, isDraggable: edit }} //isDraggable 전체로 하는 방식있는데 안먹혀서 하나씩...
+              width={'100%'}
+              height={'100%'}
+            >
+              {/*위젯 삭제 버튼*/}
+              {edit && (
+                <IconButton
+                  onClick={() => {
+                    const newWidgets = [
+                      ...widgets.filter((widget) => widget.grid.i !== grid.i),
+                    ]
+                    setWidgets(newWidgets)
+                  }}
+                  aria-label="delete"
+                  color="primary"
+                  sx={{
+                    position: 'absolute',
+                    top: -12,
+                    right: -12,
+                    zIndex: 999,
+                    color: 'black',
+                  }}
+                  size={'small'}
+                >
+                  <RemoveCircleIcon />
+                </IconButton>
+              )}
+              {/*위젯 type에 따라 렌더링*/}
               {type === 'notice' && (
                 <TmpNoticeWidget data={data} size={wgSize} />
               )}
@@ -141,10 +267,29 @@ const WidgetsRender = ({
           )
         })}
       </ResponsiveGridLayout>
-      <Stack alignItems={'center'} marginY={2}>
+      {/* 팀페이지 수정 버튼 */}
+      <Stack
+        alignItems={'center'}
+        marginY={2}
+        direction={'row'}
+        gap={1}
+        justifyContent={'center'}
+      >
+        {edit && (
+          <CuButton
+            message={'취소'}
+            action={() => {
+              // 취소 시 최초의 widget 상태로 되돌림
+              setWidgets(setInitWidgets)
+              setEdit(!edit)
+            }}
+            variant={'outlined'}
+          />
+        )}
         <CuButton
           message={edit ? '팀페이지 저장' : '팀페이지 수정'}
           action={() => {
+            if (edit) return setOpen(true)
             setEdit(!edit)
           }}
           variant={edit ? 'contained' : 'outlined'}
