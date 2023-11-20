@@ -22,7 +22,27 @@ import {
   ITag,
   statusEnum,
 } from '@/types/IPostDetail'
-import { convertImageToBase64 } from '../../write/page'
+
+// react-base64-image.js
+const convertImageToBase64 = (file: any) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result.split(',')[1]) // Base64 데이터에서 실제 데이터 부분만 추출
+      } else {
+        reject(new Error('Unexpected result type'))
+      }
+    }
+
+    reader.onerror = (error) => {
+      reject(error)
+    }
+
+    reader.readAsDataURL(file)
+  })
+}
 
 const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   const [title, setTitle] = useState<string>('')
