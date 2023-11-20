@@ -2,8 +2,10 @@
 import { Typography, Button, Stack, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import useMedia from '@/hook/useMedia'
+import NoticeList from './panel/NoticeList'
 
-const TeamNotice = () => {
+const TeamNotice = ({ params }: { params: { id: string } }) => {
+  const { id } = params
   const { isPc } = useMedia()
   return (
     <Stack width={'100%'}>
@@ -22,7 +24,7 @@ const TeamNotice = () => {
           </IconButton>
         )}
       </Stack>
-      {/* <NoticeList /> */}
+      <NoticeList teamId={parseInt(id)} />
     </Stack>
   )
 }
