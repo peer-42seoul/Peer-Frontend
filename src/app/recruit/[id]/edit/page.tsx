@@ -92,7 +92,6 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
       !link ||
       !tagList ||
       !roleList ||
-      !interviewList ||
       !content
     ) {
       alert('빈칸을 모두 채워주세요')
