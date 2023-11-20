@@ -16,6 +16,7 @@ import RatioQuestionForm, { RatioQuestionList } from './RatioQuestionForm'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import useAuthStore from '@/states/useAuthStore'
+import { useRouter } from 'next/navigation'
 interface IInterviewData {
   question: string
   type: 'CLOSE' | 'OPEN' | 'RATIO' | 'CHECK'
@@ -28,23 +29,24 @@ const RecruitFormModal = ({
   user_id,
   recruit_id,
   role,
+  setRoleOpen,
 }: {
   open: boolean
   setOpen: any
   user_id: string
   recruit_id: string
-  role: string
+  role: string,
+  setRoleOpen: any
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { isLogin } = useAuthStore()
-
   const { data } = useSWR<IInterviewData[]>(
     isLogin
       ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`
       : null,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
-
+  const router = useRouter()
   const [openConfirm, setOpenConfirm] = useState(false)
   const {
     handleSubmit,
@@ -95,6 +97,10 @@ const RecruitFormModal = ({
       )
       setOpenConfirm(false)
       openSuccessToast()
+      router.push(`/recruit/${recruit_id}`)
+      setOpen(false)
+      setRoleOpen(false)
+
     } catch (e) {
       setOpenConfirm(false)
       openFailedToast()
