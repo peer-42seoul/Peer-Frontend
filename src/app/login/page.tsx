@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import axios from 'axios'
 import useAuthStore from '@/states/useAuthStore'
-import { useCookies } from 'react-cookie'
 import {
   Box,
   Button,
@@ -85,7 +84,6 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { isLogin, login } = useAuthStore()
-  const [cookies] = useCookies(['refreshToken'])
   const [errorMessage, setErrorMessage] = useState('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const router = useRouter()
@@ -98,11 +96,6 @@ const Login = () => {
     formState: { errors },
   } = useForm<ILoginFormInput>()
 
-  const getCookie = () => {
-    const refreshToken = cookies.refreshToken
-    console.log('refreshToken?', refreshToken)
-  }
-
   const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
     setIsLoading(true)
     axios
@@ -112,13 +105,17 @@ const Login = () => {
           userEmail: data.userEmail,
           password: data.password,
         },
-        { withCredentials: true },
+        {
+          withCredentials: true,
+          headers: {
+            'access-control-expose-headers': 'Set-Cookie',
+          },
+        },
       )
       .then((res) => {
         login(res.data.accessToken)
       })
       .catch((error) => {
-        //console.log(error.message)
         if (error.response?.status == 401)
           setErrorMessage('이메일과 비밀번호를 다시 확인해주세요.')
         else setErrorMessage('알 수 없는 오류가 발생했습니다.')
@@ -129,7 +126,6 @@ const Login = () => {
 
   useEffect(() => {
     if (isLogin) {
-      getCookie()
       if (redirect) {
         console.log('redirect in login', redirect)
         router.push(redirect)
@@ -139,7 +135,7 @@ const Login = () => {
       setErrorMessage('로그인이 필요한 서비스입니다.')
       openToast()
     }
-  }, [isLogin, redirect, cookies.refreshToken])
+  }, [isLogin, redirect])
 
   return (
     <>

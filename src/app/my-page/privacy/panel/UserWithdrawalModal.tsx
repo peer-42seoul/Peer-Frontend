@@ -9,7 +9,6 @@ import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
 import LocalStorage from '@/states/localStorage'
 import { useRouter } from 'next/navigation'
-import { useCookies } from 'react-cookie'
 
 const UserWithdrawalModal = ({
   setToastProps,
@@ -24,7 +23,6 @@ const UserWithdrawalModal = ({
   const [password, setPassword] = useState('')
   const axiosInstance = useAxiosWithAuth()
   const router = useRouter()
-  const [, , removeCookie] = useCookies(['refreshToken'])
 
   const handlekeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
@@ -48,7 +46,6 @@ const UserWithdrawalModal = ({
         },
       })
       LocalStorage.removeItem('authData')
-      removeCookie('refreshToken', { path: '/' })
       useAuthStore.setState({
         isLogin: false,
         accessToken: null,

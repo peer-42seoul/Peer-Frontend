@@ -5,7 +5,17 @@ import { useState } from 'react'
 import AreaForAddInterviewForm from './AreaForAddInterviewForm'
 import AreaForShowAnswers from './AreaForShowAnswers'
 import { Stack } from '@mui/material'
-import { IFormInterview } from '@/app/recruit/write/page'
+import { IFormInterview } from '@/types/IPostDetail'
+
+/**
+ * [컴포넌트 구조]
+ * SetInterview
+ * - AreaForAddInterviewForm (질문과 답변 칸 만들기)
+ *   - SelectInterviewType (답변 타입 설정)
+ *   - WriteAnswers (답변 작성칸)
+ * - AreaForShowAnswers (만들어진 질문 답변 칸 보기)
+ *   - Answers
+ */
 
 const style = {
   position: 'absolute' as 'absolute',
