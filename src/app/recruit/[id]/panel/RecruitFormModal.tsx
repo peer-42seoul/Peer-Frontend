@@ -4,6 +4,7 @@ import {
   Button,
   Modal,
   Portal,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material'
@@ -35,7 +36,7 @@ const RecruitFormModal = ({
   setOpen: any
   user_id: string
   recruit_id: string
-  role: string,
+  role: string
   setRoleOpen: any
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
@@ -52,7 +53,6 @@ const RecruitFormModal = ({
     handleSubmit,
     control,
     formState: { errors },
-    triggerValidation
   } = useForm()
   const {
     CuToast: CuSuccessToast,
@@ -72,8 +72,7 @@ const RecruitFormModal = ({
   }
 
   const onSubmit = async (values: any) => {
-    if (errors)
-      return;
+    if (errors) return
 
     const array = Object.values(values)
     const answerList = array?.map((res: any) => {
@@ -104,7 +103,6 @@ const RecruitFormModal = ({
       router.push(`/recruit/${recruit_id}`)
       setOpen(false)
       setRoleOpen(false)
-
     } catch (e) {
       setOpenConfirm(false)
       openFailedToast()
@@ -134,7 +132,6 @@ const RecruitFormModal = ({
         <ConfirmModal
           open={openConfirm}
           setOpen={setOpenConfirm}
-          triggerValidation={triggerValidation}
           submitForm={submitForm}
         />
         <Modal open={open} onClose={() => setOpen(false)} sx={{ zIndex: 1400 }}>
@@ -144,50 +141,69 @@ const RecruitFormModal = ({
             height={'90%'}
             sx={{ overflowY: 'scroll' }}
           >
-            <Button onClick={() => setOpen(false)}>닫기</Button>
-            <Typography variant="h4">{`${role} 지원 하기`}</Typography>
-            {data?.map((quest, idx) => (
-              <Box key={idx}>
-                <Typography>{idx + 1}번 질문</Typography>
-                <Typography>{quest.question}</Typography>
-                {quest.type === 'OPEN' && (
-                  <Controller
-                    rules={{
-                      required: '답변을 입력해주세요',
-                    }}
-                    name={idx.toString()}
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => <TextField {...field} error={!!errors[idx]} helperText={errors[idx]?.message as string} />}
-                  />
-                )}
-                {quest.type === 'CLOSE' && (
-                  <CloseQuestionForm
-                    optionList={quest?.optionList as CloseQuestionList}
-                    control={control}
-                    idx={idx}
-                    disabled={false}
-                  />
-                )}
-                {quest.type === 'RATIO' && (
-                  <RatioQuestionForm
-                    optionList={quest?.optionList as RatioQuestionList}
-                    control={control}
-                    idx={idx}
-                    disabled={false}
-                  />
-                )}
-                {quest.type === 'CHECK' && (
-                  <CheckQuestionForm
-                    optionList={quest?.optionList as CheckQuestionList}
-                    control={control}
-                    idx={idx}
-                    disabled={false}
-                  />
-                )}
-              </Box>
-            ))}
-            <Button onClick={() => setOpenConfirm(true)}>제출</Button>
+            <Typography
+              variant="h6"
+              fontWeight={'bold'}
+            >{`지원하는 역할: ${role}`}</Typography>
+            <Stack gap={1} marginY={1}>
+              {data?.map((quest, idx) => (
+                <Box key={idx} sx={{ border: '1px solid black' }}>
+                  <Typography>{quest.question}</Typography>
+                  {quest.type === 'OPEN' && (
+                    <Controller
+                      rules={{
+                        required: '답변을 입력해주세요',
+                      }}
+                      name={idx.toString()}
+                      control={control}
+                      defaultValue=""
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          error={!!errors[idx]}
+                          helperText={errors[idx]?.message as string}
+                        />
+                      )}
+                    />
+                  )}
+                  {quest.type === 'CLOSE' && (
+                    <CloseQuestionForm
+                      optionList={quest?.optionList as CloseQuestionList}
+                      control={control}
+                      idx={idx}
+                      disabled={false}
+                    />
+                  )}
+                  {quest.type === 'RATIO' && (
+                    <RatioQuestionForm
+                      optionList={quest?.optionList as RatioQuestionList}
+                      control={control}
+                      idx={idx}
+                      disabled={false}
+                    />
+                  )}
+                  {quest.type === 'CHECK' && (
+                    <CheckQuestionForm
+                      optionList={quest?.optionList as CheckQuestionList}
+                      control={control}
+                      idx={idx}
+                      disabled={false}
+                    />
+                  )}
+                </Box>
+              ))}
+            </Stack>
+            <Stack gap={1} direction={'row'} marginY={2}>
+              <Button variant={'contained'} onClick={() => setOpen(false)}>
+                취소
+              </Button>
+              <Button
+                variant={'contained'}
+                onClick={() => setOpenConfirm(true)}
+              >
+                제출하기
+              </Button>
+            </Stack>
           </Box>
         </Modal>
       </form>

@@ -46,7 +46,7 @@ export const MobileNav = () => {
         left: 0,
         right: 0,
         overflow: 'hidden',
-        zIndex: 999,
+        zIndex: 1400,
       }}
       elevation={3}
     >
@@ -116,7 +116,7 @@ export const PcNav = () => {
         right: 0,
         top: 0,
         overflow: 'hidden',
-        zIndex: 999,
+        zIndex: 1400,
         backgroundColor: 'white',
       }}
     >
@@ -164,7 +164,11 @@ export const PcNav = () => {
           </IconButton>
         </Link>
         <Avatar
-          onClick={() => router.push(isLogin ? '/my-page/profile' : '/login?redirect=/my-page/profile')}
+          onClick={() =>
+            router.push(
+              isLogin ? '/my-page/profile' : '/login?redirect=/my-page/profile',
+            )
+          }
         />
         <Link href={'/recruit/write'}>
           {isTablet ? (
