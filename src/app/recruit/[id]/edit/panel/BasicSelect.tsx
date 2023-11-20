@@ -30,20 +30,6 @@ export default function BasicSelect({
 
   switch (type) {
     case ComponentType.Month:
-      // options = [
-      //   ...Array.from({ length: 3 }, (_, index) => (
-      //     <MenuItem key={index} value={index}>
-      //       {`${index + 1}주`}
-      //     </MenuItem>
-      //   )),
-      //   ...Array.from({ length: 11 }, (_, index) => (
-      //     <MenuItem key={index + 3} value={index + 3}>
-      //       {`${index + 1}개월`}
-      //     </MenuItem>
-      //   )),
-      //   <MenuItem key={14} value={14}>
-      //     {'12개월 이상'}
-      //   </MenuItem>,
       options = 
         [
           '1주일',
@@ -61,7 +47,6 @@ export default function BasicSelect({
           '9개월',
           '10개월',
           '11개월',
-          '12개월',
           '12개월 이상',
         ].map((dueTo, idx) => (
           <MenuItem key={'dueTo' + idx} value={dueTo}>
