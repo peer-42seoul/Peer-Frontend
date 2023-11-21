@@ -1,7 +1,14 @@
 'use client'
-import { ReactNode } from 'react'
-import { Avatar, IconButton, Stack, Typography } from '@mui/material'
+import { ReactNode, FormEvent } from 'react'
+import {
+  Avatar,
+  IconButton,
+  OutlinedInput,
+  Stack,
+  Typography,
+} from '@mui/material'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlined'
 
 const CommentCotainer = ({ children }: { children: ReactNode }) => {
   return (
@@ -58,6 +65,31 @@ const Comment = ({
       <Typography>{content}</Typography>
       <Typography>{date}</Typography>
     </Stack>
+  )
+}
+
+const CommentForm = ({ postId }: { postId: number }) => {
+  // TODO 🐧 : 댓글 작성 기능 구현
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const comment = formData.get('comment') as string
+    alert("Comment: '" + comment + "'")
+  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <Stack direction={'row'}>
+        <OutlinedInput
+          placeholder={'댓글을 작성해주세요.'}
+          fullWidth
+          name={'comment'}
+          id={'comment'}
+        />
+        <IconButton type={'submit'}>
+          <InsertEmoticonOutlinedIcon />
+        </IconButton>
+      </Stack>
+    </form>
   )
 }
 
@@ -120,8 +152,6 @@ const CommentList = ({ postId }: { postId: number }) => {
     )
   }
 
-  console.log(data)
-
   return (
     <CommentCotainer>
       <Stack>
@@ -129,6 +159,7 @@ const CommentList = ({ postId }: { postId: number }) => {
           <Comment key={comment.id} commentId={comment.id} {...comment} />
         ))}
       </Stack>
+      <CommentForm postId={postId} />
     </CommentCotainer>
   )
 }
