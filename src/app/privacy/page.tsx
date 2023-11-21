@@ -90,6 +90,8 @@ const Privacy = () => {
             label="전체 동의하기"
             onChange={() => {
               if (checkAll === false) setCheckStatus([true, true])
+              else if (checkAll === true && checkStatus[0] && checkStatus[1])
+                setCheckStatus([false, false])
               setCheckAll(!checkAll)
             }}
             checked={checkAll}

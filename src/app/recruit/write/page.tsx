@@ -46,7 +46,7 @@ const CreateTeam = () => {
     '/images/defaultImage.png',
   )
   const [name, setName] = useState<string>('')
-  const [type, setType] = useState<string>('project')
+  const [type, setType] = useState<string>('PROJECT')
   const [tagList, setTagList] = useState<ITag[]>([])
   const [region, setRegion] = useState<string[]>([])
   const [place, setPlace] = useState<string>('')
@@ -71,11 +71,9 @@ const CreateTeam = () => {
 
   useEffect(() => {
     if (error) {
-      console.log('error ocurred!!')
       setToastMessage('태그를 불러오는데 실패했습니다.')
       openToast()
     } else if (data) {
-      console.log('tag fetching success', data)
       setAllTagList(data)
     }
   }, [data])
@@ -83,6 +81,22 @@ const CreateTeam = () => {
   const onHandlerFinish = async () => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
+    }
+    if (
+      !image ||
+      !title ||
+      !name ||
+      !due ||
+      !region ||
+      !place ||
+      !link ||
+      !tagList ||
+      !roleList ||
+      !interviewList ||
+      !content
+    ) {
+      alert('빈칸을 모두 채워주세요')
+      return
     }
     const base64Data = await convertImageToBase64(image[0])
     setSelectedImage(base64Data)
@@ -136,22 +150,31 @@ const CreateTeam = () => {
           <TextField
             variant="outlined"
             value={title}
-            onChange={(e) => setTitle(e.target.value as string)}
+            onChange={(e) => {
+              if (e.target.value.length > 20)
+                setTitle(e.target.value.slice(0, 20) as string)
+              else setTitle(e.target.value as string)
+            }}
           />
         </Box>
-        <Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h6">팀 이름</Typography>
           <TextField
+            sx={{ width: '80vw' }}
             variant="outlined"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length > 20)
+                setName(e.target.value.slice(0, 20) as string)
+              else setName(e.target.value as string)
+            }}
           />
         </Box>
         <Box>
           <Typography variant="h6">팀 분류</Typography>
           <RowRadioButtonsGroup setValue={setType} />
         </Box>
-        {type === 'study' && (
+        {type === 'STUDY' && (
           <Box>
             <Typography variant="h6">팀 인원</Typography>
             <BasicSelect
@@ -186,7 +209,7 @@ const CreateTeam = () => {
           <SetCommunicationToolLink setValue={setCommunicationTool} />
         </Box>
         <Stack>
-          <Typography variant="h6" sx={{ paddingRight: '5px' }}>
+          <Typography variant="h6" sx={{ paddingRight: '5px', width: '70%' }}>
             모집인원 인터뷰 등록하기
           </Typography>
           <Button variant="outlined" onClick={() => setOpenBasicModal(true)}>
@@ -209,7 +232,7 @@ const CreateTeam = () => {
             />
           ) : null}
         </Box>
-        {type === 'study' ? null : (
+        {type === 'STUDY' ? null : (
           <Box>
             <Typography variant="h6">팀 역할</Typography>
             <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
@@ -219,8 +242,13 @@ const CreateTeam = () => {
           <Typography variant="h6">팀 소개</Typography>
           <TextField
             variant="outlined"
+            value={content}
             sx={{ width: '80vw', height: 'auto' }}
-            onChange={(e) => setContent(e.target.value as string)}
+            onChange={(e) => {
+              if (e.target.value.length > 1000)
+                setContent(e.target.value.slice(0, 1000) as string)
+              else setContent(e.target.value as string)
+            }}
             multiline
           />
         </Box>

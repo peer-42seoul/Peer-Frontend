@@ -16,7 +16,33 @@ import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
 import RowRadioButtonsGroupStatus from './panel/radioGroupStatus'
-import { IFormInterview, IRoleData, ITag, statusEnum } from '@/types/IPostDetail'
+import {
+  IFormInterview,
+  IRoleData,
+  ITag,
+  statusEnum,
+} from '@/types/IPostDetail'
+
+// react-base64-image.js
+const convertImageToBase64 = (file: any) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result.split(',')[1]) // Base64 데이터에서 실제 데이터 부분만 추출
+      } else {
+        reject(new Error('Unexpected result type'))
+      }
+    }
+
+    reader.onerror = (error) => {
+      reject(error)
+    }
+
+    reader.readAsDataURL(file)
+  })
+}
 
 const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   const [title, setTitle] = useState<string>('')
@@ -38,13 +64,14 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const [status, setStatus] = useState<statusEnum>(statusEnum.BEFORE)
   const [allTagList, setAllTagList] = useState<ITag[]>([])
+  const [selectedImage, setSelectedImage] = useState<any>(null)
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
   const { data, error } = useSWR(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.recruit_id}`,
-    (url:string) => axiosInstance.get(url).then((res) => res.data),
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.recruit_id}`,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
   useEffect(() => {
@@ -75,23 +102,43 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
     if (type === 'project') {
       setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
+    if (
+      !image ||
+      !title ||
+      !name ||
+      !due ||
+      !region ||
+      !place ||
+      !link ||
+      !tagList ||
+      !roleList ||
+      !content
+    ) {
+      alert('빈칸을 모두 채워주세요')
+      return
+    }
     try {
+      if (type === 'project') {
+        setRoleList([{ role: null, member: parseInt(teamsize) }])
+      }
+      const base64Data = await convertImageToBase64(image[0])
+      setSelectedImage(base64Data)
       const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.recruit_id}`,
         {
-          place,
-          image,
-          title,
-          name,
-          due,
-          type,
-          content,
-          region,
-          link,
-          tagList,
-          roleList,
-          interviewList,
-          status,
+          place: place,
+          image: selectedImage,
+          title: title,
+          name: name,
+          due: due,
+          type: type,
+          content: content,
+          region: region,
+          link: link,
+          tagList: tagList,
+          roleList: roleList,
+          interviewList: interviewList,
+          status: status,
         },
       )
       if (response.status === 200) router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
@@ -126,7 +173,11 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
           <TextField
             variant="outlined"
             value={title}
-            onChange={(e) => setTitle(e.target.value as string)}
+            onChange={(e) => {
+              if (e.target.value.length > 20)
+                setTitle(e.target.value.slice(0, 20) as string)
+              else setTitle(e.target.value as string)
+            }}
           />
         </Box>
         <Box>
@@ -134,7 +185,11 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
           <TextField
             variant="outlined"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length > 20)
+                setName(e.target.value.slice(0, 20) as string)
+              else setName(e.target.value as string)
+            }}
           />
         </Box>
         <Box>
@@ -212,7 +267,12 @@ const CreateTeam = ({ params }: { params: { recruit_id: string } }) => {
           <TextField
             variant="outlined"
             sx={{ width: '80vw', height: 'auto' }}
-            onChange={(e) => setContent(e.target.value as string)}
+            value={content}
+            onChange={(e) => {
+              if (e.target.value.length > 1000)
+                setContent(e.target.value.slice(0, 1000) as string)
+              else setContent(e.target.value as string)
+            }}
             multiline
           />
         </Box>

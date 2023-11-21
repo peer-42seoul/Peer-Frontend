@@ -9,7 +9,7 @@ import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
-import { IMessage, IMessageUser } from '@/types/IMessage'
+import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
 import MessageItem from './panel/MessageItem'
 import MessageForm from './panel/MessageForm'
 import MessageFormModal from './panel/MessageFormModal'
@@ -18,8 +18,8 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const searchParams = useSearchParams()
   const [updatedData, setUpdatedData] = useState<IMessage[] | undefined>()
-  const [owner, setOwner] = useState<IMessageUser>()
-  const [target, setTarget] = useState<IMessageUser>()
+  const [owner, setOwner] = useState<IMessageUser | undefined>()
+  const [target, setTarget] = useState<IMessageTargetUser | undefined>()
   const [isEnd, setIsEnd] = useState<boolean>(false)
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
@@ -74,12 +74,10 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         conversationalId,
       })
       .then((response) => {
-        // TODO : 데이터 순서 논의해보기
-        const reversedData = response.data.msgList.reverse()
-        setUpdatedData(reversedData)
+        setUpdatedData(response.data.msgList)
         setOwner(response.data.msgOwner)
         setTarget(response.data.msgTarget)
-        setIsEnd(reversedData[0].isEnd)
+        setIsEnd(response.data.msgList[0].isEnd)
       })
       .catch(() => {
         // TODO : 에러 구체화
@@ -94,13 +92,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     if (!data) return
     // data : 새로 불러온 데이터 (예전 메시지)
     // currentData : 현재 데이터 (최근 메시지)
-    // TODO : 데이터 순서 논의해보기
-    const reversedData = data.reverse()
     setUpdatedData((currentData: IMessage[] | undefined) => {
-      if (!currentData) return reversedData
-      return [...reversedData, ...currentData]
+      if (!currentData) return data
+      return [...data, ...currentData]
     })
-    setIsEnd(reversedData[0].isEnd)
+    setIsEnd(data[0].isEnd)
     setPrevScrollHeight(scrollRef.current?.scrollHeight)
   }, [data])
 
@@ -161,7 +157,9 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         <MessageForm
           view={'PC_VIEW'}
           targetId={target.userId}
+          updateTarget={setTarget}
           addNewMessage={addNewMessage}
+          disabled={target.deleted}
         />
       ) : (
         <>
@@ -170,6 +168,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
             action={() => openModal()}
             message="답하기"
             fullWidth
+            disabled={target.deleted}
           />
           <MessageFormModal
             isOpen={isOpen}
