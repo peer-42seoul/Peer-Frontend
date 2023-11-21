@@ -7,7 +7,7 @@ import webpush from 'web-push'
 const PushAlertBanner = () => {
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const [isShowPush, setIsShowPush] = useState<boolean>(true)
-  const [isScroll, setIsScroll] = useState<number>(0)
+  const [isScroll, setIsScroll] = useState<number>(1)
 
   const urlBase64ToUint8Array = (base64String: string) => {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
