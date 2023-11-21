@@ -50,4 +50,3 @@ node_modules
 /public/sw.js.map
 /public/workbox-*.js
 /public/workbox-*.js.map
-
