@@ -1,105 +1,106 @@
-'use client'
+"use client";
 
-import { Avatar, Button, Stack, Typography } from '@mui/material'
-import { IApplicant } from '../page'
-import { useEffect, useRef, useState } from 'react'
-import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
-import axios from 'axios'
-import useMedia from '@/hook/useMedia'
-import FormAnswer from './RecuitFormAnswer'
+import { Avatar, Button, Stack, Typography } from "@mui/material";
+import { IApplicant } from "../page";
+import { useEffect, useRef, useState } from "react";
+import useSWR from "swr";
+import { defaultGetFetcher } from "@/api/fetchers";
+import useMedia from "@/hook/useMedia";
+import FormAnswer from "./RecuitFormAnswer";
+import useAxiosWithAuth from "@/api/config";
 
 const ApplicantList = ({
   close,
   teamId,
 }: {
-  close: () => void
-  teamId: string
+  close: () => void;
+  teamId: string;
 }) => {
-  console.log(teamId)
-  const { isPc } = useMedia()
-  const [index, setIndex] = useState(0)
-  const scrollRef = useRef<HTMLDivElement>(null)
+  console.log(teamId);
+  const { isPc } = useMedia();
+  const [index, setIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const axiosInstance = useAxiosWithAuth();
 
   // TODO: DTO 맞추기
 
   const { data, isLoading } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/${teamId}`,
-    defaultGetFetcher,
-  )
-  const [members, setMembers] = useState<IApplicant[]>([])
+    defaultGetFetcher
+  );
+  const [members, setMembers] = useState<IApplicant[]>([]);
   const [member, setMember] = useState<IApplicant | null>(
-    members ? members[index] : null,
-  )
+    members ? members[index] : null
+  );
 
   const handleAccept = () => {
-    axios
+    axiosInstance
       .put(
         `${
           process.env.NEXT_PUBLIC_API_URL
-        }/api/v1/team/accept/${teamId}?userId=${member!.userId}`,
+        }/api/v1/team/accept/${teamId}?userId=${member!.userId}`
       )
       .then((res) => {
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
-          setMembers(data)
+          setMembers(data);
 
-          if (index > 0) setIndex(index - 1)
+          if (index > 0) setIndex(index - 1);
         }
       })
       .catch((err) => {
-        console.log(err)
-      })
-  }
+        console.log(err);
+      });
+  };
 
   const handleReject = () => {
-    console.log('reject')
-    axios
+    console.log("reject");
+    axiosInstance
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/deny/${teamId}?userId=${
           member!.userId
-        }`,
+        }`
       )
       .then((res) => {
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
-          setMembers(data)
+          setMembers(data);
 
-          if (index > 0) setIndex(index - 1)
+          if (index > 0) setIndex(index - 1);
         }
       })
       .catch((err) => {
-        console.log(err)
-      })
-  }
+        console.log(err);
+      });
+  };
 
   const handleNext = () => {
-    if (index < members.length - 1) setIndex(index + 1)
-  }
+    if (index < members.length - 1) setIndex(index + 1);
+  };
 
   const handlePrev = () => {
-    if (index > 0) setIndex(index - 1)
-  }
+    if (index > 0) setIndex(index - 1);
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = 0
+      scrollRef.current.scrollTop = 0;
     }
 
     if (data) {
-      setMembers(data)
+      setMembers(data);
       if (data.length >= index) {
-        setMember(data[index])
+        setMember(data[index]);
       }
     }
-  }, [index, data])
+  }, [index, data]);
 
   if (isLoading) {
     return (
       <Stack border="1px solid" borderRadius={2} height={400}>
         <Typography>로딩중</Typography>
       </Stack>
-    )
+    );
   }
 
   if (!data) {
@@ -120,7 +121,7 @@ const ApplicantList = ({
           <Typography>신청한 대기자가 없습니다.</Typography>
         </Stack>
       </>
-    )
+    );
   }
 
   return (
@@ -211,7 +212,7 @@ const ApplicantList = ({
         </Stack>
       </Stack>
     </>
-  )
-}
+  );
+};
 
-export default ApplicantList
+export default ApplicantList;
