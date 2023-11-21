@@ -1,7 +1,13 @@
 import React from 'react'
 import { Button, Popover, Typography } from '@mui/material'
 
-const LinkButton = ({ href }: { href: string }) => {
+const LinkButton = ({
+  href,
+  variant,
+}: {
+  href: string
+  variant: 'text' | 'outlined' | 'contained'
+}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const open = Boolean(anchorEl)
@@ -19,7 +25,7 @@ const LinkButton = ({ href }: { href: string }) => {
     <div>
       <Button
         aria-describedby={id}
-        variant="contained"
+        variant={variant}
         size="large"
         href={href}
         onMouseEnter={handlePopoverOpen}
