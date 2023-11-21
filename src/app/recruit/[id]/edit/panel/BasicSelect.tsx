@@ -64,13 +64,13 @@ export default function BasicSelect({
       break
     case ComponentType.Place:
       options = [
-        <MenuItem key={0} value={'온라인'}>
+        <MenuItem key={0} value={'ONLINE'}>
           온라인
         </MenuItem>,
-        <MenuItem key={1} value={'오프라인'}>
+        <MenuItem key={1} value={'OFFLINE'}>
           오프라인
         </MenuItem>,
-        <MenuItem key={2} value={'혼합'}>
+        <MenuItem key={2} value={'MIX'}>
           혼합
         </MenuItem>,
       ]
