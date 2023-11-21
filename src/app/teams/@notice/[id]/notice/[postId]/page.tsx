@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { Button, Stack, Typography } from '@mui/material'
+import CommentList from './panel/CommentList'
 
 interface NoticeContentContainerProps {
   children: ReactNode
@@ -47,7 +48,7 @@ const TeamNoticeView = ({ params }: { params: { postId: string } }) => {
       </NoticeContentContainer>
     )
   return (
-    <>
+    <Stack>
       <NoticeContentContainer isMine={data.isMine}>
         {loading ? (
           <Typography>로딩중...</Typography>
@@ -70,8 +71,8 @@ const TeamNoticeView = ({ params }: { params: { postId: string } }) => {
           </>
         )}
       </NoticeContentContainer>
-      {/* 댓글 컨테이너.. */}
-    </>
+      <CommentList postId={parseInt(postId)} />
+    </Stack>
   )
 }
 
