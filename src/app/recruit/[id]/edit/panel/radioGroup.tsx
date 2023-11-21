@@ -18,23 +18,23 @@ export default function RowRadioButtonsGroup({
 
   return (
     <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label">
+      <FormLabel id="team-type-radio-buttons-group-label">
         스터디 or 프로젝트
       </FormLabel>
       <RadioGroup
         row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        name="row-radio-buttons-group"
+        aria-labelledby="team-type-radio-buttons-group-label"
+        name="team-type-radio-buttons-group"
         onChange={handleChange}
-        defaultValue="project"
+        defaultValue="PROJECT"
       >
         <FormControlLabel
-          value="study"
+          value="STUDY"
           control={<Radio />}
           label="Study-group"
         />
         <FormControlLabel
-          value="project"
+          value="PROJECT"
           control={<Radio />}
           label="Project-team"
           defaultChecked
