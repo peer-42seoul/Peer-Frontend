@@ -37,7 +37,7 @@ const Comment = ({
   commentId,
 }: CommentProps) => {
   const handleDelete = () => {
-    // TODO 🐧 : id를 이용해서 댓글 삭제 기능 구현 가능
+    // TODO 🐧 : id를 이용해서 댓글 삭제 기능 구현
     alert('Delete comment #' + commentId)
   }
 
