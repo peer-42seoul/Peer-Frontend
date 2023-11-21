@@ -4,6 +4,7 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 declare module '@mui/material/styles' {
+  // typography variant 추가
   interface TypographyVariants {
     HeadlineEmphasis: React.CSSProperties
     Headline: React.CSSProperties
@@ -22,6 +23,7 @@ declare module '@mui/material/styles' {
     Tag: React.CSSProperties
   }
 
+  // typography 추가된 variant 커스텀 할 수 있도록 설정
   interface TypographyVariantsOptions {
     HeadlineEmphasis?: React.CSSProperties
     Headline?: React.CSSProperties
@@ -100,14 +102,6 @@ declare module '@mui/material/styles' {
     assistive: string
     disable: string
   }
-
-  // interface TextColorsOptions {
-  //   strong?: string
-  //   normal?: string
-  //   alternative?: string
-  //   assistive?: string
-  //   disable?: string
-  // }
 }
 
 declare module '@mui/material/Typography' {
@@ -323,6 +317,8 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         primary: '#060623',
         secondary: '#18182B',
         tertiary: '#22223A',
+        paper: '#060623',
+        default: '#060623',
       },
       line: {
         base: '#35373E',
@@ -330,10 +326,13 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       },
       text: {
         strong: '#FFFFFF',
-        normal: '#CCCCCC',
-        alternative: '#AAAAAA',
+        primary: '#F6F6F6',
+        normal: '#F6F6F6',
+        alternative: '#9B9B9B',
+        secondary: '#9B9B9B',
         assistive: '#42444C',
         disable: '#292C32',
+        disabled: '#292C32',
       },
       primary: {
         main: '#6F62FE',
