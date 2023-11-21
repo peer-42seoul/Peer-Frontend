@@ -35,6 +35,7 @@ interface IManageBarProps {
   handleSelectAll: () => void
   handleUnselectAll: () => void
   handleDelete: () => void
+  setIsManageMode: (isManageMode: boolean) => void
 }
 
 export const ManageBar = ({
@@ -42,9 +43,9 @@ export const ManageBar = ({
   handleSelectAll,
   handleUnselectAll,
   handleDelete,
+  setIsManageMode,
 }: IManageBarProps) => {
   return (
-    // 관리 모드 나가기 버튼?
     <Stack direction="row">
       {isSelectedAll ? (
         <CuButton
@@ -56,6 +57,11 @@ export const ManageBar = ({
         <CuButton variant="text" action={handleSelectAll} message="전체 선택" />
       )}
       <CuButton variant="text" action={handleDelete} message="삭제" />
+      <CuButton
+        variant="text"
+        action={() => setIsManageMode(false)}
+        message="리스트로 돌아가기"
+      />
     </Stack>
   )
 }

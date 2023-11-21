@@ -75,7 +75,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     undefined,
   )
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
-
   const pageSize = 6
   const {
     data: newData,
@@ -153,75 +152,11 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   return (
     <>
       <PushAlertBanner />
-
       {/* mobile view */}
-      <Container className="mobile-layout">
-        <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
-          <SelectType type={type} setType={handleType} />
-          <Grid container p={2}>
-            <SearchOption
-              openOption={openOption}
-              setOpenOption={setOpenOption}
-              setDetailOption={handleOption}
-            />
-            <Grid item xs={12}>
-              <Stack
-                direction="row"
-                alignItems={'center'}
-                justifyContent={'flex-end'}
-              >
-                <SelectSort sort={sort} setSort={handleSort} />
-              </Stack>
-            </Grid>
-          </Grid>
-          {isLoading && page == 1 ? (
-            <Typography>로딩중...</Typography>
-          ) : error || !initData ? (
-            <Typography>에러 발생</Typography>
-          ) : content?.length == 0 ? (
-            <Typography>데이터가 없습니다</Typography>
-          ) : (
-            <>
-              <Stack alignItems={'center'} gap={2}>
-                {content?.map((project: IPost, index: number) => (
-                  <Box key={index}>
-                    <MainCard {...project} type={type} />
-                  </Box>
-                ))}
-              </Stack>
-              <Box
-                sx={{
-                  position: 'fixed',
-                  right: 20,
-                  bottom: 80,
-                }}
-              >
-                <EditButton />
-              </Box>
-              {spinner && <CircularProgress />}
-              <Box
-                sx={{
-                  bottom: 0,
-                  height: '1vh',
-                  backgroundColor: 'primary.main',
-                }}
-                ref={target}
-              />
-            </>
-          )}
-        </Box>
-      </Container>
-      {/* pc view */}
-      <Container
-        sx={{ backgroundColor: 'white', border: '1px solid black' }}
-        className="pc-layout"
-      >
-        <Stack direction={'row'} border="1px solid black">
-          <Stack flex={1}>
-            <Box height={'200px'} border="1px solid black">
-              피어 소개 배너
-            </Box>
-            <SelectType type={type} setType={handleType} pc />
+      <div className="mobile-layout">
+        <Container>
+          <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
+            <SelectType type={type} setType={handleType} />
             <Grid container p={2}>
               <SearchOption
                 openOption={openOption}
@@ -232,28 +167,38 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 <Stack
                   direction="row"
                   alignItems={'center'}
-                  justifyContent={'space-between'}
+                  justifyContent={'flex-end'}
                 >
-                  <Typography>모집글</Typography>
                   <SelectSort sort={sort} setSort={handleSort} />
                 </Stack>
               </Grid>
             </Grid>
             {isLoading && page == 1 ? (
               <Typography>로딩중...</Typography>
-            ) : error ? (
+            ) : error || !initData ? (
               <Typography>에러 발생</Typography>
             ) : content?.length == 0 ? (
               <Typography>데이터가 없습니다</Typography>
             ) : (
               <>
-                <Grid container spacing={2}>
-                  {content?.map((project: IPost, index: number) => (
-                    <Grid item key={index} sm={12} md={4}>
-                      <MainCard {...project} type={type} />
-                    </Grid>
-                  ))}
-                </Grid>
+                <Stack alignItems={'center'}>
+                  <Stack gap={2}>
+                    {content?.map((project: IPost, index: number) => (
+                      <Box key={index}>
+                        <MainCard {...project} type={type} />
+                      </Box>
+                    ))}
+                  </Stack>
+                </Stack>
+                <Box
+                  sx={{
+                    position: 'fixed',
+                    right: 20,
+                    bottom: 80,
+                  }}
+                >
+                  <EditButton />
+                </Box>
                 {spinner && <CircularProgress />}
                 <Box
                   sx={{
@@ -265,14 +210,70 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 />
               </>
             )}
+          </Box>
+        </Container>
+      </div>
+      {/* pc view */}
+      <div className="pc-layout">
+        <Container sx={{ backgroundColor: 'white', border: '1px solid black' }}>
+          <Stack direction={'row'} border="1px solid black">
+            <Stack flex={1}>
+              <Box height={'200px'} border="1px solid black">
+                피어 소개 배너
+              </Box>
+              <SelectType type={type} setType={handleType} pc />
+              <Grid container p={2}>
+                <SearchOption
+                  openOption={openOption}
+                  setOpenOption={setOpenOption}
+                  setDetailOption={handleOption}
+                />
+                <Grid item xs={12}>
+                  <Stack
+                    direction="row"
+                    alignItems={'center'}
+                    justifyContent={'space-between'}
+                  >
+                    <Typography>모집글</Typography>
+                    <SelectSort sort={sort} setSort={handleSort} />
+                  </Stack>
+                </Grid>
+              </Grid>
+              {isLoading && page == 1 ? (
+                <Typography>로딩중...</Typography>
+              ) : error ? (
+                <Typography>에러 발생</Typography>
+              ) : content?.length == 0 ? (
+                <Typography>데이터가 없습니다</Typography>
+              ) : (
+                <>
+                  <Grid container spacing={2}>
+                    {content?.map((project: IPost, index: number) => (
+                      <Grid item key={index} sm={12} md={6} lg={4}>
+                        <MainCard {...project} type={type} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                  {spinner && <CircularProgress />}
+                  <Box
+                    sx={{
+                      bottom: 0,
+                      height: '1vh',
+                      backgroundColor: 'primary.main',
+                    }}
+                    ref={target}
+                  />
+                </>
+              )}
+            </Stack>
+            <Stack width={'250px'} height={'100%'}>
+              <MainProfile />
+              <MainShowcase />
+              <MainCarousel />
+            </Stack>
           </Stack>
-          <Stack width={'250px'} height={'100%'}>
-            <MainProfile />
-            <MainShowcase />
-            <MainCarousel />
-          </Stack>
-        </Stack>
-      </Container>
+        </Container>
+      </div>
       <PwaInstallBanner />
     </>
   )

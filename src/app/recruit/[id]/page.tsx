@@ -26,7 +26,7 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 
-const RecruitDetailPage = ({ params }: { params: { id: string }, searchParams: any }) => {
+const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
   const type = useSearchParams().get('type') ?? 'projects'
   const [open, setOpen] = React.useState(false)
@@ -36,7 +36,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string }, searchParams: a
   const { isPc } = useMedia()
   const { isLogin } = useAuthStore()
   const axiosInstance = useAxiosWithAuth()
-  const currentUrl = "/login?redirect=/recruit/1?type=" + type
+  const currentUrl = '/login?redirect=/recruit/1?type=' + type
   const { data, isLoading, error } = useSWR<IPostDetail>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
     isLogin
@@ -85,7 +85,9 @@ const RecruitDetailPage = ({ params }: { params: { id: string }, searchParams: a
             />
             <Box display="flex" flexDirection="column" gap={2}>
               <Stack gap={2} direction="row">
-                <Typography variant="h5">{data?.title}</Typography>
+                <Typography variant="h6" fontWeight={'bold'}>
+                  {data?.title}
+                </Typography>
                 <Chip label={data?.status} size="medium" />
               </Stack>
               <Stack gap={2} direction="row">
@@ -103,7 +105,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string }, searchParams: a
                 >
                   쪽지
                 </Button>
-                <LinkButton href={data?.link} />
+                <LinkButton href={data?.link} variant={'contained'} />
               </Stack>
               <ApplyButton
                 role={data?.roleList?.map((item) => item.name) || []}
@@ -150,6 +152,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string }, searchParams: a
             anchor={'bottom'}
             open={roleOpen}
             onClose={() => setRoleOpen(false)}
+            sx={{ zIndex: 1500 }}
           >
             <List>
               {data?.roleList.map(({ name }) => (
@@ -161,65 +164,81 @@ const RecruitDetailPage = ({ params }: { params: { id: string }, searchParams: a
               ))}
             </List>
           </Drawer>
-          <Typography variant="h5">{data?.title}</Typography>
-          <Chip label={data?.status} size="medium" />
-          <Stack gap={2} direction="row">
-            <Typography>{data?.user_nickname}</Typography>
-            <Typography>
-              {type === 'project' ? '프로젝트' : '스터디'}
-            </Typography>
-            <Typography>{data?.place}</Typography>
-          </Stack>
-          <Image
-            src={data?.user_thumbnail ?? ''}
-            alt="leader_profile"
-            width={300}
-            height={300}
-          />
-          <RecruitFormText
-            label="총 인원"
-            content={(total?.toString() ?? '0') + ' 명'}
-          />
-          <RecruitFormText label="목표 작업기간" content={data?.due} />
-          <RecruitFormText label="지역">
-            {data?.region ? (
-              <Typography>{data.region[0] + ' ' + data.region?.[1]}</Typography>
-            ) : (
-              <Typography>없음</Typography>
-            )}
-          </RecruitFormText>
-          <RecruitFormText label="역할">
-            <Box>
-              {data?.roleList?.map(({ name, number }, idx: number) => (
-                <Chip label={`${name} ${number} 명`} size="small" key={idx} />
-              ))}
-            </Box>
-          </RecruitFormText>
-          <RecruitFormText label="소통도구" content={data?.link} />
-          <RecruitFormText label="설명" content={data?.content} />
-          <RecruitFormText label="태그">
-            <Box>
-              {data?.tagList?.map((tag: ITag, idx: number) => (
-                <Chip
-                  label={tag?.name}
-                  size="small"
-                  key={idx}
-                  sx={{ backgroundColor: tag?.color }}
-                />
-              ))}
-            </Box>
-          </RecruitFormText>
-          <Button
-            fullWidth
-            variant="contained"
-            size="large"
-            onClick={() => {
-              if (!isLogin) router.push(currentUrl)
-              else setRoleOpen(true)
-            }}
-          >
-            지원하기
-          </Button>
+          <Container>
+            <Stack gap={1}>
+              <Box>
+                <Typography variant="h6" fontWeight={'bold'}>
+                  {data?.title}
+                </Typography>
+                <Chip label={data?.status} size="medium" />
+                <Stack gap={2} direction="row">
+                  <Typography>{data?.user_nickname}</Typography>
+                  <Typography>
+                    {type === 'project' ? '프로젝트' : '스터디'}
+                  </Typography>
+                  <Typography>{data?.place}</Typography>
+                </Stack>
+              </Box>
+              <Image
+                src={data?.user_thumbnail ?? ''}
+                alt="leader_profile"
+                width={300}
+                height={300}
+              />
+              <RecruitFormText
+                label="총 인원"
+                content={(total?.toString() ?? '0') + ' 명'}
+              />
+              <RecruitFormText label="목표 작업기간" content={data?.due} />
+              <RecruitFormText label="지역">
+                {data?.region ? (
+                  <Typography>
+                    {data.region[0] + ' ' + data.region?.[1]}
+                  </Typography>
+                ) : (
+                  <Typography>없음</Typography>
+                )}
+              </RecruitFormText>
+              <RecruitFormText label="역할">
+                <Box>
+                  {data?.roleList?.map(({ name, number }, idx: number) => (
+                    <Chip
+                      label={`${name} ${number} 명`}
+                      size="small"
+                      key={idx}
+                    />
+                  ))}
+                </Box>
+              </RecruitFormText>
+              <RecruitFormText label="소통도구">
+                <LinkButton href={data?.link} variant={'text'} />
+              </RecruitFormText>
+              <RecruitFormText label="설명" content={data?.content} />
+              <RecruitFormText label="태그">
+                <Stack gap={1} direction={'row'}>
+                  {data?.tagList?.map((tag: ITag, idx: number) => (
+                    <Chip
+                      label={tag?.name}
+                      size="small"
+                      key={idx}
+                      sx={{ backgroundColor: tag?.color }}
+                    />
+                  ))}
+                </Stack>
+              </RecruitFormText>
+              <Button
+                fullWidth
+                variant="contained"
+                size="large"
+                onClick={() => {
+                  if (!isLogin) router.push(currentUrl)
+                  else setRoleOpen(true)
+                }}
+              >
+                지원하기
+              </Button>
+            </Stack>
+          </Container>
         </>
       )}
     </>

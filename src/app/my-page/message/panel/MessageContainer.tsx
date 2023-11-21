@@ -90,6 +90,7 @@ const MessageContainer = ({
             }
             handleUnselectAll={unselectAll}
             handleDelete={handleDelete}
+            setIsManageMode={setIsManageMode}
           />
         ) : (
           <SearchBar
