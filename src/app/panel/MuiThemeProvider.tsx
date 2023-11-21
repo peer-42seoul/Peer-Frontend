@@ -89,11 +89,6 @@ export const theme = createTheme({
         },
       },
     },
-  },
-})
-
-const typoTheme = createTheme({
-  components: {
     MuiTypography: {
       defaultProps: {
         variantMapping: {
@@ -216,11 +211,7 @@ const typoTheme = createTheme({
 })
 
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <ThemeProvider theme={theme}>
-      <ThemeProvider theme={typoTheme}>{children}</ThemeProvider>
-    </ThemeProvider>
-  )
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
 }
 
 export default MuiThemeProvider
