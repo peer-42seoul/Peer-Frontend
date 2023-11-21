@@ -1,5 +1,5 @@
 import useMedia from '@/hook/useMedia'
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { BeforeInstallPromptEvent } from './MainPage'
 
@@ -11,6 +11,7 @@ const PwaInstallBanner = () => {
 
   const handleInstall = () => {
     if (deferredPrompt) {
+      console.log('install', deferredPrompt)
       deferredPrompt.prompt()
       deferredPrompt.userChoice.then((choiceResult) => {
         console.log(choiceResult.outcome)
@@ -22,13 +23,18 @@ const PwaInstallBanner = () => {
           console.log('User dismissed the install prompt')
         }
       })
+    } else {
+      console.log('not install', deferredPrompt)
     }
   }
 
   useEffect(() => {
     if (localStorage.getItem('isShowInstall') === 'false') {
       setIsShowInstall(false)
+    } else {
+      setIsShowInstall(true)
     }
+
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       e.preventDefault()
       setDeferredPrompt(e)
@@ -49,12 +55,13 @@ const PwaInstallBanner = () => {
           position={'fixed'}
           bottom={0}
           width={'100%'}
-          height={'50px'}
           border="1px solid black"
           sx={{ backgroundColor: 'white', zIndex: 9999 }}
         >
-          <Stack>
-            사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
+          <Stack margin={1}>
+            <Typography>
+              사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.
+            </Typography>
             {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
             <Stack direction="row">
               <Button onClick={handleInstall}>설치</Button>

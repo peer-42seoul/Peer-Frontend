@@ -1,5 +1,5 @@
 import useAxiosWithAuth from '@/api/config'
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
 import webpush from 'web-push'
@@ -7,6 +7,7 @@ import webpush from 'web-push'
 const PushAlertBanner = () => {
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const [isShowPush, setIsShowPush] = useState<boolean>(true)
+  const [isScroll, setIsScroll] = useState<number>(0)
 
   const urlBase64ToUint8Array = (base64String: string) => {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -113,9 +114,19 @@ const PushAlertBanner = () => {
     }
   }
 
+  const handleScroll = () => {
+    setIsScroll(window.scrollY)
+  }
+
   useEffect(() => {
     if (localStorage && localStorage.getItem('isShowPush') === 'false') {
       setIsShowPush(false)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
@@ -124,15 +135,16 @@ const PushAlertBanner = () => {
       {isShowPush && (
         <Box
           position={'fixed'}
-          top={57}
+          top={isScroll ? 0 : 57}
           width={'100%'}
-          height={'50px'}
           border="1px solid black"
           sx={{ backgroundColor: 'white', zIndex: 9999 }}
         >
-          <Stack>
-            사용하시는 브라우저는 알림 기능을 사용할 수 있습니다.
-            사용하시겠습니까?
+          <Stack margin={1}>
+            <Typography>
+              사용하시는 브라우저는 알림 기능을 사용할 수 있습니다.
+              사용하시겠습니까?
+            </Typography>
             <Stack direction="row">
               <Button onClick={handlePush}>네</Button>
               <Button onClick={() => setIsShowPush(false)}>다음에</Button>
