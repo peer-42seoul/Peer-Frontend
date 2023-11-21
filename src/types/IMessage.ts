@@ -27,6 +27,10 @@ export interface IMessageUser {
   userNickname: string
 }
 
+export interface IMessageTargetUser extends IMessageUser {
+  deleted: boolean
+}
+
 // 메시지 전송 타입
 
 export interface IMessageTarget {
