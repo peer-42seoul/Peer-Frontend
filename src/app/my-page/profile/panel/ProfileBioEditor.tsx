@@ -55,7 +55,7 @@ const ProfileBioEditor = ({
   )
   const [imageChanged, setImageChanged] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement>(null)
-  const [cropper, setCropper] = useState<any>(null)
+  const [cropper, setCropper] = useState<Cropper | null>(null)
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
 
   const defaultValues: IFormInput = {
