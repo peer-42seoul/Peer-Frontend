@@ -64,14 +64,7 @@ const PwaInstallBanner = () => {
             {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
             <Stack direction="row">
               <Button onClick={handleInstall}>설치</Button>
-              <Button
-                onClick={() => {
-                  console.log('다음에')
-                  setIsShowInstall(false)
-                }}
-              >
-                다음에
-              </Button>
+              <Button onClick={() => setIsShowInstall(false)}>다음에</Button>
               <Button
                 onClick={() => {
                   setIsShowInstall(false)
