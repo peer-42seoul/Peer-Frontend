@@ -42,31 +42,23 @@ declare module '@mui/material/styles' {
     Tag?: React.CSSProperties
   }
 
-  interface PaletteColorType {
+  interface PaletteColor {
     strong?: string
     normal?: string
     alternative?: string
     tinted?: string
     base?: string
     assistive?: string
+    disable?: string
   }
 
-  interface CommonColors {
-    red: PaletteColorType
-    blue: PaletteColorType
-    purple: PaletteColorType
-    green: PaletteColorType
-    yellow: PaletteColorType
-    pink: PaletteColorType
-  }
-
-  interface CommonColorsOptions {
-    red?: PaletteColorType
-    blue?: PaletteColorType
-    purple?: PaletteColorType
-    green?: PaletteColorType
-    yellow?: PaletteColorType
-    pink?: PaletteColorType
+  interface SimplePaletteColorOptions {
+    strong?: string
+    normal?: string
+    alternative?: string
+    tinted?: string
+    base?: string
+    assistive?: string
   }
 
   interface TypeBackground {
@@ -80,19 +72,26 @@ declare module '@mui/material/styles' {
     alternative?: string
   }
 
-  interface PaletteColors {
-    common: CommonColors
-  }
-
-  interface PaletteColorsOptions {
-    common?: CommonColorsOptions
-  }
-
   interface Palette {
-    line: LineColors
+    // common: CommonColors
+    red: Palette['primary']
+    blue: Palette['primary']
+    purple: Palette['primary']
+    green: Palette['primary']
+    yellow: Palette['primary']
+    pink: Palette['primary']
+    line: Palette['primary']
   }
+
   interface PaletteOptions {
-    line?: LineColors
+    // common?: CommonColorsOptions
+    red?: PaletteOptions['primary']
+    blue?: PaletteOptions['primary']
+    purple?: PaletteOptions['primary']
+    green?: PaletteOptions['primary']
+    yellow?: PaletteOptions['primary']
+    pink?: PaletteOptions['primary']
+    line?: PaletteOptions['primary']
   }
 
   interface TypeText {
@@ -101,6 +100,38 @@ declare module '@mui/material/styles' {
     alternative: string
     assistive: string
     disable: string
+  }
+
+  interface TypeTextOptions {
+    strong?: string
+    normal?: string
+    alternative?: string
+    assistive?: string
+    disable?: string
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
+  }
+}
+
+declare module '@mui/material/IconButton' {
+  interface IconButtonPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
   }
 }
 
@@ -122,12 +153,174 @@ declare module '@mui/material/Typography' {
     Caption: true
     Tag: true
   }
+
+  interface TypographyPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
+    text: true
+  }
+}
+
+declare module '@mui/material/TextField' {
+  interface TextFieldPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
+  }
+}
+
+declare module '@mui/material/OutlinedInput' {
+  interface OutlinedInputPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
+  }
+}
+
+declare module '@mui/material/InputLabel' {
+  interface InputLabelPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
+  }
+}
+
+declare module '@mui/material/Select' {
+  interface SelectPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
+  }
+}
+
+declare module '@mui/material/Checkbox' {
+  interface CheckboxPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
+  }
+}
+
+declare module '@mui/material/Radio' {
+  interface RadioPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
+  }
+}
+
+declare module '@mui/material/Switch' {
+  interface SwitchPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+  }
+}
+
+declare module '@mui/material/Slider' {
+  interface SliderPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+  }
+}
+
+declare module '@mui/material/Alert' {
+  interface AlertPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+  }
+}
+
+declare module '@mui/material/AlertTitle' {
+  interface AlertTitlePropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+  }
+}
+
+declare module '@mui/material/Avatar' {
+  interface AvatarPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+  }
+}
+
+declare module '@mui/material/Badge' {
+  interface BadgePropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+  }
+}
+
+declare module '@mui/material/Chip' {
+  interface ChipPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+  }
 }
 
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
   // const mode = useDarkMode().darkMode
 
-  const theme = createTheme({
+  let theme = createTheme()
+
+  theme = createTheme(theme, {
     breakpoints: {
       values: {
         xs: 0,
@@ -275,44 +468,66 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
     },
     palette: {
       mode: 'dark',
-      common: {
-        red: {
+      red: theme.palette.augmentColor({
+        color: {
+          main: '#FF5833',
           strong: '#FF5833',
           normal: '#FF6D4D',
           alternative: '#FF7D61',
           tinted: '#FF6D4D33',
         },
-        blue: {
+        name: 'red',
+      }),
+      blue: theme.palette.augmentColor({
+        color: {
+          main: '#3A5DCF',
           strong: '#3A5DCF',
           normal: '#4E6ED4',
           alternative: '#6681DB',
           tinted: '#4E6ED433',
         },
-        purple: {
+        name: 'blue',
+      }),
+      purple: theme.palette.augmentColor({
+        color: {
+          main: '#6F62FE',
           strong: '#6F62FE',
           normal: '#877CFE',
           alternative: '#A39BFD',
           tinted: '#877CFE33',
         },
-        green: {
+        name: 'purple',
+      }),
+      green: theme.palette.augmentColor({
+        color: {
+          main: '#489B08',
           strong: '#489B08',
           normal: '#53B309',
           alternative: '#61CD0E',
           tinted: '#53B30933',
         },
-        yellow: {
+        name: 'green',
+      }),
+      yellow: theme.palette.augmentColor({
+        color: {
+          main: '#FFA805',
           strong: '#FFA805',
           normal: '#FFB01F',
           alternative: '#FDBC44',
           tinted: '#FFB01F33',
         },
-        pink: {
+        name: 'yellow',
+      }),
+      pink: theme.palette.augmentColor({
+        color: {
+          main: '#C44ECA',
           strong: '#C44ECA',
           normal: '#CB62D0',
           alternative: '#D581D9',
           tinted: '#CB62D033',
         },
-      },
+        name: 'pink',
+      }),
       background: {
         primary: '#060623',
         secondary: '#18182B',
@@ -338,6 +553,96 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         main: '#6F62FE',
         light: '#A39BFD',
         dark: '#877CFE',
+      },
+    },
+  })
+
+  theme = createTheme(theme, {
+    typography: {
+      fontFamily: 'Pretendard Variable, sans-serif',
+      HeadlineEmphasis: {
+        color: theme.palette.text.normal,
+      },
+      Headline: {
+        color: theme.palette.text.normal,
+      },
+      Title1Emphasis: {
+        color: theme.palette.text.normal,
+      },
+      Title1: {
+        color: theme.palette.text.normal,
+      },
+      Title2Emphasis: {
+        color: theme.palette.text.normal,
+      },
+      Title2: {
+        color: theme.palette.text.normal,
+      },
+      Title3Emphasis: {
+        color: theme.palette.text.normal,
+      },
+      Title3: {
+        color: theme.palette.text.normal,
+      },
+      Body1Emphasis: {
+        color: theme.palette.text.normal,
+      },
+      Body1: {
+        color: theme.palette.text.normal,
+      },
+      Body2Emphasis: {
+        color: theme.palette.text.normal,
+      },
+      Body2: {
+        color: theme.palette.text.normal,
+      },
+      CaptionEmphasis: {
+        color: theme.palette.text.normal,
+      },
+      Caption: {
+        color: theme.palette.text.normal,
+      },
+      Tag: {
+        color: theme.palette.text.normal,
+      },
+      h1: {
+        color: theme.palette.text.normal,
+      },
+      h2: {
+        color: theme.palette.text.normal,
+      },
+      h3: {
+        color: theme.palette.text.normal,
+      },
+      h4: {
+        color: theme.palette.text.normal,
+      },
+      h5: {
+        color: theme.palette.text.normal,
+      },
+      h6: {
+        color: theme.palette.text.normal,
+      },
+      subtitle1: {
+        color: theme.palette.text.normal,
+      },
+      subtitle2: {
+        color: theme.palette.text.normal,
+      },
+      body1: {
+        color: theme.palette.text.normal,
+      },
+      body2: {
+        color: theme.palette.text.normal,
+      },
+      button: {
+        color: theme.palette.text.normal,
+      },
+      caption: {
+        color: theme.palette.text.normal,
+      },
+      overline: {
+        color: theme.palette.text.normal,
       },
     },
   })
