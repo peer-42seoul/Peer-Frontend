@@ -1,3 +1,4 @@
+'use client'
 import { ReactNode } from 'react'
 import { Avatar, IconButton, Stack, Typography } from '@mui/material'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
@@ -12,6 +13,7 @@ const CommentCotainer = ({ children }: { children: ReactNode }) => {
 }
 
 interface CommentProps {
+  commentId: number
   avatar: string
   name: string
   content: string
@@ -19,8 +21,19 @@ interface CommentProps {
   isMine: boolean
 }
 
-const Comment = ({ avatar, name, content, date, isMine }: CommentProps) => {
-  // TODO 🐧 : id를 이용해서 댓글 삭제 기능 구현 가능
+const Comment = ({
+  avatar,
+  name,
+  content,
+  date,
+  isMine,
+  commentId,
+}: CommentProps) => {
+  const handleDelete = () => {
+    // TODO 🐧 : id를 이용해서 댓글 삭제 기능 구현 가능
+    alert('Delete comment #' + commentId)
+  }
+
   return (
     <Stack>
       <Stack
@@ -37,7 +50,7 @@ const Comment = ({ avatar, name, content, date, isMine }: CommentProps) => {
           <Typography>{name}</Typography>
         </Stack>
         {isMine ? (
-          <IconButton aria-label="delete">
+          <IconButton onClick={handleDelete}>
             <DeleteOutlinedIcon />
           </IconButton>
         ) : null}
@@ -113,7 +126,7 @@ const CommentList = ({ postId }: { postId: number }) => {
     <CommentCotainer>
       <Stack>
         {data.map((comment) => (
-          <Comment key={comment.id} {...comment} />
+          <Comment key={comment.id} commentId={comment.id} {...comment} />
         ))}
       </Stack>
     </CommentCotainer>
