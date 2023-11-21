@@ -27,7 +27,7 @@ const TeamDnD = ({ id }: { id: string }) => {
   const [isDropping, setIsDropping] = useState(false)
   const [size, setSize] = useState<SizeType>('S')
   const axiosInstance = useAxiosWithAuth()
-  const { trigger, data } = useSWRMutation<ITeamDnDLayout>(
+  const { trigger, data, error, isMutating } = useSWRMutation<ITeamDnDLayout>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/read`,
     (url: string) =>
       axiosInstance
@@ -39,9 +39,8 @@ const TeamDnD = ({ id }: { id: string }) => {
     trigger()
   }, [])
 
-  /* api 연결 후 사용할 예정 */
-  // if (isLoading) return <>로딩중입니다</>
-  // if (error) return <>에러 발생</>
+  if (!data && isMutating) return <>로딩중입니다</>
+  if (!data && error) return <>에러 발생</>
 
   return (
     <Stack
