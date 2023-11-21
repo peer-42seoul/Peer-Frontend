@@ -20,7 +20,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           item
           xs={7}
           sm={4}
-          width={1}
           sx={{
             maxWidth: '844px',
             padding: '32px',
