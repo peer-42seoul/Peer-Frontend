@@ -43,7 +43,7 @@ const NickNameField = ({
           endAdornment: (
             <InputAdornment position="end">
               <Button
-                variant="contained"
+                variant="text"
                 disabled={isSubmitting}
                 onClick={submitNickName}
               >

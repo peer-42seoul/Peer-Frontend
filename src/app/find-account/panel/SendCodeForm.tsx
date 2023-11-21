@@ -110,13 +110,13 @@ const SendCodeForm = ({
             required: '코드를 입력해주세요',
           }}
           render={({ field }) => (
-            <Container sx={LabelBox}>
+            <Container sx={LabelBox} disableGutters={true}>
               <CuTextFieldLabel htmlFor="code">인증코드</CuTextFieldLabel>
               <CuTextField
                 {...field}
                 type="code"
                 id="code"
-                placeholder="이메일로 받은 코드를 입력하세요"
+                placeholder="인증 코드를 입력하세요"
                 style={{ width: '100%' }}
                 InputProps={{
                   endAdornment: (
@@ -129,7 +129,12 @@ const SendCodeForm = ({
           )}
         />
       </Box>
-      <Button type="submit" disabled={isSubmitting}>
+      <Button
+        variant="contained"
+        type="submit"
+        disabled={isSubmitting}
+        fullWidth
+      >
         임시 비밀번호 발급
       </Button>
     </Box>
