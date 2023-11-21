@@ -5,19 +5,27 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
+type TabValue =
+  | 'profile'
+  | 'interests'
+  | 'message'
+  | 'privacy'
+  | 'homepage-setting'
+
 const getTabValue = (path: string) => {
-  if (path.startsWith('/my-page/profile')) return 0
-  else if (path.startsWith('/my-page/interests')) return 1
-  else if (path.startsWith('/my-page/message')) return 2
-  else if (path.startsWith('/my-page/privacy')) return 3
-  else if (path.startsWith('/my-page/homepage-setting')) return 4
-  else return 0
+  if (path.startsWith('/my-page/profile')) return 'profile'
+  else if (path.startsWith('/my-page/interests')) return 'interests'
+  else if (path.startsWith('/my-page/message')) return 'message'
+  else if (path.startsWith('/my-page/privacy')) return 'privacy'
+  else if (path.startsWith('/my-page/homepage-setting'))
+    return 'homepage-setting'
+  else return 'profile'
 }
 
 const SubNavBar = () => {
   const router = useRouter()
   const pathName = usePathname()
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState<TabValue>('profile')
   const { isPc } = useMedia()
 
   const tabStyle: SxProps = { maxWidth: '244px', padding: '0 24px' }
@@ -53,32 +61,32 @@ const SubNavBar = () => {
         <Tab
           label="프로필"
           onClick={() => router.push('/my-page/profile')}
-          value={0}
+          value={'profile'}
           sx={tabStyle}
         />
         <Tab
           label="관심리스트"
           onClick={() => router.push('/my-page/interests')}
           sx={tabStyle}
-          value={1}
+          value={'interests'}
         />
         <Tab
           label="쪽지"
           onClick={() => router.push('/my-page/message')}
           sx={tabStyle}
-          value={2}
+          value={'message'}
         />
         <Tab
           label="개인정보"
           onClick={() => router.push('/my-page/privacy')}
           sx={tabStyle}
-          value={3}
+          value={'privacy'}
         />
         <Tab
           label="홈페이지 설정"
           onClick={() => router.push('/my-page/homepage-setting')}
           sx={tabStyle}
-          value={4}
+          value={'homepage-setting'}
         />
       </Tabs>
     </Box>
