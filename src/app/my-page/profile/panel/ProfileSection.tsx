@@ -32,7 +32,7 @@ const ProfileSection = ({
         <Stack direction="row" justifyContent="space-between">
           <Typography>{sectionTypeMap.get(sectionTitle)}</Typography>
           <Button variant="text" onClick={handleEditClick}>
-            <Typography>수정</Typography>
+            <Typography variant="CaptionEmphasis">수정</Typography>
           </Button>
         </Stack>
         {children}
