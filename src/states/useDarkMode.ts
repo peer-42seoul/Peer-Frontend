@@ -1,11 +1,14 @@
 import { create } from 'zustand'
 
 type DarkModeState = {
-  darkMode: boolean
+  darkMode: 'light' | 'dark'
   toggleDarkMode: () => void
 }
 
 export const useDarkMode = create<DarkModeState>((set) => ({
-  darkMode: false,
-  toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
+  darkMode: 'dark',
+  toggleDarkMode: () =>
+    set((state) => ({
+      darkMode: state.darkMode === 'dark' ? 'light' : 'dark',
+    })),
 }))
