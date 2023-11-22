@@ -3,8 +3,10 @@ import MainPage from './panel/MainPage'
 
 //{ withCredentials: true }
 export default async function Home() {
+
   const data = await fetchServerData(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=STUDY&sort=latest&page=1&pageSize=6&keyword=&due=&region1=&region2=&place=&status=&tag=`,
+
   )
   return <MainPage initData={data} />
 }

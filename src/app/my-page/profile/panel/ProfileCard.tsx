@@ -82,17 +82,15 @@ const ProfileCard = ({
             margin: '0 0 0 4px',
           }}
         >
-          <Typography>{nickname}</Typography>
-          {association ? (
-            <Typography>{association}</Typography>
-          ) : (
-            <Typography />
+          <Typography variant="Body2">{nickname}</Typography>
+          {association && (
+            <Typography variant="Caption">{association}</Typography>
           )}
-          <Typography>아이디({email})</Typography>
+          <Typography variant="Caption">{email}</Typography>
         </Stack>
       </Stack>
       <Box>
-        <Typography>{introduction}</Typography>
+        <Typography variant="Body2">{introduction}</Typography>
       </Box>
       <ProfileImageModal
         open={open}
