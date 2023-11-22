@@ -1,17 +1,22 @@
 'use client'
 import { ReactNode } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button, Stack, Typography } from '@mui/material'
 import CommentList from './panel/CommentList'
 
 interface NoticeContentContainerProps {
   children: ReactNode
   isMine: boolean | null | undefined
+  params: { id: string; postId: string }
 }
 
 const NoticeContentContainer = ({
   children,
   isMine,
+  params,
 }: NoticeContentContainerProps) => {
+  const router = useRouter()
+  const { id, postId } = params
   return (
     <Stack spacing={2} width={'100%'}>
       <Stack
@@ -20,14 +25,25 @@ const NoticeContentContainer = ({
         justifyContent={'space-between'}
       >
         <Typography variant="body2">공지사항</Typography>
-        {isMine ? <Button variant="text">수정</Button> : null}
+        {isMine ? (
+          <Button
+            onClick={() => router.push(`/teams/${id}/notice-edit/${postId}`)}
+            variant="text"
+          >
+            수정
+          </Button>
+        ) : null}
       </Stack>
       {children}
     </Stack>
   )
 }
 
-const TeamNoticeView = ({ params }: { params: { postId: string } }) => {
+const TeamNoticeView = ({
+  params,
+}: {
+  params: { id: string; postId: string }
+}) => {
   const { postId } = params
   // TODO 🐧 : postId로 공지사항 정보 받아오기
   const dummy = {
@@ -50,13 +66,13 @@ const TeamNoticeView = ({ params }: { params: { postId: string } }) => {
 
   if (error || !data)
     return (
-      <NoticeContentContainer isMine={data.isMine}>
+      <NoticeContentContainer isMine={data.isMine} params={params}>
         <Typography>문제가 발생했습니다.</Typography>
       </NoticeContentContainer>
     )
   return (
     <Stack>
-      <NoticeContentContainer isMine={data.isMine}>
+      <NoticeContentContainer isMine={data.isMine} params={params}>
         {loading ? (
           <Typography>로딩중...</Typography>
         ) : (
