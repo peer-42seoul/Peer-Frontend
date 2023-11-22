@@ -6,7 +6,7 @@ import CommentList from './panel/CommentList'
 
 interface NoticeContentContainerProps {
   children: ReactNode
-  isMine: boolean | null | undefined
+  isMine: boolean
   params: { id: string; postId: string }
 }
 
@@ -45,13 +45,11 @@ const TeamNoticeView = ({
   params: { id: string; postId: string }
 }) => {
   const { postId } = params
-  // TODO 🐧 : postId로 공지사항 정보 받아오기
   const dummy = {
     data: {
       title: '공지사항 제목이 들어오는 자리입니다.',
       description:
         '팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.',
-      tag: ['중요 공지'], // TODO 🐧 : 필요한건지 확인해보기
       isMine: true,
     },
     loading: false,
@@ -60,7 +58,6 @@ const TeamNoticeView = ({
   const { data, loading, error } = dummy
 
   const handleDelete = () => {
-    // TODO 🐧 : id를 이용해서 글 삭제 기능 구현 가능
     alert('Delete notice #' + postId)
   }
 
@@ -82,7 +79,6 @@ const TeamNoticeView = ({
               <Typography>{data.title}</Typography>
             </Stack>
             <Stack spacing={1}>
-              {/* TODO 🐧 : 에디터 내장 뷰어 사용하는건지? */}
               <Typography>설명</Typography>
               <Typography>{data.description}</Typography>
             </Stack>
@@ -93,11 +89,6 @@ const TeamNoticeView = ({
                 </Button>
               ) : null}
             </Stack>
-            {/* <Stack spacing={1}>
-              TODO 🐧 : 와이어프레임이 없음. 기능명세 확인하고 와이어프레임에 추가 요청하기
-              <Typography>태그</Typography>
-              <Typography>{data.tag}</Typography>
-            </Stack> */}
           </>
         )}
       </NoticeContentContainer>
