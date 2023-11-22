@@ -8,7 +8,7 @@ import useAuthStore from '@/states/useAuthStore'
 import FindComplete from './panel/FindComplete'
 import BoxBase from '@/components/BoxBase'
 
-export const PCAccountBox = {
+const PCAccountBox = {
   display: 'flex',
   position: 'relative',
   width: '544px',
@@ -20,7 +20,7 @@ export const PCAccountBox = {
   border: '1px solid #000',
 }
 
-export const MobileAccountBox = {
+const MobileAccountBox = {
   display: 'flex',
   width: '100%',
   flexDirection: 'column',
