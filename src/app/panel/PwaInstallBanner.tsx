@@ -1,11 +1,20 @@
 import useMedia from '@/hook/useMedia'
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { BeforeInstallPromptEvent } from './MainPage'
+import IosShareIcon from '@mui/icons-material/IosShare'
+import CloseIcon from '@mui/icons-material/Close'
+
+declare global {
+  interface Window {
+    MSStream: any
+  }
+}
 
 const PwaInstallBanner = () => {
   const [isShowInstall, setIsShowInstall] = useState(true)
   const { isPc } = useMedia()
+  const [isSafari, setIsSafari] = useState(false)
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null)
 
@@ -22,13 +31,22 @@ const PwaInstallBanner = () => {
           console.log('User dismissed the install prompt')
         }
       })
+    } else {
+      console.log('not install')
     }
   }
 
   useEffect(() => {
     if (localStorage.getItem('isShowInstall') === 'false') {
       setIsShowInstall(false)
+    } else {
+      setIsShowInstall(true)
     }
+
+    const isSafariBrowser = navigator.userAgent.includes('Safari')
+
+    setIsSafari(isSafariBrowser)
+
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       e.preventDefault()
       setDeferredPrompt(e)
@@ -40,7 +58,49 @@ const PwaInstallBanner = () => {
       console.log('installed')
       setIsShowInstall(false)
     })
-  }, [deferredPrompt, isShowInstall])
+
+    return () => {
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt,
+      )
+      window.removeEventListener('appinstalled', () => {
+        console.log('installed')
+        setIsShowInstall(false)
+      })
+    }
+  }, [deferredPrompt])
+
+  if (isSafari)
+    return (
+      <>
+        {isShowInstall && (
+          <Box
+            position={'fixed'}
+            bottom={0}
+            width={'100%'}
+            border="1px solid black"
+            sx={{ backgroundColor: 'white', zIndex: 9999 }}
+          >
+            <Stack
+              margin={1}
+              direction={'row'}
+              justifyContent={'space-between'}
+            >
+              <Typography>
+                사용하시는 브라우저는 PWA 기능을 사용하기 위해서는{' '}
+                <IosShareIcon fontSize="small" />
+                [공유하기 버튼]을 눌러서 [홈 화면에 추가]를 해주셔야 합니다.
+              </Typography>
+
+              <IconButton onClick={() => setIsShowInstall(false)}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </Stack>
+          </Box>
+        )}
+      </>
+    )
 
   return (
     <>
@@ -49,13 +109,14 @@ const PwaInstallBanner = () => {
           position={'fixed'}
           bottom={0}
           width={'100%'}
-          height={'50px'}
           border="1px solid black"
           sx={{ backgroundColor: 'white', zIndex: 9999 }}
         >
-          <Stack>
-            사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
-            {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
+          <Stack margin={1}>
+            <Typography>
+              사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
+              {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
+            </Typography>
             <Stack direction="row">
               <Button onClick={handleInstall}>설치</Button>
               <Button onClick={() => setIsShowInstall(false)}>다음에</Button>
