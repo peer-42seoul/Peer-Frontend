@@ -347,6 +347,13 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
           },
         },
       },
+      MuiBox: {
+        styleOverrides: {
+          root: {
+            minWidth: '40px',
+          },
+        },
+      },
       MuiTypography: {
         defaultProps: {
           variantMapping: {
