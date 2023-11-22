@@ -40,8 +40,8 @@ import CuButton from '@/components/CuButton'
 
 const componentName = {
   flex: 'row',
-  paddingTop: '24px',
-  paddingBottom: '8px',
+  // paddingTop: '24px',
+  // paddingBottom: '8px',
   alignItems: 'center',
 }
 
@@ -166,198 +166,206 @@ const CreateTeam = () => {
             width: '1216px',
             border: '1px solid #000',
             borderRadius: '12px',
+            paddingTop: '24px',
             paddingBottom: '24px',
             paddingLeft: '16px',
             paddingRight: '16px',
           }}
         >
-          <Box>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <ImageIcon />
-              <Typography>대표 이미지</Typography>
-            </Stack>
-            <ImageUploadButton
-              setImage={setImage}
-              setPreviewImage={setPreviewImage}
-            >
+          <Stack gap={3}>
+            <Box>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <ImageIcon />
+                <Typography>대표 이미지</Typography>
+              </Stack>
+              <ImageUploadButton
+                setImage={setImage}
+                setPreviewImage={setPreviewImage}
+              >
+                <Box>
+                  <Image
+                    src={previewImage}
+                    width={240}
+                    height={160}
+                    alt="Picture of the author"
+                  />
+                </Box>
+              </ImageUploadButton>
+            </Box>
+            <Box>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <ContentPasteOutlinedIcon />
+                <Typography variant="h6">팀 분류</Typography>
+              </Stack>
+              <RowRadioButtonsGroup setValue={setType} />
+            </Box>
+            <Box>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <EditOutlinedIcon />
+                <Typography variant="h6">모집글 제목</Typography>
+              </Stack>
+              <TextField
+                sx={{ width: '416px'}}
+                variant="outlined"
+                value={title}
+                onChange={(e) => {
+                  if (e.target.value.length > 20)
+                    setTitle(e.target.value.slice(0, 20) as string)
+                  else setTitle(e.target.value as string)
+                }}
+              />
+            </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <FormatListBulletedOutlinedIcon />
+                <Typography variant="h6">프로젝트 명</Typography>
+              </Stack>
+              <TextField
+                sx={{ width: '416px'}}
+                variant="outlined"
+                value={name}
+                onChange={(e) => {
+                  if (e.target.value.length > 20)
+                    setName(e.target.value.slice(0, 20) as string)
+                  else setName(e.target.value as string)
+                }}
+              />
+            </Box>
+            {type === 'STUDY' ? null : (
               <Box>
-                <Image
-                  src={previewImage}
-                  width={240}
-                  height={160}
-                  alt="Picture of the author"
+                <Stack direction={'row'} gap={1} sx={componentName}>
+                  <HowToRegOutlinedIcon />
+                  <Typography variant="h6">역할</Typography>
+                </Stack>
+                <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
+              </Box>
+            )}
+            {type === 'STUDY' && (
+              <Box>
+                <Stack direction={'row'} gap={1} sx={componentName}>
+                  <HowToRegOutlinedIcon />
+                  <Typography variant="h6">인원</Typography>
+                </Stack>
+                <BasicSelect
+                  type={ComponentType.TeamSize}
+                  value={teamsize}
+                  setValue={setTeamsize}
                 />
               </Box>
-            </ImageUploadButton>
-          </Box>
-          <Box>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <ContentPasteOutlinedIcon />
-              <Typography variant="h6">팀 분류</Typography>
-            </Stack>
-            <RowRadioButtonsGroup setValue={setType} />
-          </Box>
-          <Box>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <EditOutlinedIcon />
-              <Typography variant="h6">모집글 제목</Typography>
-            </Stack>
-            <TextField
-              sx={{ width: '416px', height: '32px' }}
-              variant="outlined"
-              value={title}
-              onChange={(e) => {
-                if (e.target.value.length > 20)
-                  setTitle(e.target.value.slice(0, 20) as string)
-                else setTitle(e.target.value as string)
-              }}
-            />
-          </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <FormatListBulletedOutlinedIcon />
-              <Typography variant="h6">프로젝트 명</Typography>
-            </Stack>
-            <TextField
-              sx={{ width: '416px', height: '32px' }}
-              variant="outlined"
-              value={name}
-              onChange={(e) => {
-                if (e.target.value.length > 20)
-                  setName(e.target.value.slice(0, 20) as string)
-                else setName(e.target.value as string)
-              }}
-            />
-          </Box>
-          {type === 'STUDY' ? null : (
+            )}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <HowToRegOutlinedIcon />
-                <Typography variant="h6">역할</Typography>
-              </Stack>
-              <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
-            </Box>
-          )}
-          {type === 'STUDY' && (
-            <Box>
-              <Stack direction={'row'} gap={1} sx={componentName}>
-                <HowToRegOutlinedIcon />
-                <Typography variant="h6">인원</Typography>
+                <WifiOutlinedIcon />
+                <Typography variant="h6">활동방식</Typography>
               </Stack>
               <BasicSelect
-                type={ComponentType.TeamSize}
-                value={teamsize}
-                setValue={setTeamsize}
+                type={ComponentType.Place}
+                value={place}
+                setValue={setPlace}
               />
             </Box>
-          )}
-          <Box>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <WifiOutlinedIcon />
-              <Typography variant="h6">활동방식</Typography>
-            </Stack>
-            <BasicSelect
-              type={ComponentType.Place}
-              value={place}
-              setValue={setPlace}
-            />
-          </Box>
-          <Box>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <AccessTimeOutlinedIcon />
-              <Typography variant="h6">목표기간</Typography>
-            </Stack>
-            <BasicSelect
-              type={ComponentType.Month}
-              value={due}
-              setValue={setMonth}
-            />
-          </Box>
-          <Box>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <LocationOnOutlinedIcon />
-              <Typography variant="h6">지역</Typography>
-            </Stack>
-            <SelectRegion setValue={setRegion} />
-          </Box>
-          <Box>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <InsertLinkOutlinedIcon />
-              <Typography variant="h6">소통 링크</Typography>
-            </Stack>
-            <SetCommunicationToolLink setValue={setCommunicationTool} />
-          </Box>
-          <Box>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <LocalOfferOutlinedIcon />
-              <Typography variant="h6">태그</Typography>
-            </Stack>
-            {allTagList ? (
-              <TagAutoComplete
-                datas={tagList}
-                setData={setTagList}
-                allTagList={allTagList}
+            <Box>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <AccessTimeOutlinedIcon />
+                <Typography variant="h6">목표기간</Typography>
+              </Stack>
+              <BasicSelect
+                type={ComponentType.Month}
+                value={due}
+                setValue={setMonth}
               />
-            ) : null}
-          </Box>
-          <Box>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <DescriptionOutlinedIcon />
-              <Typography variant="h6">팀 소개</Typography>
-            </Stack>
-            <TextField
-              variant="outlined"
-              value={content}
-              sx={{ width: '1150px', height: 'auto' }}
-              onChange={(e) => {
-                if (e.target.value.length > 1000)
-                  setContent(e.target.value.slice(0, 1000) as string)
-                else setContent(e.target.value as string)
-              }}
-              multiline
-            />
-          </Box>
-          <Stack>
-            <Stack direction={'row'} gap={1} sx={componentName}>
-              <CreateNewFolderOutlinedIcon />
-              <Typography
-                variant="h6"
-                sx={{ paddingRight: '5px', width: '70%' }}
+            </Box>
+            <Box>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <LocationOnOutlinedIcon />
+                <Typography variant="h6">지역</Typography>
+              </Stack>
+              <SelectRegion setValue={setRegion} />
+            </Box>
+            <Box>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <InsertLinkOutlinedIcon />
+                <Typography variant="h6">소통 링크</Typography>
+              </Stack>
+              <SetCommunicationToolLink setValue={setCommunicationTool} />
+            </Box>
+            <Box>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <LocalOfferOutlinedIcon />
+                <Typography variant="h6">태그</Typography>
+              </Stack>
+              {allTagList ? (
+                <TagAutoComplete
+                  datas={tagList}
+                  setData={setTagList}
+                  allTagList={allTagList}
+                />
+              ) : null}
+            </Box>
+            <Box>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <DescriptionOutlinedIcon />
+                <Typography variant="h6">팀 소개</Typography>
+              </Stack>
+              <TextField
+                variant="outlined"
+                value={content}
+                sx={{ width: '1150px', height: 'auto' }}
+                onChange={(e) => {
+                  if (e.target.value.length > 1000)
+                    setContent(e.target.value.slice(0, 1000) as string)
+                  else setContent(e.target.value as string)
+                }}
+                multiline
+              />
+            </Box>
+            <Stack>
+              <Stack direction={'row'} gap={1} sx={componentName}>
+                <CreateNewFolderOutlinedIcon />
+                <Typography
+                  variant="h6"
+                  sx={{ paddingRight: '5px', width: '70%' }}
+                >
+                  모집인원 인터뷰 등록하기
+                </Typography>
+              </Stack>
+              <Button
+                sx={{ width: '416px' }}
+                variant="outlined"
+                onClick={() => setOpenBasicModal(true)}
               >
-                모집인원 인터뷰 등록하기
-              </Typography>
+                인터뷰 추가
+              </Button>
+              <SetInterview
+                openBasicModal={openBasicModal}
+                handleCloseBasicModal={() => setOpenBasicModal(false)}
+                interviewData={interviewList}
+                setInterviewData={setInterviewList}
+              />
             </Stack>
-            <Button
-              sx={{ width: '416px' }}
-              variant="outlined"
-              onClick={() => setOpenBasicModal(true)}
+            <Stack
+              direction={'row'}
+              gap={2}
+              sx={componentName}
+              justifyContent={'flex-end'}
             >
-              인터뷰 추가
-            </Button>
-            <SetInterview
-              openBasicModal={openBasicModal}
-              handleCloseBasicModal={() => setOpenBasicModal(false)}
-              interviewData={interviewList}
-              setInterviewData={setInterviewList}
-            />
+              <CuButton
+                message="취소"
+                action={() => {
+                  router.push('/')
+                }}
+                variant="outlined"
+              />
+              <CuButton
+                message="등록하기"
+                action={onHandlerFinish}
+                variant="contained"
+              />
+            </Stack>
+            <CuToast open={isOpen} onClose={closeToast} severity="error">
+              <Typography>{toastMessage}</Typography>
+            </CuToast>
           </Stack>
-          <Stack direction={'row'} gap={2} sx={componentName} justifyContent={'flex-end'}>
-            <CuButton
-              message="취소"
-              action={() => {
-                router.push('/')
-              }}
-              variant="outlined"
-            />
-            <CuButton
-              message="등록하기"
-              action={onHandlerFinish}
-              variant="contained"
-            />
-          </Stack>
-          <CuToast open={isOpen} onClose={closeToast} severity="error">
-            <Typography>{toastMessage}</Typography>
-          </CuToast>
         </Container>
       </Container>
       <Box sx={{ height: '70px' }} />

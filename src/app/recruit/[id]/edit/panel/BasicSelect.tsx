@@ -30,30 +30,28 @@ export default function BasicSelect({
 
   switch (type) {
     case ComponentType.Month:
-      options = 
-        [
-          '1주일',
-          '2주일',
-          '3주일',
-          '4주일',
-          '1개월',
-          '2개월',
-          '3개월',
-          '4개월',
-          '5개월',
-          '6개월',
-          '7개월',
-          '8개월',
-          '9개월',
-          '10개월',
-          '11개월',
-          '12개월 이상',
-        ].map((dueTo, idx) => (
-          <MenuItem key={'dueTo' + idx} value={dueTo}>
-            {dueTo}
-          </MenuItem>
-        ))
-      ;
+      options = [
+        '1주일',
+        '2주일',
+        '3주일',
+        '4주일',
+        '1개월',
+        '2개월',
+        '3개월',
+        '4개월',
+        '5개월',
+        '6개월',
+        '7개월',
+        '8개월',
+        '9개월',
+        '10개월',
+        '11개월',
+        '12개월 이상',
+      ].map((dueTo, idx) => (
+        <MenuItem key={'dueTo' + idx} value={dueTo}>
+          {dueTo}
+        </MenuItem>
+      ))
       break
     case ComponentType.TeamSize:
       options = Array.from({ length: 9 }, (_, index) => (
@@ -80,9 +78,13 @@ export default function BasicSelect({
   }
 
   return (
-    <Box sx={{ width: '416px', height: '32px' }}>
+    <Box>
       <FormControl fullWidth>
-        <Select value={value} onChange={handleChange}>
+        <Select
+          sx={{ width: '416px', height: '32px' }}
+          value={value}
+          onChange={handleChange}
+        >
           {options}
         </Select>
       </FormControl>

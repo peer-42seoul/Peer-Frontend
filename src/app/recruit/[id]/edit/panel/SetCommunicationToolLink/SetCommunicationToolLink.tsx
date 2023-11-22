@@ -15,7 +15,7 @@ const SetCommunicationToolLink = ({ setValue }: CommunicationToolLinkProps) => {
       <TextField
         variant="outlined"
         placeholder="link to communication tool"
-        sx={{ width: '416px', height: '32px' }}
+        sx={{ width: '416px'}}
         onChange={handleChange}
       />
     </Box>
