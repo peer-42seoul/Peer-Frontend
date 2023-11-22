@@ -34,7 +34,7 @@ const useAxiosWithAuth = () => {
       isRefreshing = true
       const currentPageUrl = window.location.pathname
       if (error.response?.status === 401) {
-        if (!accessToken || isRefreshing) {
+        if (isRefreshing) {
           // 로그아웃 후 리디렉션
 
           useAuthStore.getState().logout()
