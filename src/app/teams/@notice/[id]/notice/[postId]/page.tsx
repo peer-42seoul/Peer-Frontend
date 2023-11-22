@@ -45,7 +45,6 @@ const TeamNoticeView = ({
   params: { id: string; postId: string }
 }) => {
   const { postId } = params
-  // TODO 🐧 : postId로 공지사항 정보 받아오기
   const dummy = {
     data: {
       title: '공지사항 제목이 들어오는 자리입니다.',
@@ -59,7 +58,6 @@ const TeamNoticeView = ({
   const { data, loading, error } = dummy
 
   const handleDelete = () => {
-    // TODO 🐧 : id를 이용해서 글 삭제 기능 구현 가능
     alert('Delete notice #' + postId)
   }
 
@@ -81,7 +79,6 @@ const TeamNoticeView = ({
               <Typography>{data.title}</Typography>
             </Stack>
             <Stack spacing={1}>
-              {/* TODO 🐧 : 에디터 내장 뷰어 사용하는건지? */}
               <Typography>설명</Typography>
               <Typography>{data.description}</Typography>
             </Stack>

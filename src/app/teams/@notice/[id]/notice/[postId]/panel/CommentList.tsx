@@ -37,7 +37,6 @@ const Comment = ({
   commentId,
 }: CommentProps) => {
   const handleDelete = () => {
-    // TODO 🐧 : id를 이용해서 댓글 삭제 기능 구현
     alert('Delete comment #' + commentId)
   }
 
@@ -69,7 +68,6 @@ const Comment = ({
 }
 
 const CommentForm = ({ postId }: { postId: number }) => {
-  // TODO 🐧 : 댓글 작성 기능 구현
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
