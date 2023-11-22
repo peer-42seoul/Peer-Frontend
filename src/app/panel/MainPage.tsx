@@ -149,7 +149,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* mobile view */}
       <div className="mobile-layout">
         <Container>
-          <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
+          <Box sx={{ backgroundColor: 'Background' }} border="1px solid black">
             <SelectType type={type} setType={handleType} />
             <Grid container p={2}>
               <SearchOption
