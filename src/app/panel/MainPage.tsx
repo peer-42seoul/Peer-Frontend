@@ -80,14 +80,19 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     isLoading,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    (page == 1 && !type && !sort && detailOption.isInit && keyword == '')
+    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type ?? 'STUDY'
-      }&sort=${sort ?? 'latest'
-      }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due
-      }&region1=${detailOption.region1}&region2=${detailOption.region2
-      }&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag
-      }`,
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
+          type ?? 'STUDY'
+        }&sort=${
+          sort ?? 'latest'
+        }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
+          detailOption.due
+        }&region1=${detailOption.region1}&region2=${
+          detailOption.region2
+        }&place=${detailOption.place}&status=${detailOption.status}&tag=${
+          detailOption.tag
+        }`,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
