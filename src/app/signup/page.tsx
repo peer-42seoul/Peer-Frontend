@@ -25,8 +25,6 @@ const PCSignupBox = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '48px',
-  borderRadius: '16px',
-  border: '1px solid #000',
 }
 
 const MobileSignupBox = {
@@ -36,8 +34,6 @@ const MobileSignupBox = {
   alignItems: 'center',
   padding: '40px 16px',
   gap: '24px',
-  borderRadius: '16px',
-  border: '1px solid #000',
 }
 
 const formStyle = {
@@ -80,7 +76,7 @@ const SignUp = () => {
     if (isLogin) router.replace('/')
   }, [])
 
-  const [signUpStep, setSignUpStep] = useState<number>(1)
+  const [signUpStep, setSignUpStep] = useState<number>(0)
   const [emailSendStatus, setEmailSendStatus] = useState<
     'before' | 'submit' | 'error'
   >('before')

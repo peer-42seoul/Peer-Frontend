@@ -32,8 +32,6 @@ const PCLoginBox = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '48px',
-  borderRadius: '16px',
-  border: '1px solid #000',
 }
 
 const MobileLoginBox = {
@@ -43,8 +41,6 @@ const MobileLoginBox = {
   alignItems: 'center',
   padding: '40px 16px',
   gap: '24px',
-  borderRadius: '16px',
-  border: '1px solid #000',
 }
 
 const Form = {
@@ -122,7 +118,7 @@ const Login = () => {
   return (
     <>
       <BoxBase pcSx={PCLoginBox} mobileSx={MobileLoginBox}>
-        <Typography>피어 로그인</Typography>
+        <Typography variant="Title3">피어 로그인</Typography>
         <Box sx={Form}>
           <OauthLoginBox />
         </Box>
@@ -244,4 +240,3 @@ const Login = () => {
 }
 
 export default Login
-
