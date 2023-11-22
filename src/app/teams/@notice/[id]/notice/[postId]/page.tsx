@@ -6,7 +6,7 @@ import CommentList from './panel/CommentList'
 
 interface NoticeContentContainerProps {
   children: ReactNode
-  isMine: boolean | null | undefined
+  isMine: boolean
   params: { id: string; postId: string }
 }
 
