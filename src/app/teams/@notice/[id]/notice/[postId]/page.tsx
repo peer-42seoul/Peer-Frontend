@@ -19,6 +19,12 @@ const NoticeContentContainer = ({
   const { id, postId } = params
   return (
     <Stack spacing={2} width={'100%'}>
+      <Button
+        onClick={() => router.push(`/teams/${id}/notice`)}
+        variant={'text'}
+      >
+        이전 페이지
+      </Button>
       <Stack
         direction={'row'}
         alignItems={'center'}
