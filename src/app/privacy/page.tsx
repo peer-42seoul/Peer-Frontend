@@ -35,16 +35,25 @@ const MobileSignupBox = {
 }
 
 const PCPaper = {
-  width: 'calc(100% - 16px)',
-  height: '82px',
+  width: 'calc(100%-16px)',
+  height: '92px',
   overflow: 'auto',
+  borderRadius: '8px',
+  borderWidth: '1px',
+  borderStyle: 'solid',
+  borderColor: 'text.assistive',
   padding: '8px',
 }
 
 const MobilePaper = {
-  width: '100%',
-  height: '100px',
+  width: 'calc(100%-16px)',
+  height: '146px',
   overflow: 'auto',
+  borderRadius: '8px',
+  borderWidth: '1px',
+  borderStyle: 'solid',
+  borderColor: 'text.assistive',
+  padding: '8px',
 }
 
 const Policy1 =
@@ -112,21 +121,29 @@ const Privacy = () => {
                 setCheckStatus([!checkStatus[0], checkStatus[1]])
               }}
               label={
-                <Typography variant="CaptionEmphasis">
+                <Typography
+                  variant="CaptionEmphasis"
+                  color={'text.alternative'}
+                >
                   [필수] peer 이용 약관
                 </Typography>
               }
               checked={checkStatus[0]}
             />
             <Paper sx={isPc ? PCPaper : MobilePaper}>
-              <Typography variant="Caption">{Policy1}</Typography>
+              <Typography variant="Caption" color={'text.alternative'}>
+                {Policy1}
+              </Typography>
             </Paper>
           </Stack>
           <Stack>
             <FormControlLabel
               control={<Checkbox />}
               label={
-                <Typography variant="CaptionEmphasis">
+                <Typography
+                  variant="CaptionEmphasis"
+                  color={'text.alternative'}
+                >
                   [필수] 개인정보 수집 및 이용
                 </Typography>
               }
@@ -136,7 +153,9 @@ const Privacy = () => {
               checked={checkStatus[1]}
             />
             <Paper sx={isPc ? PCPaper : MobilePaper}>
-              <Typography variant="Caption">{Policy1}</Typography>
+              <Typography variant="Caption" color={'text.alternative'}>
+                {Policy1}
+              </Typography>
             </Paper>
           </Stack>
         </Box>
