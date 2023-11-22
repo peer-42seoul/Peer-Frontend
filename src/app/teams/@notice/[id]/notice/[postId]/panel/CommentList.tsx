@@ -72,7 +72,7 @@ const CommentForm = ({ postId }: { postId: number }) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const comment = formData.get('comment') as string
-    alert("Comment: '" + comment + "'")
+    alert('#' + postId + " Comment: '" + comment + "'")
   }
   return (
     <form onSubmit={handleSubmit}>
