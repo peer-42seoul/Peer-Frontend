@@ -80,7 +80,7 @@ export default function BasicSelect({
   }
 
   return (
-    <Box sx={{ width: 150 }}>
+    <Box sx={{ width: '416px', height: '32px' }}>
       <FormControl fullWidth>
         <Select value={value} onChange={handleChange}>
           {options}

@@ -1,4 +1,3 @@
-import LinkIcon from '@mui/icons-material/Link'
 import { Box, TextField } from '@mui/material'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 
@@ -13,17 +12,10 @@ const SetCommunicationToolLink = ({ setValue }: CommunicationToolLinkProps) => {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <LinkIcon
-        sx={{
-          width: '45px',
-          height: '45px',
-          paddingRight: '6px',
-        }}
-      />
       <TextField
         variant="outlined"
         placeholder="link to communication tool"
-        sx={{ width: '50%' }}
+        sx={{ width: '416px', height: '32px' }}
         onChange={handleChange}
       />
     </Box>
