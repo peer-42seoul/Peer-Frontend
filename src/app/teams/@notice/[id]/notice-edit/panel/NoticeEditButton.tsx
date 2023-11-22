@@ -12,9 +12,8 @@ const NoticeEditButton = ({
 }) => {
   const router = useRouter()
   const handleGoBack = () => {
-    alert('뒤로가기!')
-    // if (postId) router.push(`/teams/${teamId}/notice/${postId}`)
-    // else router.push(`/teams/${teamId}/notice`)
+    if (postId) router.push(`/teams/${teamId}/notice/${postId}`)
+    else router.push(`/teams/${teamId}/notice`)
   }
   return (
     <Stack direction={'row'} justifyContent={'flex-end'}>
