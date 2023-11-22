@@ -7,45 +7,28 @@ import useAuthStore from '@/states/useAuthStore'
 import {
   Box,
   Button,
-  Container,
   IconButton,
   InputAdornment,
   Typography,
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import CuTextField from '@/components/CuTextField'
-import CuTextFieldLabel from '@/components/CuTextFieldLabel'
+//import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import OauthLoginBox from './panel/OauthLoginBox'
-import useMedia from '@/hook/useMedia'
 import useToast from '@/hook/useToast'
 import { useRouter, useSearchParams } from 'next/navigation'
+import BoxBase from '@/components/BoxBase'
 
 interface ILoginFormInput {
   userEmail: string
   password: string
 }
 
-const PCBase = {
-  display: 'flex',
-  width: '100%',
-  flexDirection: 'column',
-  alignItems: 'center',
-  paddingTop: '80px',
-}
-
-const MobileBase = {
-  display: 'flex',
-  width: '100%',
-  flexDirection: 'column',
-  alignItems: 'center',
-  paddingTop: '20px',
-}
-
 const PCLoginBox = {
   display: 'flex',
   position: 'relative',
-  width: '496px',
-  padding: '24px 24px 40px 24px',
+  width: '544px',
+  padding: '40px 64px',
   flexDirection: 'column',
   alignItems: 'center',
   gap: '48px',
@@ -58,7 +41,10 @@ const MobileLoginBox = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '0 32px 15px 32px',
+  padding: '40px 16px',
+  gap: '24px',
+  borderRadius: '16px',
+  border: '1px solid #000',
 }
 
 const Form = {
@@ -66,7 +52,7 @@ const Form = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '24px',
+  gap: '8px',
 }
 
 const PCLabelBox = {
@@ -79,7 +65,6 @@ const PCLabelBox = {
 }
 
 const Login = () => {
-  const { isPc } = useMedia()
   const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -107,9 +92,6 @@ const Login = () => {
         },
         {
           withCredentials: true,
-          headers: {
-            'access-control-expose-headers': 'Set-Cookie',
-          },
         },
       )
       .then((res) => {
@@ -139,119 +121,121 @@ const Login = () => {
 
   return (
     <>
-      <Container sx={isPc ? PCBase : MobileBase}>
-        <Container sx={isPc ? PCLoginBox : MobileLoginBox}>
-          <Typography margin={3}>Peer</Typography>
-          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={Form}>
-            <Box sx={{ display: 'flex', width: '100%' }}>
-              <Controller
-                name="userEmail"
-                control={control}
-                defaultValue=""
-                rules={{
-                  required: '이메일을 입력해주세요',
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                    message: '이메일 형식이 아닙니다',
-                  },
-                }}
-                render={({ field }) => (
-                  <Box sx={PCLabelBox}>
-                    <CuTextFieldLabel
+      <BoxBase pcSx={PCLoginBox} mobileSx={MobileLoginBox}>
+        <Typography>피어 로그인</Typography>
+        <Box sx={Form}>
+          <OauthLoginBox />
+        </Box>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={Form}>
+          <Box sx={{ display: 'flex', width: '100%' }}>
+            <Controller
+              name="userEmail"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: '이메일을 입력해주세요',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: '이메일 형식이 아닙니다',
+                },
+              }}
+              render={({ field }) => (
+                <Box sx={PCLabelBox}>
+                  {/* <CuTextFieldLabel
                       htmlFor="userEmail"
                       style={{ color: '#000', font: 'inherit' }}
                     >
                       이메일
-                    </CuTextFieldLabel>
-                    <CuTextField
-                      {...field}
-                      style={{ width: '100%' }}
-                      placeholder="이메일을 입력하세요."
-                    />
-                    {errors.userEmail && (
-                      <Typography>{errors.userEmail.message}</Typography>
-                    )}
-                  </Box>
-                )}
-              />
-            </Box>
+                    </CuTextFieldLabel> */}
+                  <CuTextField
+                    {...field}
+                    style={{ width: '100%' }}
+                    placeholder="이메일을 입력하세요."
+                  />
+                  {errors.userEmail ? (
+                    <Typography color="error">
+                      {errors.userEmail?.message}
+                    </Typography>
+                  ) : (
+                    <Typography>&nbsp;</Typography>
+                  )}
+                </Box>
+              )}
+            />
+          </Box>
 
-            <Box sx={{ display: 'flex', width: '100%' }}>
-              <Controller
-                name="password"
-                control={control}
-                defaultValue=""
-                rules={{
-                  required: '비밀번호를 입력해주세요',
-                }}
-                render={({ field }) => (
-                  <Box sx={PCLabelBox}>
-                    <CuTextFieldLabel
+          <Box sx={{ display: 'flex', width: '100%' }}>
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: '비밀번호를 입력해주세요',
+              }}
+              render={({ field }) => (
+                <Box sx={PCLabelBox}>
+                  {/* <CuTextFieldLabel
                       htmlFor="password"
                       style={{ color: '#000', font: 'inherit' }}
                     >
                       비밀번호
-                    </CuTextFieldLabel>
-                    <CuTextField
-                      type={showPassword ? 'text' : 'password'}
-                      {...field}
-                      style={{ width: '100%' }}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={() => setShowPassword(!showPassword)}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      placeholder="비밀번호를 입력하세요."
-                    />
-                    {errors.password && (
-                      <Typography>{errors.password.message}</Typography>
-                    )}
-                  </Box>
-                )}
-              />
-            </Box>
-            <Button type="submit" disabled={isLoading}>
-              로그인
-            </Button>
+                    </CuTextFieldLabel> */}
+                  <CuTextField
+                    type={showPassword ? 'text' : 'password'}
+                    {...field}
+                    style={{ width: '100%' }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    placeholder="비밀번호를 입력하세요."
+                  />
+                  {errors.password ? (
+                    <Typography color="error">
+                      {errors.password?.message}
+                    </Typography>
+                  ) : (
+                    <Typography>&nbsp;</Typography>
+                  )}
+                </Box>
+              )}
+            />
           </Box>
-          <Box sx={Form}>
-            {isPc ? (
-              <Typography sx={{ color: '#868686' }}>간편 로그인</Typography>
-            ) : (
-              <Typography
-                sx={{ color: '#868686', fontSize: '10px', marginTop: '24px' }}
-              >
-                또는
-              </Typography>
-            )}
-            <OauthLoginBox />
-          </Box>
-          <Container
-            sx={{
-              display: 'flex',
-              width: '100%',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              ...(isPc ? {} : { marginTop: '104px' }),
-            }}
+          <Button
+            fullWidth
+            variant="contained"
+            type="submit"
+            disabled={isLoading}
           >
-            <Button href="/privacy">회원가입</Button>
-            <Button href="/find-account">비밀번호 찾기</Button>
-          </Container>
-        </Container>
-      </Container>
+            로그인
+          </Button>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: '16px',
+            alignItems: 'flex-end',
+          }}
+        >
+          <Button fullWidth variant="outlined" href="/privacy">
+            피어가 처음이에요!
+          </Button>
+          <Button href="/find-account">비밀번호 찾기</Button>
+        </Box>
+      </BoxBase>
+
       <CuToast open={isOpen} onClose={closeToast} severity="error">
         <Typography>{errorMessage}</Typography>
       </CuToast>

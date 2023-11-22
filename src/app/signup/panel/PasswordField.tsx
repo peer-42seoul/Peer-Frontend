@@ -24,6 +24,7 @@ const PasswordField = ({
     field.onChange('')
   }
 
+  const [showValidating, setShowValidating] = useState<boolean>(false)
   const isLengthValid = field.value.length >= 8
   const isNumberValid = /\d/.test(field.value)
   const isSpecialValid = /[!@#$%^&*]/.test(field.value)
@@ -42,6 +43,9 @@ const PasswordField = ({
           minLength: 8,
           maxLength: 20,
         }}
+        onFocus={() => {
+          setShowValidating(true)
+        }}
         InputProps={{
           endAdornment: (
             <>
@@ -56,7 +60,14 @@ const PasswordField = ({
           ),
         }}
       />
-      <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: showValidating ? 'flex' : 'none',
+          gap: '10px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
         <Typography
           color={isAlphabetValid ? 'primary' : ''}
           sx={{ display: 'flex', alignItems: 'center' }}

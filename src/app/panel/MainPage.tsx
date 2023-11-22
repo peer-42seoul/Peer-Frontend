@@ -70,7 +70,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
   )
@@ -81,19 +80,14 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     isLoading,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
+    (page == 1 && !type && !sort && detailOption.isInit && keyword == '')
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
-          type ?? 'STUDY'
-        }&sort=${
-          sort ?? 'latest'
-        }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
-          detailOption.due
-        }&region1=${detailOption.region1}&region2=${
-          detailOption.region2
-        }&place=${detailOption.place}&status=${detailOption.status}&tag=${
-          detailOption.tag
-        }`,
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type ?? 'STUDY'
+      }&sort=${sort ?? 'latest'
+      }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due
+      }&region1=${detailOption.region1}&region2=${detailOption.region2
+      }&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag
+      }`,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
@@ -155,7 +149,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* mobile view */}
       <div className="mobile-layout">
         <Container>
-          <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
+          <Box sx={{ backgroundColor: 'Background' }} border="1px solid black">
             <SelectType type={type} setType={handleType} />
             <Grid container p={2}>
               <SearchOption

@@ -16,9 +16,20 @@ import React from 'react'
   register : react-hook-form 등록용 입니다.
 */
 
+/**
+ * 이미지 업로드 버튼
+ * @param {React.ReactNode} children 버튼 안에 다른 것을 넣고 싶을 때 넣습니다.
+ * @param {string} accept 파일 타입을 다르게 제한하고 싶을 때 씁니다. default로 이미지만 받도록 해두었습니다
+ * @param {string} id id
+ * @param {(image: File[]) => void} setImage 이미지 파일을 저장할 때 쓰는 함수입니다.
+ * @param {(imageUrl: string) => void} setPreviewImage 이미지를 URL로 반환해 저장하는 함수입니다.
+ * @param {() => void} onChange url로 변환 이후 작동해야할 로직이 있다면 onChange에 넣습니다.
+ * @param {UseFormRegisterReturn} register react-hook-form 등록용 입니다.
+ * @returns
+ */
 const ImageUploadButton = ({
   children,
-  accept = 'image/*',
+  accept = 'image/jpeg, image/jpg, image/png',
   id,
   setImage,
   setPreviewImage,
