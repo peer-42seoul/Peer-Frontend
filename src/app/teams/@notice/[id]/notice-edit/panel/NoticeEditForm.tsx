@@ -2,7 +2,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Stack, Typography, OutlinedInput } from '@mui/material'
 
-const NoticeEditForm = ({ postId }: { postId?: string }) => {
+const NoticeEditForm = ({ postId }: { teamId: string; postId?: string }) => {
   const [previousData, setPreviousData] = useState({
     title: '',
     description: '',
