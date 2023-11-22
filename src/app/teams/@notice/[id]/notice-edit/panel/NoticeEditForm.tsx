@@ -52,9 +52,8 @@ const NoticeEditForm = ({ postId }: { postId?: string }) => {
           <Typography>제목</Typography>
           <OutlinedInput
             name={'title'}
-            placeholder={
-              previousData?.title ? previousData.title : '제목을 입력해주세요.'
-            }
+            placeholder={'제목을 입력해주세요.'}
+            defaultValue={previousData?.title ? previousData.title : ''}
           />
         </Stack>
         <Stack>
@@ -62,13 +61,12 @@ const NoticeEditForm = ({ postId }: { postId?: string }) => {
           <OutlinedInput
             fullWidth
             name={'description'}
-            placeholder={
-              previousData?.description
-                ? previousData.description
-                : '내용을 입력해주세요.'
-            }
+            placeholder={'내용을 입력해주세요.'}
             multiline
             rows={10}
+            defaultValue={
+              previousData?.description ? previousData.description : ''
+            }
           />
         </Stack>
       </form>
