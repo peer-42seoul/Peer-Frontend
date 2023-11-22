@@ -4,6 +4,7 @@ import {
   FormGroup,
   Grid,
   SelectChangeEvent,
+  Slider,
   Stack,
 } from '@mui/material'
 
@@ -29,10 +30,18 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
     defaultGetFetcher,
   )
-  const [due, setDue] = useState('')
+  const [due, setDue] = useState<number[]>([0, 100])
   const [tagData, setTagData] = useState<string[]>([])
   const [location, setLocation] = useState<string>('')
   const [parentLocation, setParentLocation] = useState<string>('선택안함')
+  const dueList = [
+    { value: 0, label: '1주일' },
+    { value: 20, label: '1개월' },
+    { value: 40, label: '3개월' },
+    { value: 60, label: '6개월' },
+    { value: 80, label: '9개월' },
+    { value: 100, label: '12개월 이상' },
+  ]
 
   const onSubmit = (data: any) => {
     const { placeOnline, placeOffline, placemix, statusonGoing, statusdone } =
@@ -55,8 +64,10 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     })
 
     const tag = tagData.length ? tagData.join(',') : ''
+    //제출할 때는 숫자로 들어옴
     setDetailOption({
-      due: due === '선택안함' ? '' : due,
+      due1: due[0],
+      due2: due[1],
       region1: parentLocation === '선택안함' ? '' : parentLocation,
       region2: parentLocation === '선택안함' ? '' : location,
       place,
@@ -67,18 +78,27 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
 
   const handleReset = () => {
     reset()
-    setDue('')
+    setDue([0, 100])
     setTagData([])
     setLocation('')
     setParentLocation('')
     setDetailOption({
-      due: '',
+      due1: 0,
+      due2: 100,
       region1: '',
       region2: '',
       place: '',
       status: '',
       tag: '',
     })
+  }
+
+  function valueLabelFormat(value: number) {
+    return dueList.findIndex((mark) => mark.value === value) + 1
+  }
+
+  const handleDueChange = (_: Event, newValue: number | number[]) => {
+    setDue(newValue as number[])
   }
 
   return (
@@ -94,11 +114,16 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Box>목표 기간</Box>
-          <SetupSelect
-            value={due}
-            setValue={(event: SelectChangeEvent) => setDue(event.target.value)}
-            type="dueToSearch"
-          />
+          <Box paddingX={4}>
+            <Slider
+              value={due}
+              valueLabelFormat={valueLabelFormat}
+              onChange={handleDueChange}
+              step={null}
+              valueLabelDisplay="off"
+              marks={dueList}
+            />
+          </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
           <Box>작업 지역</Box>
