@@ -138,7 +138,10 @@ const PushAlertBanner = () => {
           top={isScroll ? 0 : 57}
           width={'100%'}
           border="1px solid black"
-          sx={{ backgroundColor: 'white', zIndex: 9999 }}
+          sx={{
+            backgroundColor: 'primary.main',
+            zIndex: 9999,
+          }}
         >
           <Stack margin={1}>
             <Typography>
