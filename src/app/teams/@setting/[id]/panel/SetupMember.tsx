@@ -30,16 +30,14 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
     if (member.grant === TeamGrant.LEADER) {
       axiosInstance
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.userId}&role=member`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
         )
         .then((res) => {
           console.log(res)
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
-                m.userId === member.userId
-                  ? { ...m, grant: TeamGrant.MEMBER }
-                  : m,
+                m.id === member.id ? { ...m, grant: TeamGrant.MEMBER } : m,
               ),
             )
           } else console.log(res.status)
@@ -50,16 +48,14 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
     } else {
       axiosInstance
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.userId}&role=leader`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
         )
         .then((res) => {
           console.log(res)
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
-                m.userId === member.userId
-                  ? { ...m, grant: TeamGrant.LEADER }
-                  : m,
+                m.id === member.id ? { ...m, grant: TeamGrant.LEADER } : m,
               ),
             )
           } else console.log(res.status)
@@ -81,7 +77,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
     if (!member) return console.log('팀원이 없습니다.')
     axiosInstance
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/delete/${teamId}?userId=${member.userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/delete/${teamId}?userId=${member.id}`,
       )
       .then((res) => {
         if (res.status === 200) {
