@@ -31,7 +31,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const type = useSearchParams().get('type') ?? 'projects'
   const [open, setOpen] = React.useState(false)
   const [roleOpen, setRoleOpen] = React.useState(false)
-  const [role, setRole] = React.useState<string>('')
+  const [role, setRole] = React.useState<string | null>(null)
 
   const { isPc } = useMedia()
   const { isLogin } = useAuthStore()
@@ -51,7 +51,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     }, 0)
   }, [data])
 
-  const handleApply = (selectedRole: string) => {
+  const handleApply = (selectedRole: string | null) => {
     if (!isLogin) router.push(currentUrl)
     else {
       setRole(selectedRole)
@@ -71,14 +71,13 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
         setOpen={setOpen}
         recruit_id={params.id}
         role={role}
-        user_id={data?.user_id}
         setRoleOpen={setRoleOpen}
       />
       {isPc ? (
         <Container>
           <Stack direction={'row'} gap={4} marginBottom={6}>
             <Image
-              src={data?.user_thumbnail ?? ''}
+              src={data?.leader_image ?? ''}
               alt="leader_profile"
               width={300}
               height={300}
@@ -91,7 +90,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 <Chip label={data?.status} size="medium" />
               </Stack>
               <Stack gap={2} direction="row">
-                <Typography>{data?.user_nickname}</Typography>
+                <Typography>{data?.leader_nickname}</Typography>
                 <Typography>
                   {type === 'project' ? '프로젝트' : '스터디'}
                 </Typography>
@@ -107,10 +106,21 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 </Button>
                 <LinkButton href={data?.link} variant={'contained'} />
               </Stack>
-              <ApplyButton
-                role={data?.roleList?.map((item) => item.name) || []}
-                onApply={handleApply}
-              />
+              {data?.roleList ? (
+                <ApplyButton
+                  role={data?.roleList?.map((item) => item.name) || []}
+                  onApply={handleApply}
+                />
+              ) : (
+                <Button
+                  id="apply-button"
+                  variant="contained"
+                  size="large"
+                  onClick={() => handleApply(null)}
+                >
+                  지원하기
+                </Button>
+              )}
             </Box>
           </Stack>
           <RecruitFormText
@@ -172,7 +182,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 </Typography>
                 <Chip label={data?.status} size="medium" />
                 <Stack gap={2} direction="row">
-                  <Typography>{data?.user_nickname}</Typography>
+                  <Typography>{data?.leader_nickname}</Typography>
                   <Typography>
                     {type === 'project' ? '프로젝트' : '스터디'}
                   </Typography>
@@ -180,7 +190,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 </Stack>
               </Box>
               <Image
-                src={data?.user_thumbnail ?? ''}
+                src={data?.leader_image ?? ''}
                 alt="leader_profile"
                 width={300}
                 height={300}
@@ -226,17 +236,28 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                   ))}
                 </Stack>
               </RecruitFormText>
-              <Button
-                fullWidth
-                variant="contained"
-                size="large"
-                onClick={() => {
-                  if (!isLogin) router.push(currentUrl)
-                  else setRoleOpen(true)
-                }}
-              >
-                지원하기
-              </Button>
+              {data?.roleList ? (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  onClick={() => {
+                    if (!isLogin) router.push(currentUrl)
+                    else setRoleOpen(true)
+                  }}
+                >
+                  지원하기
+                </Button>
+              ) : (
+                <Button
+                  id="apply-button"
+                  variant="contained"
+                  size="large"
+                  onClick={() => handleApply(null)}
+                >
+                  지원하기
+                </Button>
+              )}
             </Stack>
           </Container>
         </>
