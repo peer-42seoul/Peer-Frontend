@@ -75,6 +75,11 @@ const NotifSetting = ({
         checked={message}
         handleChange={() => setMessage((prev) => !prev)}
       />
+      <Notif
+        type="야간 알림(20시~9시)"
+        checked={message}
+        handleChange={() => setMessage((prev) => !prev)}
+      />
     </Box>
   )
 }
