@@ -43,10 +43,9 @@ const useAxiosWithAuth = () => {
           console.log('reissue!')
           try {
             // accessToken 갱신 요청
-            const response = await axiosInstance.post(
-              '/api/v1/signin/reissue',
-              { withCredentials: true },
-            )
+            const response = await axiosInstance.get('/api/v1/signin/reissue', {
+              withCredentials: true,
+            })
             const newAccessToken = response.data.accessToken
             useAuthStore.getState().login(newAccessToken)
             error.config.headers['Authorization'] = `Bearer ${newAccessToken}`
