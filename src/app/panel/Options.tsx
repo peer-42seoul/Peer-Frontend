@@ -6,6 +6,7 @@ import {
   SelectChangeEvent,
   Slider,
   Stack,
+  Typography,
 } from '@mui/material'
 
 import { useState } from 'react'
@@ -105,7 +106,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Box>작업 스택</Box>
+          <Typography>작업 스택</Typography>
           <TagAutoComplete
             list={listData?.map(({ name }: { name: string }) => name) || []}
             datas={tagData}
@@ -113,7 +114,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Box>목표 기간</Box>
+          <Typography>목표 기간</Typography>
           <Box paddingX={4}>
             <Slider
               value={due}
@@ -126,7 +127,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
           </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Box>작업 지역</Box>
+          <Typography>작업 지역</Typography>
           <SetupSelect
             value={parentLocation}
             setValue={(event: SelectChangeEvent) =>
@@ -144,7 +145,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Box>작업 유형</Box>
+          <Typography>작업 유형</Typography>
           <FormGroup row>
             <FormCheckbox name="placeOnline" label="온라인" control={control} />
             <FormCheckbox
@@ -156,7 +157,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
           </FormGroup>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Box>작업 단계</Box>
+          <Typography>작업 단계</Typography>
           <FormGroup row>
             <FormCheckbox
               name="statusonGoing"

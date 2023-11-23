@@ -166,7 +166,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* mobile view */}
       <div className="mobile-layout">
         <Container>
-          <Box sx={{ backgroundColor: 'Background' }} border="1px solid black">
+          <Box
+            sx={{ backgroundColor: 'Background.primary' }}
+            border="1px solid black"
+          >
             <SelectType type={type} setType={handleType} />
             <Grid container p={2}>
               <SearchOption
@@ -226,14 +229,19 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       </div>
       {/* pc view */}
       <div className="pc-layout">
-        <Container sx={{ backgroundColor: 'white', border: '1px solid black' }}>
+        <Container
+          sx={{
+            backgroundColor: 'Background.primary',
+            border: '1px solid black',
+          }}
+        >
           <Stack direction={'row'} border="1px solid black">
             <Stack flex={1}>
               <Box height={'200px'} border="1px solid black">
                 피어 소개 배너
               </Box>
               <SelectType type={type} setType={handleType} pc />
-              <Grid container p={2}>
+              <Grid container p={2} bgcolor={'Background.primary'}>
                 <SearchOption
                   openOption={openOption}
                   setOpenOption={setOpenOption}
