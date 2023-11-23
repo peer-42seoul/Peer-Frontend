@@ -58,7 +58,9 @@ const SearchPopover = ({
       >
         <Stack>
           <CuTextField
-            id="search"
+            // FIXME : inputRef를 통해서 ref를 전달했을 때 ref.current가 항상 null이 나오는 문제가 있는데 원인을 못찾아서 일단 추가로 ref를 전달해주었음.
+            ref={textFieldRef}
+            id="search-keyword"
             placeholder="검색어를 입력하세요."
             inputRef={textFieldRef}
             fullWidth
@@ -84,11 +86,12 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
   const { id } = params
   const { isPc } = useMedia()
   const router = useRouter()
+  const [keyword, setKeyword] = useState<string>('')
   return (
     <Stack width={'100%'}>
       {isPc ? (
         <Stack direction={'row'} justifyContent={'flex-end'}>
-          <SearchPopover setKeyword={(keyword) => console.log(keyword)} />
+          <SearchPopover setKeyword={setKeyword} />
           <Button
             onClick={() => router.push(`/teams/${id}/notice-edit`)}
             variant="contained"
@@ -102,14 +105,14 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
         <Typography>공지사항</Typography>
         {isPc ? null : (
           <Stack direction={'row'}>
-            <SearchPopover setKeyword={(keyword) => console.log(keyword)} />
+            <SearchPopover setKeyword={setKeyword} />
             <IconButton onClick={() => router.push(`/teams/${id}/notice-edit`)}>
               <AddIcon />
             </IconButton>
           </Stack>
         )}
       </Stack>
-      <NoticeList teamId={parseInt(id)} />
+      <NoticeList teamId={parseInt(id)} keyword={keyword} />
     </Stack>
   )
 }
