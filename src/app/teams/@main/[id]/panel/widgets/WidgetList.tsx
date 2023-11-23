@@ -72,6 +72,40 @@ const WidgetList = ({
     [setDroppingItem, setIsDropping, setType, toolSize, setSize],
   )
 
+  const getWidget = useCallback(
+    (typeValue: WidgetType) => {
+      switch (typeValue) {
+        case 'notice':
+          return (
+            <TmpNoticeWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+          )
+        case 'board':
+          return (
+            <TmpBoardWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+          )
+        case 'calender':
+          return (
+            <TmpCalenderWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+          )
+        case 'attendance':
+          return (
+            <TmpAttendWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+          )
+        case 'text':
+          return <TmpTextWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+        case 'image':
+          return (
+            <TmpImageWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+          )
+        case 'linkTable':
+          return <TmpLinkWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+        default:
+          return null
+      }
+    },
+    [toolSize],
+  )
+
   return (
     <Box
       bgcolor={'skyblue'}
@@ -125,48 +159,7 @@ const WidgetList = ({
                   setIsDropping(false)
                 }}
               >
-                {typeValue === 'notice' && (
-                  <TmpNoticeWidget
-                    data={null}
-                    size={toolSize[typeValue] ?? 'S'}
-                  />
-                )}
-                {typeValue === 'board' && (
-                  <TmpBoardWidget
-                    data={null}
-                    size={toolSize[typeValue] ?? 'S'}
-                  />
-                )}
-                {typeValue === 'calender' && (
-                  <TmpCalenderWidget
-                    data={null}
-                    size={toolSize[typeValue] ?? 'S'}
-                  />
-                )}
-                {typeValue === 'attendance' && (
-                  <TmpAttendWidget
-                    data={null}
-                    size={toolSize[typeValue] ?? 'S'}
-                  />
-                )}
-                {typeValue === 'text' && (
-                  <TmpTextWidget
-                    data={null}
-                    size={toolSize[typeValue] ?? 'S'}
-                  />
-                )}
-                {typeValue === 'image' && (
-                  <TmpImageWidget
-                    data={null}
-                    size={toolSize[typeValue] ?? 'S'}
-                  />
-                )}
-                {typeValue === 'linkTable' && (
-                  <TmpLinkWidget
-                    data={null}
-                    size={toolSize[typeValue] ?? 'S'}
-                  />
-                )}
+                {getWidget(typeValue)}
               </Stack>
             </Stack>
           </Box>

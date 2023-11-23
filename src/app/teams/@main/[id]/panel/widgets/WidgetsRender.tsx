@@ -31,6 +31,7 @@ import useAxiosWithAuth from '@/api/config'
 
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import CuModal from '@/components/CuModal'
+
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
 interface IWidgetsRenderProps {
@@ -53,11 +54,14 @@ const WidgetsRender = ({
   edit,
   setEdit,
 }: IWidgetsRenderProps) => {
+  const [index, setIndex] = useState(0)
+
   /* 초기 widget값을 만드는 함수 */
   const setInitWidgets: IWidget[] = useMemo(() => {
     if (!data) return []
     return data?.widgets?.map((widget, index) => {
-      if (index === widgets.length - 1) setIndex(index)
+      if (index === data?.widgets?.length - 1) setIndex(index)
+
       return {
         ...widget,
         grid: {
@@ -67,8 +71,8 @@ const WidgetsRender = ({
       }
     })
   }, [data])
-  const [index, setIndex] = useState(0)
   const [widgets, setWidgets] = useState<IWidget[]>(setInitWidgets)
+
   const [isOpen, setOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
   const {
@@ -119,6 +123,7 @@ const WidgetsRender = ({
           (grid: Layout, i: number) => ({
             ...widgets[i],
             grid,
+            updatedAt: new Date(),
           }),
         )
         setWidgets(updatedCurrentWidget)
@@ -135,14 +140,13 @@ const WidgetsRender = ({
         type: 'team',
         widgets: widgets,
       }
-      console.log('teamWidgetInfo', teamWidgetInfo)
       if (!data) {
         await axiosInstance.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/create`,
           teamWidgetInfo,
         )
       } else
-        await axiosInstance.put(
+        await axiosInstance.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/update`,
           teamWidgetInfo,
         )
@@ -152,7 +156,31 @@ const WidgetsRender = ({
       console.log('e', e)
       openFailedToast()
     }
-  }, [data, id, widgets])
+  }, [axiosInstance, data, id, openFailedToast, openSuccessToast, widgets])
+
+  const getWidget = useCallback(
+    (type: WidgetType, wgData: any, wgSize: SizeType) => {
+      switch (type) {
+        case 'notice':
+          return <TmpNoticeWidget data={wgData} size={wgSize} />
+        case 'board':
+          return <TmpBoardWidget data={wgData} size={wgSize} />
+        case 'calender':
+          return <TmpCalenderWidget data={wgData} size={wgSize} />
+        case 'attendance':
+          return <TmpAttendWidget data={wgData} size={wgSize} />
+        case 'text':
+          return <TmpTextWidget data={wgData} size={wgSize} />
+        case 'image':
+          return <TmpImageWidget data={wgData} size={wgSize} />
+        case 'linkTable':
+          return <TmpLinkWidget data={wgData} size={wgSize} />
+        default:
+          return null
+      }
+    },
+    [],
+  )
 
   return (
     <Box>
@@ -216,7 +244,7 @@ const WidgetsRender = ({
           backgroundColor: 'yellow',
         }}
       >
-        {widgets?.map(({ grid, type, size: wgSize }) => {
+        {widgets?.map(({ grid, type, size: wgSize, data: wgData }) => {
           return (
             <Box
               key={grid.i}
@@ -228,9 +256,9 @@ const WidgetsRender = ({
               {edit && (
                 <IconButton
                   onClick={() => {
-                    const newWidgets = [
-                      ...widgets.filter((widget) => widget.grid.i !== grid.i),
-                    ]
+                    const newWidgets = widgets.filter(
+                      (widget) => widget.grid.i !== grid.i,
+                    )
                     setWidgets(newWidgets)
                   }}
                   aria-label="delete"
@@ -248,21 +276,7 @@ const WidgetsRender = ({
                 </IconButton>
               )}
               {/*위젯 type에 따라 렌더링*/}
-              {type === 'notice' && (
-                <TmpNoticeWidget data={data} size={wgSize} />
-              )}
-              {type === 'board' && <TmpBoardWidget data={data} size={wgSize} />}
-              {type === 'calender' && (
-                <TmpCalenderWidget data={data} size={wgSize} />
-              )}
-              {type === 'attendance' && (
-                <TmpAttendWidget data={data} size={wgSize} />
-              )}
-              {type === 'text' && <TmpTextWidget data={data} size={wgSize} />}
-              {type === 'image' && <TmpImageWidget data={data} size={wgSize} />}
-              {type === 'linkTable' && (
-                <TmpLinkWidget data={data} size={wgSize} />
-              )}
+              {getWidget(type, wgData, wgSize)}
             </Box>
           )
         })}

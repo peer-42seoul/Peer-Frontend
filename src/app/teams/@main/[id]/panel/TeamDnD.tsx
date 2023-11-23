@@ -1,12 +1,12 @@
 import { Stack } from '@mui/material'
-import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import 'react-grid-layout/css/styles.css'
 import { ITeamDnDLayout, SizeType, WidgetType } from '@/types/ITeamDnDLayout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import WidgetList from '@/app/teams/@main/[id]/panel/widgets/WidgetList'
 import WidgetsRender from '@/app/teams/@main/[id]/panel/widgets/WidgetsRender'
 import ReactGridLayout from 'react-grid-layout'
+import useSWRMutation from 'swr/mutation'
 
 export const sizeRatio = {
   S: { w: 1, h: 1 },
@@ -27,14 +27,20 @@ const TeamDnD = ({ id }: { id: string }) => {
   const [isDropping, setIsDropping] = useState(false)
   const [size, setSize] = useState<SizeType>('S')
   const axiosInstance = useAxiosWithAuth()
-  const { data } = useSWR<ITeamDnDLayout>(
+  const { trigger, data, error, isMutating } = useSWRMutation<ITeamDnDLayout>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/read`,
-    (url: string) => axiosInstance.get(url).then((res) => res.data),
+    (url: string) =>
+      axiosInstance
+        .post(url, { teamId: id, type: 'team' })
+        .then((res) => res.data),
   )
 
-  /* api 연결 후 사용할 예정 */
-  // if (isLoading) return <>로딩중입니다</>
-  // if (error) return <>에러 발생</>
+  useEffect(() => {
+    trigger()
+  }, [])
+
+  if (!data && isMutating) return <>로딩중입니다</>
+  if (!data && error) return <>에러 발생</>
 
   return (
     <Stack

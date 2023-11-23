@@ -45,7 +45,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="peer" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" />
-        <meta name="theme-color" content="#8936FF" />
+        <meta name="theme-color" content="#010456" />
       </head>
       <body>
         <CuSWRConfig>

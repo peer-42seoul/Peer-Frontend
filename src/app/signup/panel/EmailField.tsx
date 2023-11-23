@@ -27,7 +27,7 @@ const EmailField = ({
         autoComplete="email"
         error={emailSendStatus === 'error'}
         type="text"
-        placeholder="이메일을 입력하세요"
+        placeholder="가입할 이메일을 입력하세요"
         inputProps={{
           maxLength: 30,
         }}
@@ -35,11 +35,11 @@ const EmailField = ({
           endAdornment: (
             <InputAdornment position="end">
               <Button
-                variant="contained"
+                variant="text"
                 disabled={isSubmitting || emailSendStatus === 'submit'}
                 onClick={submitEmail}
               >
-                이메일 인증
+                코드 전송
               </Button>
             </InputAdornment>
           ),
