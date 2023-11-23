@@ -133,7 +133,8 @@ const RecruitFormModal = ({
           }}
         >
           <Box
-            bgcolor={'white'}
+            bgcolor={'Background.primary'}
+            border={'1px solid white'}
             padding={4}
             sx={{
               overflowY: 'auto',
