@@ -1,10 +1,20 @@
 import { Layout } from 'react-grid-layout'
 
+export type DateTimeArray = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+  number,
+]
+
 export interface ITeamDnDLayout {
   teamId: number
   type: string // teamPage, peerLog
-  createdAt: Date | number[]
-  updatedAt: Date | number[] // LocalDateTime
+  createdAt: Date | DateTimeArray
+  updatedAt: Date | DateTimeArray // LocalDateTime
   widgets: IWidget[]
 }
 
@@ -15,8 +25,8 @@ export interface IWidget {
   size: SizeType // S/M/L
   grid: Layout // x,y,w,h
   type: WidgetType
-  createdAt?: Date | number[]
-  updatedAt?: Date | number[]
+  createdAt?: Date | DateTimeArray
+  updatedAt?: Date | DateTimeArray
   data: any
 }
 

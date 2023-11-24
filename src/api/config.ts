@@ -30,22 +30,22 @@ const useAxiosWithAuth = () => {
       return response
     },
     async (error) => {
-      //console.log('is refreshing?', isRefreshing)
-      isRefreshing = true
+      console.log('is refreshing?', isRefreshing)
       const currentPageUrl = window.location.pathname
       if (error.response?.status === 401) {
-        if (!accessToken || isRefreshing) {
+        if (isRefreshing) {
           // 로그아웃 후 리디렉션
-
+          isRefreshing = true
           useAuthStore.getState().logout()
           router.push('/login?redirect=' + currentPageUrl)
         } else {
+          isRefreshing = true
+          console.log('reissue!')
           try {
             // accessToken 갱신 요청
-            const response = await axiosInstance.post(
-              '/api/v1/signin/reissue',
-              { withCredentials: true },
-            )
+            const response = await axiosInstance.get('/api/v1/signin/reissue', {
+              withCredentials: true,
+            })
             const newAccessToken = response.data.accessToken
             useAuthStore.getState().login(newAccessToken)
             error.config.headers['Authorization'] = `Bearer ${newAccessToken}`

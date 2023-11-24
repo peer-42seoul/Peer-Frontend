@@ -32,11 +32,12 @@ export const getFetcherWithInstance = (
 export const fetchServerData = async (url: string) => {
   try {
     const response = await axios.get(url, {
+      withCredentials: true,
       headers: { 'Cache-Control': 'no-store' },
     })
     return response.data
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 }
 

@@ -13,7 +13,7 @@ const Form = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '24px',
+  gap: '8px',
 }
 
 const LabelBox = {
@@ -58,12 +58,8 @@ const SendEmailForm = ({
 
   return (
     <>
-      <Box sx={Form}>
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}
-        >
+      <Container disableGutters={true}>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={Form}>
           <Controller
             name="email"
             control={control}
@@ -76,7 +72,7 @@ const SendEmailForm = ({
               },
             }}
             render={({ field }) => (
-              <Container sx={LabelBox}>
+              <Container sx={LabelBox} disableGutters={true}>
                 <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
                 <CuTextField
                   {...field}
@@ -85,14 +81,21 @@ const SendEmailForm = ({
                   style={{ width: '100%' }}
                   disabled={isEmailSuccessful}
                 />
-                {errors.email && (
-                  <Typography>{errors.email.message}</Typography>
+                {errors.email ? (
+                  <Typography color="error">{errors.email?.message}</Typography>
+                ) : (
+                  <Typography>&nbsp;</Typography>
                 )}
               </Container>
             )}
           />
           {!isEmailSuccessful && (
-            <Button type="submit" disabled={isSubmitting}>
+            <Button
+              fullWidth
+              variant="contained"
+              type="submit"
+              disabled={isSubmitting}
+            >
               코드 발송
             </Button>
           )}
@@ -109,7 +112,7 @@ const SendEmailForm = ({
             />
           </Box>
         )}
-      </Box>
+      </Container>
       <CuToast open={isOpen} onClose={closeToast} severity="error">
         <Typography>{errorMessage}</Typography>
       </CuToast>

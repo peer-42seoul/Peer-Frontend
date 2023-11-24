@@ -117,7 +117,7 @@ export const PcNav = () => {
         top: 0,
         overflow: 'hidden',
         zIndex: 1400,
-        backgroundColor: 'white',
+        backgroundColor: 'background.primary',
       }}
     >
       <BottomNavigation
@@ -159,7 +159,7 @@ export const PcNav = () => {
         </IconButton>
         <SearchButton />
         <Link href="/my-page/interests">
-          <IconButton aria-label="favorites">
+          <IconButton sx={{ color: 'purple.strong' }} aria-label="favorites">
             <Favorite />
           </IconButton>
         </Link>

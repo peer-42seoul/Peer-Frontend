@@ -4,7 +4,7 @@ import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import {
   Checkbox,
-  Container,
+  Box,
   FormControlLabel,
   Paper,
   Stack,
@@ -13,12 +13,13 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
+import BoxBase from '@/components/BoxBase'
 
-const PCLoginBox = {
+const PCSignupBox = {
   display: 'flex',
   position: 'relative',
-  width: '496px',
-  padding: '24px 24px 40px 24px',
+  width: '544px',
+  padding: '40px 64px',
   flexDirection: 'column',
   alignItems: 'center',
   gap: '48px',
@@ -26,16 +27,19 @@ const PCLoginBox = {
   border: '1px solid #000',
 }
 
-const MobileLoginBox = {
+const MobileSignupBox = {
   display: 'flex',
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '0 32px 15px 32px',
+  padding: '40px 16px',
+  gap: '24px',
+  borderRadius: '16px',
+  border: '1px solid #000',
 }
 
 const PCPaper = {
-  width: '450px',
+  width: '100%',
   height: '100px',
   overflow: 'auto',
 }
@@ -82,54 +86,57 @@ const Privacy = () => {
 
   return (
     <>
-      <Container sx={isPc ? PCLoginBox : MobileLoginBox}>
-        <Typography variant="h4">개인정보처리방침</Typography>
-        <Stack>
-          <FormControlLabel
-            control={<Checkbox />}
-            label="전체 동의하기"
-            onChange={() => {
-              if (checkAll === false) setCheckStatus([true, true])
-              else if (checkAll === true && checkStatus[0] && checkStatus[1])
-                setCheckStatus([false, false])
-              setCheckAll(!checkAll)
-            }}
-            checked={checkAll}
-          />
-          <Typography>
-            실명 인증된 아이디로 가입,이벤트 혜택 정보 수신(선택) 동의를
-            포함합니다.
-          </Typography>
-        </Stack>
-        <Stack>
-          <Paper sx={isPc ? PCPaper : MobilePaper}> {Policy1}</Paper>
-          <FormControlLabel
-            control={<Checkbox />}
-            onChange={() => {
-              setCheckStatus([!checkStatus[0], checkStatus[1]])
-            }}
-            label="[필수] peer 이용 약관"
-            checked={checkStatus[0]}
-          />
-        </Stack>
-        <Stack>
-          <Paper sx={isPc ? PCPaper : MobilePaper}>{Policy1}</Paper>
-          <FormControlLabel
-            control={<Checkbox />}
-            label="[필수] 개인정보 수집 및 이용"
-            onChange={() => {
-              setCheckStatus([checkStatus[0], !checkStatus[1]])
-            }}
-            checked={checkStatus[1]}
-          />
-        </Stack>
+      <BoxBase pcSx={PCSignupBox} mobileSx={MobileSignupBox}>
+        <Typography variant="h5">개인정보처리방침</Typography>
+        <Box>
+          <Stack>
+            <FormControlLabel
+              control={<Checkbox />}
+              label="전체 동의하기"
+              onChange={() => {
+                if (checkAll === false) setCheckStatus([true, true])
+                else if (checkAll === true && checkStatus[0] && checkStatus[1])
+                  setCheckStatus([false, false])
+                setCheckAll(!checkAll)
+              }}
+              checked={checkAll}
+            />
+            <Typography>
+              실명 인증된 아이디로 가입,이벤트 혜택 정보 수신(선택) 동의를
+              포함합니다.
+            </Typography>
+          </Stack>
+          <Stack>
+            <Paper sx={isPc ? PCPaper : MobilePaper}> {Policy1}</Paper>
+            <FormControlLabel
+              control={<Checkbox />}
+              onChange={() => {
+                setCheckStatus([!checkStatus[0], checkStatus[1]])
+              }}
+              label="[필수] peer 이용 약관"
+              checked={checkStatus[0]}
+            />
+          </Stack>
+          <Stack>
+            <Paper sx={isPc ? PCPaper : MobilePaper}>{Policy1}</Paper>
+            <FormControlLabel
+              control={<Checkbox />}
+              label="[필수] 개인정보 수집 및 이용"
+              onChange={() => {
+                setCheckStatus([checkStatus[0], !checkStatus[1]])
+              }}
+              checked={checkStatus[1]}
+            />
+          </Stack>
+        </Box>
         <CuButton
           message={'다음'}
           action={onClick}
           variant={'contained'}
           disabled={disabled}
+          fullWidth
         />
-      </Container>
+      </BoxBase>
     </>
   )
 }
