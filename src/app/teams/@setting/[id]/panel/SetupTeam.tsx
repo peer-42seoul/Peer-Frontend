@@ -8,6 +8,7 @@ import {
   Button,
   TextField,
   IconButton,
+  Avatar,
 } from '@mui/material'
 import { TeamOperationForm, TeamStatus, TeamType } from '../page'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
@@ -250,15 +251,15 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
                     component="label"
                     sx={{ position: 'relative', width: '100%', height: '100%' }}
                   >
-                    <Image
+                    <Avatar
+                      variant="rounded"
                       src={
                         teamInfo.teamImage
                           ? teamInfo.teamImage
                           : '/images/teamLogo.png'
                       }
                       alt="teamLogo"
-                      width={100}
-                      height={100}
+                      sx={{ width: 100, height: 100 }}
                     />
                     <Box
                       sx={{

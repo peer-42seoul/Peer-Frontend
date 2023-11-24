@@ -39,12 +39,13 @@ const PwaInstallBanner = () => {
   useEffect(() => {
     if (localStorage.getItem('isShowInstall') === 'false') {
       setIsShowInstall(false)
-    } else {
-      setIsShowInstall(true)
     }
 
-    const isSafariBrowser = navigator.userAgent.includes('Safari')
+    console.log('navigator', navigator.userAgent)
 
+    const isSafariBrowser =
+      navigator.userAgent.includes('Safari') &&
+      !navigator.userAgent.includes('Chrome')
     setIsSafari(isSafariBrowser)
 
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
@@ -80,7 +81,7 @@ const PwaInstallBanner = () => {
             bottom={0}
             width={'100%'}
             border="1px solid black"
-            sx={{ backgroundColor: 'white', zIndex: 9999 }}
+            sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
           >
             <Stack
               margin={1}
@@ -110,7 +111,7 @@ const PwaInstallBanner = () => {
           bottom={0}
           width={'100%'}
           border="1px solid black"
-          sx={{ backgroundColor: 'white', zIndex: 9999 }}
+          sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
         >
           <Stack margin={1}>
             <Typography>
@@ -118,15 +119,19 @@ const PwaInstallBanner = () => {
               {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
             </Typography>
             <Stack direction="row">
-              <Button onClick={handleInstall}>설치</Button>
-              <Button onClick={() => setIsShowInstall(false)}>다음에</Button>
+              <Button onClick={handleInstall}>
+                <Typography>설치</Typography>
+              </Button>
+              <Button onClick={() => setIsShowInstall(false)}>
+                <Typography>다음에</Typography>
+              </Button>
               <Button
                 onClick={() => {
                   setIsShowInstall(false)
                   localStorage.setItem('isShowInstall', 'false')
                 }}
               >
-                닫기
+                <Typography>닫기</Typography>
               </Button>
             </Stack>
           </Stack>
