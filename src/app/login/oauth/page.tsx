@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import useAuthStore from '@/states/useAuthStore'
-import { cookies } from 'next/headers'
+import { setCookie } from 'cookies-next'
 
 const OauthLogin = () => {
   const router = useRouter()
@@ -15,7 +15,7 @@ const OauthLogin = () => {
     const accessToken = searchParams.get('accessToken')
     if (accessToken) {
       login(accessToken)
-      cookies().set('accessToken', accessToken)
+      setCookie('accessToken', accessToken)
       router.push('/')
     } else {
       window.alert('로그인에 실패했습니다')
