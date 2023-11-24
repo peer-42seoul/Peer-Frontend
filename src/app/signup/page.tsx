@@ -80,7 +80,7 @@ const SignUp = () => {
     if (isLogin) router.replace('/')
   }, [])
 
-  const [signUpStep, setSignUpStep] = useState<number>(1)
+  const [signUpStep, setSignUpStep] = useState<number>(0)
   const [emailSendStatus, setEmailSendStatus] = useState<
     'before' | 'submit' | 'error'
   >('before')

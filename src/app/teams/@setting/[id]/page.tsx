@@ -33,7 +33,7 @@ export enum TeamOperationForm {
 }
 export interface IMember {
   name: string
-  userId: string
+  id: string
   grant: TeamGrant
 }
 
