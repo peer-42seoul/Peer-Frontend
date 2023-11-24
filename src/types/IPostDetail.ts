@@ -35,9 +35,9 @@ export interface IPostDetail {
   status: TPostStatus
   due: string
   content: string
-  user_id: string
-  user_nickname: string
-  user_thumbnail: string
+  leader_id: string
+  leader_image: string
+  leader_nickname: string
   region: string[]
   link: string
   tagList: ITag[]
