@@ -46,13 +46,13 @@ export default function SelectRegion({ setValue }: BasicSelectProps) {
     : []
 
   return (
-    <Box sx={{ width: 300, display: 'flex', flexDirection: 'row' }}>
-      <FormControl fullWidth>
+    <Box sx={{ width: '416px', display: 'flex', flexDirection: 'row', gap: 2 }}>
+      <FormControl fullWidth sx={{ width: '204px' }}>
         <Select value={largeScaleData} onChange={handleChangeLargeScaleData}>
           {options1}
         </Select>
       </FormControl>
-      <FormControl fullWidth>
+      <FormControl fullWidth sx={{ width: '204px' }}>
         <Select value={smallScaleData} onChange={handleChangeSmallScaleData}>
           {options2}
         </Select>

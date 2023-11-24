@@ -47,6 +47,7 @@ const TagAutoComplete = ({
             placeholder={
               placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
             }
+            sx={{ width: '416px' }}
           />
         )}
       />

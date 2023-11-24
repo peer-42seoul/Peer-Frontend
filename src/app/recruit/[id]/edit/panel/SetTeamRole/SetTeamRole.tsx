@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Button, Stack, TextField } from '@mui/material'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import BasicSelectMember from './BasicSelectMember'
 import { IRoleData } from '@/types/IPostDetail'
@@ -29,28 +29,30 @@ const SetTeamRole = ({
   }
 
   return (
-    <Box
-      sx={{
-        p: 2,
-        border: '1px dashed grey',
-        width: '70%',
-      }}
-    >
+    <Box>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
         }}
       >
-        <Typography>역할</Typography>
-        <TextField
-          variant="outlined"
-          value={role}
-          onChange={onHandlerEditRole}
-        />
-        <Typography>인원</Typography>
-        <BasicSelectMember member={member} setMember={setMember} />
-        <Button onClick={onHandlerAddRole}>역할 추가</Button>
+        <Stack
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+          }}
+          gap={2}
+        >
+          <TextField
+            sx={{ width: '416px' }}
+            variant="outlined"
+            value={role}
+            onChange={onHandlerEditRole}
+            placeholder='역할을 입력해주세요'
+          />
+          <BasicSelectMember member={member} setMember={setMember} />
+        </Stack>
+        <Button onClick={onHandlerAddRole}>추가</Button>
       </Box>
       {roleData.map((data, index) => {
         if (data.role === '' || data.member === 0) {
