@@ -46,25 +46,25 @@ const componentName = {
 }
 
 // react-base64-image.js
-const convertImageToBase64 = (file: any) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
+// const convertImageToBase64 = (file: any) => {
+//   return new Promise((resolve, reject) => {
+//     const reader = new FileReader()
 
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        resolve(reader.result.split(',')[1]) // Base64 데이터에서 실제 데이터 부분만 추출
-      } else {
-        reject(new Error('Unexpected result type'))
-      }
-    }
+//     reader.onload = () => {
+//       if (typeof reader.result === 'string') {
+//         resolve(reader.result.split(',')[1]) // Base64 데이터에서 실제 데이터 부분만 추출
+//       } else {
+//         reject(new Error('Unexpected result type'))
+//       }
+//     }
 
-    reader.onerror = (error) => {
-      reject(error)
-    }
+//     reader.onerror = (error) => {
+//       reject(error)
+//     }
 
-    reader.readAsDataURL(file)
-  })
-}
+//     reader.readAsDataURL(file)
+//   })
+// }
 
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
