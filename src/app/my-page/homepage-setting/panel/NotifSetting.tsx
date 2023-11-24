@@ -25,22 +25,26 @@ const Notif = ({
 }) => {
   return (
     <Box>
-      <Stack direction={'row'} alignItems={'center'} spacing={2}>
-        <Typography variant="CaptionEmphasis" color={'text.strong'}>
-          {type}
-        </Typography>
-        <FormControlLabel
-          control={
-            <CuToggle
-              checked={checked}
-              onChange={handleChange}
-              inputProps={{ 'aria-label': `${type} 설정 토글` }}
-            />
-          }
-          label={''}
-          labelPlacement="start"
-        />
-      </Stack>
+      <FormControlLabel
+        sx={{ marginLeft: '0', display: 'box' }}
+        control={
+          <CuToggle
+            checked={checked}
+            onChange={handleChange}
+            inputProps={{ 'aria-label': `${type} 설정 토글` }}
+          />
+        }
+        label={
+          <Typography
+            variant="CaptionEmphasis"
+            color={'text.strong'}
+            sx={{ marginRight: '16px', marginLeft: '0' }}
+          >
+            {type}
+          </Typography>
+        }
+        labelPlacement="start"
+      />
     </Box>
   )
 }

@@ -419,11 +419,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         fontStyle: 'normal',
         fontWeight: 600,
         lineHeight: '150%',
-        '@media (max-width: 480px)': {
-          fontSize: '15px',
-          fontWeight: 600,
-        },
-      } as React.CSSProperties,
+      },
       Title3: {
         fontSize: '18px',
         fontStyle: 'normal',
