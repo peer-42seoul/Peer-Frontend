@@ -48,8 +48,6 @@ const PwaInstallBanner = () => {
       !navigator.userAgent.includes('Chrome')
     setIsSafari(isSafariBrowser)
 
-    console.log('isSafari', isSafariBrowser)
-
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       e.preventDefault()
       setDeferredPrompt(e)
