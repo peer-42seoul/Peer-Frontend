@@ -39,7 +39,7 @@ import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutl
 import CuButton from '@/components/CuButton'
 
 const componentName = {
-  flex: 'row',
+  // flex: 'row',
   // paddingTop: '24px',
   // paddingBottom: '8px',
   alignItems: 'center',
@@ -89,7 +89,7 @@ const CreateTeam = () => {
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
-  const [selectedImage, setSelectedImage] = useState<any>(null)
+  // const [selectedImage, setSelectedImage] = useState<any>(null)
 
   const { data, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
@@ -127,14 +127,14 @@ const CreateTeam = () => {
     }
     // const base64Data = await convertImageToBase64(image[0])
     // setSelectedImage(base64Data)
-    setSelectedImage(previewImage.split(',')[1])
-    console.log(selectedImage)
+    // setSelectedImage(previewImage.split(',')[1])
+    // console.log(selectedImage)
     try {
       const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
         {
           place: place,
-          image: selectedImage,
+          image: previewImage.split(',')[1],
           title: title,
           name: name,
           due: due,
@@ -170,6 +170,7 @@ const CreateTeam = () => {
             paddingBottom: '24px',
             paddingLeft: '16px',
             paddingRight: '16px',
+            backgroundColor: '#18182B',
           }}
         >
           <Stack gap={3}>
@@ -205,7 +206,7 @@ const CreateTeam = () => {
                 <Typography variant="h6">모집글 제목</Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px'}}
+                sx={{ width: '416px' }}
                 variant="outlined"
                 value={title}
                 onChange={(e) => {
@@ -221,7 +222,7 @@ const CreateTeam = () => {
                 <Typography variant="h6">프로젝트 명</Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px'}}
+                sx={{ width: '416px' }}
                 variant="outlined"
                 value={name}
                 onChange={(e) => {
