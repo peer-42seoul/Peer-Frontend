@@ -92,8 +92,6 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
     (url: string) => axiosInstance(url).then((res) => res.data),
   )
 
-  console.log(data)
-
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
