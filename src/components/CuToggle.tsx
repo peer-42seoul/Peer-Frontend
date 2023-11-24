@@ -23,6 +23,7 @@ const CuToggle = styled((props: SwitchProps) => (
     position: 'relative',
     '&.Mui-checked': {
       transform: 'translateX(28px)',
+      transition: 'transform 0.3s ease',
       color: theme.palette.purple.tinted,
       '& + .MuiSwitch-track': {
         opacity: 1,
@@ -31,7 +32,7 @@ const CuToggle = styled((props: SwitchProps) => (
           content: '""',
           position: 'absolute',
           top: 2,
-          transition: 'opacity 0.5s ease',
+          transition: 'opacity 0.3s ease',
           width: 24,
           height: 24,
         },

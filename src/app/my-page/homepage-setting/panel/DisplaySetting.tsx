@@ -36,7 +36,7 @@ const DisplaySetting = () => {
           labelPlacement="start"
         />
         <FormControlLabel
-          sx={{ opacity: useSystem ? 0 : 1, transition: 'opacity 0.5s ease' }}
+          sx={{ opacity: useSystem ? 0 : 1, transition: 'opacity 0.3s ease' }}
           control={
             <CuDisplayModeToggle
               checked={darkMode}
