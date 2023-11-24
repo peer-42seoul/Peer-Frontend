@@ -2,7 +2,7 @@
 
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material'
 import { NotificationsNoneOutlined } from '@mui/icons-material'
-import SearchButton from './SearchButton'
+import SearchButton from './main-page/SearchButton'
 
 const Header = () => {
   return (

@@ -9,16 +9,16 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
-import EditButton from './EditButton'
-import MainCard from './MainCard'
-import SearchOption from './SearchOption'
-import SelectSort from './SelectSort'
-import SelectType from './SelectType'
+import FloatEditButton from './main-page/FloatEditButton'
+import MainCard from './main-page/MainCard'
+import SearchOption from './main-page/SearchOption'
+import SelectSort from './main-page/SelectSort'
+import SelectType from './main-page/SelectType'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
-import MainProfile from './MainProfile'
-import MainShowcase from './MainShowcase'
-import MainCarousel from './MainCarousel'
+import MainProfile from './main-page/MainProfile'
+import MainShowcase from './main-page/MainShowcase'
+import MainCarousel from './main-page/MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
 import { IPost } from '@/types/IPostDetail'
@@ -211,7 +211,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                     bottom: 80,
                   }}
                 >
-                  <EditButton />
+                  <FloatEditButton />
                 </Box>
                 {spinner && <CircularProgress />}
                 <Box

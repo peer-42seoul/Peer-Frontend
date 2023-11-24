@@ -1,5 +1,5 @@
 import { Button, ButtonGroup } from '@mui/material'
-import { ProjectType } from './MainPage'
+import { ProjectType } from '../MainPage'
 
 const SelectType = ({
   type,
@@ -18,7 +18,9 @@ const SelectType = ({
       <ButtonGroup>
         <Button
           variant="text"
-          sx={{ color: !type || type === 'STUDY' ? 'blue' : 'black' }}
+          sx={{
+            color: !type || type === 'STUDY' ? 'primary' : 'text.assistive',
+          }}
           onClick={() => {
             setType('STUDY')
           }}
@@ -27,7 +29,7 @@ const SelectType = ({
         </Button>
         <Button
           variant="text"
-          sx={{ color: type === 'PROJECT' ? 'blue' : 'black' }}
+          sx={{ color: type === 'PROJECT' ? 'primary' : 'text.assistive' }}
           onClick={() => {
             setType('PROJECT')
           }}
