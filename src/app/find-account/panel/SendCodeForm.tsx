@@ -111,7 +111,9 @@ const SendCodeForm = ({
           }}
           render={({ field }) => (
             <Container sx={LabelBox} disableGutters={true}>
-              <CuTextFieldLabel htmlFor="code">인증코드</CuTextFieldLabel>
+              <CuTextFieldLabel htmlFor="code">
+                <Typography variant="Caption">인증코드</Typography>
+              </CuTextFieldLabel>
               <CuTextField
                 {...field}
                 type="code"

@@ -4,20 +4,14 @@ import React, { useEffect, useState } from 'react'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import axios from 'axios'
 import useAuthStore from '@/states/useAuthStore'
-import {
-  Box,
-  Button,
-  IconButton,
-  InputAdornment,
-  Typography,
-} from '@mui/material'
-import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { Box, Button, InputAdornment, Typography } from '@mui/material'
 import CuTextField from '@/components/CuTextField'
 //import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import OauthLoginBox from './panel/OauthLoginBox'
 import useToast from '@/hook/useToast'
 import { useRouter, useSearchParams } from 'next/navigation'
 import BoxBase from '@/components/BoxBase'
+import EyeIcon from '@/components/EyeIcon'
 
 interface ILoginFormInput {
   userEmail: string
@@ -63,7 +57,9 @@ const PCLabelBox = {
 const Login = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [isLoading, setIsLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState<'password' | 'text'>(
+    'password',
+  )
   const { isLogin, login } = useAuthStore()
   const [errorMessage, setErrorMessage] = useState('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
@@ -118,7 +114,7 @@ const Login = () => {
   return (
     <>
       <BoxBase pcSx={PCLoginBox} mobileSx={MobileLoginBox}>
-        <Typography variant="Title3">피어 로그인</Typography>
+        <Typography variant="Title3">로그인</Typography>
         <Box sx={Form}>
           <OauthLoginBox />
         </Box>
@@ -177,19 +173,16 @@ const Login = () => {
                       비밀번호
                     </CuTextFieldLabel> */}
                   <CuTextField
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword}
                     {...field}
                     style={{ width: '100%' }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={() => setShowPassword(!showPassword)}
-                            edge="end"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
+                          <EyeIcon
+                            showPassword={showPassword}
+                            setShowPassword={setShowPassword}
+                          />
                         </InputAdornment>
                       ),
                     }}
@@ -228,7 +221,11 @@ const Login = () => {
           <Button fullWidth variant="outlined" href="/privacy">
             피어가 처음이에요!
           </Button>
-          <Button href="/find-account">비밀번호 찾기</Button>
+          <Button href="/find-account">
+            <Typography variant="Caption" color="text.alternative">
+              비밀번호 찾기
+            </Typography>
+          </Button>
         </Box>
       </BoxBase>
 

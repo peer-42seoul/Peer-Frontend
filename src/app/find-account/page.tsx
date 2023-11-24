@@ -43,7 +43,7 @@ const FindAccount = () => {
         <FindComplete />
       ) : (
         <>
-          <Typography>비밀번호 찾기</Typography>
+          <Typography variant="Title3Emphasis">비밀번호 찾기</Typography>
           <SendEmailForm setIsCodeSuccessful={setIsCodeSuccessful} />
         </>
       )}

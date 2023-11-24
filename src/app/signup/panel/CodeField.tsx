@@ -1,4 +1,4 @@
-import { InputAdornment, Button } from '@mui/material'
+import { InputAdornment, Button, Typography } from '@mui/material'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import { ControllerRenderProps } from 'react-hook-form'
@@ -17,7 +17,9 @@ const CodeField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="code">인증코드</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="code">
+        <Typography variant="Caption">인증코드</Typography>
+      </CuTextFieldLabel>
       <CuTextField
         {...field}
         disabled={codeSendStatus === 'submit'}
@@ -36,7 +38,7 @@ const CodeField = ({
                 disabled={isSubmitting || codeSendStatus === 'submit'}
                 onClick={submitCode}
               >
-                인증하기
+                <Typography variant="CaptionEmphasis">인증하기</Typography>
               </Button>
             </InputAdornment>
           ),
