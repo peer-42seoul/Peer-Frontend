@@ -108,7 +108,12 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         <Grid item xs={12}>
           <Typography>작업 스택</Typography>
           <TagAutoComplete
-            list={listData?.map(({ name }: { name: string }) => name) || []}
+            tagList={listData || []}
+            // list={
+            //   listData?.map(
+            //     ({ name, color }: { name: string; color: string }) => name,
+            //   ) || []
+            // }
             datas={tagData}
             setData={setTagData}
           />

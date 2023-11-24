@@ -1,7 +1,7 @@
 import useAxiosWithAuth from '@/api/config'
 import useAuthStore from '@/states/useAuthStore'
 import { IUserProfile } from '@/types/IUserProfile'
-import { Avatar, Stack, Typography } from '@mui/material'
+import { Avatar, Link, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
@@ -35,6 +35,9 @@ const MainProfile = () => {
           <>
             <Typography>{data?.nickname}</Typography>
             <Typography>{data?.association}</Typography>
+            <Link style={{ textDecoration: 'none' }} href={'/my-page/profile'}>
+              내 프로필 보기
+            </Link>
           </>
         ) : (
           <Typography>로그인이 필요합니다</Typography>

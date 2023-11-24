@@ -28,6 +28,7 @@ import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
 import PwaInstallBanner from './PwaInstallBanner'
 import PushAlertBanner from './PushAlertBanner'
+import MainBanner from '@/app/panel/main-page/MainBanner'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -170,6 +171,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             sx={{ backgroundColor: 'Background.primary' }}
             border="1px solid black"
           >
+            <MainBanner />
             <SelectType type={type} setType={handleType} />
             <Grid container p={2}>
               <SearchOption
@@ -237,10 +239,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         >
           <Stack direction={'row'} border="1px solid black">
             <Stack flex={1}>
-              <Box height={'200px'} border="1px solid black">
-                피어 소개 배너
-              </Box>
-              <SelectType type={type} setType={handleType} pc />
+              <MainBanner />
+              <SelectType type={type} setType={handleType} />
               <Grid container p={2} bgcolor={'Background.primary'}>
                 <SearchOption
                   openOption={openOption}
@@ -251,9 +251,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   <Stack
                     direction="row"
                     alignItems={'center'}
-                    justifyContent={'space-between'}
+                    justifyContent={'flex-end'}
                   >
-                    <Typography>모집글</Typography>
                     <SelectSort sort={sort} setSort={handleSort} />
                   </Stack>
                 </Grid>

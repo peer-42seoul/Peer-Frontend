@@ -4,55 +4,19 @@ import { ProjectType } from '../MainPage'
 const SelectType = ({
   type,
   setType,
-  pc,
 }: {
   type: ProjectType | undefined
   setType: (value: ProjectType) => void
-  pc?: boolean
 }) => {
   {
     /*type이 null일시 (최초값일시) study 활성화*/
   }
-  if (pc) {
-    return (
-      <ButtonGroup>
-        <Button
-          variant="text"
-          sx={{
-            color: !type || type === 'STUDY' ? 'primary' : 'text.assistive',
-          }}
-          onClick={() => {
-            setType('STUDY')
-          }}
-        >
-          스터디
-        </Button>
-        <Button
-          variant="text"
-          sx={{ color: type === 'PROJECT' ? 'primary' : 'text.assistive' }}
-          onClick={() => {
-            setType('PROJECT')
-          }}
-        >
-          프로젝트
-        </Button>
-      </ButtonGroup>
-    )
-  }
-
   return (
-    <ButtonGroup
-      variant="contained"
-      aria-label="STUDY or PROJECT button"
-      fullWidth
-      sx={{
-        justifyContent: 'space-evenly',
-        border: 'none',
-      }}
-    >
+    <ButtonGroup>
       <Button
+        variant="text"
         sx={{
-          backgroundColor: !type || type === 'STUDY' ? 'blue' : 'gray',
+          color: !type || type === 'STUDY' ? 'primary' : 'text.assistive',
         }}
         onClick={() => {
           setType('STUDY')
@@ -61,7 +25,8 @@ const SelectType = ({
         스터디
       </Button>
       <Button
-        sx={{ backgroundColor: type === 'PROJECT' ? 'blue' : 'gray' }}
+        variant="text"
+        sx={{ color: type === 'PROJECT' ? 'primary' : 'text.assistive' }}
         onClick={() => {
           setType('PROJECT')
         }}

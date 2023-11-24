@@ -1,5 +1,5 @@
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
-import { Grid, IconButton, Stack, Typography } from '@mui/material'
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { Box, IconButton, Stack, Typography } from '@mui/material'
 import Options from './Options'
 
 const SearchOption = ({
@@ -12,33 +12,21 @@ const SearchOption = ({
   setDetailOption: any
 }) => {
   return (
-    <>
-      <Grid item xs={8}>
-        <Stack justifyContent={'center'}>
-          <Typography variant="body2">
-            맞춤 프로젝트를 빠르게 찾아요.
-          </Typography>
-        </Stack>
-      </Grid>
-      <Grid item xs={4}>
-        <Stack
-          direction="row"
-          alignItems={'center'}
-          justifyContent={'flex-end'}
-          onClick={() => {
-            setOpenOption(!openOption)
-          }}
-        >
-          <Typography variant="body2">세부 옵션</Typography>
-          <IconButton>
-            {openOption ? <ArrowDropDown /> : <ArrowDropUp />}
-          </IconButton>
-        </Stack>
-      </Grid>
-      <Grid item xs={12}>
+    <Stack flex={1} padding={1}>
+      <Stack
+        flexDirection={'row'}
+        alignItems={'center'}
+        bgcolor={'purple.strong'}
+      >
+        <Typography variant="body2">맞춤 프로젝트를 빠르게 찾아요.</Typography>
+        <IconButton onClick={() => setOpenOption(!openOption)}>
+          {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
+        </IconButton>
+      </Stack>
+      <Stack>
         {openOption && <Options setDetailOption={setDetailOption} />}
-      </Grid>
-    </>
+      </Stack>
+    </Stack>
   )
 }
 

@@ -19,7 +19,12 @@ const nextConfig = withPWA({
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['picsum.photos', 'source.unsplash.com'],
+    domains: [
+      'picsum.photos',
+      'source.unsplash.com',
+      'lh3.googleusercontent.com',
+      'https://kr1-api-object-storage.nhncloudservice.com', //임시
+    ],
   },
 })
 
