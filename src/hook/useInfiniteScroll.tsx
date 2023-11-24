@@ -1,8 +1,52 @@
+import { IPagination } from '@/types/IPagination'
 import { debounce } from 'lodash'
-import { useState, useEffect, useRef, Dispatch, SetStateAction, useCallback } from 'react'
+import {
+  useState,
+  useEffect,
+  useRef,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+} from 'react'
+import useSWRInfinite from 'swr/infinite'
 
 /**
- * 메시지 무한 스크롤 훅
+ * 무한 요청 훅 (with useSWRInfinite)
+ * - GET 요청만 가능합니다.
+ * - IPagination 타입의 데이터와 함께 사용할 수 있습니다.
+ * @param urlWithoutPageParam : 페이지 번호를 제외한 api request URL
+ * @example '/api?param1=1&param2=2' // page=1 은 제외합니다.
+ * @param fetcher : 데이터를 가져오는 함수
+ * @example
+ * const fetcher = (url: string) => axios.get(url).then((res) => res.data)
+ * @returns { data, error, isLoading, size, setSize }
+ * @description
+ * - data : 데이터
+ * - error : 에러
+ * - isLoading : 로딩 여부
+ * - size : 현재 페이지 번호 (getKey 함수의 pageIndex이고 초깃값은 0)
+ * - setSize : 페이지 번호를 변경하는 함수 (보통 setSize(size + 1)로 사용)
+ */
+export const useInfiniteSWR = (
+  urlWithoutPageParam: string,
+  fetcher: (url: string) => any,
+) => {
+  const getKey = useCallback(
+    (pageIndex: number, previousPageData: IPagination<any>) => {
+      if (previousPageData && !previousPageData.last) return null // 마지막 페이지면 null 반환 (데이터를 가져오지 않음)
+      return `${urlWithoutPageParam}&page=${pageIndex + 1}` // 페이지 번호를 포함한 요청 URL 반환
+    },
+    [],
+  )
+  const { data, error, isLoading, size, setSize } = useSWRInfinite(
+    getKey,
+    fetcher,
+  )
+  return { data, error, isLoading, size, setSize }
+}
+
+/**
+ * ANCHOR : 메시지 무한 스크롤 훅 (POST 요청)
  * @param trigger 데이터를 가져오는 함수
  * @param isEnd 더이상 데이터를 가져올 수 없는지 여부
  */
@@ -70,9 +114,8 @@ export const useInfiniteScrollHook = (
   )
 
   useEffect(() => {
-    if (!isLoading && spinner)
-      setSpinner(false)
-  }, [isLoading]);
+    if (!isLoading && spinner) setSpinner(false)
+  }, [isLoading])
 
   const debouncedFetchData = debounce(async () => {
     // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
@@ -166,6 +209,5 @@ const useInfiniteScroll = ({
 
   return { target, spinner }
 }
-
 
 export default useInfiniteScroll
