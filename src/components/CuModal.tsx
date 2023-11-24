@@ -44,6 +44,7 @@ interface ICuModal {
   ariaDescription: string
   sx?: SxProps
   style?: SxProps
+  keepMounted?: boolean
 }
 
 const CuModal = ({
@@ -54,6 +55,7 @@ const CuModal = ({
   ariaDescription,
   sx,
   style = defaultstyle,
+  keepMounted,
 }: ICuModal) => {
   const { isPc } = useMedia()
 
@@ -65,8 +67,11 @@ const CuModal = ({
         aria-labelledby={ariaTitle}
         aria-describedby={ariaDescription}
         sx={sx}
+        keepMounted={keepMounted}
       >
-        <Box sx={isPc ? style : MobileMessagetstyle}>{children}</Box>
+        <Box sx={style ? style : isPc ? defaultstyle : MobileMessagetstyle}>
+          {children}
+        </Box>
       </Modal>
     </>
   )

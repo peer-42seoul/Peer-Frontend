@@ -33,7 +33,7 @@ export enum TeamOperationForm {
 }
 export interface IMember {
   name: string
-  userId: string
+  id: string
   grant: TeamGrant
 }
 
@@ -91,8 +91,6 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosInstance(url).then((res) => res.data),
   )
-
-  console.log(data)
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)

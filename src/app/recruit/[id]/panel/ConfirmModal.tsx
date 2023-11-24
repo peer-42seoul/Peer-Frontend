@@ -1,4 +1,5 @@
 import CuModal from '@/components/CuModal'
+import LoadingButton from '@/components/LoadingButton'
 import { Box, Typography, Button } from '@mui/material'
 import { Dispatch } from 'react'
 
@@ -6,10 +7,12 @@ const ConfirmModal = ({
   open,
   setOpen,
   submitForm,
+  isLoading,
 }: {
   open: boolean
   setOpen: Dispatch<React.SetStateAction<boolean>>
   submitForm: () => void
+  isLoading: boolean
 }) => {
   return (
     <CuModal
@@ -17,7 +20,7 @@ const ConfirmModal = ({
       handleClose={() => setOpen(false)}
       ariaTitle="modal-title"
       ariaDescription="modal-description"
-      sx={{ zIndex: 1500 }}
+      sx={{ zIndex: 1450 }}
     >
       <Box>
         <Typography variant="h4" id="modal-title">
@@ -27,8 +30,19 @@ const ConfirmModal = ({
           지원서를 제출하시겠습니까?
         </Typography>
         <Box>
-          <Button onClick={() => setOpen(false)}>취소</Button>
-          <Button onClick={() => submitForm()}>확인</Button>
+          <Button variant="outlined" onClick={() => setOpen(false)}>
+            취소
+          </Button>
+          <LoadingButton
+            variant="outlined"
+            isLoading={isLoading}
+            onClick={() => {
+              submitForm()
+              setOpen(false)
+            }}
+          >
+            확인
+          </LoadingButton>
         </Box>
       </Box>
     </CuModal>

@@ -1,13 +1,5 @@
 import useToast from '@/hook/useToast'
-import {
-  Box,
-  Button,
-  Modal,
-  Portal,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Modal, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ConfirmModal from './ConfirmModal'
@@ -27,19 +19,18 @@ interface IInterviewData {
 const RecruitFormModal = ({
   open,
   setOpen,
-  user_id,
   recruit_id,
   role,
   setRoleOpen,
 }: {
   open: boolean
   setOpen: any
-  user_id: string
   recruit_id: string
-  role: string
+  role: string | null
   setRoleOpen: any
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
+  const [isLoading, setLoading] = useState(false)
   const { isLogin } = useAuthStore()
   const { data } = useSWR<IInterviewData[]>(
     isLogin
@@ -72,8 +63,6 @@ const RecruitFormModal = ({
   }
 
   const onSubmit = async (values: any) => {
-    if (errors) return
-
     const array = Object.values(values)
     const answerList = array?.map((res: any) => {
       if (typeof res !== 'string') {
@@ -86,18 +75,18 @@ const RecruitFormModal = ({
     })
 
     const value = {
-      user_id,
-      recruit_id,
       role,
       answerList,
     }
     console.log('value', value)
 
     try {
+      setLoading(true)
       await axiosWithAuth.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`,
         value,
       )
+      setLoading(false)
       setOpenConfirm(false)
       openSuccessToast()
       router.push(`/recruit/${recruit_id}`)
@@ -112,34 +101,47 @@ const RecruitFormModal = ({
 
   return (
     <>
-      <Portal>
-        <CuSuccessToast
-          open={isSuccessOpen}
-          onClose={closeSuccessToast}
-          severity="success"
-        >
-          <Typography>제출에 성공하였습니다.</Typography>
-        </CuSuccessToast>
-        <CuFailedToast
-          open={isFailedOpen}
-          onClose={closeFailedToast}
-          severity="error"
-        >
-          <Typography>제출에 실패하였습니다.</Typography>
-        </CuFailedToast>
-      </Portal>
+      <CuSuccessToast
+        open={isSuccessOpen}
+        onClose={closeSuccessToast}
+        severity="success"
+      >
+        <Typography>제출에 성공하였습니다.</Typography>
+      </CuSuccessToast>
+      <CuFailedToast
+        open={isFailedOpen}
+        onClose={closeFailedToast}
+        severity="error"
+      >
+        <Typography>제출에 실패하였습니다.</Typography>
+      </CuFailedToast>
       <form>
         <ConfirmModal
+          isLoading={isLoading}
           open={openConfirm}
           setOpen={setOpenConfirm}
           submitForm={submitForm}
         />
-        <Modal open={open} onClose={() => setOpen(false)} sx={{ zIndex: 1400 }}>
+        <Modal
+          open={open}
+          onClose={() => setOpen(false)}
+          sx={{
+            zIndex: 1400,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <Box
-            bgcolor={'white'}
+            bgcolor={'Background.primary'}
+            border={'1px solid white'}
             padding={4}
-            height={'90%'}
-            sx={{ overflowY: 'scroll' }}
+            sx={{
+              overflowY: 'auto',
+              width: '70vw',
+              height: '70vh',
+              maxWidth: '800px',
+            }}
           >
             <Typography
               variant="h6"
@@ -199,7 +201,9 @@ const RecruitFormModal = ({
               </Button>
               <Button
                 variant={'contained'}
-                onClick={() => setOpenConfirm(true)}
+                onClick={() => {
+                  if (Object.keys(errors)?.length === 0) setOpenConfirm(true)
+                }}
               >
                 제출하기
               </Button>

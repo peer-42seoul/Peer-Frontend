@@ -17,14 +17,14 @@ const CodeField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="code">인증번호</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="code">인증코드</CuTextFieldLabel>
       <CuTextField
         {...field}
         disabled={codeSendStatus === 'submit'}
         autoComplete="off"
         error={codeSendStatus === 'error'}
         type="text"
-        placeholder="인증번호를 입력하세요"
+        placeholder="인증코드를 입력하세요"
         inputProps={{
           maxLength: 10,
         }}
@@ -32,11 +32,11 @@ const CodeField = ({
           endAdornment: (
             <InputAdornment position="end">
               <Button
-                variant="contained"
+                variant="text"
                 disabled={isSubmitting || codeSendStatus === 'submit'}
                 onClick={submitCode}
               >
-                인증번호 확인
+                인증하기
               </Button>
             </InputAdornment>
           ),

@@ -69,51 +69,60 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar
-          sx={{ justifyContent: 'space-between', margin: 'dense', padding: 0 }}
-        >
-          <Button style={{ border: 'none', color: 'white' }} onClick={onClose}>
-            <ArrowBackIosNewIcon />
-          </Button>
-          <Typography>검색</Typography>
-          <Button disabled />
-        </Toolbar>
-      </AppBar>
+      <Stack sx={{ m: 0, p: 0 }}>
+        <AppBar position="static">
+          <Toolbar
+            sx={{
+              justifyContent: 'space-between',
+              margin: 'dense',
+              padding: 0,
+            }}
+          >
+            <Button
+              style={{ border: 'none', color: 'white' }}
+              onClick={onClose}
+            >
+              <ArrowBackIosNewIcon />
+            </Button>
+            <Typography>검색</Typography>
+            <Button disabled />
+          </Toolbar>
+        </AppBar>
 
-      <Box sx={isPc ? StyleSeachPc : StyleSeachMobile}>
-        <ButtonGroup>
-          <Button onClick={clickStudy} sx={{ border: 'none' }}>
-            스터디
-          </Button>
-          <Button onClick={clickProject} sx={{ border: 'none' }}>
-            프로젝트
-          </Button>
-        </ButtonGroup>
+        <Box sx={isPc ? StyleSeachPc : StyleSeachMobile}>
+          <ButtonGroup>
+            <Button onClick={clickStudy} sx={{ border: 'none' }}>
+              스터디
+            </Button>
+            <Button onClick={clickProject} sx={{ border: 'none' }}>
+              프로젝트
+            </Button>
+          </ButtonGroup>
 
-        <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-              name="searchWord"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField
-                  sx={{ width: '100%' }}
-                  placeholder={
-                    type === SearchType.PROJECT
-                      ? '프로젝트를 찾는 중...'
-                      : '스터디를 찾는 중...'
-                  }
-                  {...field}
-                />
-              )}
-            />
-            <Button type="submit">검색</Button>
-          </form>
-        </Stack>
-        <SearchHistory searchwordSet={setValue} />
-      </Box>
+          <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Controller
+                name="searchWord"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    sx={{ width: '100%' }}
+                    placeholder={
+                      type === SearchType.PROJECT
+                        ? '프로젝트를 찾는 중...'
+                        : '스터디를 찾는 중...'
+                    }
+                    {...field}
+                  />
+                )}
+              />
+              <Button type="submit">검색</Button>
+            </form>
+          </Stack>
+          <SearchHistory searchwordSet={setValue} />
+        </Box>
+      </Stack>
     </>
   )
 }

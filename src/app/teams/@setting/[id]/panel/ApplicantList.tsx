@@ -5,9 +5,9 @@ import { IApplicant } from '../page'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
-import axios from 'axios'
 import useMedia from '@/hook/useMedia'
 import FormAnswer from './RecuitFormAnswer'
+import useAxiosWithAuth from '@/api/config'
 
 const ApplicantList = ({
   close,
@@ -20,6 +20,7 @@ const ApplicantList = ({
   const { isPc } = useMedia()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const axiosInstance = useAxiosWithAuth()
 
   // TODO: DTO 맞추기
 
@@ -33,7 +34,7 @@ const ApplicantList = ({
   )
 
   const handleAccept = () => {
-    axios
+    axiosInstance
       .put(
         `${
           process.env.NEXT_PUBLIC_API_URL
@@ -54,7 +55,7 @@ const ApplicantList = ({
 
   const handleReject = () => {
     console.log('reject')
-    axios
+    axiosInstance
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/deny/${teamId}?userId=${
           member!.userId

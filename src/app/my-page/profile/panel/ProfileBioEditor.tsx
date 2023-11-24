@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import SettingContainer from './SettingContainer'
 import {
   AlertColor,
@@ -19,6 +19,10 @@ import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
 import ClearIcon from '@mui/icons-material/Clear'
 import CuButton from '@/components/CuButton'
 import useAxiosWithAuth from '@/api/config'
+import useModal from '@/hook/useModal'
+import CuModal from '@/components/CuModal'
+import Cropper from 'cropperjs'
+import 'cropperjs/dist/cropper.css'
 
 interface IFormInput {
   nickname: string
@@ -50,6 +54,9 @@ const ProfileBioEditor = ({
     data.profileImageUrl,
   )
   const [imageChanged, setImageChanged] = useState<boolean>(false)
+  const imageRef = useRef<HTMLImageElement>(null)
+  const [cropper, setCropper] = useState<Cropper | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
@@ -71,17 +78,85 @@ const ProfileBioEditor = ({
     mode: 'onChange',
   })
 
+  const {
+    isOpen,
+    openModal: openCropModal,
+    closeModal: closeCropModal,
+  } = useModal()
+
+  const squareBoxStyle = {
+    width: '100%',
+    height: 0,
+    paddingBottom: '100%',
+    position: 'relative',
+  }
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     if (e.target.files && e.target.files?.length && e.target.files[0]) {
       const reader = new FileReader()
-      setValue('profileImage', [e.target.files[0]])
-      reader.onload = (e) => {
-        setPreviewImage(e.target?.result as string)
-        setImageChanged(true)
+      setSelectedFile([e.target.files[0]])
+      reader.onload = () => {
+        // 크로퍼 설정
+        const imageElement: any = imageRef.current
+        imageElement.src = reader.result
+
+        // 크로퍼가 있으면 크로퍼 삭제
+        if (cropper) {
+          cropper.destroy()
+        }
+        openCropModal()
+
+        const newCropper = new Cropper(imageElement, {
+          aspectRatio: 1,
+          viewMode: 1,
+          dragMode: 'move',
+          autoCropArea: 1,
+          cropBoxResizable: false,
+          modal: true,
+          // ... other options
+        })
+
+        setCropper(newCropper)
       }
       if (file) reader.readAsDataURL(file)
     }
+  }
+
+  const handleCrop = () => {
+    if (cropper && selectedFile) {
+      // Get the cropped data as a Blob
+      cropper
+        .getCroppedCanvas({ width: 48, height: 48 })
+        .toBlob((blob: Blob | null) => {
+          if (blob) {
+            // Create a FormData object and append the original file
+            const image = selectedFile
+            if (image) {
+              const newImage = new File([blob], image[0].name, {
+                type: `image/${image[0].type.split('/')[1]}`,
+              })
+
+              setValue('profileImage', [newImage])
+
+              const reader = new FileReader()
+              reader.onload = (e) => {
+                setPreviewImage(e.target?.result as string)
+                setImageChanged(true)
+              }
+              reader.readAsDataURL(newImage)
+            }
+
+            // Close the modal after cropping
+            closeCropModal()
+          }
+        })
+    }
+  }
+
+  const handleCancelCrop = () => {
+    closeCropModal()
+    setSelectedFile(null)
   }
 
   const handleImageDelete = () => {
@@ -93,14 +168,6 @@ const ProfileBioEditor = ({
   }
 
   const nickname = watch('nickname')
-
-  // const profileImage = watch('profileImage')
-  // useEffect(() => {
-  //   if (profileImage) {
-  //     const file = profileImage[0]
-  //     setImage(URL.createObjectURL(file))
-  //   }
-  // }, [profileImage])
 
   const NicknameCheckButton = ({
     nickname,
@@ -142,7 +209,6 @@ const ProfileBioEditor = ({
               message: '새로운 닉네임을 입력해주세요.',
             })
             setIsLoading(false)
-            // setNicknameError(true)
           })
       }
       if (!isLoading) {
@@ -292,7 +358,7 @@ const ProfileBioEditor = ({
                   </Box>
                   <input
                     type="file"
-                    accept={'image/*'}
+                    accept={'image/jpeg, image/jpg, image/png'}
                     style={{ display: 'none' }}
                     {...register('profileImage')}
                     id="profileImage"
@@ -302,11 +368,6 @@ const ProfileBioEditor = ({
                 </Button>
               </Box>
             </Box>
-
-            {/* )}
-              name={'profileImageUrl'}
-              control={control}
-            /> */}
           </Grid>
           {/* nickname, association, email, introduction */}
           <Grid item container spacing={2} justifyContent={'flex-start'}>
@@ -410,6 +471,39 @@ const ProfileBioEditor = ({
             </Grid>
           </Grid>
         </Grid>
+        <CuModal
+          open={isOpen}
+          handleClose={closeCropModal}
+          keepMounted
+          ariaDescription=""
+          ariaTitle=""
+        >
+          <Box>
+            <Box sx={squareBoxStyle}>
+              <img
+                ref={imageRef}
+                alt="Preview"
+                style={{
+                  borderRadius: '50%',
+                  width: '100%',
+                  height: '100%',
+                  display: 'none',
+                }}
+              />
+            </Box>
+
+            <CuButton
+              variant="contained"
+              action={handleCancelCrop}
+              message="취소"
+            ></CuButton>
+            <CuButton
+              variant="contained"
+              action={handleCrop}
+              message="완료"
+            ></CuButton>
+          </Box>
+        </CuModal>
       </SettingContainer>
     </form>
   )
