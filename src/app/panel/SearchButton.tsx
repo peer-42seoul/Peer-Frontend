@@ -27,7 +27,7 @@ const SearchPc = () => {
   return (
     <>
       <IconButton color="inherit" aria-label="menu" onClick={openModal}>
-        <SearchIcon />
+        <SearchIcon color="primary" />
       </IconButton>
 
       <CuModal
