@@ -109,11 +109,6 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
           <Typography>작업 스택</Typography>
           <TagAutoComplete
             tagList={listData || []}
-            // list={
-            //   listData?.map(
-            //     ({ name, color }: { name: string; color: string }) => name,
-            //   ) || []
-            // }
             datas={tagData}
             setData={setTagData}
           />

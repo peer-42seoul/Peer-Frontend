@@ -1,11 +1,10 @@
 import { Autocomplete, Chip, Stack, TextField } from '@mui/material'
 import { ITag } from '@/types/IPostDetail'
-import { useMemo } from 'react'
 
 /**
  *
  * @param list 드롭다운 시 나올 리스트입니다.
- * @param data 선택한 값들의 리스트입니다 (useState로 관리해주세요)
+ * @param datas 선택한 값들의 리스트입니다 (useState로 관리해주세요)
  * @param setData 선택한 값들의 리스트를 변경해주는 함수입니다 (useState로 관리해주세요)
  */
 
@@ -22,7 +21,6 @@ const TagAutoComplete = ({
 }) => {
   const nameList = tagList?.map(({ name }) => name)
 
-  console.log('datas', datas)
   /* 태그를 추가합니다 */
   const handleInput = (
     event: React.SyntheticEvent,
