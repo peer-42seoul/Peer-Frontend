@@ -59,12 +59,6 @@ const NoticeList = ({
   }
   const { data, loading, error } = dummy
 
-  // 검색 테스트용
-  useEffect(() => {
-    if (keyword === '') alert('전체보기!')
-    else alert(keyword + ' 검색하기!')
-  }, [keyword])
-
   if (error || !data)
     return (
       <NoticeListContainer>
