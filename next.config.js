@@ -23,7 +23,7 @@ const nextConfig = withPWA({
       'picsum.photos',
       'source.unsplash.com',
       'lh3.googleusercontent.com',
-      'https://kr1-api-object-storage.nhncloudservice.com', //임시
+      'kr1-api-object-storage.nhncloudservice.com'
     ],
   },
 })
