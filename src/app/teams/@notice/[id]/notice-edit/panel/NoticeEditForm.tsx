@@ -19,7 +19,7 @@ const NoticeEditForm = ({ postId }: { teamId: string; postId?: string }) => {
         loading: false,
         error: null,
       }
-      const { data, loading, error } = dummy
+      const { data, error } = dummy
       if (error || !data) {
         alert('데이터를 불러오는 데 실패했습니다.')
       }
