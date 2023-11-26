@@ -7,7 +7,7 @@ import webpush from 'web-push'
 const PushAlertBanner = () => {
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const [isShowPush, setIsShowPush] = useState<boolean>(true)
-  const [isScroll, setIsScroll] = useState<number>(1)
+  const [isScroll, setIsScroll] = useState<number>(0)
 
   const urlBase64ToUint8Array = (base64String: string) => {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -128,15 +128,21 @@ const PushAlertBanner = () => {
               사용하시겠습니까?
             </Typography>
             <Stack direction="row">
-              <Button onClick={handlePush}>네</Button>
-              <Button onClick={() => setIsShowPush(false)}>다음에</Button>
+              <Button onClick={handlePush}>
+                <Typography>네</Typography>
+              </Button>
+
+              <Button onClick={() => setIsShowPush(false)}>
+                <Typography>다음에</Typography>
+              </Button>
+
               <Button
                 onClick={() => {
                   setIsShowPush(false)
                   localStorage.setItem('isShowPush', 'false')
                 }}
               >
-                아니요
+                <Typography>아니요</Typography>
               </Button>
             </Stack>
           </Stack>
