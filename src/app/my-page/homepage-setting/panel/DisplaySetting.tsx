@@ -1,5 +1,4 @@
 'use client'
-import CuDisplayModeToggle from '@/components/CuDisplayModeToggle'
 import CuToggle from '@/components/CuToggle'
 import { FormControlLabel, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
@@ -38,12 +37,14 @@ const DisplaySetting = () => {
         <FormControlLabel
           sx={{ opacity: useSystem ? 0 : 1, transition: 'opacity 0.3s ease' }}
           control={
-            <CuDisplayModeToggle
+            <CuToggle
               checked={darkMode}
               onChange={() => {
                 setDarkMode((prev) => !prev)
               }}
               inputProps={{ 'aria-label': `라이트/다크모드 토글` }}
+              uncheckedTrackImage="/images/sign_moon.svg"
+              checkedTrackImage="/images/sign_sun.svg"
             />
           }
           label={
