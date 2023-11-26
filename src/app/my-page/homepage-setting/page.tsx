@@ -28,7 +28,7 @@ const HomepageSetting = () => {
   }
 
   return (
-    <div>
+    <div style={{ whiteSpace: 'pre-line', wordBreak: 'keep-all' }}>
       <NotifSetting setToastMessage={setToastMessage} />
       <KeywordSetting setToastMessage={setToastMessage} />
       <DisplaySetting />
