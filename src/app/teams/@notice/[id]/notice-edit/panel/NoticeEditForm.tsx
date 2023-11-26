@@ -8,8 +8,6 @@ const NoticeEditForm = ({ postId }: { teamId: string; postId?: string }) => {
     description: '',
   })
   useEffect(() => {
-    console.log('postId: ', postId)
-    // TODO 🐧 : postId가 있다면 이미 작성된 공지사항 정보 불러오기
     if (postId) {
       const dummy = {
         data: {
@@ -21,10 +19,9 @@ const NoticeEditForm = ({ postId }: { teamId: string; postId?: string }) => {
         loading: false,
         error: null,
       }
-      const { data, loading, error } = dummy
+      const { data, error } = dummy
       if (error || !data) {
         alert('데이터를 불러오는 데 실패했습니다.')
-        // TODO 🐧 : 공지사항 페이지로 이동?
       }
       setPreviousData({
         title: data.title,

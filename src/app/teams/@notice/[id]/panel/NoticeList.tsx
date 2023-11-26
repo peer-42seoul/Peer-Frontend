@@ -35,8 +35,9 @@ const NoticeList = ({
   teamId: number
   keyword: string
 }) => {
-  // TODO : 공지사항 목록 받아오기
-  // TODO : 무한스크롤 OR 페이지네이션
+  useEffect(() => {
+    // TODO: keyword로 검색하는 로직
+  }, [keyword])
   const dummy = {
     data: [
       {
@@ -58,12 +59,6 @@ const NoticeList = ({
     error: null,
   }
   const { data, loading, error } = dummy
-
-  // 검색 테스트용
-  useEffect(() => {
-    if (keyword === '') alert('전체보기!')
-    else alert(keyword + ' 검색하기!')
-  }, [keyword])
 
   if (error || !data)
     return (
