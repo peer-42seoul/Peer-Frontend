@@ -69,7 +69,9 @@ const CuModal = ({
         sx={sx}
         keepMounted={keepMounted}
       >
-        <Box sx={isPc ? style : MobileMessagetstyle}>{children}</Box>
+        <Box sx={style ? style : isPc ? defaultstyle : MobileMessagetstyle}>
+          {children}
+        </Box>
       </Modal>
     </>
   )

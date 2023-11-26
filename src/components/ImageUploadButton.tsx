@@ -57,7 +57,7 @@ const ImageUploadButton = ({
     }
   }
   return (
-    <Button component="label">
+    <Button component="label" sx={{ padding: 0 }}>
       {children}
       <input
         type="file"

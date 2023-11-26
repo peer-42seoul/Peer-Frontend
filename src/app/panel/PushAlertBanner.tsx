@@ -33,27 +33,6 @@ const PushAlertBanner = () => {
   }
 
   const createPushSubscription = (swReg: ServiceWorkerRegistration) => {
-    // // 테스트용
-    // swReg.pushManager
-    //   .subscribe({
-    //     userVisibleOnly: true,
-    //   })
-    //   .then((newSub) => {
-    //     let newSubData = newSub.toJSON()
-    //     let newSubString = JSON.stringify(newSubData)
-
-    //     return axiosInstance.post(
-    //       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/push`,
-    //       {
-    //         subscription: newSubString,
-    //       },
-    //     )
-    //   })
-    //   .then((res) => {
-    //     console.log(res)
-    //     displayNotification()
-    //   })
-
     // 추후 서버 셋팅 한 뒤 사용
     const vapidPublicKey = webpush.generateVAPIDKeys().publicKey
     const convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey)
@@ -138,7 +117,10 @@ const PushAlertBanner = () => {
           top={isScroll ? 0 : 57}
           width={'100%'}
           border="1px solid black"
-          sx={{ backgroundColor: 'white', zIndex: 9999 }}
+          sx={{
+            backgroundColor: 'primary.main',
+            zIndex: 9999,
+          }}
         >
           <Stack margin={1}>
             <Typography>

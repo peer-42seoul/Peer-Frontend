@@ -42,7 +42,8 @@ export type ProjectSort = 'latest' | 'hit'
 export type ProjectType = 'STUDY' | 'PROJECT'
 export interface IDetailOption {
   isInit?: boolean
-  due: string
+  due1: number
+  due2: number
   region1: string
   region2: string
   place: string
@@ -59,13 +60,22 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   /* 추후 디자인 추가되면 schedule 추가하기 */
   const [detailOption, setDetailOption] = useState<IDetailOption>({
     isInit: true,
-    due: '',
+    due1: 0,
+    due2: 100,
     region1: '',
     region2: '',
     place: '',
     status: '',
     tag: '',
   })
+  const dueObject: { [key: number]: string } = {
+    0: '1주일',
+    20: '1개월',
+    40: '3개월',
+    60: '6개월',
+    80: '9개월',
+    100: '12개월 이상',
+  }
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
@@ -73,6 +83,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
   )
+
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
   const pageSize = 6
   const {
@@ -80,14 +91,19 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     isLoading,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    (page == 1 && !type && !sort && detailOption.isInit && keyword == '')
+    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type ?? 'STUDY'
-      }&sort=${sort ?? 'latest'
-      }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due
-      }&region1=${detailOption.region1}&region2=${detailOption.region2
-      }&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag
-      }`,
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
+          type ?? 'STUDY'
+        }&sort=${
+          sort ?? 'latest'
+        }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
+          dueObject[detailOption.due1]
+        }&due=${dueObject[detailOption.due2]}&region1=${
+          detailOption.region1
+        }&region2=${detailOption.region2}&place=${detailOption.place}&status=${
+          detailOption.status
+        }&tag=${detailOption.tag}`,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
@@ -123,7 +139,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     //type이 변경될 경우 초기화
     setPage(1)
     setDetailOption({
-      due: '',
+      due1: 0,
+      due2: 100,
       region1: '',
       region2: '',
       place: '',
@@ -149,7 +166,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* mobile view */}
       <div className="mobile-layout">
         <Container>
-          <Box sx={{ backgroundColor: 'Background' }} border="1px solid black">
+          <Box
+            sx={{ backgroundColor: 'Background.primary' }}
+            border="1px solid black"
+          >
             <SelectType type={type} setType={handleType} />
             <Grid container p={2}>
               <SearchOption
@@ -209,14 +229,19 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       </div>
       {/* pc view */}
       <div className="pc-layout">
-        <Container sx={{ backgroundColor: 'white', border: '1px solid black' }}>
+        <Container
+          sx={{
+            backgroundColor: 'Background.primary',
+            border: '1px solid black',
+          }}
+        >
           <Stack direction={'row'} border="1px solid black">
             <Stack flex={1}>
               <Box height={'200px'} border="1px solid black">
                 피어 소개 배너
               </Box>
               <SelectType type={type} setType={handleType} pc />
-              <Grid container p={2}>
+              <Grid container p={2} bgcolor={'Background.primary'}>
                 <SearchOption
                   openOption={openOption}
                   setOpenOption={setOpenOption}

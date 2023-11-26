@@ -31,6 +31,7 @@ const CuToast = ({
       open={open}
       autoHideDuration={autoHideDuration ? autoHideDuration : 6000}
       onClose={onClose}
+      sx={{ zIndex: 1600 }}
     >
       <Alert
         onClose={onClose}

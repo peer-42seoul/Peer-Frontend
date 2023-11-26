@@ -2,7 +2,6 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
-import FormLabel from '@mui/material/FormLabel'
 import { Dispatch, SetStateAction } from 'react'
 
 interface RowRadioButtonsGroupProps {
@@ -18,9 +17,6 @@ export default function RowRadioButtonsGroup({
 
   return (
     <FormControl>
-      <FormLabel id="team-type-radio-buttons-group-label">
-        스터디 or 프로젝트
-      </FormLabel>
       <RadioGroup
         row
         aria-labelledby="team-type-radio-buttons-group-label"
@@ -29,16 +25,12 @@ export default function RowRadioButtonsGroup({
         defaultValue="PROJECT"
       >
         <FormControlLabel
-          value="STUDY"
-          control={<Radio />}
-          label="Study-group"
-        />
-        <FormControlLabel
           value="PROJECT"
           control={<Radio />}
-          label="Project-team"
+          label="프로젝트"
           defaultChecked
         />
+        <FormControlLabel value="STUDY" control={<Radio />} label="스터디" />
       </RadioGroup>
     </FormControl>
   )
