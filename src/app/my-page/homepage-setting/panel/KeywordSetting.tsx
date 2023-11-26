@@ -1,16 +1,13 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
-import BackButton from '@/components/BackButton'
 import CuButton from '@/components/CuButton'
 import CuModal from '@/components/CuModal'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
-import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import {
   AlertColor,
   Box,
-  Button,
   Chip,
   InputAdornment,
   Stack,
@@ -29,27 +26,12 @@ interface IToastProps {
   message: string
 }
 
-const mobileModalStyle = {
-  width: '100vmax',
-  height: '100vmax',
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 2,
-}
-
 const KeywordAddingField = ({
   mutate,
-  isPc,
   setToastMessage,
   keywordList,
 }: {
   mutate: () => void
-  isPc: boolean
   setToastMessage: (message: IToastProps) => void
   keywordList: Array<IChip> | undefined | null
 }) => {
@@ -124,9 +106,6 @@ const KeywordAddingField = ({
 
   return (
     <Box>
-      <CuTextFieldLabel style={{ margin: '8px 0px' }} htmlFor="keyword-field">
-        {isPc ? '키워드 관리' : '키워드'}
-      </CuTextFieldLabel>
       <CuTextField
         id="keyword-field"
         placeholder="ex. JS"
@@ -206,16 +185,14 @@ const ChipsArray = ({
   )
 }
 
-const KeywordSettingBox = ({
+const KeywordDisplayBox = ({
   mutate,
-  isPc,
   data,
   isLoading,
   error,
   setToastMessage,
 }: {
   mutate: () => void
-  isPc: boolean
   data: Array<IChip> | undefined | null
   isLoading: boolean
   error: any
@@ -236,12 +213,9 @@ const KeywordSettingBox = ({
 
   return (
     <Box id="keyword-setting-modal-description">
-      <KeywordAddingField
-        setToastMessage={setToastMessage}
-        mutate={mutate}
-        isPc={isPc}
-        keywordList={data}
-      />
+      <Typography variant="CaptionEmphasis" color={'text.normal'}>
+        등록된 키워드
+      </Typography>
       <CuButton
         variant="text"
         message="전체 삭제"
@@ -302,8 +276,6 @@ const KeywordSetting = ({
 }: {
   setToastMessage: (message: IToastProps) => void
 }) => {
-  const { isPc } = useMedia()
-  const { isOpen, closeModal, openModal } = useModal()
   const axiosWithAuth = useAxiosWithAuth()
 
   const getKeywords = async (url: string) =>
@@ -325,69 +297,25 @@ const KeywordSetting = ({
   )
 
   return (
-    <div>
-      <Typography>키워드 설정</Typography>
-      {isPc ? (
-        <KeywordSettingBox
-          data={data}
-          mutate={mutate}
-          isPc={isPc}
-          isLoading={isLoading}
-          error={error}
-          setToastMessage={setToastMessage}
-        />
-      ) : (
-        <CuButton variant="text" message="키워드 관리" action={openModal} />
-      )}
-      <CuModal
-        open={isOpen}
-        handleClose={closeModal}
-        ariaTitle="keyword-setting-modal-title"
-        ariaDescription="keyword-setting-modal-description"
-        style={mobileModalStyle}
-      >
-        <Box sx={{ height: '100vmax', width: '100vmax', padding: '0 16px' }}>
-          <Stack
-            flexDirection={'row'}
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <BackButton
-              action={closeModal}
-              style={{
-                border: 'none',
-                color: 'black',
-                padding: '3px 5px',
-                width: '40px',
-                height: '40px',
-              }}
-            />
-            <Typography id="keyword-setting-modal-title">
-              키워드 관리
-            </Typography>
-            <Button
-              sx={{
-                border: 'none',
-                color: 'black',
-                padding: '3px 5px',
-                width: '40px',
-                height: '40px',
-              }}
-              aria-hidden
-              disabled
-            ></Button>
-          </Stack>
-          <KeywordSettingBox
-            data={data}
-            mutate={mutate}
-            isPc={isPc}
-            isLoading={isLoading}
-            error={error}
-            setToastMessage={setToastMessage}
-          />
-        </Box>
-      </CuModal>
-    </div>
+    <Stack>
+      <CuTextFieldLabel style={{ margin: '8px 0px' }} htmlFor="keyword-field">
+        <Typography variant="Title3Emphasis" color={'text.normal'}>
+          키워드 설정
+        </Typography>
+      </CuTextFieldLabel>
+      <KeywordAddingField
+        setToastMessage={setToastMessage}
+        mutate={mutate}
+        keywordList={data}
+      />
+      <KeywordDisplayBox
+        setToastMessage={setToastMessage}
+        mutate={mutate}
+        data={data}
+        isLoading={isLoading}
+        error={error}
+      />
+    </Stack>
   )
 }
 
