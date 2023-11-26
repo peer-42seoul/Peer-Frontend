@@ -8,7 +8,12 @@ const DisplaySetting = () => {
   const [darkMode, setDarkMode] = useState(false)
 
   return (
-    <Stack bgcolor={'background.secondary'} p={3} spacing={3}>
+    <Stack
+      bgcolor={'background.secondary'}
+      p={3}
+      spacing={3}
+      sx={{ borderRadius: '16px' }}
+    >
       <Typography variant="Title3Emphasis" color={'text.normal'}>
         화면 스타일
       </Typography>
@@ -35,7 +40,7 @@ const DisplaySetting = () => {
           labelPlacement="start"
         />
         <FormControlLabel
-          sx={{ opacity: useSystem ? 0 : 1, transition: 'opacity 0.3s ease' }}
+          sx={{ opacity: useSystem ? 0 : 1, transition: 'opacity 0.5s ease' }}
           control={
             <CuToggle
               checked={darkMode}
@@ -50,10 +55,14 @@ const DisplaySetting = () => {
           label={
             <Typography
               variant="CaptionEmphasis"
-              color={'text.strong'}
-              sx={{ marginRight: '16px', marginLeft: '0' }}
+              color={'text.alternative'}
+              sx={{
+                marginRight: '16px',
+                marginLeft: '0',
+                textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+              }}
             >
-              라이트 / 다크 모드
+              라이트/ 다크 모드
             </Typography>
           }
           labelPlacement="start"
