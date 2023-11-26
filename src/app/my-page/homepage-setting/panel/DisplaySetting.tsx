@@ -21,7 +21,7 @@ const DisplaySetting = () => {
               onChange={() => {
                 setUseSystem((prev) => !prev)
               }}
-              inputProps={{ 'aria-label': `설정 토글` }}
+              inputProps={{ 'aria-label': `시스템 설정 토글` }}
             />
           }
           label={
@@ -43,7 +43,7 @@ const DisplaySetting = () => {
               onChange={() => {
                 setDarkMode((prev) => !prev)
               }}
-              inputProps={{ 'aria-label': `설정 토글` }}
+              inputProps={{ 'aria-label': `라이트/다크모드 토글` }}
             />
           }
           label={
