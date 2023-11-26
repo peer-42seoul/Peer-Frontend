@@ -5,6 +5,7 @@ import DisplaySetting from './panel/DisplaySetting'
 import KeywordSetting from './panel/KeywordSetting'
 import useToast from '@/hook/useToast'
 import { AlertColor } from '@mui/material/Alert'
+import { Stack } from '@mui/material'
 
 interface IToast {
   severity: AlertColor | undefined
@@ -28,7 +29,7 @@ const HomepageSetting = () => {
   }
 
   return (
-    <div style={{ whiteSpace: 'pre-line', wordBreak: 'keep-all' }}>
+    <Stack sx={{ whiteSpace: 'pre-line', wordBreak: 'keep-all' }} spacing={4}>
       <NotifSetting setToastMessage={setToastMessage} />
       <KeywordSetting setToastMessage={setToastMessage} />
       <DisplaySetting />
@@ -39,7 +40,7 @@ const HomepageSetting = () => {
       >
         {toastMessage.message}
       </CuToast>
-    </div>
+    </Stack>
   )
 }
 
