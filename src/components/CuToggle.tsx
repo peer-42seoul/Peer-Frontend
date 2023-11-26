@@ -3,8 +3,8 @@ import { Switch, SwitchProps } from '@mui/material'
 
 declare module '@mui/material' {
   interface SwitchProps {
-    checkedTrackImage?: string // 체크된 토글 이미지
-    uncheckedTrackImage?: string // 체크되지 않은 토글 이미지
+    checkedtrackimage?: string // 체크된 토글 이미지
+    uncheckedtrackimage?: string // 체크되지 않은 토글 이미지
   }
 }
 
@@ -13,8 +13,8 @@ const CuToggle = styled((props: SwitchProps) => (
 ))(
   ({
     theme,
-    checkedTrackImage = '/images/sign_on.svg',
-    uncheckedTrackImage = '/images/sign_off.svg',
+    checkedtrackimage = '/images/sign_on.svg',
+    uncheckedtrackimage = '/images/sign_off.svg',
   }) => ({
     width: 60,
     height: 28,
@@ -52,14 +52,14 @@ const CuToggle = styled((props: SwitchProps) => (
             height: 24,
           },
           '&:before': {
-            backgroundImage: `url(${checkedTrackImage})`,
+            backgroundImage: `url(${checkedtrackimage})`,
             left: 6,
             top: 2,
             zIndex: 1,
             opacity: 1,
           },
           '&:after': {
-            backgroundImage: `url(${uncheckedTrackImage})`,
+            backgroundImage: `url(${uncheckedtrackimage})`,
             right: 6,
             top: 2,
             zIndex: 1,
@@ -128,14 +128,14 @@ const CuToggle = styled((props: SwitchProps) => (
         height: 24,
       },
       '&:before': {
-        backgroundImage: `url(${checkedTrackImage})`,
+        backgroundImage: `url(${checkedtrackimage})`,
         left: 6,
         top: 2,
         zIndex: 1,
         opacity: 0,
       },
       '&:after': {
-        backgroundImage: `url(${uncheckedTrackImage})`,
+        backgroundImage: `url(${uncheckedtrackimage})`,
         right: 6,
         top: 2,
         zIndex: 1,

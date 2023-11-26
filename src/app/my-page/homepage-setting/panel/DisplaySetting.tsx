@@ -48,8 +48,8 @@ const DisplaySetting = () => {
                 setDarkMode((prev) => !prev)
               }}
               inputProps={{ 'aria-label': `라이트/다크모드 토글` }}
-              uncheckedTrackImage="/images/sign_moon.svg"
-              checkedTrackImage="/images/sign_sun.svg"
+              uncheckedtrackimage="/images/sign_moon.svg"
+              checkedtrackimage="/images/sign_sun.svg"
             />
           }
           label={
