@@ -13,6 +13,7 @@ const CuDisplayModeToggle = styled((props: SwitchProps) => (
     '& .MuiSwitch-thumb': {
       width: 16,
       height: 16,
+      transition: 'transform 0.5s ease',
     },
   },
   '& .MuiSwitch-switchBase': {
@@ -21,9 +22,11 @@ const CuDisplayModeToggle = styled((props: SwitchProps) => (
     width: 60,
     height: 28,
     position: 'relative',
+    transform: 'translateX(0px)',
+    transition: 'transform 0.5s ease, border-color 0.5s ease',
     '&.Mui-checked': {
       transform: 'translateX(28px)',
-      transition: 'transform 0.3s ease',
+      transition: 'transform 0.5s ease',
       color: theme.palette.purple.tinted,
       '& + .MuiSwitch-track': {
         opacity: 1,
@@ -80,13 +83,9 @@ const CuDisplayModeToggle = styled((props: SwitchProps) => (
     },
   },
   '& .MuiSwitch-thumb': {
-    // boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
     width: 16,
     height: 16,
     borderRadius: 50,
-    transition: theme.transitions.create(['width'], {
-      duration: 200,
-    }),
     backgroundColor: theme.palette.background.tertiary,
     borderWidth: 2,
     borderColor: theme.palette.purple.tinted,
@@ -94,6 +93,8 @@ const CuDisplayModeToggle = styled((props: SwitchProps) => (
     position: 'absolute',
     top: 2,
     left: 4,
+    transform: 'translateX(0px)',
+    transition: 'transform 0.5s ease, borderColor 0.5s ease',
   },
   '& .MuiSwitch-track': {
     position: 'absolute',
