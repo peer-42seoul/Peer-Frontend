@@ -4,11 +4,10 @@ import SubNavBar from './panel/SubNavBar'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Container sx={{ maxWidth: '1980' }}>
+    <Container sx={{ maxWidth: '1980px', padding: 0 }}>
       <Grid
         container
         columns={7}
-        columnSpacing={[0, 8]}
         justifyContent={'space-between'}
         width={1}
         maxWidth={1280}
@@ -22,8 +21,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           sm={4}
           sx={{
             maxWidth: '844px',
-            padding: '32px',
           }}
+          p={[2, 4]}
         >
           {children}
         </Grid>
