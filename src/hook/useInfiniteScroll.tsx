@@ -10,6 +10,7 @@ import {
 } from 'react'
 import useSWRInfinite from 'swr/infinite'
 import axios from 'axios'
+import useAxiosWithAuth from '@/api/config'
 
 /**
  * 무한 요청 훅 (with useSWRInfinite)
@@ -28,23 +29,19 @@ import axios from 'axios'
  * - size : 현재 페이지 번호 (getKey 함수의 pageIndex이고 초깃값은 0)
  * - setSize : 페이지 번호를 변경하는 함수 (보통 setSize(size + 1)로 사용)
  */
-export const useInfiniteSWR = (urlWithoutPageParam: string) => {
-  const getKey = useCallback(
-    (pageIndex: number, previousPageData: IPagination<any>) => {
-      if (previousPageData && previousPageData.last) {
-        return null // 마지막 페이지면 null 반환 (데이터를 가져오지 않음)
-      }
-      return `${urlWithoutPageParam}&page=${pageIndex + 1}` // 페이지 번호를 포함한 요청 URL 반환
-    },
-    [urlWithoutPageParam],
-  )
+export const useInfiniteSWR = (
+  urlWithoutPageParam: string,
+  fetcher: (url: string) => Promise<any>,
+) => {
+  const getKey = (pageIndex: number, previousPageData: IPagination<any>) => {
+    if (previousPageData && previousPageData.last) {
+      return null // 마지막 페이지면 null 반환 (데이터를 가져오지 않음)
+    }
+    return `${urlWithoutPageParam}&page=${pageIndex + 1}` // 페이지 번호를 포함한 요청 URL 반환
+  }
   const { data, error, isLoading, size, setSize } = useSWRInfinite<
     IPagination<any>
-  >(getKey, (url: string) =>
-    axios.get(url).then((res) => {
-      return res.data
-    }),
-  )
+  >(getKey, fetcher)
 
   return {
     data,
@@ -55,37 +52,36 @@ export const useInfiniteSWR = (urlWithoutPageParam: string) => {
   }
 }
 
-/**
- * ANCHOR : 무한스크롤 훅 (Observer)
- * @param size 현재 페이지 번호
- * @param setSize 페이지 번호를 변경하는 함수
- */
-export const useInfiniteScrollObserver = (
-  size: number,
-  setSize: (
-    size: number | ((_size: number) => number),
-  ) => Promise<any[] | undefined>,
+// useInfiniteSWR 훅과 IntersectionObserver를 함께 쓰기 위한 무한 스크롤 훅
+export const useInfiniteSWRScroll = (
+  urlWithoutPageParam: string,
+  fetcher: (url: string) => Promise<any>,
 ) => {
+  const { data, error, isLoading, size, setSize } = useInfiniteSWR(
+    urlWithoutPageParam,
+    fetcher,
+  )
   const targetRef = useRef<HTMLDivElement>(null)
+  // NOTE : 필요한 경우 scrollTo 함수를 추가할 수 있습니다.
+  const isLoadMore = !!(
+    !isLoading &&
+    data &&
+    data[data.length - 1]?.last === false
+  )
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setSize(size + 1)
-        }
-      },
-      { threshold: 0.7 },
-    )
-    const currentTarget = targetRef.current
-    if (currentTarget) {
-      observer.observe(currentTarget)
+    if (!targetRef.current) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && isLoadMore) setSize(size + 1)
+    })
+    const currentRef = targetRef.current
+    if (currentRef) {
+      observer.observe(currentRef)
     }
-    // 컴포넌트가 언마운트되면 IntersectionObserver 해제
     return () => {
-      if (currentTarget) observer.unobserve(currentTarget)
+      if (currentRef) observer.unobserve(currentRef)
     }
-  }, [size])
-  return { targetRef }
+  }, [targetRef, isLoadMore])
+  return { data, error, isLoading, size, setSize, targetRef }
 }
 
 /**

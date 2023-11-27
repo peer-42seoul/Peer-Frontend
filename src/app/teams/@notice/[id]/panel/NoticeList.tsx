@@ -3,14 +3,9 @@ import dayjs from 'dayjs'
 import Link from 'next/link'
 import { Box, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import {
-  useInfiniteSWR,
-  useInfiniteScrollObserver,
-} from '@/hook/useInfiniteScroll'
+import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
-
 import axios from 'axios'
-import useSWR from 'swr'
 
 interface NoticeItemProps {
   title: string
@@ -22,7 +17,7 @@ interface NoticeItemProps {
 
 const NoticeListContainer = ({ children }: { children: ReactNode }) => {
   return (
-    <Stack spacing={3} sx={{ height: '300px' }}>
+    <Stack spacing={3} sx={{ height: '300px', overflowY: 'scroll' }}>
       {children}
     </Stack>
   )
@@ -50,21 +45,15 @@ const NoticeList = ({
   keyword: string
 }) => {
   // const axiosInstance = useAxiosWithAuth()
-  console.log('keyword', keyword)
-  const { data, error, isLoading, size, setSize } = useInfiniteSWR(
-    `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
-  )
-  // const { data, isLoading, error } = useSWR(
-  //   `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}&page=${1}`,
-  //   (url: string) => axios.get(url).then((res) => res.data),
-  // )
+  const { data, error, isLoading, size, setSize, targetRef } =
+    useInfiniteSWRScroll(
+      `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
+      (url: string) => axios.get(url).then((res) => res.data),
+    )
   useEffect(() => {
     // keyword가 바뀔 때마다 size를 0으로 초기화 (size의 초깃값은 0입니다.)
-    if (!isLoading && size !== 0) setSize(1)
+    if (!isLoading && size !== 0) setSize(0)
   }, [keyword])
-  // const { targetRef } = useInfiniteScrollObserver(size, setSize)
-
-  // console.log('data', data?.content)
 
   if (error || !data)
     return (
@@ -104,7 +93,7 @@ const NoticeList = ({
           </Fragment>
         )
       })}
-      {/* <Box ref={targetRef}></Box> */}
+      <Box ref={targetRef}>{isLoading && '로딩중입니다...'}</Box>
     </NoticeListContainer>
   )
 }
