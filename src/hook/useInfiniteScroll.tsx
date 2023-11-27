@@ -36,7 +36,7 @@ export const useInfiniteSWR = (urlWithoutPageParam: string) => {
       }
       return `${urlWithoutPageParam}&page=${pageIndex + 1}` // 페이지 번호를 포함한 요청 URL 반환
     },
-    [],
+    [urlWithoutPageParam],
   )
   const { data, error, isLoading, size, setSize } = useSWRInfinite<
     IPagination<any>
