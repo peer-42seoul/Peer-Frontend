@@ -1,5 +1,5 @@
 'use client'
-import { AlertColor, Box, Typography } from '@mui/material'
+import { AlertColor, Box, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ProfileCard from './panel/ProfileCard'
 import ProfileSection from './panel/ProfileSection'
@@ -77,8 +77,6 @@ const MyProfile = () => {
 
     if (modalType === 'introduction') {
       newModalOpen.introduction = true
-    } else if (modalType === 'achievements') {
-      newModalOpen.achievements = true
     } else if (modalType === 'skills') {
       newModalOpen.skills = true
     } else if (modalType === 'links') {
@@ -115,38 +113,26 @@ const MyProfile = () => {
   }
 
   return (
-    <Box
-      // px={[2, 4]} py={[3, 4]}
-      width={1}
-    >
-      {!isPc && <Typography>프로필</Typography>}
-
-      <ProfileSection
-        sectionTitle="introduction"
+    <Stack width={1} spacing={4}>
+      {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
+      <ProfileCard
+        profileImageUrl={userInfo.profileImageUrl}
+        nickname={userInfo.nickname}
+        association={userInfo?.association}
+        email={userInfo.email}
+        introduction={userInfo.introduction}
         setModalType={setModalType}
-        sx={{ marginBottom: '24px' }}
-      >
-        {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
-        <ProfileCard
-          profileImageUrl={userInfo.profileImageUrl}
-          nickname={userInfo.nickname}
-          association={userInfo?.association}
-          email={userInfo.email}
-          introduction={userInfo.introduction}
-        />
-      </ProfileSection>
+      />
 
       {/* profile home */}
       <Box>
-        <ProfileSection sectionTitle="achievements" setModalType={setModalType}>
-          achievements
-        </ProfileSection>
-        <ProfileSection sectionTitle="skills" setModalType={setModalType}>
+        <Typography variant={'Title3Emphasis'}>프로필 홈</Typography>
+        {/* <ProfileSection sectionTitle="skills" setModalType={setModalType}>
           skills
         </ProfileSection>
         <ProfileSection sectionTitle="links" setModalType={setModalType}>
           <ProfileLinksSection linkList={userInfo.linkList} />
-        </ProfileSection>
+        </ProfileSection> */}
         <CuButton variant="text" action={handleLogout} message="로그아웃" />
       </Box>
       {/* profile home end*/}
@@ -196,7 +182,7 @@ const MyProfile = () => {
       >
         <Typography>{toastMessage.message}</Typography>
       </CuToast>
-    </Box>
+    </Stack>
   )
 }
 

@@ -1,7 +1,8 @@
 'use client'
 import { Avatar, Box, Modal, Stack, Typography } from '@mui/material'
-import { IProfileCard } from '@/types/IUserProfile'
 import React, { useState } from 'react'
+import ProfileSection from './ProfileSection'
+import Image from 'next/image'
 
 // TODO css 다른 파일로 빼기
 
@@ -25,10 +26,6 @@ const ProfileImageModal = ({
       sx={{ border: 'none', outline: 'none' }}
     >
       <Box
-        component="img"
-        src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
-        aria-labelledby="유저 이미지"
-        aria-describedby="확대된 유저 이미지"
         sx={{
           width: '80%',
           position: 'absolute',
@@ -38,7 +35,14 @@ const ProfileImageModal = ({
           outline: 'none',
           transform: 'translate(-50%, -50%)',
         }}
-      />
+      >
+        <Image
+          width={500}
+          height={500}
+          alt="profile image"
+          src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
+        />
+      </Box>
     </Modal>
   )
 }
@@ -49,55 +53,71 @@ const ProfileCard = ({
   association,
   introduction,
   email,
-}: IProfileCard) => {
+  setModalType,
+}: {
+  profileImageUrl: string | null
+  nickname: string
+  association: string | null
+  introduction: string | null
+  email: string
+  setModalType: (type: string) => void
+}) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleModalClose = () => {
     setOpen(false)
   }
 
   return (
-    <div>
-      <Stack direction="row">
+    <Stack spacing={3} p={3}>
+      <ProfileSection
+        sectionTitle={'introduction'}
+        setModalType={setModalType}
+        titleTypographyProps={{
+          variant: 'Title3Emphasis',
+          color: 'text.normal',
+        }}
+      />
+      <Stack direction="row" spacing={0.75} alignItems={'center'}>
         {/* image component */}
-        <div
-          style={{
-            width: '56px',
-            height: '56px',
-            padding: '5px 3px',
-          }}
-        >
-          <Avatar
-            src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
-            onClick={() => setOpen(true)}
-            sx={{
-              width: '100%',
-              height: '100%',
-            }}
-          />
-        </div>
-        {/* 유저 이름, 소속, 유저 아이디, 유저 이메일 */}
-        <Stack
-          spacing={0.5}
+
+        <Avatar
+          src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
+          onClick={() => setOpen(true)}
           sx={{
-            margin: '0 0 0 4px',
+            width: '48px',
+            height: '48px',
           }}
-        >
-          <Typography variant="Body2">{nickname}</Typography>
+        />
+        {/* 유저 이름, 소속, 유저 아이디, 유저 이메일 */}
+        <Stack spacing={0.5}>
+          <Typography variant="Body2" color={'text.normal'}>
+            {nickname}
+          </Typography>
           {association && (
-            <Typography variant="Caption">{association}</Typography>
+            <Typography
+              variant="Caption"
+              color={'text.alternative'}
+              sx={{ marginRight: '4px' }}
+            >
+              {association}
+            </Typography>
           )}
-          <Typography variant="Caption">{email}</Typography>
+          <Typography variant="Caption" color={'text.alternative'}>
+            {email}
+          </Typography>
         </Stack>
       </Stack>
-      <Box>
-        <Typography variant="Body2">{introduction}</Typography>
+      <Box width={1} height={'72px'}>
+        <Typography variant="Body2" color={'text.normal'}>
+          {introduction}
+        </Typography>
       </Box>
       <ProfileImageModal
         open={open}
         handleModalClose={handleModalClose}
         profileImageUrl={profileImageUrl}
       />
-    </div>
+    </Stack>
   )
 }
 
