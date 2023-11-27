@@ -1,11 +1,10 @@
 import { ReactNode, useEffect, Fragment } from 'react'
-import dayjs from 'dayjs'
 import Link from 'next/link'
+import dayjs from 'dayjs'
 import { Box, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
-import axios from 'axios'
 
 interface NoticeItemProps {
   title: string
@@ -44,11 +43,11 @@ const NoticeList = ({
   teamId: number
   keyword: string
 }) => {
-  // const axiosInstance = useAxiosWithAuth()
+  const axiosWithAuth = useAxiosWithAuth()
   const { data, error, isLoading, size, setSize, targetRef } =
     useInfiniteSWRScroll(
       `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
-      (url: string) => axios.get(url).then((res) => res.data),
+      (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     )
   useEffect(() => {
     // keyword가 바뀔 때마다 size를 0으로 초기화 (size의 초깃값은 0입니다.)
@@ -61,18 +60,21 @@ const NoticeList = ({
         <Typography>문제가 발생했습니다.</Typography>
       </NoticeListContainer>
     )
+
   if (!data && isLoading)
     return (
       <NoticeListContainer>
         <Typography>로딩중입니다...</Typography>
       </NoticeListContainer>
     )
+
   if (data.length === 0 || data[0].content.length === 0)
     return (
       <NoticeListContainer>
         <Typography>공지사항이 없습니다.</Typography>
       </NoticeListContainer>
     )
+
   return (
     <NoticeListContainer>
       {data.map((page, index) => {

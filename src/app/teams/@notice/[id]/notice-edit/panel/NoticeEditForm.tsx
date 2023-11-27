@@ -2,7 +2,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Stack, Typography, OutlinedInput } from '@mui/material'
-import axios from 'axios'
+import useAxiosWithAuth from '@/api/config'
 
 const NoticeEditForm = ({
   teamId,
@@ -11,6 +11,7 @@ const NoticeEditForm = ({
   teamId: string
   postId?: string
 }) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const router = useRouter()
   const [previousData, setPreviousData] = useState({
     title: '',
@@ -20,7 +21,7 @@ const NoticeEditForm = ({
   useEffect(() => {
     if (postId) {
       setIsLoading(true)
-      axios
+      axiosWithAuth
         .get(`/api/v1/team/notice/${postId}`)
         .then((res) => {
           if (!res || !res.data) throw new Error()
@@ -41,13 +42,14 @@ const NoticeEditForm = ({
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
+    const form = {
+      title: formData.get('title') as string,
+      content: formData.get('content') as string,
+    }
     if (postId) {
       // 글 수정
-      axios
-        .put(`/api/v1/team/notice/${postId}`, {
-          title: formData.get('title') as string,
-          content: formData.get('content') as string,
-        })
+      axiosWithAuth
+        .put(`/api/v1/team/notice/${postId}`, form)
         .then(() => {
           alert('공지사항을 수정했습니다.')
           router.push(`/teams/${teamId}/notice/${postId}`)
@@ -57,11 +59,10 @@ const NoticeEditForm = ({
         })
     }
     // 글 작성
-    axios
+    axiosWithAuth
       .post(`/api/v1/team/notice`, {
-        teamId: teamId,
-        title: formData.get('title') as string,
-        content: formData.get('content') as string,
+        ...form,
+        teamId,
       })
       .then((res) => {
         alert('공지사항이 등록되었습니다.')
@@ -71,6 +72,7 @@ const NoticeEditForm = ({
         alert('공지사항 작성에 실패했습니다.')
       })
   }
+
   return (
     <Stack>
       <form onSubmit={handleSubmit} id={'notice-form'}>

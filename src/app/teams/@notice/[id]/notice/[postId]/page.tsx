@@ -1,12 +1,12 @@
 'use client'
 import { ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button, Stack, Typography } from '@mui/material'
-import CommentList from './panel/CommentList'
-import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
-import axios from 'axios'
-import useSWR from 'swr'
 import dayjs from 'dayjs'
+import useSWR from 'swr'
+import { Button, Stack, Typography } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
+import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
+import CommentList from './panel/CommentList'
 
 interface NoticeContentContainerProps {
   children: ReactNode
@@ -55,16 +55,17 @@ const TeamNoticeView = ({
   params: { id: string; postId: string }
 }) => {
   const { postId, id } = params
+  const axiosWithAuth = useAxiosWithAuth()
   const router = useRouter()
   const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
     `/api/v1/team/notice/${postId}`,
-    (url: string) => axios.get(url).then((res) => res.data),
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   const handleDelete = () => {
     const confirm = window.confirm('공지사항을 삭제하시겠습니까?')
     if (!confirm) return
-    axios
+    axiosWithAuth
       .delete(`/api/v1/team/notice/${postId}`)
       .then(() => {
         alert('공지사항을 삭제했습니다.')

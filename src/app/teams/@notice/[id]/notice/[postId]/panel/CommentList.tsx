@@ -1,15 +1,15 @@
 'use client'
 import { ReactNode, FormEvent, useState } from 'react'
+import dayjs from 'dayjs'
+import useSWR from 'swr'
 import { Avatar, Divider, IconButton, Stack, Typography } from '@mui/material'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlined'
 import EditIcon from '@mui/icons-material/Edit'
+import useAxiosWithAuth from '@/api/config'
 import CuTextField from '@/components/CuTextField'
 import CuButton from '@/components/CuButton'
-import useSWR from 'swr'
-import axios from 'axios'
 import { ITeamComment } from '@/types/TeamBoardTypes'
-import dayjs from 'dayjs'
 
 interface ICommentProps {
   postId: number
@@ -36,10 +36,11 @@ const CommentEditForm = ({
   initialComment,
   setEditMode,
 }: CommentEditFormProps) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const handleEdit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
-    axios
+    axiosWithAuth
       .put(`/api/v1/team/notice/answer/${commentId}`, {
         content: formData.get('content') as string,
       })
@@ -85,11 +86,11 @@ const Comment = ({
   isAuthor,
 }: ITeamComment & { postId: number }) => {
   const [isEditMode, setEditMode] = useState(false)
-
+  const axiosWithAuth = useAxiosWithAuth()
   const handleDelete = () => {
     const confirm = window.confirm('댓글을 삭제하시겠습니까?')
     if (!confirm) return
-    axios
+    axiosWithAuth
       .delete(`/api/v1/team/notice/answer/${answerId}`)
       .then(() => {
         alert('댓글을 삭제했습니다.')
@@ -97,9 +98,6 @@ const Comment = ({
       .catch(() => {
         alert('댓글 삭제에 실패했습니다.')
       })
-  }
-  const handleEdit = () => {
-    setEditMode(true)
   }
 
   return (
@@ -125,7 +123,7 @@ const Comment = ({
               <Divider orientation="vertical" variant="middle" flexItem />
             }
           >
-            <IconButton onClick={handleEdit}>
+            <IconButton onClick={() => setEditMode(true)}>
               <EditIcon />
             </IconButton>
             <IconButton onClick={handleDelete}>
@@ -153,12 +151,13 @@ const Comment = ({
 }
 
 const CommentForm = ({ postId, teamId }: ICommentProps) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setIsLoading] = useState(false)
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
     const formData = new FormData(e.currentTarget)
-    axios
+    axiosWithAuth
       .post('/api/v1/team/notice/answer', {
         teamId: teamId,
         postId: postId,
@@ -171,6 +170,7 @@ const CommentForm = ({ postId, teamId }: ICommentProps) => {
         alert('댓글 작성에 실패했습니다.')
       })
   }
+
   return (
     <form onSubmit={handleSubmit}>
       <Stack direction={'row'}>
@@ -189,9 +189,10 @@ const CommentForm = ({ postId, teamId }: ICommentProps) => {
 }
 
 const CommentList = ({ postId, teamId }: ICommentProps) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
     `/api/v1/team/notice/answer/${postId}`,
-    (url: string) => axios.get(url).then((res) => res.data),
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   if (error || !data) {
