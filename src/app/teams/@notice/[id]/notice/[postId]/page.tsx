@@ -68,7 +68,7 @@ const TeamNoticeView = ({
       .delete(`/api/v1/team/notice/${postId}`)
       .then(() => {
         alert('공지사항을 삭제했습니다.')
-        router.push(`/teams/${id}/notice`) // FIXME : 팀 페이지 url 변경 후 동작 확인 필요함.
+        router.push(`/teams/${id}/notice`)
       })
       .catch(() => {
         alert('공지사항 삭제에 실패했습니다.')
@@ -116,7 +116,7 @@ const TeamNoticeView = ({
           </>
         )}
       </NoticeContentContainer>
-      <CommentList postId={parseInt(postId)} />
+      <CommentList postId={parseInt(postId)} teamId={parseInt(id)} />
     </Stack>
   )
 }
