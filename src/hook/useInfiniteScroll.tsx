@@ -9,6 +9,7 @@ import {
   useCallback,
 } from 'react'
 import useSWRInfinite from 'swr/infinite'
+import axios from 'axios'
 
 /**
  * 무한 요청 훅 (with useSWRInfinite)
@@ -27,22 +28,77 @@ import useSWRInfinite from 'swr/infinite'
  * - size : 현재 페이지 번호 (getKey 함수의 pageIndex이고 초깃값은 0)
  * - setSize : 페이지 번호를 변경하는 함수 (보통 setSize(size + 1)로 사용)
  */
-export const useInfiniteSWR = (
-  urlWithoutPageParam: string,
-  fetcher: (url: string) => any,
-) => {
+export const useInfiniteSWR = (urlWithoutPageParam: string) => {
   const getKey = useCallback(
     (pageIndex: number, previousPageData: IPagination<any>) => {
-      if (previousPageData && !previousPageData.last) return null // 마지막 페이지면 null 반환 (데이터를 가져오지 않음)
+      if (previousPageData && previousPageData.last) {
+        return null // 마지막 페이지면 null 반환 (데이터를 가져오지 않음)
+      }
       return `${urlWithoutPageParam}&page=${pageIndex + 1}` // 페이지 번호를 포함한 요청 URL 반환
     },
     [],
   )
-  const { data, error, isLoading, size, setSize } = useSWRInfinite(
-    getKey,
-    fetcher,
+  const {
+    data: rawData,
+    error,
+    isLoading,
+    size,
+    setSize,
+  } = useSWRInfinite<IPagination<any>>(getKey, (url: string) =>
+    axios.get(url).then((res) => {
+      console.log('res', res)
+      return res.data
+    }),
   )
-  return { data, error, isLoading, size, setSize }
+
+  console.log(
+    'rawData',
+    'isLoading: ',
+    isLoading,
+    'data',
+    rawData && rawData[0],
+  )
+
+  return {
+    data: rawData && rawData.length > 0 ? rawData[0] : null,
+    error,
+    isLoading,
+    size,
+    setSize,
+  }
+}
+
+/**
+ * ANCHOR : 무한스크롤 훅 (Observer)
+ * @param size 현재 페이지 번호
+ * @param setSize 페이지 번호를 변경하는 함수
+ */
+export const useInfiniteScrollObserver = (
+  size: number,
+  setSize: (
+    size: number | ((_size: number) => number),
+  ) => Promise<any[] | undefined>,
+) => {
+  const targetRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setSize(size + 1)
+        }
+      },
+      { threshold: 0.7 },
+    )
+    const currentTarget = targetRef.current
+    if (currentTarget) {
+      observer.observe(currentTarget)
+    }
+    // 컴포넌트가 언마운트되면 IntersectionObserver 해제
+    return () => {
+      if (currentTarget) observer.unobserve(currentTarget)
+    }
+  }, [size])
+  return { targetRef }
 }
 
 /**
