@@ -41,17 +41,34 @@ const NoticeEditForm = ({
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
+    if (postId) {
+      // 글 수정
+      axios
+        .put(`/api/v1/team/notice/${postId}`, {
+          title: formData.get('title') as string,
+          content: formData.get('content') as string,
+        })
+        .then(() => {
+          alert('공지사항을 수정했습니다.')
+          router.push(`/teams/${teamId}/notice/${postId}`)
+        })
+        .catch(() => {
+          alert('공지사항 수정에 실패했습니다.')
+        })
+    }
+    // 글 작성
     axios
-      .put(`/api/v1/team/notice/${postId}`, {
+      .post(`/api/v1/team/notice`, {
+        teamId: teamId,
         title: formData.get('title') as string,
         content: formData.get('content') as string,
       })
-      .then(() => {
-        alert('공지사항을 수정했습니다.')
-        router.push(`/teams/${teamId}/notice/${postId}`)
+      .then((res) => {
+        alert('공지사항이 등록되었습니다.')
+        router.push(`/teams/${teamId}/notice/${res.data.postId}`)
       })
       .catch(() => {
-        alert('공지사항 수정에 실패했습니다.')
+        alert('공지사항 작성에 실패했습니다.')
       })
   }
   return (
