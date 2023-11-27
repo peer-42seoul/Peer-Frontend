@@ -1,9 +1,7 @@
 'use client'
 
-import useMedia from '@/hook/useMedia'
 import { Button } from '@mui/base'
 import { Box, Popover, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
 import {
   MouseEvent,
   ReactElement,
@@ -19,8 +17,6 @@ interface IOthersProfile {
 }
 
 const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
-  const { isPc } = useMedia()
-  const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
