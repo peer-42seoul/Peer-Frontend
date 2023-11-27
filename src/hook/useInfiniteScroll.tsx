@@ -1,4 +1,3 @@
-import { IPagination } from '@/types/IPagination'
 import { debounce } from 'lodash'
 import {
   useState,
@@ -9,8 +8,7 @@ import {
   useCallback,
 } from 'react'
 import useSWRInfinite from 'swr/infinite'
-import axios from 'axios'
-import useAxiosWithAuth from '@/api/config'
+import { IPagination } from '@/types/IPagination'
 
 /**
  * 무한 요청 훅 (with useSWRInfinite)
