@@ -126,13 +126,17 @@ const MyProfile = () => {
 
       {/* profile home */}
       <Box>
-        <Typography variant={'Title3Emphasis'}>프로필 홈</Typography>
+        <Typography variant={'Title3Emphasis'}>내 정보</Typography>
         {/* <ProfileSection sectionTitle="skills" setModalType={setModalType}>
           skills
         </ProfileSection>
         <ProfileSection sectionTitle="links" setModalType={setModalType}>
           <ProfileLinksSection linkList={userInfo.linkList} />
         </ProfileSection> */}
+        <ProfileLinksSection
+          linkList={userInfo.linkList}
+          setModalType={setModalType}
+        />
         <CuButton variant="text" action={handleLogout} message="로그아웃" />
       </Box>
       {/* profile home end*/}

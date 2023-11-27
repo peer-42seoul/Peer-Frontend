@@ -31,12 +31,27 @@ const ProfileSection = ({
   }
 
   return (
-    <Stack direction="row" justifyContent="space-between">
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems={'center'}
+      minHeight={'24px'}
+    >
       <Typography {...titleTypographyProps}>
         {sectionTypeMap.get(sectionTitle)}
       </Typography>
-      <Button variant="text" onClick={handleEditClick}>
-        <Typography variant="CaptionEmphasis">수정</Typography>
+      <Button
+        variant="text"
+        onClick={handleEditClick}
+        sx={{ padding: '0 4px', width: '29px', height: '24px' }}
+      >
+        <Typography
+          variant="CaptionEmphasis"
+          color={'text.alternative'}
+          sx={{ padding: 0, whiteSpace: 'pre-line', wordBreak: 'keep-all' }}
+        >
+          수정
+        </Typography>
       </Button>
     </Stack>
   )
