@@ -1,16 +1,7 @@
 'use client'
 
-import {
-  AppBar,
-  Badge,
-  Box,
-  IconButton,
-  Toolbar,
-  Typography,
-} from '@mui/material'
-import NotificationsIcon from '@mui/icons-material/Notifications'
+import { AppBar, Box, Toolbar, Typography } from '@mui/material'
 import SearchButton from './SearchButton'
-import { useState } from 'react'
 import AlertIcon from './AlertIcon'
 
 const Header = () => {
