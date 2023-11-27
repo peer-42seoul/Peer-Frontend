@@ -343,7 +343,8 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       MuiButton: {
         styleOverrides: {
           root: {
-            minWidth: '40px',
+            minWidth: '20px',
+            minHeight: '20x',
           },
         },
       },
