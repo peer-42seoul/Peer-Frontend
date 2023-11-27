@@ -170,7 +170,9 @@ export const PcNav = () => {
             )
           }
         />
-        <Link href={'/recruit/write'}>
+        <Link
+          href={isLogin ? '/recruit/write' : '/login?redirect=/recruit/write'}
+        >
           {isTablet ? (
             <IconButton>
               <BorderColor />
