@@ -27,7 +27,7 @@ export const SelectInterviewType = ({
           value={formType}
           onChange={handleChange}
         >
-          {['주관식', '객관식', '체크박스', '선형배율'].map((value) => {
+          {['open', 'close', 'check', 'ratio'].map((value) => {
             return <MenuItem key={value} value={value}>{`${value}`}</MenuItem>
           })}
         </Select>

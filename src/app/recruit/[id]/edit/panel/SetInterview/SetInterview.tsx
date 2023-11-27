@@ -43,7 +43,7 @@ export const SetInterview = ({
   setInterviewData: React.Dispatch<React.SetStateAction<IFormInterview[]>>
 }) => {
   const [question, setQuestion] = useState<string>('')
-  const [formType, setFormType] = useState<string>('주관식')
+  const [formType, setFormType] = useState<string>('open')
   const [answer, setAnswer] = useState<string[]>([])
 
   return (

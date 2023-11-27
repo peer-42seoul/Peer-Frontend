@@ -13,7 +13,7 @@ import {
 const Answers = ({ data }: { data: IFormInterview }) => {
   console.log('data.type', data.type)
   switch (data.type) {
-    case '객관식': {
+    case 'close': {
       return (
         <Box>
           <RadioGroup
@@ -34,7 +34,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         </Box>
       )
     }
-    case '주관식': {
+    case 'open': {
       return (
         <TextField
           variant="standard"
@@ -43,7 +43,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         ></TextField>
       )
     }
-    case '체크박스': {
+    case 'check': {
       return (
         <Box>
           <FormGroup sx={{ paddingLeft: '10px' }}>
@@ -64,7 +64,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         </Box>
       )
     }
-    case '선형배율': {
+    case 'ratio': {
       // if (!data?.ratioList) return
       if (!data?.optionList) return
       // const maxNumber = parseInt(data.ratioList?.max)
