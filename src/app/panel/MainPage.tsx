@@ -236,7 +236,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             border: '1px solid black',
           }}
         >
-          <Stack direction={'row'} border="1px solid black">
+          <Stack direction={'row'} border="1px solid black" spacing={4}>
             <Stack flex={1}>
               <Box height={'200px'} border="1px solid black">
                 피어 소개 배너
