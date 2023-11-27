@@ -227,6 +227,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           </Box>
         </Container>
       </div>
+
       {/* pc view */}
       <div className="pc-layout">
         <Container
