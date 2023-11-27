@@ -68,7 +68,17 @@ const ProfileCard = ({
   }
 
   return (
-    <Stack spacing={3} p={3}>
+    <Stack
+      spacing={3}
+      p={3}
+      alignSelf={'stretch'}
+      sx={{
+        backgroundColor: 'background.secondary',
+        borderRadius: '16px',
+        // overflow: 'auto',
+        height: '100%',
+      }}
+    >
       <ProfileSection
         sectionTitle={'introduction'}
         setModalType={setModalType}
@@ -107,7 +117,7 @@ const ProfileCard = ({
           </Typography>
         </Stack>
       </Stack>
-      <Box width={1} height={'72px'}>
+      <Box width={1} sx={{ minHeight: '72px' }}>
         <Typography variant="Body2" color={'text.normal'}>
           {introduction}
         </Typography>
