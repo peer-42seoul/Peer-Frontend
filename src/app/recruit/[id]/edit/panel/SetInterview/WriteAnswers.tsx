@@ -41,7 +41,7 @@ const WriteAnswers = ({
   const [value, setValue] = useState<string>('')
 
   const onHandlerAddOption = () => {
-    if ((formType !== 'open' && value === '') || option.length === 10) {
+    if ((formType !== '주관식' && value === '') || option.length === 10) {
       console.log('onHandlerAddOption')
       // TODO 에러 처리 추가예정
       return
@@ -73,7 +73,7 @@ const WriteAnswers = ({
   }
 
   switch (formType) {
-    case 'open': {
+    case '주관식': {
       return (
         <>
           <TextField
@@ -86,7 +86,7 @@ const WriteAnswers = ({
         </>
       )
     }
-    case 'close': {
+    case '객관식': {
       return (
         <>
           <Box sx={{ paddingBottom: '20px' }}>
@@ -115,7 +115,7 @@ const WriteAnswers = ({
         </>
       )
     }
-    case 'check': {
+    case '체크박스': {
       return (
         <>
           <Box
@@ -150,7 +150,7 @@ const WriteAnswers = ({
         </>
       )
     }
-    case 'ratio': {
+    case '선형배율': {
       return (
         <>
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
