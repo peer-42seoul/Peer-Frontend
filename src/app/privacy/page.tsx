@@ -4,7 +4,6 @@ import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import {
   Checkbox,
-  Box,
   FormControlLabel,
   Paper,
   Stack,
@@ -43,6 +42,7 @@ const PCPaper = {
   borderStyle: 'solid',
   borderColor: 'text.assistive',
   padding: '8px',
+  backgroundColor: 'background.secondary',
 }
 
 const MobilePaper = {
@@ -54,6 +54,7 @@ const MobilePaper = {
   borderStyle: 'solid',
   borderColor: 'text.assistive',
   padding: '8px',
+  backgroundColor: 'background.secondary',
 }
 
 const Policy1 =
@@ -94,7 +95,7 @@ const Privacy = () => {
     <>
       <BoxBase pcSx={PCSignupBox} mobileSx={MobileSignupBox}>
         <Typography variant="Title3Emphasis">회원가입</Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <Stack gap={'16px'}>
           <Stack>
             <FormControlLabel
               control={<Checkbox />}
@@ -158,7 +159,7 @@ const Privacy = () => {
               </Typography>
             </Paper>
           </Stack>
-        </Box>
+        </Stack>
         <CuButton
           message={'다음'}
           action={onClick}
