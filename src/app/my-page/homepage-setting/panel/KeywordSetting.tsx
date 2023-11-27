@@ -48,7 +48,7 @@ const KeywordAddingField = ({
         message: '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
       })
       return false
-    } else if (keywordList?.find((keyword) => keyword.label === trimmed)) {
+    } else if (keywordList?.some((keyword) => keyword.label === trimmed)) {
       setToastMessage({
         severity: 'error',
         message: '이미 등록된 알림 키워드입니다.',
@@ -163,13 +163,12 @@ const ChipsArray = ({
       {data &&
         data.map((chip) => {
           return (
-            <Grid item key={chip.key} xs={0}>
-              <TagChip
-                mutate={mutate}
-                setToastMessage={setToastMessage}
-                chip={chip}
-              />
-            </Grid>
+            <TagChip
+              key={chip.key}
+              mutate={mutate}
+              setToastMessage={setToastMessage}
+              chip={chip}
+            />
           )
         })}
     </Grid>
