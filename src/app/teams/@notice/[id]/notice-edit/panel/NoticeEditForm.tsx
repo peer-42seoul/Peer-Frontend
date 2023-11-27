@@ -14,7 +14,7 @@ const NoticeEditForm = ({
   const router = useRouter()
   const [previousData, setPreviousData] = useState({
     title: '',
-    description: '',
+    content: '',
   })
   const [isLoading, setIsLoading] = useState(false)
   useEffect(() => {
@@ -26,7 +26,7 @@ const NoticeEditForm = ({
           if (!res || !res.data) throw new Error()
           setPreviousData({
             title: res.data.title,
-            description: res.data.description,
+            content: res.data.content,
           })
         })
         .catch(() => {
@@ -44,7 +44,7 @@ const NoticeEditForm = ({
     axios
       .put(`/api/v1/team/notice/${postId}`, {
         title: formData.get('title') as string,
-        description: formData.get('description') as string,
+        content: formData.get('content') as string,
       })
       .then(() => {
         alert('공지사항을 수정했습니다.')
@@ -71,13 +71,11 @@ const NoticeEditForm = ({
           <OutlinedInput
             disabled={isLoading}
             fullWidth
-            name={'description'}
+            name={'content'}
             placeholder={'내용을 입력해주세요.'}
             multiline
             rows={10}
-            defaultValue={
-              previousData?.description ? previousData.description : ''
-            }
+            defaultValue={previousData?.content ? previousData.content : ''}
           />
         </Stack>
       </form>
