@@ -38,29 +38,16 @@ export const useInfiniteSWR = (urlWithoutPageParam: string) => {
     },
     [],
   )
-  const {
-    data: rawData,
-    error,
-    isLoading,
-    size,
-    setSize,
-  } = useSWRInfinite<IPagination<any>>(getKey, (url: string) =>
+  const { data, error, isLoading, size, setSize } = useSWRInfinite<
+    IPagination<any>
+  >(getKey, (url: string) =>
     axios.get(url).then((res) => {
-      console.log('res', res)
       return res.data
     }),
   )
 
-  console.log(
-    'rawData',
-    'isLoading: ',
-    isLoading,
-    'data',
-    rawData && rawData[0],
-  )
-
   return {
-    data: rawData && rawData.length > 0 ? rawData[0] : null,
+    data,
     error,
     isLoading,
     size,

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react'
+import { ReactNode, useEffect, Fragment } from 'react'
 import dayjs from 'dayjs'
 import Link from 'next/link'
 import { Box, Stack, Typography } from '@mui/material'
@@ -50,6 +50,7 @@ const NoticeList = ({
   keyword: string
 }) => {
   // const axiosInstance = useAxiosWithAuth()
+  console.log('keyword', keyword)
   const { data, error, isLoading, size, setSize } = useInfiniteSWR(
     `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
   )
@@ -59,11 +60,11 @@ const NoticeList = ({
   // )
   useEffect(() => {
     // keyword가 바뀔 때마다 size를 0으로 초기화 (size의 초깃값은 0입니다.)
-    // setSize(0)
+    if (!isLoading && size !== 0) setSize(1)
   }, [keyword])
   // const { targetRef } = useInfiniteScrollObserver(size, setSize)
 
-  console.log('data', data?.content)
+  // console.log('data', data?.content)
 
   if (error || !data)
     return (
@@ -71,13 +72,13 @@ const NoticeList = ({
         <Typography>문제가 발생했습니다.</Typography>
       </NoticeListContainer>
     )
-  if (!data.content && isLoading)
+  if (!data && isLoading)
     return (
       <NoticeListContainer>
         <Typography>로딩중입니다...</Typography>
       </NoticeListContainer>
     )
-  if (data.content.length === 0)
+  if (data.length === 0 || data[0].content.length === 0)
     return (
       <NoticeListContainer>
         <Typography>공지사항이 없습니다.</Typography>
@@ -85,16 +86,24 @@ const NoticeList = ({
     )
   return (
     <NoticeListContainer>
-      {data.content.map((notice: ITeamNotice) => (
-        <NoticeItem
-          key={notice.postId}
-          title={notice.title}
-          author={notice.authorNickname}
-          date={dayjs(notice.createdAt).format('MM[월] DD[일]')}
-          id={notice.postId}
-          teamId={teamId}
-        />
-      ))}
+      {data.map((page, index) => {
+        return (
+          <Fragment key={index}>
+            {page.content.map((notice: ITeamNotice) => {
+              return (
+                <NoticeItem
+                  key={notice.postId}
+                  title={notice.title}
+                  author={notice.authorNickname}
+                  date={dayjs(notice.createdAt).format('MM[월] DD[일]')}
+                  id={notice.postId}
+                  teamId={teamId}
+                />
+              )
+            })}
+          </Fragment>
+        )
+      })}
       {/* <Box ref={targetRef}></Box> */}
     </NoticeListContainer>
   )
