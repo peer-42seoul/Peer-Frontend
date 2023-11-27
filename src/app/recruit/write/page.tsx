@@ -116,7 +116,6 @@ const CreateTeam = () => {
       !due ||
       !region ||
       !place ||
-      !link ||
       !tagList ||
       !roleList ||
       !interviewList ||
