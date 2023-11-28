@@ -179,7 +179,7 @@ const MyInterests = () => {
       })
       openToast()
     }
-  }, [error, isLoading, data])
+  }, [error, isLoading, data, openToast])
 
   const { target, spinner } = useInfiniteScroll({
     setPage,

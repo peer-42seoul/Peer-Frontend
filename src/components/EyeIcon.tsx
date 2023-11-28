@@ -20,9 +20,9 @@ const EyeIcon = ({
         }}
       >
         {showPassword === 'password' ? (
-          <VisibilityIcon />
+          <VisibilityIcon sx={{ color: 'text.alternative' }} />
         ) : (
-          <VisibilityOffIcon />
+          <VisibilityOffIcon sx={{ color: 'text.alternative' }} />
         )}
       </IconButton>
     </>

@@ -18,6 +18,12 @@ enum TeamType {
   PROJECT = 'PROJECT',
 }
 
+enum TeamOperationForm {
+  OFFLINE = 'OFFLINE',
+  ONLINE = 'ONLINE',
+  MIX = 'MIX',
+}
+
 export interface ITeamInfo {
   id: string
   name: string
@@ -26,7 +32,7 @@ export interface ITeamInfo {
   status: TeamStatus
   myRole: boolean
   region: string
-  operationForm: string
+  operationFormat: TeamOperationForm
 }
 
 const TeamsListPage = () => {

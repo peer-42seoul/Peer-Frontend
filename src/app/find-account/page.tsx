@@ -16,8 +16,6 @@ const PCAccountBox = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '48px',
-  borderRadius: '16px',
-  border: '1px solid #000',
 }
 
 const MobileAccountBox = {
@@ -27,8 +25,6 @@ const MobileAccountBox = {
   alignItems: 'center',
   padding: '40px 16px',
   gap: '24px',
-  borderRadius: '16px',
-  border: '1px solid #000',
 }
 
 const FindAccount = () => {
@@ -47,7 +43,7 @@ const FindAccount = () => {
         <FindComplete />
       ) : (
         <>
-          <Typography>비밀번호 찾기</Typography>
+          <Typography variant="Title3Emphasis">비밀번호 찾기</Typography>
           <SendEmailForm setIsCodeSuccessful={setIsCodeSuccessful} />
         </>
       )}

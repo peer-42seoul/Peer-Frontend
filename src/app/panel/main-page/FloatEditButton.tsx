@@ -17,4 +17,4 @@ const EditButton = () => {
   )
 }
 
-export default EditButton
+export default FloatEditButton
