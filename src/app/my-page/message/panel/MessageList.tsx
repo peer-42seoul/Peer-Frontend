@@ -1,7 +1,20 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
-import { Avatar, Checkbox, Grid, Stack, Typography } from '@mui/material'
+import dayjs from 'dayjs'
+import {
+  Avatar,
+  Checkbox,
+  Chip,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+  Stack,
+  Typography,
+} from '@mui/material'
 import { IMessageListData } from '@/types/IMessage'
 
 interface IMessageItemProps {
@@ -11,7 +24,7 @@ interface IMessageItemProps {
   toggleSelectUser: (targetId: number) => void
 }
 
-const MessageItem = ({
+const PCMessageItem = ({
   message,
   isManageMode,
   isChecked,
@@ -19,61 +32,58 @@ const MessageItem = ({
 }: IMessageItemProps) => {
   const router = useRouter()
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
-  const {
-    targetId,
-    conversationId,
-    targetNickname,
-    latestDate,
-    latestContent,
-    targetProfile,
-    unreadMsgNumber,
-  } = message
-
+  const { targetId, conversationId } = message
   return (
-    <Stack direction={'row'} spacing={1}>
-      {isManageMode && (
-        <Checkbox
-          {...label}
-          checked={isChecked}
-          onChange={() => toggleSelectUser(targetId)}
-        />
-      )}
-      <Grid
-        container
-        onClick={() =>
-          router.push(`/my-page/message/${conversationId}?target=${targetId}`)
+    <ListItem>
+      <ListItemButton
+        role={undefined}
+        onClick={
+          isManageMode
+            ? () => toggleSelectUser(targetId)
+            : () =>
+                router.push(
+                  `/my-page/message/${conversationId}?target=${targetId}`,
+                )
         }
-        sx={{ cursor: 'pointer' }}
-        spacing={1}
-        alignItems="center"
       >
-        <Grid item xs={2}>
-          <Avatar src={targetProfile} />
-        </Grid>
-        <Grid item xs>
-          <Stack alignItems={'flex-start'}>
-            <Typography>{targetNickname}</Typography>
-            <Typography noWrap={true}>{latestContent}</Typography>
-          </Stack>
-        </Grid>
-        <Grid item xs={2}>
-          <Stack alignItems={'flex-end'}>
-            <Typography>{latestDate}</Typography>
-            <Typography
-              style={{
-                width: '24px',
-                color: 'white',
-                background: 'rgba(255, 81, 64, 1)',
-                borderRadius: '50%',
-                textAlign: 'center',
-              }}
-            >
-              {unreadMsgNumber > 0 ? unreadMsgNumber : null}
-            </Typography>
-          </Stack>
-        </Grid>
-      </Grid>
-    </Stack>
+        {isManageMode && (
+          <ListItemIcon>
+            <Checkbox {...label} checked={isChecked} />
+          </ListItemIcon>
+        )}
+        <MessageItemBase message={message} />
+      </ListItemButton>
+    </ListItem>
+  )
+}
+
+const MessageItemBase = ({ message }: { message: IMessageListData }) => {
+  const { targetNickname, latestContent, targetProfile, unreadMsgNumber } =
+    message
+  return (
+    <>
+      <ListItemAvatar>
+        <Avatar src={targetProfile} />
+      </ListItemAvatar>
+      <ListItemText primary={targetNickname} secondary={latestContent} />
+      <ListItemSecondaryAction>
+        <Stack alignItems={'flex-end'}>
+          <Typography>
+            {/* TODO : latestDate 데이터로 바꿀 것!!!!!!! */}
+            {dayjs('2021-08-01T16:26:39.098').format('MM월 DD일')}
+          </Typography>
+          <Chip
+            label={
+              unreadMsgNumber > 0
+                ? unreadMsgNumber > 99
+                  ? '99+'
+                  : unreadMsgNumber
+                : null
+            }
+          />
+        </Stack>
+      </ListItemSecondaryAction>
+    </>
   )
 }
 
@@ -102,9 +112,9 @@ const MessageList = ({
     return <Typography>쪽지함이 비었습니다.</Typography>
 
   return (
-    <Stack spacing={2}>
+    <List>
       {messageList.map((message) => (
-        <MessageItem
+        <PCMessageItem
           key={message.targetId}
           message={message}
           isManageMode={isManageMode}
@@ -112,7 +122,7 @@ const MessageList = ({
           toggleSelectUser={toggleSelectUser}
         />
       ))}
-    </Stack>
+    </List>
   )
 }
 
