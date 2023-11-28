@@ -15,6 +15,7 @@ import useAxiosWithAuth from '@/api/config'
 import useAuthStore from '@/states/useAuthStore'
 import CuButton from '@/components/CuButton'
 import { useRouter } from 'next/navigation'
+import Skills from './panel/Skills'
 
 interface IModals {
   introduction: boolean
@@ -127,12 +128,7 @@ const MyProfile = () => {
       {/* profile home */}
       <Box>
         <Typography variant={'Title3Emphasis'}>내 정보</Typography>
-        {/* <ProfileSection sectionTitle="skills" setModalType={setModalType}>
-          skills
-        </ProfileSection>
-        <ProfileSection sectionTitle="links" setModalType={setModalType}>
-          <ProfileLinksSection linkList={userInfo.linkList} />
-        </ProfileSection> */}
+        <Skills setModalType={setModalType} />
         <ProfileLinksSection
           linkList={userInfo.linkList}
           setModalType={setModalType}
