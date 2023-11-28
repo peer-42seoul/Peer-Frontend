@@ -1,6 +1,13 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
-import { IconButton, Stack, Typography } from '@mui/material'
+import {
+  Drawer,
+  IconButton,
+  Stack,
+  SwipeableDrawer,
+  Typography,
+} from '@mui/material'
 import Options from './Options'
+import useMedia from '@/hook/useMedia'
 
 const SearchOption = ({
   openOption,
@@ -11,21 +18,63 @@ const SearchOption = ({
   setOpenOption: any
   setDetailOption: any
 }) => {
+  const { isPc } = useMedia()
+
+  if (isPc)
+    return (
+      <Stack flex={1}>
+        <Stack
+          flexDirection={'row'}
+          alignItems={'center'}
+          bgcolor={'purple.strong'}
+        >
+          <Typography variant="body2">
+            맞춤 프로젝트를 빠르게 찾아요.
+          </Typography>
+          <IconButton onClick={() => setOpenOption(!openOption)}>
+            {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
+          </IconButton>
+        </Stack>
+        <Stack>
+          {openOption && <Options setDetailOption={setDetailOption} />}
+        </Stack>
+      </Stack>
+    )
+
   return (
-    <Stack flex={1} padding={1}>
+    <Stack flex={1}>
       <Stack
         flexDirection={'row'}
         alignItems={'center'}
         bgcolor={'purple.strong'}
       >
-        <Typography variant="body2">맞춤 프로젝트를 빠르게 찾아요.</Typography>
+        <Typography variant="body1">맞춤 프로젝트를 빠르게 찾아요.</Typography>
         <IconButton onClick={() => setOpenOption(!openOption)}>
           {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
         </IconButton>
       </Stack>
-      <Stack>
-        {openOption && <Options setDetailOption={setDetailOption} />}
-      </Stack>
+      <SwipeableDrawer
+        sx={{ zIndex: 1500 }}
+        onOpen={() => setOpenOption(false)}
+        open={openOption}
+        onClose={() => setOpenOption(false)}
+        anchor={'bottom'}
+      >
+        <Stack padding={2} sx={{ height: '70vh' }}>
+          <Stack flexDirection={'row'} alignItems={'center'}>
+            <Typography variant="body1" color={'purple.strong'}>
+              맞춤 프로젝트를 빠르게 찾아요.
+            </Typography>
+            <IconButton
+              sx={{ color: 'purple.strong' }}
+              onClick={() => setOpenOption(!openOption)}
+            >
+              {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
+            </IconButton>
+          </Stack>
+          <Options setDetailOption={setDetailOption} />
+        </Stack>
+      </SwipeableDrawer>
     </Stack>
   )
 }

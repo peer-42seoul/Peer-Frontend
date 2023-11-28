@@ -11,6 +11,7 @@ import {
   ListItemButton,
   List,
   Container,
+  Avatar,
 } from '@mui/material'
 import { IPostDetail, ITag } from '@/types/IPostDetail'
 import Image from 'next/image'
@@ -25,6 +26,15 @@ import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
+import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined'
+import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
+import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined'
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
+import TagChip from '@/components/TagChip'
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
@@ -44,14 +54,13 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
       : defaultGetFetcher,
   )
 
-  const total = useMemo(() => {
-    if (!data) return 0
-    return data?.roleList?.reduce((acc, cur) => {
-      return acc + cur.number
-    }, 0)
-  }, [data])
+  // const total = useMemo(() => {
+  //   if (!data) return 0
+  //   return data?.roleList?.reduce((acc, cur) => {
+  //     return acc + cur.number
+  //   }, 0)
+  // }, [data])
 
-  console.log('data', data)
   const handleApply = (selectedRole: string | null) => {
     if (!isLogin) router.push(currentUrl)
     else {
@@ -65,16 +74,16 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   if (error) return <Typography>에러 발생</Typography>
   if (!data) return <Typography>데이터가 없습니다</Typography>
 
-  return (
-    <>
-      <RecruitFormModal
-        open={open}
-        setOpen={setOpen}
-        recruit_id={params.id}
-        role={role}
-        setRoleOpen={setRoleOpen}
-      />
-      {isPc ? (
+  if (isPc) {
+    return (
+      <>
+        <RecruitFormModal
+          open={open}
+          setOpen={setOpen}
+          recruit_id={params.id}
+          role={role}
+          setRoleOpen={setRoleOpen}
+        />
         <Container>
           <Stack direction={'row'} gap={4} marginBottom={6}>
             <Image
@@ -82,34 +91,32 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               alt="leader_profile"
               width={300}
               height={300}
+              style={{ border: '1px solid white' }}
             />
             <Box display="flex" flexDirection="column" gap={2}>
-              <Stack gap={2} direction="row">
-                <Typography variant="h6" fontWeight={'bold'}>
-                  {data?.title}
+              <Stack gap={2} direction="row" alignItems={'center'}>
+                <Chip
+                  label={type === 'STUDY' ? '스터디' : '프로젝트'}
+                  size="medium"
+                  sx={{
+                    backgroundColor: 'background.tertiary',
+                    borderRadius: 2,
+                    color: 'green.normal',
+                  }}
+                />
+                <Typography variant={'Title3'}>{data?.title}</Typography>
+                <Typography color={'yellow.strong'} variant={'caption'}>
+                  {data?.status}
                 </Typography>
-                <Chip label={data?.status} size="medium" />
               </Stack>
-              <Stack gap={2} direction="row">
-                <Typography>{data?.leader_nickname}</Typography>
-                <Typography>
-                  {type === 'project' ? '프로젝트' : '스터디'}
-                </Typography>
-                <Typography>{data?.place}</Typography>
-              </Stack>
-              <Stack gap={2} direction="row">
-                <Button
-                  variant="contained"
-                  size="large"
-                  href="/my-page/message"
-                >
-                  쪽지
-                </Button>
+              <Stack gap={2} direction="row" alignItems={'center'}>
+                <Avatar alt="avatar" src={data?.leader_image} sizes={'small'} />
+                <Typography>프로젝트명</Typography>
                 <LinkButton href={data?.link} variant={'contained'} />
               </Stack>
-              {data?.roleList ? (
+              {data?.roleList?.length ? (
                 <ApplyButton
-                  role={data?.roleList?.map((item) => item.name) || []}
+                  role={data?.roleList?.map((item) => item.name)}
                   onApply={handleApply}
                 />
               ) : (
@@ -124,9 +131,115 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               )}
             </Box>
           </Stack>
-          <RecruitFormText
-            label="총 인원"
-            content={(total?.toString() ?? '0') + ' 명'}
+          <Stack gap={2}>
+            <RecruitFormText
+              label="작성자"
+              content={data?.leader_nickname}
+              icon={<PersonOutlineOutlinedIcon />}
+            />
+            <RecruitFormText
+              label={type === 'PROJECT' ? '역할' : '인원'}
+              icon={<HowToRegOutlinedIcon />}
+            >
+              <Box>
+                {type === 'PROJECT' ? (
+                  data?.roleList.length ? (
+                    data?.roleList?.map(({ name, number }, idx: number) => (
+                      <Typography
+                        key={idx}
+                      >{`${name} ${number} 명`}</Typography>
+                    ))
+                  ) : (
+                    <Typography>-</Typography>
+                  )
+                ) : (
+                  <Typography>{(data?.totalNumber ?? 0) + '명'}</Typography>
+                )}
+              </Box>
+            </RecruitFormText>
+            <RecruitFormText
+              label="활동방식"
+              content={data?.place}
+              icon={<WifiOutlinedIcon />}
+            />
+            <RecruitFormText
+              icon={<AccessTimeOutlinedIcon />}
+              label="목표기간"
+              content={data?.due}
+            />
+            <RecruitFormText label="지역" icon={<LocationOnOutlinedIcon />}>
+              {data?.region ? (
+                <Typography>
+                  {data.region[0] + ' ' + data.region?.[1]}
+                </Typography>
+              ) : (
+                <Typography>없음</Typography>
+              )}
+            </RecruitFormText>
+            <RecruitFormText label="기술스택" icon={<LocalOfferOutlinedIcon />}>
+              <Stack direction={'row'} gap={1}>
+                {data?.tagList?.map((tag: ITag, idx: number) => (
+                  <TagChip name={tag?.name} key={idx} color={tag?.color} />
+                ))}
+              </Stack>
+            </RecruitFormText>
+            <RecruitFormText
+              label="설명"
+              content={data?.content}
+              icon={<DescriptionOutlinedIcon />}
+            />
+          </Stack>
+        </Container>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <RecruitFormModal
+        open={open}
+        setOpen={setOpen}
+        recruit_id={params.id}
+        role={role}
+        setRoleOpen={setRoleOpen}
+      />
+
+      <Drawer
+        anchor={'bottom'}
+        open={roleOpen}
+        onClose={() => setRoleOpen(false)}
+        sx={{ zIndex: 1500 }}
+      >
+        <List>
+          {data?.roleList.map(({ name }) => (
+            <ListItem key={name}>
+              <ListItemButton onClick={() => handleApply(name)}>
+                {name}
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+      <Container>
+        <Stack gap={1}>
+          <Box>
+            <Typography variant="h6" fontWeight={'bold'}>
+              {data?.title}
+            </Typography>
+            <Chip label={data?.status} size="medium" />
+            <Stack gap={2} direction="row">
+              <Typography>{data?.leader_nickname}</Typography>
+              <Typography>
+                {type === 'project' ? '프로젝트' : '스터디'}
+              </Typography>
+              <Typography>{data?.place}</Typography>
+            </Stack>
+          </Box>
+          <Image
+            src={data?.image ?? ''}
+            alt="leader_profile"
+            width={300}
+            height={300}
           />
           <RecruitFormText label="목표 작업기간" content={data?.due} />
           <RecruitFormText label="지역">
@@ -143,126 +256,41 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               ))}
             </Box>
           </RecruitFormText>
+          <RecruitFormText label="소통도구">
+            <LinkButton href={data?.link} variant={'text'} />
+          </RecruitFormText>
           <RecruitFormText label="설명" content={data?.content} />
           <RecruitFormText label="태그">
-            <Box>
+            <Stack direction={'row'} gap={1}>
               {data?.tagList?.map((tag: ITag, idx: number) => (
-                <Chip
-                  label={tag?.name}
-                  size="small"
-                  key={idx}
-                  sx={{ backgroundColor: tag?.color }}
-                />
+                <TagChip name={tag?.name} key={idx} color={tag?.color} />
               ))}
-            </Box>
-          </RecruitFormText>
-        </Container>
-      ) : (
-        <>
-          <Drawer
-            anchor={'bottom'}
-            open={roleOpen}
-            onClose={() => setRoleOpen(false)}
-            sx={{ zIndex: 1500 }}
-          >
-            <List>
-              {data?.roleList.map(({ name }) => (
-                <ListItem key={name}>
-                  <ListItemButton onClick={() => handleApply(name)}>
-                    {name}
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Drawer>
-          <Container>
-            <Stack gap={1}>
-              <Box>
-                <Typography variant="h6" fontWeight={'bold'}>
-                  {data?.title}
-                </Typography>
-                <Chip label={data?.status} size="medium" />
-                <Stack gap={2} direction="row">
-                  <Typography>{data?.leader_nickname}</Typography>
-                  <Typography>
-                    {type === 'project' ? '프로젝트' : '스터디'}
-                  </Typography>
-                  <Typography>{data?.place}</Typography>
-                </Stack>
-              </Box>
-              <Image
-                src={data?.image ?? ''}
-                alt="leader_profile"
-                width={300}
-                height={300}
-              />
-              <RecruitFormText
-                label="총 인원"
-                content={(total?.toString() ?? '0') + ' 명'}
-              />
-              <RecruitFormText label="목표 작업기간" content={data?.due} />
-              <RecruitFormText label="지역">
-                {data?.region ? (
-                  <Typography>
-                    {data.region[0] + ' ' + data.region?.[1]}
-                  </Typography>
-                ) : (
-                  <Typography>없음</Typography>
-                )}
-              </RecruitFormText>
-              <RecruitFormText label="역할">
-                <Box>
-                  {data?.roleList?.map(({ name, number }, idx: number) => (
-                    <Chip
-                      label={`${name} ${number} 명`}
-                      size="small"
-                      key={idx}
-                    />
-                  ))}
-                </Box>
-              </RecruitFormText>
-              <RecruitFormText label="소통도구">
-                <LinkButton href={data?.link} variant={'text'} />
-              </RecruitFormText>
-              <RecruitFormText label="설명" content={data?.content} />
-              <RecruitFormText label="태그">
-                <Stack gap={1} direction={'row'}>
-                  {data?.tagList?.map((tag: ITag, idx: number) => (
-                    <Chip
-                      label={tag?.name}
-                      size="small"
-                      key={idx}
-                      sx={{ backgroundColor: tag?.color }}
-                    />
-                  ))}
-                </Stack>
-              </RecruitFormText>
-              {data?.roleList ? (
-                <Button
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  onClick={() => {
-                    if (!isLogin) router.push(currentUrl)
-                    else setRoleOpen(true)
-                  }}
-                >
-                  지원하기
-                </Button>
-              ) : (
-                <Button
-                  id="apply-button"
-                  variant="contained"
-                  size="large"
-                  onClick={() => handleApply(null)}
-                >
-                  지원하기
-                </Button>
-              )}
             </Stack>
-          </Container>
-        </>
-      )}
+          </RecruitFormText>
+          {data?.roleList?.length ? (
+            <Button
+              fullWidth
+              variant="contained"
+              size="large"
+              onClick={() => {
+                if (!isLogin) router.push(currentUrl)
+                else setRoleOpen(true)
+              }}
+            >
+              지원하기
+            </Button>
+          ) : (
+            <Button
+              id="apply-button"
+              variant="contained"
+              size="large"
+              onClick={() => handleApply(null)}
+            >
+              지원하기
+            </Button>
+          )}
+        </Stack>
+      </Container>
     </>
   )
 }

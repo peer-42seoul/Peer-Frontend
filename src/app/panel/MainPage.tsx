@@ -8,7 +8,7 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import FloatEditButton from './main-page/FloatEditButton'
 import MainCard from './main-page/MainCard'
 import SearchOption from './main-page/SearchOption'
@@ -135,7 +135,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     page,
   )
 
-  const handleType = (value: ProjectType) => {
+  const handleType = useCallback((value: ProjectType) => {
     setType(value)
     //type이 변경될 경우 초기화
     setPage(1)
@@ -149,17 +149,17 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       tag: '',
     })
     setSort('latest')
-  }
+  }, [])
 
-  const handleSort = (value: ProjectSort) => {
+  const handleSort = useCallback((value: ProjectSort) => {
     setSort(value)
     setPage(1)
-  }
+  }, [])
 
-  const handleOption = (value: IDetailOption) => {
+  const handleOption = useCallback((value: IDetailOption) => {
     setDetailOption(value)
     setPage(1)
-  }
+  }, [])
 
   return (
     <>
@@ -284,7 +284,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 </>
               )}
             </Stack>
-            <Stack width={'250px'} height={'100%'}>
+            <Stack width={'250px'} height={'100%'} gap={4}>
               <MainProfile />
               <MainShowcase />
               <MainCarousel />

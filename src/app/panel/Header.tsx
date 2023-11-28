@@ -3,6 +3,7 @@
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material'
 import { NotificationsNoneOutlined } from '@mui/icons-material'
 import SearchButton from './main-page/SearchButton'
+import Image from 'next/image'
 
 const Header = () => {
   return (
@@ -13,7 +14,14 @@ const Header = () => {
             <IconButton color="inherit" aria-label="menu">
               <NotificationsNoneOutlined />
             </IconButton>
-            <Typography component="div">로고</Typography>
+            <Typography component="div">
+              <Image
+                src={'/icons/peer-logo.svg'}
+                alt={'peer-logo'}
+                width={50}
+                height={50}
+              />
+            </Typography>
             <SearchButton />
           </Toolbar>
         </AppBar>

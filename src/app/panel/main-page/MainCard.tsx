@@ -17,6 +17,7 @@ import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
 import useAxiosWithAuth from '@/api/config'
 import Link from 'next/link'
+import TagChip from '@/components/TagChip'
 
 const MainCard = ({
   title,
@@ -117,27 +118,9 @@ const MainCard = ({
             {title}
           </Typography>
           <Stack gap={1} direction={'row'}>
-            {tagList?.map(({ name, color }: ITag, idx: number) => {
-              const r = parseInt(color.slice(1, 3), 16),
-                g = parseInt(color.slice(3, 5), 16),
-                b = parseInt(color.slice(5, 7), 16)
-              const alpha = '0.3'
-              const backgroundColor =
-                'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')'
-
-              return (
-                <Chip
-                  label={name}
-                  size="small"
-                  key={idx}
-                  style={{
-                    color: color,
-                    backgroundColor: backgroundColor,
-                    borderRadius: 5,
-                  }}
-                />
-              )
-            })}
+            {tagList?.map(({ name, color }: ITag, idx: number) => (
+              <TagChip name={name} color={color} key={idx} />
+            ))}
           </Stack>
         </CardContent>
       </Link>

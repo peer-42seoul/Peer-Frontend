@@ -4,6 +4,7 @@ import { Box } from '@mui/material'
 import Header from './Header'
 import { MobileNav, PcNav } from './NavBar'
 import { usePathname } from 'next/navigation'
+import React from 'react'
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
