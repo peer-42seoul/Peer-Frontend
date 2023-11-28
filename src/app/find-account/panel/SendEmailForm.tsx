@@ -73,7 +73,9 @@ const SendEmailForm = ({
             }}
             render={({ field }) => (
               <Container sx={LabelBox} disableGutters={true}>
-                <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
+                <CuTextFieldLabel htmlFor="email">
+                  <Typography variant="Caption">이메일</Typography>
+                </CuTextFieldLabel>
                 <CuTextField
                   {...field}
                   id="email"
