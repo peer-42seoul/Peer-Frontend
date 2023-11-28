@@ -40,7 +40,7 @@ const PasswordField = ({
         autoComplete="new-password"
         error={false}
         type={showPassword}
-        placeholder="비밀번호를 입력하세요"
+        placeholder="비밀번호를 입력하세요."
         inputProps={{
           minLength: 8,
           maxLength: 20,
@@ -72,7 +72,7 @@ const PasswordField = ({
       >
         <Typography
           variant="Caption"
-          color={isAlphabetValid ? 'primary' : ''}
+          color={isAlphabetValid ? 'primary' : 'text.assistive'}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
           <CheckIcon sx={{ fontSize: '16px', marginRight: '4px' }} />
@@ -80,7 +80,7 @@ const PasswordField = ({
         </Typography>
         <Typography
           variant="Caption"
-          color={isLengthValid ? 'primary' : ''}
+          color={isLengthValid ? 'primary' : 'text.assistive'}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
           <CheckIcon sx={{ fontSize: '16px', marginRight: '4px' }} />
@@ -88,7 +88,7 @@ const PasswordField = ({
         </Typography>
         <Typography
           variant="Caption"
-          color={isNumberValid ? 'primary' : ''}
+          color={isNumberValid ? 'primary' : 'text.assistive'}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
           <CheckIcon sx={{ fontSize: '16px', marginRight: '4px' }} />
@@ -96,7 +96,7 @@ const PasswordField = ({
         </Typography>
         <Typography
           variant="Caption"
-          color={isSpecialValid ? 'primary' : ''}
+          color={isSpecialValid ? 'primary' : 'text.assistive'}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
           <CheckIcon sx={{ fontSize: '16px', marginRight: '4px' }} />

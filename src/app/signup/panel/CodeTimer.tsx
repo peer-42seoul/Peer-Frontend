@@ -29,7 +29,7 @@ const CodeTimer = ({
 
   return (
     <>
-      <Typography>{`${Math.floor(timer / 60)}:${(timer % 60)
+      <Typography variant="Caption">{`${Math.floor(timer / 60)}:${(timer % 60)
         .toString()
         .padStart(2, '0')}`}</Typography>
     </>
