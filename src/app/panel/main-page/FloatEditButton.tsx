@@ -3,7 +3,7 @@ import { Edit } from '@mui/icons-material'
 import { Fab } from '@mui/material'
 import Link from 'next/link'
 
-const EditButton = () => {
+const FloatEditButton = () => {
   const { isLogin } = useAuthStore()
 
   return (
