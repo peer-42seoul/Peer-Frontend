@@ -1,14 +1,7 @@
 'use client'
 
-import { Button } from '@mui/base'
-import { Box, Popover, Typography } from '@mui/material'
-import {
-  MouseEvent,
-  ReactElement,
-  ReactNode,
-  cloneElement,
-  useState,
-} from 'react'
+import { Box, Button, Popover, Typography } from '@mui/material'
+import { MouseEvent, ReactNode, useState } from 'react'
 
 interface IOthersProfile {
   name: string
@@ -27,17 +20,26 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
     setAnchorEl(null)
   }
 
-  // 인자로 받는 컴포넌트를 복사해서 onClick 이벤트를 추가
-  const cloneChild = cloneElement(children as ReactElement, {
-    onClick: handleClick,
-  })
-
   const open = Boolean(anchorEl)
   const id = open ? 'simple-popover' : undefined
 
   return (
     <div>
-      {cloneChild}
+      {children && (
+        <Button
+          variant="text"
+          disableRipple
+          sx={{
+            ':hover': { backgroundColor: 'transparent' },
+            p: 0,
+            m: 0,
+            color: 'inherit',
+          }}
+          onClick={handleClick}
+        >
+          {children}
+        </Button>
+      )}
       <Popover
         id={id}
         open={open}

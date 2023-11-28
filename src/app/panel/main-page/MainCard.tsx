@@ -17,7 +17,8 @@ import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
 import useAxiosWithAuth from '@/api/config'
 import Link from 'next/link'
-import OthersProfile from './OthersProfile'
+import { red } from '@mui/material/colors'
+import OthersProfile from '../OthersProfile'
 
 const MainCard = ({
   title,
@@ -82,16 +83,8 @@ const MainCard = ({
       </Link>
       <CardHeader
         avatar={
-<<<<<<< HEAD:src/app/panel/MainCard.tsx
           <OthersProfile userId={user_id} name={user_nickname}>
             <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
-=======
-          <Link
-            href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
-            style={{ textDecoration: 'none' }}
-          >
-            <Avatar aria-label="profile">
->>>>>>> 205fe8469a4cae1b9cff9d94ef9e874900eca622:src/app/panel/main-page/MainCard.tsx
               <Box
                 component="img"
                 height="194"
