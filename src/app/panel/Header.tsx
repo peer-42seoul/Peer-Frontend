@@ -1,8 +1,8 @@
 'use client'
 
-import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material'
-import { NotificationsNoneOutlined } from '@mui/icons-material'
-import SearchButton from './SearchButton'
+import { AppBar, Box, Toolbar, Typography } from '@mui/material'
+import SearchButton from './main-page/SearchButton'
+import AlertIcon from './AlertIcon'
 
 const Header = () => {
   return (
@@ -10,9 +10,7 @@ const Header = () => {
       <Box sx={{ flex: 1 }}>
         <AppBar position="static">
           <Toolbar sx={{ justifyContent: 'space-between' }}>
-            <IconButton color="inherit" aria-label="menu">
-              <NotificationsNoneOutlined />
-            </IconButton>
+            <AlertIcon />
             <Typography component="div">로고</Typography>
             <SearchButton />
           </Toolbar>

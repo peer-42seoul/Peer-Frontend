@@ -10,8 +10,8 @@ import {
   Chip,
   IconButton,
   Typography,
+  Stack,
 } from '@mui/material'
-import { red } from '@mui/material/colors'
 import { useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
@@ -61,7 +61,13 @@ const MainCard = ({
             alt="userImage"
           />
           <Chip
-            label={status}
+            label={
+              status === 'ONGOING'
+                ? '모집중'
+                : status === 'BEFORE'
+                  ? '모집전'
+                  : '모집완료'
+            }
             sx={{
               position: 'absolute',
               top: 16,
@@ -76,8 +82,16 @@ const MainCard = ({
       </Link>
       <CardHeader
         avatar={
+<<<<<<< HEAD:src/app/panel/MainCard.tsx
           <OthersProfile userId={user_id} name={user_nickname}>
             <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
+=======
+          <Link
+            href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
+            style={{ textDecoration: 'none' }}
+          >
+            <Avatar aria-label="profile">
+>>>>>>> 205fe8469a4cae1b9cff9d94ef9e874900eca622:src/app/panel/main-page/MainCard.tsx
               <Box
                 component="img"
                 height="194"
@@ -102,16 +116,29 @@ const MainCard = ({
           <Typography variant="body2" color="text.secondary">
             {title}
           </Typography>
-          <Box>
-            {tagList?.map(({ name, color }: ITag, idx: number) => (
-              <Chip
-                label={name}
-                size="small"
-                key={idx}
-                style={{ color: color }}
-              />
-            ))}
-          </Box>
+          <Stack gap={1} direction={'row'}>
+            {tagList?.map(({ name, color }: ITag, idx: number) => {
+              const r = parseInt(color.slice(1, 3), 16),
+                g = parseInt(color.slice(3, 5), 16),
+                b = parseInt(color.slice(5, 7), 16)
+              const alpha = '0.3'
+              const backgroundColor =
+                'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')'
+
+              return (
+                <Chip
+                  label={name}
+                  size="small"
+                  key={idx}
+                  style={{
+                    color: color,
+                    backgroundColor: backgroundColor,
+                    borderRadius: 5,
+                  }}
+                />
+              )
+            })}
+          </Stack>
         </CardContent>
       </Link>
     </Card>

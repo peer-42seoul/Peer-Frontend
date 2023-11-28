@@ -27,10 +27,17 @@ const BoxBase = ({
   mobileSx: SxProps
   pcSx: SxProps
 }) => {
-  const isPc = useMedia()
+  const { isPc } = useMedia()
   return (
     <Container sx={isPc ? PCBase : MobileBase}>
-      <Container sx={isPc ? pcSx : mobileSx} disableGutters={true}>
+      <Container
+        sx={{
+          borderRadius: '16px',
+          backgroundColor: 'background.secondary',
+          ...(isPc ? pcSx : mobileSx),
+        }}
+        disableGutters={true}
+      >
         {children}
       </Container>
     </Container>

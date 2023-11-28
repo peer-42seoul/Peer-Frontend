@@ -51,6 +51,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     }, 0)
   }, [data])
 
+  console.log('data', data)
   const handleApply = (selectedRole: string | null) => {
     if (!isLogin) router.push(currentUrl)
     else {
@@ -77,7 +78,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
         <Container>
           <Stack direction={'row'} gap={4} marginBottom={6}>
             <Image
-              src={data?.leader_image ?? ''}
+              src={data?.image ?? ''}
               alt="leader_profile"
               width={300}
               height={300}
@@ -190,7 +191,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 </Stack>
               </Box>
               <Image
-                src={data?.leader_image ?? ''}
+                src={data?.image ?? ''}
                 alt="leader_profile"
                 width={300}
                 height={300}
