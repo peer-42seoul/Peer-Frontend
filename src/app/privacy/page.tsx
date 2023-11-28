@@ -4,7 +4,6 @@ import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import {
   Checkbox,
-  Box,
   FormControlLabel,
   Paper,
   Stack,
@@ -23,8 +22,6 @@ const PCSignupBox = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '48px',
-  borderRadius: '16px',
-  border: '1px solid #000',
 }
 
 const MobileSignupBox = {
@@ -34,20 +31,30 @@ const MobileSignupBox = {
   alignItems: 'center',
   padding: '40px 16px',
   gap: '24px',
-  borderRadius: '16px',
-  border: '1px solid #000',
 }
 
 const PCPaper = {
-  width: '100%',
-  height: '100px',
+  width: 'calc(100%-16px)',
+  height: '92px',
   overflow: 'auto',
+  borderRadius: '8px',
+  borderWidth: '1px',
+  borderStyle: 'solid',
+  borderColor: 'text.assistive',
+  padding: '8px',
+  backgroundColor: 'background.secondary',
 }
 
 const MobilePaper = {
-  width: '100%',
-  height: '100px',
+  width: 'calc(100%-16px)',
+  height: '146px',
   overflow: 'auto',
+  borderRadius: '8px',
+  borderWidth: '1px',
+  borderStyle: 'solid',
+  borderColor: 'text.assistive',
+  padding: '8px',
+  backgroundColor: 'background.secondary',
 }
 
 const Policy1 =
@@ -87,12 +94,14 @@ const Privacy = () => {
   return (
     <>
       <BoxBase pcSx={PCSignupBox} mobileSx={MobileSignupBox}>
-        <Typography variant="h5">개인정보처리방침</Typography>
-        <Box>
+        <Typography variant="Title3Emphasis">회원가입</Typography>
+        <Stack gap={'16px'}>
           <Stack>
             <FormControlLabel
               control={<Checkbox />}
-              label="전체 동의하기"
+              label={
+                <Typography variant="CaptionEmphasis">전체동의</Typography>
+              }
               onChange={() => {
                 if (checkAll === false) setCheckStatus([true, true])
                 else if (checkAll === true && checkStatus[0] && checkStatus[1])
@@ -101,34 +110,56 @@ const Privacy = () => {
               }}
               checked={checkAll}
             />
-            <Typography>
+            <Typography variant="caption">
               실명 인증된 아이디로 가입,이벤트 혜택 정보 수신(선택) 동의를
               포함합니다.
             </Typography>
           </Stack>
           <Stack>
-            <Paper sx={isPc ? PCPaper : MobilePaper}> {Policy1}</Paper>
             <FormControlLabel
               control={<Checkbox />}
               onChange={() => {
                 setCheckStatus([!checkStatus[0], checkStatus[1]])
               }}
-              label="[필수] peer 이용 약관"
+              label={
+                <Typography
+                  variant="CaptionEmphasis"
+                  color={'text.alternative'}
+                >
+                  [필수] peer 이용 약관
+                </Typography>
+              }
               checked={checkStatus[0]}
             />
+            <Paper sx={isPc ? PCPaper : MobilePaper}>
+              <Typography variant="Caption" color={'text.alternative'}>
+                {Policy1}
+              </Typography>
+            </Paper>
           </Stack>
           <Stack>
-            <Paper sx={isPc ? PCPaper : MobilePaper}>{Policy1}</Paper>
             <FormControlLabel
               control={<Checkbox />}
-              label="[필수] 개인정보 수집 및 이용"
+              label={
+                <Typography
+                  variant="CaptionEmphasis"
+                  color={'text.alternative'}
+                >
+                  [필수] 개인정보 수집 및 이용
+                </Typography>
+              }
               onChange={() => {
                 setCheckStatus([checkStatus[0], !checkStatus[1]])
               }}
               checked={checkStatus[1]}
             />
+            <Paper sx={isPc ? PCPaper : MobilePaper}>
+              <Typography variant="Caption" color={'text.alternative'}>
+                {Policy1}
+              </Typography>
+            </Paper>
           </Stack>
-        </Box>
+        </Stack>
         <CuButton
           message={'다음'}
           action={onClick}

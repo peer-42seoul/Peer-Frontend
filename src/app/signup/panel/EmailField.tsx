@@ -20,7 +20,9 @@ const EmailField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="email">
+        <Typography variant="Caption">새로운 이메일</Typography>
+      </CuTextFieldLabel>
       <CuTextField
         {...field}
         disabled={emailSendStatus === 'submit'}
@@ -39,15 +41,17 @@ const EmailField = ({
                 disabled={isSubmitting || emailSendStatus === 'submit'}
                 onClick={submitEmail}
               >
-                코드 전송
+                <Typography variant="CaptionEmphasis">코드 전송</Typography>
               </Button>
             </InputAdornment>
           ),
         }}
       />
-      {(error && <Typography color="error">{error.message}</Typography>) || (
-        <Typography>&nbsp;</Typography>
-      )}
+      {(error && (
+        <Typography color="error" variant="Caption">
+          {error.message}
+        </Typography>
+      )) || <Typography>&nbsp;</Typography>}
     </>
   )
 }
