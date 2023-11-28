@@ -40,29 +40,30 @@ export default function UserInfoEdit({
     },
     mode: 'onChange',
   })
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
 
   const axiosWithAuth = useAxiosWithAuth()
 
-  const linkFt = async () => {
-    try {
-      const response = await axiosWithAuth.get('/oauth2/authorization/ft')
+  // const linkFt = async () => {
+  //   try {
+  //     const response = await axiosWithAuth.get('/oauth2/authorization/ft')
 
-      console.log(response)
-    } catch (error) {
-      // 오류 처리
-      console.error('Error:', error)
-    }
-  }
-  const linkGoogle = async () => {
-    try {
-      const response = await axiosWithAuth.get('/oauth2/authorization/google')
+  //     console.log(response)
+  //   } catch (error) {
+  //     // 오류 처리
+  //     console.error('Error:', error)
+  //   }
+  // }
+  // const linkGoogle = async () => {
+  //   try {
+  //     const response = await axiosWithAuth.get('/oauth2/authorization/google')
 
-      console.log(response)
-    } catch (error) {
-      // 오류 처리
-      console.error('Error:', error)
-    }
-  }
+  //     console.log(response)
+  //   } catch (error) {
+  //     // 오류 처리
+  //     console.error('Error:', error)
+  //   }
+  // }
 
   const changePassword: SubmitHandler<IChangePassword> = async (data) => {
     try {
@@ -100,7 +101,10 @@ export default function UserInfoEdit({
         {authenticationFt ? (
           <Typography>{authenticationFt}</Typography>
         ) : (
-          <Button variant="contained" onClick={linkFt}>
+          <Button
+            variant="contained"
+            href={`${API_URL}/oauth2/authorization/ft`}
+          >
             인증하기
           </Button>
         )}
@@ -110,7 +114,10 @@ export default function UserInfoEdit({
         {authenticationGoogle ? (
           <Typography>{authenticationGoogle}</Typography>
         ) : (
-          <Button variant="contained" onClick={linkGoogle}>
+          <Button
+            variant="contained"
+            href={`${API_URL}/oauth2/authorization/google`}
+          >
             인증하기
           </Button>
         )}
