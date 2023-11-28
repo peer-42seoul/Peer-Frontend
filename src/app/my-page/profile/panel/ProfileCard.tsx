@@ -75,7 +75,6 @@ const ProfileCard = ({
       sx={{
         backgroundColor: 'background.secondary',
         borderRadius: '16px',
-        // overflow: 'auto',
         height: '100%',
       }}
     >
