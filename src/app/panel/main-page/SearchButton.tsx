@@ -4,7 +4,7 @@ import { useMediaQuery, IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import useModal from '@/hook/useModal'
 import CuModal from '@/components/CuModal'
-import SearchBody from '../search/panel/SearchBody'
+import SearchBody from '../../search/panel/SearchBody'
 
 const StyleMobileSearch = {
   position: 'absolute' as 'absolute',

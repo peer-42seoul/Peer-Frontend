@@ -44,6 +44,7 @@ export interface IPostDetail {
   roleList: IRole[]
   // interviewList: IFormInterview[]
   place: string
+  image: string
 }
 
 export interface IFormInterview {

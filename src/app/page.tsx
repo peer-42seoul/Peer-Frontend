@@ -19,7 +19,7 @@ export default async function Home() {
     )
     data = response.data
   } catch (e) {
-    console.error(e)
+    console.log(e)
   }
 
   return <MainPage initData={data} />

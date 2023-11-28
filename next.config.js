@@ -22,7 +22,8 @@ const nextConfig = withPWA({
     domains: [
       'picsum.photos',
       'source.unsplash.com',
-      'kr1-api-object-storage.nhncloudservice.com',
+      'lh3.googleusercontent.com',
+      'kr1-api-object-storage.nhncloudservice.com'
     ],
   },
 })

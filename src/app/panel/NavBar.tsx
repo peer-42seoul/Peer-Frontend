@@ -16,7 +16,7 @@ import {
 } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import SearchButton from './SearchButton'
+import SearchButton from './main-page/SearchButton'
 import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'

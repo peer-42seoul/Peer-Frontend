@@ -2,7 +2,7 @@ import { Edit } from '@mui/icons-material'
 import { Fab } from '@mui/material'
 import Link from 'next/link'
 
-const EditButton = () => {
+const FloatEditButton = () => {
   return (
     <Fab color="secondary" aria-label="edit">
       <Link href={'/recruit/write'}>
@@ -12,4 +12,4 @@ const EditButton = () => {
   )
 }
 
-export default EditButton
+export default FloatEditButton

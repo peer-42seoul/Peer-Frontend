@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import { ProjectSort } from './MainPage'
+import { ProjectSort } from '../MainPage'
 
 interface ISelectSortProps {
   sort: ProjectSort | undefined
