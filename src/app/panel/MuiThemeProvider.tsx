@@ -344,7 +344,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         styleOverrides: {
           root: {
             minWidth: '20px',
-            minHeight: '20x',
+            minHeight: '20px',
           },
         },
       },
