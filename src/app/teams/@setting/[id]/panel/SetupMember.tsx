@@ -8,7 +8,7 @@ import {
   Switch,
   Typography,
 } from '@mui/material'
-import { IMember, TeamGrant } from '../page'
+import { IMember, TeamGrant } from '../../../types/types'
 import useModal from '@/hook/useModal'
 import { useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'

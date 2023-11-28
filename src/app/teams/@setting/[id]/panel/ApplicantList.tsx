@@ -1,7 +1,7 @@
 'use client'
 
 import { Avatar, Button, Stack, Typography } from '@mui/material'
-import { IApplicant } from '../page'
+import { IApplicant } from '../../../types/types'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
