@@ -1,7 +1,7 @@
 'use client'
 
 import { AppBar, Box, Toolbar, Typography } from '@mui/material'
-import SearchButton from './SearchButton'
+import SearchButton from './main-page/SearchButton'
 import AlertIcon from './AlertIcon'
 
 const Header = () => {

@@ -1,6 +1,6 @@
 'use client'
 
-import { TeamStatus } from '@/app/teams/@setting/[id]/page'
+import { TeamStatus } from '@/app/teams/types/types'
 import useMedia from '@/hook/useMedia'
 import useShowTeams from '@/states/useShowTeams'
 import {
