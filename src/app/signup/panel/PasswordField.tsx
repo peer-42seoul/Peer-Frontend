@@ -32,7 +32,9 @@ const PasswordField = ({
 
   return (
     <>
-      <CuTextFieldLabel htmlFor="password">비밀번호</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="password">
+        <Typography variant="Caption">비밀번호</Typography>
+      </CuTextFieldLabel>
       <CuTextField
         {...field}
         autoComplete="new-password"
@@ -54,7 +56,7 @@ const PasswordField = ({
                 setShowPassword={setShowPassword}
               />
               <IconButton onClick={deletePassword} size="small">
-                <HighlightOffIcon />
+                <HighlightOffIcon sx={{ color: 'text.alternative' }} />
               </IconButton>
             </>
           ),
@@ -69,6 +71,7 @@ const PasswordField = ({
         }}
       >
         <Typography
+          variant="Caption"
           color={isAlphabetValid ? 'primary' : ''}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
@@ -76,6 +79,7 @@ const PasswordField = ({
           대소문자
         </Typography>
         <Typography
+          variant="Caption"
           color={isLengthValid ? 'primary' : ''}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
@@ -83,6 +87,7 @@ const PasswordField = ({
           최소 8자
         </Typography>
         <Typography
+          variant="Caption"
           color={isNumberValid ? 'primary' : ''}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
@@ -90,6 +95,7 @@ const PasswordField = ({
           숫자
         </Typography>
         <Typography
+          variant="Caption"
           color={isSpecialValid ? 'primary' : ''}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
