@@ -1,4 +1,4 @@
-import { TeamStatus } from '@/app/teams/@setting/[id]/page'
+import { TeamStatus } from '@/app/teams/types/types'
 import { create } from 'zustand'
 
 interface IShowTeams {

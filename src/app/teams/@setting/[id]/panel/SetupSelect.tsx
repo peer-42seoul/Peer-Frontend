@@ -6,7 +6,7 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material'
-import { TeamOperationForm } from '../page'
+import { TeamOperationForm } from '../../../types/types'
 
 export const SetupSelect = ({
   type,

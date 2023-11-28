@@ -1,4 +1,4 @@
-import FormCheckbox from '@/app/panel/FormCheckbox'
+import FormCheckbox from '@/app/panel/main-page/FormCheckbox'
 import { FormControl, FormGroup } from '@mui/material'
 
 export type CheckQuestionList = string[]
@@ -17,7 +17,7 @@ const CheckQuestionForm = ({
   disabled: boolean
 }) => {
   return (
-    <FormControl disabled={disabled ? true : false} component="fieldset">
+    <FormControl disabled={disabled} component="fieldset">
       <FormGroup defaultValue={value}>
         {optionList?.map((label: string, index: number) => {
           console.log(label, value?.includes(label))
