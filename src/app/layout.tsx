@@ -55,6 +55,7 @@ export default function RootLayout({
             <div id="modal-root"></div>
           </MuiThemeProvider>
         </CuSWRConfig>
+        <script src="path/to/hammerjs.js" async />
       </body>
     </html>
   )

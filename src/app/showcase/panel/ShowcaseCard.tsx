@@ -20,9 +20,9 @@ const ShowcaseCard = ({ data }: { data: ShowcasePageProps }) => {
   }
 
   return (
-    <Stack height={'80vh'}>
+    <Stack height={'70vh'}>
       <Avatar
-        src={'https://source.unsplash.com/random/500*1000'}
+        src={data.image}
         sx={{ width: '100%', height: '100%' }}
         variant="rounded"
       />
