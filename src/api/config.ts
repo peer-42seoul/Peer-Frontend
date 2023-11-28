@@ -10,7 +10,7 @@ const useAxiosWithAuth = () => {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
   })
 
-  //무한 요청 방지
+  //무한 요청 방지 flag
   let isRefreshing = false
 
   axiosInstance.interceptors.request.use(
@@ -33,9 +33,8 @@ const useAxiosWithAuth = () => {
       //console.log('is refreshing?', isRefreshing)
       const currentPageUrl = window.location.pathname
       if (error.response?.status === 401) {
-        if (isRefreshing) {
+        if (!accessToken || isRefreshing) {
           // 로그아웃 후 리디렉션
-          isRefreshing = true
           useAuthStore.getState().logout()
           router.push('/login?redirect=' + currentPageUrl)
         } else {
@@ -53,6 +52,7 @@ const useAxiosWithAuth = () => {
             return axios.request(error.config)
           } catch (refreshError) {
             // 로그아웃 후 리디렉션
+            isRefreshing = true
             useAuthStore.getState().logout()
             router.push('/login?redirect=' + currentPageUrl)
           }
