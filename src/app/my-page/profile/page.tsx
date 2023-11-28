@@ -1,10 +1,8 @@
 'use client'
-import { AlertColor, Box, Stack, Typography } from '@mui/material'
+import { AlertColor, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ProfileCard from './panel/ProfileCard'
-import ProfileSection from './panel/ProfileSection'
 import { IUserProfile } from '@/types/IUserProfile'
-import ProfileLinksSection from './panel/ProfileLinksSection'
 import CuModal from '@/components/CuModal'
 import ProfileBioEditor from './panel/ProfileBioEditor'
 import ProfileLinkEditor from './panel/ProfileLinkEditor'
@@ -15,7 +13,7 @@ import useAxiosWithAuth from '@/api/config'
 import useAuthStore from '@/states/useAuthStore'
 import CuButton from '@/components/CuButton'
 import { useRouter } from 'next/navigation'
-import Skills from './panel/Skills'
+import MyInfoCard from './panel/MyInfoCard'
 
 interface IModals {
   introduction: boolean
@@ -125,17 +123,12 @@ const MyProfile = () => {
         setModalType={setModalType}
       />
 
-      {/* profile home */}
-      <Box>
-        <Typography variant={'Title3Emphasis'}>내 정보</Typography>
-        <Skills setModalType={setModalType} />
-        <ProfileLinksSection
-          linkList={userInfo.linkList}
-          setModalType={setModalType}
-        />
-        <CuButton variant="text" action={handleLogout} message="로그아웃" />
-      </Box>
-      {/* profile home end*/}
+      {/* profile my info */}
+      <MyInfoCard
+        linkList={userInfo?.linkList}
+        setModalType={setModalType}
+        handleLogout={handleLogout}
+      />
 
       {/* modals */}
       <CuModal
