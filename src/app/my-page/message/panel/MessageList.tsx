@@ -1,7 +1,8 @@
 'use client'
 import { List, Typography } from '@mui/material'
 import { IMessageListData } from '@/types/IMessage'
-import { PCMessageItem } from './MessageItem'
+import { PCMessageItem, MobileMessageItem } from './MessageItem'
+import useMedia from '@/hook/useMedia'
 
 interface IMessageListProps {
   messageList: IMessageListData[]
@@ -21,22 +22,31 @@ const MessageList = ({
   toggleSelectUser,
 }: IMessageListProps) => {
   const { isManageMode, isLoading, error } = state
+  const { isPc } = useMedia()
 
   if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
   if (error) return <Typography>데이터 불러오기에 실패했습니다.</Typography>
   if (messageList.length === 0)
     return <Typography>쪽지함이 비었습니다.</Typography>
 
+  if (isPc)
+    return (
+      <List>
+        {messageList.map((message) => (
+          <PCMessageItem
+            key={message.targetId}
+            message={message}
+            isManageMode={isManageMode}
+            isChecked={selectedUsers.has(message.targetId)}
+            toggleSelectUser={toggleSelectUser}
+          />
+        ))}
+      </List>
+    )
   return (
     <List>
       {messageList.map((message) => (
-        <PCMessageItem
-          key={message.targetId}
-          message={message}
-          isManageMode={isManageMode}
-          isChecked={selectedUsers.has(message.targetId)}
-          toggleSelectUser={toggleSelectUser}
-        />
+        <MobileMessageItem key={message.targetId} message={message} />
       ))}
     </List>
   )
