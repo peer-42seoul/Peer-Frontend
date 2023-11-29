@@ -1,7 +1,7 @@
 'use client'
 import { defaultGetFetcher } from '@/api/fetchers'
 import { IMainCard } from '@/types/IPostDetail'
-import { Box, Typography } from '@mui/material'
+import { Container, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
@@ -13,27 +13,36 @@ import CardContainer from './panel/CardContainer'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
-  const [cardList, setCardList] = useState<Array<IMainCard>>([])
 
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=STUDY&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=STUDY&sort=latest&page=${page}&pageSize=2&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
     defaultGetFetcher,
   )
 
-  if (isLoading && !data)
-    return <Typography variant="Title3Emphasis">로딩중</Typography>
-  if (error) return <Typography variant="Title3Emphasis">에러</Typography>
-  if (!data || !data?.content)
-    return <Typography variant="Title3Emphasis">데이터가 없습니다.</Typography>
+  let message: string = ''
+
+  if (isLoading && !data) message = '로딩중'
+  else if (error) message = '에러 발생'
+  else if (!data?.content) message = '데이터가 없습니다.'
 
   return (
-    <Box width={1} height={'90vh'}>
-      <CardContainer
-        cardList={data.content}
-        isLoading={isLoading}
-        update={() => setPage((prev) => prev + 1)}
-      />
-    </Box>
+    <Container sx={{ width: '100% ', height: '90vh', overflow: 'hidden' }}>
+      {!message && data?.content ? (
+        <CardContainer
+          cardList={data.content}
+          isLoading={isLoading}
+          update={() => setPage((prev) => prev + 1)}
+        />
+      ) : (
+        <Stack
+          justifyContent={'center'}
+          alignItems={'center'}
+          sx={{ width: '90vw', maxWidth: '100%', height: '100%' }}
+        >
+          <Typography>{message}</Typography>
+        </Stack>
+      )}
+    </Container>
   )
 }
 
