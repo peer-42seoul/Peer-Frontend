@@ -145,11 +145,11 @@ const Login = () => {
                     placeholder="이메일을 입력하세요."
                   />
                   {errors.userEmail ? (
-                    <Typography color="error" fontSize={'12px'}>
+                    <Typography color="error" variant="Caption">
                       {errors.userEmail?.message}
                     </Typography>
                   ) : (
-                    <Typography fontSize={'12px'}>&nbsp;</Typography>
+                    <Typography variant="Caption">&nbsp;</Typography>
                   )}
                 </Box>
               )}
@@ -189,11 +189,11 @@ const Login = () => {
                     placeholder="비밀번호를 입력하세요."
                   />
                   {errors.password ? (
-                    <Typography color="error" fontSize={'12px'}>
+                    <Typography color="error" variant="Caption">
                       {errors.password?.message}
                     </Typography>
                   ) : (
-                    <Typography fontSize={'12px'}>&nbsp;</Typography>
+                    <Typography variant="Caption">&nbsp;</Typography>
                   )}
                 </Box>
               )}

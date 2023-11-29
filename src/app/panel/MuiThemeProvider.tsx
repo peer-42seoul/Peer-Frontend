@@ -612,6 +612,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
               '& .MuiInputBase-root': {
                 '& input': {
                   height: '100%',
+                  width: '100%',
                   padding: '0 ',
                 },
               },
