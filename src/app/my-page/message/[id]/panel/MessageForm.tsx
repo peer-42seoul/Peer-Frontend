@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useState } from 'react'
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { isAxiosError } from 'axios'
 import { Stack, TextField } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
@@ -23,10 +23,11 @@ const MessageForm = ({
   handleClose,
   disabled,
 }: IMessageFormProps) => {
-  const [content, setContent] = useState('')
   const axiosWithAuth = useAxiosWithAuth()
-  const messageSubmit = useCallback(async () => {
+  const [content, setContent] = useState<string>('')
+  const messageSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
+      e.preventDefault()
       if (!content) {
         alert('내용을 입력하세요.')
         return
@@ -61,10 +62,10 @@ const MessageForm = ({
     } finally {
       handleClose && handleClose()
     }
-  }, [content])
+  }
 
   return (
-    <>
+    <form onSubmit={messageSubmit}>
       {view === 'PC_VIEW' ? (
         <Stack direction={'row'}>
           <TextField
@@ -77,7 +78,7 @@ const MessageForm = ({
           />
           <CuButton
             variant="text"
-            action={() => messageSubmit()}
+            type="submit"
             message="전송"
             disabled={disabled}
           />
@@ -99,15 +100,11 @@ const MessageForm = ({
               action={() => handleClose && handleClose()}
               message="취소"
             />
-            <CuButton
-              variant="contained"
-              action={() => messageSubmit()}
-              message="보내기"
-            />
+            <CuButton variant="contained" type="submit" message="보내기" />
           </Stack>
         </Stack>
       )}
-    </>
+    </form>
   )
 }
 
