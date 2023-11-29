@@ -1,11 +1,9 @@
 'use client'
 
 import { Typography } from '@mui/material'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import useAuthStore from '@/states/useAuthStore'
-import useAxiosWithAuth from '@/api/config'
-import axios from 'axios'
 
 const OauthFtLogin = () => {
   const searchParams = useSearchParams()
