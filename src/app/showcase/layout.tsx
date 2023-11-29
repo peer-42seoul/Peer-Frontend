@@ -1,22 +1,29 @@
-import { Stack, Typography } from '@mui/material'
+'use client'
+
+import { Box, Stack } from '@mui/material'
 import { ReactNode } from 'react'
+import ShowcaseHeader from './panel/ShowcaseHeader'
 
 const ShowcaseLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <Stack className="layout" height={'80vh'} overflow={'hidden'}>
-      <Stack
-        position={'fixed'}
-        zIndex={5}
-        p={2}
-        sx={{ backgroundColor: 'background.primary' }}
-        width={'100%'}
-      >
-        <Typography variant="h5" fontWeight={'bold'} textAlign={'center'}>
-          쇼케이스
-        </Typography>
-      </Stack>
-      <Stack className="layout__content">{children}</Stack>
-    </Stack>
+    <Box sx={{ backgroundColor: 'background.primary' }}>
+      <div className="pc-layout">
+        <Stack
+          height={'80vh'}
+          width={'100%'}
+          direction={'row'}
+          justifyContent={'center'}
+        >
+          {children}
+        </Stack>
+      </div>
+      <div className="mobile-layout">
+        <Stack height={'80vh'} width={'100%'} overflow={'hidden'}>
+          <ShowcaseHeader />
+          <Stack width={'100%'}>{children}</Stack>
+        </Stack>
+      </div>
+    </Box>
   )
 }
 

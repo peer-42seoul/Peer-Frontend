@@ -1,9 +1,13 @@
 'use client'
 
-import { Stack } from '@mui/material'
+import { IconButton, Stack } from '@mui/material'
 import ShowcaseCard from './panel/ShowcaseCard'
-import { TouchEvent, useEffect, useState } from 'react'
+import { TouchEvent, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import PhoneFrame from './panel/PhoneFrame'
+import useMedia from '@/hook/useMedia'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 export interface ShowcasePageProps {
   name: string
@@ -70,14 +74,28 @@ const mockData: ShowcasePageProps[] = [
 ]
 
 const ShowcasePage = () => {
+  const { isPc } = useMedia()
   const [datas, setDatas] = useState<ShowcasePageProps[]>(mockData)
   const [index, setIndex] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
+  const constraintsRef = useRef(null)
 
   useEffect(() => {
     setDatas(mockData)
   }, [])
+
+  const handlePrevClick = () => {
+    if (index > 0) {
+      setIndex(index - 1)
+    }
+  }
+
+  const handleNextClick = () => {
+    if (index < datas.length - 1) {
+      setIndex(index + 1)
+    }
+  }
 
   const handleTouchStart = (e: TouchEvent) => {
     e.stopPropagation()
@@ -112,6 +130,25 @@ const ShowcasePage = () => {
     exit: { opacity: 0, y: -100 },
   }
 
+  if (isPc) {
+    return (
+      <Stack direction={'row'} spacing={2}>
+        <Stack direction={'row'} spacing={1}>
+          <PhoneFrame imageUrl={datas[index].image} />
+          <Stack>
+            <IconButton onClick={handlePrevClick}>
+              <ExpandLessIcon color="primary" />
+            </IconButton>
+            <IconButton onClick={handleNextClick}>
+              <ExpandMoreIcon color="primary" />
+            </IconButton>
+          </Stack>
+        </Stack>
+        <ShowcaseCard data={datas[index]} />
+      </Stack>
+    )
+  }
+
   return (
     <Stack
       component={'div'}
@@ -119,15 +156,19 @@ const ShowcasePage = () => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <motion.div
-        key={index}
-        variants={variants}
-        initial="hidden"
-        animate="visible"
-        exit={'exit'}
-        transition={{ duration: 0.3 }}
-      >
-        <ShowcaseCard data={datas[index]} />
+      <motion.div ref={constraintsRef}>
+        <motion.div
+          key={index}
+          variants={variants}
+          drag="y"
+          dragConstraints={constraintsRef}
+          initial="hidden"
+          animate="visible"
+          exit={'exit'}
+          transition={{ duration: 0.3 }}
+        >
+          <ShowcaseCard data={datas[index]} />
+        </motion.div>
       </motion.div>
     </Stack>
   )
