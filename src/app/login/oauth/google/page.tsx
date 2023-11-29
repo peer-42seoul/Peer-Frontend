@@ -8,7 +8,6 @@ import useAxiosWithAuth from '@/api/config'
 import axios from 'axios'
 
 const OauthGoogleLogin = () => {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const state = searchParams.get('state')
   const code = searchParams.get('code')
@@ -16,39 +15,14 @@ const OauthGoogleLogin = () => {
   const authuser = searchParams.get('authuser')
   const prompt = searchParams.get('prompt')
   const API_URL = process.env.NEXT_PUBLIC_API_URL
-  const { isLogin } = useAuthStore()
-  const axiosWithAuth = useAxiosWithAuth()
+  const { isLogin, accessToken } = useAuthStore()
 
-  const handleConnect = async () => {
-    try {
-      const response = await axiosWithAuth.get('/login/oauth2/code/google', {
-        params: {
-          state: state,
-          code: code,
-          scope: scope,
-          authuser: authuser,
-          prompt: prompt,
-        },
-      })
-      if (response.status == 200) {
-        router.push('/my-page/privacy')
-      }
-    } catch (error) {
-      console.error('Error:', error)
-    }
+  const handleConnect = () => {
+    window.location.href = `${API_URL}/login/oauth2/code/google?state=${state}&code=${code}&scope=${scope}&authuser=${authuser}&prompt=${prompt}&accessToken=${accessToken}`
   }
 
-  const handleLogin = async () => {
-    try {
-      await axios.get(`${API_URL}/login/oauth2/code/google`, {
-        params: {
-          code: code,
-          state: state,
-        },
-      })
-    } catch (error) {
-      console.error('Error:', error)
-    }
+  const handleLogin = () => {
+    window.location.href = `${API_URL}/login/oauth2/code/google?state=${state}&code=${code}&scope=${scope}&authuser=${authuser}&prompt=${prompt}`
   }
 
   useEffect(() => {
