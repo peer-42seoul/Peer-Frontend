@@ -1,7 +1,7 @@
 'use client'
 import { List, Typography } from '@mui/material'
 import { IMessageListData } from '@/types/IMessage'
-import { PCMessageItem, MobileMessageItem } from './MessageItem'
+import { PCMessageListItem, MobileMessageListItem } from './MessageItem'
 import useMedia from '@/hook/useMedia'
 
 interface IMessageListProps {
@@ -33,7 +33,7 @@ const MessageList = ({
     return (
       <List>
         {messageList.map((message) => (
-          <PCMessageItem
+          <PCMessageListItem
             key={message.targetId}
             message={message}
             isManageMode={isManageMode}
@@ -46,7 +46,7 @@ const MessageList = ({
   return (
     <List>
       {messageList.map((message) => (
-        <MobileMessageItem key={message.targetId} message={message} />
+        <MobileMessageListItem key={message.targetId} message={message} />
       ))}
     </List>
   )

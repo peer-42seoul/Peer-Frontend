@@ -4,19 +4,19 @@ import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
 import CuButton from '@/components/CuButton'
 
-interface IPCMessageItemProps {
+interface IPCMessageListItemProps {
   message: IMessageListData
   isManageMode: boolean
   isChecked: boolean
   toggleSelectUser: (targetId: number) => void
 }
 
-export const PCMessageItem = ({
+export const PCMessageListItem = ({
   message,
   isManageMode,
   isChecked,
   toggleSelectUser,
-}: IPCMessageItemProps) => {
+}: IPCMessageListItemProps) => {
   const router = useRouter()
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const { targetId, conversationId } = message
@@ -53,11 +53,13 @@ const mobileItemDeleteButtonStyle = {
   marginTop: '1rem',
 }
 
-interface IMobileMessageItemProps {
+interface IMobileMessageListItemProps {
   message: IMessageListData
 }
 
-export const MobileMessageItem = ({ message }: IMobileMessageItemProps) => {
+export const MobileMessageListItem = ({
+  message,
+}: IMobileMessageListItemProps) => {
   const router = useRouter()
   const { targetId, conversationId } = message
 
