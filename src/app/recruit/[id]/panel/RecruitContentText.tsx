@@ -1,7 +1,6 @@
-import { Box, Icon, Stack, Typography } from '@mui/material'
-import ImageIcon from '@mui/icons-material/Image'
+import { Box, Stack, Typography } from '@mui/material'
 
-const RecruitFormText = ({
+const RecruitContentText = ({
   label,
   content,
   children,
@@ -22,4 +21,4 @@ const RecruitFormText = ({
   </Box>
 )
 
-export default RecruitFormText
+export default RecruitContentText

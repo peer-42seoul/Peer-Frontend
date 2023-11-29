@@ -12,7 +12,6 @@ const Header = () => {
         <AppBar position="static">
           <Toolbar sx={{ justifyContent: 'space-between' }}>
             <AlertIcon />
-            <Typography component="div">로고</Typography>
             <Typography component="div">
               <Image
                 src={'/icons/peer-logo.svg'}

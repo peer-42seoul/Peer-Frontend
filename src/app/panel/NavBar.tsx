@@ -53,7 +53,6 @@ export const MobileNav = () => {
       }}
     >
       <BottomNavigation
-        showLabels
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue)
@@ -130,7 +129,7 @@ export const PcNav = () => {
       }}
     >
       <BottomNavigation
-        showLabels
+        showLabels={true}
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue)

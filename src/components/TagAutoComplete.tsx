@@ -1,4 +1,4 @@
-import { Autocomplete, Chip, Stack, TextField } from '@mui/material'
+import { Autocomplete, Stack, TextField } from '@mui/material'
 import { ITag } from '@/types/IPostDetail'
 import TagChip from '@/components/TagChip'
 

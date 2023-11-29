@@ -166,67 +166,69 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       <PushAlertBanner />
       {/* mobile view */}
       <div className="mobile-layout">
-        <Container>
-          <Box
-            sx={{ backgroundColor: 'Background.primary' }}
-            border="1px solid black"
-          >
-            <MainBanner />
-            <SelectType type={type} setType={handleType} />
-            <Grid container p={2}>
-              <SearchOption
-                openOption={openOption}
-                setOpenOption={setOpenOption}
-                setDetailOption={handleOption}
-              />
-              <Grid item xs={12}>
-                <Stack
-                  direction="row"
-                  alignItems={'center'}
-                  justifyContent={'flex-end'}
-                >
-                  <SelectSort sort={sort} setSort={handleSort} />
-                </Stack>
-              </Grid>
+        <Container
+          sx={{
+            backgroundColor: 'Background.primary',
+            border: '1px solid black',
+          }}
+        >
+          <MainBanner />
+          <SelectType type={type} setType={handleType} />
+          <Grid container p={2}>
+            <SearchOption
+              openOption={openOption}
+              setOpenOption={setOpenOption}
+              setDetailOption={handleOption}
+            />
+            <Grid item xs={12}>
+              <Stack
+                direction="row"
+                alignItems={'center'}
+                justifyContent={'flex-end'}
+              >
+                <SelectSort sort={sort} setSort={handleSort} />
+              </Stack>
             </Grid>
-            {isLoading && page == 1 ? (
-              <Typography>로딩중...</Typography>
-            ) : error || !initData ? (
-              <Typography>에러 발생</Typography>
-            ) : content?.length == 0 ? (
-              <Typography>데이터가 없습니다</Typography>
-            ) : (
-              <>
-                <Stack alignItems={'center'}>
-                  <Stack gap={2}>
-                    {content?.map((project: IPost, index: number) => (
-                      <Box key={index}>
-                        <MainCard {...project} type={type} />
-                      </Box>
-                    ))}
-                  </Stack>
+          </Grid>
+          {/*card list 영역*/}
+          {isLoading && page == 1 ? (
+            <Typography>로딩중...</Typography>
+          ) : error || !initData ? (
+            <Typography>에러 발생</Typography>
+          ) : content?.length == 0 ? (
+            <Typography>데이터가 없습니다</Typography>
+          ) : (
+            <>
+              <Stack alignItems={'center'}>
+                <Stack gap={2}>
+                  {content?.map((project: IPost, index: number) => (
+                    <Box key={index}>
+                      <MainCard {...project} type={type} />
+                    </Box>
+                  ))}
                 </Stack>
-                <Box
-                  sx={{
-                    position: 'fixed',
-                    right: 20,
-                    bottom: 80,
-                  }}
-                >
-                  <FloatEditButton />
-                </Box>
-                {spinner && <CircularProgress />}
-                <Box
-                  sx={{
-                    bottom: 0,
-                    height: '1vh',
-                    backgroundColor: 'primary.main',
-                  }}
-                  ref={target}
-                />
-              </>
-            )}
+              </Stack>
+              {/* 무한 스크롤 */}
+              <Box
+                sx={{
+                  bottom: 0,
+                  height: '1vh',
+                  backgroundColor: 'primary.main',
+                }}
+                ref={target}
+              />
+            </>
+          )}
+          <Box
+            sx={{
+              position: 'fixed',
+              right: 20,
+              bottom: 80,
+            }}
+          >
+            <FloatEditButton />
           </Box>
+          {spinner && <CircularProgress />}
         </Container>
       </div>
 
@@ -258,6 +260,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   </Stack>
                 </Grid>
               </Grid>
+              {/*card list 영역*/}
               {isLoading && page == 1 ? (
                 <Typography>로딩중...</Typography>
               ) : error ? (
@@ -273,6 +276,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                       </Grid>
                     ))}
                   </Grid>
+                  {/* 무한 스크롤 */}
                   {spinner && <CircularProgress />}
                   <Box
                     sx={{

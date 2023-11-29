@@ -1,5 +1,4 @@
 import { IMainCard, ITag } from '@/types/IPostDetail'
-import { Favorite } from '@mui/icons-material'
 import {
   Avatar,
   Box,
@@ -8,18 +7,13 @@ import {
   CardHeader,
   CardMedia,
   Chip,
-  IconButton,
   Typography,
   Stack,
 } from '@mui/material'
-import { useState } from 'react'
-import useAuthStore from '@/states/useAuthStore'
-import { useRouter } from 'next/navigation'
-import useAxiosWithAuth from '@/api/config'
 import Link from 'next/link'
-import { red } from '@mui/material/colors'
 import OthersProfile from '../OthersProfile'
 import TagChip from '@/components/TagChip'
+import FavoriteButton from '@/components/FavoriteButton'
 
 const MainCard = ({
   title,
@@ -33,22 +27,6 @@ const MainCard = ({
   recruit_id,
   type,
 }: IMainCard) => {
-  const [isFavorite, setIsFavorite] = useState(favorite)
-  const { isLogin } = useAuthStore()
-  const router = useRouter()
-  const axiosInstance = useAxiosWithAuth()
-  const changeFavorite = async () => {
-    if (!isLogin) return router.push('/login')
-    try {
-      await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
-      )
-      setIsFavorite(!isFavorite)
-    } catch (e) {
-      console.log('error', e)
-    }
-  }
-
   return (
     <Card sx={{ maxWidth: 345 }}>
       <Link
@@ -85,7 +63,7 @@ const MainCard = ({
       <CardHeader
         avatar={
           <OthersProfile userId={user_id} name={user_nickname}>
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
+            <Avatar aria-label="profile">
               <Box
                 component="img"
                 height="194"
@@ -95,11 +73,7 @@ const MainCard = ({
             </Avatar>
           </OthersProfile>
         }
-        action={
-          <IconButton aria-label="add to favorites" onClick={changeFavorite}>
-            <Favorite sx={{ color: isFavorite ? 'red' : 'gray' }} />
-          </IconButton>
-        }
+        action={<FavoriteButton favorite={favorite} recruit_id={recruit_id} />}
         title={user_nickname}
       />
       <Link

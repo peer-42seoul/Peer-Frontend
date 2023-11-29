@@ -1,11 +1,5 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
-import {
-  Drawer,
-  IconButton,
-  Stack,
-  SwipeableDrawer,
-  Typography,
-} from '@mui/material'
+import { IconButton, Stack, SwipeableDrawer, Typography } from '@mui/material'
 import Options from './Options'
 import useMedia from '@/hook/useMedia'
 
