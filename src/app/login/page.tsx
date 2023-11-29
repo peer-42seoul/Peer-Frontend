@@ -104,8 +104,7 @@ const Login = () => {
         console.log('redirect in login', redirect)
         router.push(redirect)
       } else router.push('/')
-    }
-    if (redirect) {
+    } else if (redirect) {
       setErrorMessage('로그인이 필요한 서비스입니다.')
       openToast()
     }
