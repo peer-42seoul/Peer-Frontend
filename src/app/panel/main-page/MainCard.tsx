@@ -17,10 +17,13 @@ import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
 import useAxiosWithAuth from '@/api/config'
 import Link from 'next/link'
+import { red } from '@mui/material/colors'
+import OthersProfile from '../OthersProfile'
 
 const MainCard = ({
   title,
   image,
+  user_id,
   user_nickname,
   user_thumbnail,
   status,
@@ -80,11 +83,8 @@ const MainCard = ({
       </Link>
       <CardHeader
         avatar={
-          <Link
-            href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
-            style={{ textDecoration: 'none' }}
-          >
-            <Avatar aria-label="profile">
+          <OthersProfile userId={user_id} name={user_nickname}>
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
               <Box
                 component="img"
                 height="194"
@@ -92,21 +92,14 @@ const MainCard = ({
                 alt="profile image"
               />
             </Avatar>
-          </Link>
+          </OthersProfile>
         }
         action={
           <IconButton aria-label="add to favorites" onClick={changeFavorite}>
             <Favorite sx={{ color: isFavorite ? 'red' : 'gray' }} />
           </IconButton>
         }
-        title={
-          <Link
-            href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
-            style={{ textDecoration: 'none' }}
-          >
-            {user_nickname}
-          </Link>
-        }
+        title={user_nickname}
       />
       <Link
         href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
