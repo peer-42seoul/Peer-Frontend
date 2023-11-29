@@ -85,11 +85,11 @@ const SendEmailForm = ({
                 />
                 {!isEmailSuccessful &&
                   (errors.email ? (
-                    <Typography color="error">
+                    <Typography color="error" variant="Caption">
                       {errors.email?.message}
                     </Typography>
                   ) : (
-                    <Typography>&nbsp;</Typography>
+                    <Typography variant="Caption">&nbsp;</Typography>
                   ))}
 
                 {isEmailSuccessful && (
@@ -106,7 +106,11 @@ const SendEmailForm = ({
                     </Typography>
                     <Typography variant="Caption" color="purple.normal">
                       코드를 받지 못했나요?{' '}
-                      <Button variant="text">
+                      <Button
+                        variant="text"
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
                         <Typography variant="CaptionEmphasis">
                           재전송
                         </Typography>

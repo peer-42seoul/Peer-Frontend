@@ -70,9 +70,9 @@ const SendCodeForm = ({
 
   const adornment = (
     <>
-      <Typography>{`${Math.floor(timer / 60)}:${(timer % 60)
-        .toString()
-        .padStart(2, '0')}`}</Typography>
+      <Typography variant="Caption" sx={{ marginRight: '12px' }}>{`${Math.floor(
+        timer / 60,
+      )}:${(timer % 60).toString().padStart(2, '0')}`}</Typography>
     </>
   )
 
