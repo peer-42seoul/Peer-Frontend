@@ -126,7 +126,9 @@ const SendCodeForm = ({
                   ),
                 }}
               />
-              {errors.code && <Typography>{errors.code.message}</Typography>}
+              {(errors.code && (
+                <Typography variant="Caption">{errors.code.message}</Typography>
+              )) || <Typography variant="Caption">&nbsp;</Typography>}
             </Container>
           )}
         />
