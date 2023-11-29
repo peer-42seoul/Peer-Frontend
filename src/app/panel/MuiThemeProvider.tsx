@@ -579,6 +579,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
               },
             },
             '& .MuiOutlinedInput-root': {
+              padding: '0px',
               borderRadius: '4px',
               height: '32px',
               backgroundColor: theme.palette.background.tertiary,
@@ -587,6 +588,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
               color: theme.palette.text.normal,
               lineHeight: '150%',
               '& fieldset': {
+                height: '100%',
                 borderColor: 'transparent',
               },
               '&:hover fieldset': {
@@ -594,6 +596,24 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
               },
               '&.Mui-focused fieldset': {
                 borderColor: theme.palette.purple.normal,
+              },
+              '&.Mui-disabled': {
+                backgroundColor: theme.palette.background.tertiary,
+                opacity: 0.5,
+              },
+            },
+          },
+        },
+      },
+      MuiAutocomplete: {
+        styleOverrides: {
+          root: {
+            '& .MuiFormControl-root': {
+              '& .MuiInputBase-root': {
+                '& input': {
+                  height: '100%',
+                  padding: '0 ',
+                },
               },
             },
           },
