@@ -1,7 +1,7 @@
 import { Box, Card, CardActionArea, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { ITeamInfo } from '../page'
-import { TeamOperationForm, TeamStatus } from '@/app/teams/@setting/[id]/page'
+import { TeamOperationForm, TeamStatus } from '@/app/teams/types/types'
 
 //icons
 import TrackChangesIcon from '@mui/icons-material/TrackChanges'

@@ -5,24 +5,29 @@ import useShowTeams from '@/states/useShowTeams'
 import useSWR from 'swr'
 import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import {
+  TeamStatus,
+  TeamType,
+  TeamOperationForm,
+} from '@/app/teams/types/types'
 
-enum TeamStatus {
-  RECRUITING = 'RECRUITING',
-  BEFORE = 'BEFORE',
-  ONGOING = 'ONGOING',
-  COMPLETE = 'COMPLETE',
-}
+// enum TeamStatus {
+//   RECRUITING = 'RECRUITING',
+//   BEFORE = 'BEFORE',
+//   ONGOING = 'ONGOING',
+//   COMPLETE = 'COMPLETE',
+// }
 
-enum TeamType {
-  STUDY = 'STUDY',
-  PROJECT = 'PROJECT',
-}
+// enum TeamType {
+//   STUDY = 'STUDY',
+//   PROJECT = 'PROJECT',
+// }
 
-enum TeamOperationForm {
-  OFFLINE = 'OFFLINE',
-  ONLINE = 'ONLINE',
-  MIX = 'MIX',
-}
+// enum TeamOperationForm {
+//   OFFLINE = 'OFFLINE',
+//   ONLINE = 'ONLINE',
+//   MIX = 'MIX',
+// }
 
 export interface ITeamInfo {
   id: string

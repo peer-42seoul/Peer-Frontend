@@ -229,6 +229,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           </Box>
         </Container>
       </div>
+
       {/* pc view */}
       <div className="pc-layout">
         <Container
@@ -237,7 +238,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             border: '1px solid black',
           }}
         >
-          <Stack direction={'row'} border="1px solid black">
+          <Stack direction={'row'} border="1px solid black" spacing={4}>
             <Stack flex={1}>
               <MainBanner />
               <SelectType type={type} setType={handleType} />
