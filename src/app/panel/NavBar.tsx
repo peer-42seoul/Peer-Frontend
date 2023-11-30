@@ -25,18 +25,25 @@ import TabletMacOutlinedIcon from '@mui/icons-material/TabletMacOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 
 export const MobileNav = () => {
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState<
+    'home' | 'hitchhiking' | 'team-list' | 'showcase' | 'my-page'
+  >('home')
   const pathname = usePathname()
   const router = useRouter()
   const { isLogin } = useAuthStore()
 
+  const bottomNavStyle = {
+    minWidth: 'auto',
+    padding: '6px 0',
+  }
+
   useEffect(() => {
     if (pathname === '/') {
-      setValue(0)
+      setValue('home')
     } else if (pathname === '/team-list') {
-      setValue(3)
+      setValue('team-list')
     } else if (pathname === '/my-page') {
-      setValue(4)
+      setValue('my-page')
     }
   }, [pathname])
 
@@ -59,35 +66,45 @@ export const MobileNav = () => {
         }}
       >
         <BottomNavigationAction
+          sx={bottomNavStyle}
           icon={<HomeOutlinedIcon />}
           label="홈"
+          value={'home'}
           onClick={() => {
             router.push('/')
           }}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           icon={<ThumbUpAltOutlinedIcon />}
           label="히치하이킹"
+          value={'hitchhiking'}
           onClick={() => {
             router.push('/')
           }}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           label="쇼케이스"
+          value={'showcase'}
           onClick={() => {
             router.push('/')
           }}
           icon={<GroupOutlinedIcon />}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           label="팀페이지"
+          value={'team-list'}
           onClick={() => {
             router.push('/team-list')
           }}
           icon={<TabletMacOutlinedIcon />}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           label="내 프로필"
+          value={'my-page'}
           onClick={() => {
             router.push(isLogin ? '/my-page' : '/login?redirect=/my-page')
           }}
@@ -99,7 +116,9 @@ export const MobileNav = () => {
 }
 
 export const PcNav = () => {
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState<
+    'home' | 'hitchhiking' | 'team-list' | 'showcase'
+  >('home')
   const { isTablet } = useMedia()
   const pathname = usePathname()
   const router = useRouter()
@@ -107,13 +126,15 @@ export const PcNav = () => {
 
   useEffect(() => {
     if (pathname === '/') {
-      setValue(0)
+      setValue('home')
     } else if (pathname === '/team-list') {
-      setValue(2)
+      setValue('team-list')
     }
   }, [pathname])
+
   return (
     <Stack
+      width={'100%'}
       direction={'row'}
       justifyContent={'space-between'}
       alignItems={'center'}
@@ -143,12 +164,14 @@ export const PcNav = () => {
           height={50}
         />
         <BottomNavigationAction
+          value={'home'}
           label="홈"
           onClick={() => {
             router.push('/')
           }}
         />
         <BottomNavigationAction
+          value={'hitchhiking'}
           label="히치하이킹"
           onClick={() => {
             router.push('/')
@@ -156,12 +179,14 @@ export const PcNav = () => {
         />
 
         <BottomNavigationAction
+          value={'team-list'}
           label="팀페이지"
           onClick={() => {
             router.push('/team-list')
           }}
         />
         <BottomNavigationAction
+          value={'showcase'}
           label="쇼케이스"
           onClick={() => {
             router.push('/')
