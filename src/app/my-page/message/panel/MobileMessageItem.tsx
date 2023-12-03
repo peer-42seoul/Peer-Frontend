@@ -5,30 +5,33 @@ import useAxiosWithAuth from '@/api/config'
 import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
 
+/* ANCHOR - interface */
 interface ITouchState {
-  wrapperHeight: string | number // 삭제 animation을 위한 wrapper 높이
+  // wrapperHeight: string | number // 삭제 animation을 위한 wrapper 높이
   diffLength: string // 컴포넌트가 밀릴 길이
   startX: number // drag 시작 x좌표
   side: 'LEFT' | 'RIGHT' | null
 }
-
 interface ISwappableMessageItemProps {
   children: ReactNode
   eventHandler: () => void
 }
+interface IMobileMessageListItemProps {
+  message: IMessageListData
+}
 
+/* ANCHOR - constants */
 const initialTouchState: ITouchState = {
-  wrapperHeight: '30rem',
+  // wrapperHeight: '30rem',
   diffLength: '0',
   startX: 0,
   side: null,
 }
-
-// 터치 이벤트를 발생시킬 최소 길이
-const TOUCH_OFFSET = 20
+const TOUCH_OFFSET = 20 // 터치 이벤트를 발생시킬 최소 길이
 const DELETE_BUTTON_WIDTH = '10.8%'
 const TRANSITION_DURATION = '800ms'
 
+/* ANCHOR - styles */
 const swappableWrapperStyle = {
   width: '100%',
   transition: `transform ${TRANSITION_DURATION}`,
@@ -40,6 +43,7 @@ const removeButtonStyle = {
   backgroundColor: 'red',
 }
 
+/* ANCHOR - components */
 const SwappableMessageItem = ({
   children,
   eventHandler,
@@ -104,10 +108,6 @@ const SwappableMessageItem = ({
       </Button>
     </Stack>
   )
-}
-
-interface IMobileMessageListItemProps {
-  message: IMessageListData
 }
 
 const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
