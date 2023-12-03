@@ -132,16 +132,18 @@ const ShowcasePage = () => {
 
   if (isPc) {
     return (
-      <Stack direction={'row'} spacing={2}>
+      <Stack direction={'row'} spacing={2} height={'600px'}>
         <Stack direction={'row'} spacing={1}>
           <PhoneFrame imageUrl={datas[index].image} />
-          <Stack>
-            <IconButton onClick={handlePrevClick}>
-              <ExpandLessIcon color="primary" />
-            </IconButton>
-            <IconButton onClick={handleNextClick}>
-              <ExpandMoreIcon color="primary" />
-            </IconButton>
+          <Stack direction={'column-reverse'}>
+            <Stack>
+              <IconButton onClick={handlePrevClick}>
+                <ExpandLessIcon color="primary" />
+              </IconButton>
+              <IconButton onClick={handleNextClick}>
+                <ExpandMoreIcon color="primary" />
+              </IconButton>
+            </Stack>
           </Stack>
         </Stack>
         <ShowcaseCard data={datas[index]} />

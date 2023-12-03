@@ -11,7 +11,7 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string }) => {
         height: '600px',
       }}
     >
-      <Card sx={{ borderRadius: 10, backgroundColor: 'pink', height: '100%' }}>
+      <Card sx={{ borderRadius: 10, height: '100%', backgroundColor: 'white' }}>
         <Stack direction={'row'} justifyContent={'center'}>
           <Box
             sx={{
@@ -28,7 +28,10 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string }) => {
         <Stack>
           <Avatar
             src={imageUrl}
-            sx={{ width: '300px', height: '300px' }}
+            sx={{
+              width: '300px',
+              height: '600px',
+            }}
             variant="rounded"
           />
         </Stack>
