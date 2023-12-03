@@ -1,8 +1,9 @@
 'use client'
 import { List, Typography } from '@mui/material'
 import { IMessageListData } from '@/types/IMessage'
-import { PCMessageListItem, MobileMessageListItem } from './MessageItem'
 import useMedia from '@/hook/useMedia'
+import { PCMessageListItem } from './PCMessageItem'
+import MobileMessageListItem from './MobileMessageItem'
 
 interface IMessageListProps {
   messageList: IMessageListData[]
@@ -13,6 +14,10 @@ interface IMessageListProps {
   }
   selectedUsers: Set<number>
   toggleSelectUser: (targetId: number) => void
+}
+
+const mobileListStyle = {
+  overflowX: 'hidden',
 }
 
 const MessageList = ({
@@ -44,7 +49,7 @@ const MessageList = ({
       </List>
     )
   return (
-    <List>
+    <List sx={mobileListStyle}>
       {messageList.map((message) => (
         <MobileMessageListItem key={message.targetId} message={message} />
       ))}
