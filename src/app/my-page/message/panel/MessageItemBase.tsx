@@ -9,10 +9,16 @@ import {
   Typography,
 } from '@mui/material'
 import { IMessageListData } from '@/types/IMessage'
+import UTCtoLocalTime from '@/utils/UTCtoLocalTime'
 
 const MessageItemBase = ({ message }: { message: IMessageListData }) => {
-  const { targetNickname, latestContent, targetProfile, unreadMsgNumber } =
-    message
+  const {
+    targetNickname,
+    latestContent,
+    targetProfile,
+    unreadMsgNumber,
+    latestDate,
+  } = message
   return (
     <>
       <ListItemAvatar>
@@ -22,8 +28,7 @@ const MessageItemBase = ({ message }: { message: IMessageListData }) => {
       <ListItemSecondaryAction>
         <Stack alignItems={'flex-end'}>
           <Typography>
-            {/* TODO : latestDate 데이터로 바꿀 것!!!!!!! */}
-            {dayjs('2021-08-01T16:26:39.098').format('MM월 DD일')}
+            {dayjs(UTCtoLocalTime(latestDate)).format('MM월 DD일')}
           </Typography>
           <Chip
             label={
