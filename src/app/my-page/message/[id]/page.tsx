@@ -14,6 +14,7 @@ import MessageItem from './panel/MessageItem'
 import MessageForm from './panel/MessageForm'
 import MessageFormModal from './panel/MessageFormModal'
 import MessageContainer from './panel/MessageContainer'
+import MessageHeader from './panel/MessageHeader'
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -125,7 +126,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <MessageContainer>
-      <Box
+      {/* <Box
         sx={{
           display: 'flex',
           width: '100%',
@@ -137,7 +138,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         }}
       >
         <Typography>{target.userNickname}</Typography>
-      </Box>
+      </Box> */}
+      <MessageHeader
+        targetProfile={target.userProfile}
+        userNickname={target.userNickname}
+      />
       <Box
         ref={scrollRef}
         sx={{ width: '100%', height: '90%', overflowY: 'auto' }}
