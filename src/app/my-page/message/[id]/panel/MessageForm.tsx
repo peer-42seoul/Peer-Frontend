@@ -72,7 +72,12 @@ const MessageForm = ({
   return (
     <form onSubmit={messageSubmit}>
       {view === 'PC_VIEW' ? (
-        <Stack direction={'row'} spacing={'1rem'} sx={style.pcMessageForm}>
+        <Stack
+          direction={'row'}
+          alignItems={'center'}
+          spacing={'1rem'}
+          sx={style.pcMessageForm}
+        >
           <Stack
             direction={'row'}
             spacing={0}
