@@ -13,6 +13,7 @@ import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
 import MessageItem from './panel/MessageItem'
 import MessageForm from './panel/MessageForm'
 import MessageFormModal from './panel/MessageFormModal'
+import MessageContainer from './panel/MessageContainer'
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -123,7 +124,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     return <Typography>빈 쪽지함 입니다!</Typography>
 
   return (
-    <Box sx={{ width: '100%', height: '50vh' }}>
+    <MessageContainer>
       <Box
         sx={{
           display: 'flex',
@@ -133,7 +134,6 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
           flexDirection: 'column',
           alignItems: 'flex-start',
           gap: '0.5rem',
-          backgroundColor: '#D8D8D8',
         }}
       >
         <Typography>{target.userNickname}</Typography>
@@ -178,7 +178,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
           />
         </>
       )}
-    </Box>
+    </MessageContainer>
   )
 }
 
