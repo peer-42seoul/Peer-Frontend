@@ -31,7 +31,9 @@ messaging.onBackgroundMessage((payload) => {
     icon: '/images/icons/icon-72x72.png',
   }
 
-  self.registration.showNotification(notificationTitle, notificationOptions)
+  payload.waitUntil(
+    registration.showNotification(notificationTitle, notificationOptions),
+  )
 })
 
 self.addEventListener('push', (event) => {
