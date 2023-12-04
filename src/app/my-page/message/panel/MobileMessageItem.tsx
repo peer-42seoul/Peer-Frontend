@@ -1,7 +1,8 @@
 import { TouchEvent, useState, ReactNode, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button, ListItem, ListItemButton, Stack } from '@mui/material'
+import { ListItem, ListItemButton, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import CuButton from '@/components/CuButton'
 import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
 
@@ -34,13 +35,19 @@ const TRANSITION_DURATION = '800ms'
 /* ANCHOR - styles */
 const swappableWrapperStyle = {
   width: '100%',
+  height: '4.5rem',
   transition: `transform ${TRANSITION_DURATION}`,
 }
 
 const removeButtonStyle = {
-  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
   transition: `opacity ${TRANSITION_DURATION}`,
-  backgroundColor: 'red',
+  color: 'red.strong',
+  backgroundColor: 'red.tinted',
+  borderRadius: '0',
+  padding: '0rem 0.25rem',
 }
 
 /* ANCHOR - components */
@@ -88,6 +95,7 @@ const SwappableMessageItem = ({
   return (
     <Stack
       direction="row"
+      justifyContent="space-between"
       spacing={0}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -97,15 +105,15 @@ const SwappableMessageItem = ({
       }}
     >
       {children}
-      <Button
-        onClick={eventHandler}
-        sx={{
+      <CuButton
+        message="삭제"
+        style={{
           ...removeButtonStyle,
           opacity: `${touchState.side === 'LEFT' ? 1 : 0}`,
         }}
-      >
-        삭제
-      </Button>
+        action={eventHandler}
+        variant="contained"
+      />
     </Stack>
   )
 }
