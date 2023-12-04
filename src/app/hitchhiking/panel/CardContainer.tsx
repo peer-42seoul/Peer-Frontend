@@ -1,9 +1,12 @@
-import MainCard from '@/app/panel/main-page/MainCard'
+'use client'
+
 import { IMainCard } from '@/types/IPostDetail'
-import { Box, Stack, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import React, { useMemo, useRef, useState } from 'react'
 import TinderCard from 'react-tinder-card'
 import './CardContainer.css'
+import PostCard from '@/app/panel/PostCard'
+import useMedia from '@/hook/useMedia'
 
 type TSwipeDirection = 'left' | 'right' | 'up' | 'down'
 
@@ -15,6 +18,7 @@ const CardContainer = ({
   isLoading: boolean
   update: () => void
 }) => {
+  const { isPc } = useMedia()
   const [currentIndex, setCurrentIndex] = useState<number>(cardList.length - 1)
 
   const currentIndexRef = useRef(currentIndex)
@@ -42,11 +46,7 @@ const CardContainer = ({
   }
 
   return (
-    <Stack
-      justifyContent={'center'}
-      alignItems={'center'}
-      sx={{ width: '90vw', maxWidth: '100%', height: '100%' }}
-    >
+    <>
       {currentIndex >= 0 ? (
         cardList.map((card, i) => (
           <TinderCard
@@ -57,22 +57,31 @@ const CardContainer = ({
             preventSwipe={['right', 'left', 'down']}
             className="swipe"
           >
-            <Box
+            <PostCard
+              authorImage={card.user_thumbnail}
+              teamName={card.user_nickname}
+              title={card.title}
+              tagList={card.tagList}
+              image={card.image}
+              postId={card.recruit_id}
               sx={{
-                position: 'relative',
-                width: '80vw',
-                maxWidth: '260px',
-                height: '300px',
+                backgroundColor: 'background.primary',
+                width: isPc ? '20.5rem' : '90vw',
+                height: '27rem',
+                maxWidth: '20.5rem',
+                // maxHeight: '27rem',
+                borderRadius: '0.75rem',
+                borderWidth: '0.0625rem',
+                borderColor: 'line.base',
+                borderStyle: 'solid',
               }}
-            >
-              <MainCard {...card} type="STUDY" />
-            </Box>
+            />
           </TinderCard>
         ))
       ) : (
         <Typography>히치하이킹 끝!</Typography>
       )}
-    </Stack>
+    </>
   )
 }
 

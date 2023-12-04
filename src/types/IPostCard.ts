@@ -1,3 +1,4 @@
+import { SxProps } from '@mui/material'
 import { ITag } from './IPostDetail'
 
 export interface IPostCard {
@@ -7,6 +8,7 @@ export interface IPostCard {
   postId: number // 글 id
   tagList: ITag[]
   image: string // 글 대표 이미지 (썸네일)
+  sx?: SxProps
 }
 
 export interface IHitchhikingCardBack {

@@ -19,24 +19,22 @@ const PostCard = ({
   title,
   tagList,
   image,
+  sx,
 }: IPostCard) => {
   return (
     <Card
       sx={{
-        backgroundColor: 'background.primary',
-        width: '90vw',
-        height: '55vh',
-        borderRadius: '0.75rem',
-        borderWidth: '0.0625rem',
-        borderColor: 'line.base',
-        borderStyle: 'solid',
+        ...sx,
         display: 'flex',
-        alignItems: 'space-between',
-        justifyContent: 'space-between',
         flexDirection: 'column',
       }}
     >
-      <CardMedia component="img" image={image} alt="post thumbnail" />
+      <CardMedia
+        component="img"
+        image={image}
+        alt="post thumbnail"
+        sx={{ flexGrow: 1, objectFit: 'cover' }}
+      />
       <Stack
         sx={{ p: '1rem', pt: '0.75rem' }}
         spacing={'15px'}
@@ -62,12 +60,12 @@ const PostCard = ({
           sx={{ p: 0 }}
         />
 
-        <CardContent sx={{ px: 0 }}>
+        <CardContent sx={{ p: 0 }}>
           <Typography variant="Body1" color="text.normal">
             {title}
           </Typography>
         </CardContent>
-        <CardContent sx={{ px: 0 }}>
+        <CardContent sx={{ p: 0 }}>
           <Stack gap={1} direction={'row'} justifyContent={'center'}>
             {tagList?.map(({ name, color }: ITag, idx: number) => {
               const r = parseInt(color.slice(1, 3), 16),
