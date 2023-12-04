@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import useSWRMutation from 'swr/mutation'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
@@ -126,27 +126,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <MessageContainer>
-      {/* <Box
-        sx={{
-          display: 'flex',
-          width: '100%',
-          height: '10%',
-          padding: '2rem',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '0.5rem',
-        }}
-      >
-        <Typography>{target.userNickname}</Typography>
-      </Box> */}
       <MessageHeader
         targetProfile={target.userProfile}
         userNickname={target.userNickname}
       />
-      <Box
-        ref={scrollRef}
-        sx={{ width: '100%', height: '90%', overflowY: 'auto' }}
-      >
+      <Stack ref={scrollRef} spacing={'0.5rem'}>
         <Box ref={targetRef}></Box>
         {spinner && <CircularProgress />}
         {updatedData.map((msgObj: IMessage) => (
@@ -157,7 +141,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
             target={target}
           />
         ))}
-      </Box>
+      </Stack>
       {isPc ? (
         <MessageForm
           view={'PC_VIEW'}

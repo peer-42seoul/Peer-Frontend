@@ -1,5 +1,12 @@
 import { debounce } from 'lodash'
-import { useState, useEffect, useRef, Dispatch, SetStateAction, useCallback } from 'react'
+import {
+  useState,
+  useEffect,
+  useRef,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+} from 'react'
 
 /**
  * 메시지 무한 스크롤 훅
@@ -14,8 +21,8 @@ export const useMessageInfiniteScroll = ({
   isEnd: boolean
 }) => {
   const [spinner, setSpinner] = useState(false)
-  const targetRef = useRef<HTMLDivElement>() // fetch 여부를 결정할 요소
-  const scrollRef = useRef<HTMLDivElement>() // 스크롤 위치를 결정할 요소
+  const targetRef = useRef<HTMLDivElement>(null) // fetch 여부를 결정할 요소
+  const scrollRef = useRef<HTMLDivElement>(null) // 스크롤 위치를 결정할 요소
 
   const debouncedFetchData = debounce(async () => {
     // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
@@ -70,9 +77,8 @@ export const useInfiniteScrollHook = (
   )
 
   useEffect(() => {
-    if (!isLoading && spinner)
-      setSpinner(false)
-  }, [isLoading]);
+    if (!isLoading && spinner) setSpinner(false)
+  }, [isLoading])
 
   const debouncedFetchData = debounce(async () => {
     // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
@@ -166,6 +172,5 @@ const useInfiniteScroll = ({
 
   return { target, spinner }
 }
-
 
 export default useInfiniteScroll
