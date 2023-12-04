@@ -1,10 +1,6 @@
 'use client'
 
-import {
-  BorderColor,
-  Favorite,
-  NotificationsNoneOutlined,
-} from '@mui/icons-material'
+import { BorderColor, Favorite } from '@mui/icons-material'
 import {
   Avatar,
   BottomNavigation,
@@ -16,10 +12,11 @@ import {
 } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import SearchButton from './SearchButton'
+import SearchButton from './main-page/SearchButton'
 import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'
+import AlertIcon from './AlertIcon'
 
 export const MobileNav = () => {
   const [value, setValue] = useState(0)
@@ -72,7 +69,7 @@ export const MobileNav = () => {
         <BottomNavigationAction
           label="쇼케이스"
           onClick={() => {
-            router.push('/')
+            router.push('/showcase')
           }}
         />
         <BottomNavigationAction
@@ -149,14 +146,12 @@ export const PcNav = () => {
         <BottomNavigationAction
           label="쇼케이스"
           onClick={() => {
-            router.push('/')
+            router.push('/showcase')
           }}
         />
       </BottomNavigation>
       <Stack direction={'row'} alignItems={'center'}>
-        <IconButton color="inherit" aria-label="menu">
-          <NotificationsNoneOutlined />
-        </IconButton>
+        <AlertIcon />
         <SearchButton />
         <Link href="/my-page/interests">
           <IconButton sx={{ color: 'purple.strong' }} aria-label="favorites">

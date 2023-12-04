@@ -1,10 +1,10 @@
 'use client'
+import CuToggle from '@/components/CuToggle'
 import {
   AlertColor,
   Box,
   FormControlLabel,
   Stack,
-  Switch,
   Typography,
 } from '@mui/material'
 import React, { useState } from 'react'
@@ -25,24 +25,26 @@ const Notif = ({
 }) => {
   return (
     <Box>
-      <Stack
-        direction={'row'}
-        alignItems={'baseline'}
-        justifyContent={'space-between'}
-      >
-        <Typography>{type}</Typography>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={checked}
-              onChange={handleChange}
-              inputProps={{ 'aria-label': `${type} 설정 토글` }}
-            />
-          }
-          label={checked ? 'ON' : 'OFF'}
-          labelPlacement="start"
-        />
-      </Stack>
+      <FormControlLabel
+        sx={{ marginLeft: '0', display: 'box' }}
+        control={
+          <CuToggle
+            checked={checked}
+            onChange={handleChange}
+            inputProps={{ 'aria-label': `${type} 설정 토글` }}
+          />
+        }
+        label={
+          <Typography
+            variant="CaptionEmphasis"
+            color={'text.strong'}
+            sx={{ marginRight: '16px', marginLeft: '0' }}
+          >
+            {type}
+          </Typography>
+        }
+        labelPlacement="start"
+      />
     </Box>
   )
 }
@@ -55,27 +57,42 @@ const NotifSetting = ({
   const [keyword, setKeyword] = useState(false)
   const [team, setTeam] = useState(false)
   const [message, setMessage] = useState(false)
+  const [night, setNight] = useState(false)
 
   console.log(setToastMessage)
   return (
-    <Box>
-      <Typography>알림 설정</Typography>
-      <Notif
-        type="키워드 알림"
-        checked={keyword}
-        handleChange={() => setKeyword((prev) => !prev)}
-      />
-      <Notif
-        type="프로젝트/스터디 알림"
-        checked={team}
-        handleChange={() => setTeam((prev) => !prev)}
-      />
-      <Notif
-        type="쪽지 알림"
-        checked={message}
-        handleChange={() => setMessage((prev) => !prev)}
-      />
-    </Box>
+    <Stack
+      bgcolor={'background.secondary'}
+      p={3}
+      spacing={3}
+      sx={{
+        borderRadius: '16px',
+      }}
+    >
+      <Stack spacing={2}>
+        <Typography variant="Title3Emphasis">알림 설정</Typography>
+        <Notif
+          type="키워드 알림"
+          checked={keyword}
+          handleChange={() => setKeyword((prev) => !prev)}
+        />
+        <Notif
+          type="프로젝트/스터디 알림"
+          checked={team}
+          handleChange={() => setTeam((prev) => !prev)}
+        />
+        <Notif
+          type="쪽지 알림"
+          checked={message}
+          handleChange={() => setMessage((prev) => !prev)}
+        />
+        <Notif
+          type="야간 알림(20시~9시)"
+          checked={night}
+          handleChange={() => setNight((prev) => !prev)}
+        />
+      </Stack>
+    </Stack>
   )
 }
 

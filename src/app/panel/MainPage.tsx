@@ -9,16 +9,16 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
-import EditButton from './EditButton'
-import MainCard from './MainCard'
-import SearchOption from './SearchOption'
-import SelectSort from './SelectSort'
-import SelectType from './SelectType'
+import FloatEditButton from './main-page/FloatEditButton'
+import MainCard from './main-page/MainCard'
+import SearchOption from './main-page/SearchOption'
+import SelectSort from './main-page/SelectSort'
+import SelectType from './main-page/SelectType'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
-import MainProfile from './MainProfile'
-import MainShowcase from './MainShowcase'
-import MainCarousel from './MainCarousel'
+import MainProfile from './main-page/MainProfile'
+import MainShowcase from './main-page/MainShowcase'
+import MainCarousel from './main-page/MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
 import { IPost } from '@/types/IPostDetail'
@@ -28,6 +28,7 @@ import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
 import PwaInstallBanner from './PwaInstallBanner'
 import PushAlertBanner from './PushAlertBanner'
+import MainBanner from '@/app/panel/main-page/MainBanner'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -170,6 +171,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             sx={{ backgroundColor: 'Background.primary' }}
             border="1px solid black"
           >
+            <MainBanner />
             <SelectType type={type} setType={handleType} />
             <Grid container p={2}>
               <SearchOption
@@ -211,7 +213,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                     bottom: 80,
                   }}
                 >
-                  <EditButton />
+                  <FloatEditButton />
                 </Box>
                 {spinner && <CircularProgress />}
                 <Box
@@ -227,6 +229,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           </Box>
         </Container>
       </div>
+
       {/* pc view */}
       <div className="pc-layout">
         <Container
@@ -235,12 +238,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             border: '1px solid black',
           }}
         >
-          <Stack direction={'row'} border="1px solid black">
+          <Stack direction={'row'} border="1px solid black" spacing={4}>
             <Stack flex={1}>
-              <Box height={'200px'} border="1px solid black">
-                피어 소개 배너
-              </Box>
-              <SelectType type={type} setType={handleType} pc />
+              <MainBanner />
+              <SelectType type={type} setType={handleType} />
               <Grid container p={2} bgcolor={'Background.primary'}>
                 <SearchOption
                   openOption={openOption}
@@ -251,9 +252,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   <Stack
                     direction="row"
                     alignItems={'center'}
-                    justifyContent={'space-between'}
+                    justifyContent={'flex-end'}
                   >
-                    <Typography>모집글</Typography>
                     <SelectSort sort={sort} setSort={handleSort} />
                   </Stack>
                 </Grid>

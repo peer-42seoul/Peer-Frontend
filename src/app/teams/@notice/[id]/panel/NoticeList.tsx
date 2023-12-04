@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import Link from 'next/link'
 import { Stack, Typography } from '@mui/material'
 
@@ -28,9 +28,16 @@ const NoticeItem = ({ title, author, date, id, teamId }: NoticeItemProps) => {
   )
 }
 
-const NoticeList = ({ teamId }: { teamId: number }) => {
-  // TODO : 공지사항 목록 받아오기
-  // TODO : 무한스크롤 OR 페이지네이션
+const NoticeList = ({
+  teamId,
+  keyword,
+}: {
+  teamId: number
+  keyword: string
+}) => {
+  useEffect(() => {
+    // TODO: keyword로 검색하는 로직
+  }, [keyword])
   const dummy = {
     data: [
       {
@@ -52,6 +59,7 @@ const NoticeList = ({ teamId }: { teamId: number }) => {
     error: null,
   }
   const { data, loading, error } = dummy
+
   if (error || !data)
     return (
       <NoticeListContainer>

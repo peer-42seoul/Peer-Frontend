@@ -22,13 +22,17 @@ const getTabValue = (path: string) => {
   else return 'profile'
 }
 
-const SubNavBar = () => {
+const SubNavBar = ({ sx }: { sx: SxProps }) => {
   const router = useRouter()
   const pathName = usePathname()
   const [value, setValue] = useState<TabValue>('profile')
   const { isPc } = useMedia()
 
-  const tabStyle: SxProps = { maxWidth: '244px', padding: '0 24px' }
+  const tabStyle: SxProps = {
+    maxWidth: '308px',
+    padding: '0 32px',
+    width: '100%',
+  }
 
   useEffect(() => {
     setValue(getTabValue(pathName))
@@ -42,7 +46,7 @@ const SubNavBar = () => {
     <Box
       sx={{
         padding: '24px 32px',
-        maxWidth: '244px',
+        ...sx,
       }}
     >
       <Typography>마이페이지</Typography>
@@ -51,9 +55,7 @@ const SubNavBar = () => {
         value={value}
         onChange={(event, newValue) => setValue(newValue)}
         sx={{
-          // borderRight: 1,
           borderColor: 'divider',
-          // padding: '24px 32px',
           gap: '4px',
         }}
         variant="fullWidth"

@@ -13,7 +13,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import FormCheckbox from './FormCheckbox'
 import TagAutoComplete from '@/components/TagAutoComplete'
-import SetupSelect from '../teams/@setting/[id]/panel/SetupSelect'
+import SetupSelect from '../../teams/@setting/[id]/panel/SetupSelect'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 
@@ -108,7 +108,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         <Grid item xs={12}>
           <Typography>작업 스택</Typography>
           <TagAutoComplete
-            list={listData?.map(({ name }: { name: string }) => name) || []}
+            tagList={listData || []}
             datas={tagData}
             setData={setTagData}
           />

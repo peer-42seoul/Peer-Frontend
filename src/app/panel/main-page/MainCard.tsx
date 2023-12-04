@@ -10,17 +10,20 @@ import {
   Chip,
   IconButton,
   Typography,
+  Stack,
 } from '@mui/material'
-import { red } from '@mui/material/colors'
 import { useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
 import useAxiosWithAuth from '@/api/config'
 import Link from 'next/link'
+import { red } from '@mui/material/colors'
+import OthersProfile from '../OthersProfile'
 
 const MainCard = ({
   title,
   image,
+  user_id,
   user_nickname,
   user_thumbnail,
   status,
@@ -59,7 +62,13 @@ const MainCard = ({
             alt="userImage"
           />
           <Chip
-            label={status}
+            label={
+              status === 'ONGOING'
+                ? '모집중'
+                : status === 'BEFORE'
+                  ? '모집전'
+                  : '모집완료'
+            }
             sx={{
               position: 'absolute',
               top: 16,
@@ -74,10 +83,7 @@ const MainCard = ({
       </Link>
       <CardHeader
         avatar={
-          <Link
-            href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
-            style={{ textDecoration: 'none' }}
-          >
+          <OthersProfile userId={user_id} name={user_nickname}>
             <Avatar sx={{ bgcolor: red[500] }} aria-label="profile">
               <Box
                 component="img"
@@ -86,21 +92,14 @@ const MainCard = ({
                 alt="profile image"
               />
             </Avatar>
-          </Link>
+          </OthersProfile>
         }
         action={
           <IconButton aria-label="add to favorites" onClick={changeFavorite}>
             <Favorite sx={{ color: isFavorite ? 'red' : 'gray' }} />
           </IconButton>
         }
-        title={
-          <Link
-            href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
-            style={{ textDecoration: 'none' }}
-          >
-            {user_nickname}
-          </Link>
-        }
+        title={user_nickname}
       />
       <Link
         href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
@@ -110,16 +109,29 @@ const MainCard = ({
           <Typography variant="body2" color="text.secondary">
             {title}
           </Typography>
-          <Box>
-            {tagList?.map(({ name, color }: ITag, idx: number) => (
-              <Chip
-                label={name}
-                size="small"
-                key={idx}
-                style={{ color: color }}
-              />
-            ))}
-          </Box>
+          <Stack gap={1} direction={'row'}>
+            {tagList?.map(({ name, color }: ITag, idx: number) => {
+              const r = parseInt(color.slice(1, 3), 16),
+                g = parseInt(color.slice(3, 5), 16),
+                b = parseInt(color.slice(5, 7), 16)
+              const alpha = '0.3'
+              const backgroundColor =
+                'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')'
+
+              return (
+                <Chip
+                  label={name}
+                  size="small"
+                  key={idx}
+                  style={{
+                    color: color,
+                    backgroundColor: backgroundColor,
+                    borderRadius: 5,
+                  }}
+                />
+              )
+            })}
+          </Stack>
         </CardContent>
       </Link>
     </Card>

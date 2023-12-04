@@ -10,7 +10,7 @@ const useAxiosWithAuth = () => {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
   })
 
-  //무한 요청 방지
+  //무한 요청 방지 flag
   let isRefreshing = false
 
   axiosInstance.interceptors.request.use(
@@ -30,17 +30,16 @@ const useAxiosWithAuth = () => {
       return response
     },
     async (error) => {
-      console.log('is refreshing?', isRefreshing)
+      //console.log('is refreshing?', isRefreshing)
       const currentPageUrl = window.location.pathname
       if (error.response?.status === 401) {
-        if (isRefreshing) {
+        if (!accessToken || isRefreshing) {
           // 로그아웃 후 리디렉션
-          isRefreshing = true
           useAuthStore.getState().logout()
           router.push('/login?redirect=' + currentPageUrl)
         } else {
           isRefreshing = true
-          console.log('reissue!')
+          //console.log('reissue!')
           try {
             // accessToken 갱신 요청
             const response = await axiosInstance.get('/api/v1/signin/reissue', {
@@ -53,6 +52,7 @@ const useAxiosWithAuth = () => {
             return axios.request(error.config)
           } catch (refreshError) {
             // 로그아웃 후 리디렉션
+            isRefreshing = true
             useAuthStore.getState().logout()
             router.push('/login?redirect=' + currentPageUrl)
           }

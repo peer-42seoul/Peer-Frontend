@@ -343,6 +343,14 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       MuiButton: {
         styleOverrides: {
           root: {
+            minWidth: '20px',
+            minHeight: '20px',
+          },
+        },
+      },
+      MuiBox: {
+        styleOverrides: {
+          root: {
             minWidth: '40px',
           },
         },
@@ -412,11 +420,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         fontStyle: 'normal',
         fontWeight: 600,
         lineHeight: '150%',
-        '@media (max-width: 480px)': {
-          fontSize: '15px',
-          fontWeight: 600,
-        },
-      } as React.CSSProperties,
+      },
       Title3: {
         fontSize: '18px',
         fontStyle: 'normal',

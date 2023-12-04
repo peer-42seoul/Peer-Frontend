@@ -127,7 +127,7 @@ const ProfileBioEditor = ({
     if (cropper && selectedFile) {
       // Get the cropped data as a Blob
       cropper
-        .getCroppedCanvas({ width: 48, height: 48 })
+        .getCroppedCanvas({ width: 128, height: 128 })
         .toBlob((blob: Blob | null) => {
           if (blob) {
             // Create a FormData object and append the original file
