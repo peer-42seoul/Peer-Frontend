@@ -1,5 +1,9 @@
+import { Theme } from '@mui/material'
+
 export const pcHeader = {
-  padding: '0.125rem 0rem',
+  padding: '0.625rem 1rem',
+  'border-bottom': (theme: Theme) =>
+    `1px solid ${theme.palette.line.alternative}`,
 }
 
 export const headerAvatar = {
