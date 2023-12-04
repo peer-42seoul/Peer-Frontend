@@ -4,6 +4,7 @@ import { IMessageListData } from '@/types/IMessage'
 import useMedia from '@/hook/useMedia'
 import { PCMessageListItem } from './PCMessageItem'
 import MobileMessageListItem from './MobileMessageItem'
+import * as style from './MessageList.style'
 
 interface IMessageListProps {
   messageList: IMessageListData[]
@@ -14,10 +15,6 @@ interface IMessageListProps {
   }
   selectedUsers: Set<number>
   toggleSelectUser: (targetId: number) => void
-}
-
-const mobileListStyle = {
-  overflowX: 'hidden',
 }
 
 const MessageList = ({
@@ -49,7 +46,7 @@ const MessageList = ({
       </List>
     )
   return (
-    <List sx={mobileListStyle}>
+    <List sx={style.mobileList}>
       {messageList.map((message) => (
         <MobileMessageListItem key={message.targetId} message={message} />
       ))}

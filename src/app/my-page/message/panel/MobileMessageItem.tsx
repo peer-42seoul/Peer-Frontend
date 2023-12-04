@@ -5,6 +5,7 @@ import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
+import * as style from './MobileMessageItem.style'
 
 /* ANCHOR - interface */
 interface ITouchState {
@@ -24,25 +25,6 @@ interface IMobileMessageListItemProps {
 /* ANCHOR - constants */
 const TOUCH_OFFSET = 20 // 터치 이벤트를 발생시킬 최소 길이
 const DELETE_BUTTON_WIDTH = '10.8%'
-const TRANSITION_DURATION = '800ms'
-
-/* ANCHOR - styles */
-const swappableWrapperStyle = {
-  width: '100%',
-  height: '4.5rem',
-  transition: `transform ${TRANSITION_DURATION}`,
-}
-
-const removeButtonStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  transition: `opacity ${TRANSITION_DURATION}`,
-  color: 'red.strong',
-  backgroundColor: 'red.tinted',
-  borderRadius: '0',
-  padding: '0rem 0.25rem',
-}
 
 /* ANCHOR - components */
 const SwappableMessageItem = ({
@@ -96,7 +78,7 @@ const SwappableMessageItem = ({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       sx={{
-        ...swappableWrapperStyle,
+        ...style.swappableWrapper,
         transform: `translateX(${touchState.diffLength})`,
       }}
     >
@@ -104,7 +86,7 @@ const SwappableMessageItem = ({
       <CuButton
         message="삭제"
         style={{
-          ...removeButtonStyle,
+          ...style.removeButton,
           opacity: `${touchState.side === 'LEFT' ? 1 : 0}`,
         }}
         action={eventHandler}
