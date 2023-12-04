@@ -1,6 +1,6 @@
 import { Avatar, Box, Card, Stack } from '@mui/material'
 
-const PhoneFrame = ({ imageUrl }: { imageUrl: string }) => {
+const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
   return (
     <Card
       sx={{
@@ -26,14 +26,25 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string }) => {
           />
         </Stack>
         <Stack>
-          <Avatar
-            src={imageUrl}
-            sx={{
-              width: '300px',
-              height: '600px',
-            }}
-            variant="rounded"
-          />
+          {imageUrl ? (
+            <Avatar
+              src={imageUrl}
+              sx={{
+                width: '300px',
+                height: '600px',
+              }}
+              variant="rounded"
+            />
+          ) : (
+            <Avatar
+              src="/images/icons/icon-512x512.png"
+              sx={{
+                width: '300px',
+                height: '600px',
+              }}
+              variant="rounded"
+            />
+          )}
         </Stack>
       </Card>
     </Card>
