@@ -69,7 +69,7 @@ export const MobileNav = () => {
         <BottomNavigationAction
           label="쇼케이스"
           onClick={() => {
-            router.push('/')
+            router.push('/showcase')
           }}
         />
         <BottomNavigationAction
@@ -146,7 +146,7 @@ export const PcNav = () => {
         <BottomNavigationAction
           label="쇼케이스"
           onClick={() => {
-            router.push('/')
+            router.push('/showcase')
           }}
         />
       </BottomNavigation>
