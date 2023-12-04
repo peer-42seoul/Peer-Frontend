@@ -1,5 +1,7 @@
+import dayjs from 'dayjs'
 import { Avatar, Box, Stack, Typography } from '@mui/material'
 import { IMessage, IMessageUser } from '@/types/IMessage'
+import * as style from './MessageItem.style'
 
 interface IOwnerMessageItemProps {
   message: IMessage
@@ -11,23 +13,39 @@ interface ITargetMessageItemProps {
   target: IMessageUser
 }
 
+const MessageDate = ({ date }: { date: string }) => {
+  // TODO : UTCtoLocalTime 함수로 시간 변환할 것
+  const dayjsDate = dayjs(date)
+  const ampm = dayjsDate.hour() < 12 ? '오전' : '오후'
+  return (
+    <Stack
+      justifyContent={'flex-end'}
+      alignItems={'center'}
+      spacing={'0.125rem'}
+    >
+      <Typography variant={'CaptionEmphasis'} color={'text.assistive'}>
+        {dayjsDate.format('MM월 DD일')}
+      </Typography>
+      <Typography variant={'CaptionEmphasis'} color={'text.assistive'}>
+        {ampm} {dayjsDate.format('HH:mm')}
+      </Typography>
+    </Stack>
+  )
+}
+
 export const OwnerMessageItem = ({
   message,
   needExtraMargin,
 }: IOwnerMessageItemProps) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-      }}
+    <Stack
+      direction={'row'}
+      justifyContent={'flex-end'}
+      alignItems={'flex-end'}
+      sx={needExtraMargin ? style.extraMargin : undefined}
     >
-      <Stack sx={{ bgcolor: '#EFEFEF', alignItems: 'flex-end' }}>
-        <Typography>{message.content}</Typography>
-        <Typography>{message.date}</Typography>
-      </Stack>
-    </Box>
+      <MessageDate date={message.date} />
+    </Stack>
   )
 }
 
