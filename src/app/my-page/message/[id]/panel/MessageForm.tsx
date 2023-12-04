@@ -1,11 +1,16 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { isAxiosError } from 'axios'
-import { Stack, TextField } from '@mui/material'
+import { Stack, TextField, Typography, IconButton } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import { IMessage, IMessageTargetUser } from '@/types/IMessage'
+import SendIcon from '@/icons/SendIcon'
+import BorderlessTextField from '@/components/BorderlessTextField'
+import * as style from './MessageForm.style'
 
 type TMessageSendView = 'PC_VIEW' | 'MOBILE_VIEW'
+
+const MAX_LENGTH = 300
 interface IMessageFormProps {
   view: TMessageSendView
   targetId: number
@@ -67,21 +72,29 @@ const MessageForm = ({
   return (
     <form onSubmit={messageSubmit}>
       {view === 'PC_VIEW' ? (
-        <Stack direction={'row'}>
-          <TextField
-            sx={{ width: '100%' }}
-            value={content}
-            placeholder="내용을 입력하세요"
-            variant="outlined"
-            onChange={(e) => setContent(e.target.value)}
-            disabled={disabled}
-          />
-          <CuButton
-            variant="text"
-            type="submit"
-            message="전송"
-            disabled={disabled}
-          />
+        <Stack direction={'row'} spacing={'1rem'} sx={style.pcMessageForm}>
+          <Stack
+            direction={'row'}
+            spacing={0}
+            alignItems={'flex-end'}
+            sx={style.pcTextFieldContainer}
+          >
+            <BorderlessTextField
+              fullWidth
+              multiline
+              rows={4}
+              value={content}
+              placeholder="내용을 입력하세요"
+              onChange={(e) => setContent(e.target.value.slice(0, MAX_LENGTH))}
+              disabled={disabled}
+            />
+            <Typography color={'text.assistive'} sx={style.messageLength}>
+              {content.length} / {MAX_LENGTH}
+            </Typography>
+          </Stack>
+          <IconButton type="submit" sx={style.pcSendButton}>
+            <SendIcon />
+          </IconButton>
         </Stack>
       ) : (
         <Stack>
