@@ -58,6 +58,7 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   // 알림 클릭
   console.log('[Service Worker] Notification click Received.')
+  console.log('event', event.notification.data)
   event.notification.close()
   // 터치하면 리다이렉션
   event.waitUntil(clients.openWindow(event.notification.data.link))
