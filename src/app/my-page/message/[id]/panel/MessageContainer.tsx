@@ -10,7 +10,7 @@ const MessageContainer = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
   return isPc ? (
     <Stack sx={style.PcBox}>
-      <Stack direction={'row'} justifyContent={'flex-end'}>
+      <Stack direction={'row'} justifyContent={'flex-end'} spacing={'2rem'}>
         <CuButton
           message={'이 쪽지 나가기'}
           variant="text"
@@ -18,7 +18,9 @@ const MessageContainer = ({ children }: { children: ReactNode }) => {
           style={style.PcGoToListButton}
         />
       </Stack>
-      <Stack sx={style.PcMessageContainer}>{children}</Stack>
+      <Stack sx={style.PcMessageContainer} spacing={'3rem'}>
+        {children}
+      </Stack>
     </Stack>
   ) : (
     <Box>{children}</Box>

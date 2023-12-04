@@ -5,7 +5,6 @@ export const PcBox = {
   width: '52.8rem',
   height: '57.1rem',
   padding: '2rem',
-  gap: '2rem',
   backgroundColor: (theme: Theme) => theme.palette.background.primary,
 }
 
@@ -14,7 +13,6 @@ export const PcMessageContainer = {
   width: '49.8rem',
   height: '48.6rem',
   padding: '2rem 1.5rem 3rem 1.5rem',
-  gap: '3rem',
   backgroundColor: (theme: Theme) => theme.palette.background.primary,
   border: (theme: Theme) => `1px solid ${theme.palette.line.alternative}`,
   borderRadius: '1rem',
