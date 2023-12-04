@@ -8,3 +8,8 @@ export interface IPostCard {
   tagList: ITag[]
   image: string // 글 대표 이미지 (썸네일)
 }
+
+export interface IHitchhikingCardBack {
+  content: string // 모집글 글 내용
+  memberImage: Array<{ url: string }> // 모집글의 팀원 프로필 이미지
+}
