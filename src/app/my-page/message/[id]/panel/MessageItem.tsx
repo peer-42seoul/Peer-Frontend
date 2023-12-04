@@ -1,20 +1,19 @@
 import { Avatar, Box, Stack, Typography } from '@mui/material'
 import { IMessage, IMessageUser } from '@/types/IMessage'
 
-type TMarginType = 'Top' | 'First' | 'NotFirst'
 interface IOwnerMessageItemProps {
   message: IMessage
-  marginType: TMarginType
+  needExtraMargin?: boolean
 }
 interface ITargetMessageItemProps {
   message: IMessage
-  marginType: TMarginType
+  needExtraMargin?: boolean
   target: IMessageUser
 }
 
 export const OwnerMessageItem = ({
   message,
-  marginType,
+  needExtraMargin,
 }: IOwnerMessageItemProps) => {
   return (
     <Box
@@ -35,7 +34,7 @@ export const OwnerMessageItem = ({
 export const TargetMessageItem = ({
   message,
   target,
-  marginType,
+  needExtraMargin,
 }: ITargetMessageItemProps) => {
   return (
     <Box
