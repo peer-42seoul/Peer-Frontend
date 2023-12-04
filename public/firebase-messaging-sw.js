@@ -42,7 +42,7 @@ self.addEventListener('push', (event) => {
   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
   const data = event.data.json().notification
 
-  console.log('send result', data)
+  console.log('send result', data) // 디버그용
   const title = data.title
 
   const options = {
@@ -58,7 +58,7 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   // 알림 클릭
   console.log('[Service Worker] Notification click Received.')
-  console.log('event', event.notification.data)
+  console.log('event', event.notification.data) // 디버그용
   event.notification.close()
   // 터치하면 리다이렉션
   event.waitUntil(clients.openWindow(event.notification.data.link))
