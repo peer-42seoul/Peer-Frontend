@@ -42,11 +42,11 @@ self.addEventListener('push', (event) => {
   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
   const data = event.data.json().notification
 
-  const title = data.title
   const options = {
+    title: data.title,
     body: data.body,
     icon: '/images/icons/icon-192x192.png',
-    link: '/', // 추후 변경
+    link: data.link, // 추후 변경
   }
 
   event.waitUntil(registration.showNotification(title, options))
