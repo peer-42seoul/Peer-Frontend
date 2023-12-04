@@ -99,6 +99,15 @@ const PushAlertBanner = () => {
       .then((currentToken) => {
         if (currentToken) {
           console.log(currentToken)
+          axiosInstance
+            .post(`http://localhost:8082/api/v1/alarm/send-push`, {
+              token: currentToken,
+              title: '푸시 알림 테스트',
+              message: '푸시 알림 테스트 메시지입니다.',
+            })
+            .then((res) => {
+              console.log(res)
+            })
         } else {
           console.log(
             'No registration token available. Request permission to generate one.',
@@ -108,6 +117,10 @@ const PushAlertBanner = () => {
       .catch((err) => {
         console.log('An error occurred while retrieving token. ', err)
       })
+
+    onMessage(messaging, (payload) => {
+      console.log('Message received. ', payload)
+    })
   }
 
   const handlePush = () => {
