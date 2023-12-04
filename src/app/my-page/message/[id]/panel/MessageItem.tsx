@@ -42,9 +42,15 @@ export const OwnerMessageItem = ({
       direction={'row'}
       justifyContent={'flex-end'}
       alignItems={'flex-end'}
+      spacing={'0.5rem'}
       sx={needExtraMargin ? style.extraMargin : undefined}
     >
       <MessageDate date={message.date} />
+      <Box sx={style.ownerMessage}>
+        <Typography variant={'body1'} color={'text.'}>
+          {message.content}
+        </Typography>
+      </Box>
     </Stack>
   )
 }
