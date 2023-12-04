@@ -22,12 +22,6 @@ interface IMobileMessageListItemProps {
 }
 
 /* ANCHOR - constants */
-const initialTouchState: ITouchState = {
-  // wrapperHeight: '30rem',
-  diffLength: '0',
-  startX: 0,
-  side: null,
-}
 const TOUCH_OFFSET = 20 // 터치 이벤트를 발생시킬 최소 길이
 const DELETE_BUTTON_WIDTH = '10.8%'
 const TRANSITION_DURATION = '800ms'
@@ -55,27 +49,29 @@ const SwappableMessageItem = ({
   children,
   eventHandler,
 }: ISwappableMessageItemProps) => {
-  const [touchState, setTouchState] = useState<ITouchState>(initialTouchState)
+  const [touchState, setTouchState] = useState<ITouchState>({
+    diffLength: '0',
+    startX: 0,
+    side: null,
+  })
   const handleTouchStart = (event: TouchEvent) => {
     event.stopPropagation()
-    const { clientX } = event.touches[0]
     setTouchState((prevState) => ({
       ...prevState,
-      startX: clientX,
+      startX: event.touches[0].clientX,
     }))
   }
   const handleTouchMove = (event: TouchEvent) => {
     event.stopPropagation()
-    const { clientX } = event.touches[0]
-    const newDiffLength = clientX - touchState.startX
-    if (newDiffLength < 0 && newDiffLength <= TOUCH_OFFSET * -1) {
+    const dragLength = event.touches[0].clientX - touchState.startX
+    if (dragLength < 0 && Math.abs(dragLength) >= TOUCH_OFFSET) {
       // 왼쪽으로 드래그하는 경우
       setTouchState((prevState) => ({
         ...prevState,
         diffLength: `-${DELETE_BUTTON_WIDTH}`,
         side: 'LEFT',
       }))
-    } else if (newDiffLength > 0 && newDiffLength >= TOUCH_OFFSET) {
+    } else if (dragLength > 0 && Math.abs(dragLength) >= TOUCH_OFFSET) {
       // 오른쪽으로 드래그하는 경우
       setTouchState((prevState) => ({
         ...prevState,
