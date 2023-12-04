@@ -43,8 +43,10 @@ self.addEventListener('push', (event) => {
   const data = event.data.json().notification
 
   console.log('send result', data)
+  const title = data.title
 
   const options = {
+    title: data.title,
     body: data.body,
     icon: '/images/icons/icon-192x192.png',
     link: data.link, // 추후 변경
