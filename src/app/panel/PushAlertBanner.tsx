@@ -2,80 +2,112 @@ import useAxiosWithAuth from '@/api/config'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
-import webpush from 'web-push'
+import { initializeApp } from 'firebase/app'
+import { getMessaging, onMessage, getToken } from 'firebase/messaging'
 
 const PushAlertBanner = () => {
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const [isShowPush, setIsShowPush] = useState<boolean>(true)
   const [isScroll, setIsScroll] = useState<number>(0)
 
-  const urlBase64ToUint8Array = (base64String: string) => {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
-    const base64 = (base64String + padding)
-      .replace(/-/g, '+')
-      .replace(/_/g, '/')
-    const rawData = window.atob(base64)
-    const outputArray = new Uint8Array(rawData.length)
+  // const urlBase64ToUint8Array = (base64String: string) => {
+  //   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
+  //   const base64 = (base64String + padding)
+  //     .replace(/-/g, '+')
+  //     .replace(/_/g, '/')
+  //   const rawData = window.atob(base64)
+  //   const outputArray = new Uint8Array(rawData.length)
 
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i)
-    }
+  //   for (let i = 0; i < rawData.length; ++i) {
+  //     outputArray[i] = rawData.charCodeAt(i)
+  //   }
 
-    return outputArray
-  }
+  //   return outputArray
+  // }
 
-  const displayNotification = () => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      navigator.serviceWorker.ready.then((swReg) => {
-        swReg.showNotification('Hello world!')
-      })
-    }
-  }
+  // const displayNotification = () => {
+  //   if ('serviceWorker' in navigator && 'PushManager' in window) {
+  //     navigator.serviceWorker.ready.then((swReg) => {
+  //       swReg.showNotification('Hello world!')
+  //     })
+  //   }
+  // }
 
-  const createPushSubscription = (swReg: ServiceWorkerRegistration) => {
-    // 추후 서버 셋팅 한 뒤 사용
-    const vapidPublicKey = webpush.generateVAPIDKeys().publicKey
-    const convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey)
-    swReg.pushManager
-      .subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: convertedVapidPublicKey,
-      })
-      .then((newSub) => {
-        let newSubData = newSub.toJSON()
-        let newSubString = JSON.stringify(newSubData)
+  // const createPushSubscription = (swReg: ServiceWorkerRegistration) => {
+  //   // 추후 서버 셋팅 한 뒤 사용
+  //   const vapidPublicKey = webpush.generateVAPIDKeys().publicKey
+  //   const convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey)
+  //   swReg.pushManager
+  //     .subscribe({
+  //       userVisibleOnly: true,
+  //       applicationServerKey: convertedVapidPublicKey,
+  //     })
+  //     .then((newSub) => {
+  //       let newSubData = newSub.toJSON()
+  //       let newSubString = JSON.stringify(newSubData)
 
-        return axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/push`,
-          {
-            subscription: newSubString,
-          },
-        )
-      })
-      .then((res) => {
-        console.log(res)
-        displayNotification()
+  //       return axiosInstance.post(
+  //         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/push`,
+  //         {
+  //           subscription: newSubString,
+  //         },
+  //       )
+  //     })
+  //     .then((res) => {
+  //       console.log(res)
+  //       displayNotification()
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // }
+
+  // const handlePushNotification = () => {
+  //   if ('serviceWorker' in navigator && 'PushManager' in window) {
+  //     let reg: ServiceWorkerRegistration
+
+  //     navigator.serviceWorker.ready
+  //       .then((swReg) => {
+  //         reg = swReg
+  //         return swReg.pushManager.getSubscription()
+  //       })
+  //       .then((subscription) => {
+  //         if (subscription === null) {
+  //           createPushSubscription(reg)
+  //         }
+  //       })
+  //   }
+  // }
+
+  const handlePushFCM = () => {
+    const firebaseConfig = initializeApp({
+      apiKey: 'AIzaSyCVBmOaZ34Loogn8Ig7SFXTfO10IEThLOw',
+      authDomain: 'peer-web-application.firebaseapp.com',
+      projectId: 'peer-web-application',
+      storageBucket: 'peer-web-application.appspot.com',
+      messagingSenderId: '620097618965',
+      appId: '1:620097618965:web:81ba270413fec5a173ba1c',
+      measurementId: 'G-LM629HF4B9',
+    })
+
+    const messaging = getMessaging(firebaseConfig)
+
+    getToken(messaging, {
+      vapidKey:
+        'BErmL1dcTujcaxfe6OhZOmSg7i0IdDmU2kBoQ3S8fj7U2zbrzfj8oPgoid_9Qy8euy58ThxzGIRCx-3h15_WAGg',
+    })
+      .then((currentToken) => {
+        if (currentToken) {
+          console.log(currentToken)
+        } else {
+          console.log(
+            'No registration token available. Request permission to generate one.',
+          )
+        }
       })
       .catch((err) => {
-        console.log(err)
+        console.log('An error occurred while retrieving token. ', err)
       })
-  }
-
-  const handlePushNotification = () => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      let reg: ServiceWorkerRegistration
-
-      navigator.serviceWorker.ready
-        .then((swReg) => {
-          reg = swReg
-          return swReg.pushManager.getSubscription()
-        })
-        .then((subscription) => {
-          if (subscription === null) {
-            createPushSubscription(reg)
-          }
-        })
-    }
   }
 
   const handlePush = () => {
@@ -83,7 +115,8 @@ const PushAlertBanner = () => {
       Notification.requestPermission((permission) => {
         if (permission === 'granted') {
           console.log('Notification permission granted.')
-          handlePushNotification()
+          handlePushFCM()
+          // handlePushNotification()
           setIsShowPush(false)
           localStorage.setItem('isShowPush', 'false')
         } else {
