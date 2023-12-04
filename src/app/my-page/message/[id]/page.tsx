@@ -15,6 +15,7 @@ import MessageFormModal from './panel/MessageFormModal'
 import MessageContainer from './panel/MessageContainer'
 import MessageHeader from './panel/MessageHeader'
 import MessageStack from './panel/MessageStack'
+import * as style from './page.style'
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -130,7 +131,11 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         targetProfile={target.userProfile}
         userNickname={target.userNickname}
       />
-      <Stack ref={scrollRef} spacing={'0.5rem'}>
+      <Stack
+        ref={scrollRef}
+        spacing={'0.5rem'}
+        sx={isPc ? style.pcStack : style.mobileStack}
+      >
         <Box ref={targetRef}></Box>
         {spinner && <CircularProgress />}
         <MessageStack messageData={updatedData} owner={owner} target={target} />
