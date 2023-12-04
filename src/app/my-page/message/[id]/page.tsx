@@ -10,11 +10,11 @@ import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
-import MessageItem from './panel/MessageItem'
 import MessageForm from './panel/MessageForm'
 import MessageFormModal from './panel/MessageFormModal'
 import MessageContainer from './panel/MessageContainer'
 import MessageHeader from './panel/MessageHeader'
+import MessageStack from './panel/MessageStack'
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -133,14 +133,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
       <Stack ref={scrollRef} spacing={'0.5rem'}>
         <Box ref={targetRef}></Box>
         {spinner && <CircularProgress />}
-        {updatedData.map((msgObj: IMessage) => (
-          <MessageItem
-            key={msgObj.msgId}
-            msg={msgObj}
-            owner={owner}
-            target={target}
-          />
-        ))}
+        <MessageStack messageData={updatedData} owner={owner} target={target} />
       </Stack>
       {isPc ? (
         <MessageForm

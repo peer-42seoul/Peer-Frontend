@@ -1,7 +1,21 @@
 import { Avatar, Box, Stack, Typography } from '@mui/material'
 import { IMessage, IMessageUser } from '@/types/IMessage'
 
-const OwnerMessageItem = ({ message }: { message: IMessage }) => {
+type TMarginType = 'Top' | 'First' | 'NotFirst'
+interface IOwnerMessageItemProps {
+  message: IMessage
+  marginType: TMarginType
+}
+interface ITargetMessageItemProps {
+  message: IMessage
+  marginType: TMarginType
+  target: IMessageUser
+}
+
+export const OwnerMessageItem = ({
+  message,
+  marginType,
+}: IOwnerMessageItemProps) => {
   return (
     <Box
       sx={{
@@ -18,13 +32,11 @@ const OwnerMessageItem = ({ message }: { message: IMessage }) => {
   )
 }
 
-const TargetMessageItem = ({
+export const TargetMessageItem = ({
   message,
   target,
-}: {
-  message: IMessage
-  target: IMessageUser
-}) => {
+  marginType,
+}: ITargetMessageItemProps) => {
   return (
     <Box
       sx={{
@@ -46,23 +58,3 @@ const TargetMessageItem = ({
     </Box>
   )
 }
-
-interface IMessageItemProps {
-  msg: IMessage
-  owner: IMessageUser
-  target: IMessageUser
-}
-
-const MessageItem = ({ msg, owner, target }: IMessageItemProps) => {
-  return (
-    <>
-      {msg.userId === owner.userId ? (
-        <OwnerMessageItem message={msg} />
-      ) : (
-        <TargetMessageItem message={msg} target={target} />
-      )}
-    </>
-  )
-}
-
-export default MessageItem
