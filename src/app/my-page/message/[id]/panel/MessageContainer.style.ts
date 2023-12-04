@@ -21,6 +21,7 @@ export const pcMessageContainer = {
 export const pcGoToListButton = {
   // 리스트로 가기 버튼
   fontSize: '0.75rem',
+  padding: '0.81rem 0.25rem',
 }
 
 export const mobileBox = {

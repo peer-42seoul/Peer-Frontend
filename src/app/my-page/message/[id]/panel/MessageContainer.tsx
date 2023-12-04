@@ -9,7 +9,7 @@ const MessageContainer = ({ children }: { children: ReactNode }) => {
   const { isPc } = useMedia()
   const router = useRouter()
   return isPc ? (
-    <Stack sx={style.pcBox}>
+    <Stack spacing={'1rem'} sx={style.pcBox}>
       <Stack direction={'row'} justifyContent={'flex-end'} spacing={'2rem'}>
         <CuButton
           message={'이 쪽지 나가기'}
