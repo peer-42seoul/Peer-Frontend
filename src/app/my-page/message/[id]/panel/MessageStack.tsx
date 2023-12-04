@@ -11,19 +11,23 @@ const MessageStack = ({ messageData, owner, target }: IMessageStackProps) => {
   return (
     <>
       {messageData.map((message: IMessage, index) => {
-        const needExtraMargin =
-          index !== 0 && messageData[index - 1].userId === message.userId
+        const messageOption =
+          index === 0
+            ? 'TOP'
+            : messageData[index - 1].userId === message.userId
+              ? 'NEED_EXTRA_MARGIN'
+              : 'NORMAL'
         return (
           <>
             {message.userId === owner.userId ? (
               <OwnerMessageItem
                 message={message}
-                needExtraMargin={needExtraMargin}
+                messageOption={messageOption}
               />
             ) : (
               <TargetMessageItem
                 message={message}
-                needExtraMargin={needExtraMargin}
+                messageOption={messageOption}
                 target={target}
               />
             )}

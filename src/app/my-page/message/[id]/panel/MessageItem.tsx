@@ -1,15 +1,17 @@
 import dayjs from 'dayjs'
-import { Avatar, Box, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { IMessage, IMessageUser } from '@/types/IMessage'
+import CuAvatar from '@/components/CuAvatar'
 import * as style from './MessageItem.style'
 
+type TMessageOption = 'TOP' | 'NEED_EXTRA_MARGIN' | 'NORMAL'
 interface IOwnerMessageItemProps {
   message: IMessage
-  needExtraMargin?: boolean
+  messageOption: TMessageOption
 }
 interface ITargetMessageItemProps {
   message: IMessage
-  needExtraMargin?: boolean
+  messageOption: TMessageOption
   target: IMessageUser
 }
 
@@ -22,6 +24,7 @@ const MessageDate = ({ date }: { date: string }) => {
       justifyContent={'flex-end'}
       alignItems={'center'}
       spacing={'0.125rem'}
+      sx={style.date}
     >
       <Typography variant={'CaptionEmphasis'} color={'text.assistive'}>
         {dayjsDate.format('MM월 DD일')}
@@ -35,7 +38,7 @@ const MessageDate = ({ date }: { date: string }) => {
 
 export const OwnerMessageItem = ({
   message,
-  needExtraMargin,
+  messageOption,
 }: IOwnerMessageItemProps) => {
   return (
     <Stack
@@ -43,13 +46,11 @@ export const OwnerMessageItem = ({
       justifyContent={'flex-end'}
       alignItems={'flex-end'}
       spacing={'0.5rem'}
-      sx={needExtraMargin ? style.extraMargin : undefined}
+      sx={messageOption === 'NEED_EXTRA_MARGIN' ? style.extraMargin : undefined}
     >
       <MessageDate date={message.date} />
       <Box sx={style.ownerMessage}>
-        <Typography variant={'body1'} color={'text.'}>
-          {message.content}
-        </Typography>
+        <Typography variant={'body1'}>{message.content}</Typography>
       </Box>
     </Stack>
   )
@@ -58,26 +59,29 @@ export const OwnerMessageItem = ({
 export const TargetMessageItem = ({
   message,
   target,
-  needExtraMargin,
+  messageOption,
 }: ITargetMessageItemProps) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-      }}
+    <Stack
+      direction={'row'}
+      justifyContent={'flex-start'}
+      alignItems={'flex-start'}
+      spacing={'0.5rem'}
+      sx={messageOption === 'NEED_EXTRA_MARGIN' ? style.extraMargin : undefined}
     >
-      <Stack sx={{ bgcolor: '#D8D8D8', alignItems: 'flex-start' }} spacing={1}>
-        <Stack direction={'row'} alignItems={'center'} spacing={1}>
-          <Avatar src={target.userProfile} />
-          <Typography sx={{ fontWeight: 'bold' }}>
-            {target.userNickname}
-          </Typography>
-        </Stack>
-        <Typography>{message.content}</Typography>
-        <Typography>{message.date}</Typography>
-      </Stack>
-    </Box>
+      {messageOption === 'NORMAL' ? (
+        <Box sx={style.dummyAvatar}></Box>
+      ) : (
+        <CuAvatar
+          src={target.userProfile}
+          alt={target.userNickname}
+          sx={style.targetAvatar}
+        />
+      )}
+      <Box sx={style.targetMessage}>
+        <Typography variant={'body1'}>{message.content}</Typography>
+      </Box>
+      <MessageDate date={message.date} />
+    </Stack>
   )
 }
