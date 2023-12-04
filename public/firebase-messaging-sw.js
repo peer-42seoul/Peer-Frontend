@@ -42,6 +42,8 @@ self.addEventListener('push', (event) => {
   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
   const data = event.data.json().notification
 
+  console.log('send result', data)
+
   const options = {
     title: data.title,
     body: data.body,
