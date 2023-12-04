@@ -1,5 +1,6 @@
 import useMedia from '@/hook/useMedia'
-import { Avatar, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
+import CuAvatar from '@/components/CuAvatar'
 import * as style from './MessageHeader.style'
 
 const TARGETMESSAGE = '님과의 쪽지'
@@ -20,7 +21,7 @@ const MessageHeader = ({
       sx={style.pcHeader}
       spacing={'0.5rem'}
     >
-      <Avatar
+      <CuAvatar
         sx={style.headerAvatar}
         alt="Message Target"
         src={targetProfile}
