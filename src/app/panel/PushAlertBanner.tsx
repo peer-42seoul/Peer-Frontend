@@ -100,7 +100,7 @@ const PushAlertBanner = () => {
         if (currentToken) {
           console.log(currentToken)
           axiosInstance
-            .post(`http://localhost:8082/api/v1/alarm/send-push`, {
+            .post(`http://localhost:8082/alarm/send-push`, {
               token: currentToken,
               title: '푸시 알림 테스트',
               message: '푸시 알림 테스트 메시지입니다.',
