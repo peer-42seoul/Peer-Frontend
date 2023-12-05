@@ -27,7 +27,7 @@ const Hitchhiking = () => {
   useEffect(() => {
     if (!isLoading && data?.content) {
       setCardList((prev) => {
-        const newArray = prev.concat(data.content)
+        const newArray = data.content.reverse().concat(prev)
         return newArray
       })
       console.log(data.content)
@@ -37,9 +37,8 @@ const Hitchhiking = () => {
 
   let message: string = ''
 
-  if (isLoading && !data) message = '로딩중'
+  if (isLoading && !cardList.length) message = '로딩중'
   else if (error) message = '에러 발생'
-  else if (!data?.content) message = '데이터가 없습니다.'
 
   return (
     <Stack
@@ -67,11 +66,11 @@ const Hitchhiking = () => {
           position: 'relative',
         }}
       >
-        {!message && data?.content ? (
+        {!message ? (
           <CardContainer
             cardList={cardList}
             isLoading={isLoading}
-            update={() => setPage((prev) => (!data.last ? prev + 1 : prev))}
+            update={() => setPage((prev) => (!data?.last ? prev + 1 : prev))}
             setCardList={setCardList}
           />
         ) : (
