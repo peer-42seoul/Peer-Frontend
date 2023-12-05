@@ -5,7 +5,6 @@ import {
   Avatar,
   BottomNavigation,
   BottomNavigationAction,
-  Box,
   Button,
   IconButton,
   Paper,
@@ -13,7 +12,7 @@ import {
 } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import SearchButton from './main-page/SearchButton'
+import SearchButton from '../main-page/SearchButton'
 import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'
@@ -23,6 +22,7 @@ import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined'
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined'
 import TabletMacOutlinedIcon from '@mui/icons-material/TabletMacOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 
 export const MobileNav = () => {
   const [value, setValue] = useState(0)
@@ -129,14 +129,9 @@ export const PcNav = () => {
       }}
     >
       <Stack direction={'row'}>
-        <Box
-          component={'img'}
-          style={{ padding: 3 }}
-          src={'/icons/peer-logo.svg'}
-          alt={'peer-logo'}
-          width={50}
-          height={50}
-        />
+        <Stack alignItems={'center'} justifyContent={'center'}>
+          <PeerLogo sx={{ width: 50, height: 50 }} />
+        </Stack>
         <BottomNavigation
           showLabels
           value={value}
@@ -166,7 +161,7 @@ export const PcNav = () => {
           <BottomNavigationAction
             label="쇼케이스"
             onClick={() => {
-                router.push('/showcase')
+              router.push('/showcase')
             }}
           />
         </BottomNavigation>

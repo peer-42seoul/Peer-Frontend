@@ -1,8 +1,8 @@
 'use client'
 
 import { Box } from '@mui/material'
-import Header from './Header'
-import { MobileNav, PcNav } from './NavBar'
+import Header from './layout-panel/Header'
+import { MobileNav, PcNav } from './layout-panel/NavBar'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 

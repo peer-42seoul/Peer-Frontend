@@ -1,8 +1,9 @@
 'use client'
 
-import { AppBar, Box, Toolbar } from '@mui/material'
-import SearchButton from './main-page/SearchButton'
+import { AppBar, Box, Stack, Toolbar } from '@mui/material'
+import SearchButton from '../main-page/SearchButton'
 import AlertIcon from './AlertIcon'
+import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 
 const Header = () => {
   return (
@@ -11,11 +12,9 @@ const Header = () => {
         <AppBar position="static">
           <Toolbar sx={{ justifyContent: 'space-between' }}>
             <AlertIcon />
-            <Box
-              component="img"
-              src={'/icons/peer-logo.svg'}
-              alt={'peer-logo'}
-            />
+            <Stack alignItems={'center'} justifyContent={'center'}>
+              <PeerLogo sx={{ width: 50, height: 50 }} />
+            </Stack>
             <SearchButton />
           </Toolbar>
         </AppBar>
