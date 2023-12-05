@@ -20,7 +20,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
   const { isPc } = useMedia()
   const [isTouched, setIsTouched] = useState(false)
-  const axiosInstance = useAxiosWithAuth()
+  const axiosWithAuth = useAxiosWithAuth()
 
   const handleCardClick = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
@@ -29,20 +29,21 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
 
   const clickLike = useCallback(() => {
     if (!data) return alert('로그인이 필요합니다.')
-    axiosInstance
+    axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/like/${data.id}`,
       )
       .then((res) => {
         if (res.status === 200) {
+          console.log(res)
           data.like = res.data.like
         }
       })
-  }, [data, axiosInstance])
+  }, [data, axiosWithAuth])
 
   const clickFavorite = useCallback(() => {
     if (!data) return alert('로그인이 필요합니다.')
-    axiosInstance
+    axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${data.id}`,
       )
@@ -52,7 +53,7 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
           data.favorite = true
         }
       })
-  }, [data, axiosInstance])
+  }, [data, axiosWithAuth])
 
   if (isPc) {
     return (
@@ -67,16 +68,17 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
           {data !== undefined ? (
             <CardActions onClick={handleCardClick}>
               <CardContent>
-                <Stack direction={'row'} justifyContent={'space-between'}>
-                  <Stack direction={'row'}>
+                <Stack direction={'row'} spacing={10}>
+                  <Stack direction={'row'} spacing={1}>
                     <Typography>팀 이미지</Typography>
                     <Typography>팀 이름: {data.name}</Typography>
                   </Stack>
-                  <Stack direction={'row'} spacing={2}>
+                  <Stack direction={'row'} spacing={1}>
                     <IconButton
                       onClick={clickLike}
                       color="primary"
                       size="small"
+                      sx={{ mr: 1 }}
                     >
                       <ThumbUpIcon />
                     </IconButton>
@@ -158,7 +160,7 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
                     <IconButton onClick={clickLike}>
                       <ThumbUpIcon />
                     </IconButton>
-                    <Typography>좋아요: {data.like}</Typography>
+                    <Typography>{data.like}</Typography>
                   </Stack>
                   <Typography>관심 추가</Typography>
                 </Stack>

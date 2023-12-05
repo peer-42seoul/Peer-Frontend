@@ -12,6 +12,8 @@ import useSWR from 'swr'
 import { ICardData } from './panel/types'
 import { defaultGetFetcher } from '@/api/fetchers'
 import { IPagination } from '@/types/IPagination'
+import useAuthStore from '@/states/useAuthStore'
+import useAxiosWithAuth from '@/api/config'
 
 const ShowcasePage = () => {
   const [page, setPage] = useState<number>(1)
@@ -20,9 +22,14 @@ const ShowcasePage = () => {
   const [touchEnd, setTouchEnd] = useState(0)
   const constraintsRef = useRef(null)
   const { isPc } = useMedia()
+  const { isLogin } = useAuthStore()
+
+  const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const { data, error, isLoading } = useSWR<IPagination<ICardData[]>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=${page}&pageSize=5`,
-    defaultGetFetcher,
+    isLogin
+      ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      : defaultGetFetcher,
   )
 
   const handlePrevClick = () => {
@@ -89,8 +96,8 @@ const ShowcasePage = () => {
         <Stack direction={'row'} spacing={1}>
           <PhoneFrame
             imageUrl={
-              data?.content && data.content[index].image
-                ? data.content[index].image
+              data?.content && data.content[index].image!
+                ? data.content[index].image!
                 : undefined
             }
           />
