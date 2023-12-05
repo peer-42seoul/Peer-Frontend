@@ -4,6 +4,7 @@ import '../../styles/reset.css'
 import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
 import CuSWRConfig from './panel/CuSWRConfig'
 import MainLayout from './panel/MainLayout'
+import { Pretendard } from './panel/font'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -48,7 +49,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" />
         <meta name="theme-color" content="#010456" />
       </head>
-      <body>
+      <body className={Pretendard.className}>
         <CuSWRConfig>
           <MuiThemeProvider>
             <MainLayout>{children}</MainLayout>
