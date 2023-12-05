@@ -133,7 +133,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
       />
       <Stack ref={scrollRef} sx={isPc ? style.pcStack : style.mobileStack}>
         <Box ref={targetRef}></Box>
-        {spinner && <CircularProgress />}
+        {spinner && <CircularProgress sx={style.circularProgress} />}
         <MessageStack messageData={updatedData} owner={owner} target={target} />
       </Stack>
       {isPc ? (
