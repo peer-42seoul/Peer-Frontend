@@ -61,7 +61,14 @@ const NotifSetting = ({
 
   console.log(setToastMessage)
   return (
-    <Stack bgcolor={'background.secondary'} p={3} spacing={3}>
+    <Stack
+      bgcolor={'background.secondary'}
+      p={3}
+      spacing={3}
+      sx={{
+        borderRadius: '16px',
+      }}
+    >
       <Stack spacing={2}>
         <Typography variant="Title3Emphasis">알림 설정</Typography>
         <Notif

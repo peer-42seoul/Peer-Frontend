@@ -330,7 +330,53 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         xl: 1536,
       },
     },
-
+    components: {
+      MuiContainer: {
+        styleOverrides: {
+          root: {
+            '@media (min-width: 1200px)': {
+              maxWidth: '1280px',
+            },
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            minWidth: '20px',
+            minHeight: '20px',
+          },
+        },
+      },
+      MuiBox: {
+        styleOverrides: {
+          root: {
+            minWidth: '40px',
+          },
+        },
+      },
+      MuiTypography: {
+        defaultProps: {
+          variantMapping: {
+            HeadlineEmphasis: 'h1',
+            Headline: 'h1',
+            Title1Emphasis: 'h2',
+            Title1: 'h2',
+            Title2Emphasis: 'h3',
+            Title2: 'h3',
+            Title3Emphasis: 'h4',
+            Title3: 'h4',
+            Body1Emphasis: 'p',
+            Body1: 'p',
+            Body2Emphasis: 'p',
+            Body2: 'p',
+            CaptionEmphasis: 'span',
+            Caption: 'span',
+            Tag: 'span',
+          },
+        },
+      },
+    },
     typography: {
       fontFamily: 'Pretendard Variable, sans-serif',
       HeadlineEmphasis: {
