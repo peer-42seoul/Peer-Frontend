@@ -71,7 +71,7 @@ const Hitchhiking = () => {
           <CardContainer
             cardList={cardList}
             isLoading={isLoading}
-            update={() => setPage((prev) => prev + 1)}
+            update={() => setPage((prev) => (!data.last ? prev + 1 : prev))}
             setCardList={setCardList}
           />
         ) : (

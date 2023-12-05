@@ -69,7 +69,7 @@ const CardContainer = ({
         prev.splice(-1)
         return prev
       })
-      if (currentIndex === 0) {
+      if (currentIndex === 2) {
         update()
       }
     }
