@@ -7,6 +7,7 @@ import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
 import CardContainer from './panel/CardContainer'
 import CuToggle from '@/components/CuToggle'
+import useMedia from '@/hook/useMedia'
 
 // 1. 메인페이지 api 긁어오기
 // 2. 메인 카드 컴포넌트 가져오기
@@ -16,6 +17,7 @@ const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(true)
 
+  const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=STUDY&sort=latest&page=${page}&pageSize=2&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
     defaultGetFetcher,
@@ -31,7 +33,7 @@ const Hitchhiking = () => {
     <Stack
       justifyContent={'space-between'}
       alignItems={'center'}
-      sx={{ width: '100vw', height: '80vh' }}
+      sx={{ width: '100%', height: '80vh' }}
       direction={'column'}
     >
       <FormControlLabel
@@ -47,12 +49,11 @@ const Hitchhiking = () => {
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          width: '100vw',
-          height: '70vh',
           overflow: 'hidden',
-          position: 'absolute',
-          top: '10vh',
-          left: 0,
+          width: isPc ? '20.5rem' : '90vw',
+          height: '27rem',
+          maxWidth: '20.5rem',
+          position: 'relative',
         }}
       >
         {!message && data?.content ? (
@@ -65,6 +66,7 @@ const Hitchhiking = () => {
           <Typography>{message}</Typography>
         )}
       </Stack>
+      <Typography variant="Title3Emphasis">관심있어요!</Typography>
     </Stack>
   )
 }
