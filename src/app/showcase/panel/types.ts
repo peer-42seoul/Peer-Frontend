@@ -5,14 +5,14 @@ interface tag {
 
 export interface ICardData {
   id: number
-  image: string
+  image: string | null
   name: string
   description: string
   skill: tag[]
   like: number
-  is_liked: boolean
-  is_favorite: boolean
-  team_logo: string | null
-  start_date: Date
-  end_date: Date
+  liked: boolean
+  favorite: boolean
+  teamLogo: string | null
+  start: Date
+  end: Date
 }

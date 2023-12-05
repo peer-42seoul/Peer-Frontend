@@ -11,6 +11,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import useSWR from 'swr'
 import { ICardData } from './panel/types'
 import { defaultGetFetcher } from '@/api/fetchers'
+import { IPagination } from '@/types/IPagination'
 
 const ShowcasePage = () => {
   const [page, setPage] = useState<number>(1)
@@ -19,7 +20,7 @@ const ShowcasePage = () => {
   const [touchEnd, setTouchEnd] = useState(0)
   const constraintsRef = useRef(null)
   const { isPc } = useMedia()
-  const { data, error, isLoading } = useSWR<ICardData[]>(
+  const { data, error, isLoading } = useSWR<IPagination<ICardData[]>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=${page}&pageSize=5`,
     defaultGetFetcher,
   )
@@ -37,9 +38,9 @@ const ShowcasePage = () => {
 
   const handleNextClick = () => {
     if (!data) return
-    if (index < data.length - 1) {
+    if (index < data.content.length - 1) {
       setIndex(index + 1)
-      if (index === data.length - 1) {
+      if (index === data.content.length - 1) {
         setPage(page + 1)
       }
     }
@@ -59,7 +60,7 @@ const ShowcasePage = () => {
     e.stopPropagation()
     if (touchEnd < touchStart + 200) {
       if (!data) return
-      if (index < data.length - 1) {
+      if (index < data.content.length - 1) {
         setIndex(index + 1)
         setTouchEnd(0)
         setTouchStart(0)
@@ -80,11 +81,19 @@ const ShowcasePage = () => {
     exit: { opacity: 0, y: -100 },
   }
 
+  console.log(data)
+
   if (isPc) {
     return (
       <Stack direction={'row'} spacing={2} height={'600px'}>
         <Stack direction={'row'} spacing={1}>
-          <PhoneFrame imageUrl={data ? data[index].image : undefined} />
+          <PhoneFrame
+            imageUrl={
+              data?.content && data.content[index].image
+                ? data.content[index].image
+                : undefined
+            }
+          />
           <Stack direction={'column-reverse'}>
             <Stack>
               <IconButton onClick={handlePrevClick}>
@@ -96,7 +105,7 @@ const ShowcasePage = () => {
             </Stack>
           </Stack>
         </Stack>
-        <ShowcaseCard data={data ? data[index] : undefined} />
+        <ShowcaseCard data={data?.content ? data.content[index] : undefined} />
       </Stack>
     )
   }
@@ -112,7 +121,7 @@ const ShowcasePage = () => {
         <Typography>로딩 중...</Typography>
       ) : error || !data ? (
         <Typography>에러 발생</Typography>
-      ) : data?.length === 0 ? (
+      ) : data.content.length === 0 ? (
         <Typography>데이터가 없습니다</Typography>
       ) : (
         <motion.div ref={constraintsRef}>
@@ -128,7 +137,7 @@ const ShowcasePage = () => {
             exit={'exit'}
             transition={{ duration: 0.3 }}
           >
-            <ShowcaseCard data={data[index]} />
+            <ShowcaseCard data={data.content[index]} />
           </motion.div>
         </motion.div>
       )}
