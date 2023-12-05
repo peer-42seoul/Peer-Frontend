@@ -1,8 +1,7 @@
 'use client'
 
-import { AppBar, Box, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Toolbar } from '@mui/material'
 import SearchButton from './main-page/SearchButton'
-import Image from 'next/image'
 import AlertIcon from './AlertIcon'
 
 const Header = () => {
@@ -12,14 +11,11 @@ const Header = () => {
         <AppBar position="static">
           <Toolbar sx={{ justifyContent: 'space-between' }}>
             <AlertIcon />
-            <Typography component="div">
-              <Image
-                src={'/icons/peer-logo.svg'}
-                alt={'peer-logo'}
-                width={50}
-                height={50}
-              />
-            </Typography>
+            <Box
+              component="img"
+              src={'/icons/peer-logo.svg'}
+              alt={'peer-logo'}
+            />
             <SearchButton />
           </Toolbar>
         </AppBar>
