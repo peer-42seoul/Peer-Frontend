@@ -4,7 +4,7 @@ import { IMessage, IMessageUser } from '@/types/IMessage'
 import CuAvatar from '@/components/CuAvatar'
 import * as style from './MessageItem.style'
 
-type TMessageOption = 'TOP' | 'NEED_EXTRA_MARGIN' | 'NORMAL'
+type TMessageOption = 'Top' | 'Normal' | 'Extra'
 interface IOwnerMessageItemProps {
   message: IMessage
   messageOption: TMessageOption
@@ -46,7 +46,7 @@ export const OwnerMessageItem = ({
       justifyContent={'flex-end'}
       alignItems={'flex-end'}
       spacing={'0.5rem'}
-      sx={messageOption === 'NEED_EXTRA_MARGIN' ? style.extraMargin : undefined}
+      sx={style[`contentMargin${messageOption}`]}
     >
       <MessageDate date={message.date} />
       <Box sx={style.ownerMessage}>
@@ -67,9 +67,9 @@ export const TargetMessageItem = ({
       justifyContent={'flex-start'}
       alignItems={'flex-start'}
       spacing={'0.5rem'}
-      sx={messageOption === 'NEED_EXTRA_MARGIN' ? style.extraMargin : undefined}
+      sx={style[`contentMargin${messageOption}`]}
     >
-      {messageOption === 'NORMAL' ? (
+      {messageOption === 'Normal' ? (
         <CuAvatar sx={style.dummyAvatar} />
       ) : (
         <CuAvatar

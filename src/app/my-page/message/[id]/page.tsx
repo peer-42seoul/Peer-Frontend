@@ -131,11 +131,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         targetProfile={target.userProfile}
         userNickname={target.userNickname}
       />
-      <Stack
-        ref={scrollRef}
-        spacing={'0.5rem'}
-        sx={isPc ? style.pcStack : style.mobileStack}
-      >
+      <Stack ref={scrollRef} sx={isPc ? style.pcStack : style.mobileStack}>
         <Box ref={targetRef}></Box>
         {spinner && <CircularProgress />}
         <MessageStack messageData={updatedData} owner={owner} target={target} />

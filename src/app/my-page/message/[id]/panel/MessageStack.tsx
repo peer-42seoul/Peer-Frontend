@@ -13,10 +13,10 @@ const MessageStack = ({ messageData, owner, target }: IMessageStackProps) => {
       {messageData.map((message: IMessage, index) => {
         const messageOption =
           index === 0
-            ? 'TOP'
+            ? 'Top'
             : messageData[index - 1].userId === message.userId
-              ? 'NEED_EXTRA_MARGIN'
-              : 'NORMAL'
+              ? 'Normal'
+              : 'Extra'
         return (
           <>
             {message.userId === owner.userId ? (

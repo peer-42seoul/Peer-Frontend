@@ -1,7 +1,15 @@
 import { Theme } from '@mui/material'
 
-export const extraMargin = {
-  marginTop: '1rem', // TODO : collapse 여부에 따라 '1rem' or '1.5rem' 조정할것
+export const contentMarginTop = {
+  marginTop: '0',
+}
+
+export const contentMarginNormal = {
+  marginTop: '0.5rem',
+}
+
+export const contentMarginExtra = {
+  marginTop: '1.5rem',
 }
 
 export const date = {
