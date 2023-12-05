@@ -1,7 +1,11 @@
 import React from 'react'
-import Modal from '@mui/material/Modal'
-import { Box, SxProps } from '@mui/material'
+import Modal, { ModalProps } from '@mui/material/Modal'
+import { Box, IconButton, Stack, SxProps, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
+import ChevronLeft from '@/icons/ChevronLeft'
+import CloseIcon from '@/icons/CloseIcon'
+import * as style from './CuModal.style'
+import CuButton from './CuButton'
 
 //   여기 있는 state를 쓰면 됩니다.
 //   const [open, setOpen] = useState(false)
@@ -23,7 +27,7 @@ const defaultstyle = {
 const MobileMessagetstyle = {
   display: 'flex',
   width: '100%',
-  height: '100%',
+  height: '100svh',
   justifyContent: 'center',
   alignItems: 'center',
   position: 'absolute' as 'absolute',
@@ -78,3 +82,92 @@ const CuModal = ({
 }
 
 export default CuModal
+
+interface ICuModalProps extends ModalProps {
+  title?: string
+  mobileFullSize?: boolean // 기본적으로 false입니다.
+  primaryButton: {
+    text: string
+    onClick: () => void
+  }
+  secondaryButton?: {
+    text: string
+    onClick: () => void
+  }
+}
+
+const getModalWrapperStyle = (isPc: boolean, mobileFullSize?: boolean) => {
+  return isPc
+    ? style.pcWrapper
+    : mobileFullSize
+      ? style.mobileFullSizeWrapper
+      : style.mobileWrapper
+}
+
+const CuCuModal = ({
+  title,
+  primaryButton,
+  secondaryButton,
+  mobileFullSize,
+  open,
+  onClose,
+  sx,
+  keepMounted,
+  children,
+}: ICuModalProps) => {
+  const { isPc } = useMedia()
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
+      sx={{ ...sx, ...getModalWrapperStyle(isPc, mobileFullSize) }}
+      keepMounted={!!keepMounted}
+    >
+      <Stack spacing={'1.5rem'}>
+        <Stack
+          direction={'row'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          spacing={'1rem'}
+        >
+          {!isPc && mobileFullSize ? (
+            <IconButton onClick={() => onClose} sx={style.headerMobileButton}>
+              <ChevronLeft />
+            </IconButton>
+          ) : (
+            <Box sx={style.headerDummyButton}></Box>
+          )}
+          <Typography
+            variant={isPc ? 'Title2Emphasis' : 'Body1Emphasis'}
+            color="text.normal"
+            sx={style.title}
+          >
+            {title}
+          </Typography>
+          <IconButton onClick={() => onClose} sx={style.headerCloseButton}>
+            <CloseIcon />
+          </IconButton>
+        </Stack>
+        <Box>{children}</Box>
+        <Stack direction={'row'} spacing={'1rem'}>
+          {secondaryButton ? (
+            <CuButton
+              variant={'text'}
+              message={secondaryButton.text}
+              action={secondaryButton.onClick}
+            />
+          ) : null}
+          <CuButton
+            variant={'contained'}
+            message={primaryButton.text}
+            action={primaryButton.onClick}
+          />
+        </Stack>
+      </Stack>
+    </Modal>
+  )
+}
+
+export { CuCuModal }
