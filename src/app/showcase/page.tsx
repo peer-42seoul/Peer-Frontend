@@ -57,7 +57,7 @@ const ShowcasePage = () => {
 
   const handleTouchEnd = (e: TouchEvent) => {
     e.stopPropagation()
-    if (touchEnd < touchStart) {
+    if (touchEnd < touchStart + 200) {
       if (!data) return
       if (index < data.length - 1) {
         setIndex(index + 1)
@@ -121,12 +121,14 @@ const ShowcasePage = () => {
             variants={variants}
             drag="y"
             dragConstraints={constraintsRef}
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+            dragDirectionLock
             initial="hidden"
             animate="visible"
             exit={'exit'}
             transition={{ duration: 0.3 }}
           >
-            <ShowcaseCard data={data ? data[index] : undefined} />
+            <ShowcaseCard data={data[index]} />
           </motion.div>
         </motion.div>
       )}

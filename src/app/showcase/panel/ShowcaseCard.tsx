@@ -5,21 +5,38 @@ import {
   Card,
   CardActions,
   CardContent,
+  IconButton,
   Stack,
   Typography,
 } from '@mui/material'
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useCallback, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import { ICardData } from './types'
+import useAxiosWithAuth from '@/api/config'
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 
 const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
   const { isPc } = useMedia()
   const [isTouched, setIsTouched] = useState(false)
+  const axiosInstance = useAxiosWithAuth()
 
   const handleCardClick = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setIsTouched(!isTouched)
   }
+
+  const clickLike = useCallback(() => {
+    if (!data) return alert('로그인이 필요합니다.')
+    axiosInstance
+      .post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/like/${data.id}`,
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          data.like = res.data.like
+        }
+      })
+  }, [data, axiosInstance])
 
   if (isPc) {
     return (
@@ -28,7 +45,7 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
           sx={{
             height: isTouched ? '80%' : '30%',
             backgroundColor: 'rgba(0,0,0,0.8)',
-            width: '100%',
+            width: '15rem',
           }}
         >
           {data !== undefined ? (
@@ -37,7 +54,12 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
                 <Stack direction={'row'}>
                   <Typography>팀 이미지</Typography>
                   <Typography>팀 이름: {data.name}</Typography>
-                  <Typography>좋아요</Typography>
+                  <Stack direction={'row'}>
+                    <IconButton onClick={clickLike}>
+                      <ThumbUpIcon />
+                    </IconButton>
+                    <Typography>좋아요: {data.like}</Typography>
+                  </Stack>
                   <Typography>관심 추가</Typography>
                 </Stack>
                 <Typography>글 내용: {data.description}</Typography>
@@ -83,7 +105,12 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
                 <Stack direction={'row'}>
                   <Typography>팀 이미지</Typography>
                   <Typography>팀 이름: {data.name}</Typography>
-                  <Typography>좋아요</Typography>
+                  <Stack direction={'row'}>
+                    <IconButton onClick={clickLike}>
+                      <ThumbUpIcon />
+                    </IconButton>
+                    <Typography>좋아요: {data.like}</Typography>
+                  </Stack>
                   <Typography>관심 추가</Typography>
                 </Stack>
                 <Typography>글 내용: {data.description}</Typography>
