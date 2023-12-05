@@ -29,7 +29,7 @@ const EmailField = ({
         autoComplete="email"
         error={emailSendStatus === 'error'}
         type="text"
-        placeholder="가입할 이메일을 입력하세요"
+        placeholder="가입할 이메일을 입력하세요."
         inputProps={{
           maxLength: 30,
         }}
@@ -51,7 +51,7 @@ const EmailField = ({
         <Typography color="error" variant="Caption">
           {error.message}
         </Typography>
-      )) || <Typography>&nbsp;</Typography>}
+      )) || <Typography variant="Caption">&nbsp;</Typography>}
     </>
   )
 }

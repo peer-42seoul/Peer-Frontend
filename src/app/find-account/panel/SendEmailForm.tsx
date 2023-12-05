@@ -84,9 +84,11 @@ const SendEmailForm = ({
                   disabled={isEmailSuccessful}
                 />
                 {errors.email ? (
-                  <Typography color="error">{errors.email?.message}</Typography>
+                  <Typography color="error" variant="Caption">
+                    {errors.email?.message}
+                  </Typography>
                 ) : (
-                  <Typography>&nbsp;</Typography>
+                  <Typography variant="Caption">&nbsp;</Typography>
                 )}
               </Container>
             )}
