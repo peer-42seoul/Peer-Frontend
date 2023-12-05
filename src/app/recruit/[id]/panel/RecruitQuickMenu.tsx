@@ -1,9 +1,9 @@
 import { IconButton, Stack } from '@mui/material'
 import FavoriteButton from '@/components/FavoriteButton'
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
-import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined'
 import React from 'react'
-//'purple.strong'
+import SirenIcon from '@/app/recruit/[id]/panel/SirenIcon'
+
 const RecruitQuickMenu = ({
   favorite,
   recruit_id,
@@ -18,7 +18,7 @@ const RecruitQuickMenu = ({
         <ShareOutlinedIcon sx={{ color: 'purple.strong' }} />
       </IconButton>
       <IconButton onClick={() => {}}>
-        <FlagOutlinedIcon sx={{ color: 'purple.strong' }} />
+        <SirenIcon sx={{ color: 'purple.strong' }} />
       </IconButton>
     </Stack>
   )
