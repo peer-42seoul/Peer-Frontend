@@ -7,8 +7,8 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
         borderRadius: 10,
         p: 1,
         backgroundColor: 'gray',
-        width: '300px',
-        height: '600px',
+        width: '70%',
+        height: '100%',
       }}
     >
       <Card sx={{ borderRadius: 10, height: '100%', backgroundColor: 'white' }}>
@@ -30,8 +30,8 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
             <Avatar
               src={imageUrl}
               sx={{
-                width: '300px',
-                height: '600px',
+                width: '22.5rem',
+                height: '50rem',
               }}
               variant="rounded"
             />
@@ -39,8 +39,8 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
             <Avatar
               src="/images/icons/icon-512x512.png"
               sx={{
-                width: '300px',
-                height: '600px',
+                width: '22.5rem',
+                height: '50rem',
               }}
               variant="rounded"
             />
