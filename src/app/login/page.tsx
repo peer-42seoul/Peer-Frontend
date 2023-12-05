@@ -42,7 +42,7 @@ const Form = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '8px',
+  gap: '6px',
 }
 
 const PCLabelBox = {
@@ -50,7 +50,7 @@ const PCLabelBox = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '8px',
+  gap: '6px',
   fontSize: '14px',
 }
 
@@ -145,11 +145,11 @@ const Login = () => {
                     placeholder="이메일을 입력하세요."
                   />
                   {errors.userEmail ? (
-                    <Typography color="error">
+                    <Typography color="error" variant="Caption">
                       {errors.userEmail?.message}
                     </Typography>
                   ) : (
-                    <Typography>&nbsp;</Typography>
+                    <Typography variant="Caption">&nbsp;</Typography>
                   )}
                 </Box>
               )}
@@ -189,11 +189,11 @@ const Login = () => {
                     placeholder="비밀번호를 입력하세요."
                   />
                   {errors.password ? (
-                    <Typography color="error">
+                    <Typography color="error" variant="Caption">
                       {errors.password?.message}
                     </Typography>
                   ) : (
-                    <Typography>&nbsp;</Typography>
+                    <Typography variant="Caption">&nbsp;</Typography>
                   )}
                 </Box>
               )}
