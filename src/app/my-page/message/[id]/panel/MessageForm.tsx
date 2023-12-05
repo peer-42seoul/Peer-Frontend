@@ -1,16 +1,16 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { isAxiosError } from 'axios'
-import { Stack, TextField, Typography, IconButton } from '@mui/material'
+import { Stack, TextField, Typography, IconButton, styled } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import { IMessage, IMessageTargetUser } from '@/types/IMessage'
 import SendIcon from '@/icons/SendIcon'
-import BorderlessTextField from '@/components/BorderlessTextField'
 import * as style from './MessageForm.style'
-
-type TMessageSendView = 'PC_VIEW' | 'MOBILE_VIEW'
+import CuTextField from '@/components/CuTextField'
 
 const MAX_LENGTH = 300
+
+type TMessageSendView = 'PC_VIEW' | 'MOBILE_VIEW'
 interface IMessageFormProps {
   view: TMessageSendView
   targetId: number
@@ -19,6 +19,8 @@ interface IMessageFormProps {
   handleClose?: () => void // MOBILE_VIEW에서 모달을 닫기 위함
   disabled?: boolean // PC_VIEW에서 채팅방이 삭제되었을 때 메시지 전송을 막기 위함
 }
+
+const BorderlessTextField = styled(CuTextField)(style.removeBorder)
 
 const MessageForm = ({
   view,

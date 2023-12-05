@@ -1,5 +1,16 @@
 import { Theme } from '@mui/material'
 
+export const removeBorder = {
+  '& .MuiOutlinedInput-notchedOutline': {
+    border: 'none',
+  },
+  '&.Mui-focused': {
+    '& .MuiOutlinedInput-notchedOutline': {
+      border: 'none',
+    },
+  },
+}
+
 export const pcMessageForm = {
   width: '100%',
   paddingRight: '0.5rem',
