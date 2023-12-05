@@ -610,7 +610,9 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       MuiTextField: {
         styleOverrides: {
           root: {
-            height: '32px',
+            '& textarea': {
+              rows: '1',
+            },
             '& input': {
               height: '32px',
               padding: '0px 12px',
@@ -627,7 +629,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
             '& .MuiOutlinedInput-root': {
               padding: '0px',
               borderRadius: '4px',
-              height: '32px',
+              height: 'auto',
               backgroundColor: theme.palette.background.tertiary,
               fontSize: '12px',
               fontWeight: 400,
@@ -647,6 +649,10 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
                 backgroundColor: theme.palette.background.tertiary,
                 opacity: 0.5,
               },
+            },
+            '& .MuiInputBase-inputMultiline': {
+              height: 'auto',
+              padding: '12px',
             },
           },
         },

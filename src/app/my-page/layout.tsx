@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         direction={'row'}
         sx={{ flex: '3, 4' }}
       >
-        <SubNavBar sx={{ width: '308px' }} />
+        <SubNavBar sx={{ width: '244px' }} />
         <Box
           sx={{
             maxWidth: '908px',

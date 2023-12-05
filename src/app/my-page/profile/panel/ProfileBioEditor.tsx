@@ -10,6 +10,7 @@ import {
   IconButton,
   InputAdornment,
   Typography,
+  Stack,
 } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
@@ -229,6 +230,7 @@ const ProfileBioEditor = ({
         }
         action={onClick}
         message="중복 확인"
+        TypographyProps={{ variant: 'CaptionEmphasis' }}
       />
     )
   }
@@ -301,7 +303,8 @@ const ProfileBioEditor = ({
           <Grid item xs={12}>
             {/* <Controller
               render={({ field }) => ( */}
-            <Box>
+            <Stack gap={2}>
+              <Typography variant="CaptionEmphasis">프로필 사진</Typography>
               <Box
                 width={[56, 100]}
                 height={[56, 100]}
@@ -367,13 +370,21 @@ const ProfileBioEditor = ({
                   />
                 </Button>
               </Box>
-            </Box>
+            </Stack>
           </Grid>
           {/* nickname, association, email, introduction */}
-          <Grid item container spacing={2} justifyContent={'flex-start'}>
+          <Grid
+            item
+            container
+            spacing={3}
+            justifyContent={'flex-start'}
+            alignItems={'center'}
+          >
             {/* 닉네임 수정 */}
             <Grid item xs={3}>
-              <CuTextFieldLabel htmlFor="nickname">닉네임</CuTextFieldLabel>
+              <CuTextFieldLabel htmlFor="nickname">
+                <Typography variant="CaptionEmphasis">닉네임</Typography>
+              </CuTextFieldLabel>
             </Grid>
             <Grid item xs={9}>
               <Controller
@@ -423,24 +434,24 @@ const ProfileBioEditor = ({
             </Grid>
             {/* association */}
             <Grid item xs={3}>
-              <Typography>소속</Typography>
+              <Typography variant="CaptionEmphasis">소속</Typography>
             </Grid>
             <Grid item xs={9}>
-              <Typography>
+              <Typography variant="Caption">
                 {data.association ? data.association : '해당 없음'}
               </Typography>
             </Grid>
             {/* email */}
             <Grid item xs={3}>
-              <Typography>아이디</Typography>
+              <Typography variant="CaptionEmphasis">아이디</Typography>
             </Grid>
             <Grid item xs={9}>
-              <Typography>{data.email}</Typography>
+              <Typography variant="Caption">{data.email}</Typography>
             </Grid>
             {/* introduction message */}
-            <Grid item xs={12} style={{ display: 'none' }}>
+            <Grid item xs={12}>
               <CuTextFieldLabel htmlFor="introduction">
-                자기 소개
+                <Typography variant="CaptionEmphasis">소개</Typography>
               </CuTextFieldLabel>
             </Grid>
             <Grid item xs={12}>

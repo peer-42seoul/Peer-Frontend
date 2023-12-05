@@ -29,7 +29,7 @@ const SubNavBar = ({ sx }: { sx: SxProps }) => {
   const { isPc } = useMedia()
 
   const tabStyle: SxProps = {
-    maxWidth: '308px',
+    maxWidth: '244px',
     padding: '0 32px',
     width: '100%',
   }
@@ -45,7 +45,7 @@ const SubNavBar = ({ sx }: { sx: SxProps }) => {
   return (
     <Box
       sx={{
-        padding: '24px 32px',
+        p: '24px 32px',
         ...sx,
       }}
     >

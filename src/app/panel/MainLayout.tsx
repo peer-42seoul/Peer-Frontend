@@ -8,21 +8,21 @@ import { usePathname } from 'next/navigation'
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
 
-  if (
-    pathname === '/login' ||
-    pathname === '/signup' ||
-    pathname === '/find-account'
-  )
-    return (
-      <Box sx={{ backgroundColor: 'background.primary' }}>
-        <div className="mobile-layout">
-          <Box sx={{ marginBottom: '60px' }}>{children}</Box>
-        </div>
-        <div className="pc-layout">
-          <Box sx={{ marginY: '60px' }}>{children}</Box>
-        </div>
-      </Box>
-    )
+  // if (
+  //   pathname === '/login' ||
+  //   pathname === '/signup' ||
+  //   pathname === '/find-account'
+  // )
+  //   return (
+  //     <Box sx={{ backgroundColor: 'background.primary' }}>
+  //       <div className="mobile-layout">
+  //         <Box sx={{ marginBottom: '60px' }}>{children}</Box>
+  //       </div>
+  //       <div className="pc-layout">
+  //         <Box sx={{ marginY: '60px' }}>{children}</Box>
+  //       </div>
+  //     </Box>
+  //   )
 
   if (pathname === '/showcase') {
     return (
