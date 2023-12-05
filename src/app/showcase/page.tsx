@@ -14,6 +14,7 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import { IPagination } from '@/types/IPagination'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
+import { AxiosInstance } from 'axios'
 
 const ShowcasePage = () => {
   const [page, setPage] = useState<number>(1)
