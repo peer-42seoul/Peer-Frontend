@@ -36,6 +36,11 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
       .then((res) => {
         if (res.status === 200) {
           console.log(res)
+          if (data.like < res.data.like) {
+            data.liked = true
+          } else {
+            data.liked = false
+          }
           data.like = res.data.like
         }
       })
@@ -62,30 +67,30 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
           sx={{
             height: isTouched ? '80%' : '30%',
             backgroundColor: 'rgba(0,0,0,0.8)',
-            width: '20rem',
+            width: '23rem',
           }}
         >
           {data !== undefined ? (
             <CardActions onClick={handleCardClick}>
               <CardContent>
-                <Stack direction={'row'} spacing={10}>
+                <Stack direction={'row'} height={'1.5rem'}>
                   <Stack direction={'row'} spacing={1}>
-                    <Typography>팀 이미지</Typography>
-                    <Typography>팀 이름: {data.name}</Typography>
+                    <Avatar
+                      src={data.image!}
+                      sx={{ width: '1.5rem', height: '1.5rem' }}
+                    />
+                    <Typography>{data.name}</Typography>
                   </Stack>
                   <Stack direction={'row'} spacing={1}>
                     <IconButton
                       onClick={clickLike}
                       color="primary"
                       size="small"
-                      sx={{ mr: 1 }}
                     >
                       <ThumbUpIcon />
                     </IconButton>
                     <Typography>{data.like}</Typography>
-                  </Stack>
-                  <Stack>
-                    <Typography>관심 추가</Typography>
+
                     <ToggleButton
                       value={data.favorite}
                       onClick={clickFavorite}

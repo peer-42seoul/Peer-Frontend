@@ -27,7 +27,7 @@ const ShowcasePage = () => {
 
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const { data, error, isLoading } = useSWR<IPagination<ICardData[]>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=${page}&pageSize=5`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=${page}&pageSize=3`,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
