@@ -13,6 +13,7 @@ import useModal from '@/hook/useModal'
 import { useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
+import OthersProfile from '@/app/panel/OthersProfile'
 
 const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
   const { isPc } = useMedia()
@@ -136,8 +137,9 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
                 >
                   X
                 </Button>
-                <Avatar sx={{ margin: 'auto' }}>A</Avatar>
-
+                <OthersProfile name={member.name} userId={member.id}>
+                  <Avatar sx={{ margin: 'auto' }}>A</Avatar>
+                </OthersProfile>
                 <Typography fontWeight="bold">{member.name}</Typography>
                 <Stack direction="row" sx={{ justifyContent: 'center' }}>
                   <Typography fontSize="small">리더 권한</Typography>
