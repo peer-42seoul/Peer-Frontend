@@ -56,7 +56,9 @@ const LinkButton = ({
         sx={{ zIndex: 1303 }}
         container={() => document.getElementById('modal-root')}
       >
-        <Typography sx={{ padding: 2 }}>{href}</Typography>
+        <Typography variant={'body2'} sx={{ padding: 2 }}>
+          {href}
+        </Typography>
       </Popover>
     </div>
   )

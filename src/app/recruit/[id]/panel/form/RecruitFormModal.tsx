@@ -1,5 +1,5 @@
 import useToast from '@/hook/useToast'
-import { Box, Button, Modal, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ConfirmModal from './ConfirmModal'
@@ -10,6 +10,7 @@ import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
+import CuTextField from '@/components/CuTextField'
 interface IInterviewData {
   question: string
   type: 'CLOSE' | 'OPEN' | 'RATIO' | 'CHECK'
@@ -159,8 +160,9 @@ const RecruitFormModal = ({
                       control={control}
                       defaultValue=""
                       render={({ field }) => (
-                        <TextField
+                        <CuTextField
                           {...field}
+                          variant="standard"
                           error={!!errors[idx]}
                           helperText={errors[idx]?.message as string}
                         />

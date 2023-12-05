@@ -47,6 +47,7 @@ export interface IPostDetail {
   image: string
   totalNumber: number
   favorite: boolean
+  teamName: string
 }
 
 export interface IFormInterview {

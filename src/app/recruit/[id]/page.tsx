@@ -55,6 +55,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
       : defaultGetFetcher,
   )
 
+  console.log('Data', data)
   // const total = useMemo(() => {
   //   if (!data) return 0
   //   return data?.roleList?.reduce((acc, cur) => {
@@ -75,6 +76,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   if (error) return <Typography>에러 발생</Typography>
   if (!data) return <Typography>데이터가 없습니다</Typography>
 
+  // pc뷰
   if (isPc) {
     return (
       <>
@@ -105,8 +107,8 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 <Image
                   src={data?.image ?? ''}
                   alt="leader_profile"
-                  width={300}
-                  height={300}
+                  width={240}
+                  height={160}
                   style={{ border: '1px solid white' }}
                 />
                 <Box display="flex" flexDirection="column" gap={2}>
@@ -131,7 +133,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                       src={data?.leader_image}
                       sizes={'small'}
                     />
-                    <Typography>프로젝트명</Typography>
+                    <Typography variant={'Body2'}>{data?.teamName}</Typography>
                     <LinkButton href={data?.link} variant={'contained'} />
                   </Stack>
                   {data?.roleList?.length ? (
@@ -155,7 +157,11 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               <Stack gap={2}>
                 <RecruitContentText
                   label="작성자"
-                  content={data?.leader_nickname}
+                  content={
+                    data?.leader_nickname
+                      ? data.leader_nickname
+                      : '존재하지 않는 유저'
+                  }
                   icon={<PersonOutlineOutlinedIcon />}
                 />
                 <RecruitContentText
@@ -228,6 +234,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     )
   }
 
+  // 모바일 뷰
   return (
     <>
       <RecruitFormModal
@@ -271,8 +278,8 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           <Image
             src={data?.image ?? ''}
             alt="leader_profile"
-            width={300}
-            height={300}
+            width={240}
+            height={160}
           />
           <RecruitContentText label="목표 작업기간" content={data?.due} />
           <RecruitContentText label="지역">

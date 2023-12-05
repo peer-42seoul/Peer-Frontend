@@ -73,7 +73,13 @@ const MainCard = ({
             </Avatar>
           </OthersProfile>
         }
-        action={<FavoriteButton favorite={favorite} recruit_id={recruit_id} />}
+        action={
+          <FavoriteButton
+            favorite={favorite}
+            recruit_id={recruit_id}
+            redirect_url={'/'}
+          />
+        }
         title={user_nickname}
       />
       <Link
