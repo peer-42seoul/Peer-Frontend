@@ -70,7 +70,7 @@ export const TargetMessageItem = ({
       sx={messageOption === 'NEED_EXTRA_MARGIN' ? style.extraMargin : undefined}
     >
       {messageOption === 'NORMAL' ? (
-        <Box sx={style.dummyAvatar}></Box>
+        <CuAvatar sx={style.dummyAvatar} />
       ) : (
         <CuAvatar
           src={target.userProfile}
