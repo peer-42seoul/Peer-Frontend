@@ -2,7 +2,7 @@
 import { defaultGetFetcher } from '@/api/fetchers'
 import { IMainCard } from '@/types/IPostDetail'
 import { FormControlLabel, Stack, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
 import CardContainer from './panel/CardContainer'
@@ -16,12 +16,24 @@ import useMedia from '@/hook/useMedia'
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(true)
+  const [cardList, setCardList] = useState<Array<IMainCard>>([])
 
   const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=STUDY&sort=latest&page=${page}&pageSize=2&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=STUDY&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
     defaultGetFetcher,
   )
+
+  useEffect(() => {
+    if (!isLoading && data?.content) {
+      setCardList((prev) => {
+        const newArray = prev.concat(data.content)
+        return newArray
+      })
+      console.log(data.content)
+      console.log('test')
+    }
+  }, [isLoading, data?.content])
 
   let message: string = ''
 
@@ -49,7 +61,6 @@ const Hitchhiking = () => {
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          overflow: 'hidden',
           width: isPc ? '20.5rem' : '90vw',
           height: '27rem',
           maxWidth: '20.5rem',
@@ -58,9 +69,10 @@ const Hitchhiking = () => {
       >
         {!message && data?.content ? (
           <CardContainer
-            cardList={data.content}
+            cardList={cardList}
             isLoading={isLoading}
             update={() => setPage((prev) => prev + 1)}
+            setCardList={setCardList}
           />
         ) : (
           <Typography>{message}</Typography>

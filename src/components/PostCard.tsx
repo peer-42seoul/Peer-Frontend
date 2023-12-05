@@ -13,14 +13,10 @@ import { IPostCard } from '@/types/IPostCard'
 import { ITag } from '@/types/IPostDetail'
 import { Chip } from '@mui/material'
 
-const PostCard = ({
-  authorImage,
-  teamName,
-  title,
-  tagList,
-  image,
-  sx,
-}: IPostCard) => {
+const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
+  { authorImage, teamName, title, tagList, image, sx }: IPostCard,
+  ref,
+) {
   return (
     <Card
       sx={{
@@ -28,6 +24,7 @@ const PostCard = ({
         display: 'flex',
         flexDirection: 'column',
       }}
+      ref={ref}
     >
       <CardMedia
         component="img"
@@ -97,6 +94,6 @@ const PostCard = ({
       </Stack>
     </Card>
   )
-}
+})
 
 export default PostCard
