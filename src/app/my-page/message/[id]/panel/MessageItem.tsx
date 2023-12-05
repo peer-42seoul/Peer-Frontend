@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { Box, Stack, Typography } from '@mui/material'
-import { IMessage, IMessageUser } from '@/types/IMessage'
 import CuAvatar from '@/components/CuAvatar'
+import { IMessage, IMessageUser } from '@/types/IMessage'
 import * as style from './MessageItem.style'
 
 type TMessageOption = 'Top' | 'Normal' | 'Extra'

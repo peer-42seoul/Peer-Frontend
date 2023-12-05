@@ -3,10 +3,10 @@ import { isAxiosError } from 'axios'
 import { Stack, TextField, Typography, IconButton, styled } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
-import { IMessage, IMessageTargetUser } from '@/types/IMessage'
-import SendIcon from '@/icons/SendIcon'
-import * as style from './MessageForm.style'
 import CuTextField from '@/components/CuTextField'
+import SendIcon from '@/icons/SendIcon'
+import { IMessage, IMessageTargetUser } from '@/types/IMessage'
+import * as style from './MessageForm.style'
 
 const MAX_LENGTH = 300
 
