@@ -2,7 +2,7 @@
 
 import useMedia from '@/hook/useMedia'
 import useShowTeamCategory from '@/states/useShowTeamCategory'
-import { ToggleButton, ToggleButtonGroup } from '@mui/material'
+import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { useState } from 'react'
 
 const TeamSidebar = () => {
@@ -43,28 +43,28 @@ const TeamSidebar = () => {
             onClick={onClickMain}
             sx={{ m: 'dense' }}
           >
-            메인
+            <Typography>메인</Typography>
           </ToggleButton>
           <ToggleButton
             value={'공지사항'}
             onClick={onClickNotice}
             sx={{ m: 'dense' }}
           >
-            공지사항
+            <Typography>공지사항</Typography>
           </ToggleButton>
           <ToggleButton
             value={'게시판'}
             onClick={onClickBoard}
             sx={{ m: 'dense' }}
           >
-            게시판
+            <Typography>게시판</Typography>
           </ToggleButton>
           <ToggleButton
             value={'팀 설정'}
             onClick={onClickSetting}
             sx={{ m: 'dense' }}
           >
-            팀 설정
+            <Typography>팀 설정</Typography>
           </ToggleButton>
         </ToggleButtonGroup>
       ) : (
@@ -79,7 +79,7 @@ const TeamSidebar = () => {
             onClick={onClickMain}
             sx={{ m: 'dense' }}
           >
-            메인
+            <Typography>메인</Typography>
           </ToggleButton>
 
           <ToggleButton
@@ -87,7 +87,7 @@ const TeamSidebar = () => {
             onClick={onClickNotice}
             sx={{ m: 'dense' }}
           >
-            공지사항
+            <Typography>공지사항</Typography>
           </ToggleButton>
 
           <ToggleButton
@@ -95,7 +95,7 @@ const TeamSidebar = () => {
             onClick={onClickBoard}
             sx={{ m: 'dense' }}
           >
-            게시판
+            <Typography>게시판</Typography>
           </ToggleButton>
 
           <ToggleButton
@@ -103,7 +103,7 @@ const TeamSidebar = () => {
             onClick={onClickSetting}
             sx={{ m: 'dense' }}
           >
-            팀 설정
+            <Typography>팀 설정</Typography>
           </ToggleButton>
         </ToggleButtonGroup>
       )}
