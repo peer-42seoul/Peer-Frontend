@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import CuModal from './CuModal'
 import { ICuModalProps } from './CuModal'
 

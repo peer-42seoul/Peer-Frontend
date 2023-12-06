@@ -1,7 +1,6 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
-import CuModal from '@/components/CuModal'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useModal from '@/hook/useModal'

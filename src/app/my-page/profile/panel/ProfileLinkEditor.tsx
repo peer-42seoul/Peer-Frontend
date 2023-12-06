@@ -1,7 +1,6 @@
 import React from 'react'
-import SettingContainer from './SettingContainer'
 import { IUserProfileLink } from '@/types/IUserProfile'
-import { AlertColor, Box, Grid } from '@mui/material'
+import { AlertColor, Grid } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'

@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Stack, TextField, Typography } from '@mui/material'
+import { Button, Stack, TextField } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import { IMessageListData, IMessageTarget } from '@/types/IMessage'

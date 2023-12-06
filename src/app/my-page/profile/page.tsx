@@ -3,11 +3,9 @@ import { AlertColor, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ProfileCard from './panel/ProfileCard'
 import { IUserProfile } from '@/types/IUserProfile'
-import CuModal from '@/components/CuModal'
 import ProfileBioEditor from './panel/ProfileBioEditor'
 import ProfileLinkEditor from './panel/ProfileLinkEditor'
 import useToast from '@/hook/useToast'
-import useMedia from '@/hook/useMedia'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import useAuthStore from '@/states/useAuthStore'
@@ -25,19 +23,6 @@ interface IModals {
 interface IToastProps {
   severity?: AlertColor
   message: string
-}
-
-const mobileStyle = {
-  width: '100vmax',
-  height: '100vmax',
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
 }
 
 // TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
@@ -63,8 +48,6 @@ const MyProfile = () => {
   const [toastMessage, setToastMessage] = useState<IToastProps>(
     {} as IToastProps,
   )
-
-  const { isPc } = useMedia()
 
   useEffect(() => {
     const newModalOpen: IModals = {

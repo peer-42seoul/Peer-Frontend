@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Portal,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, IconButton, Portal, Stack, Typography } from '@mui/material'
 import TmpNoticeWidget from '@/app/teams/@main/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/@main/[id]/panel/widgets/TmpBoardWidget'
 import TmpCalenderWidget from '@/app/teams/@main/[id]/panel/widgets/TmpCalenderWidget'
@@ -30,7 +23,6 @@ import useToast from '@/hook/useToast'
 import useAxiosWithAuth from '@/api/config'
 
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
-import CuModal from '@/components/CuModal'
 import CuTextModal from '@/components/CuTextModal'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)

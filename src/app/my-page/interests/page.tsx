@@ -1,22 +1,13 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
 import { ProjectType } from '@/app/panel/MainPage'
-import CloseButton from '@/components/CloseButton'
 import CuButton from '@/components/CuButton'
-import CuModal from '@/components/CuModal'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
 import { IMainCard } from '@/types/IPostDetail'
-import {
-  AlertColor,
-  MenuItem,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from '@mui/material'
+import { AlertColor, MenuItem, Tab, Tabs, Typography } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'

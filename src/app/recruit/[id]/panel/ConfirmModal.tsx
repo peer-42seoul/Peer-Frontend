@@ -1,7 +1,4 @@
-import CuModal from '@/components/CuModal'
 import CuTextModal from '@/components/CuTextModal'
-import LoadingButton from '@/components/LoadingButton'
-import { Box, Typography, Button } from '@mui/material'
 import { Dispatch } from 'react'
 
 const ConfirmModal = ({
