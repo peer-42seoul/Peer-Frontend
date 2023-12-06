@@ -12,11 +12,17 @@ import {
 } from '@mui/material'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import SearchButton from './main-page/SearchButton'
+import SearchButton from '../main-page/SearchButton'
 import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'
 import AlertIcon from './AlertIcon'
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined'
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined'
+import TabletMacOutlinedIcon from '@mui/icons-material/TabletMacOutlined'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 
 export const MobileNav = () => {
   const [value, setValue] = useState(0)
@@ -45,22 +51,22 @@ export const MobileNav = () => {
         overflow: 'hidden',
         zIndex: 1400,
       }}
-      elevation={3}
     >
       <BottomNavigation
-        showLabels
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue)
         }}
       >
         <BottomNavigationAction
+          icon={<HomeOutlinedIcon />}
           label="홈"
           onClick={() => {
             router.push('/')
           }}
         />
         <BottomNavigationAction
+          icon={<ThumbUpAltOutlinedIcon />}
           label="히치하이킹"
           onClick={() => {
             router.push('/')
@@ -71,18 +77,21 @@ export const MobileNav = () => {
           onClick={() => {
             router.push('/showcase')
           }}
+          icon={<GroupOutlinedIcon />}
         />
         <BottomNavigationAction
           label="팀페이지"
           onClick={() => {
             router.push('/team-list')
           }}
+          icon={<TabletMacOutlinedIcon />}
         />
         <BottomNavigationAction
           label="내 프로필"
           onClick={() => {
             router.push(isLogin ? '/my-page' : '/login?redirect=/my-page')
           }}
+          icon={<PersonOutlineOutlinedIcon />}
         />
       </BottomNavigation>
     </Paper>
@@ -107,6 +116,7 @@ export const PcNav = () => {
     <Stack
       direction={'row'}
       justifyContent={'space-between'}
+      alignItems={'center'}
       sx={{
         position: 'fixed',
         left: 0,
@@ -115,41 +125,47 @@ export const PcNav = () => {
         overflow: 'hidden',
         zIndex: 1400,
         backgroundColor: 'background.primary',
+        paddingX: 3,
       }}
     >
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue)
-        }}
-      >
-        <BottomNavigationAction
-          label="홈"
-          onClick={() => {
-            router.push('/')
+      <Stack direction={'row'}>
+        <Stack alignItems={'center'} justifyContent={'center'}>
+          <PeerLogo sx={{ width: 50, height: 50 }} />
+        </Stack>
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue)
           }}
-        />
-        <BottomNavigationAction
-          label="히치하이킹"
-          onClick={() => {
-            router.push('/')
-          }}
-        />
+        >
+          <BottomNavigationAction
+            label="홈"
+            onClick={() => {
+              router.push('/')
+            }}
+          />
+          <BottomNavigationAction
+            label="히치하이킹"
+            onClick={() => {
+              router.push('/')
+            }}
+          />
 
-        <BottomNavigationAction
-          label="팀페이지"
-          onClick={() => {
-            router.push('/team-list')
-          }}
-        />
-        <BottomNavigationAction
-          label="쇼케이스"
-          onClick={() => {
-            router.push('/showcase')
-          }}
-        />
-      </BottomNavigation>
+          <BottomNavigationAction
+            label="팀페이지"
+            onClick={() => {
+              router.push('/team-list')
+            }}
+          />
+          <BottomNavigationAction
+            label="쇼케이스"
+            onClick={() => {
+              router.push('/showcase')
+            }}
+          />
+        </BottomNavigation>
+      </Stack>
       <Stack direction={'row'} alignItems={'center'}>
         <AlertIcon />
         <SearchButton />
@@ -159,16 +175,19 @@ export const PcNav = () => {
           </IconButton>
         </Link>
         <Avatar
+          sx={{ cursor: 'pointer' }}
           onClick={() =>
             router.push(
               isLogin ? '/my-page/profile' : '/login?redirect=/my-page/profile',
             )
           }
         />
-        <Link href={'/recruit/write'}>
+        <Link
+          href={isLogin ? '/recruit/write' : '/login?redirect=/recruit/write'}
+        >
           {isTablet ? (
             <IconButton>
-              <BorderColor />
+              <BorderColor color={'primary'} />
             </IconButton>
           ) : (
             <Button variant="outlined" startIcon={<BorderColor />}>
