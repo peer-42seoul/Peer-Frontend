@@ -47,11 +47,9 @@ const EmailField = ({
           ),
         }}
       />
-      {(error && (
-        <Typography color="error" variant="Caption">
-          {error.message}
-        </Typography>
-      )) || <Typography variant="Caption">&nbsp;</Typography>}
+      <Typography color="error" variant="Caption">
+        {error?.message || '\u00A0'}
+      </Typography>
     </>
   )
 }
