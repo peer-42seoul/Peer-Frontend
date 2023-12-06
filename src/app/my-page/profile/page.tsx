@@ -145,21 +145,14 @@ const MyProfile = () => {
         mutate={mutate}
         open={modalOpen.introduction}
       />
-      <CuModal
+      <ProfileLinkEditor
+        links={userInfo?.linkList}
+        closeModal={() => setModalType('')}
+        setToastMessage={setToastMessage}
+        setToastOpen={openToast}
+        mutate={mutate}
         open={modalOpen.links}
-        handleClose={() => setModalType('')}
-        ariaTitle="profile-links-setting-modal-title"
-        ariaDescription="profile-links-setting-modal-description"
-        style={isPc ? undefined : mobileStyle}
-      >
-        <ProfileLinkEditor
-          links={userInfo?.linkList}
-          closeModal={() => setModalType('')}
-          setToastMessage={setToastMessage}
-          setToastOpen={openToast}
-          mutate={mutate}
-        />
-      </CuModal>
+      />
       {/* toast */}
       <CuToast
         open={isToastOpen}
