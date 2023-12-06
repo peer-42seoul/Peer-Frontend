@@ -44,6 +44,7 @@
     "react-grid-layout": "^1.4.3",
     "react-hook-form": "^7.45.4",
     "react-slick": "^0.29.0",
+    "react-virtuoso": "^4.6.2",
     "slick-carousel": "^1.8.1",
     "swr": "^2.2.4",
     "tls": "^0.0.1",
