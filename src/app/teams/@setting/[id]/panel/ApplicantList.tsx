@@ -4,7 +4,6 @@ import { Avatar, Button, Stack, Typography } from '@mui/material'
 import { IApplicant } from '../../../types/types'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
 import useMedia from '@/hook/useMedia'
 import FormAnswer from './RecuitFormAnswer'
 import useAxiosWithAuth from '@/api/config'
@@ -26,7 +25,7 @@ const ApplicantList = ({
 
   const { data, isLoading } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/${teamId}`,
-    defaultGetFetcher,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
   const [members, setMembers] = useState<IApplicant[]>([])
   const [member, setMember] = useState<IApplicant | null>(
