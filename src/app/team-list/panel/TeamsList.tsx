@@ -9,10 +9,8 @@ import RoomIcon from '@mui/icons-material/Room'
 import WifiIcon from '@mui/icons-material/Wifi'
 import useShowTeams from '@/states/useShowTeams'
 import { grey } from '@mui/material/colors'
-import useMedia from '@/hook/useMedia'
 
 const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
-  const { isPc } = useMedia()
   const router = useRouter()
   const { showTeams } = useShowTeams()
 
