@@ -17,12 +17,14 @@ import * as style from './CuModal.style'
  * @param text 버튼에 표시될 텍스트입니다.
  * @param onClick 버튼을 클릭했을 때 실행될 함수입니다.
  * @param type 버튼의 타입입니다. (기본값: 'button')
+ * @param form 버튼이 속한 폼의 id입니다.
  */
 
 interface IModalButton {
   text: string
-  onClick: () => void
+  onClick?: () => void
   type?: 'button' | 'submit' | 'reset'
+  form?: string
 }
 
 /**
@@ -103,6 +105,7 @@ const CuModal = ({
               style={style.textButton}
               TypographyProps={style.textButtonTypo}
               type={textButton.type}
+              form={textButton.form}
             />
           ) : null}
           <CuButton
@@ -113,6 +116,7 @@ const CuModal = ({
             style={style.containedButton}
             TypographyProps={style.containedButtonTypo}
             type={containedButton.type}
+            form={containedButton.form}
           />
         </Stack>
       </Stack>
