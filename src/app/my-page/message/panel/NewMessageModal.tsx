@@ -45,12 +45,20 @@ const NewMessageModal = ({
   return (
     <CuModal
       open={isOpen}
-      handleClose={handleClose}
-      ariaTitle={'create_message'}
-      ariaDescription={'create_message'}
+      onClose={handleClose}
+      title={'새 쪽지'}
+      mobileFullSize
+      containedButton={{
+        text: '보내기',
+        type: 'submit',
+        form: 'new-message-form',
+      }}
+      textButton={{
+        text: '취소',
+        onClick: handleClose,
+      }}
     >
       <Stack alignItems={'center'} spacing={2}>
-        <Typography>새 쪽지</Typography>
         <Stack direction={'row'} alignItems={'stretch'} sx={{ width: '100%' }}>
           <TextField
             sx={{ width: '100%' }}

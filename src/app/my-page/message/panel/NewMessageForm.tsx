@@ -21,7 +21,8 @@ const NewMessageForm = ({
 }: INewMessageFormProps) => {
   const [content, setContent] = useState('')
   const axiosInstance = useAxiosWithAuth()
-  const messageSubmitHandler = useCallback(async () => {
+  const messageSubmitHandler = async () => {
+    // TODO : state 대신 formdata 사용할 수 있도록 수정
     try {
       if (!content) {
         alert('내용을 입력하세요.')
@@ -44,10 +45,10 @@ const NewMessageForm = ({
     } catch (error) {
       alert('쪽지 전송에 실패하였습니다. 다시 시도해주세요.')
     }
-  }, [content, userInfo])
+  }
 
   return (
-    <>
+    <form onSubmit={messageSubmitHandler} id={'new-message-form'}>
       <Typography>{`받는 사람 : ${
         userInfo ? userInfo.targetNickname : ''
       }`}</Typography>
@@ -60,15 +61,7 @@ const NewMessageForm = ({
         rows={3}
         onChange={(e) => setContent(e.target.value)}
       />
-      <Stack direction={'row'} justifyContent={'space-around'} spacing={3}>
-        <Button variant="contained" onClick={() => handleClose()}>
-          취소
-        </Button>
-        <Button variant="contained" onClick={messageSubmitHandler}>
-          보내기
-        </Button>
-      </Stack>
-    </>
+    </form>
   )
 }
 
