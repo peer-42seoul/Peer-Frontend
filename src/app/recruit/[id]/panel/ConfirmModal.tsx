@@ -1,4 +1,5 @@
 import CuModal from '@/components/CuModal'
+import CuTextModal from '@/components/CuTextModal'
 import LoadingButton from '@/components/LoadingButton'
 import { Box, Typography, Button } from '@mui/material'
 import { Dispatch } from 'react'
@@ -15,37 +16,25 @@ const ConfirmModal = ({
   isLoading: boolean
 }) => {
   return (
-    <CuModal
+    <CuTextModal
       open={open}
-      handleClose={() => setOpen(false)}
-      ariaTitle="modal-title"
-      ariaDescription="modal-description"
+      onClose={() => setOpen(false)}
+      title={'지원서 제출'}
+      containedButton={{
+        text: '확인',
+        onClick: () => {
+          submitForm()
+          setOpen(false)
+        },
+        isLoading: isLoading,
+      }}
+      textButton={{
+        text: '취소',
+        onClick: () => setOpen(false),
+      }}
+      content={'지원서를 제출하시겠습니까?'}
       sx={{ zIndex: 1450 }}
-    >
-      <Box>
-        <Typography variant="h4" id="modal-title">
-          지원서 제출
-        </Typography>
-        <Typography id="modal-description">
-          지원서를 제출하시겠습니까?
-        </Typography>
-        <Box>
-          <Button variant="outlined" onClick={() => setOpen(false)}>
-            취소
-          </Button>
-          <LoadingButton
-            variant="outlined"
-            isLoading={isLoading}
-            onClick={() => {
-              submitForm()
-              setOpen(false)
-            }}
-          >
-            확인
-          </LoadingButton>
-        </Box>
-      </Box>
-    </CuModal>
+    />
   )
 }
 
