@@ -17,6 +17,7 @@ import {
 import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
 import TagChip from './TagChip'
+import CuTextModal from '@/components/CuTextModal'
 
 interface IChip {
   key: number
@@ -223,42 +224,20 @@ const KeywordDisplayBox = ({
           isLoading={isLoading}
         />
       )}
-      <CuModal
-        ariaTitle="alert-modal-title"
-        ariaDescription="alert-modal-description"
+      <CuTextModal
         open={isOpen}
-        handleClose={closeModal}
-        style={{
-          position: 'absolute' as 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
+        onClose={closeModal}
+        title={'삭제'}
+        content={'모든 키워드를 삭제하시겠습니까?'}
+        containedButton={{
+          text: '삭제',
+          onClick: deleteAll,
         }}
-      >
-        <Box>
-          <Typography id="alert-modal-title">삭제</Typography>
-          <Typography id="alert-modal-description">
-            모든 키워드를 삭제하시겠습니까?
-          </Typography>
-          <CuButton
-            variant="contained"
-            action={closeModal}
-            message="취소"
-            style={{ width: '50%' }}
-          />
-          <CuButton
-            variant="contained"
-            action={deleteAll}
-            message="삭제"
-            style={{ width: '50%' }}
-          />
-        </Box>
-      </CuModal>
+        textButton={{
+          text: '취소',
+          onClick: closeModal,
+        }}
+      />
     </Box>
   )
 }
