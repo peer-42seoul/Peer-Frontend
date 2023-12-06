@@ -83,16 +83,11 @@ const SendEmailForm = ({
                   style={{ width: '100%' }}
                   disabled={isEmailSuccessful}
                 />
-                {!isEmailSuccessful &&
-                  (errors.email ? (
-                    <Typography color="error" variant="Caption">
-                      {errors.email?.message}
-                    </Typography>
-                  ) : (
-                    <Typography variant="Caption">&nbsp;</Typography>
-                  ))}
-
-                {isEmailSuccessful && (
+                {!isEmailSuccessful ? (
+                  <Typography color="error" variant="Caption">
+                    {errors.email ? errors.email.message : <>&nbsp;</>}
+                  </Typography>
+                ) : (
                   <Stack
                     direction="row"
                     sx={{
