@@ -5,6 +5,7 @@ import {
   ModalProps,
   Stack,
   Typography,
+  CircularProgress,
 } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import ChevronLeft from '@/icons/ChevronLeft'
@@ -18,6 +19,7 @@ import * as style from './CuModal.style'
  * @param onClick 버튼을 클릭했을 때 실행될 함수입니다.
  * @param type 버튼의 타입입니다. (기본값: 'button')
  * @param form 버튼이 속한 폼의 id입니다.
+ * @param isLoading 버튼이 로딩 중인지 여부입니다. (기본값: false)
  */
 
 interface IModalButton {
@@ -25,6 +27,7 @@ interface IModalButton {
   onClick?: () => void
   type?: 'button' | 'submit' | 'reset'
   form?: string
+  isLoading?: boolean
 }
 
 /**
@@ -99,24 +102,32 @@ const CuModal = ({
           {textButton ? (
             <CuButton
               variant={'text'}
-              message={textButton.text}
+              message={textButton.isLoading ? '' : textButton.text}
               action={textButton.onClick}
               fullWidth
               style={style.textButton}
               TypographyProps={style.textButtonTypo}
               type={textButton.type}
               form={textButton.form}
+              disabled={textButton.isLoading}
+              startIcon={
+                textButton.isLoading ? <CircularProgress /> : undefined
+              }
             />
           ) : null}
           <CuButton
             variant={'contained'}
-            message={containedButton.text}
+            message={containedButton.isLoading ? '' : containedButton.text}
             action={containedButton.onClick}
             fullWidth
             style={style.containedButton}
             TypographyProps={style.containedButtonTypo}
             type={containedButton.type}
             form={containedButton.form}
+            disabled={containedButton.isLoading}
+            startIcon={
+              containedButton.isLoading ? <CircularProgress /> : undefined
+            }
           />
         </Stack>
       </Stack>
