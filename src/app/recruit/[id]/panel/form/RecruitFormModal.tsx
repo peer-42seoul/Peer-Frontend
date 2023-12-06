@@ -133,7 +133,6 @@ const RecruitFormModal = ({
           }}
         >
           <Box
-            bgcolor={'Background.primary'}
             border={'1px solid white'}
             padding={4}
             sx={{
@@ -141,12 +140,12 @@ const RecruitFormModal = ({
               width: '70vw',
               height: '70vh',
               maxWidth: '800px',
+              backgroundColor: 'background.primary',
             }}
           >
-            <Typography
-              variant="h6"
-              fontWeight={'bold'}
-            >{`지원하는 역할: ${role}`}</Typography>
+            <Typography variant="h6" fontWeight={'bold'}>
+              {role ? `지원하는 역할: ${role}` : '지원하기'}
+            </Typography>
             <Stack gap={1} marginY={1}>
               {data?.map((quest, idx) => (
                 <Box key={idx} sx={{ border: '1px solid black' }}>

@@ -1,11 +1,20 @@
 'use client'
 import { ReactNode, FormEvent, useState } from 'react'
+import dayjs from 'dayjs'
+import useSWR from 'swr'
 import { Avatar, Divider, IconButton, Stack, Typography } from '@mui/material'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlined'
 import EditIcon from '@mui/icons-material/Edit'
+import useAxiosWithAuth from '@/api/config'
 import CuTextField from '@/components/CuTextField'
 import CuButton from '@/components/CuButton'
+import { ITeamComment } from '@/types/TeamBoardTypes'
+
+interface ICommentProps {
+  postId: number
+  teamId: number
+}
 
 const CommentCotainer = ({ children }: { children: ReactNode }) => {
   return (
@@ -18,25 +27,30 @@ const CommentCotainer = ({ children }: { children: ReactNode }) => {
 
 interface CommentEditFormProps {
   commentId: number
-  postId: number
   initialComment: string
   setEditMode: (isEditMode: boolean) => void
 }
 
 const CommentEditForm = ({
   commentId,
-  postId,
   initialComment,
   setEditMode,
 }: CommentEditFormProps) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const handleEdit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
-    const comment = formData.get('comment') as string
-    alert(
-      '#' + postId + ' Comment #' + commentId + " Edited: '" + comment + "'",
-    )
-    setEditMode(false)
+    axiosWithAuth
+      .put(`/api/v1/team/notice/answer/${commentId}`, {
+        content: formData.get('content') as string,
+      })
+      .then(() => {
+        alert('댓글을 수정했습니다.')
+        setEditMode(false)
+      })
+      .catch(() => {
+        alert('댓글 수정에 실패했습니다.')
+      })
   }
 
   return (
@@ -45,8 +59,8 @@ const CommentEditForm = ({
         <CuTextField
           placeholder={'댓글을 작성해주세요.'}
           fullWidth
-          name={'comment'}
-          id={'comment'}
+          name={'content'}
+          id={'content'}
           defaultValue={initialComment}
           multiline
         />
@@ -63,32 +77,27 @@ const CommentEditForm = ({
   )
 }
 
-interface CommentProps {
-  commentId: number
-  postId: number
-  avatar: string
-  name: string
-  content: string
-  date: string
-  isMine: boolean
-}
-
 const Comment = ({
-  avatar,
-  name,
+  answerId,
+  authorImage,
+  authorNickname,
   content,
-  date,
-  isMine,
-  postId,
-  commentId,
-}: CommentProps) => {
+  createdAt,
+  isAuthor,
+}: ITeamComment & { postId: number }) => {
   const [isEditMode, setEditMode] = useState(false)
-
+  const axiosWithAuth = useAxiosWithAuth()
   const handleDelete = () => {
-    alert('Delete comment #' + commentId)
-  }
-  const handleEdit = () => {
-    setEditMode(true)
+    const confirm = window.confirm('댓글을 삭제하시겠습니까?')
+    if (!confirm) return
+    axiosWithAuth
+      .delete(`/api/v1/team/notice/answer/${answerId}`)
+      .then(() => {
+        alert('댓글을 삭제했습니다.')
+      })
+      .catch(() => {
+        alert('댓글 삭제에 실패했습니다.')
+      })
   }
 
   return (
@@ -103,10 +112,10 @@ const Comment = ({
           alignItems={'center'}
           justifyContent={'flex-start'}
         >
-          <Avatar alt="comment profile" src={avatar} />
-          <Typography>{name}</Typography>
+          <Avatar alt="comment profile" src={authorImage} />
+          <Typography>{authorNickname}</Typography>
         </Stack>
-        {isMine && !isEditMode ? (
+        {isAuthor && !isEditMode ? (
           <Stack
             direction={'row'}
             alignItems={'center'}
@@ -114,7 +123,7 @@ const Comment = ({
               <Divider orientation="vertical" variant="middle" flexItem />
             }
           >
-            <IconButton onClick={handleEdit}>
+            <IconButton onClick={() => setEditMode(true)}>
               <EditIcon />
             </IconButton>
             <IconButton onClick={handleDelete}>
@@ -125,38 +134,53 @@ const Comment = ({
       </Stack>
       {isEditMode ? (
         <CommentEditForm
-          commentId={commentId}
-          postId={postId}
+          commentId={answerId}
           initialComment={content}
           setEditMode={setEditMode}
         />
       ) : (
         <>
           <Typography>{content}</Typography>
-          <Typography>{date}</Typography>
+          <Typography>
+            {dayjs(createdAt).format('YYYY년 MM월 DD일 hh:mm A')}
+          </Typography>
         </>
       )}
     </Stack>
   )
 }
 
-const CommentForm = ({ postId }: { postId: number }) => {
+const CommentForm = ({ postId, teamId }: ICommentProps) => {
+  const axiosWithAuth = useAxiosWithAuth()
+  const [isLoading, setIsLoading] = useState(false)
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsLoading(true)
     const formData = new FormData(e.currentTarget)
-    const comment = formData.get('comment') as string
-    alert('#' + postId + " Comment: '" + comment + "'")
+    axiosWithAuth
+      .post('/api/v1/team/notice/answer', {
+        teamId: teamId,
+        postId: postId,
+        content: formData.get('new-content') as string,
+      })
+      .then(() => {
+        setIsLoading(false)
+      })
+      .catch(() => {
+        alert('댓글 작성에 실패했습니다.')
+      })
   }
+
   return (
     <form onSubmit={handleSubmit}>
       <Stack direction={'row'}>
         <CuTextField
           placeholder={'댓글을 작성해주세요.'}
           fullWidth
-          name={'comment'}
-          id={'comment'}
+          name={'new-content'}
+          id={'new-content'}
         />
-        <IconButton type={'submit'}>
+        <IconButton disabled={isLoading} type={'submit'}>
           <InsertEmoticonOutlinedIcon />
         </IconButton>
       </Stack>
@@ -164,40 +188,12 @@ const CommentForm = ({ postId }: { postId: number }) => {
   )
 }
 
-const CommentList = ({ postId }: { postId: number }) => {
-  const dummy = {
-    data: [
-      {
-        id: 1,
-        avatar: 'https://picsum.photos/200',
-        name: '닉네임',
-        content: 'ㅋㅋ힘내세요. 이번주도 열심히! 화이팅!',
-        date: '2023년 10월 03일 11:30 AM',
-        isMine: true,
-      },
-      {
-        id: 2,
-        avatar: 'https://picsum.photos/200',
-        name: '닉네임',
-        content:
-          'ㅋㅋ힘내세요. 이번주도 열심히! 화이팅!ㅋㅋ힘내세요. 이번주도 열심히! 화이팅!ㅋㅋ힘내세요. 이번주도 열심히! 화이팅!ㅋㅋ힘내세요. 이번주도 열심히! 화이팅!ㅋㅋ힘내세요. 이번주도 열심히! 화이팅!',
-        date: '2023년 10월 03일 11:30 AM',
-        isMine: true,
-      },
-      {
-        id: 3,
-        avatar: 'https://picsum.photos/200',
-        name: '닉네임22',
-        content: '맛있는 걸 먹으면 힘이 나요!',
-        date: '2023년 10월 03일 11:30 AM',
-        isMine: false,
-      },
-    ],
-    loading: false,
-    error: null,
-  }
-
-  const { data, loading, error } = dummy
+const CommentList = ({ postId, teamId }: ICommentProps) => {
+  const axiosWithAuth = useAxiosWithAuth()
+  const { data, isLoading, error } = useSWR(
+    `/api/v1/team/notice/answer/${postId}`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  )
 
   if (error || !data) {
     return (
@@ -207,7 +203,7 @@ const CommentList = ({ postId }: { postId: number }) => {
     )
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <CommentCotainer>
         <Typography>로딩중...</Typography>
@@ -226,16 +222,11 @@ const CommentList = ({ postId }: { postId: number }) => {
   return (
     <CommentCotainer>
       <Stack>
-        {data.map((comment) => (
-          <Comment
-            key={comment.id}
-            postId={postId}
-            commentId={comment.id}
-            {...comment}
-          />
+        {data.map((comment: ITeamComment) => (
+          <Comment key={comment.answerId} postId={postId} {...comment} />
         ))}
       </Stack>
-      <CommentForm postId={postId} />
+      <CommentForm postId={postId} teamId={teamId} />
     </CommentCotainer>
   )
 }
