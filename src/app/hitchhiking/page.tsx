@@ -27,11 +27,9 @@ const Hitchhiking = () => {
   useEffect(() => {
     if (!isLoading && data?.content) {
       setCardList((prev) => {
-        const newArray = data.content.reverse().concat(prev)
+        const newArray = [...data.content].reverse().concat(prev)
         return newArray
       })
-      console.log(data.content)
-      console.log('test')
     }
   }, [isLoading, data?.content])
 
