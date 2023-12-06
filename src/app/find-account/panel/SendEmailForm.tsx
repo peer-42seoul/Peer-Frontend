@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import axios from 'axios'
-import { Box, Typography, Button, Container } from '@mui/material'
+import { Box, Typography, Button, Container, Stack } from '@mui/material'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import CuTextField from '@/components/CuTextField'
 import SendCodeForm from './SendCodeForm'
@@ -83,12 +83,35 @@ const SendEmailForm = ({
                   style={{ width: '100%' }}
                   disabled={isEmailSuccessful}
                 />
-                {errors.email ? (
+                {!isEmailSuccessful ? (
                   <Typography color="error" variant="Caption">
-                    {errors.email?.message}
+                    {errors.email ? errors.email.message : <>&nbsp;</>}
                   </Typography>
                 ) : (
-                  <Typography variant="Caption">&nbsp;</Typography>
+                  <Stack
+                    direction="row"
+                    sx={{
+                      width: '100%',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography variant="Caption" color="purple.normal">
+                      입력하신 메일로 코드를 보냈어요.
+                    </Typography>
+                    <Typography variant="Caption" color="purple.normal">
+                      코드를 받지 못했나요?{' '}
+                      <Button
+                        variant="text"
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
+                        <Typography variant="CaptionEmphasis">
+                          재전송
+                        </Typography>
+                      </Button>
+                    </Typography>
+                  </Stack>
                 )}
               </Container>
             )}

@@ -70,9 +70,9 @@ const SendCodeForm = ({
 
   const adornment = (
     <>
-      <Typography>{`${Math.floor(timer / 60)}:${(timer % 60)
-        .toString()
-        .padStart(2, '0')}`}</Typography>
+      <Typography variant="Caption" sx={{ marginRight: '12px' }}>{`${Math.floor(
+        timer / 60,
+      )}:${(timer % 60).toString().padStart(2, '0')}`}</Typography>
     </>
   )
 
@@ -126,9 +126,11 @@ const SendCodeForm = ({
                   ),
                 }}
               />
-              {(errors.code && (
-                <Typography variant="Caption">{errors.code.message}</Typography>
-              )) || <Typography variant="Caption">&nbsp;</Typography>}
+              {
+                <Typography variant="Caption">
+                  {errors.code ? errors.code.message : '\u00A0'}
+                </Typography>
+              }
             </Container>
           )}
         />
