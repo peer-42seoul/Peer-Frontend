@@ -34,7 +34,7 @@ const ApplyButton = ({
         disableElevation
         onClick={handleMenuClick}
         endIcon={<KeyboardArrowDown />}
-        sx={{ zIndex: 1302 }}
+        // sx={{ zIndex: 1302 }} // TODO : zIndex 문제 해결되면 주석 삭제할 것.
       >
         지원하기
       </Button>

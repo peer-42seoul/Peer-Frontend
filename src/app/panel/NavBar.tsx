@@ -43,7 +43,7 @@ export const MobileNav = () => {
         left: 0,
         right: 0,
         overflow: 'hidden',
-        zIndex: 1400,
+        zIndex: 1300, // NOTE : sideeffect 우려로 설정할 수 있는 가장 높은 index로 설정함. zIndex를 제거할 수 있으면 좋을 듯.
       }}
       elevation={3}
     >
@@ -113,7 +113,7 @@ export const PcNav = () => {
         right: 0,
         top: 0,
         overflow: 'hidden',
-        zIndex: 1400,
+        zIndex: 1300, // NOTE : sideeffect 우려로 설정할 수 있는 가장 높은 index로 설정함. zIndex를 제거할 수 있으면 좋을 듯.
         backgroundColor: 'background.primary',
       }}
     >
