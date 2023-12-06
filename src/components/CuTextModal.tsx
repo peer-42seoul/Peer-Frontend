@@ -42,11 +42,9 @@ const CuTextModal = ({
       sx={sx}
       keepMounted={!!keepMounted}
     >
-      <Stack justifyContent={'center'} alignItems={'center'}>
-        <Typography variant="body1" color="text.normal">
-          {content}
-        </Typography>
-      </Stack>
+      <Typography variant="body1" color="text.normal" textAlign={'center'}>
+        {content}
+      </Typography>
     </CuModal>
   )
 }

@@ -97,7 +97,9 @@ const CuModal = ({
             <CloseIcon />
           </IconButton>
         </Stack>
-        <Box sx={style.modalContent}>{children}</Box>
+        <Stack sx={style.modalContent} justifyContent={'center'}>
+          {children}
+        </Stack>
         <Stack direction={'row'} spacing={'1rem'} width={'100%'}>
           {textButton ? (
             <CuButton
