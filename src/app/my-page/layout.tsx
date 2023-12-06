@@ -4,7 +4,7 @@ import SubNavBar from './panel/SubNavBar'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Container sx={{ maxWidth: '1980px', padding: 0 }}>
+    <Container sx={{ maxWidth: '124rem', padding: 0 }}>
       <Stack
         justifyContent={'space-between'}
         width={1}
@@ -12,10 +12,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         direction={'row'}
         sx={{ flex: '3, 4' }}
       >
-        <SubNavBar sx={{ width: '244px' }} />
+        <SubNavBar sx={{ width: '15.3rem' }} />
         <Box
           sx={{
-            maxWidth: '908px',
+            maxWidth: '57rem',
           }}
           flexGrow={1}
           p={[2, 4]}

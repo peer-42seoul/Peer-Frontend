@@ -29,8 +29,8 @@ const SubNavBar = ({ sx }: { sx: SxProps }) => {
   const { isPc } = useMedia()
 
   const tabStyle: SxProps = {
-    maxWidth: '244px',
-    padding: '0 32px',
+    maxWidth: '15.3rem',
+    padding: '0',
     width: '100%',
   }
 
@@ -45,7 +45,7 @@ const SubNavBar = ({ sx }: { sx: SxProps }) => {
   return (
     <Box
       sx={{
-        p: '24px 32px',
+        p: '1.5rem 2rem',
         ...sx,
       }}
     >
@@ -56,7 +56,7 @@ const SubNavBar = ({ sx }: { sx: SxProps }) => {
         onChange={(event, newValue) => setValue(newValue)}
         sx={{
           borderColor: 'divider',
-          gap: '4px',
+          gap: '0.25rem',
         }}
         variant="fullWidth"
       >
