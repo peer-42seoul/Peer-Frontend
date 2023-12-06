@@ -65,8 +65,10 @@ const CardContainer = ({
       Math.abs(info.point.y - dragStart.y) < 150 ||
       checkDragDirection(info.point.x, info.point.y) !== ESwipeDirection.up
     ) {
+      setDragStart({ x: 0, y: 0 })
       return
     }
+    setDragStart({ x: 0, y: 0 })
     // setCurrentIndex((prev) => prev - 1)
     setCardList((prev: IMainCard[]) => {
       console.log(`dislike api 호출 pathValue: ${recruit_id}, title: ${title}`)
@@ -81,14 +83,17 @@ const CardContainer = ({
     <>
       <Box width={1} height={1} position={'relative'} sx={{ zIndex: 500 }}>
         <AnimatePresence>
-          {cardList.map((card, i) => (
+          {cardList.map((card) => (
             <motion.div
               key={card.recruit_id}
               initial={{
                 scale: 1,
-                opacity: 0,
+                opacity: 1,
               }}
-              animate={{ scale: 1, opacity: 1, zIndex: i + 1000 }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+              }}
               exit={{ opacity: 0 }}
               drag
               dragSnapToOrigin

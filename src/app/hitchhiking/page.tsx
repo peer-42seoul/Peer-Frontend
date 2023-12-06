@@ -58,7 +58,7 @@ const Hitchhiking = () => {
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          width: isPc ? '20.5rem' : '90vw',
+          width: isPc ? '20.5rem' : '92vw',
           height: '27rem',
           maxWidth: '20.5rem',
           position: 'relative',

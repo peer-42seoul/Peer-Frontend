@@ -1,9 +1,10 @@
+'use client'
 import CuButton from '@/components/CuButton'
 import PostCard from '@/components/PostCard'
 import { IPostCard } from '@/types/IPostCard'
 import { CardContent, SxProps, Typography } from '@mui/material'
 import { Box, Card, CardHeader, Chip, Stack } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 
 const HitchhikingCardBack = ({
   postId,
@@ -16,10 +17,12 @@ const HitchhikingCardBack = ({
   return (
     <Card
       sx={{
-        backgroundColor: 'background.primary',
+        ...sx,
+        backgroundColor: 'text.normal',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        ...sx,
+        transform: 'rotateY(180deg)',
+        // backfaceVisibility: 'hidden',
       }}
     >
       <CardHeader>
@@ -57,8 +60,18 @@ const HitchhikingCard = ({
   postId,
   sx,
 }: IPostCard) => {
+  const [isFlipped, setFlipped] = useState(false)
+
   return (
-    <Box>
+    <div
+      style={{
+        transform: `rotateY(${isFlipped ? '180deg' : '0deg'})`,
+        width: '100%',
+        height: '100%',
+        transition: 'transform 0.5s ease',
+      }}
+      onClick={() => setFlipped(!isFlipped)}
+    >
       <PostCard
         postId={postId}
         authorImage={authorImage}
@@ -66,10 +79,22 @@ const HitchhikingCard = ({
         title={title}
         tagList={tagList}
         image={image}
-        sx={sx}
+        sx={{
+          ...sx,
+          backfaceVisibility: 'hidden',
+          opacity: isFlipped ? 0 : 1,
+          transition: 'opacity 0.5s ease',
+        }}
       />
-      <HitchhikingCardBack postId={postId} sx={sx} />
-    </Box>
+      <HitchhikingCardBack
+        postId={postId}
+        sx={{
+          ...sx,
+          opacity: isFlipped ? 1 : 0,
+          transition: 'opacity 0.5s ease',
+        }}
+      />
+    </div>
   )
 }
 

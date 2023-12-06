@@ -23,6 +23,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
         ...sx,
         display: 'flex',
         flexDirection: 'column',
+        backfaceVisibility: 'hidden',
       }}
       ref={ref}
     >
