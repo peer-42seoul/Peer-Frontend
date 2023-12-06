@@ -21,6 +21,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
+import CuTextModal from '@/components/CuTextModal'
 
 interface IInterestResponse {
   postList: IMainCard[]
@@ -77,35 +78,20 @@ const AlertModal = ({
   confirmAction: () => void
 }) => {
   return (
-    <CuModal
+    <CuTextModal
       open={isOpen}
-      handleClose={closeModal}
-      ariaTitle=""
-      ariaDescription=""
-    >
-      <Stack direction={'column'}>
-        <Typography>삭제</Typography>
-        <CloseButton
-          action={closeModal}
-          style={{ border: 'none', color: 'black' }}
-        />
-      </Stack>
-      <Typography>정말 삭제하시겠습니까?</Typography>
-      <Stack direction={'column'}>
-        <CuButton
-          message="취소"
-          action={closeModal}
-          variant="contained"
-          style={{ width: '50%' }}
-        />
-        <CuButton
-          message="삭제"
-          action={confirmAction}
-          variant="contained"
-          style={{ width: '50%' }}
-        />
-      </Stack>
-    </CuModal>
+      onClose={closeModal}
+      title={'삭제'}
+      content={'정말 삭제하시겠습니까?'}
+      containedButton={{
+        text: '삭제',
+        onClick: confirmAction,
+      }}
+      textButton={{
+        text: '취소',
+        onClick: closeModal,
+      }}
+    />
   )
 }
 
