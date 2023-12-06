@@ -8,11 +8,6 @@ import IToastProps from '@/types/IToastProps'
 import IChangePassword from '../types/IChangePassword'
 import PasswordField from './PasswordField'
 
-const LinkAccount = {
-  alignItems: 'center',
-  gap: '16px',
-}
-
 export default function UserInfoEdit({
   local,
   authenticationFt,
@@ -96,43 +91,65 @@ export default function UserInfoEdit({
 
   return (
     <>
-      <Stack direction="row" sx={LinkAccount}>
-        <Typography>42 계정</Typography>
+      <Stack spacing={2} direction="row" alignItems={'center'}>
+        <Typography variant="CaptionEmphasis" color="text.strong">
+          42 계정
+        </Typography>
         {authenticationFt ? (
-          <Typography>{authenticationFt}</Typography>
+          <Typography variant="Body2" color="text.alternative">
+            {authenticationFt}
+          </Typography>
         ) : (
           <Button
             variant="contained"
             href={`${API_URL}/oauth2/authorization/ft`}
           >
-            인증하기
+            <Typography variant="CaptionEmphasis" color="text.strong">
+              인증하기
+            </Typography>
           </Button>
         )}
       </Stack>
-      <Stack direction="row" sx={LinkAccount}>
-        <Typography>구글 계정</Typography>
+      <Stack spacing={2} direction="row" alignItems={'center'}>
+        <Typography variant="CaptionEmphasis" color="text.strong">
+          구글 계정
+        </Typography>
         {authenticationGoogle ? (
-          <Typography>{authenticationGoogle}</Typography>
+          <Typography variant="Body2" color="text.alternative">
+            {authenticationGoogle}
+          </Typography>
         ) : (
           <Button
             variant="contained"
             href={`${API_URL}/oauth2/authorization/google`}
           >
-            인증하기
+            <Typography variant="CaptionEmphasis" color="text.strong">
+              인증하기
+            </Typography>
           </Button>
         )}
       </Stack>
-      <Stack direction="row" sx={LinkAccount}>
-        <Typography>지역</Typography>
+      <Stack spacing={2} direction="row" alignItems={'center'}>
+        <Typography variant="CaptionEmphasis" color="text.strong">
+          지역
+        </Typography>
         {local ? (
-          <Typography>{local}</Typography>
+          <Typography variant="Body2" color="text.alternative">
+            {local}
+          </Typography>
         ) : (
-          <Button variant="contained">인증하기</Button>
+          <Button variant="contained">
+            <Typography variant="CaptionEmphasis" color="text.strong">
+              인증하기
+            </Typography>
+          </Button>
         )}
       </Stack>
       <form onSubmit={handleSubmit(changePassword)}>
         <Stack spacing={1}>
-          <Typography>비밀번호</Typography>
+          <Typography variant="CaptionEmphasis" color="text.strong">
+            비밀번호
+          </Typography>
           <Controller
             name="presentPassword"
             control={control}
