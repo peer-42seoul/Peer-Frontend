@@ -3,9 +3,9 @@
 import { IMainCard } from '@/types/IPostDetail'
 import { Box, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import PostCard from '@/components/PostCard'
 import useMedia from '@/hook/useMedia'
 import { motion, AnimatePresence } from 'framer-motion'
+import HitchhikingCard from './HitchhikingCard'
 
 enum ESwipeDirection {
   left = 'left',
@@ -107,7 +107,7 @@ const CardContainer = ({
                 handleDragEnd(e, info, card.recruit_id, card.title)
               }
             >
-              <PostCard
+              <HitchhikingCard
                 authorImage={card.user_thumbnail}
                 teamName={card.user_nickname}
                 title={card.title}
