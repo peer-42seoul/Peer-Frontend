@@ -473,35 +473,29 @@ const ProfileBioEditor = ({
         </Grid>
         <CuModal
           open={isOpen}
-          handleClose={closeCropModal}
+          onClose={closeCropModal}
           keepMounted
-          ariaDescription=""
-          ariaTitle=""
+          title={'프로필 이미지 편집'} // NOTE: 통일성을 위해 임의로 설정한 제목입니다.
+          containedButton={{
+            text: '완료',
+            onClick: handleCrop,
+          }}
+          textButton={{
+            text: '취소',
+            onClick: handleCancelCrop,
+          }}
         >
-          <Box>
-            <Box sx={squareBoxStyle}>
-              <img
-                ref={imageRef}
-                alt="Preview"
-                style={{
-                  borderRadius: '50%',
-                  width: '100%',
-                  height: '100%',
-                  display: 'none',
-                }}
-              />
-            </Box>
-
-            <CuButton
-              variant="contained"
-              action={handleCancelCrop}
-              message="취소"
-            ></CuButton>
-            <CuButton
-              variant="contained"
-              action={handleCrop}
-              message="완료"
-            ></CuButton>
+          <Box sx={squareBoxStyle}>
+            <img
+              ref={imageRef}
+              alt="Preview"
+              style={{
+                borderRadius: '50%',
+                width: '100%',
+                height: '100%',
+                display: 'none',
+              }}
+            />
           </Box>
         </CuModal>
       </SettingContainer>
