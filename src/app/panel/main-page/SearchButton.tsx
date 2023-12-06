@@ -1,9 +1,8 @@
 'use client'
 
-import { useMediaQuery, IconButton } from '@mui/material'
+import { useMediaQuery, IconButton, Modal } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import useModal from '@/hook/useModal'
-import CuModal from '@/components/CuModal'
 import SearchBody from '../../search/panel/SearchBody'
 
 const StyleMobileSearch = {
@@ -30,15 +29,15 @@ const SearchPc = () => {
         <SearchIcon color="primary" />
       </IconButton>
 
-      <CuModal
+      <Modal
         open={isOpen}
-        handleClose={closeModal}
-        ariaTitle="modal-title"
-        ariaDescription="modal-description"
-        style={StylePcSearch}
+        onClose={closeModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+        sx={StylePcSearch}
       >
         <SearchBody onClose={closeModal} />
-      </CuModal>
+      </Modal>
     </>
   )
 }
@@ -51,15 +50,15 @@ const SearchMobile = () => {
         <SearchIcon />
       </IconButton>
 
-      <CuModal
+      <Modal
         open={isOpen}
-        handleClose={closeModal}
-        ariaTitle="modal-title"
-        ariaDescription="modal-description"
-        style={StyleMobileSearch}
+        onClose={closeModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+        sx={StyleMobileSearch}
       >
         <SearchBody onClose={closeModal} />
-      </CuModal>
+      </Modal>
     </>
   )
 }
