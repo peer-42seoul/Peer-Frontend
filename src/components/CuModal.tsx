@@ -148,21 +148,25 @@ const CuCuModal = ({
             <CloseIcon />
           </IconButton>
         </Stack>
-        <Box>{children}</Box>
+        <Box sx={style.modalContent}>{children}</Box>
         <Stack direction={'row'} spacing={'1rem'} width={'100%'}>
           {textButton ? (
             <CuButton
               variant={'text'}
               message={textButton.text}
               action={textButton.onClick}
+              fullWidth
               style={style.textButton}
+              TypographyProps={style.textButtonTypo}
             />
           ) : null}
           <CuButton
             variant={'contained'}
             message={containedButton.text}
             action={containedButton.onClick}
+            fullWidth
             style={style.containedButton}
+            TypographyProps={style.containedButtonTypo}
           />
         </Stack>
       </Stack>
