@@ -9,8 +9,10 @@ import RoomIcon from '@mui/icons-material/Room'
 import WifiIcon from '@mui/icons-material/Wifi'
 import useShowTeams from '@/states/useShowTeams'
 import { grey } from '@mui/material/colors'
+import useMedia from '@/hook/useMedia'
 
 const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
+  const { isPc } = useMedia()
   const router = useRouter()
   const { showTeams } = useShowTeams()
 
@@ -29,32 +31,23 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
       </Stack>
       <Stack
         spacing={1}
-        sx={{
-          overflowY: 'scroll',
-          height: '100%',
-          padding: 1,
-          overflow: 'hidden',
-        }}
+        overflow={'auto'}
+        sx={{ p: 1 }}
+        height={'60vh'}
+        maxHeight={'60vh'}
+        flex={4}
       >
         {prop.map((team, index) => (
           <Card
             key={index}
             sx={{
+              overflow: 'visible',
               p: 2,
               boxShadow: 'none',
               borderRadius: 3,
             }}
           >
             <CardActionArea onClick={() => router.push(`/teams/${team.id}`)}>
-              {/* 기획상 문제로 임시로 주석처리 */}
-              {/* {team.myRole && (
-                <IconButton
-                  sx={{ float: 'right' }}
-                  onClick={() => router.push(`/teams/setup/${index}`)}
-                >
-                  <SettingsIcon />
-                </IconButton>
-              )}  */}
               <Stack direction={'row'} spacing={1} my={1}>
                 <Box width={60} sx={{ margin: 0, backgroundColor: grey[900] }}>
                   <Typography
