@@ -65,7 +65,7 @@ const MessageForm = ({
   }
 
   return (
-    <form onSubmit={messageSubmit}>
+    <form onSubmit={messageSubmit} id={'message-form'}>
       {view === 'PC_VIEW' ? (
         <Stack direction={'row'}>
           <TextField
@@ -84,25 +84,15 @@ const MessageForm = ({
           />
         </Stack>
       ) : (
-        <Stack>
-          <TextField
-            sx={{ width: '100%' }}
-            value={content}
-            placeholder="내용을 입력하세요"
-            variant="outlined"
-            multiline
-            rows={10}
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <Stack direction={'row'}>
-            <CuButton
-              variant="contained"
-              action={() => handleClose && handleClose()}
-              message="취소"
-            />
-            <CuButton variant="contained" type="submit" message="보내기" />
-          </Stack>
-        </Stack>
+        <TextField
+          sx={{ width: '100%' }}
+          value={content}
+          placeholder="내용을 입력하세요"
+          variant="outlined"
+          multiline
+          rows={10}
+          onChange={(e) => setContent(e.target.value)}
+        />
       )}
     </form>
   )
