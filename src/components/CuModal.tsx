@@ -83,17 +83,15 @@ const CuModal = ({
 
 export default CuModal
 
+interface IModalButton {
+  text: string
+  onClick: () => void
+}
 interface ICuModalProps extends ModalProps {
-  title?: string
+  title: string
+  containedButton: IModalButton
+  textButton?: IModalButton
   mobileFullSize?: boolean // 기본적으로 false입니다.
-  primaryButton: {
-    text: string
-    onClick: () => void
-  }
-  secondaryButton?: {
-    text: string
-    onClick: () => void
-  }
 }
 
 const getModalWrapperStyle = (isPc: boolean, mobileFullSize?: boolean) => {
@@ -106,8 +104,8 @@ const getModalWrapperStyle = (isPc: boolean, mobileFullSize?: boolean) => {
 
 const CuCuModal = ({
   title,
-  primaryButton,
-  secondaryButton,
+  containedButton,
+  textButton,
   mobileFullSize,
   open,
   onClose,
@@ -122,10 +120,10 @@ const CuCuModal = ({
       onClose={onClose}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
-      sx={{ ...sx, ...getModalWrapperStyle(isPc, mobileFullSize) }}
+      sx={sx}
       keepMounted={!!keepMounted}
     >
-      <Stack spacing={'1.5rem'}>
+      <Stack spacing={'1.5rem'} sx={getModalWrapperStyle(isPc, mobileFullSize)}>
         <Stack
           direction={'row'}
           justifyContent={'space-between'}
@@ -151,18 +149,20 @@ const CuCuModal = ({
           </IconButton>
         </Stack>
         <Box>{children}</Box>
-        <Stack direction={'row'} spacing={'1rem'}>
-          {secondaryButton ? (
+        <Stack direction={'row'} spacing={'1rem'} width={'100%'}>
+          {textButton ? (
             <CuButton
               variant={'text'}
-              message={secondaryButton.text}
-              action={secondaryButton.onClick}
+              message={textButton.text}
+              action={textButton.onClick}
+              style={style.textButton}
             />
           ) : null}
           <CuButton
             variant={'contained'}
-            message={primaryButton.text}
-            action={primaryButton.onClick}
+            message={containedButton.text}
+            action={containedButton.onClick}
+            style={style.containedButton}
           />
         </Stack>
       </Stack>

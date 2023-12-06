@@ -1,6 +1,14 @@
 import { Theme } from '@mui/material'
 
+const modalBase = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+}
+
 export const pcWrapper = {
+  ...modalBase,
   minWidth: '35rem',
   minHeight: '21.5rem',
   padding: '1.5rem 2rem',
@@ -9,6 +17,7 @@ export const pcWrapper = {
 }
 
 export const mobileWrapper = {
+  ...modalBase,
   minWidth: '20.5rem',
   borderRadius: '2rem',
   padding: '1.25rem 1.25rem 1.5rem 1.25rem',
@@ -16,8 +25,10 @@ export const mobileWrapper = {
 }
 
 export const mobileFullSizeWrapper = {
+  // ...modalBase,
   width: '100vw',
   height: '100svh',
+  backgroundColor: (theme: Theme) => theme.palette.blue.alternative,
 }
 
 export const headerMobileButton = {
@@ -37,4 +48,12 @@ export const title = {
 export const headerCloseButton = {
   ...headerMobileButton,
   color: (theme: Theme) => theme.palette.text.assistive,
+}
+
+export const textButton = {
+  width: '50%',
+}
+
+export const containedButton = {
+  width: '50%',
 }
