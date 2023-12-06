@@ -131,27 +131,20 @@ const MyProfile = () => {
       />
 
       {/* modals */}
-      <CuModal
+      <ProfileBioEditor
+        data={{
+          profileImageUrl: userInfo.profileImageUrl,
+          nickname: userInfo.nickname,
+          association: userInfo.association,
+          email: userInfo.email,
+          introduction: userInfo.introduction,
+        }}
+        setToastMessage={setToastMessage}
+        setToastOpen={openToast}
+        closeModal={() => setModalType('')}
+        mutate={mutate}
         open={modalOpen.introduction}
-        handleClose={() => setModalType('')}
-        ariaTitle="profile-introduction-setting-modal-title"
-        ariaDescription="profile-introduction-setting-modal-description"
-        style={isPc ? undefined : mobileStyle}
-      >
-        <ProfileBioEditor
-          data={{
-            profileImageUrl: userInfo.profileImageUrl,
-            nickname: userInfo.nickname,
-            association: userInfo.association,
-            email: userInfo.email,
-            introduction: userInfo.introduction,
-          }}
-          setToastMessage={setToastMessage}
-          setToastOpen={openToast}
-          closeModal={() => setModalType('')}
-          mutate={mutate}
-        />
-      </CuModal>
+      />
       <CuModal
         open={modalOpen.links}
         handleClose={() => setModalType('')}

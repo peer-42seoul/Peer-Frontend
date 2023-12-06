@@ -41,12 +41,14 @@ const ProfileBioEditor = ({
   setToastMessage,
   setToastOpen,
   mutate,
+  open,
 }: {
   data: IProfileCard
   closeModal: () => void
   setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (isOpen: boolean) => void
   mutate: () => void
+  open: boolean
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
@@ -290,12 +292,21 @@ const ProfileBioEditor = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <SettingContainer
-        onNegativeClick={closeModal}
-        settingTitle="introduction"
-        isSubmitting={isSubmitting}
-      >
+    <CuModal
+      open={open}
+      onClose={closeModal}
+      title={'소개 수정'}
+      containedButton={{
+        text: isSubmitting ? '제출 중' : '완료',
+        type: 'submit',
+        form: 'profile-bio-editor-form',
+      }}
+      textButton={{
+        text: '취소',
+        onClick: closeModal,
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)} id={'profile-bio-editor-form'}>
         <Grid container spacing={2} rowSpacing={1}>
           {/* profile image */}
           <Grid item xs={12}>
@@ -498,8 +509,8 @@ const ProfileBioEditor = ({
             />
           </Box>
         </CuModal>
-      </SettingContainer>
-    </form>
+      </form>
+    </CuModal>
   )
 }
 
