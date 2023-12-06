@@ -15,6 +15,7 @@ interface CuButtonProps {
   fullWidth?: boolean // width: 100%
   disabled?: boolean // 비활성화
   TypographyProps?: TypographyProps // 버튼 텍스트에 들어갈 스타일
+  form?: string // 버튼이 속한 폼의 id
 }
 
 const CuButton = ({
@@ -28,6 +29,7 @@ const CuButton = ({
   fullWidth,
   disabled,
   TypographyProps,
+  form,
 }: CuButtonProps) => {
   return (
     <Button
@@ -39,6 +41,7 @@ const CuButton = ({
       endIcon={endIcon}
       fullWidth={fullWidth}
       disabled={disabled}
+      form={form}
     >
       <Typography {...TypographyProps}>{message}</Typography>
     </Button>
