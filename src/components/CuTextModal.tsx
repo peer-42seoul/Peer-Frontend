@@ -17,8 +17,9 @@ import { ICuModalProps } from './CuModal'
  * @param content Modal의 내용입니다. (필수)
  */
 
-interface ICuTextModal extends ICuModalProps {
+interface ICuTextModal extends Omit<ICuModalProps, 'children'> {
   content: string
+  children?: never // children은 사용하지 않습니다.
 }
 
 const CuTextModal = ({
