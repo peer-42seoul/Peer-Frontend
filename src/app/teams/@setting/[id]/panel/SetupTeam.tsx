@@ -20,8 +20,9 @@ import CuButton from '@/components/CuButton'
 import useAxiosWithAuth from '@/api/config'
 import ClearIcon from '@mui/icons-material/Clear'
 import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
+import { validation, validationNumber } from './utils'
 
-interface ISetupTeam {
+export interface ISetupTeam {
   id: string
   type: TeamType
   name: string
@@ -158,30 +159,6 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
     })
   }
 
-  const validation = (target: string) => {
-    // 한글, 영문, 숫자만 입력 가능
-    // 2~12자리
-    let check = /^[\d|a-zA-Z|가-힣]{2,12}$/
-
-    if (check.test(target)) {
-      return false
-    }
-
-    return true
-  }
-
-  const validationNumber = (target: string) => {
-    // 숫자만 입력 가능
-    // 1~2자리
-    let check = /^[0-9]{1,2}$/
-
-    if (check.test(target)) {
-      return false
-    }
-
-    return true
-  }
-
   useEffect(() => {
     window.history.pushState(null, '', location.href)
 
@@ -199,7 +176,6 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
     <>
       {teamInfo.type === TeamType.STUDY ? (
         <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
-          <Typography fontWeight="bold">클릭한 스터디 팀 설정 : </Typography>
           <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
             <Stack>
               <Typography>스터디</Typography>
@@ -349,9 +325,6 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
         </Box>
       ) : (
         <Box sx={{ border: '1px solid', borderRadius: 2, p: 2 }}>
-          <Typography fontWeight="bold">
-            클릭한 프로젝트명 팀 설정 :{' '}
-          </Typography>
           <Box sx={{ border: '1px solid', borderRadius: 2, m: 1, p: 2 }}>
             <Stack>
               <Typography>프로젝트</Typography>

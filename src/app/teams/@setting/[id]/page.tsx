@@ -9,6 +9,7 @@ import useSWR from 'swr'
 import { useRouter } from 'next/navigation'
 import useAxiosWithAuth from '@/api/config'
 import { ITeam } from '../../types/types'
+import RedirectionRecruit from './panel/RedirectionRecruit'
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
@@ -24,8 +25,6 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
 
   if (isLoading) return <Typography>로딩중</Typography>
 
-  if (!data) return <Typography>데이터가 없습니다.</Typography>
-
   return (
     <Stack
       margin={4}
@@ -36,8 +35,10 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       borderRadius={2}
       padding={2}
     >
+      <Typography>설정</Typography>
       {data ? (
         <>
+          <RedirectionRecruit id={params.id} data={data} />
           <SetupPage team={data.team} />
           {!showApplicant ? (
             <>
@@ -62,16 +63,10 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         </>
       )}
       <Button
-        variant="contained"
+        variant="outlined"
         onClick={() => router.push(`/recruit/${params.id}`)}
       >
         모집 글 보기
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() => router.push(`/recruit/edit/${params.id}`)}
-      >
-        모집 글 수정하기
       </Button>
     </Stack>
   )
