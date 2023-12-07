@@ -45,7 +45,7 @@ const CuTextModal = ({
       sx={sx}
       keepMounted={!!keepMounted}
     >
-      <Typography variant="body1" color="text.normal" textAlign={'center'}>
+      <Typography variant="Body1" color="text.normal" textAlign={'center'}>
         {content}
       </Typography>
     </CuModal>
