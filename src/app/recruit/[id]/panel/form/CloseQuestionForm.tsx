@@ -18,7 +18,7 @@ const CloseQuestionForm = ({
 }) => {
   return (
     <Controller
-      disabled={disabled ? true : false}
+      disabled={disabled}
       name={idx.toString()}
       control={control}
       rules={{
@@ -30,7 +30,7 @@ const CloseQuestionForm = ({
           {optionList?.map((label: string, index: number) => {
             return (
               <FormControlLabel
-                disabled={disabled ? true : false}
+                disabled={disabled}
                 control={<Radio />}
                 label={label}
                 value={index}

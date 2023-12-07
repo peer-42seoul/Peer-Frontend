@@ -20,7 +20,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
   const { isOpen, closeModal, openModal } = useModal()
   const [members, setMembers] = useState<IMember[]>([])
   const [member, setMember] = useState<IMember | null>(null)
-  const axiosInstance = useAxiosWithAuth()
+  const axiosWithAuth = useAxiosWithAuth()
 
   useEffect(() => {
     setMembers(team)
@@ -29,7 +29,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
     if (member.grant === TeamGrant.LEADER) {
-      axiosInstance
+      axiosWithAuth
         .post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
         )
@@ -47,7 +47,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
           console.log(err)
         })
     } else {
-      axiosInstance
+      axiosWithAuth
         .post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
         )
@@ -76,7 +76,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
   const handleDelete = () => {
     console.log('팀원 삭제')
     if (!member) return console.log('팀원이 없습니다.')
-    axiosInstance
+    axiosWithAuth
       .delete(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/delete/${teamId}?userId=${member.id}`,
       )

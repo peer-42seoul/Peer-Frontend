@@ -42,7 +42,7 @@ const Form = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '8px',
+  gap: '6px',
 }
 
 const PCLabelBox = {
@@ -50,7 +50,7 @@ const PCLabelBox = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '8px',
+  gap: '6px',
   fontSize: '14px',
 }
 
@@ -104,8 +104,7 @@ const Login = () => {
         console.log('redirect in login', redirect)
         router.push(redirect)
       } else router.push('/')
-    }
-    if (redirect) {
+    } else if (redirect) {
       setErrorMessage('로그인이 필요한 서비스입니다.')
       openToast()
     }
@@ -144,13 +143,9 @@ const Login = () => {
                     style={{ width: '100%' }}
                     placeholder="이메일을 입력하세요."
                   />
-                  {errors.userEmail ? (
-                    <Typography color="error">
-                      {errors.userEmail?.message}
-                    </Typography>
-                  ) : (
-                    <Typography>&nbsp;</Typography>
-                  )}
+                  <Typography color="error" variant="Caption">
+                    {errors.userEmail?.message || '\u00A0'}
+                  </Typography>
                 </Box>
               )}
             />
@@ -188,13 +183,9 @@ const Login = () => {
                     }}
                     placeholder="비밀번호를 입력하세요."
                   />
-                  {errors.password ? (
-                    <Typography color="error">
-                      {errors.password?.message}
-                    </Typography>
-                  ) : (
-                    <Typography>&nbsp;</Typography>
-                  )}
+                  <Typography color="error" variant="Caption">
+                    {errors.password?.message || '\u00A0'}
+                  </Typography>
                 </Box>
               )}
             />

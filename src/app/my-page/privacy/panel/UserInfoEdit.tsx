@@ -199,19 +199,11 @@ export default function UserInfoEdit({
               />
             )}
           />
-          {errors.newPassword ? (
-            <Typography color="error">
-              {errors.newPassword.message
-                ? errors.newPassword.message
-                : '비밀번호를 입력해주세요'}
-            </Typography>
-          ) : errors.confirmPassword ? (
-            <Typography color="error">
-              {errors.confirmPassword.message}
-            </Typography>
-          ) : (
-            <Typography>&nbsp;</Typography>
-          )}
+          <Typography color="error" variant="Caption">
+            {errors.newPassword?.message ||
+              errors.confirmPassword?.message ||
+              '\u00A0'}
+          </Typography>
         </Stack>
         <Button type="submit">변경하기</Button>
       </form>
