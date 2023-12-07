@@ -6,13 +6,13 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import TmpNoticeWidget from '@/app/teams/@main/[id]/panel/widgets/TmpNoticeWidget'
-import TmpBoardWidget from '@/app/teams/@main/[id]/panel/widgets/TmpBoardWidget'
-import TmpCalenderWidget from '@/app/teams/@main/[id]/panel/widgets/TmpCalenderWidget'
-import TmpAttendWidget from '@/app/teams/@main/[id]/panel/widgets/TmpAttendWidget'
-import TmpTextWidget from '@/app/teams/@main/[id]/panel/widgets/TmpTextWidget'
-import TmpImageWidget from '@/app/teams/@main/[id]/panel/widgets/TmpImageWidget'
-import TmpLinkWidget from '@/app/teams/@main/[id]/panel/widgets/TmpLinkWidget'
+import TmpNoticeWidget from '@/app/teams/[teamId]/[id]/panel/widgets/TmpNoticeWidget'
+import TmpBoardWidget from '@/app/teams/[teamId]/[id]/panel/widgets/TmpBoardWidget'
+import TmpCalenderWidget from '@/app/teams/[teamId]/[id]/panel/widgets/TmpCalenderWidget'
+import TmpAttendWidget from '@/app/teams/[teamId]/[id]/panel/widgets/TmpAttendWidget'
+import TmpTextWidget from '@/app/teams/[teamId]/[id]/panel/widgets/TmpTextWidget'
+import TmpImageWidget from '@/app/teams/[teamId]/[id]/panel/widgets/TmpImageWidget'
+import TmpLinkWidget from '@/app/teams/[teamId]/[id]/panel/widgets/TmpLinkWidget'
 import React, { useCallback, useMemo, useState } from 'react'
 import ReactGridLayout, {
   Layout,

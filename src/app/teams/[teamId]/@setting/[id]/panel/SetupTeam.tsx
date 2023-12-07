@@ -10,7 +10,11 @@ import {
   IconButton,
   Avatar,
 } from '@mui/material'
-import { TeamOperationForm, TeamStatus, TeamType } from '../../../types/types'
+import {
+  TeamOperationForm,
+  TeamStatus,
+  TeamType,
+} from '../../../../types/types'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import SetupSelect from './SetupSelect'
 import Image from 'next/image'

@@ -8,7 +8,7 @@ import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
 import { useRouter } from 'next/navigation'
 import useAxiosWithAuth from '@/api/config'
-import { ITeam } from '../../types/types'
+import { ITeam } from '../../../types/types'
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()

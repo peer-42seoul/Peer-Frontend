@@ -5,7 +5,7 @@ import {
   EInterviewType,
   IInterview,
   RatioQuestionList,
-} from '../../../types/types'
+} from '../../../../types/types'
 import CloseQuestionForm from '@/app/recruit/[id]/panel/form/CloseQuestionForm'
 import RatioQuestionForm from '@/app/recruit/[id]/panel/form/RatioQuestionForm'
 import CheckQuestionForm from '@/app/recruit/[id]/panel/form/CheckQuestionForm'
