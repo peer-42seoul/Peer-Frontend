@@ -49,7 +49,7 @@ export const MobileNav = () => {
         left: 0,
         right: 0,
         overflow: 'hidden',
-        zIndex: 1300, // NOTE : sideeffect 우려로 설정할 수 있는 가장 높은 index로 설정함. zIndex를 제거할 수 있으면 좋을 듯.
+        zIndex: 1300, // NOTE : 추후 모집글 버튼 z-index 조정 작업시에 함께 조정 필요함.
       }}
     >
       <BottomNavigation
@@ -123,7 +123,7 @@ export const PcNav = () => {
         right: 0,
         top: 0,
         overflow: 'hidden',
-        zIndex: 1300, // NOTE : sideeffect 우려로 설정할 수 있는 가장 높은 index로 설정함. zIndex를 제거할 수 있으면 좋을 듯.
+        zIndex: 1300, // NOTE : 추후 모집글 버튼 z-index 조정 작업시에 함께 조정 필요함.
         backgroundColor: 'background.primary',
         paddingX: 3,
       }}
