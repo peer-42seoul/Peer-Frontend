@@ -10,7 +10,7 @@ import useMedia from '@/hook/useMedia'
 
 const defaultstyle = {
   position: 'absolute' as 'absolute',
-  top: '50%',
+  top: 'calc(50% + 56px)',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,

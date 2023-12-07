@@ -1,6 +1,10 @@
-import { ReactNode, useEffect } from 'react'
+import { ReactNode, useEffect, Fragment } from 'react'
 import Link from 'next/link'
-import { Stack, Typography } from '@mui/material'
+import dayjs from 'dayjs'
+import { Box, Stack, Typography } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
+import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
+import { ITeamNotice } from '@/types/TeamBoardTypes'
 
 interface NoticeItemProps {
   title: string
@@ -11,7 +15,11 @@ interface NoticeItemProps {
 }
 
 const NoticeListContainer = ({ children }: { children: ReactNode }) => {
-  return <Stack spacing={3}>{children}</Stack>
+  return (
+    <Stack spacing={3} sx={{ height: '300px', overflowY: 'scroll' }}>
+      {children}
+    </Stack>
+  )
 }
 
 const NoticeItem = ({ title, author, date, id, teamId }: NoticeItemProps) => {
@@ -35,30 +43,16 @@ const NoticeList = ({
   teamId: number
   keyword: string
 }) => {
+  const axiosWithAuth = useAxiosWithAuth()
+  const { data, error, isLoading, size, setSize, targetRef } =
+    useInfiniteSWRScroll(
+      `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
+      (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    )
   useEffect(() => {
-    // TODO: keyword로 검색하는 로직
+    // keyword가 바뀔 때마다 size를 0으로 초기화 (size의 초깃값은 0입니다.)
+    if (!isLoading && size !== 0) setSize(0)
   }, [keyword])
-  const dummy = {
-    data: [
-      {
-        title:
-          '11월 첫째주 주간회의 기록입니다. 11월 첫째주 주간회의 기록입니다.',
-        author: 'jeyoon',
-        date: '11월 4일',
-        id: 1,
-      },
-      {
-        title:
-          '11월 첫째주 주간회의 기록입니다. 11월 첫째주 주간회의 기록입니다.11월 첫째주 주간회의 기록입니다. 11월 첫째주 주간회의 기록입니다.11월 첫째주 주간회의 기록입니다. 11월 첫째주 주간회의 기록입니다.',
-        author: 'jeyoon',
-        date: '11월 4일',
-        id: 2,
-      },
-    ],
-    loading: false,
-    error: null,
-  }
-  const { data, loading, error } = dummy
 
   if (error || !data)
     return (
@@ -66,30 +60,42 @@ const NoticeList = ({
         <Typography>문제가 발생했습니다.</Typography>
       </NoticeListContainer>
     )
-  if (loading)
+
+  if (!data && isLoading)
     return (
       <NoticeListContainer>
         <Typography>로딩중입니다...</Typography>
       </NoticeListContainer>
     )
-  if (data.length === 0)
+
+  if (data.length === 0 || data[0].content.length === 0)
     return (
       <NoticeListContainer>
         <Typography>공지사항이 없습니다.</Typography>
       </NoticeListContainer>
     )
+
   return (
     <NoticeListContainer>
-      {data.map((notice) => (
-        <NoticeItem
-          key={notice.id}
-          title={notice.title}
-          author={notice.author}
-          date={notice.date}
-          id={notice.id}
-          teamId={teamId}
-        />
-      ))}
+      {data.map((page, index) => {
+        return (
+          <Fragment key={index}>
+            {page.content.map((notice: ITeamNotice) => {
+              return (
+                <NoticeItem
+                  key={notice.postId}
+                  title={notice.title}
+                  author={notice.authorNickname}
+                  date={dayjs(notice.createdAt).format('MM[월] DD[일]')}
+                  id={notice.postId}
+                  teamId={teamId}
+                />
+              )
+            })}
+          </Fragment>
+        )
+      })}
+      <Box ref={targetRef}>{isLoading && '로딩중입니다...'}</Box>
     </NoticeListContainer>
   )
 }

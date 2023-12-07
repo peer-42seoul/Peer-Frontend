@@ -1,18 +1,22 @@
 'use client'
 import { ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
+import dayjs from 'dayjs'
+import useSWR from 'swr'
 import { Button, Stack, Typography } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
+import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
 
 interface NoticeContentContainerProps {
   children: ReactNode
-  isMine: boolean
+  isAuthor: boolean
   params: { id: string; postId: string }
 }
 
 const NoticeContentContainer = ({
   children,
-  isMine,
+  isAuthor,
   params,
 }: NoticeContentContainerProps) => {
   const router = useRouter()
@@ -31,7 +35,7 @@ const NoticeContentContainer = ({
         justifyContent={'space-between'}
       >
         <Typography variant="body2">공지사항</Typography>
-        {isMine ? (
+        {isAuthor ? (
           <Button
             onClick={() => router.push(`/teams/${id}/notice-edit/${postId}`)}
             variant="text"
@@ -50,35 +54,38 @@ const TeamNoticeView = ({
 }: {
   params: { id: string; postId: string }
 }) => {
-  const { postId } = params
-  const dummy = {
-    data: {
-      title: '공지사항 제목이 들어오는 자리입니다.',
-      description:
-        '팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.',
-      isMine: true,
-      createdAt: '2023-11-10',
-      autherNickname: 'jeyoon',
-    },
-    loading: false,
-    error: null,
-  }
-  const { data, loading, error } = dummy
+  const { postId, id } = params
+  const axiosWithAuth = useAxiosWithAuth()
+  const router = useRouter()
+  const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
+    `/api/v1/team/notice/${postId}`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  )
 
   const handleDelete = () => {
-    alert('Delete notice #' + postId)
+    const confirm = window.confirm('공지사항을 삭제하시겠습니까?')
+    if (!confirm) return
+    axiosWithAuth
+      .delete(`/api/v1/team/notice/${postId}`)
+      .then(() => {
+        alert('공지사항을 삭제했습니다.')
+        router.push(`/teams/${id}/notice`)
+      })
+      .catch(() => {
+        alert('공지사항 삭제에 실패했습니다.')
+      })
   }
 
   if (error || !data)
     return (
-      <NoticeContentContainer isMine={data.isMine} params={params}>
+      <NoticeContentContainer isAuthor={!!data?.isAuthor} params={params}>
         <Typography>문제가 발생했습니다.</Typography>
       </NoticeContentContainer>
     )
   return (
     <Stack>
-      <NoticeContentContainer isMine={data.isMine} params={params}>
-        {loading ? (
+      <NoticeContentContainer isAuthor={data.isAuthor} params={params}>
+        {isLoading ? (
           <Typography>로딩중...</Typography>
         ) : (
           <>
@@ -88,18 +95,20 @@ const TeamNoticeView = ({
             </Stack>
             <Stack spacing={1}>
               <Typography>작성자</Typography>
-              <Typography>{data.autherNickname}</Typography>
+              <Typography>{data.authorNickname}</Typography>
             </Stack>
             <Stack spacing={1}>
               <Typography>작성일</Typography>
-              <Typography>{data.createdAt}</Typography>
+              <Typography>
+                {dayjs(data.createdAt).format('YYYY-MM-DD')}
+              </Typography>
             </Stack>
             <Stack spacing={1}>
               <Typography>설명</Typography>
-              <Typography>{data.description}</Typography>
+              <Typography>{data.content}</Typography>
             </Stack>
             <Stack alignItems={'flex-end'}>
-              {data.isMine ? (
+              {data.isAuthor ? (
                 <Button variant={'text'} color="warning" onClick={handleDelete}>
                   삭제
                 </Button>
@@ -108,7 +117,7 @@ const TeamNoticeView = ({
           </>
         )}
       </NoticeContentContainer>
-      <CommentList postId={parseInt(postId)} />
+      <CommentList postId={parseInt(postId)} teamId={parseInt(id)} />
     </Stack>
   )
 }
