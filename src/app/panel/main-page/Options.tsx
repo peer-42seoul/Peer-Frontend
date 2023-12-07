@@ -13,7 +13,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import FormCheckbox from './FormCheckbox'
 import TagAutoComplete from '@/components/TagAutoComplete'
-import SetupSelect from '../../teams/[id]/@setting/[id]/panel/SetupSelect'
+import SetupSelect from '../../teams/[id]/setting/panel/SetupSelect'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 
