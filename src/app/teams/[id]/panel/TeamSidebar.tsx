@@ -20,7 +20,7 @@ const getTabValue = (path: string) => {
   else return 'main'
 }
 
-const TeamSidebar = ({ teamId }: { teamId: string }) => {
+const TeamSidebar = ({ id }: { id: string }) => {
   const { isPc } = useMedia()
   const [tab, setTab] = useState<TTabType>('main')
   const router = useRouter()
@@ -37,16 +37,16 @@ const TeamSidebar = ({ teamId }: { teamId: string }) => {
   }
 
   const onClickMain = () => {
-    router.push(`/teams/${teamId}`)
+    router.push(`/teams/${id}`)
   }
   const onClickNotice = () => {
-    router.push(`/teams/${teamId}/notice`)
+    router.push(`/teams/${id}/notice`)
   }
   const onClickBoard = () => {
-    router.push(`/teams/${teamId}/board`)
+    router.push(`/teams/${id}/board`)
   }
   const onClickSetting = () => {
-    router.push(`/teams/${teamId}/setting`)
+    router.push(`/teams/${id}/setting`)
   }
 
   return (

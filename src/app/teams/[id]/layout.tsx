@@ -9,11 +9,11 @@ const TeamLayout = ({
   params,
   children,
 }: {
-  params: { teamId: string }
+  params: { id: string }
   children: ReactNode
 }) => {
   const { isPc } = useMedia()
-  const teamId = params.teamId
+  const id = params.id
 
   return (
     <Stack display="flex" padding={1} spacing={2} px={isPc ? 10 : 1}>
@@ -21,7 +21,7 @@ const TeamLayout = ({
         <Typography fontWeight="bold">나의 팀페이지</Typography>
       </Stack>
       <Stack spacing={2} direction={isPc ? 'row' : 'column'}>
-        <TeamSidebar teamId={teamId} />
+        <TeamSidebar id={id} />
         <Stack
           spacing={2}
           direction={isPc ? 'row' : 'column'}
