@@ -20,7 +20,7 @@ const getTabValue = (path: string) => {
   else return 'main'
 }
 
-const TeamSidebar = ({ params }: { params: { teamId: string } }) => {
+const TeamSidebar = ({ teamId }: { teamId: string }) => {
   const { isPc } = useMedia()
   const [tab, setTab] = useState<TTabType>('main')
   const router = useRouter()
@@ -28,7 +28,6 @@ const TeamSidebar = ({ params }: { params: { teamId: string } }) => {
   useEffect(() => {
     setTab(getTabValue(pathName))
   }, [pathName])
-  const { teamId } = params
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
