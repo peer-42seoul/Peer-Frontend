@@ -26,7 +26,7 @@ const RatioQuestionForm = ({
   )
   return (
     <Controller
-      disabled={disabled ? true : false}
+      disabled={disabled}
       name={idx.toString()}
       control={control}
       rules={{
@@ -39,7 +39,7 @@ const RatioQuestionForm = ({
             return (
               <Box key={index}>
                 <FormControlLabel
-                  disabled={disabled ? true : false}
+                  disabled={disabled}
                   control={<Radio />}
                   label={label}
                   value={index}

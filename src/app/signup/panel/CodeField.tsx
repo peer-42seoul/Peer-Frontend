@@ -26,7 +26,7 @@ const CodeField = ({
         autoComplete="off"
         error={codeSendStatus === 'error'}
         type="text"
-        placeholder="인증코드를 입력하세요"
+        placeholder="인증코드를 입력하세요."
         inputProps={{
           maxLength: 10,
         }}

@@ -4,7 +4,6 @@ import { Avatar, Button, Stack, Typography } from '@mui/material'
 import { IApplicant } from '../../../types/types'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
 import useMedia from '@/hook/useMedia'
 import FormAnswer from './RecuitFormAnswer'
 import useAxiosWithAuth from '@/api/config'
@@ -20,13 +19,13 @@ const ApplicantList = ({
   const { isPc } = useMedia()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const axiosInstance = useAxiosWithAuth()
+  const axiosWithAuth = useAxiosWithAuth()
 
   // TODO: DTO 맞추기
 
   const { data, isLoading } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/${teamId}`,
-    defaultGetFetcher,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const [members, setMembers] = useState<IApplicant[]>([])
   const [member, setMember] = useState<IApplicant | null>(
@@ -34,7 +33,7 @@ const ApplicantList = ({
   )
 
   const handleAccept = () => {
-    axiosInstance
+    axiosWithAuth
       .put(
         `${
           process.env.NEXT_PUBLIC_API_URL
@@ -55,7 +54,7 @@ const ApplicantList = ({
 
   const handleReject = () => {
     console.log('reject')
-    axiosInstance
+    axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/deny/${teamId}?userId=${
           member!.userId
