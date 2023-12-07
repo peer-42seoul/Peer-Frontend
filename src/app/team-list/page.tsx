@@ -25,7 +25,6 @@ export interface ITeamInfo {
 const TeamsListPage = () => {
   const { showTeams } = useShowTeams()
   const axiosInstance = useAxiosWithAuth()
-  //실제 동작해야할 API
   const { data, isLoading } = useSWR<ITeamInfo[]>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/list?teamStatus=${showTeams}`,
     (url: string) => axiosInstance(url).then((res) => res.data),
