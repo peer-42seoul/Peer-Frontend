@@ -1,68 +1,87 @@
-import { Avatar, Box, Stack, Typography } from '@mui/material'
+import dayjs from 'dayjs'
+import { Box, Stack, Typography } from '@mui/material'
+import CuAvatar from '@/components/CuAvatar'
 import { IMessage, IMessageUser } from '@/types/IMessage'
+import * as style from './MessageItem.style'
 
-const OwnerMessageItem = ({ message }: { message: IMessage }) => {
+type TMessageOption = 'Top' | 'Normal' | 'Extra'
+interface IOwnerMessageItemProps {
+  message: IMessage
+  messageOption: TMessageOption
+}
+interface ITargetMessageItemProps {
+  message: IMessage
+  messageOption: TMessageOption
+  target: IMessageUser
+}
+
+const MessageDate = ({ date }: { date: string }) => {
+  // TODO : UTCtoLocalTime 함수로 시간 변환할 것
+  const dayjsDate = dayjs(date)
+  const ampm = dayjsDate.hour() < 12 ? '오전' : '오후'
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-      }}
+    <Stack
+      justifyContent={'flex-end'}
+      alignItems={'center'}
+      spacing={'0.125rem'}
+      sx={style.date}
     >
-      <Stack sx={{ bgcolor: '#EFEFEF', alignItems: 'flex-end' }}>
-        <Typography>{message.content}</Typography>
-        <Typography>{message.date}</Typography>
-      </Stack>
-    </Box>
+      <Typography variant={'CaptionEmphasis'} color={'text.assistive'}>
+        {dayjsDate.format('MM월 DD일')}
+      </Typography>
+      <Typography variant={'CaptionEmphasis'} color={'text.assistive'}>
+        {ampm} {dayjsDate.format('HH:mm')}
+      </Typography>
+    </Stack>
   )
 }
 
-const TargetMessageItem = ({
+export const OwnerMessageItem = ({
+  message,
+  messageOption,
+}: IOwnerMessageItemProps) => {
+  return (
+    <Stack
+      direction={'row'}
+      justifyContent={'flex-end'}
+      alignItems={'flex-end'}
+      spacing={'0.5rem'}
+      sx={style[`contentMargin${messageOption}`]}
+    >
+      <MessageDate date={message.date} />
+      <Box sx={style.ownerMessage}>
+        <Typography variant={'body1'}>{message.content}</Typography>
+      </Box>
+    </Stack>
+  )
+}
+
+export const TargetMessageItem = ({
   message,
   target,
-}: {
-  message: IMessage
-  target: IMessageUser
-}) => {
+  messageOption,
+}: ITargetMessageItemProps) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-      }}
+    <Stack
+      direction={'row'}
+      justifyContent={'flex-start'}
+      alignItems={'flex-start'}
+      spacing={'0.5rem'}
+      sx={style[`contentMargin${messageOption}`]}
     >
-      <Stack sx={{ bgcolor: '#D8D8D8', alignItems: 'flex-start' }} spacing={1}>
-        <Stack direction={'row'} alignItems={'center'} spacing={1}>
-          <Avatar src={target.userProfile} />
-          <Typography sx={{ fontWeight: 'bold' }}>
-            {target.userNickname}
-          </Typography>
-        </Stack>
-        <Typography>{message.content}</Typography>
-        <Typography>{message.date}</Typography>
-      </Stack>
-    </Box>
-  )
-}
-
-interface IMessageItemProps {
-  msg: IMessage
-  owner: IMessageUser
-  target: IMessageUser
-}
-
-const MessageItem = ({ msg, owner, target }: IMessageItemProps) => {
-  return (
-    <>
-      {msg.userId === owner.userId ? (
-        <OwnerMessageItem message={msg} />
+      {messageOption === 'Normal' ? (
+        <CuAvatar sx={style.dummyAvatar} />
       ) : (
-        <TargetMessageItem message={msg} target={target} />
+        <CuAvatar
+          src={target.userProfile}
+          alt={target.userNickname}
+          sx={style.targetAvatar}
+        />
       )}
-    </>
+      <Box sx={style.targetMessage}>
+        <Typography variant={'body1'}>{message.content}</Typography>
+      </Box>
+      <MessageDate date={message.date} />
+    </Stack>
   )
 }
-
-export default MessageItem

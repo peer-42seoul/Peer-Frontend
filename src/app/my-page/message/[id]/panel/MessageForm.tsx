@@ -1,9 +1,14 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { isAxiosError } from 'axios'
-import { Stack, TextField } from '@mui/material'
+import { Stack, TextField, Typography, IconButton, styled } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
+import CuTextField from '@/components/CuTextField'
+import SendIcon from '@/icons/SendIcon'
 import { IMessage, IMessageTargetUser } from '@/types/IMessage'
+import * as style from './MessageForm.style'
+
+const MAX_LENGTH = 300
 
 type TMessageSendView = 'PC_VIEW' | 'MOBILE_VIEW'
 interface IMessageFormProps {
@@ -14,6 +19,8 @@ interface IMessageFormProps {
   handleClose?: () => void // MOBILE_VIEW에서 모달을 닫기 위함
   disabled?: boolean // PC_VIEW에서 채팅방이 삭제되었을 때 메시지 전송을 막기 위함
 }
+
+const BorderlessTextField = styled(CuTextField)(style.removeBorder)
 
 const MessageForm = ({
   view,
@@ -67,21 +74,34 @@ const MessageForm = ({
   return (
     <form onSubmit={messageSubmit} id={'message-form'}>
       {view === 'PC_VIEW' ? (
-        <Stack direction={'row'}>
-          <TextField
-            sx={{ width: '100%' }}
-            value={content}
-            placeholder="내용을 입력하세요"
-            variant="outlined"
-            onChange={(e) => setContent(e.target.value)}
-            disabled={disabled}
-          />
-          <CuButton
-            variant="text"
-            type="submit"
-            message="전송"
-            disabled={disabled}
-          />
+        <Stack
+          direction={'row'}
+          alignItems={'center'}
+          spacing={'1rem'}
+          sx={style.pcMessageForm}
+        >
+          <Stack
+            direction={'row'}
+            spacing={0}
+            alignItems={'flex-end'}
+            sx={style.pcTextFieldContainer}
+          >
+            <BorderlessTextField
+              fullWidth
+              multiline
+              rows={4}
+              value={content}
+              placeholder="내용을 입력하세요"
+              onChange={(e) => setContent(e.target.value.slice(0, MAX_LENGTH))}
+              disabled={disabled}
+            />
+            <Typography color={'text.assistive'} sx={style.messageLength}>
+              {content.length} / {MAX_LENGTH}
+            </Typography>
+          </Stack>
+          <IconButton type="submit" sx={style.pcSendButton}>
+            <SendIcon />
+          </IconButton>
         </Stack>
       ) : (
         <TextField

@@ -27,31 +27,57 @@ const SettingContainer = ({
   // onPositiveClick?: (object: any) => void
 }) => {
   return (
-    <div>
-      <Typography id={`profile-${settingTitle}-setting-modal-title`}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        width: '100%',
+        gap: '24px',
+      }}
+    >
+      <Typography
+        id={`profile-${settingTitle}-setting-modal-title`}
+        variant="Title2Emphasis"
+        sx={{ textAlign: 'center' }}
+      >
         {settingTypeMap.get(settingTitle)} 수정
       </Typography>
       <Box id={`profile-${settingTitle}-setting-modal-description`}>
         {children}
       </Box>
-      <CuButton
-        variant="contained"
-        action={onNegativeClick}
-        disabled={isSubmitting}
-        message="취소"
-      />
-      {/* {onPositiveClick ? (
+      <div style={{ width: '100%', justifyContent: 'space-between' }}>
+        <CuButton
+          variant="text"
+          action={onNegativeClick}
+          disabled={isSubmitting}
+          message="취소"
+          style={{ width: '50%' }}
+          TypographyProps={{
+            color: 'purple.strong',
+            fontSize: '14px',
+            fontWeight: '500',
+          }}
+        />
+        {/* {onPositiveClick ? (
         <Button variant="contained" onClick={onPositiveClick}>
           완료
         </Button>
       ) : ( */}
-      <CuButton
-        variant="contained"
-        type="submit"
-        disabled={isSubmitting}
-        message={isSubmitting ? '제출 중' : '완료'}
-        action={() => {}}
-      />
+        <CuButton
+          variant="contained"
+          type="submit"
+          disabled={isSubmitting}
+          message={isSubmitting ? '제출 중' : '완료'}
+          action={() => {}}
+          style={{ width: '50%' }}
+          TypographyProps={{
+            color: 'text.normal',
+            fontSize: '14px',
+            fontWeight: '500',
+          }}
+        />
+      </div>
     </div>
   )
 }
