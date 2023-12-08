@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { IMember, TeamGrant } from '../../../types/types'
 import useModal from '@/hook/useModal'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
@@ -18,13 +18,9 @@ import OthersProfile from '@/app/panel/OthersProfile'
 const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
-  const [members, setMembers] = useState<IMember[]>([])
+  const [members, setMembers] = useState<IMember[]>(team)
   const [member, setMember] = useState<IMember | null>(null)
   const axiosWithAuth = useAxiosWithAuth()
-
-  useEffect(() => {
-    setMembers(team)
-  }, [team])
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
@@ -97,63 +93,45 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
 
   return (
     <>
-      <Box
-        sx={{
-          border: '1px solid',
-          borderRadius: 2,
-          p: 2,
-          height: 400,
-          overflow: 'scroll',
-        }}
-      >
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography fontWeight="bold">팀원 목록</Typography>
-          </Grid>
-          {members.map((member, index) => (
-            <Grid
-              component="div"
-              key={index}
-              item
-              xs={isPc ? 4 : 6}
-              textAlign="center"
-            >
-              <Box
-                component="div"
-                border="1px solid"
-                p={1}
-                sx={{ position: 'relative' }}
+      <Grid container spacing={2} m={1}>
+        {members.map((member, index) => (
+          <Grid
+            component="div"
+            key={index}
+            item
+            xs={isPc ? 2 : 6}
+            textAlign="center"
+          >
+            <Box component="div" p={1} sx={{ position: 'relative' }}>
+              <Button
+                size="small"
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  padding: 0,
+                  minWidth: 0.2,
+                }}
+                onClick={() => handleOpenDelete(member)}
               >
-                <Button
+                X
+              </Button>
+              <OthersProfile name={member.name} userId={member.id}>
+                <Avatar sx={{ margin: 'auto' }}>A</Avatar>
+              </OthersProfile>
+              <Typography fontWeight="bold">{member.name}</Typography>
+              <Stack direction="row" sx={{ justifyContent: 'center' }}>
+                <Typography fontSize="small">리더 권한</Typography>
+                <Switch
                   size="small"
-                  sx={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    padding: 0,
-                    minWidth: 0.2,
-                  }}
-                  onClick={() => handleOpenDelete(member)}
-                >
-                  X
-                </Button>
-                <OthersProfile name={member.name} userId={member.id}>
-                  <Avatar sx={{ margin: 'auto' }}>A</Avatar>
-                </OthersProfile>
-                <Typography fontWeight="bold">{member.name}</Typography>
-                <Stack direction="row" sx={{ justifyContent: 'center' }}>
-                  <Typography fontSize="small">리더 권한</Typography>
-                  <Switch
-                    size="small"
-                    onChange={() => handleGrant(member)}
-                    checked={member.grant === TeamGrant.LEADER ? true : false}
-                  />
-                </Stack>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
+                  onChange={() => handleGrant(member)}
+                  checked={member.grant === TeamGrant.LEADER ? true : false}
+                />
+              </Stack>
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
 
       <Modal open={isOpen}>
         <Box sx={{ backgroundColor: 'white' }}>

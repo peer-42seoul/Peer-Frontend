@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, Button, Stack, Typography } from '@mui/material'
+import { Avatar, Button, Card, Stack, Typography } from '@mui/material'
 import { IApplicant } from '../../../types/types'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
@@ -124,93 +124,92 @@ const ApplicantList = ({
   }
 
   return (
-    <>
-      <Stack border="1px solid" borderRadius={2} height={isPc ? 600 : 400}>
-        <Stack
-          direction="row"
-          display="flex"
-          justifyContent="space-between"
-          p={2}
-        >
-          <Typography fontWeight="bold">
-            신청 대기자 {index + 1} / {members.length}
-          </Typography>
-          <Button onClick={close} size="small">
-            X
-          </Button>
+    <Card sx={{ p: 3, borderRadius: '10px' }}>
+      <Stack
+        direction="row"
+        display="flex"
+        justifyContent="space-between"
+        p={2}
+      >
+        <Typography fontWeight="bold">
+          신청 대기자 {index + 1} / {members.length}
+        </Typography>
+        <Button onClick={close} size="small">
+          X
+        </Button>
+      </Stack>
+      <Stack
+        direction="row"
+        display="flex"
+        justifyContent="space-between"
+        margin="auto"
+        width="80%"
+        height={'10rem'}
+        p={2}
+      >
+        <Button onClick={handlePrev}>◀︎</Button>
+        <Stack alignItems="center" spacing={1}>
+          <Avatar>A</Avatar>
+          {member && <Typography>{member.name}</Typography>}
         </Stack>
-        <Stack
-          direction="row"
-          display="flex"
-          justifyContent="space-between"
-          margin="auto"
-          width="80%"
-          p={2}
+        <Button onClick={handleNext}>▶︎</Button>
+      </Stack>
+
+      <Stack direction="row" spacing={1}>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleAccept}
         >
-          <Button onClick={handlePrev}>◀︎</Button>
-          <Stack alignItems="center" spacing={1}>
-            <Avatar>A</Avatar>
-            {member && <Typography>{member.name}</Typography>}
-          </Stack>
-          <Button onClick={handleNext}>▶︎</Button>
-        </Stack>
-        <Stack border="1px solid" borderRadius={2} p={2}>
-          <Typography fontWeight="bold">팀 신청 설문</Typography>
-          <Stack
-            border="1px solid"
-            borderRadius={2}
-            p={2}
-            overflow="auto"
-            height={isPc ? 300 : 100}
-            ref={scrollRef}
-          >
-            {member ? (
-              member.interview.map((interview, index) => (
-                <Stack key={index} m={1}>
-                  <Typography fontWeight="bold">
-                    {interview.question}
-                  </Typography>
-                  <FormAnswer interview={interview} index={index} />
-                </Stack>
-              ))
-            ) : (
-              <Stack border="1px solid" borderRadius={2} height={400}>
-                <Stack
-                  direction="row"
-                  display="flex"
-                  justifyContent="space-between"
-                  p={2}
-                >
-                  <Typography fontWeight="bold">신청 대기자</Typography>
-                  <Button onClick={close} size="small">
-                    X
-                  </Button>
-                </Stack>
-                <Typography>신청한 대기자가 없습니다.</Typography>
+          승인
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          fullWidth
+          onClick={handleReject}
+        >
+          거절
+        </Button>
+      </Stack>
+
+      <Stack border="1px solid" borderRadius={2} p={2}>
+        <Typography fontWeight="bold">팀 신청 설문</Typography>
+        <Stack
+          border="1px solid"
+          borderRadius={2}
+          p={2}
+          overflow="auto"
+          height={isPc ? 300 : 100}
+          ref={scrollRef}
+        >
+          {member ? (
+            member.interview.map((interview, index) => (
+              <Stack key={index} m={1}>
+                <Typography fontWeight="bold">{interview.question}</Typography>
+                <FormAnswer interview={interview} index={index} />
               </Stack>
-            )}
-          </Stack>
-        </Stack>
-        <Stack direction="row" spacing={1}>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleAccept}
-          >
-            승인
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            fullWidth
-            onClick={handleReject}
-          >
-            거절
-          </Button>
+            ))
+          ) : (
+            <Stack border="1px solid" borderRadius={2} height={400}>
+              <Stack
+                direction="row"
+                display="flex"
+                justifyContent="space-between"
+                p={2}
+              >
+                <Typography fontWeight="bold">신청 대기자</Typography>
+                <Button onClick={close} size="small">
+                  X
+                </Button>
+              </Stack>
+              <Typography>신청한 대기자가 없습니다.</Typography>
+            </Stack>
+          )}
         </Stack>
       </Stack>
-    </>
+    </Card>
   )
 }
 

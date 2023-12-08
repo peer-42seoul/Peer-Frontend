@@ -1,18 +1,16 @@
 'use client'
 
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Card, Stack, Typography } from '@mui/material'
 import SetupPage from './panel/SetupTeam'
 import { useState } from 'react'
 import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
-import { useRouter } from 'next/navigation'
 import useAxiosWithAuth from '@/api/config'
 import { ITeam } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectionRecruit'
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
-  const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const { data, isLoading } = useSWR<ITeam>(
@@ -42,16 +40,29 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
           <SetupPage team={data.team} />
           {!showApplicant ? (
             <>
-              <SetupMember team={data.member} teamId={data.team.id} />
-              <Button
-                onClick={openApplicant}
-                sx={{ mt: 1 }}
-                variant="contained"
-                color="primary"
-                fullWidth
+              <Card
+                sx={{
+                  borderRadius: '10px',
+                  p: 3,
+                  height: 400,
+                  overflow: 'scroll',
+                }}
               >
-                신청 대기자 보기
-              </Button>
+                <Stack direction={'row'} justifyContent={'space-between'}>
+                  <Typography fontWeight="bold">팀원 목록</Typography>
+
+                  <Button
+                    onClick={openApplicant}
+                    sx={{ mt: 1, width: '9rem' }}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    신청 대기자 보기
+                  </Button>
+                </Stack>
+                <SetupMember team={data.member} teamId={data.team.id} />
+              </Card>
             </>
           ) : (
             <ApplicantList close={closeApplicant} teamId={data.team.id} />
@@ -62,12 +73,6 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
           <Typography>데이터가 없습니다.</Typography>
         </>
       )}
-      <Button
-        variant="outlined"
-        onClick={() => router.push(`/recruit/${params.id}`)}
-      >
-        모집 글 보기
-      </Button>
     </Stack>
   )
 }

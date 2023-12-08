@@ -33,4 +33,17 @@ const deleteModalStyle = {
   p: 4,
 }
 
-export { closeButtonStyle, comfirmModalStyle, deleteModalStyle }
+const SaveButtonStyle = {
+  width: '4rem',
+  margin: 'auto',
+  right: 0,
+  bottom: 0,
+  position: 'absolute',
+}
+
+export {
+  closeButtonStyle,
+  comfirmModalStyle,
+  deleteModalStyle,
+  SaveButtonStyle,
+}

@@ -1,6 +1,11 @@
 'use client'
 
-import { TeamOperationForm, TeamStatus, TeamType } from '../../../types/types'
+import {
+  Job,
+  TeamOperationForm,
+  TeamStatus,
+  TeamType,
+} from '../../../types/types'
 import SetupStudy from './SetupStudy'
 import SetupProject from './SetupProject'
 
@@ -14,6 +19,7 @@ export interface ISetupTeam {
   operationForm: TeamOperationForm
   region: string[]
   teamImage: string | null
+  job: Job[] | null
 }
 
 const SetupTeam = ({ team }: { team: ISetupTeam }) => {
