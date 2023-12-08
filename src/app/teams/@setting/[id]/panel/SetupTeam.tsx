@@ -17,19 +17,6 @@ export interface ISetupTeam {
 }
 
 const SetupTeam = ({ team }: { team: ISetupTeam }) => {
-  // useEffect(() => {
-  //   window.history.pushState(null, '', location.href)
-
-  //   window.onpopstate = () => {
-  //     if (isEdit) {
-  //       console.log("You can't go back")
-  //       history.go(1)
-
-  //       alert('팀 정보 수정을 완료해주세요.')
-  //     }
-  //   }
-  // }, [isEdit])
-
   return (
     <>
       {team.type === TeamType.STUDY ? (

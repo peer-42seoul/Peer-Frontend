@@ -54,10 +54,6 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
 
   const watchAllFields = watch()
 
-  useEffect(() => {
-    if (watchAllFields) setIsEdit(true)
-  }, [watchAllFields])
-
   const onSubmit = handleSubmit((data) => {
     if (
       validation(getValues('name')) ||
@@ -101,6 +97,27 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
     setValue('teamImage', '')
     closeModal()
   }
+
+  useEffect(() => {
+    if (watchAllFields) setIsEdit(true)
+  }, [watchAllFields])
+
+  useEffect(() => {
+    window.history.pushState(null, '', location.href)
+
+    window.onpopstate = () => {
+      if (isEdit) {
+        console.log("You can't go back")
+        history.go(1)
+
+        alert('팀 정보 수정을 완료해주세요.')
+      }
+    }
+
+    return () => {
+      window.onpopstate = () => {}
+    }
+  }, [isEdit])
 
   return (
     <>
