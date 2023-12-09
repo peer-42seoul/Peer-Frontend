@@ -27,7 +27,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   if (pathname === '/showcase') {
     return (
-      <Box sx={{ backgroundColor: 'background.primary' }}>
+      <Box sx={{ backgroundColor: 'background.primary', minHeight: '100svh' }}>
         <div className="mobile-layout">
           <Box sx={{ marginBottom: '64px' }}>{children}</Box>
           <MobileNav />
@@ -41,7 +41,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <Box sx={{ backgroundColor: 'background.primary' }}>
+    <Box sx={{ backgroundColor: 'background.primary', minHeight: '100svh' }}>
       <div className="mobile-layout">
         <Header />
         <Box sx={{ marginBottom: '64px' }}>{children}</Box>
