@@ -349,7 +349,7 @@ const SignUp = () => {
               />
               {(emailSendStatus === 'submit' && codeSendStatus !== 'submit' && (
                 <CodeTimer setEmailSendStatus={setEmailSendStatus} />
-              )) || <Typography>&nbsp;</Typography>}
+              )) || <Typography variant="Caption">&nbsp;</Typography>}
               <Controller
                 name="password"
                 control={control}

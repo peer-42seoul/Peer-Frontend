@@ -9,8 +9,8 @@ const ShowcaseLayout = ({ children }: { children: ReactNode }) => {
     <Box sx={{ backgroundColor: 'background.primary' }}>
       <div className="pc-layout">
         <Stack
-          height={'80vh'}
-          width={'100%'}
+          height={'100%'}
+          width={'100vw'}
           direction={'row'}
           justifyContent={'center'}
         >

@@ -1,17 +1,17 @@
 import { Avatar, Box, Card, Stack } from '@mui/material'
 
-const PhoneFrame = ({ imageUrl }: { imageUrl: string }) => {
+const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
   return (
     <Card
       sx={{
         borderRadius: 10,
         p: 1,
         backgroundColor: 'gray',
-        width: '300px',
-        height: '600px',
+        width: '70%',
+        height: '100%',
       }}
     >
-      <Card sx={{ borderRadius: 10, backgroundColor: 'pink', height: '100%' }}>
+      <Card sx={{ borderRadius: 10, height: '100%', backgroundColor: 'white' }}>
         <Stack direction={'row'} justifyContent={'center'}>
           <Box
             sx={{
@@ -26,11 +26,25 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string }) => {
           />
         </Stack>
         <Stack>
-          <Avatar
-            src={imageUrl}
-            sx={{ width: '300px', height: '300px' }}
-            variant="rounded"
-          />
+          {imageUrl ? (
+            <Avatar
+              src={imageUrl}
+              sx={{
+                width: '22.5rem',
+                height: '50rem',
+              }}
+              variant="rounded"
+            />
+          ) : (
+            <Avatar
+              src="/images/icons/icon-512x512.png"
+              sx={{
+                width: '22.5rem',
+                height: '50rem',
+              }}
+              variant="rounded"
+            />
+          )}
         </Stack>
       </Card>
     </Card>
