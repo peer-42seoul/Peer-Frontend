@@ -17,6 +17,7 @@ import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'
 import AlertIcon from './AlertIcon'
+import Image from 'next/image'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined'
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined'
@@ -25,18 +26,25 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 
 export const MobileNav = () => {
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState<
+    'home' | 'hitchhiking' | 'team-list' | 'showcase' | 'my-page'
+  >('home')
   const pathname = usePathname()
   const router = useRouter()
   const { isLogin } = useAuthStore()
 
+  const bottomNavStyle = {
+    minWidth: 'auto',
+    padding: '6px 0',
+  }
+
   useEffect(() => {
     if (pathname === '/') {
-      setValue(0)
+      setValue('home')
     } else if (pathname === '/team-list') {
-      setValue(3)
+      setValue('team-list')
     } else if (pathname === '/my-page') {
-      setValue(4)
+      setValue('my-page')
     }
   }, [pathname])
 
@@ -59,35 +67,45 @@ export const MobileNav = () => {
         }}
       >
         <BottomNavigationAction
+          sx={bottomNavStyle}
           icon={<HomeOutlinedIcon />}
           label="홈"
+          value={'home'}
           onClick={() => {
             router.push('/')
           }}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           icon={<ThumbUpAltOutlinedIcon />}
           label="히치하이킹"
+          value={'hitchhiking'}
           onClick={() => {
             router.push('/')
           }}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           label="쇼케이스"
+          value={'showcase'}
           onClick={() => {
             router.push('/showcase')
           }}
           icon={<GroupOutlinedIcon />}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           label="팀페이지"
+          value={'team-list'}
           onClick={() => {
             router.push('/team-list')
           }}
           icon={<TabletMacOutlinedIcon />}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           label="내 프로필"
+          value={'my-page'}
           onClick={() => {
             router.push(isLogin ? '/my-page' : '/login?redirect=/my-page')
           }}
@@ -99,7 +117,9 @@ export const MobileNav = () => {
 }
 
 export const PcNav = () => {
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState<
+    'home' | 'hitchhiking' | 'team-list' | 'showcase'
+  >('home')
   const { isTablet } = useMedia()
   const pathname = usePathname()
   const router = useRouter()
@@ -107,13 +127,15 @@ export const PcNav = () => {
 
   useEffect(() => {
     if (pathname === '/') {
-      setValue(0)
+      setValue('home')
     } else if (pathname === '/team-list') {
-      setValue(2)
+      setValue('team-list')
     }
   }, [pathname])
+
   return (
     <Stack
+      width={'100%'}
       direction={'row'}
       justifyContent={'space-between'}
       alignItems={'center'}
@@ -128,44 +150,49 @@ export const PcNav = () => {
         paddingX: 3,
       }}
     >
-      <Stack direction={'row'}>
-        <Stack alignItems={'center'} justifyContent={'center'}>
-          <PeerLogo sx={{ width: 50, height: 50 }} />
-        </Stack>
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue)
-          }}
-        >
-          <BottomNavigationAction
-            label="홈"
-            onClick={() => {
-              router.push('/')
-            }}
-          />
-          <BottomNavigationAction
-            label="히치하이킹"
-            onClick={() => {
-              router.push('/')
-            }}
-          />
+        <Stack direction={'row'}>
+            <Stack alignItems={'center'} justifyContent={'center'}>
+                <PeerLogo sx={{ width: 50, height: 50 }} />
+            </Stack>
+      <BottomNavigation
+        showLabels={true}
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue)
+        }}
+      >
 
-          <BottomNavigationAction
-            label="팀페이지"
-            onClick={() => {
-              router.push('/team-list')
-            }}
-          />
-          <BottomNavigationAction
-            label="쇼케이스"
-            onClick={() => {
-              router.push('/showcase')
-            }}
-          />
-        </BottomNavigation>
-      </Stack>
+        <BottomNavigationAction
+          value={'home'}
+          label="홈"
+          onClick={() => {
+            router.push('/')
+          }}
+        />
+        <BottomNavigationAction
+          value={'hitchhiking'}
+          label="히치하이킹"
+          onClick={() => {
+            router.push('/')
+          }}
+        />
+
+        <BottomNavigationAction
+          value={'team-list'}
+          label="팀페이지"
+          onClick={() => {
+            router.push('/team-list')
+          }}
+        />
+        <BottomNavigationAction
+          value={'showcase'}
+          label="쇼케이스"
+          onClick={() => {
+            router.push('/showcase')
+          }}
+        />
+      </BottomNavigation>
+        </Stack>
       <Stack direction={'row'} alignItems={'center'}>
         <AlertIcon />
         <SearchButton />
