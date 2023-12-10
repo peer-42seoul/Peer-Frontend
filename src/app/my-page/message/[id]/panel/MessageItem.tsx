@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { Box, Stack, Typography } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
 import { IMessage, IMessageUser } from '@/types/IMessage'
+import UTCtoLocalTime from '@/utils/UTCtoLocalTime'
 import * as style from './MessageItem.style'
 
 type TMessageOption = 'Top' | 'Normal' | 'Extra'
@@ -16,8 +17,7 @@ interface ITargetMessageItemProps {
 }
 
 const MessageDate = ({ date }: { date: string }) => {
-  // TODO : UTCtoLocalTime 함수로 시간 변환할 것
-  const dayjsDate = dayjs(date)
+  const dayjsDate = dayjs(UTCtoLocalTime(date))
   const ampm = dayjsDate.hour() < 12 ? '오전' : '오후'
   return (
     <Stack
