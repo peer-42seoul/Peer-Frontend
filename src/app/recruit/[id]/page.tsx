@@ -105,7 +105,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               <Stack direction={'row'} gap={4} marginBottom={6}>
                 <Box
                   src={data?.image ?? ''}
-                  alt="leader_profile"
+                  alt="main_image"
                   width={240}
                   height={160}
                   component={'img'}
@@ -276,7 +276,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           </Box>
           <Box
             src={data?.image ?? ''}
-            alt="leader_profile"
+            alt="main_image"
             width={240}
             height={160}
             component={'img'}
