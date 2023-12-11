@@ -1,14 +1,14 @@
 import { Box, Button, Stack } from '@mui/material'
 import { SizeType, WidgetType } from '@/types/ITeamDnDLayout'
-import TmpTextWidget from '@/app/teams/@main/[id]/panel/widgets/TmpTextWidget'
+import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
 import { useCallback, useState } from 'react'
-import { sizeRatio } from '@/app/teams/@main/[id]/panel/TeamDnD'
-import TmpNoticeWidget from '@/app/teams/@main/[id]/panel/widgets/TmpNoticeWidget'
-import TmpBoardWidget from '@/app/teams/@main/[id]/panel/widgets/TmpBoardWidget'
-import TmpCalenderWidget from '@/app/teams/@main/[id]/panel/widgets/TmpCalenderWidget'
-import TmpAttendWidget from '@/app/teams/@main/[id]/panel/widgets/TmpAttendWidget'
-import TmpImageWidget from '@/app/teams/@main/[id]/panel/widgets/TmpImageWidget'
-import TmpLinkWidget from '@/app/teams/@main/[id]/panel/widgets/TmpLinkWidget'
+import { sizeRatio } from '@/app/teams/[id]/panel/TeamDnD'
+import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
+import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
+import TmpCalenderWidget from '@/app/teams/[id]/panel/widgets/TmpCalenderWidget'
+import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
+import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
+import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 
 interface ITeamDnDWidgetListProps {
   setIsDropping: (isDropping: boolean) => void
