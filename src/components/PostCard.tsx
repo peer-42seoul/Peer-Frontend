@@ -14,7 +14,7 @@ import { ITag } from '@/types/IPostDetail'
 import { Chip } from '@mui/material'
 
 const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
-  { authorImage, teamName, title, tagList, image, sx }: IPostCard,
+  { authorImage, teamName, title, tagList, image, sx, onClick }: IPostCard,
   ref,
 ) {
   return (
@@ -26,6 +26,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
         backfaceVisibility: 'hidden',
       }}
       ref={ref}
+      onClick={onClick}
     >
       <CardMedia
         component="img"

@@ -9,6 +9,7 @@ export interface IPostCard {
   tagList: ITag[]
   image: string // 글 대표 이미지 (썸네일)
   sx?: SxProps
+  onClick?: () => void
 }
 
 export interface IHitchhikingCardBack {

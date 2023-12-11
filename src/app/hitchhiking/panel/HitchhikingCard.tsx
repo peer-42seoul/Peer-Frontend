@@ -1,19 +1,26 @@
 'use client'
-import CuButton from '@/components/CuButton'
 import PostCard from '@/components/PostCard'
 import { IPostCard } from '@/types/IPostCard'
-import { CardContent, SxProps, Typography } from '@mui/material'
+import { Button, CardContent, SxProps, Typography } from '@mui/material'
 import { Box, Card, CardHeader, Chip, Stack } from '@mui/material'
 import React, { useState } from 'react'
 
 const HitchhikingCardBack = ({
   postId,
   sx,
+  onClick,
 }: {
   postId: number
   sx?: SxProps
+  onClick?: () => void
 }) => {
   console.log(`HitchhikingCard Back API! ${postId}`)
+
+  const handleSeeAll = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('handleSeeAll')
+  }
   return (
     <Card
       sx={{
@@ -22,8 +29,9 @@ const HitchhikingCardBack = ({
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         transform: 'rotateY(180deg)',
-        // backfaceVisibility: 'hidden',
+        backfaceVisibility: 'hidden',
       }}
+      onClick={onClick}
     >
       <CardHeader>
         <Stack direction="row" justifyContent={'space-between'}>
@@ -45,7 +53,7 @@ const HitchhikingCardBack = ({
         <Box sx={{ backgroundColor: 'background.secondary' }}>Avatars</Box>
       </CardContent>
       <CardContent>
-        <CuButton message="전체 보기" />
+        <Button onClick={handleSeeAll}>전체 보기</Button>
       </CardContent>
     </Card>
   )
@@ -65,12 +73,14 @@ const HitchhikingCard = ({
   return (
     <div
       style={{
-        transform: `rotateY(${isFlipped ? '180deg' : '0deg'})`,
+        transform: `perspective(800px) rotateY(${
+          isFlipped ? '180deg' : '0deg'
+        })`,
+        transformStyle: 'preserve-3d',
         width: '100%',
         height: '100%',
         transition: 'transform 0.5s ease',
       }}
-      onClick={() => setFlipped(!isFlipped)}
     >
       <PostCard
         postId={postId}
@@ -82,17 +92,15 @@ const HitchhikingCard = ({
         sx={{
           ...sx,
           backfaceVisibility: 'hidden',
-          opacity: isFlipped ? 0 : 1,
-          transition: 'opacity 0.5s ease',
         }}
+        onClick={() => setFlipped(!isFlipped)}
       />
       <HitchhikingCardBack
         postId={postId}
         sx={{
           ...sx,
-          opacity: isFlipped ? 1 : 0,
-          transition: 'opacity 0.5s ease',
         }}
+        onClick={() => setFlipped(!isFlipped)}
       />
     </div>
   )
