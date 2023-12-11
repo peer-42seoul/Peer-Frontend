@@ -69,7 +69,6 @@ const CardContainer = ({
       return
     }
     setDragStart({ x: 0, y: 0 })
-    // setCurrentIndex((prev) => prev - 1)
     setCardList((prev: IMainCard[]) => {
       console.log(`dislike api 호출 pathValue: ${recruit_id}, title: ${title}`)
       return prev.filter((card) => card.recruit_id !== recruit_id)

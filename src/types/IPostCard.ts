@@ -10,6 +10,8 @@ export interface IPostCard {
   image: string // 글 대표 이미지 (썸네일)
   sx?: SxProps
   onClick?: () => void
+  onTouchEnd?: () => void
+  onMouseUp?: () => void
 }
 
 export interface IHitchhikingCardBack {

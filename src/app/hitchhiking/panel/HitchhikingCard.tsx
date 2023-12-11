@@ -17,7 +17,6 @@ const HitchhikingCardBack = ({
   console.log(`HitchhikingCard Back API! ${postId}`)
 
   const handleSeeAll = (e: React.MouseEvent) => {
-    e.preventDefault()
     e.stopPropagation()
     console.log('handleSeeAll')
   }
