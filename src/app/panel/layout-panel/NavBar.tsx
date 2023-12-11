@@ -49,7 +49,7 @@ export const MobileNav = () => {
         left: 0,
         right: 0,
         overflow: 'hidden',
-        zIndex: 1400,
+        zIndex: 1300, // NOTE : 추후 모집글 버튼 z-index 조정 작업시에 함께 조정 필요함.
       }}
     >
       <BottomNavigation
@@ -123,7 +123,7 @@ export const PcNav = () => {
         right: 0,
         top: 0,
         overflow: 'hidden',
-        zIndex: 1400,
+        zIndex: 1300, // NOTE : 추후 모집글 버튼 z-index 조정 작업시에 함께 조정 필요함.
         backgroundColor: 'background.primary',
         paddingX: 3,
       }}

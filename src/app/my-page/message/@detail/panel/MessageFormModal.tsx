@@ -19,9 +19,18 @@ const MessageFormModal = ({
   return (
     <CuModal
       open={isOpen}
-      handleClose={handleClose}
-      ariaTitle={'create_message'}
-      ariaDescription={'create_message'}
+      onClose={handleClose}
+      title={'쪽지 보내기'} // TODO : 쪽지 보내기 -> 상대방 닉네임으로 변경
+      mobileFullSize
+      containedButton={{
+        text: '보내기',
+        type: 'submit',
+        form: 'message-form',
+      }}
+      textButton={{
+        text: '취소',
+        onClick: handleClose,
+      }}
     >
       <MessageForm
         view={'MOBILE_VIEW'}
