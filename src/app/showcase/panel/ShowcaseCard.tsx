@@ -7,7 +7,6 @@ import {
   CardContent,
   IconButton,
   Stack,
-  ToggleButton,
   Typography,
 } from '@mui/material'
 import { MouseEvent, useCallback, useState } from 'react'
@@ -16,7 +15,7 @@ import { ICardData } from './types'
 import useAxiosWithAuth from '@/api/config'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import FavoriteIcon from '@mui/icons-material/Favorite'
-import { CalendarIcon, TagIcon } from './icons'
+import { CalendarIcon, TagIcon, ThreeDotsIcon } from './icons'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -65,6 +64,7 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
 
   const clickFavorite = useCallback(() => {
     if (!data) return alert('로그인이 필요합니다.')
+    if (data.favorite) return alert('이미 관심을 추가한 팀입니다.')
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${data.id}`,
@@ -99,24 +99,43 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
                       />
                       <Typography width={'11rem'}>{data.name}</Typography>
                     </Stack>
-                    <Stack direction={'row'} spacing={1}>
-                      <IconButton
-                        onClick={clickLike}
-                        color="primary"
-                        size="small"
-                      >
-                        <ThumbUpIcon />
-                      </IconButton>
-                      <Typography>{data.like}</Typography>
+                    <Stack direction={'row'} spacing={2}>
+                      <Stack direction={'row'} spacing={1}>
+                        <IconButton
+                          onClick={clickLike}
+                          color={data.liked ? 'primary' : 'inherit'}
+                          size="small"
+                          sx={{
+                            m: 0,
+                            p: 0,
+                          }}
+                        >
+                          <ThumbUpIcon />
+                        </IconButton>
+                        <Typography>{data.like}</Typography>
+                      </Stack>
 
-                      <ToggleButton
-                        value={data.favorite}
+                      <IconButton
                         onClick={clickFavorite}
-                        selected={data.favorite}
-                        color="primary"
+                        color={data.favorite ? 'primary' : 'inherit'}
+                        size="small"
+                        sx={{
+                          m: 0,
+                          p: 0,
+                        }}
                       >
                         <FavoriteIcon />
-                      </ToggleButton>
+                      </IconButton>
+
+                      <IconButton
+                        color="inherit"
+                        sx={{
+                          m: 0,
+                          p: 0,
+                        }}
+                      >
+                        <ThreeDotsIcon />
+                      </IconButton>
                     </Stack>
                   </Stack>
                   <Stack minHeight={'22.5rem'}>

@@ -1,6 +1,6 @@
 'use client'
 
-import { IconButton, Stack, Typography } from '@mui/material'
+import { Box, IconButton, Stack, Typography } from '@mui/material'
 import ShowcaseCard from './panel/ShowcaseCard'
 import { TouchEvent, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
@@ -15,6 +15,7 @@ import { IPagination } from '@/types/IPagination'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
+import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
 
 const ShowcasePage = () => {
   const [page, setPage] = useState<number>(1)
@@ -26,12 +27,21 @@ const ShowcasePage = () => {
   const { isLogin } = useAuthStore()
 
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-  const { data, error, isLoading } = useSWR<IPagination<ICardData[]>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=${page}&pageSize=3`,
+  // const { data, error, isLoading } = useSWR<IPagination<ICardData[]>>(
+  //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=${page}&pageSize=10`,
+  //   isLogin
+  //     ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+  //     : defaultGetFetcher,
+  // )
+
+  const { data, error, isLoading, targetRef } = useInfiniteSWRScroll(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?pageSize=2`,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
+
+  console.log(data)
 
   const handlePrevClick = () => {
     if (!data) return
@@ -46,9 +56,9 @@ const ShowcasePage = () => {
 
   const handleNextClick = () => {
     if (!data) return
-    if (index < data.content.length - 1) {
+    if (index < data[0].content.length - 1) {
       setIndex(index + 1)
-      if (index === data.content.length - 1) {
+      if (index === data[0].content.length - 1) {
         setPage(page + 1)
       }
     }
@@ -68,7 +78,7 @@ const ShowcasePage = () => {
     e.stopPropagation()
     if (touchEnd < touchStart + 200) {
       if (!data) return
-      if (index < data.content.length - 1) {
+      if (index < data[0].content.length - 1) {
         setIndex(index + 1)
         setTouchEnd(0)
         setTouchStart(0)
@@ -89,32 +99,41 @@ const ShowcasePage = () => {
     exit: { opacity: 0, y: -100 },
   }
 
-  console.log(data)
-
   if (isPc) {
     return (
-      <Stack direction={'row'} spacing={2} height={'600px'}>
-        <Stack direction={'row'} spacing={1}>
-          <PhoneFrame
-            imageUrl={
-              data?.content && data.content[index].image!
-                ? data.content[index].image!
+      <>
+        <Stack direction={'row'} spacing={2} height={'600px'}>
+          <Stack direction={'row'} spacing={1}>
+            <PhoneFrame
+              imageUrl={
+                data && data[0].content[index].image!
+                  ? data[0].content[index].image!
+                  : undefined
+              }
+            />
+            <Stack direction={'column-reverse'}>
+              <Stack>
+                <IconButton onClick={handlePrevClick}>
+                  <ExpandLessIcon color="primary" />
+                </IconButton>
+                <IconButton onClick={handleNextClick}>
+                  <ExpandMoreIcon color="primary" />
+                </IconButton>
+              </Stack>
+            </Stack>
+          </Stack>
+          <ShowcaseCard
+            data={
+              data
+                ? data[0].content
+                  ? data[0].content[index]
+                  : undefined
                 : undefined
             }
           />
-          <Stack direction={'column-reverse'}>
-            <Stack>
-              <IconButton onClick={handlePrevClick}>
-                <ExpandLessIcon color="primary" />
-              </IconButton>
-              <IconButton onClick={handleNextClick}>
-                <ExpandMoreIcon color="primary" />
-              </IconButton>
-            </Stack>
-          </Stack>
+          <Box ref={targetRef}>{isLoading && '로딩중입니다...'}</Box>
         </Stack>
-        <ShowcaseCard data={data?.content ? data.content[index] : undefined} />
-      </Stack>
+      </>
     )
   }
 
@@ -129,7 +148,7 @@ const ShowcasePage = () => {
         <Typography>로딩 중...</Typography>
       ) : error || !data ? (
         <Typography>에러 발생</Typography>
-      ) : data.content.length === 0 ? (
+      ) : data[0].content.length === 0 ? (
         <Typography>데이터가 없습니다</Typography>
       ) : (
         <motion.div ref={constraintsRef}>
@@ -145,10 +164,11 @@ const ShowcasePage = () => {
             exit={'exit'}
             transition={{ duration: 0.3 }}
           >
-            <ShowcaseCard data={data.content[index]} />
+            <ShowcaseCard data={data[0].content[index]} />
           </motion.div>
         </motion.div>
       )}
+      <Box ref={targetRef}>{isLoading && '로딩중입니다...'}</Box>
     </Stack>
   )
 }

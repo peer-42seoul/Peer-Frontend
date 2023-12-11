@@ -72,4 +72,40 @@ const TagIcon = () => {
   )
 }
 
-export { CalendarIcon, TagIcon }
+const ThreeDotsIcon = () => {
+  return (
+    <SvgIcon>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+      >
+        <path
+          d="M10.0013 10.8307C10.4615 10.8307 10.8346 10.4576 10.8346 9.9974C10.8346 9.53716 10.4615 9.16406 10.0013 9.16406C9.54106 9.16406 9.16797 9.53716 9.16797 9.9974C9.16797 10.4576 9.54106 10.8307 10.0013 10.8307Z"
+          stroke="#9B9B9B"
+          strokeWidth="1.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M15.8333 10.8307C16.2936 10.8307 16.6667 10.4576 16.6667 9.9974C16.6667 9.53716 16.2936 9.16406 15.8333 9.16406C15.3731 9.16406 15 9.53716 15 9.9974C15 10.4576 15.3731 10.8307 15.8333 10.8307Z"
+          stroke="#9B9B9B"
+          strokeWidth="1.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M4.16536 10.8307C4.6256 10.8307 4.9987 10.4576 4.9987 9.9974C4.9987 9.53716 4.6256 9.16406 4.16536 9.16406C3.70513 9.16406 3.33203 9.53716 3.33203 9.9974C3.33203 10.4576 3.70513 10.8307 4.16536 10.8307Z"
+          stroke="#9B9B9B"
+          strokeWidth="1.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </SvgIcon>
+  )
+}
+
+export { CalendarIcon, TagIcon, ThreeDotsIcon }
