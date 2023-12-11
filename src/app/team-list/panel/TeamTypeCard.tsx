@@ -6,7 +6,7 @@ const TeamTypeCard = ({ type }: { type: TeamType }) => {
   return (
     <Box
       width={60}
-      sx={{ py: 1, px: 2, backgroundColor: grey[900], borderRadius: '0.5rem' }}
+      sx={{ py: 1, px: 2, backgroundColor: (theme: Theme) => theme.palette.background.tertiary, borderRadius: '0.5rem' }}
     >
       <Typography
         textAlign={'center'}

@@ -38,7 +38,7 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
       <CardActionArea onClick={() => router.push(`/teams/${team.id}`)}>
         <Stack direction={isPc ? 'row' : 'column'} spacing={1} my={1}>
           {TeamType(team.type)}
-          <Typography sx={isPc ? {} : { height: '4rem', overflow: 'hidden' }}>
+          <Typography sx={isPc ? undefined : { height: '4rem', overflow: 'hidden' }}>
             {team.name}
           </Typography>
         </Stack>
