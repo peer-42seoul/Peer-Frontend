@@ -9,9 +9,9 @@ export interface IPostCard {
   tagList: ITag[]
   image: string // 글 대표 이미지 (썸네일)
   sx?: SxProps
-  onClick?: () => void
-  onTouchEnd?: () => void
-  onMouseUp?: () => void
+  onClick?: (e: React.MouseEvent) => void
+  onTouchEnd?: (e: React.TouchEvent) => void
+  onMouseUp?: (e: React.MouseEvent) => void
 }
 
 export interface IHitchhikingCardBack {

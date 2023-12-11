@@ -1,6 +1,6 @@
 'use client'
 import PostCard from '@/components/PostCard'
-import { IPostCard } from '@/types/IPostCard'
+import { ITag } from '@/types/IPostDetail'
 import { Button, CardContent, SxProps, Typography } from '@mui/material'
 import { Box, Card, CardHeader, Chip, Stack } from '@mui/material'
 import React, { useState } from 'react'
@@ -12,24 +12,26 @@ const HitchhikingCardBack = ({
 }: {
   postId: number
   sx?: SxProps
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent) => void
 }) => {
   console.log(`HitchhikingCard Back API! ${postId}`)
 
-  const handleSeeAll = (e: React.MouseEvent) => {
+  const handleSeeAllMouse = (e: React.MouseEvent) => {
     e.stopPropagation()
     console.log('handleSeeAll')
   }
+
   return (
     <Card
       sx={{
         ...sx,
-        backgroundColor: 'text.normal',
+        backgroundColor: 'background.primary',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         transform: 'rotateY(180deg)',
         backfaceVisibility: 'hidden',
       }}
+      // onTouchEnd={onTouchEnd}
       onClick={onClick}
     >
       <CardHeader>
@@ -52,7 +54,7 @@ const HitchhikingCardBack = ({
         <Box sx={{ backgroundColor: 'background.secondary' }}>Avatars</Box>
       </CardContent>
       <CardContent>
-        <Button onClick={handleSeeAll}>전체 보기</Button>
+        <Button onClick={handleSeeAllMouse}>전체 보기</Button>
       </CardContent>
     </Card>
   )
@@ -65,9 +67,29 @@ const HitchhikingCard = ({
   tagList,
   image,
   postId,
+  dragged,
+  setDragged,
   sx,
-}: IPostCard) => {
+}: {
+  authorImage: string
+  teamName: string
+  title: string
+  tagList: Array<ITag>
+  image: string
+  postId: number
+  sx?: SxProps
+  dragged: boolean
+  setDragged: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const [isFlipped, setFlipped] = useState(false)
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!dragged) {
+      setFlipped((prev) => !prev)
+    }
+    setDragged(false)
+  }
 
   return (
     <div
@@ -92,15 +114,9 @@ const HitchhikingCard = ({
           ...sx,
           backfaceVisibility: 'hidden',
         }}
-        onClick={() => setFlipped(!isFlipped)}
+        onClick={handleMouseUp}
       />
-      <HitchhikingCardBack
-        postId={postId}
-        sx={{
-          ...sx,
-        }}
-        onClick={() => setFlipped(!isFlipped)}
-      />
+      <HitchhikingCardBack postId={postId} sx={sx} onClick={handleMouseUp} />
     </div>
   )
 }
