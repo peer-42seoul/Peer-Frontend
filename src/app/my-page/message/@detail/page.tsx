@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 import useSWRMutation from 'swr/mutation'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
@@ -9,6 +8,7 @@ import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
+import useMessagePageState from '@/states/useMessagePageState'
 import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
 import MessageForm from './panel/MessageForm'
 import MessageFormModal from './panel/MessageFormModal'
@@ -17,9 +17,9 @@ import MessageHeader from './panel/MessageHeader'
 import MessageStack from './panel/MessageStack'
 import * as style from './page.style'
 
-const MessageChatPage = ({ params }: { params: { id: string } }) => {
+const MessageChatPage = () => {
+  const { conversationId, targetId, setListPage } = useMessagePageState()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const searchParams = useSearchParams()
   const [updatedData, setUpdatedData] = useState<IMessage[] | undefined>()
   const [owner, setOwner] = useState<IMessageUser | undefined>()
   const [target, setTarget] = useState<IMessageTargetUser | undefined>()
@@ -31,13 +31,22 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const { isOpen, openModal, closeModal } = useModal()
   const { isPc } = useMedia()
 
+  console.log('conversationId', conversationId)
+
+  useEffect(() => {
+    if (conversationId === 0 || targetId === 0) {
+      // TODO : 잘못된 접근 안내
+      setListPage()
+    }
+  }, [conversationId, targetId])
+
   const fetchMoreData = useCallback(
     async (url: string) => {
       if (!updatedData) return []
       try {
         const response = await axiosWithAuth.post(url, {
-          targetId: Number(searchParams.get('target')),
-          conversationId: Number(params.id),
+          conversationId,
+          targetId,
           earlyMsgId: updatedData[0]?.msgId,
         })
         return response.data.msgList
@@ -46,7 +55,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         alert('쪽지를 불러오는데 실패하였습니다.')
       }
     },
-    [searchParams, params, updatedData],
+    [conversationId, targetId, updatedData],
   )
 
   const { trigger, data } = useSWRMutation(
@@ -69,12 +78,10 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     setIsLoading(true)
-    const targetId = Number(searchParams.get('target'))
-    const conversationalId = Number(params.id)
     axiosWithAuth
       .post('/api/v1/message/conversation-list', {
         targetId,
-        conversationalId,
+        conversationalId: conversationId,
       })
       .then((response) => {
         setUpdatedData(response.data.msgList)
@@ -89,7 +96,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
       .finally(() => {
         setIsLoading(false)
       })
-  }, [searchParams, params])
+  }, [targetId, conversationId])
 
   useEffect(() => {
     if (!data) return

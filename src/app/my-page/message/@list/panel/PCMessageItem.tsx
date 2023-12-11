@@ -1,5 +1,5 @@
-import { useRouter } from 'next/navigation'
 import { Checkbox, ListItem, ListItemButton, ListItemIcon } from '@mui/material'
+import useMessagePageState from '@/states/useMessagePageState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
 
@@ -16,19 +16,17 @@ export const PCMessageListItem = ({
   isChecked,
   toggleSelectUser,
 }: IPCMessageListItemProps) => {
-  const router = useRouter()
+  const { setDetailPage } = useMessagePageState()
   const label = { inputProps: { 'aria-label': 'MessageItem Checkbox' } }
   const { targetId, conversationId } = message
+
   return (
     <ListItem>
       <ListItemButton
         onClick={
           isManageMode
             ? () => toggleSelectUser(targetId)
-            : () =>
-                router.push(
-                  `/my-page/message/${conversationId}?target=${targetId}`,
-                )
+            : () => setDetailPage(conversationId, targetId)
         }
       >
         {isManageMode && (
