@@ -3,16 +3,19 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import useSWRMutation from 'swr/mutation'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
-import MessageItem from './panel/MessageItem'
 import MessageForm from './panel/MessageForm'
 import MessageFormModal from './panel/MessageFormModal'
+import MessageContainer from './panel/MessageContainer'
+import MessageHeader from './panel/MessageHeader'
+import MessageStack from './panel/MessageStack'
+import * as style from './page.style'
 
 const MessageChatPage = ({ params }: { params: { id: string } }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -123,36 +126,16 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     return <Typography>빈 쪽지함 입니다!</Typography>
 
   return (
-    <Box sx={{ width: '100%', height: '50vh' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          width: '100%',
-          height: '10%',
-          padding: '2rem',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '0.5rem',
-          backgroundColor: '#D8D8D8',
-        }}
-      >
-        <Typography>{target.userNickname}</Typography>
-      </Box>
-      <Box
-        ref={scrollRef}
-        sx={{ width: '100%', height: '90%', overflowY: 'auto' }}
-      >
+    <MessageContainer>
+      <MessageHeader
+        targetProfile={target.userProfile}
+        userNickname={target.userNickname}
+      />
+      <Stack ref={scrollRef} sx={isPc ? style.pcStack : style.mobileStack}>
         <Box ref={targetRef}></Box>
-        {spinner && <CircularProgress />}
-        {updatedData.map((msgObj: IMessage) => (
-          <MessageItem
-            key={msgObj.msgId}
-            msg={msgObj}
-            owner={owner}
-            target={target}
-          />
-        ))}
-      </Box>
+        {spinner && <CircularProgress sx={style.circularProgress} />}
+        <MessageStack messageData={updatedData} owner={owner} target={target} />
+      </Stack>
       {isPc ? (
         <MessageForm
           view={'PC_VIEW'}
@@ -178,7 +161,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
           />
         </>
       )}
-    </Box>
+    </MessageContainer>
   )
 }
 

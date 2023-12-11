@@ -95,8 +95,8 @@ export const useMessageInfiniteScroll = ({
   isEnd: boolean
 }) => {
   const [spinner, setSpinner] = useState(false)
-  const targetRef = useRef<HTMLDivElement>() // fetch 여부를 결정할 요소
-  const scrollRef = useRef<HTMLDivElement>() // 스크롤 위치를 결정할 요소
+  const targetRef = useRef<HTMLDivElement>(null) // fetch 여부를 결정할 요소
+  const scrollRef = useRef<HTMLDivElement>(null) // 스크롤 위치를 결정할 요소
 
   const debouncedFetchData = debounce(async () => {
     // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
