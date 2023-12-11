@@ -7,15 +7,16 @@ import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
-import { ITeam } from '../../types/types'
+import { ITeam, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectionRecruit'
+import TeamJobAdd from './panel/TeamJobAdd'
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
-  const axiosInstance = useAxiosWithAuth()
+  const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const { data, isLoading } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
-    (url: string) => axiosInstance(url).then((res) => res.data),
+    (url: string) => axiosWithAuth(url).then((res) => res.data),
   )
 
   const openApplicant = () => setShowApplicant(true)
@@ -38,6 +39,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         <>
           <RedirectionRecruit id={params.id} data={data} />
           <SetupPage team={data.team} />
+          {data.team.type === TeamType.PROJECT && <TeamJobAdd />}
           {!showApplicant ? (
             <>
               <Card
