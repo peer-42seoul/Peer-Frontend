@@ -1,33 +1,60 @@
 'use client'
 
 import useMedia from '@/hook/useMedia'
-import useShowTeamCategory from '@/states/useShowTeamCategory'
 import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 
-const TeamSidebar = () => {
+type TTabType = 'main' | 'notice' | 'board' | 'setting'
+const tabName: Record<TTabType, string> = {
+  main: '메인',
+  notice: '공지사항',
+  board: '게시판',
+  setting: '팀 설정',
+}
+
+const getTabValue = (path: string) => {
+  if (path.includes('/notice')) return 'notice'
+  else if (path.includes('/board')) return 'board'
+  else if (path.includes('/setting')) return 'setting'
+  else return 'main'
+}
+
+const TeamSidebar = ({ id }: { id: string }) => {
   const { isPc } = useMedia()
-  const [alignment, setAlignment] = useState('메인')
-  const { setShowTeamPageCategory } = useShowTeamCategory()
+  const [tab, setTab] = useState<TTabType>('main')
+  const router = useRouter()
+  const pathName = usePathname()
+  useEffect(() => {
+    setTab(getTabValue(pathName))
+  }, [pathName])
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
-    newAlignment: string,
+    newTab: string,
   ) => {
-    setAlignment(newAlignment)
+    setTab(newTab as TTabType)
   }
 
-  const onClickMain = () => setShowTeamPageCategory('메인')
-  const onClickNotice = () => setShowTeamPageCategory('공지사항')
-  const onClickBoard = () => setShowTeamPageCategory('게시판')
-  const onClickSetting = () => setShowTeamPageCategory('팀 설정')
+  const onClickMain = () => {
+    router.push(`/teams/${id}`)
+  }
+  const onClickNotice = () => {
+    router.push(`/teams/${id}/notice`)
+  }
+  const onClickBoard = () => {
+    router.push(`/teams/${id}/board`)
+  }
+  const onClickSetting = () => {
+    router.push(`/teams/${id}/setting`)
+  }
 
   return (
     <>
       {isPc ? (
         <ToggleButtonGroup
           orientation="vertical"
-          value={alignment}
+          value={tab}
           exclusive
           onChange={handleChange}
           sx={{
@@ -39,71 +66,70 @@ const TeamSidebar = () => {
           }}
         >
           <ToggleButton
-            value={'메인'}
+            value={'main'}
             onClick={onClickMain}
             sx={{ m: 'dense' }}
           >
-            <Typography>메인</Typography>
+            <Typography>{tabName.main}</Typography>
           </ToggleButton>
           <ToggleButton
-            value={'공지사항'}
+            value={'notice'}
             onClick={onClickNotice}
             sx={{ m: 'dense' }}
           >
-            <Typography>공지사항</Typography>
+            <Typography>{tabName.notice}</Typography>
           </ToggleButton>
           <ToggleButton
-            value={'게시판'}
+            value={'board'}
             onClick={onClickBoard}
             sx={{ m: 'dense' }}
           >
-            <Typography>게시판</Typography>
+            <Typography>{tabName.board}</Typography>
           </ToggleButton>
           <ToggleButton
-            value={'팀 설정'}
+            value={'setting'}
             onClick={onClickSetting}
             sx={{ m: 'dense' }}
           >
-            <Typography>팀 설정</Typography>
+            <Typography>{tabName.setting}</Typography>
           </ToggleButton>
         </ToggleButtonGroup>
       ) : (
         <ToggleButtonGroup
           fullWidth
-          value={alignment}
+          value={tab}
           exclusive
           onChange={handleChange}
         >
           <ToggleButton
-            value={'메인'}
+            value={'main'}
             onClick={onClickMain}
             sx={{ m: 'dense' }}
           >
-            <Typography>메인</Typography>
+            <Typography>{tabName.main}</Typography>
           </ToggleButton>
 
           <ToggleButton
-            value={'공지사항'}
+            value={'notice'}
             onClick={onClickNotice}
             sx={{ m: 'dense' }}
           >
-            <Typography>공지사항</Typography>
+            <Typography>{tabName.notice}</Typography>
           </ToggleButton>
 
           <ToggleButton
-            value={'게시판'}
+            value={'board'}
             onClick={onClickBoard}
             sx={{ m: 'dense' }}
           >
-            <Typography>게시판</Typography>
+            <Typography>{tabName.board}</Typography>
           </ToggleButton>
-
           <ToggleButton
-            value={'팀 설정'}
+            value={'setting'}
             onClick={onClickSetting}
             sx={{ m: 'dense' }}
           >
-            <Typography>팀 설정</Typography>
+            <Typography>{tabName.setting}</Typography>
           </ToggleButton>
         </ToggleButtonGroup>
       )}

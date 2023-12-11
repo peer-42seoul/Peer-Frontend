@@ -1,6 +1,6 @@
 import { TextField, Typography } from '@mui/material'
 import { SizeType } from '@/types/ITeamDnDLayout'
-import WidgetCard from '@/app/teams/@main/[id]/panel/widgets/WidgetCard'
+import WidgetCard from '@/app/teams/[id]/panel/widgets/WidgetCard'
 
 /* 임시 위젯 */
 const TmpNoticeWidget = ({ data, size }: { data: any; size: SizeType }) => {
