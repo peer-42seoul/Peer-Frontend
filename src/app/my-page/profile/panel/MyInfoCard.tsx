@@ -22,7 +22,7 @@ const MyInfoCard = ({
       pt={0}
       rowSpacing={3}
       columnSpacing={1}
-      sx={{ backgroundColor: 'background.secondary', borderRadius: '16px' }}
+      sx={{ backgroundColor: 'background.secondary', borderRadius: '1rem' }}
       width={'100%'}
     >
       <Grid item xs={12}>

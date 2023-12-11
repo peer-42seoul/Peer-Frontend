@@ -1,21 +1,19 @@
 'use client'
 
+import { ReactNode } from 'react'
 import useMedia from '@/hook/useMedia'
 import { Stack, Typography } from '@mui/material'
 import TeamSidebar from './panel/TeamSidebar'
-import useShowTeamCategory from '@/states/useShowTeamCategory'
-import { ReactNode } from 'react'
 
-interface TeamLayoutProps {
-  main: ReactNode
-  notice: ReactNode
-  borad: ReactNode
-  setting: ReactNode
-}
-
-const TeamLayout = (props: TeamLayoutProps) => {
+const TeamLayout = ({
+  params,
+  children,
+}: {
+  params: { id: string }
+  children: ReactNode
+}) => {
   const { isPc } = useMedia()
-  const { showTeamPageCategory } = useShowTeamCategory()
+  const id = params.id
 
   return (
     <Stack display="flex" padding={1} spacing={2} px={isPc ? 10 : 1}>
@@ -23,17 +21,14 @@ const TeamLayout = (props: TeamLayoutProps) => {
         <Typography fontWeight="bold">나의 팀페이지</Typography>
       </Stack>
       <Stack spacing={2} direction={isPc ? 'row' : 'column'}>
-        <TeamSidebar />
+        <TeamSidebar id={id} />
         <Stack
           spacing={2}
           direction={isPc ? 'row' : 'column'}
           flex={4}
           borderRadius={2}
         >
-          {showTeamPageCategory === '메인' && props.main}
-          {showTeamPageCategory === '공지사항' && props.notice}
-          {showTeamPageCategory === '게시판' && props.borad}
-          {showTeamPageCategory === '팀 설정' && props.setting}
+          {children}
         </Stack>
       </Stack>
     </Stack>
