@@ -89,7 +89,9 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
       .catch((err) => {
         console.log(err)
       })
-    closeConfirmModel()
+      .finally(() => {
+        closeConfirmModel()
+      })
   })
 
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
