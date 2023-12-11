@@ -1,12 +1,16 @@
 import { TeamType } from '@/app/teams/types/types'
-import { Box, Typography } from '@mui/material'
-import { grey } from '@mui/material/colors'
+import { Box, Theme, Typography } from '@mui/material'
 
 const TeamTypeCard = ({ type }: { type: TeamType }) => {
   return (
     <Box
       width={60}
-      sx={{ py: 1, px: 2, backgroundColor: (theme: Theme) => theme.palette.background.tertiary, borderRadius: '0.5rem' }}
+      sx={{
+        py: 1,
+        px: 2,
+        backgroundColor: (theme: Theme) => theme.palette.background.tertiary,
+        borderRadius: '0.5rem',
+      }}
     >
       <Typography
         textAlign={'center'}

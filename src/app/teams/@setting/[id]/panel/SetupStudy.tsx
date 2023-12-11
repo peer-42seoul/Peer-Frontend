@@ -23,12 +23,7 @@ import useAxiosWithAuth from '@/api/config'
 import ClearIcon from '@mui/icons-material/Clear'
 import { Controller, useForm } from 'react-hook-form'
 import { locationData } from '@/api/location'
-import {
-  SaveButtonStyle,
-  closeButtonStyle,
-  comfirmModalStyle,
-  deleteModalStyle,
-} from './styles'
+import * as styles from './styles'
 import {
   GeoClearIcon,
   PencilClearIcon,
@@ -146,7 +141,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                 height={[56, 100]}
                 sx={{ position: 'relative' }}
               >
-                <IconButton sx={closeButtonStyle} onClick={openModal}>
+                <IconButton sx={styles.closeButtonStyle} onClick={openModal}>
                   <ClearIcon />
                 </IconButton>
                 <Button
@@ -362,7 +357,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
         </form>
         <Stack position={'relative'}>
           <Button
-            sx={SaveButtonStyle}
+            sx={styles.SaveButtonStyle}
             variant="contained"
             type="button"
             onClick={openConfirmModel}
@@ -377,7 +372,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
         ariaDescription="alert-modal-description"
         open={isConfirmOpen}
         handleClose={closeConfirmModel}
-        style={comfirmModalStyle}
+        style={styles.comfirmModalStyle}
       >
         <Box>
           <Typography id="alert-modal-title">팀 정보 수정 확인</Typography>
@@ -404,7 +399,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
         ariaDescription="alert-modal-description"
         open={isOpen}
         handleClose={closeModal}
-        style={deleteModalStyle}
+        style={styles.deleteModalStyle}
       >
         <Box>
           <Typography id="alert-modal-title">팀 로고 삭제</Typography>
