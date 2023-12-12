@@ -34,6 +34,8 @@ const ProfileImageModal = ({
           border: 'none',
           outline: 'none',
           transform: 'translate(-50%, -50%)',
+          maxWidth: '20rem',
+          maxHeight: '20rem',
         }}
         alt="profile image"
         src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
