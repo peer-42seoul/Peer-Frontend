@@ -69,6 +69,6 @@ export enum statusEnum {
 }
 
 export interface IRoleData {
-  name: string | null
-  number: number
+  role: string | null
+  member: number
 }
