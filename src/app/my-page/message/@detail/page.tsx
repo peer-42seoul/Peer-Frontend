@@ -144,7 +144,6 @@ const MessageChatPage = () => {
       </Stack>
       {isPc ? (
         <MessageForm
-          view={'PC_VIEW'}
           targetId={target.userId}
           updateTarget={setTarget}
           addNewMessage={addNewMessage}

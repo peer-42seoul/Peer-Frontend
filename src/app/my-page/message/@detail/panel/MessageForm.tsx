@@ -7,9 +7,10 @@ import {
   useState,
 } from 'react'
 import { isAxiosError } from 'axios'
-import { Stack, TextField, Typography, IconButton, styled } from '@mui/material'
+import { Stack, Typography, IconButton, styled } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuTextField from '@/components/CuTextField'
+import useMedia from '@/hook/useMedia'
 import useToast from '@/hook/useToast'
 import SendIcon from '@/icons/SendIcon'
 import { IMessage, IMessageTargetUser } from '@/types/IMessage'
@@ -17,9 +18,7 @@ import * as style from './MessageForm.style'
 
 const MAX_LENGTH = 300
 
-type TMessageSendView = 'PC_VIEW' | 'MOBILE_VIEW'
 interface IMessageFormProps {
-  view: TMessageSendView
   targetId: number
   updateTarget?: Dispatch<SetStateAction<IMessageTargetUser | undefined>>
   addNewMessage: (newMessage: IMessage) => void
@@ -30,7 +29,6 @@ interface IMessageFormProps {
 const BorderlessTextField = styled(CuTextField)(style.removeBorder)
 
 const MessageForm = ({
-  view,
   targetId,
   updateTarget,
   addNewMessage,
@@ -47,6 +45,7 @@ const MessageForm = ({
     toastMessage,
     setToastMessage,
   } = useToast()
+  const { isPc } = useMedia()
 
   const resetToast = useCallback(() => {
     setToastMessage('')
@@ -105,8 +104,12 @@ const MessageForm = ({
 
   return (
     <>
-      <form onSubmit={messageSubmit} id={'message-form'}>
-        {view === 'PC_VIEW' ? (
+      <form
+        onSubmit={messageSubmit}
+        id={'message-form'}
+        style={!isPc ? { height: '100%' } : undefined}
+      >
+        {isPc ? (
           <Stack
             direction={'row'}
             alignItems={'center'}
@@ -121,6 +124,7 @@ const MessageForm = ({
             >
               <BorderlessTextField
                 fullWidth
+                id="message"
                 multiline
                 value={content}
                 placeholder="내용을 입력하세요"
@@ -141,15 +145,21 @@ const MessageForm = ({
             </IconButton>
           </Stack>
         ) : (
-          <Stack height={'100%'} alignItems={'stretch'}>
-            <TextField
-              fullWidth
-              value={content}
-              placeholder="내용을 입력하세요"
-              variant="outlined"
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </Stack>
+          <BorderlessTextField
+            fullWidth
+            multiline
+            value={content}
+            placeholder="내용을 입력하세요"
+            variant="outlined"
+            onChange={(e) => setContent(e.target.value.slice(0, MAX_LENGTH))}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.stopPropagation()
+                return
+                // messageSubmit(e) // NOTE : 모바일에서도 엔터를 쳤을 때 전송가능해야 하는지?
+              }
+            }}
+          />
         )}
       </form>
       <CuToast open={isOpen} onClose={closeToast} severity="error">

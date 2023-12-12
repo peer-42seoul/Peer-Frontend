@@ -36,7 +36,6 @@ const MessageFormModal = ({
       }}
     >
       <MessageForm
-        view={'MOBILE_VIEW'}
         targetId={target.id}
         addNewMessage={addNewMessage}
         handleClose={handleClose}
