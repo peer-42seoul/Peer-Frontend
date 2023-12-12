@@ -2,7 +2,7 @@
 
 import { Box, Stack } from '@mui/material'
 import { ReactNode } from 'react'
-import ShowcaseHeader from './panel/ShowcaseHeader'
+import ShowcaseHeader from '../panel/ShowcaseHeader'
 
 const ShowcaseLayout = ({ children }: { children: ReactNode }) => {
   return (

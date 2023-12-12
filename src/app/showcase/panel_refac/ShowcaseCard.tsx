@@ -5,25 +5,11 @@ import PostCard from '@/components/PostCard'
 import { CardContent, SxProps, Typography } from '@mui/material'
 import { Box, Card, CardHeader, Chip, Stack } from '@mui/material'
 import React, { useState } from 'react'
-import { ICardData } from '../../panel/types'
+import { ICardData } from '../panel/types'
 import useMedia from '@/hook/useMedia'
+import PostShowcaseCard from '@/components/PostShowcaseCard'
 
 const ShowcaseCardBack = ({ postId, sx }: { postId: number; sx?: SxProps }) => {
-  const { isPc } = useMedia()
-  const cardStyle = {
-    backgroundColor: 'background.primary',
-    width: isPc ? '20.5rem' : '90vw',
-    height: '27rem',
-    maxWidth: '20.5rem',
-    borderRadius: '0.75rem',
-    borderWidth: '2px',
-    borderColor: 'line.base',
-    borderStyle: 'solid',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  }
-
   console.log(`ShowcaseCard Back API! ${postId}`)
   return (
     <Card
@@ -64,18 +50,33 @@ const ShowcaseCardBack = ({ postId, sx }: { postId: number; sx?: SxProps }) => {
 
 const ShowcaseCard = ({
   id,
-  imageid,
-  nameid,
-  descriptionid,
-  skillid,
-  likeid,
-  likedid,
-  favoriteid,
-  teamLogoid,
-  startid,
-  endid,
+  image,
+  name,
+  description,
+  skill,
+  like,
+  liked,
+  favorite,
+  teamLogo,
+  start,
+  end,
 }: ICardData) => {
+  const { isPc } = useMedia()
   const [isFlipped, setFlipped] = useState(false)
+
+  const cardStyle = {
+    backgroundColor: 'background.primary',
+    width: isPc ? '20.5rem' : '90vw',
+    height: '27rem',
+    maxWidth: '20.5rem',
+    borderRadius: '0.75rem',
+    borderWidth: '2px',
+    borderColor: 'line.base',
+    borderStyle: 'solid',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  }
 
   return (
     <div
@@ -87,13 +88,13 @@ const ShowcaseCard = ({
       }}
       onClick={() => setFlipped(!isFlipped)}
     >
-      <PostCard
-        postId={postId}
-        authorImage={authorImage}
-        teamName={teamName}
-        title={title}
-        tagList={tagList}
-        image={image}
+      <PostShowcaseCard
+        postId={id}
+        authorImage={teamLogo ? teamLogo : '/images/icons/icon-192x192.png'}
+        teamName={name}
+        title={description}
+        tagList={skill}
+        image={image ? image : '/images/icons/icon-192x192.png'}
         sx={{
           ...cardStyle,
           backfaceVisibility: 'hidden',
@@ -102,7 +103,7 @@ const ShowcaseCard = ({
         }}
       />
       <ShowcaseCardBack
-        postId={postId}
+        postId={id}
         sx={{
           ...cardStyle,
           opacity: isFlipped ? 1 : 0,

@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import { motion, AnimatePresence } from 'framer-motion'
 import ShowcaseCard from './ShowcaseCard'
-import { ICardData } from '../../panel/types'
+import { ICardData } from '../panel/types'
 
 enum ESwipeDirection {
   left = 'left',
@@ -113,7 +113,7 @@ const CardContainer = ({
         </AnimatePresence>
       </Box>
 
-      <Typography sx={{ zIndex: 0 }}>히치하이킹 끝!</Typography>
+      <Typography sx={{ zIndex: 0 }}>쇼케이스 끝!</Typography>
     </>
   )
 }
