@@ -14,7 +14,6 @@ import { useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
-import CuModal from '@/components/CuModal'
 
 const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
   const { isPc } = useMedia()
@@ -142,16 +141,16 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
         ))}
       </Grid>
 
-      <CuModal open={isChangeOpen} handleClose={closeChangeModal}>
-        <Box sx={{ backgroundColor: 'white' }}>
+      <Modal open={isChangeOpen} onClose={closeChangeModal}>
+        <Box>
           <Typography>역할 변경</Typography>
           <Button onClick={closeChangeModal}>취소</Button>
           <Button onClick={closeChangeModal}>확인</Button>
         </Box>
-      </CuModal>
+      </Modal>
 
-      <Modal open={isOpen}>
-        <Box sx={{ backgroundColor: 'white' }}>
+      <Modal open={isOpen} onClose={closeChangeModal}>
+        <Box>
           정말 팀원을 내보내시겠습니까?
           <Button onClick={closeModal}>취소</Button>
           <Button onClick={handleDelete}>확인</Button>

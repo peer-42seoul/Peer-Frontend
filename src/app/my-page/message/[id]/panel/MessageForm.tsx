@@ -2,7 +2,6 @@ import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { isAxiosError } from 'axios'
 import { Stack, TextField, Typography, IconButton, styled } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import CuButton from '@/components/CuButton'
 import CuTextField from '@/components/CuTextField'
 import SendIcon from '@/icons/SendIcon'
 import { IMessage, IMessageTargetUser } from '@/types/IMessage'
@@ -72,7 +71,7 @@ const MessageForm = ({
   }
 
   return (
-    <form onSubmit={messageSubmit}>
+    <form onSubmit={messageSubmit} id={'message-form'}>
       {view === 'PC_VIEW' ? (
         <Stack
           direction={'row'}
@@ -104,25 +103,15 @@ const MessageForm = ({
           </IconButton>
         </Stack>
       ) : (
-        <Stack>
-          <TextField
-            sx={{ width: '100%' }}
-            value={content}
-            placeholder="내용을 입력하세요"
-            variant="outlined"
-            multiline
-            rows={10}
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <Stack direction={'row'}>
-            <CuButton
-              variant="contained"
-              action={() => handleClose && handleClose()}
-              message="취소"
-            />
-            <CuButton variant="contained" type="submit" message="보내기" />
-          </Stack>
-        </Stack>
+        <TextField
+          sx={{ width: '100%' }}
+          value={content}
+          placeholder="내용을 입력하세요"
+          variant="outlined"
+          multiline
+          rows={10}
+          onChange={(e) => setContent(e.target.value)}
+        />
       )}
     </form>
   )
