@@ -52,7 +52,7 @@ export const OwnerMessageItem = ({
     >
       <MessageDate date={message.date} />
       <Box sx={isPc ? style.ownerPc : style.ownerMobile}>
-        <Typography variant={'body1'}>{message.content}</Typography>
+        <Typography variant={'Body1'}>{message.content}</Typography>
       </Box>
     </Stack>
   )
@@ -82,7 +82,7 @@ export const TargetMessageItem = ({
         />
       )}
       <Box sx={isPc ? style.targetPc : style.targetMobile}>
-        <Typography variant={'body1'}>{message.content}</Typography>
+        <Typography variant={'Body1'}>{message.content}</Typography>
       </Box>
       <MessageDate date={message.date} />
     </Stack>
