@@ -1,6 +1,7 @@
 import {
   Dispatch,
   FormEvent,
+  KeyboardEvent,
   SetStateAction,
   useCallback,
   useState,
@@ -8,7 +9,6 @@ import {
 import { isAxiosError } from 'axios'
 import { Stack, TextField, Typography, IconButton, styled } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import CuButton from '@/components/CuButton'
 import CuTextField from '@/components/CuTextField'
 import useToast from '@/hook/useToast'
 import SendIcon from '@/icons/SendIcon'
@@ -61,7 +61,9 @@ const MessageForm = ({
     [openToast, setToastMessage],
   )
 
-  const messageSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const messageSubmit = async (
+    e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLDivElement>,
+  ) => {
     try {
       e.preventDefault()
       if (!content) {
@@ -103,7 +105,7 @@ const MessageForm = ({
 
   return (
     <>
-      <form onSubmit={messageSubmit}>
+      <form onSubmit={messageSubmit} id={'message-form'}>
         {view === 'PC_VIEW' ? (
           <Stack
             direction={'row'}
@@ -120,12 +122,14 @@ const MessageForm = ({
               <BorderlessTextField
                 fullWidth
                 multiline
-                rows={4}
                 value={content}
                 placeholder="내용을 입력하세요"
                 onChange={(e) =>
                   setContent(e.target.value.slice(0, MAX_LENGTH))
                 }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') messageSubmit(e)
+                }}
                 disabled={disabled}
               />
               <Typography color={'text.assistive'} sx={style.messageLength}>
@@ -137,24 +141,14 @@ const MessageForm = ({
             </IconButton>
           </Stack>
         ) : (
-          <Stack>
+          <Stack height={'100%'} alignItems={'stretch'}>
             <TextField
-              sx={{ width: '100%' }}
+              fullWidth
               value={content}
               placeholder="내용을 입력하세요"
               variant="outlined"
-              multiline
-              rows={10}
               onChange={(e) => setContent(e.target.value)}
             />
-            <Stack direction={'row'}>
-              <CuButton
-                variant="contained"
-                action={() => handleClose && handleClose()}
-                message="취소"
-              />
-              <CuButton variant="contained" type="submit" message="보내기" />
-            </Stack>
           </Stack>
         )}
       </form>
