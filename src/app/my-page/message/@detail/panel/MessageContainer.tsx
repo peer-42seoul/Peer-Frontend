@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import { useRouter } from 'next/navigation'
 import { Modal, Stack, IconButton, Typography, Box } from '@mui/material'
 import CuButton from '@/components/CuButton'
 import * as modalStyle from '@/components/CuModal.style'
@@ -16,7 +15,6 @@ const MessageContainer = ({
   children: ReactNode
 }) => {
   const { isPc } = useMedia()
-  const router = useRouter()
   const { setListPage } = useMessagePageState()
 
   return isPc ? (
@@ -25,7 +23,7 @@ const MessageContainer = ({
         <CuButton
           message={'이 쪽지 나가기'}
           variant="text"
-          action={() => router.push('/my-page/message')}
+          action={setListPage}
           style={style.pcGoToListButton}
         />
       </Stack>
