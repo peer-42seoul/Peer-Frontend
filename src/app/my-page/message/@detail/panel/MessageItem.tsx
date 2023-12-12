@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { Box, Stack, Typography } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
+import useMedia from '@/hook/useMedia'
 import { IMessage, IMessageUser } from '@/types/IMessage'
 import UTCtoLocalTime from '@/utils/UTCtoLocalTime'
 import * as style from './MessageItem.style'
@@ -40,6 +41,7 @@ export const OwnerMessageItem = ({
   message,
   messageOption,
 }: IOwnerMessageItemProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       direction={'row'}
@@ -49,7 +51,7 @@ export const OwnerMessageItem = ({
       sx={style[`contentMargin${messageOption}`]}
     >
       <MessageDate date={message.date} />
-      <Box sx={style.ownerMessage}>
+      <Box sx={isPc ? style.ownerPc : style.ownerMobile}>
         <Typography variant={'body1'}>{message.content}</Typography>
       </Box>
     </Stack>
@@ -61,6 +63,7 @@ export const TargetMessageItem = ({
   target,
   messageOption,
 }: ITargetMessageItemProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       direction={'row'}
@@ -69,7 +72,7 @@ export const TargetMessageItem = ({
       spacing={'0.5rem'}
       sx={style[`contentMargin${messageOption}`]}
     >
-      {messageOption === 'Normal' ? (
+      {!isPc ? null : messageOption === 'Normal' ? (
         <CuAvatar sx={style.dummyAvatar} />
       ) : (
         <CuAvatar
@@ -78,7 +81,7 @@ export const TargetMessageItem = ({
           sx={style.targetAvatar}
         />
       )}
-      <Box sx={style.targetMessage}>
+      <Box sx={isPc ? style.targetPc : style.targetMobile}>
         <Typography variant={'body1'}>{message.content}</Typography>
       </Box>
       <MessageDate date={message.date} />
