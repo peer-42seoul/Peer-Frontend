@@ -153,7 +153,7 @@ const MessageChatPage = () => {
       ) : (
         <MobileSendButton
           disabled={target.deleted}
-          targetId={target.userId}
+          target={{ id: target.userId, nickname: target.userNickname }}
           addNewMessage={addNewMessage}
         />
       )}
