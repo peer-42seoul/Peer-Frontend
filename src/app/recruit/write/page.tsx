@@ -85,7 +85,7 @@ const CreateTeam = () => {
 
   const onHandlerFinish = async () => {
     if (type === 'project') {
-      setRoleList([{ name: null, number: parseInt(teamsize) }])
+      setRoleList([{ role: null, member: parseInt(teamsize) }])
     }
     if (
       !image ||
