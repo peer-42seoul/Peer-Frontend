@@ -4,17 +4,15 @@ import { useCallback, useEffect, useState } from 'react'
 import useSWRMutation from 'swr/mutation'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
-import useModal from '@/hook/useModal'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 import useMessagePageState from '@/states/useMessagePageState'
 import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
 import MessageForm from './panel/MessageForm'
-import MessageFormModal from './panel/MessageFormModal'
 import MessageContainer from './panel/MessageContainer'
-import MessageHeader from './panel/MessageHeader'
+import MessageHeader from './panel/PcHeader'
 import MessageStack from './panel/MessageStack'
+import MobileSendButton from './panel/MobileSendButton'
 import * as style from './page.style'
 
 const MessageChatPage = () => {
@@ -28,10 +26,7 @@ const MessageChatPage = () => {
     undefined,
   )
   const axiosWithAuth = useAxiosWithAuth()
-  const { isOpen, openModal, closeModal } = useModal()
   const { isPc } = useMedia()
-
-  console.log('conversationId', conversationId)
 
   useEffect(() => {
     if (conversationId === 0 || targetId === 0) {
@@ -133,15 +128,19 @@ const MessageChatPage = () => {
     return <Typography>빈 쪽지함 입니다!</Typography>
 
   return (
-    <MessageContainer>
-      <MessageHeader
-        targetProfile={target.userProfile}
-        userNickname={target.userNickname}
-      />
+    <MessageContainer targetNickname={target.userNickname}>
+      {isPc && (
+        <MessageHeader
+          targetProfile={target.userProfile}
+          userNickname={target.userNickname}
+        />
+      )}
       <Stack ref={scrollRef} sx={isPc ? style.pcStack : style.mobileStack}>
         <Box ref={targetRef}></Box>
         {spinner && <CircularProgress sx={style.circularProgress} />}
         <MessageStack messageData={updatedData} owner={owner} target={target} />
+        {/* FIXME : 버튼 스크롤감지, 모마일 스크롤 감지 오류 수정 */}
+        {/* <Box ref={bottomRef}></Box> */}
       </Stack>
       {isPc ? (
         <MessageForm
@@ -152,21 +151,11 @@ const MessageChatPage = () => {
           disabled={target.deleted}
         />
       ) : (
-        <>
-          <CuButton
-            variant="contained"
-            action={() => openModal()}
-            message="답하기"
-            fullWidth
-            disabled={target.deleted}
-          />
-          <MessageFormModal
-            isOpen={isOpen}
-            targetId={target.userId}
-            addNewMessage={addNewMessage}
-            handleClose={closeModal}
-          />
-        </>
+        <MobileSendButton
+          disabled={target.deleted}
+          targetId={target.userId}
+          addNewMessage={addNewMessage}
+        />
       )}
     </MessageContainer>
   )
