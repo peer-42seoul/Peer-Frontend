@@ -34,7 +34,7 @@ const AreaForAddInterviewForm = ({
 
   const onHandlerAddQuestion = () => {
     switch (formType) {
-      case '선형배율': {
+      case 'ratio': {
         if (
           question === '' ||
           max === '' ||
@@ -55,14 +55,14 @@ const AreaForAddInterviewForm = ({
           },
         ])
         setQuestion('')
-        setFormType('주관식')
+        setFormType('open')
         setOption([])
         setMax('')
         setvalueOfMin('')
         setvalueOfMax('')
         return
       }
-      case '주관식': {
+      case 'open': {
         if (question === '') {
           console.log('모든 값을 입력해주세요')
           alert('모든 값을 입력해주세요')
@@ -83,7 +83,7 @@ const AreaForAddInterviewForm = ({
       },
     ])
     setQuestion('')
-    setFormType('주관식')
+    setFormType('open')
     setOption([])
   }
 
