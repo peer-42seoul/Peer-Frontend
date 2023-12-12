@@ -19,6 +19,11 @@ import CuModal from '@/components/CuModal'
 const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
+  const {
+    isOpen: isChangeOpen,
+    closeModal: closeChangeModal,
+    openModal: openChangeModal,
+  } = useModal()
   const [members, setMembers] = useState<IMember[]>(team)
   const [member, setMember] = useState<IMember | null>(null)
   const axiosWithAuth = useAxiosWithAuth()
@@ -129,7 +134,7 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
                   checked={member.grant === TeamGrant.LEADER ? true : false}
                 />
               </Stack>
-              <Button>
+              <Button onClick={openChangeModal}>
                 <Typography fontSize="small">역할 변경</Typography>
               </Button>
             </Box>
@@ -137,7 +142,13 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
         ))}
       </Grid>
 
-      <CuModal></CuModal>
+      <CuModal open={isChangeOpen} handleClose={closeChangeModal}>
+        <Box sx={{ backgroundColor: 'white' }}>
+          <Typography>역할 변경</Typography>
+          <Button onClick={closeChangeModal}>취소</Button>
+          <Button onClick={closeChangeModal}>확인</Button>
+        </Box>
+      </CuModal>
 
       <Modal open={isOpen}>
         <Box sx={{ backgroundColor: 'white' }}>
