@@ -55,10 +55,12 @@ const MessageChatPage = () => {
     fetchMoreData,
   )
 
-  const { targetRef, scrollRef, spinner } = useMessageInfiniteScroll({
-    trigger, // == mutate
-    isEnd,
-  })
+  const { targetRef, scrollRef, bottomRef, spinner } = useMessageInfiniteScroll(
+    {
+      trigger, // == mutate
+      isEnd,
+    },
+  )
 
   const scrollTo = useCallback(
     (height: number) => {
@@ -104,13 +106,13 @@ const MessageChatPage = () => {
 
   useEffect(() => {
     // FIXME : 깜빡임 현상 해결 필요할듯...
-    if (!scrollRef.current) return
+    if (!scrollRef.current || !bottomRef.current) return
     if (prevScrollHeight) {
       scrollTo(scrollRef.current.scrollHeight - prevScrollHeight)
       setPrevScrollHeight(undefined)
       return
     }
-    scrollTo(scrollRef.current.scrollHeight - scrollRef.current.clientHeight)
+    bottomRef.current.scrollIntoView()
   }, [updatedData])
 
   const addNewMessage = useCallback((newMessage: IMessage) => {
@@ -149,8 +151,7 @@ const MessageChatPage = () => {
               owner={owner}
               target={target}
             />
-            {/* FIXME : 버튼 스크롤감지, 모마일 스크롤 감지 오류 수정 */}
-            {/* <Box ref={bottomRef}></Box> */}
+            <Box ref={bottomRef}></Box>
           </Stack>
           {isPc ? (
             <MessageForm
