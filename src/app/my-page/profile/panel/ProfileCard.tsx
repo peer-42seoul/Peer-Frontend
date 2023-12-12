@@ -2,7 +2,6 @@
 import { Avatar, Box, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import ProfileSection from './ProfileSection'
-import Image from 'next/image'
 
 // TODO css 다른 파일로 빼기
 
@@ -26,6 +25,7 @@ const ProfileImageModal = ({
       sx={{ border: 'none', outline: 'none' }}
     >
       <Box
+        component={'img'}
         sx={{
           width: '80%',
           position: 'absolute',
@@ -35,14 +35,9 @@ const ProfileImageModal = ({
           outline: 'none',
           transform: 'translate(-50%, -50%)',
         }}
-      >
-        <Image
-          width={500}
-          height={500}
-          alt="profile image"
-          src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
-        />
-      </Box>
+        alt="profile image"
+        src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
+      />
     </Modal>
   )
 }
