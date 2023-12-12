@@ -1,6 +1,5 @@
 'use client'
 import React, { useCallback, useRef, useState } from 'react'
-import SettingContainer from './SettingContainer'
 import {
   AlertColor,
   Avatar,
@@ -42,12 +41,14 @@ const ProfileBioEditor = ({
   setToastMessage,
   setToastOpen,
   mutate,
+  open,
 }: {
   data: IProfileCard
   closeModal: () => void
   setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (isOpen: boolean) => void
   mutate: () => void
+  open: boolean
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
@@ -292,12 +293,21 @@ const ProfileBioEditor = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <SettingContainer
-        onNegativeClick={closeModal}
-        settingTitle="introduction"
-        isSubmitting={isSubmitting}
-      >
+    <CuModal
+      open={open}
+      onClose={closeModal}
+      title={'소개 수정'}
+      containedButton={{
+        text: isSubmitting ? '제출 중' : '완료',
+        type: 'submit',
+        form: 'profile-bio-editor-form',
+      }}
+      textButton={{
+        text: '취소',
+        onClick: closeModal,
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)} id={'profile-bio-editor-form'}>
         <Grid container spacing={2} rowSpacing={1}>
           {/* profile image */}
           <Grid item xs={12}>
@@ -484,39 +494,33 @@ const ProfileBioEditor = ({
         </Grid>
         <CuModal
           open={isOpen}
-          handleClose={closeCropModal}
+          onClose={closeCropModal}
           keepMounted
-          ariaDescription=""
-          ariaTitle=""
+          title={'프로필 이미지 편집'} // NOTE: 통일성을 위해 임의로 설정한 제목입니다.
+          containedButton={{
+            text: '완료',
+            onClick: handleCrop,
+          }}
+          textButton={{
+            text: '취소',
+            onClick: handleCancelCrop,
+          }}
         >
-          <Box>
-            <Box sx={squareBoxStyle}>
-              <img
-                ref={imageRef}
-                alt="Preview"
-                style={{
-                  borderRadius: '50%',
-                  width: '100%',
-                  height: '100%',
-                  display: 'none',
-                }}
-              />
-            </Box>
-
-            <CuButton
-              variant="contained"
-              action={handleCancelCrop}
-              message="취소"
-            ></CuButton>
-            <CuButton
-              variant="contained"
-              action={handleCrop}
-              message="완료"
-            ></CuButton>
+          <Box sx={squareBoxStyle}>
+            <img
+              ref={imageRef}
+              alt="Preview"
+              style={{
+                borderRadius: '50%',
+                width: '100%',
+                height: '100%',
+                display: 'none',
+              }}
+            />
           </Box>
         </CuModal>
-      </SettingContainer>
-    </form>
+      </form>
+    </CuModal>
   )
 }
 

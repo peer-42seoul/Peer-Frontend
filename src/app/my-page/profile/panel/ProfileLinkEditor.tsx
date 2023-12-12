@@ -1,11 +1,11 @@
 import React from 'react'
-import SettingContainer from './SettingContainer'
 import { IUserProfileLink } from '@/types/IUserProfile'
-import { AlertColor, Box, Grid } from '@mui/material'
+import { AlertColor, Grid } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useAxiosWithAuth from '@/api/config'
+import CuModal from '@/components/CuModal'
 
 interface IToastProps {
   severity?: AlertColor
@@ -18,12 +18,14 @@ const ProfileLinkEditor = ({
   setToastMessage,
   setToastOpen,
   mutate,
+  open,
 }: {
   closeModal: () => void
   links?: Array<IUserProfileLink>
   setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (open: boolean) => void
   mutate: () => void
+  open: boolean
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const defaultValues: Array<IUserProfileLink> = links
@@ -115,20 +117,59 @@ const ProfileLinkEditor = ({
   }
 
   return (
-    <Box>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <SettingContainer
-          onNegativeClick={closeModal}
-          settingTitle="links"
-          isSubmitting={isSubmitting}
-        >
-          <Grid container rowSpacing={2}>
-            {defaultValues.map((link, i) => {
-              return (
-                <Grid item container xs={12} key={link.id} rowSpacing={1}>
+    <CuModal
+      open={open}
+      onClose={closeModal}
+      title="링크 수정"
+      containedButton={{
+        text: isSubmitting ? '제출 중' : '완료',
+        type: 'submit',
+        form: 'profile-link-editor-form',
+      }}
+      textButton={{
+        text: '취소',
+        onClick: closeModal,
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)} id={'profile-link-editor-form'}>
+        <Grid container rowSpacing={2}>
+          {defaultValues.map((link, i) => {
+            return (
+              <Grid item container xs={12} key={link.id} rowSpacing={1}>
+                <Grid item xs={3}>
+                  <CuTextFieldLabel htmlFor={`${i}.linkName`}>
+                    제목
+                  </CuTextFieldLabel>
+                </Grid>
+                <Grid item xs={9}>
+                  <Controller
+                    render={({ field }) => (
+                      <CuTextField
+                        variant="outlined"
+                        id={`${i}.linkName`}
+                        {...field}
+                        autoComplete="off"
+                        error={errors[i]?.linkName ? true : false}
+                        fullWidth
+                        inputProps={{ maxLength: 20 }}
+                        helperText={errors[i]?.linkName?.message}
+                      />
+                    )}
+                    name={`${i}.linkName`}
+                    control={control}
+                    rules={{
+                      maxLength: {
+                        value: 20,
+                        message:
+                          '링크 제목은 최대 20글자까지만 적용 가능합니다.',
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item container xs={12}>
                   <Grid item xs={3}>
-                    <CuTextFieldLabel htmlFor={`${i}.linkName`}>
-                      제목
+                    <CuTextFieldLabel htmlFor={`${i}.linkUrl`}>
+                      링크
                     </CuTextFieldLabel>
                   </Grid>
                   <Grid item xs={9}>
@@ -136,65 +177,32 @@ const ProfileLinkEditor = ({
                       render={({ field }) => (
                         <CuTextField
                           variant="outlined"
-                          id={`${i}.linkName`}
+                          id={`${i}.linkUrl`}
                           {...field}
                           autoComplete="off"
-                          error={errors[i]?.linkName ? true : false}
+                          error={errors[i]?.linkUrl ? true : false}
                           fullWidth
-                          inputProps={{ maxLength: 20 }}
-                          helperText={errors[i]?.linkName?.message}
+                          helperText={errors[i]?.linkUrl?.message}
+                          inputProps={{ maxLength: 300 }}
                         />
                       )}
-                      name={`${i}.linkName`}
+                      name={`${i}.linkUrl`}
                       control={control}
                       rules={{
                         maxLength: {
-                          value: 20,
-                          message:
-                            '링크 제목은 최대 20글자까지만 적용 가능합니다.',
+                          value: 300,
+                          message: '링크는 최대 300글자까지만 적용 가능합니다.',
                         },
                       }}
                     />
                   </Grid>
-                  <Grid item container xs={12}>
-                    <Grid item xs={3}>
-                      <CuTextFieldLabel htmlFor={`${i}.linkUrl`}>
-                        링크
-                      </CuTextFieldLabel>
-                    </Grid>
-                    <Grid item xs={9}>
-                      <Controller
-                        render={({ field }) => (
-                          <CuTextField
-                            variant="outlined"
-                            id={`${i}.linkUrl`}
-                            {...field}
-                            autoComplete="off"
-                            error={errors[i]?.linkUrl ? true : false}
-                            fullWidth
-                            helperText={errors[i]?.linkUrl?.message}
-                            inputProps={{ maxLength: 300 }}
-                          />
-                        )}
-                        name={`${i}.linkUrl`}
-                        control={control}
-                        rules={{
-                          maxLength: {
-                            value: 300,
-                            message:
-                              '링크는 최대 300글자까지만 적용 가능합니다.',
-                          },
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
                 </Grid>
-              )
-            })}
-          </Grid>
-        </SettingContainer>
+              </Grid>
+            )
+          })}
+        </Grid>
       </form>
-    </Box>
+    </CuModal>
   )
 }
 
