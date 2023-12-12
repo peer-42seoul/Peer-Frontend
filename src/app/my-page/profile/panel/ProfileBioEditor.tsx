@@ -114,6 +114,7 @@ const ProfileBioEditor = ({
           dragMode: 'move',
           autoCropArea: 1,
           cropBoxResizable: false,
+          cropBoxMovable: false,
           modal: true,
           // ... other options
         })
