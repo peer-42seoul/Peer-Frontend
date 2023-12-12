@@ -60,11 +60,20 @@ const MessageForm = ({
     [openToast, setToastMessage],
   )
 
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>) => {
+      // 한글 입력 시 이벤트 중복 방지 https://minjung-jeon.github.io/IME-keyCode-229-issue/
+      if (!e.nativeEvent.isComposing && e.key === 'Enter') messageSubmit(e)
+    },
+    [content],
+  )
+
   const messageSubmit = async (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLDivElement>,
   ) => {
+    e.preventDefault()
+    e.stopPropagation()
     try {
-      e.preventDefault()
       if (!content) {
         setToast('빈 메시지는 전송할 수 없습니다.')
         return
@@ -127,9 +136,7 @@ const MessageForm = ({
                 onChange={(e) =>
                   setContent(e.target.value.slice(0, MAX_LENGTH))
                 }
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') messageSubmit(e)
-                }}
+                onKeyDown={handleKeyDown}
                 disabled={disabled}
               />
               <Typography color={'text.assistive'} sx={style.messageLength}>
@@ -148,13 +155,7 @@ const MessageForm = ({
             placeholder="내용을 입력하세요"
             variant="outlined"
             onChange={(e) => setContent(e.target.value.slice(0, MAX_LENGTH))}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.stopPropagation()
-                return
-                // messageSubmit(e) // NOTE : 모바일에서도 엔터를 쳤을 때 전송가능해야 하는지?
-              }
-            }}
+            onKeyDown={handleKeyDown}
           />
         )}
       </form>
