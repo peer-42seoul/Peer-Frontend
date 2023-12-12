@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from 'react'
 import useSWRMutation from 'swr/mutation'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import CuToast from '@/components/CuToast'
 import useMedia from '@/hook/useMedia'
+import useToast from '@/hook/useToast'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 import useMessagePageState from '@/states/useMessagePageState'
 import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
@@ -27,13 +29,7 @@ const MessageChatPage = () => {
   )
   const axiosWithAuth = useAxiosWithAuth()
   const { isPc } = useMedia()
-
-  useEffect(() => {
-    if (conversationId === 0 || targetId === 0) {
-      // TODO : 잘못된 접근 안내
-      setListPage()
-    }
-  }, [conversationId, targetId])
+  const { isOpen, toastMessage, openToast, setToastMessage } = useToast()
 
   const fetchMoreData = useCallback(
     async (url: string) => {
@@ -47,7 +43,8 @@ const MessageChatPage = () => {
         return response.data.msgList
       } catch {
         // TODO : 에러 구체화
-        alert('쪽지를 불러오는데 실패하였습니다.')
+        setToastMessage('쪽지를 불러오는데 실패하였습니다.')
+        openToast()
       }
     },
     [conversationId, targetId, updatedData],
@@ -85,8 +82,8 @@ const MessageChatPage = () => {
         setIsEnd(response.data.msgList[0].isEnd)
       })
       .catch(() => {
-        // TODO : 에러 구체화
-        alert('쪽지를 불러오는데 실패하였습니다.')
+        setToastMessage('쪽지를 불러오는데 실패하였습니다.')
+        openToast()
       })
       .finally(() => {
         setIsLoading(false)
@@ -123,39 +120,57 @@ const MessageChatPage = () => {
     })
   }, [])
 
-  if (isLoading) return <Typography>로딩중... @_@</Typography>
-  if (!updatedData || !owner || !target)
-    return <Typography>빈 쪽지함 입니다!</Typography>
+  const isError = !updatedData || !owner || !target
 
   return (
-    <MessageContainer targetNickname={target.userNickname}>
+    <MessageContainer targetNickname={target ? target.userNickname : '...'}>
       {isPc && (
         <MessageHeader
-          targetProfile={target.userProfile}
-          userNickname={target.userNickname}
+          targetProfile={target?.userProfile}
+          userNickname={target ? target.userNickname : '...'}
         />
       )}
-      <Stack ref={scrollRef} sx={isPc ? style.pcStack : style.mobileStack}>
-        <Box ref={targetRef}></Box>
-        {spinner && <CircularProgress sx={style.circularProgress} />}
-        <MessageStack messageData={updatedData} owner={owner} target={target} />
-        {/* FIXME : 버튼 스크롤감지, 모마일 스크롤 감지 오류 수정 */}
-        {/* <Box ref={bottomRef}></Box> */}
-      </Stack>
-      {isPc ? (
-        <MessageForm
-          targetId={target.userId}
-          updateTarget={setTarget}
-          addNewMessage={addNewMessage}
-          disabled={target.deleted}
-        />
+      {isLoading ? (
+        // case 1 : 로딩 중
+        <CircularProgress sx={style.circularProgress} />
+      ) : isError ? (
+        // case 2 : 에러
+        <Stack justifyContent={'center'} alignItems={'center'} height={'100%'}>
+          <Typography>쪽지함이 비어있습니다.</Typography>
+        </Stack>
       ) : (
-        <MobileSendButton
-          disabled={target.deleted}
-          target={{ id: target.userId, nickname: target.userNickname }}
-          addNewMessage={addNewMessage}
-        />
+        // case 3 : 정상
+        <>
+          <Stack ref={scrollRef} sx={isPc ? style.pcStack : style.mobileStack}>
+            <Box ref={targetRef}></Box>
+            {spinner && <CircularProgress sx={style.circularProgress} />}
+            <MessageStack
+              messageData={updatedData}
+              owner={owner}
+              target={target}
+            />
+            {/* FIXME : 버튼 스크롤감지, 모마일 스크롤 감지 오류 수정 */}
+            {/* <Box ref={bottomRef}></Box> */}
+          </Stack>
+          {isPc ? (
+            <MessageForm
+              targetId={target.userId}
+              updateTarget={setTarget}
+              addNewMessage={addNewMessage}
+              disabled={target.deleted}
+            />
+          ) : (
+            <MobileSendButton
+              disabled={target.deleted}
+              target={{ id: target.userId, nickname: target.userNickname }}
+              addNewMessage={addNewMessage}
+            />
+          )}
+        </>
       )}
+      <CuToast open={isOpen} onClose={setListPage} severity="error">
+        {toastMessage}
+      </CuToast>
     </MessageContainer>
   )
 }
