@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react'
 import { isAxiosError } from 'axios'
-import { Stack, Typography, IconButton, styled } from '@mui/material'
+import { Stack, Typography, IconButton, styled, Box } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuTextField from '@/components/CuTextField'
 import useMedia from '@/hook/useMedia'
@@ -103,12 +103,8 @@ const MessageForm = ({
   }
 
   return (
-    <>
-      <form
-        onSubmit={messageSubmit}
-        id={'message-form'}
-        style={!isPc ? { height: '100%' } : undefined}
-      >
+    <Box sx={isPc ? undefined : style.mobileMessageForm}>
+      <form onSubmit={messageSubmit} id={'message-form'}>
         {isPc ? (
           <Stack
             direction={'row'}
@@ -165,7 +161,7 @@ const MessageForm = ({
       <CuToast open={isOpen} onClose={closeToast} severity="error">
         {toastMessage}
       </CuToast>
-    </>
+    </Box>
   )
 }
 

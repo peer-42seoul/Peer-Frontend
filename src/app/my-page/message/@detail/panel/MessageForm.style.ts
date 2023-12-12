@@ -48,8 +48,7 @@ export const pcSendButton = {
 }
 
 export const mobileMessageForm = {
-  // width: '100%',
-  // height: '100%',
-  flexGrow: 1,
-  padding: '0.75rem',
+  height: '100%',
+  borderRadius: '0.5rem',
+  background: (theme: Theme) => theme.palette.background.tertiary,
 }
