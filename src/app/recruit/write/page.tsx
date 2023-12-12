@@ -70,7 +70,7 @@ const CreateTeam = () => {
   const axiosInstance = useAxiosWithAuth()
 
   const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/tag`,
     (url: string) => axios.get(url).then((res) => res.data),
   )
 

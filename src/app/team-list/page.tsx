@@ -42,6 +42,7 @@ const TeamsListPage = () => {
         로딩 중...
       </Stack>
     )
+
   if (!data)
     return (
       <Stack

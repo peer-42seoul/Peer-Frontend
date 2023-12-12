@@ -2,20 +2,29 @@ import {
   Avatar,
   Box,
   Button,
+  FormControl,
   Grid,
   Modal,
+  NativeSelect,
+  Select,
   Stack,
   Switch,
   Typography,
 } from '@mui/material'
-import { IMember, TeamGrant } from '../../../types/types'
+import { IMember, Job, TeamGrant } from '../../../types/types'
 import useModal from '@/hook/useModal'
 import { useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
 
-const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
+interface ISetupMember {
+  team: IMember[]
+  teamId: string
+  jobs: Job[]
+}
+
+const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   const {
@@ -25,7 +34,15 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
   } = useModal()
   const [members, setMembers] = useState<IMember[]>(team)
   const [member, setMember] = useState<IMember | null>(null)
+  const [job, setJob] = useState<Job[]>(jobs)
   const axiosWithAuth = useAxiosWithAuth()
+
+  const changeJob = () => {
+    axiosWithAuth.put(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/change`,
+      job,
+    )
+  }
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
@@ -96,6 +113,11 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
       })
   }
 
+  const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
+    if (jobs.length === 0) return console.log('역할이 없습니다.')
+    setJob([...job, e.target.value as Job])
+  }
+
   return (
     <>
       <Grid container spacing={2} m={1}>
@@ -144,6 +166,25 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
       <Modal open={isChangeOpen} onClose={closeChangeModal}>
         <Box>
           <Typography>역할 변경</Typography>
+          <FormControl>
+            <NativeSelect
+              value={job}
+              onChange={handleChangeJob}
+              inputProps={{ 'aria-label': 'role' }}
+            >
+              {jobs.map((job, index) => (
+                <option key={index} value={job.id}>
+                  {job.name}
+                </option>
+              ))}
+            </NativeSelect>
+          </FormControl>
+          <Stack direction={'row'} justifyContent={'space-evenly'}>
+            {job.map((j, index) => (
+              <Typography key={index}>{j.name}</Typography>
+            ))}
+          </Stack>
+
           <Button onClick={closeChangeModal}>취소</Button>
           <Button onClick={closeChangeModal}>확인</Button>
         </Box>
