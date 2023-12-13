@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select, MenuItem, Box } from '@mui/material'
+import { Select, MenuItem, Box, Typography } from '@mui/material'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 
 interface IReportTypeSelectProps {
@@ -12,7 +12,7 @@ const ReportTypeSelect = ({ field, label }: IReportTypeSelectProps) => {
   return (
     <Box style={{ display: 'flex', alignItems: 'center' }}>
       <CuTextFieldLabel htmlFor={field.name} style={{ width: '120px' }}>
-        {label}
+        <Typography variant="Body2">{label}</Typography>
       </CuTextFieldLabel>
       <Select
         labelId={`${field.name}-label`}
