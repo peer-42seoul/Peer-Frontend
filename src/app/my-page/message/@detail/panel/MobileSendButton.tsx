@@ -1,11 +1,11 @@
-import useModal from '@/hook/useModal'
-import { IMessage } from '@/types/IMessage'
-import * as style from './MobileSendButton.style'
-import { Fab, Typography, Fade } from '@mui/material'
-import SendIcon from '@/icons/SendIcon'
-import MessageFormModal from './MessageFormModal'
 import { RefObject, useCallback, useEffect, useState } from 'react'
 import { throttle } from 'lodash'
+import { Fab, Typography, Fade, Stack } from '@mui/material'
+import useModal from '@/hook/useModal'
+import SendIcon from '@/icons/SendIcon'
+import { IMessage } from '@/types/IMessage'
+import MessageFormModal from './MessageFormModal'
+import * as style from './MobileSendButton.style'
 
 interface IMobileSendButtonProps {
   disabled: boolean
@@ -73,8 +73,10 @@ const MobileSendButton = ({
           disabled={disabled}
           sx={style.mobileSendButton}
         >
-          <SendIcon />
-          <Typography variant="Body2">쪽지 보내기</Typography>
+          <Stack direction={'row'} spacing={'0.25rem'}>
+            <SendIcon />
+            <Typography variant="Body2">쪽지 보내기</Typography>
+          </Stack>
         </Fab>
       </Fade>
       <MessageFormModal
