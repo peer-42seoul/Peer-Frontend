@@ -25,6 +25,7 @@ const useAuthStore = create<IAuthStore>((set) => {
       // save userId, accessToken to LocalStorage
       const authDataToSave = { accessToken }
       LocalStorage.setItem('authData', JSON.stringify(authDataToSave))
+      console.log('accessToken', accessToken)
       setCookie('accessToken', accessToken)
       // set state
       set(() => ({
