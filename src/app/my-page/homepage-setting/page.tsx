@@ -29,7 +29,7 @@ const HomepageSetting = () => {
   }
 
   return (
-    <Stack sx={{ whiteSpace: 'pre-line', wordBreak: 'keep-all' }} spacing={4}>
+    <Stack spacing={4}>
       <NotifSetting setToastMessage={setToastMessage} />
       <KeywordSetting setToastMessage={setToastMessage} />
       <DisplaySetting />
