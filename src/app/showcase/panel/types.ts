@@ -1,5 +1,5 @@
 export interface IShowcaseTag {
-  tagId: number
+  id: number
   name: string
 }
 

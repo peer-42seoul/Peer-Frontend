@@ -27,22 +27,24 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
         </Stack>
         <Stack>
           {imageUrl ? (
-            <Avatar
+            <Box
+              component="img"
               src={imageUrl}
               sx={{
                 width: '22.5rem',
                 height: '50rem',
               }}
-              variant="rounded"
+              // variant="rounded"
             />
           ) : (
-            <Avatar
+            <Box
+              component="img"
               src="/images/icons/icon-512x512.png"
               sx={{
                 width: '22.5rem',
                 height: '50rem',
               }}
-              variant="rounded"
+              // variant="rounded"
             />
           )}
         </Stack>
