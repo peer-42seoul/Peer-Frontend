@@ -5,6 +5,7 @@ import {
   Card,
   IconButton,
   MenuItem,
+  Modal,
   Select,
   Stack,
   TextField,
@@ -368,12 +369,11 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
         </Stack>
       </Card>
 
-      <CuModal
-        ariaTitle="alert-modal-title"
-        ariaDescription="alert-modal-description"
+      <Modal
+        title="팀 정보 수정"
         open={isConfirmOpen}
-        handleClose={closeConfirmModel}
-        style={styles.comfirmModalStyle}
+        onClose={closeConfirmModel}
+        sx={styles.comfirmModalStyle}
       >
         <Box>
           <Typography id="alert-modal-title">팀 정보 수정 확인</Typography>
@@ -393,15 +393,9 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
             style={{ width: '50%' }}
           />
         </Box>
-      </CuModal>
+      </Modal>
 
-      <CuModal
-        ariaTitle="alert-modal-title"
-        ariaDescription="alert-modal-description"
-        open={isOpen}
-        handleClose={closeModal}
-        style={styles.deleteModalStyle}
-      >
+      <Modal open={isOpen} onClose={closeModal} sx={styles.deleteModalStyle}>
         <Box>
           <Typography id="alert-modal-title">팀 로고 삭제</Typography>
           <Typography id="alert-modal-description">
@@ -420,7 +414,7 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
             style={{ width: '50%' }}
           />
         </Box>
-      </CuModal>
+      </Modal>
     </>
   )
 }
