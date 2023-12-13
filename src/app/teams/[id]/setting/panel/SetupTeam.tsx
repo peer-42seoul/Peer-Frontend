@@ -15,11 +15,10 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import SetupSelect from './SetupSelect'
 import Image from 'next/image'
 import useModal from '@/hook/useModal'
-import CuModal from '@/components/CuModal'
-import CuButton from '@/components/CuButton'
 import useAxiosWithAuth from '@/api/config'
 import ClearIcon from '@mui/icons-material/Clear'
 import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
+import CuTextModal from '@/components/CuTextModal'
 
 interface ISetupTeam {
   id: string
@@ -496,80 +495,34 @@ const SetupTeam = ({ team }: { team: ISetupTeam }) => {
           <Button onClick={openConfirmModel}>팀 설정</Button>
         </Box>
       )}
-
-      <CuModal
-        ariaTitle="alert-modal-title"
-        ariaDescription="alert-modal-description"
+      <CuTextModal
         open={isConfirmOpen}
-        handleClose={closeConfirmModel}
-        style={{
-          position: 'absolute' as 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
+        onClose={closeConfirmModel}
+        title={'팀 정보 수정 확인'}
+        containedButton={{
+          text: '수정',
+          onClick: sendTeamInfo,
         }}
-      >
-        <Box>
-          <Typography id="alert-modal-title">팀 정보 수정 확인</Typography>
-          <Typography id="alert-modal-description">
-            팀 정보를 수정하시겠습니다.
-          </Typography>
-          <CuButton
-            variant="contained"
-            action={closeConfirmModel}
-            message="취소"
-            style={{ width: '50%' }}
-          />
-          <CuButton
-            variant="contained"
-            action={sendTeamInfo}
-            message="수정"
-            style={{ width: '50%' }}
-          />
-        </Box>
-      </CuModal>
-
-      <CuModal
-        ariaTitle="alert-modal-title"
-        ariaDescription="alert-modal-description"
+        textButton={{
+          text: '취소',
+          onClick: closeConfirmModel,
+        }}
+        content={'팀 정보를 수정하시겠습니까?'}
+      />
+      <CuTextModal
         open={isOpen}
-        handleClose={closeModal}
-        style={{
-          position: 'absolute' as 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
+        onClose={closeModal}
+        title={'팀 로고 삭제'}
+        containedButton={{
+          text: '삭제',
+          onClick: openModal,
         }}
-      >
-        <Box>
-          <Typography id="alert-modal-title">팀 로고 삭제</Typography>
-          <Typography id="alert-modal-description">
-            사진을 삭제하시겠습니까?
-          </Typography>
-          <CuButton
-            variant="contained"
-            action={closeModal}
-            message="취소"
-            style={{ width: '50%' }}
-          />
-          <CuButton
-            variant="contained"
-            action={handleDeleteImage}
-            message="삭제"
-            style={{ width: '50%' }}
-          />
-        </Box>
-      </CuModal>
+        textButton={{
+          text: '취소',
+          onClick: handleDeleteImage,
+        }}
+        content={'사진을 삭제하시겠습니까?'}
+      />
     </>
   )
 }

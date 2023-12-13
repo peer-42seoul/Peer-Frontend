@@ -14,7 +14,6 @@ import {
   Avatar,
 } from '@mui/material'
 import { IPostDetail, ITag } from '@/types/IPostDetail'
-import Image from 'next/image'
 import React from 'react'
 import RecruitFormModal from './panel/form/RecruitFormModal'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -102,12 +101,12 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             <Stack width={'100%'}>
               {/*이미지, 제목, 프로필 영역*/}
               <Stack direction={'row'} gap={4} marginBottom={6}>
-                <Image
-                  src={data?.image ?? ''}
-                  alt="leader_profile"
+                <Box
+                  src={data?.image}
+                  alt="main_image"
                   width={300}
                   height={300}
-                  style={{ border: '1px solid white' }}
+                  component={'img'}
                 />
                 <Box display="flex" flexDirection="column" gap={2}>
                   <Stack gap={2} direction="row" alignItems={'center'}>
@@ -268,11 +267,12 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               <Typography>{data?.place}</Typography>
             </Stack>
           </Box>
-          <Image
-            src={data?.image ?? ''}
+          <Box
+            src={data?.image}
             alt="leader_profile"
             width={300}
             height={300}
+            component={'img'}
           />
           <RecruitContentText label="목표 작업기간" content={data?.due} />
           <RecruitContentText label="지역">

@@ -1,9 +1,8 @@
 'use client'
 
-import { useMediaQuery, IconButton } from '@mui/material'
+import { useMediaQuery, IconButton, Modal, Box } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import useModal from '@/hook/useModal'
-import CuModal from '@/components/CuModal'
 import SearchBody from '../../search/panel/SearchBody'
 
 const StyleMobileSearch = {
@@ -29,16 +28,17 @@ const SearchPc = () => {
       <IconButton color="inherit" aria-label="menu" onClick={openModal}>
         <SearchIcon color="primary" />
       </IconButton>
-
-      <CuModal
+      {/* NOTE : 기본 모달과 형태가 달라 CuModal을 사용하지 않았습니다. */}
+      <Modal
         open={isOpen}
-        handleClose={closeModal}
-        ariaTitle="modal-title"
-        ariaDescription="modal-description"
-        style={StylePcSearch}
+        onClose={closeModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
       >
-        <SearchBody onClose={closeModal} />
-      </CuModal>
+        <Box sx={StylePcSearch}>
+          <SearchBody onClose={closeModal} />
+        </Box>
+      </Modal>
     </>
   )
 }
@@ -50,16 +50,17 @@ const SearchMobile = () => {
       <IconButton color="inherit" aria-label="menu" onClick={openModal}>
         <SearchIcon />
       </IconButton>
-
-      <CuModal
+      {/* NOTE : 기본 모달과 형태가 달라 CuModal을 사용하지 않았습니다. */}
+      <Modal
         open={isOpen}
-        handleClose={closeModal}
-        ariaTitle="modal-title"
-        ariaDescription="modal-description"
-        style={StyleMobileSearch}
+        onClose={closeModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
       >
-        <SearchBody onClose={closeModal} />
-      </CuModal>
+        <Box sx={StyleMobileSearch}>
+          <SearchBody onClose={closeModal} />
+        </Box>
+      </Modal>
     </>
   )
 }

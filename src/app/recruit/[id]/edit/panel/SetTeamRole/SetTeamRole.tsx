@@ -48,7 +48,7 @@ const SetTeamRole = ({
             variant="outlined"
             value={role}
             onChange={onHandlerEditRole}
-            placeholder='역할을 입력해주세요'
+            placeholder="역할을 입력해주세요"
           />
           <BasicSelectMember member={member} setMember={setMember} />
         </Stack>

@@ -1,18 +1,11 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Portal,
-  Stack,
-  Typography,
-} from '@mui/material'
-import TmpNoticeWidget from '@/app/teams/@main/[id]/panel/widgets/TmpNoticeWidget'
-import TmpBoardWidget from '@/app/teams/@main/[id]/panel/widgets/TmpBoardWidget'
-import TmpCalenderWidget from '@/app/teams/@main/[id]/panel/widgets/TmpCalenderWidget'
-import TmpAttendWidget from '@/app/teams/@main/[id]/panel/widgets/TmpAttendWidget'
-import TmpTextWidget from '@/app/teams/@main/[id]/panel/widgets/TmpTextWidget'
-import TmpImageWidget from '@/app/teams/@main/[id]/panel/widgets/TmpImageWidget'
-import TmpLinkWidget from '@/app/teams/@main/[id]/panel/widgets/TmpLinkWidget'
+import { Box, IconButton, Portal, Stack, Typography } from '@mui/material'
+import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
+import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
+import TmpCalenderWidget from '@/app/teams/[id]/panel/widgets/TmpCalenderWidget'
+import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
+import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
+import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
+import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 import React, { useCallback, useMemo, useState } from 'react'
 import ReactGridLayout, {
   Layout,
@@ -30,7 +23,7 @@ import useToast from '@/hook/useToast'
 import useAxiosWithAuth from '@/api/config'
 
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
-import CuModal from '@/components/CuModal'
+import CuTextModal from '@/components/CuTextModal'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
@@ -202,25 +195,20 @@ const WidgetsRender = ({
         </CuFailedToast>
       </Portal>
       {/*확인 모달*/}
-      <CuModal
+      <CuTextModal
         open={isOpen}
-        ariaDescription={'modal-description'}
-        ariaTitle={'modal-title'}
-        handleClose={() => setOpen(false)}
-      >
-        <Box bgcolor={'white'}>
-          <Typography variant="h4" id="modal-title">
-            팀페이지 저장
-          </Typography>
-          <Typography id="modal-description">
-            팀 페이지를 저장하시겠습니까?
-          </Typography>
-          <Box>
-            <Button onClick={() => setOpen(false)}>취소</Button>
-            <Button onClick={handleSave}>확인</Button>
-          </Box>
-        </Box>
-      </CuModal>
+        onClose={() => setOpen(false)}
+        title={'팀페이지 저장'}
+        containedButton={{
+          text: '확인',
+          onClick: handleSave,
+        }}
+        textButton={{
+          text: '취소',
+          onClick: () => setOpen(false),
+        }}
+        content={'팀 페이지를 저장하시겠습니까?'}
+      />
       {/* react-grid-layout 영역 */}
       <ResponsiveGridLayout
         className="layout"

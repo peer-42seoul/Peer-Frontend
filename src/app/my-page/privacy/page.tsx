@@ -9,11 +9,12 @@ import useToast from '@/hook/useToast'
 import IToastProps from '@/types/IToastProps'
 
 const PrivacyStack = {
-  padding: '24px',
-  borderRadius: '16px',
+  backgroundColor: 'background.secondary',
+  borderRadius: '1rem',
+  padding: '1.5rem',
   justifyContent: 'center',
   alignItems: 'flex-start',
-  gap: '24px',
+  gap: '1.5rem',
   alignSelf: 'stretch',
 }
 
@@ -35,16 +36,26 @@ const PrivacyPage = () => {
 
   const { name, email, local, authenticationFt, authenticationGoogle } = data
   return (
-    <>
+    <Stack spacing={4}>
       <Stack sx={PrivacyStack}>
-        <Typography>개인 정보</Typography>
-        <Stack>
-          <Typography>이름</Typography>
-          <Typography>{name}</Typography>
+        <Typography variant="Title2Emphasis" color="text.normal">
+          개인 정보
+        </Typography>
+        <Stack spacing={1}>
+          <Typography variant="CaptionEmphasis" color="text.strong">
+            이름
+          </Typography>
+          <Typography variant="Body2" color="text.alternative">
+            {name}
+          </Typography>
         </Stack>
-        <Stack>
-          <Typography>이메일</Typography>
-          <Typography>{email}</Typography>
+        <Stack spacing={1}>
+          <Typography variant="CaptionEmphasis" color="text.strong">
+            이메일
+          </Typography>
+          <Typography variant="Body2" color="text.alternative">
+            {email}
+          </Typography>
         </Stack>
         <UserInfoEdit
           local={local}
@@ -55,7 +66,12 @@ const PrivacyPage = () => {
         />
       </Stack>
       <Stack sx={PrivacyStack}>
-        <Typography>계정관리</Typography>
+        <Typography variant="Title2Emphasis" color="text.normal">
+          계정 관리
+        </Typography>
+        <Typography variant="Body2" color="text.alternative">
+          계정을 삭제하시면....
+        </Typography>
         <UserWithdrawalModal
           setToastProps={setToastProps}
           openToast={openToast}
@@ -68,7 +84,7 @@ const PrivacyPage = () => {
           <Typography>{toastProps.message}</Typography>
         </CuToast>
       </Stack>
-    </>
+    </Stack>
   )
 }
 
