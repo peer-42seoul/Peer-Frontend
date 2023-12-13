@@ -74,7 +74,7 @@ const ProfileCard = ({
       alignSelf={'stretch'}
       sx={{
         backgroundColor: 'background.secondary',
-        borderRadius: '16px',
+        borderRadius: '1rem',
         height: '100%',
       }}
     >
@@ -93,8 +93,8 @@ const ProfileCard = ({
           src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
           onClick={() => setOpen(true)}
           sx={{
-            width: '48px',
-            height: '48px',
+            width: '3rem',
+            height: '3rem',
           }}
         />
         {/* 유저 이름, 소속, 유저 아이디, 유저 이메일 */}
@@ -106,7 +106,7 @@ const ProfileCard = ({
             <Typography
               variant="Caption"
               color={'text.alternative'}
-              sx={{ marginRight: '4px' }}
+              sx={{ marginRight: '0.25rem' }}
             >
               {association}
             </Typography>
@@ -116,7 +116,7 @@ const ProfileCard = ({
           </Typography>
         </Stack>
       </Stack>
-      <Box width={1} sx={{ minHeight: '72px' }}>
+      <Box width={1} sx={{ minHeight: '4.5rem' }}>
         <Typography variant="Body2" color={'text.normal'}>
           {introduction}
         </Typography>
