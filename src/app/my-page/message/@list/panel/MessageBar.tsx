@@ -26,13 +26,14 @@ export const SearchBar = ({
         />
       </Stack>
       <Stack
-        sx={style.searchInput}
+        sx={style.searchInputWrapper}
         direction={'row'}
         alignItems={'center'}
         spacing={'0.38rem'}
       >
         <SearchIcon />
         <InputBase
+          sx={style.searchInput}
           onChange={(e) => setSearchKeyword(e.target.value)}
           placeholder="닉네임을 검색해주세요."
           fullWidth
