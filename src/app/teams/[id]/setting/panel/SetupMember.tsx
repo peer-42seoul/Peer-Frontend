@@ -6,7 +6,6 @@ import {
   Grid,
   Modal,
   NativeSelect,
-  Select,
   Stack,
   Switch,
   Typography,
@@ -37,12 +36,12 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
   const [job, setJob] = useState<Job[]>(jobs)
   const axiosWithAuth = useAxiosWithAuth()
 
-  const changeJob = () => {
-    axiosWithAuth.put(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/change`,
-      job,
-    )
-  }
+  // const changeJob = () => {
+  //   axiosWithAuth.put(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/change`,
+  //     job,
+  //   )
+  // }
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
