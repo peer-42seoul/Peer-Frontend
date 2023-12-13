@@ -68,22 +68,52 @@ export const ManageBar = ({
   setIsManageMode,
 }: IManageBarProps) => {
   return (
-    <Stack direction="row">
-      {isSelectedAll ? (
+    <Stack spacing={'1.5rem'}>
+      <Stack direction={'row'} justifyContent={'space-between'}>
+        <Typography variant={'Title3Emphasis'}>대상 리스트 관리</Typography>
         <CuButton
+          TypographyProps={{ variant: 'CaptionEmphasis' }}
           variant="text"
-          action={handleUnselectAll}
-          message="전체 선택 해제"
+          action={() => setIsManageMode(false)}
+          message="리스트로 돌아가기"
         />
-      ) : (
-        <CuButton variant="text" action={handleSelectAll} message="전체 선택" />
-      )}
-      <CuButton variant="text" action={handleDelete} message="삭제" />
-      <CuButton
-        variant="text"
-        action={() => setIsManageMode(false)}
-        message="리스트로 돌아가기"
-      />
+      </Stack>
+      <Stack
+        direction={'row'}
+        sx={style.manageBarStack}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+      >
+        {isSelectedAll ? (
+          <CuButton
+            TypographyProps={{
+              variant: 'CaptionEmphasis',
+              color: 'text.alternative',
+            }}
+            variant="text"
+            action={handleUnselectAll}
+            message="전체 선택 해제"
+          />
+        ) : (
+          <CuButton
+            TypographyProps={{
+              variant: 'CaptionEmphasis',
+              color: 'text.alternative',
+            }}
+            variant="text"
+            action={handleSelectAll}
+            message="전체 선택"
+          />
+        )}
+        <CuButton
+          TypographyProps={{
+            variant: 'CaptionEmphasis',
+          }}
+          variant="text"
+          action={handleDelete}
+          message="삭제"
+        />
+      </Stack>
     </Stack>
   )
 }

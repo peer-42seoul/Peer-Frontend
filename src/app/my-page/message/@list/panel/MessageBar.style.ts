@@ -16,3 +16,7 @@ export const searchInput = {
     lineHeight: (theme: Theme) => theme.typography.Caption.lineHeight,
   },
 }
+
+export const manageBarStack = {
+  height: '2rem',
+}
