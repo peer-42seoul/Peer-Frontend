@@ -4,6 +4,24 @@ importScripts(
 importScripts(
   'https://www.gstatic.com/firebasejs/9.14.0/firebase-messaging-compat.js',
 )
+importScripts(
+  'https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js',
+)
+
+// 1. 서비스 워커 설치 및 등록
+
+self.addEventListener('install', (event) => {
+  // 서비스 워커 설치
+  console.log('[Service Worker] Install')
+  self.skipWaiting()
+})
+
+self.addEventListener('activate', (event) => {
+  // 서비스 워커 활성화
+  console.log('[Service Worker] Activate')
+})
+
+// 2. 푸시 메시지 수신 및 알림 표시
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCVBmOaZ34Loogn8Ig7SFXTfO10IEThLOw',
@@ -59,13 +77,4 @@ self.addEventListener('notificationclick', (event) => {
   event.waitUntil(clients.openWindow(event.notification.data.link))
 })
 
-self.addEventListener('install', (event) => {
-  // 서비스 워커 설치
-  console.log('[Service Worker] Install')
-  self.skipWaiting()
-})
-
-self.addEventListener('activate', (event) => {
-  // 서비스 워커 활성화
-  console.log('[Service Worker] Activate')
-})
+// 3. 프리 캐싱
