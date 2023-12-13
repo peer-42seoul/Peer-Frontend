@@ -1,6 +1,5 @@
 'use client'
 import React, { useCallback, useRef, useState } from 'react'
-import SettingContainer from './SettingContainer'
 import {
   AlertColor,
   Avatar,
@@ -10,6 +9,7 @@ import {
   IconButton,
   InputAdornment,
   Typography,
+  Stack,
 } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
@@ -41,12 +41,14 @@ const ProfileBioEditor = ({
   setToastMessage,
   setToastOpen,
   mutate,
+  open,
 }: {
   data: IProfileCard
   closeModal: () => void
   setToastMessage: (toastProps: IToastProps) => void
   setToastOpen: (isOpen: boolean) => void
   mutate: () => void
+  open: boolean
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isNicknameUnique, setIsNicknameUnique] = useState<boolean>(true)
@@ -229,6 +231,7 @@ const ProfileBioEditor = ({
         }
         action={onClick}
         message="중복 확인"
+        TypographyProps={{ variant: 'CaptionEmphasis' }}
       />
     )
   }
@@ -290,18 +293,28 @@ const ProfileBioEditor = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <SettingContainer
-        onNegativeClick={closeModal}
-        settingTitle="introduction"
-        isSubmitting={isSubmitting}
-      >
+    <CuModal
+      open={open}
+      onClose={closeModal}
+      title={'소개 수정'}
+      containedButton={{
+        text: isSubmitting ? '제출 중' : '완료',
+        type: 'submit',
+        form: 'profile-bio-editor-form',
+      }}
+      textButton={{
+        text: '취소',
+        onClick: closeModal,
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)} id={'profile-bio-editor-form'}>
         <Grid container spacing={2} rowSpacing={1}>
           {/* profile image */}
           <Grid item xs={12}>
             {/* <Controller
               render={({ field }) => ( */}
-            <Box>
+            <Stack gap={2}>
+              <Typography variant="CaptionEmphasis">프로필 사진</Typography>
               <Box
                 width={[56, 100]}
                 height={[56, 100]}
@@ -367,13 +380,21 @@ const ProfileBioEditor = ({
                   />
                 </Button>
               </Box>
-            </Box>
+            </Stack>
           </Grid>
           {/* nickname, association, email, introduction */}
-          <Grid item container spacing={2} justifyContent={'flex-start'}>
+          <Grid
+            item
+            container
+            spacing={3}
+            justifyContent={'flex-start'}
+            alignItems={'center'}
+          >
             {/* 닉네임 수정 */}
             <Grid item xs={3}>
-              <CuTextFieldLabel htmlFor="nickname">닉네임</CuTextFieldLabel>
+              <CuTextFieldLabel htmlFor="nickname">
+                <Typography variant="CaptionEmphasis">닉네임</Typography>
+              </CuTextFieldLabel>
             </Grid>
             <Grid item xs={9}>
               <Controller
@@ -423,24 +444,24 @@ const ProfileBioEditor = ({
             </Grid>
             {/* association */}
             <Grid item xs={3}>
-              <Typography>소속</Typography>
+              <Typography variant="CaptionEmphasis">소속</Typography>
             </Grid>
             <Grid item xs={9}>
-              <Typography>
+              <Typography variant="Caption">
                 {data.association ? data.association : '해당 없음'}
               </Typography>
             </Grid>
             {/* email */}
             <Grid item xs={3}>
-              <Typography>아이디</Typography>
+              <Typography variant="CaptionEmphasis">아이디</Typography>
             </Grid>
             <Grid item xs={9}>
-              <Typography>{data.email}</Typography>
+              <Typography variant="Caption">{data.email}</Typography>
             </Grid>
             {/* introduction message */}
-            <Grid item xs={12} style={{ display: 'none' }}>
+            <Grid item xs={12}>
               <CuTextFieldLabel htmlFor="introduction">
-                자기 소개
+                <Typography variant="CaptionEmphasis">소개</Typography>
               </CuTextFieldLabel>
             </Grid>
             <Grid item xs={12}>
@@ -473,39 +494,33 @@ const ProfileBioEditor = ({
         </Grid>
         <CuModal
           open={isOpen}
-          handleClose={closeCropModal}
+          onClose={closeCropModal}
           keepMounted
-          ariaDescription=""
-          ariaTitle=""
+          title={'프로필 이미지 편집'} // NOTE: 통일성을 위해 임의로 설정한 제목입니다.
+          containedButton={{
+            text: '완료',
+            onClick: handleCrop,
+          }}
+          textButton={{
+            text: '취소',
+            onClick: handleCancelCrop,
+          }}
         >
-          <Box>
-            <Box sx={squareBoxStyle}>
-              <img
-                ref={imageRef}
-                alt="Preview"
-                style={{
-                  borderRadius: '50%',
-                  width: '100%',
-                  height: '100%',
-                  display: 'none',
-                }}
-              />
-            </Box>
-
-            <CuButton
-              variant="contained"
-              action={handleCancelCrop}
-              message="취소"
-            ></CuButton>
-            <CuButton
-              variant="contained"
-              action={handleCrop}
-              message="완료"
-            ></CuButton>
+          <Box sx={squareBoxStyle}>
+            <img
+              ref={imageRef}
+              alt="Preview"
+              style={{
+                borderRadius: '50%',
+                width: '100%',
+                height: '100%',
+                display: 'none',
+              }}
+            />
           </Box>
         </CuModal>
-      </SettingContainer>
-    </form>
+      </form>
+    </CuModal>
   )
 }
 

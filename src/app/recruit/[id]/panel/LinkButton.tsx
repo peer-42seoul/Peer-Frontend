@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Popover, Typography } from '@mui/material'
+import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined'
 
 const LinkButton = ({
   href,
@@ -29,9 +30,15 @@ const LinkButton = ({
         size="large"
         href={href}
         onMouseEnter={handlePopoverOpen}
-        sx={{ zIndex: 1304 }}
+        sx={{
+          // zIndex: 1304, // TODO : zIndex 문제 해결되면 주석 삭제할 것.
+          borderRadius: '50%',
+          width: 40,
+          height: 40,
+          backgroundColor: 'purple.tinted',
+        }}
       >
-        소통링크
+        <InsertLinkOutlinedIcon />
       </Button>
       <Popover
         id={id}
@@ -46,7 +53,7 @@ const LinkButton = ({
           vertical: 'top',
           horizontal: 'left',
         }}
-        sx={{ zIndex: 1303 }}
+        // sx={{ zIndex: 1303 }} // TODO : zIndex 문제 해결되면 주석 삭제할 것.
         container={() => document.getElementById('modal-root')}
       >
         <Typography sx={{ padding: 2 }}>{href}</Typography>

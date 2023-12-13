@@ -24,7 +24,7 @@ const MainProfile = () => {
         height="150px"
         alignItems="center"
         justifyContent={'center'}
-        border="1px solid black"
+        bgcolor={'background.secondary'}
       >
         <Avatar
           alt="avatar"

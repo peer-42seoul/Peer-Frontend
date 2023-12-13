@@ -20,14 +20,14 @@ const NameField = ({
         autoComplete="name"
         error={false}
         type="text"
-        placeholder="이름을 입력하세요"
+        placeholder="이름을 입력하세요."
         inputProps={{
           maxLength: 5,
         }}
       />
-      {(error && <Typography color="error">{error.message}</Typography>) || (
-        <Typography>&nbsp;</Typography>
-      )}
+      <Typography color="error" variant="Caption">
+        {error?.message || '\u00A0'}
+      </Typography>
     </>
   )
 }
