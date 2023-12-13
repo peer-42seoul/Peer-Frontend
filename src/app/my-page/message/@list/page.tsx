@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import useSWR from 'swr'
-import { Box, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
@@ -11,6 +11,8 @@ import useMessageListState from '@/states/useMessageListState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageContainer from './panel/MessageContainer'
 import NewMessageModal from './panel/NewMessageModal'
+import BackgroundBox from '@/components/BackgroundBox'
+import * as style from './page.style'
 
 interface INewMessageButtonProps {
   isPc: boolean
@@ -49,15 +51,17 @@ const MessageListPage = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Stack spacing={'2rem'} sx={isPc ? style.pcStack : style.mobileStack}>
         <NewMessageButton isPc={isPc} openModal={openModal} />
-        <MessageContainer
-          originalMessageData={data}
-          error={error}
-          isLoading={isLoading}
-          isPC={isPc}
-        />
-      </Box>
+        <BackgroundBox mobileSx={style.mobileBox} pcSx={style.pcBox}>
+          <MessageContainer
+            originalMessageData={data}
+            error={error}
+            isLoading={isLoading}
+            isPC={isPc}
+          />
+        </BackgroundBox>
+      </Stack>
       )
       {isOpen && (
         <NewMessageModal
