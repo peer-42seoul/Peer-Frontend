@@ -28,7 +28,18 @@ const ReportModal = ({
   targetId,
 }: IReportModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const {
+    CuToast: SuccessToast,
+    isOpen: isSuccessOpen,
+    openToast: successOpenToast,
+    closeToast: successCloseToast,
+  } = useToast()
+  const {
+    CuToast: FailedToast,
+    isOpen: isFailedOpen,
+    openToast: failedOpenToast,
+    closeToast: failedCloseToast,
+  } = useToast()
 
   const axiosInstance = useAxiosWithAuth()
   const {
@@ -50,13 +61,14 @@ const ReportModal = ({
       .post(`api/v1/report`, data)
       .then((res) => {
         console.log(res)
+        successOpenToast()
+        handleClose()
       })
       .catch((error) => {
         console.log(error.message)
+        failedOpenToast()
       })
     setIsSubmitting(false)
-    openToast()
-    handleClose()
   }
 
   let typeName: string
@@ -140,9 +152,20 @@ const ReportModal = ({
           </form>
         </Box>
       </CuModal>
-      <CuToast open={isOpen} severity="success" onClose={closeToast}>
+      <SuccessToast
+        open={isSuccessOpen}
+        severity="success"
+        onClose={successCloseToast}
+      >
         <Typography>신고가 접수되었습니다.</Typography>
-      </CuToast>
+      </SuccessToast>
+      <FailedToast
+        open={isFailedOpen}
+        severity="error"
+        onClose={failedCloseToast}
+      >
+        <Typography>신고 접수 중 오류가 발생했습니다.</Typography>
+      </FailedToast>
     </>
   )
 }
