@@ -464,7 +464,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         lineHeight: 'normal',
       },
       Tag: {
-        fontSize: '12px',
+        fontSize: '11px',
         fontStyle: 'normal',
         fontWeight: 400,
         lineHeight: '150%',
