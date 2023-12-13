@@ -6,9 +6,10 @@ import CuTextField from '@/components/CuTextField'
 import useAxiosWithAuth from '@/api/config'
 import { Box, Typography } from '@mui/material'
 import ReportTypeSelect from '@/components/ReportTypeSelect'
+import useToast from '@/hook/useToast'
 
 interface IReportModalProps {
-  isOpen: boolean
+  isModalOpen: boolean
   handleClose: () => void
   reportType: 'user' | 'showcase' | 'recruit'
   targetId: string
@@ -21,12 +22,14 @@ interface IReportFormInput {
 }
 
 const ReportModal = ({
-  isOpen,
+  isModalOpen,
   handleClose,
   reportType,
   targetId,
 }: IReportModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { CuToast, isOpen, openToast, closeToast } = useToast()
+
   const axiosInstance = useAxiosWithAuth()
   const {
     handleSubmit,
@@ -41,12 +44,10 @@ const ReportModal = ({
   })
 
   const onSubmit: SubmitHandler<IReportFormInput> = (data) => {
-    console.log(data)
+    //console.log(data)
     setIsSubmitting(true)
     axiosInstance
-      .post(`/report`, {
-        data,
-      })
+      .post(`api/v1/report`, data)
       .then((res) => {
         console.log(res)
       })
@@ -54,6 +55,8 @@ const ReportModal = ({
         console.log(error.message)
       })
     setIsSubmitting(false)
+    openToast()
+    handleClose()
   }
 
   let typeName: string
@@ -71,71 +74,76 @@ const ReportModal = ({
   }
 
   return (
-    <CuModal
-      open={isOpen}
-      onClose={handleClose}
-      title={'신고하기'}
-      mobileFullSize
-      containedButton={{
-        text: isSubmitting ? '제출 중' : '완료',
-        type: 'submit',
-        form: 'report-form',
-      }}
-      textButton={{
-        text: '취소',
-        onClick: handleClose,
-      }}
-    >
-      <Box sx={{ height: '100%', justifyContent: 'flex-start' }}>
-        <form id="report-form" onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            name="type"
-            control={control}
-            rules={{
-              required: '신고의 유형을 선택해주세요',
-            }}
-            render={({ field }) => (
-              <>
-                <ReportTypeSelect field={field} label="신고 유형" />
-                <Typography color="error" variant="Caption">
-                  {errors.type?.message || '\u00A0'}
-                </Typography>
-              </>
-            )}
-          />
-          <Controller
-            name="content"
-            control={control}
-            rules={{
-              required: '신고 내용을 작성해주세요',
-            }}
-            render={({ field }) => (
-              <Box>
-                <CuTextFieldLabel
-                  htmlFor="content"
-                  style={{ marginBottom: '10px' }}
-                >
-                  <Typography variant="Body2">
-                    이 {typeName} 신고하시겠습니까?
+    <>
+      <CuModal
+        open={isModalOpen}
+        onClose={handleClose}
+        title={'신고하기'}
+        mobileFullSize
+        containedButton={{
+          text: isSubmitting ? '제출 중' : '완료',
+          type: 'submit',
+          form: 'report-form',
+        }}
+        textButton={{
+          text: '취소',
+          onClick: handleClose,
+        }}
+      >
+        <Box sx={{ height: '100%', justifyContent: 'flex-start' }}>
+          <form id="report-form" onSubmit={handleSubmit(onSubmit)}>
+            <Controller
+              name="type"
+              control={control}
+              rules={{
+                required: '신고의 유형을 선택해주세요',
+              }}
+              render={({ field }) => (
+                <>
+                  <ReportTypeSelect field={field} label="신고 유형" />
+                  <Typography color="error" variant="Caption">
+                    {errors.type?.message || '\u00A0'}
                   </Typography>
-                </CuTextFieldLabel>
-                <CuTextField
-                  {...field}
-                  id="content"
-                  style={{ width: '100%' }}
-                  placeholder="신고하는 이유를 적어주세요."
-                  multiline
-                  rows={5}
-                />
-                <Typography color="error" variant="Caption">
-                  {errors.content?.message || '\u00A0'}
-                </Typography>
-              </Box>
-            )}
-          />
-        </form>
-      </Box>
-    </CuModal>
+                </>
+              )}
+            />
+            <Controller
+              name="content"
+              control={control}
+              rules={{
+                required: '신고 내용을 작성해주세요',
+              }}
+              render={({ field }) => (
+                <Box>
+                  <CuTextFieldLabel
+                    htmlFor="content"
+                    style={{ marginBottom: '10px' }}
+                  >
+                    <Typography variant="Body2">
+                      이 {typeName} 신고하시겠습니까?
+                    </Typography>
+                  </CuTextFieldLabel>
+                  <CuTextField
+                    {...field}
+                    id="content"
+                    style={{ width: '100%' }}
+                    placeholder="신고하는 이유를 적어주세요."
+                    multiline
+                    rows={5}
+                  />
+                  <Typography color="error" variant="Caption">
+                    {errors.content?.message || '\u00A0'}
+                  </Typography>
+                </Box>
+              )}
+            />
+          </form>
+        </Box>
+      </CuModal>
+      <CuToast open={isOpen} severity="success" onClose={closeToast}>
+        <Typography>신고가 접수되었습니다.</Typography>
+      </CuToast>
+    </>
   )
 }
 

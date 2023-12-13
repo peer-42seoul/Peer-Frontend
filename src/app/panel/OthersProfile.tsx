@@ -62,7 +62,7 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
         </Box>
       </Popover>
       <ReportModal
-        isOpen={isOpen}
+        isModalOpen={isOpen}
         handleClose={closeModal}
         reportType="user"
         targetId={userId}

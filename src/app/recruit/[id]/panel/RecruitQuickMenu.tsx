@@ -27,7 +27,7 @@ const RecruitQuickMenu = ({
         </IconButton>
       </Stack>
       <ReportModal
-        isOpen={isOpen}
+        isModalOpen={isOpen}
         handleClose={closeModal}
         reportType={'recruit'}
         targetId={recruit_id.toString()}
