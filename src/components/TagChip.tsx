@@ -55,7 +55,7 @@ const TagChip = ({
         backgroundColor: backgroundColor,
         borderRadius: '2px',
         padding: deleteIcon ? '6px 0px 6px 8px' : '0px 6px',
-        height: deleteIcon ? '24px' : '20px',
+        height: deleteIcon ? '1.5rem' : '1.25rem',
         '& .MuiChip-label': {
           padding: '0px',
         },
