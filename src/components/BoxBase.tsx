@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, SxProps } from '@mui/material'
+import { Container, SxProps, Theme } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 
 const PCBase = {
@@ -24,8 +24,8 @@ const BoxBase = ({
   pcSx,
 }: {
   children: React.ReactNode
-  mobileSx: SxProps
-  pcSx: SxProps
+  mobileSx: SxProps<Theme> | undefined
+  pcSx: SxProps<Theme> | undefined
 }) => {
   const { isPc } = useMedia()
   return (
