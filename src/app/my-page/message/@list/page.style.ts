@@ -13,3 +13,8 @@ export const pcBox = {
 }
 
 export const mobileBox = {}
+
+export const pcSendButton = {
+  padding: '0.75rem 1rem',
+  borderRadius: '31.25rem',
+}

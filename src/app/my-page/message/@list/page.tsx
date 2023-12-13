@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import useSWR from 'swr'
-import { Stack } from '@mui/material'
+import { IconButton, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
@@ -12,6 +12,7 @@ import { IMessageListData } from '@/types/IMessage'
 import MessageContainer from './panel/MessageContainer'
 import NewMessageModal from './panel/NewMessageModal'
 import BackgroundBox from '@/components/BackgroundBox'
+import PlusIcon from '@/icons/PlusIcon'
 import * as style from './page.style'
 
 interface INewMessageButtonProps {
@@ -22,12 +23,19 @@ interface INewMessageButtonProps {
 const NewMessageButton = ({ isPc, openModal }: INewMessageButtonProps) => {
   return (
     <Stack direction="row" justifyContent={'flex-end'}>
-      <CuButton
-        variant="outlined"
-        action={openModal}
-        message={isPc ? '새 쪽지 보내기' : '+'}
-        style={{ marginBottom: '32px' }}
-      />
+      {isPc ? (
+        <CuButton
+          message="새 쪽지"
+          action={openModal}
+          variant={'contained'}
+          startIcon={<PlusIcon width={'1.25rem'} height={'1.25rem'} />}
+          style={style.pcSendButton}
+        />
+      ) : (
+        <IconButton onClick={openModal}>
+          <PlusIcon />
+        </IconButton>
+      )}
     </Stack>
   )
 }
