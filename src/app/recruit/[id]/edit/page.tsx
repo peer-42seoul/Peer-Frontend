@@ -22,9 +22,7 @@ import Image from 'next/image'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
-import RowRadioButtonsGroupStatus from './panel/radioGroupStatus'
 import { IFormInterview, IRole, ITag, statusEnum } from '@/types/IPostDetail'
-import { set } from 'lodash'
 import CuButton from '@/components/CuButton'
 import ImageIcon from '@mui/icons-material/Image'
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined'
@@ -72,7 +70,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.id}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
-  let regionData = undefined;
+  let regionData = undefined
 
   useEffect(() => {
     console.log(data)
@@ -82,7 +80,6 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
       openToast()
     } else if (data) {
       regionData = [data.region1, data.region2]
-      console.log('regionData',regionData)
       setTitle(data.title)
       setPreviewImage(data.previewImage)
       setName(data.name)
@@ -291,7 +288,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 <LocationOnOutlinedIcon />
                 <Typography variant="h6">지역</Typography>
               </Stack>
-              <SelectRegion setValue={setRegion} region={region}/>
+              <SelectRegion setValue={setRegion} region={region} />
             </Box>
             {/* 커뮤니케이션 링크 등록 */}
             <Box>
@@ -299,7 +296,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 <InsertLinkOutlinedIcon />
                 <Typography variant="h6">소통 링크</Typography>
               </Stack>
-              <SetCommunicationToolLink setValue={setCommunicationTool} />
+              <SetCommunicationToolLink setValue={setCommunicationTool} value={link}/>
             </Box>
             {/* 태그 추가 */}
             <Box>

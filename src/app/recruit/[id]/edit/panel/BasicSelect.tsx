@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 
 export enum ComponentType {
   Month = 'Month',
@@ -23,7 +23,6 @@ export default function BasicSelect({
 }: BasicSelectProps) {
   const handleChange = (event: SelectChangeEvent) => {
     setValue(event.target.value as string)
-    console.log(value)
   }
 
   let options = null
