@@ -1,5 +1,6 @@
-import { Autocomplete, Chip, Stack, TextField } from '@mui/material'
+import { Autocomplete, Stack, TextField } from '@mui/material'
 import { ITag } from '@/types/IPostDetail'
+import TagChip from '@/components/TagChip'
 
 /**
  *
@@ -36,14 +37,6 @@ const TagAutoComplete = ({
     )
   }
 
-  const getBgColor = (color: string) => {
-    if (!color) return ''
-    const r = parseInt(color.slice(1, 3), 16),
-      g = parseInt(color.slice(3, 5), 16),
-      b = parseInt(color.slice(5, 7), 16)
-    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + '0.3' + ')'
-  }
-
   return (
     <>
       <Autocomplete
@@ -65,23 +58,14 @@ const TagAutoComplete = ({
       <Stack gap={1} direction={'row'}>
         {datas?.map((tag: string, idx: number) => {
           const selectTag = tagList?.find((item) => item.name === tag)
-          if (!selectTag) return
-          const color = selectTag.color
-          const backgroundColor = getBgColor(color)
-
           return (
-            <Chip
-              label={selectTag?.name ?? ''}
-              size="small"
+            <TagChip
               key={idx}
-              style={{
-                color,
-                backgroundColor,
-                borderRadius: 5,
-              }}
+              name={selectTag?.name ?? ''}
               onDelete={() => {
                 handleDelete(idx)
               }}
+              color={selectTag?.color ?? ''}
             />
           )
         })}

@@ -11,24 +11,6 @@ import {
   TeamOperationForm,
 } from '@/app/teams/types/types'
 
-// enum TeamStatus {
-//   RECRUITING = 'RECRUITING',
-//   BEFORE = 'BEFORE',
-//   ONGOING = 'ONGOING',
-//   COMPLETE = 'COMPLETE',
-// }
-
-// enum TeamType {
-//   STUDY = 'STUDY',
-//   PROJECT = 'PROJECT',
-// }
-
-// enum TeamOperationForm {
-//   OFFLINE = 'OFFLINE',
-//   ONLINE = 'ONLINE',
-//   MIX = 'MIX',
-// }
-
 export interface ITeamInfo {
   id: string
   name: string

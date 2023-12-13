@@ -22,13 +22,22 @@ export const SelectInterviewType = ({
     <Box sx={{ minWidth: 120 }}>
       <FormControl>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          id="answer-type-select"
           value={formType}
           onChange={handleChange}
         >
-          {['주관식', '객관식', '체크박스', '선형배율'].map((value) => {
-            return <MenuItem key={value} value={value}>{`${value}`}</MenuItem>
+          {[
+            { value: 'open', label: '주관식' },
+            { value: 'close', label: '객관식' },
+            { value: 'check', label: '체크박스' },
+            { value: 'ratio', label: '선형배율' },
+          ].map((item) => {
+            return (
+              <MenuItem
+                key={item.value}
+                value={item.value}
+              >{`${item.label}`}</MenuItem>
+            )
           })}
         </Select>
       </FormControl>

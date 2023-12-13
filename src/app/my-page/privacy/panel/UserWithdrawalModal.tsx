@@ -74,12 +74,18 @@ const UserWithdrawalModal = ({
       <Button onClick={handleOpen}>계정삭제</Button>
       <CuModal
         open={open}
-        handleClose={handleClose}
-        ariaTitle="modal-title"
-        ariaDescription="modal-description"
+        onClose={handleClose}
+        title={'계정삭제'}
+        containedButton={{
+          text: '확인',
+          onClick: handleDelete,
+        }}
+        textButton={{
+          text: '취소',
+          onClick: handleClose,
+        }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography id="modal-title">계정삭제</Typography>
           <TextField
             placeholder="계정 삭제를 위해 비밀번호를 입력하세요"
             onChange={(e) => setPassword(e.target.value)}
@@ -92,10 +98,6 @@ const UserWithdrawalModal = ({
             계정을 삭제하시겠습니까? <br />
             모든 작업물과 데이터가 영구적으로 삭제됩니다
           </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Button onClick={handleClose}>취소</Button>
-            <Button onClick={handleDelete}>확인</Button>
-          </Box>
         </Box>
       </CuModal>
     </>

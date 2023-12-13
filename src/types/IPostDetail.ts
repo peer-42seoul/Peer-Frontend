@@ -45,6 +45,8 @@ export interface IPostDetail {
   // interviewList: IFormInterview[]
   place: string
   image: string
+  totalNumber: number
+  favorite: boolean
 }
 
 export interface IFormInterview {

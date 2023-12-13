@@ -45,27 +45,6 @@ const componentName = {
   alignItems: 'center',
 }
 
-// react-base64-image.js
-// const convertImageToBase64 = (file: any) => {
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader()
-
-//     reader.onload = () => {
-//       if (typeof reader.result === 'string') {
-//         resolve(reader.result.split(',')[1]) // Base64 데이터에서 실제 데이터 부분만 추출
-//       } else {
-//         reject(new Error('Unexpected result type'))
-//       }
-//     }
-
-//     reader.onerror = (error) => {
-//       reject(error)
-//     }
-
-//     reader.readAsDataURL(file)
-//   })
-// }
-
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
   const [image, setImage] = useState<File[]>([])
@@ -89,10 +68,9 @@ const CreateTeam = () => {
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
-  // const [selectedImage, setSelectedImage] = useState<any>(null)
 
   const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/tag`,
     (url: string) => axios.get(url).then((res) => res.data),
   )
 
@@ -116,7 +94,6 @@ const CreateTeam = () => {
       !due ||
       !region ||
       !place ||
-      !link ||
       !tagList ||
       !roleList ||
       !interviewList ||
@@ -125,10 +102,6 @@ const CreateTeam = () => {
       alert('빈칸을 모두 채워주세요')
       return
     }
-    // const base64Data = await convertImageToBase64(image[0])
-    // setSelectedImage(base64Data)
-    // setSelectedImage(previewImage.split(',')[1])
-    // console.log(selectedImage)
     try {
       const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
@@ -174,6 +147,7 @@ const CreateTeam = () => {
           }}
         >
           <Stack gap={3}>
+            {/* 대표이미지 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <ImageIcon />
@@ -193,6 +167,7 @@ const CreateTeam = () => {
                 </Box>
               </ImageUploadButton>
             </Box>
+            {/* 스터디 or 프로젝트 선택 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <ContentPasteOutlinedIcon />
@@ -200,6 +175,7 @@ const CreateTeam = () => {
               </Stack>
               <RowRadioButtonsGroup setValue={setType} />
             </Box>
+            {/* 모집글 제목 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <EditOutlinedIcon />
@@ -216,10 +192,13 @@ const CreateTeam = () => {
                 }}
               />
             </Box>
+            {/* 스터디 명 / 프로젝트 명 */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <FormatListBulletedOutlinedIcon />
-                <Typography variant="h6">프로젝트 명</Typography>
+                <Typography variant="h6">
+                  {type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
+                </Typography>
               </Stack>
               <TextField
                 sx={{ width: '416px' }}
@@ -232,6 +211,7 @@ const CreateTeam = () => {
                 }}
               />
             </Box>
+            {/* (프로젝트인 경우만) 역할 추가 */}
             {type === 'STUDY' ? null : (
               <Box>
                 <Stack direction={'row'} gap={1} sx={componentName}>
@@ -254,6 +234,7 @@ const CreateTeam = () => {
                 />
               </Box>
             )}
+            {/* 온/오프라인 활동방식 선택 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <WifiOutlinedIcon />
@@ -265,6 +246,7 @@ const CreateTeam = () => {
                 setValue={setPlace}
               />
             </Box>
+            {/* 목표기간 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <AccessTimeOutlinedIcon />
@@ -276,6 +258,7 @@ const CreateTeam = () => {
                 setValue={setMonth}
               />
             </Box>
+            {/* 지역 선택 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <LocationOnOutlinedIcon />
@@ -283,6 +266,7 @@ const CreateTeam = () => {
               </Stack>
               <SelectRegion setValue={setRegion} />
             </Box>
+            {/* 커뮤니케이션 링크 등록 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <InsertLinkOutlinedIcon />
@@ -290,6 +274,7 @@ const CreateTeam = () => {
               </Stack>
               <SetCommunicationToolLink setValue={setCommunicationTool} />
             </Box>
+            {/* 태그 추가 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <LocalOfferOutlinedIcon />
@@ -303,6 +288,7 @@ const CreateTeam = () => {
                 />
               ) : null}
             </Box>
+            {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <DescriptionOutlinedIcon />
@@ -320,6 +306,7 @@ const CreateTeam = () => {
                 multiline
               />
             </Box>
+            {/* 모집 인터뷰 */}
             <Stack>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <CreateNewFolderOutlinedIcon />
@@ -344,6 +331,7 @@ const CreateTeam = () => {
                 setInterviewData={setInterviewList}
               />
             </Stack>
+            {/* 등록, 취소 버튼 */}
             <Stack
               direction={'row'}
               gap={2}
