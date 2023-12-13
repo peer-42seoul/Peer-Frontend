@@ -81,7 +81,7 @@ const MessageContainer = ({
 
   return (
     <>
-      <Stack spacing={2}>
+      <Stack spacing={'1.5rem'}>
         {isManageMode ? (
           <ManageBar
             isSelectedAll={isSelectedAll(messageList)}

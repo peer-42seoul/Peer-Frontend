@@ -1,5 +1,7 @@
 import CuButton from '@/components/CuButton'
-import { Button, Stack, TextField } from '@mui/material'
+import { Button, InputBase, Stack, TextField, Typography } from '@mui/material'
+import SearchIcon from '@/icons/SearchIcon'
+import * as style from './MessageBar.style'
 
 interface ISearchBarProps {
   setSearchKeyword: (keyword: string) => void
@@ -13,19 +15,38 @@ export const SearchBar = ({
   handleMessageSearch,
 }: ISearchBarProps) => {
   return (
-    <Stack direction="row">
-      <TextField
-        placeholder="사람을 검색해 주세요."
-        onChange={(e) => setSearchKeyword(e.target.value)}
-      />
-      <Button variant="contained" onClick={handleMessageSearch}>
-        검색
-      </Button>
-      <CuButton
-        variant="text"
-        action={() => setIsManageMode(true)}
-        message="관리"
-      />
+    <Stack spacing={'1.5rem'}>
+      <Stack direction={'row'} justifyContent={'space-between'}>
+        <Typography variant={'Title3Emphasis'}>대상 리스트</Typography>
+        <CuButton
+          TypographyProps={{ variant: 'CaptionEmphasis' }}
+          variant="text"
+          action={() => setIsManageMode(true)}
+          message="관리"
+        />
+      </Stack>
+      <Stack
+        sx={style.searchInput}
+        direction={'row'}
+        alignItems={'center'}
+        spacing={'0.38rem'}
+      >
+        <SearchIcon />
+        <InputBase
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          placeholder="닉네임을 검색해주세요."
+          fullWidth
+        />
+        <CuButton
+          TypographyProps={{
+            variant: 'CaptionEmphasis',
+            color: 'text.alternative',
+          }}
+          variant="text"
+          action={handleMessageSearch}
+          message="검색"
+        />
+      </Stack>
     </Stack>
   )
 }
