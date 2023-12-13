@@ -16,6 +16,7 @@ import useAxiosWithAuth from '@/api/config'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import { CalendarIcon, TagIcon, ThreeDotsIcon } from './icons'
+import Image from 'next/image'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -90,17 +91,19 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
           {data !== undefined ? (
             <CardActions onClick={handleCardClick}>
               <CardContent>
-                <Stack spacing={3}>
+                <Stack spacing={'1.5rem'}>
                   <Stack direction={'row'} height={'1.5rem'}>
-                    <Stack direction={'row'} spacing={1}>
+                    <Stack direction={'row'} spacing={'0.5rem'}>
                       <Avatar
                         src={data.image!}
                         sx={{ width: '1.5rem', height: '1.5rem' }}
                       />
-                      <Typography width={'11rem'}>{data.name}</Typography>
+                      <Typography color={'text.alternative'} width={'11rem'}>
+                        {data.name}
+                      </Typography>
                     </Stack>
-                    <Stack direction={'row'} spacing={2}>
-                      <Stack direction={'row'} spacing={1}>
+                    <Stack direction={'row'} spacing={'1rem'}>
+                      <Stack direction={'row'} spacing={'0.5rem'}>
                         <IconButton
                           onClick={clickLike}
                           color={data.liked ? 'primary' : 'inherit'}
@@ -141,25 +144,41 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
                   <Stack minHeight={'22.5rem'}>
                     <Typography>{data.description}</Typography>
                   </Stack>
-                  <Stack spacing={0.5}>
-                    <Stack direction={'row'} spacing={2} textAlign={'center'}>
-                      <Stack direction={'row'} spacing={1}>
+                  <Stack spacing={'0.25rem'}>
+                    <Stack
+                      direction={'row'}
+                      spacing={'1rem'}
+                      textAlign={'center'}
+                    >
+                      <Stack direction={'row'} spacing={'0.5rem'}>
                         <CalendarIcon />
+                        <Typography color={'text.alternative'}>
+                          시작일
+                        </Typography>
                         <Typography>
-                          시작일 {toStringByFormatting(new Date(data.start))}
+                          {toStringByFormatting(new Date(data.start))}
                         </Typography>
                       </Stack>
-                      <Stack direction={'row'} spacing={1}>
+                      <Stack direction={'row'} spacing={'0.5rem'}>
                         <CalendarIcon />
+                        <Typography color={'text.alternative'}>
+                          종료일
+                        </Typography>
                         <Typography>
-                          종료일 {toStringByFormatting(new Date(data.end))}
+                          {toStringByFormatting(new Date(data.end))}
                         </Typography>
                       </Stack>
                     </Stack>
-                    <Stack direction={'row'} spacing={2} textAlign={'center'}>
-                      <Stack direction={'row'} spacing={1}>
+                    <Stack
+                      direction={'row'}
+                      spacing={'1rem'}
+                      textAlign={'center'}
+                    >
+                      <Stack direction={'row'} spacing={'0.5rem'}>
                         <TagIcon />
-                        <Typography>기술 스택</Typography>
+                        <Typography color={'text.alternative'}>
+                          기술스택
+                        </Typography>
                       </Stack>
                       {data.skill.map((skill, index) => (
                         <Typography key={skill.id + index}>
@@ -202,10 +221,13 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
         </>
       ) : (
         <>
-          <Avatar
+          <Image
             src={data ? data.image! : '/images/icons/icon-192x192.png'}
-            sx={{ width: '100%', height: '100%', mt: 10 }}
-            variant="rounded"
+            width={300}
+            height={500}
+            alt="team image"
+            // sx={{ width: '100%', height: '100%', mt: 10 }}
+            // variant="rounded"
           />
           <Card
             sx={{
