@@ -6,10 +6,14 @@ import { Dispatch, SetStateAction } from 'react'
 
 interface RowRadioButtonsGroupProps {
   setValue: Dispatch<SetStateAction<string>>
+  disabled?: boolean
+  defaultChecked?: string
 }
 
 export default function RowRadioButtonsGroup({
   setValue,
+  disabled,
+  defaultChecked,
 }: RowRadioButtonsGroupProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value)
@@ -28,9 +32,16 @@ export default function RowRadioButtonsGroup({
           value="PROJECT"
           control={<Radio />}
           label="프로젝트"
-          defaultChecked
+          disabled={disabled}
+          defaultChecked={defaultChecked === 'PROJECT'}
         />
-        <FormControlLabel value="STUDY" control={<Radio />} label="스터디" />
+        <FormControlLabel
+          value="STUDY"
+          control={<Radio />}
+          label="스터디"
+          disabled={disabled}
+          defaultChecked={defaultChecked === 'STUDY'}
+        />
       </RadioGroup>
     </FormControl>
   )

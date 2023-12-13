@@ -20,7 +20,7 @@ import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
 import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import SelectRegion from '../[id]/edit/panel/SelectRegion'
-import { IFormInterview, IRoleData, ITag } from '@/types/IPostDetail'
+import { IFormInterview, IRole, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import axios from 'axios'
@@ -39,9 +39,6 @@ import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutl
 import CuButton from '@/components/CuButton'
 
 const componentName = {
-  // flex: 'row',
-  // paddingTop: '24px',
-  // paddingBottom: '8px',
   alignItems: 'center',
 }
 
@@ -60,7 +57,7 @@ const CreateTeam = () => {
   const [teamsize, setTeamsize] = useState<string>('')
   const [link, setCommunicationTool] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const [roleList, setRoleList] = useState<IRoleData[]>([])
+  const [roleList, setRoleList] = useState<IRole[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [allTagList, setAllTagList] = useState<ITag[]>()
   const [openBasicModal, setOpenBasicModal] = useState(false)
@@ -85,7 +82,7 @@ const CreateTeam = () => {
 
   const onHandlerFinish = async () => {
     if (type === 'project') {
-      setRoleList([{ role: null, member: parseInt(teamsize) }])
+      setRoleList([{ name: null, number: parseInt(teamsize) }])
     }
     if (
       !image ||

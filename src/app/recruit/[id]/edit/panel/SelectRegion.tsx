@@ -7,9 +7,10 @@ import { koreaDistrict } from '@/constant/DistrictData'
 
 interface BasicSelectProps {
   setValue: Dispatch<SetStateAction<string[]>>
+  region?: string[]
 }
 
-export default function SelectRegion({ setValue }: BasicSelectProps) {
+export default function SelectRegion({ setValue, region }: BasicSelectProps) {
   const [largeScaleData, setLargeScaleData] = useState<string>('')
   const [smallScaleData, setSmallScaleData] = useState<string>('')
 
@@ -22,6 +23,10 @@ export default function SelectRegion({ setValue }: BasicSelectProps) {
   }
 
   useEffect(() => {
+    if (region) {
+      setLargeScaleData(region[0])
+      setSmallScaleData(region[1])
+    }
     setValue([largeScaleData, smallScaleData])
   }, [largeScaleData, smallScaleData])
 
@@ -48,12 +53,12 @@ export default function SelectRegion({ setValue }: BasicSelectProps) {
   return (
     <Box sx={{ width: '416px', display: 'flex', flexDirection: 'row', gap: 2 }}>
       <FormControl fullWidth sx={{ width: '204px' }}>
-        <Select value={largeScaleData} onChange={handleChangeLargeScaleData}>
+        <Select value={largeScaleData} onChange={handleChangeLargeScaleData} disabled={region ? true : false}>
           {options1}
         </Select>
       </FormControl>
       <FormControl fullWidth sx={{ width: '204px' }}>
-        <Select value={smallScaleData} onChange={handleChangeSmallScaleData}>
+        <Select value={smallScaleData} onChange={handleChangeSmallScaleData} disabled={region ? true : false}>
           {options2}
         </Select>
       </FormControl>

@@ -56,7 +56,7 @@ export interface IFormInterview {
 }
 
 export interface IRole {
-  name: string
+  name: string | null
   number: number
 }
 
@@ -66,9 +66,4 @@ export enum statusEnum {
   BEFORE,
   ONGOING,
   AFTER,
-}
-
-export interface IRoleData {
-  role: string | null
-  member: number
 }
