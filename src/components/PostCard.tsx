@@ -44,7 +44,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
         component="img"
         image={image}
         alt="post thumbnail"
-        sx={{ flexGrow: 1, objectFit: 'cover' }}
+        sx={{ flexGrow: 1, objectFit: 'cover', maxHeight: '15.6875rem' }}
       />
       <Stack
         sx={{ p: '1rem', pt: '0.75rem' }}
