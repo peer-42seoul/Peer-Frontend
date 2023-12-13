@@ -1,8 +1,10 @@
 import { IconButton, Stack } from '@mui/material'
 import FavoriteButton from '@/components/FavoriteButton'
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
 import React from 'react'
+import SharingIcon from '@/app/recruit/[id]/panel/SharingIcon'
 import SirenIcon from '@/app/recruit/[id]/panel/SirenIcon'
+import ReportModal from '@/components/ReportModal'
+import useModal from '@/hook/useModal'
 
 const RecruitQuickMenu = ({
   favorite,
@@ -11,16 +13,26 @@ const RecruitQuickMenu = ({
   favorite: boolean | undefined
   recruit_id: number
 }) => {
+  const { isOpen, openModal, closeModal } = useModal()
+
   return (
-    <Stack alignItems={'center'}>
-      <FavoriteButton recruit_id={recruit_id} favorite={favorite} />
-      <IconButton onClick={() => {}}>
-        <ShareOutlinedIcon sx={{ color: 'purple.strong' }} />
-      </IconButton>
-      <IconButton onClick={() => {}}>
-        <SirenIcon sx={{ color: 'purple.strong' }} />
-      </IconButton>
-    </Stack>
+    <>
+      <Stack alignItems={'center'}>
+        <FavoriteButton recruit_id={recruit_id} favorite={favorite} />
+        <IconButton onClick={() => {}}>
+          <SharingIcon />
+        </IconButton>
+        <IconButton onClick={openModal}>
+          <SirenIcon />
+        </IconButton>
+      </Stack>
+      <ReportModal
+        isOpen={isOpen}
+        handleClose={closeModal}
+        reportType={'recruit'}
+        targetId={recruit_id.toString()}
+      />
+    </>
   )
 }
 

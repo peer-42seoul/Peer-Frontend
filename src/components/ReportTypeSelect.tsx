@@ -1,14 +1,14 @@
-import React from 'react';
-import { Select, MenuItem, Box } from '@mui/material';
-import CuTextFieldLabel from '@/components/CuTextFieldLabel';
+import React from 'react'
+import { Select, MenuItem, Box } from '@mui/material'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 
 interface IReportTypeSelectProps {
-  field: any;
-  label: string;
-  options: string[];
+  field: any
+  label: string
 }
 
-const ReportTypeSelect = ({ field, label, options } : IReportTypeSelectProps) => {
+const ReportTypeSelect = ({ field, label }: IReportTypeSelectProps) => {
+  const options = ['광고', '비방', '선전성', '도배', '기타']
   return (
     <Box style={{ display: 'flex', alignItems: 'center' }}>
       <CuTextFieldLabel htmlFor={field.name} style={{ width: '120px' }}>
@@ -18,6 +18,7 @@ const ReportTypeSelect = ({ field, label, options } : IReportTypeSelectProps) =>
         labelId={`${field.name}-label`}
         {...field}
         sx={{ width: '200px' }}
+        placeholder="신고 유형을 선택해주세요."
       >
         {options.map((option) => (
           <MenuItem key={option} value={option}>
@@ -26,7 +27,7 @@ const ReportTypeSelect = ({ field, label, options } : IReportTypeSelectProps) =>
         ))}
       </Select>
     </Box>
-  );
-};
+  )
+}
 
-export default ReportTypeSelect;
+export default ReportTypeSelect
