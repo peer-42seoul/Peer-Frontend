@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, SxProps, Theme } from '@mui/material'
 import useMedia from '@/hook/useMedia'
+import BackgroundBox from './BackgroundBox'
 
 const PCBase = {
   display: 'flex',
@@ -30,16 +31,9 @@ const BoxBase = ({
   const { isPc } = useMedia()
   return (
     <Container sx={isPc ? PCBase : MobileBase}>
-      <Container
-        sx={{
-          borderRadius: '16px',
-          backgroundColor: 'background.secondary',
-          ...(isPc ? pcSx : mobileSx),
-        }}
-        disableGutters={true}
-      >
+      <BackgroundBox pcSx={pcSx} mobileSx={mobileSx}>
         {children}
-      </Container>
+      </BackgroundBox>
     </Container>
   )
 }

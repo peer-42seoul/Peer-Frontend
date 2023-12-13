@@ -10,7 +10,6 @@ interface IBackgroundBoxProps {
 
 /**
  * @description 자주 사용되는 박스형태 컴포넌트의 pc, 모바일 기본 디자인을 정의한 컴포넌트입니다.
- *  - padding
  *  - borderRadius
  *  - backgroundColor
  * @param children - children
