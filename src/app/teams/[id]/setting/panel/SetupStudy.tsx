@@ -5,6 +5,7 @@ import {
   Card,
   IconButton,
   MenuItem,
+  Modal,
   Select,
   Stack,
   TextField,
@@ -15,7 +16,6 @@ import { dueList } from './SetupSelect'
 import { ISetupTeam } from './SetupTeam'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import useModal from '@/hook/useModal'
-import CuModal from '@/components/CuModal'
 import CuButton from '@/components/CuButton'
 import { TeamOperationForm, TeamStatus } from '@/app/teams/types/types'
 import useAxiosWithAuth from '@/api/config'
@@ -367,12 +367,10 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
         </Stack>
       </Card>
 
-      <CuModal
-        ariaTitle="alert-modal-title"
-        ariaDescription="alert-modal-description"
+      <Modal
         open={isConfirmOpen}
-        handleClose={closeConfirmModel}
-        style={styles.comfirmModalStyle}
+        onClose={closeConfirmModel}
+        sx={styles.comfirmModalStyle}
       >
         <Box>
           <Typography id="alert-modal-title">팀 정보 수정 확인</Typography>
@@ -392,15 +390,9 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
             style={{ width: '50%' }}
           />
         </Box>
-      </CuModal>
+      </Modal>
 
-      <CuModal
-        ariaTitle="alert-modal-title"
-        ariaDescription="alert-modal-description"
-        open={isOpen}
-        handleClose={closeModal}
-        style={styles.deleteModalStyle}
-      >
+      <Modal open={isOpen} onClose={closeModal} sx={styles.deleteModalStyle}>
         <Box>
           <Typography id="alert-modal-title">팀 로고 삭제</Typography>
           <Typography id="alert-modal-description">
@@ -419,7 +411,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
             style={{ width: '50%' }}
           />
         </Box>
-      </CuModal>
+      </Modal>
     </>
   )
 }
