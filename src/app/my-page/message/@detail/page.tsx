@@ -55,12 +55,10 @@ const MessageChatPage = () => {
     fetchMoreData,
   )
 
-  const { targetRef, scrollRef, bottomRef, spinner } = useMessageInfiniteScroll(
-    {
-      trigger, // == mutate
-      isEnd,
-    },
-  )
+  const { targetRef, scrollRef, spinner } = useMessageInfiniteScroll({
+    trigger, // == mutate
+    isEnd,
+  })
 
   const scrollTo = useCallback(
     (height: number) => {
@@ -100,19 +98,19 @@ const MessageChatPage = () => {
       if (!currentData) return data
       return [...data, ...currentData]
     })
-    setIsEnd(data[0].isEnd)
+    setIsEnd(data[0] ? data[0].isEnd : true)
     setPrevScrollHeight(scrollRef.current?.scrollHeight)
   }, [data])
 
   useEffect(() => {
     // FIXME : 깜빡임 현상 해결 필요할듯...
-    if (!scrollRef.current || !bottomRef.current) return
+    if (!scrollRef.current) return
     if (prevScrollHeight) {
       scrollTo(scrollRef.current.scrollHeight - prevScrollHeight)
       setPrevScrollHeight(undefined)
       return
     }
-    bottomRef.current.scrollIntoView()
+    scrollTo(scrollRef.current.scrollHeight)
   }, [updatedData])
 
   const addNewMessage = useCallback((newMessage: IMessage) => {
@@ -151,7 +149,6 @@ const MessageChatPage = () => {
               owner={owner}
               target={target}
             />
-            <Box ref={bottomRef}></Box>
           </Stack>
           {isPc ? (
             <MessageForm
@@ -165,6 +162,7 @@ const MessageChatPage = () => {
               disabled={target.deleted}
               target={{ id: target.userId, nickname: target.userNickname }}
               addNewMessage={addNewMessage}
+              scrollRef={scrollRef}
             />
           )}
         </>
