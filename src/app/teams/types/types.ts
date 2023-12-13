@@ -44,7 +44,7 @@ export interface ITeam {
     operationForm: TeamOperationForm
     region: string[]
     teamImage: string | null
-    job: Job[]
+    // job: Job[]
   }
   member: IMember[]
 }

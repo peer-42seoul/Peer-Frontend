@@ -1,7 +1,7 @@
 'use client'
 
 import {
-  Job,
+  // Job,
   TeamOperationForm,
   TeamStatus,
   TeamType,
@@ -19,7 +19,7 @@ export interface ISetupTeam {
   operationForm: TeamOperationForm
   region: string[]
   teamImage: string | null
-  job: Job[] | null
+  // job: Job[] | null
 }
 
 const SetupTeam = ({ team }: { team: ISetupTeam }) => {

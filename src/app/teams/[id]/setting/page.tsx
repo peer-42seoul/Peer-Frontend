@@ -63,11 +63,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                     신청 대기자 보기
                   </Button>
                 </Stack>
-                <SetupMember
-                  jobs={data.team.job}
-                  team={data.member}
-                  teamId={data.team.id}
-                />
+                <SetupMember team={data.member} teamId={data.team.id} />
               </Card>
             </>
           ) : (

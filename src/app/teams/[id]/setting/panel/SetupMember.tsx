@@ -2,10 +2,10 @@ import {
   Avatar,
   Box,
   Button,
-  FormControl,
+  // FormControl,
   Grid,
   Modal,
-  NativeSelect,
+  // NativeSelect,
   Stack,
   Switch,
   Typography,
@@ -20,10 +20,10 @@ import OthersProfile from '@/app/panel/OthersProfile'
 interface ISetupMember {
   team: IMember[]
   teamId: string
-  jobs: Job[]
+  jobs?: Job[]
 }
 
-const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
+const SetupMember = ({ team, teamId }: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   const {
@@ -33,7 +33,7 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
   } = useModal()
   const [members, setMembers] = useState<IMember[]>(team)
   const [member, setMember] = useState<IMember | null>(null)
-  const [job, setJob] = useState<Job[]>(jobs)
+  // const [job, setJob] = useState<Job[]>(jobs)
   const axiosWithAuth = useAxiosWithAuth()
 
   // const changeJob = () => {
@@ -112,10 +112,10 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
       })
   }
 
-  const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
-    if (jobs.length === 0) return console.log('역할이 없습니다.')
-    setJob([...job, e.target.value as Job])
-  }
+  // const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
+  //   if (jobs.length === 0) return console.log('역할이 없습니다.')
+  //   setJob([...job, e.target.value as Job])
+  // }
 
   return (
     <>
@@ -165,7 +165,7 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
       <Modal open={isChangeOpen} onClose={closeChangeModal}>
         <Box>
           <Typography>역할 변경</Typography>
-          <FormControl>
+          {/* <FormControl>
             <NativeSelect
               value={job}
               onChange={handleChangeJob}
@@ -182,7 +182,7 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
             {job.map((j, index) => (
               <Typography key={index}>{j.name}</Typography>
             ))}
-          </Stack>
+          </Stack> */}
 
           <Button onClick={closeChangeModal}>취소</Button>
           <Button onClick={closeChangeModal}>확인</Button>
