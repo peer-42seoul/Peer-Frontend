@@ -1,25 +1,25 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 import useSWRMutation from 'swr/mutation'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import CuButton from '@/components/CuButton'
+import CuToast from '@/components/CuToast'
 import useMedia from '@/hook/useMedia'
-import useModal from '@/hook/useModal'
+import useToast from '@/hook/useToast'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
+import useMessagePageState from '@/states/useMessagePageState'
 import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
 import MessageForm from './panel/MessageForm'
-import MessageFormModal from './panel/MessageFormModal'
 import MessageContainer from './panel/MessageContainer'
-import MessageHeader from './panel/MessageHeader'
+import MessageHeader from './panel/PcHeader'
 import MessageStack from './panel/MessageStack'
+import MobileSendButton from './panel/MobileSendButton'
 import * as style from './page.style'
 
-const MessageChatPage = ({ params }: { params: { id: string } }) => {
+const MessageChatPage = () => {
+  const { conversationId, targetId, setListPage } = useMessagePageState()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const searchParams = useSearchParams()
   const [updatedData, setUpdatedData] = useState<IMessage[] | undefined>()
   const [owner, setOwner] = useState<IMessageUser | undefined>()
   const [target, setTarget] = useState<IMessageTargetUser | undefined>()
@@ -28,25 +28,26 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     undefined,
   )
   const axiosWithAuth = useAxiosWithAuth()
-  const { isOpen, openModal, closeModal } = useModal()
   const { isPc } = useMedia()
+  const { isOpen, toastMessage, openToast, setToastMessage } = useToast()
 
   const fetchMoreData = useCallback(
     async (url: string) => {
       if (!updatedData) return []
       try {
         const response = await axiosWithAuth.post(url, {
-          targetId: Number(searchParams.get('target')),
-          conversationId: Number(params.id),
+          conversationId,
+          targetId,
           earlyMsgId: updatedData[0]?.msgId,
         })
         return response.data.msgList
       } catch {
         // TODO : 에러 구체화
-        alert('쪽지를 불러오는데 실패하였습니다.')
+        setToastMessage('쪽지를 불러오는데 실패하였습니다.')
+        openToast()
       }
     },
-    [searchParams, params, updatedData],
+    [conversationId, targetId, updatedData],
   )
 
   const { trigger, data } = useSWRMutation(
@@ -69,12 +70,10 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     setIsLoading(true)
-    const targetId = Number(searchParams.get('target'))
-    const conversationalId = Number(params.id)
     axiosWithAuth
       .post('/api/v1/message/conversation-list', {
         targetId,
-        conversationalId,
+        conversationalId: conversationId,
       })
       .then((response) => {
         setUpdatedData(response.data.msgList)
@@ -83,13 +82,13 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
         setIsEnd(response.data.msgList[0].isEnd)
       })
       .catch(() => {
-        // TODO : 에러 구체화
-        alert('쪽지를 불러오는데 실패하였습니다.')
+        setToastMessage('쪽지를 불러오는데 실패하였습니다.')
+        openToast()
       })
       .finally(() => {
         setIsLoading(false)
       })
-  }, [searchParams, params])
+  }, [targetId, conversationId])
 
   useEffect(() => {
     if (!data) return
@@ -99,7 +98,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
       if (!currentData) return data
       return [...data, ...currentData]
     })
-    setIsEnd(data[0].isEnd)
+    setIsEnd(data[0] ? data[0].isEnd : true)
     setPrevScrollHeight(scrollRef.current?.scrollHeight)
   }, [data])
 
@@ -111,7 +110,7 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
       setPrevScrollHeight(undefined)
       return
     }
-    scrollTo(scrollRef.current.scrollHeight - scrollRef.current.clientHeight)
+    scrollTo(scrollRef.current.scrollHeight)
   }, [updatedData])
 
   const addNewMessage = useCallback((newMessage: IMessage) => {
@@ -121,46 +120,56 @@ const MessageChatPage = ({ params }: { params: { id: string } }) => {
     })
   }, [])
 
-  if (isLoading) return <Typography>로딩중... @_@</Typography>
-  if (!updatedData || !owner || !target)
-    return <Typography>빈 쪽지함 입니다!</Typography>
+  const isError = !updatedData || !owner || !target
 
   return (
-    <MessageContainer>
-      <MessageHeader
-        targetProfile={target.userProfile}
-        userNickname={target.userNickname}
-      />
-      <Stack ref={scrollRef} sx={isPc ? style.pcStack : style.mobileStack}>
-        <Box ref={targetRef}></Box>
-        {spinner && <CircularProgress sx={style.circularProgress} />}
-        <MessageStack messageData={updatedData} owner={owner} target={target} />
-      </Stack>
-      {isPc ? (
-        <MessageForm
-          view={'PC_VIEW'}
-          targetId={target.userId}
-          updateTarget={setTarget}
-          addNewMessage={addNewMessage}
-          disabled={target.deleted}
+    <MessageContainer targetNickname={target ? target.userNickname : '...'}>
+      {isPc && (
+        <MessageHeader
+          targetProfile={target?.userProfile}
+          userNickname={target ? target.userNickname : '...'}
         />
+      )}
+      {isLoading ? (
+        // case 1 : 로딩 중
+        <CircularProgress sx={style.circularProgress} />
+      ) : isError ? (
+        // case 2 : 에러
+        <Stack justifyContent={'center'} alignItems={'center'} height={'100%'}>
+          <Typography>쪽지함이 비어있습니다.</Typography>
+        </Stack>
       ) : (
+        // case 3 : 정상
         <>
-          <CuButton
-            variant="contained"
-            action={() => openModal()}
-            message="답하기"
-            fullWidth
-            disabled={target.deleted}
-          />
-          <MessageFormModal
-            isOpen={isOpen}
-            targetId={target.userId}
-            addNewMessage={addNewMessage}
-            handleClose={closeModal}
-          />
+          <Stack ref={scrollRef} sx={isPc ? style.pcStack : style.mobileStack}>
+            <Box ref={targetRef}></Box>
+            {spinner && <CircularProgress sx={style.circularProgress} />}
+            <MessageStack
+              messageData={updatedData}
+              owner={owner}
+              target={target}
+            />
+          </Stack>
+          {isPc ? (
+            <MessageForm
+              targetId={target.userId}
+              updateTarget={setTarget}
+              addNewMessage={addNewMessage}
+              disabled={target.deleted}
+            />
+          ) : (
+            <MobileSendButton
+              disabled={target.deleted}
+              target={{ id: target.userId, nickname: target.userNickname }}
+              addNewMessage={addNewMessage}
+              scrollRef={scrollRef}
+            />
+          )}
         </>
       )}
+      <CuToast open={isOpen} onClose={setListPage} severity="error">
+        {toastMessage}
+      </CuToast>
     </MessageContainer>
   )
 }

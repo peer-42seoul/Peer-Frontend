@@ -1,6 +1,7 @@
 import { Theme } from '@mui/material'
 
 export const removeBorder = {
+  minHeight: '5.625rem',
   '& .MuiOutlinedInput-notchedOutline': {
     border: 'none',
   },
@@ -13,6 +14,7 @@ export const removeBorder = {
 
 export const pcMessageForm = {
   width: '100%',
+  flexGrow: 1,
   paddingRight: '0.5rem',
 }
 
@@ -21,6 +23,10 @@ export const pcTextFieldContainer = {
   padding: '1rem',
   borderRadius: '0.25rem',
   backgroundColor: (theme: Theme) => theme.palette.background.tertiary,
+}
+
+export const pcTextField = {
+  height: '5.625rem',
 }
 
 export const messageLength = {
@@ -39,4 +45,10 @@ export const pcSendButton = {
   padding: '0.5rem',
   borderRadius: '50%',
   backgroundColor: (theme: Theme) => theme.palette.purple.strong,
+}
+
+export const mobileMessageForm = {
+  height: '100%',
+  borderRadius: '0.5rem',
+  background: (theme: Theme) => theme.palette.background.tertiary,
 }

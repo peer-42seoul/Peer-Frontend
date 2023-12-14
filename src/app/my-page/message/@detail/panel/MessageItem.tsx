@@ -1,7 +1,9 @@
 import dayjs from 'dayjs'
 import { Box, Stack, Typography } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
+import useMedia from '@/hook/useMedia'
 import { IMessage, IMessageUser } from '@/types/IMessage'
+import UTCtoLocalTime from '@/utils/UTCtoLocalTime'
 import * as style from './MessageItem.style'
 
 type TMessageOption = 'Top' | 'Normal' | 'Extra'
@@ -16,8 +18,7 @@ interface ITargetMessageItemProps {
 }
 
 const MessageDate = ({ date }: { date: string }) => {
-  // TODO : UTCtoLocalTime 함수로 시간 변환할 것
-  const dayjsDate = dayjs(date)
+  const dayjsDate = dayjs(UTCtoLocalTime(date))
   const ampm = dayjsDate.hour() < 12 ? '오전' : '오후'
   return (
     <Stack
@@ -40,6 +41,7 @@ export const OwnerMessageItem = ({
   message,
   messageOption,
 }: IOwnerMessageItemProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       direction={'row'}
@@ -49,8 +51,8 @@ export const OwnerMessageItem = ({
       sx={style[`contentMargin${messageOption}`]}
     >
       <MessageDate date={message.date} />
-      <Box sx={style.ownerMessage}>
-        <Typography variant={'body1'}>{message.content}</Typography>
+      <Box sx={isPc ? style.ownerPc : style.ownerMobile}>
+        <Typography variant={'Body1'}>{message.content}</Typography>
       </Box>
     </Stack>
   )
@@ -61,6 +63,7 @@ export const TargetMessageItem = ({
   target,
   messageOption,
 }: ITargetMessageItemProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       direction={'row'}
@@ -69,7 +72,7 @@ export const TargetMessageItem = ({
       spacing={'0.5rem'}
       sx={style[`contentMargin${messageOption}`]}
     >
-      {messageOption === 'Normal' ? (
+      {!isPc ? null : messageOption === 'Normal' ? (
         <CuAvatar sx={style.dummyAvatar} />
       ) : (
         <CuAvatar
@@ -78,8 +81,8 @@ export const TargetMessageItem = ({
           sx={style.targetAvatar}
         />
       )}
-      <Box sx={style.targetMessage}>
-        <Typography variant={'body1'}>{message.content}</Typography>
+      <Box sx={isPc ? style.targetPc : style.targetMobile}>
+        <Typography variant={'Body1'}>{message.content}</Typography>
       </Box>
       <MessageDate date={message.date} />
     </Stack>
