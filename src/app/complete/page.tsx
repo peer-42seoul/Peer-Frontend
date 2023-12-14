@@ -1,7 +1,8 @@
-import { Stack, Typography } from '@mui/material'
+'use client'
 
-import TeamReviewCard from './panel/TeamReviewCard'
+import { Stack, Typography } from '@mui/material'
 import BackgroundCard from './panel/BackgroundCard'
+import ToastEditor from '@/components/EditorWrapper'
 
 const CompletePage = () => {
   return (
@@ -26,6 +27,7 @@ const CompletePage = () => {
           }}
         >
           <BackgroundCard />
+          <ToastEditor initialValue="hello" />
         </Stack>
       </div>
     </>
