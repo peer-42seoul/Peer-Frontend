@@ -10,4 +10,7 @@ export const circularProgress = {
   margin: '0 auto',
 }
 
-export const mobileStack = {}
+export const mobileStack = {
+  height: '100%',
+  overflowY: 'scroll',
+}

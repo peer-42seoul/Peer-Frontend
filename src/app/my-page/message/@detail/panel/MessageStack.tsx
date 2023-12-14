@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { IMessage, IMessageUser } from '@/types/IMessage'
 import { OwnerMessageItem, TargetMessageItem } from './MessageItem'
 
@@ -18,7 +19,7 @@ const MessageStack = ({ messageData, owner, target }: IMessageStackProps) => {
               ? 'Normal'
               : 'Extra'
         return (
-          <>
+          <Fragment key={index}>
             {message.userId === owner.userId ? (
               <OwnerMessageItem
                 message={message}
@@ -31,7 +32,7 @@ const MessageStack = ({ messageData, owner, target }: IMessageStackProps) => {
                 target={target}
               />
             )}
-          </>
+          </Fragment>
         )
       })}
     </>

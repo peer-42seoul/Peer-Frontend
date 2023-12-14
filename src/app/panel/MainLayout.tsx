@@ -44,7 +44,10 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     <Box sx={{ backgroundColor: 'background.primary', minHeight: '100svh' }}>
       <div className="mobile-layout">
         <Header />
-        <Box sx={{ marginBottom: '64px' }}>{children}</Box>
+        {/* margin은 header와 bottom appbar의 크기 */}
+        <Box sx={{ marginTop: '3.375rem', marginBottom: '64px' }}>
+          {children}
+        </Box>
         <MobileNav />
       </div>
       <div className="pc-layout">
