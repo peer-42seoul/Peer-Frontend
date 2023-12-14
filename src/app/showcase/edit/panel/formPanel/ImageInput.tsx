@@ -2,7 +2,7 @@
 import { Stack, Box, Typography } from '@mui/material'
 import React from 'react'
 import LabelWithIcon from '../LabelWithIcon'
-import { ImageIcon } from '../icons'
+import ImageIcon from '@/icons/ImageIcon'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import * as Style from '../ShowcaseEditor.style'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
