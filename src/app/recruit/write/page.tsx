@@ -19,7 +19,7 @@ import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
 import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import SelectRegion from '../[id]/edit/panel/SelectRegion'
-import { IFormInterview, IRole, ITag } from '@/types/IPostDetail'
+import { IFormInterview, IRoleWrite, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import ImageIcon from '@mui/icons-material/Image'
@@ -56,7 +56,7 @@ const CreateTeam = () => {
   const [teamsize, setTeamsize] = useState<string>('')
   const [link, setCommunicationTool] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const [roleList, setRoleList] = useState<IRole[]>([])
+  const [roleList, setRoleList] = useState<IRoleWrite[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [allTagList, setAllTagList] = useState<ITag[]>()
   const [openBasicModal, setOpenBasicModal] = useState(false)

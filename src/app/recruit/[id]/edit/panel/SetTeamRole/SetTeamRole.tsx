@@ -1,14 +1,14 @@
 import { Box, Button, Stack, TextField } from '@mui/material'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import BasicSelectMember from './BasicSelectMember'
-import { IRole } from '@/types/IPostDetail'
+import { IRoleWrite } from '@/types/IPostDetail'
 
 const SetTeamRole = ({
   roleData,
   setRoleData,
 }: {
-  roleData: IRole[]
-  setRoleData: Dispatch<SetStateAction<IRole[]>>
+  roleData: IRoleWrite[]
+  setRoleData: Dispatch<SetStateAction<IRoleWrite[]>>
 }) => {
   const [role, setRole] = useState<string>('')
   const [member, setMember] = useState('')

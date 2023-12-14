@@ -21,7 +21,7 @@ import Image from 'next/image'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
-import { IFormInterview, IRole, ITag, statusEnum } from '@/types/IPostDetail'
+import { IFormInterview, IRoleWrite, ITag, statusEnum } from '@/types/IPostDetail'
 import CuButton from '@/components/CuButton'
 import ImageIcon from '@mui/icons-material/Image'
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined'
@@ -57,7 +57,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
   const [teamsize, setTeamsize] = useState<string>('')
   const [link, setCommunicationTool] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const [roleList, setRoleList] = useState<IRole[]>([])
+  const [roleList, setRoleList] = useState<IRoleWrite[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const [status, setStatus] = useState<statusEnum>(statusEnum.BEFORE)
