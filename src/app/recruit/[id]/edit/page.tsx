@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import RowRadioButtonsGroup from './panel/radioGroup'
 import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
-import TagAutoComplete from './panel/SetTeamTag/TagAutoComplete'
+// import TagAutoComplete from './panel/SetTeamTag/TagAutoComplete'
 import { useEffect, useState } from 'react'
 import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
@@ -36,6 +36,8 @@ import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined'
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
+import TagAutoComplete from '@/components/TagAutoComplete'
+import axios from 'axios'
 
 const componentName = {
   alignItems: 'center',
@@ -66,6 +68,18 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
+
+  // axiosInstance
+  // axios // 원래는 토큰이 필요없는 요청입니다. 백엔드 작업 기다리는중
+  //   .get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`)
+  //   .then((res) => setAllTagList(res.data))
+  //   .catch((err) => {
+  //     setToastMessage('태그를 불러오는데 실패했습니다.')
+  //     openToast()
+  //     console.log('서버에서 오는 err', err)
+  //   })
+  // useSWR을 두번 사용할 수 없는데, axios 요청을 직접 보내면 태그는 불러와지지만 무한요청이 발생함
+
   const { data, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.id}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
@@ -288,7 +302,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 <LocationOnOutlinedIcon />
                 <Typography variant="h6">지역</Typography>
               </Stack>
-              <SelectRegion setValue={setRegion} region={region} />
+              {/* <SelectRegion setValue={setRegion} region={region} /> */}
             </Box>
             {/* 커뮤니케이션 링크 등록 */}
             <Box>
@@ -296,7 +310,10 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 <InsertLinkOutlinedIcon />
                 <Typography variant="h6">소통 링크</Typography>
               </Stack>
-              <SetCommunicationToolLink setValue={setCommunicationTool} value={link}/>
+              <SetCommunicationToolLink
+                setValue={setCommunicationTool}
+                value={link}
+              />
             </Box>
             {/* 태그 추가 */}
             <Box>
@@ -306,9 +323,10 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
               </Stack>
               {allTagList ? (
                 <TagAutoComplete
+                  tagList={allTagList}
                   datas={tagList}
                   setData={setTagList}
-                  allTagList={allTagList}
+                  style={{ width: '26rem', height: '32px' }}
                 />
               ) : null}
             </Box>

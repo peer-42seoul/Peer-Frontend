@@ -15,7 +15,7 @@ import Image from 'next/image'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import RowRadioButtonsGroup from '../[id]/edit/panel/radioGroup'
 import SetTeamRole from '../[id]/edit/panel/SetTeamRole/SetTeamRole'
-import TagAutoComplete from '../[id]/edit/panel/SetTeamTag/TagAutoComplete'
+// import TagAutoComplete from '../[id]/edit/panel/SetTeamTag/TagAutoComplete'
 import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
 import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
@@ -23,7 +23,6 @@ import SelectRegion from '../[id]/edit/panel/SelectRegion'
 import { IFormInterview, IRole, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
-import axios from 'axios'
 import ImageIcon from '@mui/icons-material/Image'
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
@@ -37,6 +36,8 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
 import CuButton from '@/components/CuButton'
+import { circIn } from 'framer-motion'
+import TagAutoComplete from '@/components/TagAutoComplete'
 
 const componentName = {
   alignItems: 'center',
@@ -67,8 +68,9 @@ const CreateTeam = () => {
   const axiosInstance = useAxiosWithAuth()
 
   const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/tag`,
-    (url: string) => axios.get(url).then((res) => res.data),
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
+    // (url: string) => axios.get(url).then((res) => res.data), // 원래는 토큰 필요없어도됌
+    (url: string) => axiosInstance.get(url).then((res:any) => res.data),
   )
 
   useEffect(() => {
@@ -100,6 +102,8 @@ const CreateTeam = () => {
       return
     }
     try {
+      console.log('tagList when submit', tagList)
+      console.log('tagList when submit after 가공', tagList.map(tag => tag.tagId))
       const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
         {
@@ -112,7 +116,7 @@ const CreateTeam = () => {
           content: content,
           region: region,
           link: link,
-          tagList: tagList,
+          tagList: tagList.map(tag => tag.tagId),
           roleList: roleList,
           interviewList: interviewList,
         },
@@ -279,9 +283,10 @@ const CreateTeam = () => {
               </Stack>
               {allTagList ? (
                 <TagAutoComplete
+                  tagList={allTagList}
                   datas={tagList}
                   setData={setTagList}
-                  allTagList={allTagList}
+                  style={{ width: '26rem', height: '32px'}}
                 />
               ) : null}
             </Box>
