@@ -1,5 +1,5 @@
 'use client'
-import { List, Typography } from '@mui/material'
+import { List, Typography, CircularProgress, Stack } from '@mui/material'
 import { IMessageListData } from '@/types/IMessage'
 import useMedia from '@/hook/useMedia'
 import { PCMessageListItem } from './PCMessageItem'
@@ -17,39 +17,70 @@ interface IMessageListProps {
   toggleSelectUser: (targetId: number) => void
 }
 
+const SpecialStateComponent = ({
+  isLoading,
+  isEmpty,
+}: {
+  isLoading: boolean
+  isEmpty: boolean
+}) => {
+  if (isLoading)
+    return (
+      <Stack alignItems={'center'}>
+        <CircularProgress sx={style.specialStateContent} />
+      </Stack>
+    )
+  if (isEmpty)
+    return (
+      <Stack alignItems={'center'}>
+        <Typography
+          variant={'Body2'}
+          color={'text.alternative'}
+          sx={style.specialStateContent}
+        >
+          주고받은 쪽지가 없어요.
+        </Typography>
+      </Stack>
+    )
+}
+
 const MessageList = ({
   messageList,
   state,
   selectedUsers,
   toggleSelectUser,
 }: IMessageListProps) => {
-  const { isManageMode, isLoading, error } = state
+  const { isManageMode, isLoading } = state
   const { isPc } = useMedia()
-
-  if (isLoading) return <Typography>데이터를 불러오는 중입니다 @_@</Typography>
-  if (error) return <Typography>데이터 불러오기에 실패했습니다.</Typography>
-  if (messageList.length === 0)
-    return <Typography>쪽지함이 비었습니다.</Typography>
+  const isEmpty = !messageList || messageList.length === 0
 
   if (isPc)
     return (
-      <List>
-        {messageList.map((message) => (
-          <PCMessageListItem
-            key={message.targetId}
-            message={message}
-            isManageMode={isManageMode}
-            isChecked={selectedUsers.has(message.targetId)}
-            toggleSelectUser={toggleSelectUser}
-          />
-        ))}
+      <List disablePadding>
+        {isLoading || isEmpty ? (
+          <SpecialStateComponent isLoading={isLoading} isEmpty={isEmpty} />
+        ) : (
+          messageList.map((message) => (
+            <PCMessageListItem
+              key={message.targetId}
+              message={message}
+              isManageMode={isManageMode}
+              isChecked={selectedUsers.has(message.targetId)}
+              toggleSelectUser={toggleSelectUser}
+            />
+          ))
+        )}
       </List>
     )
   return (
     <List sx={style.mobileList}>
-      {messageList.map((message) => (
-        <MobileMessageListItem key={message.targetId} message={message} />
-      ))}
+      {isLoading || isEmpty ? (
+        <SpecialStateComponent isLoading={isLoading} isEmpty={isEmpty} />
+      ) : (
+        messageList.map((message) => (
+          <MobileMessageListItem key={message.targetId} message={message} />
+        ))
+      )}
     </List>
   )
 }
