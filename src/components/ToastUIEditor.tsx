@@ -21,7 +21,7 @@ const ToastEditor = ({ initialValue }: Props) => {
       el: editorRef.current,
       initialEditType: 'markdown',
       previewStyle: 'vertical',
-      height: '400px',
+      height: '30rem',
       initialValue: initialValue,
     })
 
