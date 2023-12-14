@@ -16,10 +16,12 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
 
   const handleChangeLargeScaleData = (event: SelectChangeEvent) => {
     setLargeScaleData(event.target.value as string)
+    setValue([event.target.value as string, smallScaleData])
   }
 
   const handleChangeSmallScaleData = (event: SelectChangeEvent) => {
     setSmallScaleData(event.target.value as string)
+    setValue([largeScaleData, event.target.value as string])
   }
 
   useEffect(() => {
@@ -27,8 +29,7 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
       setLargeScaleData(region[0])
       setSmallScaleData(region[1])
     }
-    setValue([largeScaleData, smallScaleData])
-  }, [largeScaleData, smallScaleData])
+  }, [region])
 
   let options1 = [
     koreaDistrict.largeScaleData.map((value) => {
@@ -53,12 +54,12 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
   return (
     <Box sx={{ width: '416px', display: 'flex', flexDirection: 'row', gap: 2 }}>
       <FormControl fullWidth sx={{ width: '204px' }}>
-        <Select value={largeScaleData} onChange={handleChangeLargeScaleData} disabled={region ? true : false}>
+        <Select value={largeScaleData} onChange={handleChangeLargeScaleData}>
           {options1}
         </Select>
       </FormControl>
       <FormControl fullWidth sx={{ width: '204px' }}>
-        <Select value={smallScaleData} onChange={handleChangeSmallScaleData} disabled={region ? true : false}>
+        <Select value={smallScaleData} onChange={handleChangeSmallScaleData}>
           {options2}
         </Select>
       </FormControl>

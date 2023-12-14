@@ -10,7 +10,6 @@ import {
 } from '@mui/material'
 import RowRadioButtonsGroup from './panel/radioGroup'
 import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
-// import TagAutoComplete from './panel/SetTeamTag/TagAutoComplete'
 import { useEffect, useState } from 'react'
 import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
@@ -37,7 +36,7 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
 import TagAutoComplete from '@/components/TagAutoComplete'
-import axios from 'axios'
+// import axios from 'axios'
 
 const componentName = {
   alignItems: 'center',
@@ -124,7 +123,6 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
       !due ||
       !region ||
       !place ||
-      !link ||
       !tagList ||
       !roleList ||
       !content
@@ -156,7 +154,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
       )
       if (response.status === 200) router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
     } catch (error) {
-      console.log(error)
+      console.log('error : ',error)
       setToastMessage('모집글 작성 실패, 다시 시도해주세요')
       openToast()
     }
@@ -302,7 +300,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 <LocationOnOutlinedIcon />
                 <Typography variant="h6">지역</Typography>
               </Stack>
-              {/* <SelectRegion setValue={setRegion} region={region} /> */}
+              <SelectRegion setValue={setRegion} region={region} />
             </Box>
             {/* 커뮤니케이션 링크 등록 */}
             <Box>
