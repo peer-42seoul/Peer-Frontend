@@ -1,27 +1,10 @@
 import { Card, Stack, TextField, Typography } from '@mui/material'
 import FiveStarReview from './FiveStarReview'
+import * as types from './types'
 
-enum ReviewType {
-  'TEAM',
-  'SELF',
-  'PEER',
-}
-
-enum QuestionType {
-  'TEXT',
-  'STARS',
-}
-
-interface Review {
-  id: string
-  question: string
-  review_type: ReviewType
-  question_type: QuestionType
-}
-
-const TeamReviewCard = ({ review }: { review: Review }) => {
+const TeamReviewCard = ({ review }: { review: types.Review }) => {
   return (
-    <Card sx={{ padding: '3rem', borderRadius: '2rem' }}>
+    <Card sx={{ padding: '2rem', borderRadius: '2rem' }}>
       <Stack direction={'row'} justifyContent={'space-between'}>
         <Stack>
           <Typography>질문</Typography>
@@ -29,8 +12,8 @@ const TeamReviewCard = ({ review }: { review: Review }) => {
         </Stack>
         <Stack>
           <Typography>답변</Typography>
-          {review.question_type === QuestionType.TEXT && <TextField />}
-          {review.question_type === QuestionType.STARS && <FiveStarReview />}
+          {review.type === types.QuestionType.TEXT && <TextField />}
+          {review.type === types.QuestionType.STARS && <FiveStarReview />}
         </Stack>
       </Stack>
     </Card>

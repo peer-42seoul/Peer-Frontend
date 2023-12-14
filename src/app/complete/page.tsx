@@ -2,7 +2,6 @@
 
 import { Stack, Typography } from '@mui/material'
 import BackgroundCard from './panel/BackgroundCard'
-import ToastEditor from '@/components/EditorWrapper'
 
 const CompletePage = () => {
   return (
@@ -11,7 +10,7 @@ const CompletePage = () => {
         <Stack
           sx={{
             width: '100%',
-            height: '100vh',
+            height: '85vh',
             alignItems: 'center',
           }}
         >
@@ -22,12 +21,11 @@ const CompletePage = () => {
         <Stack
           sx={{
             width: '100%',
-            height: '100vh',
+            height: '85vh',
             alignItems: 'center',
           }}
         >
           <BackgroundCard />
-          <ToastEditor initialValue="hello" />
         </Stack>
       </div>
     </>
