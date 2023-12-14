@@ -5,7 +5,6 @@ const TagChip = ({
   name,
   color,
   onDelete,
-  deleteIcon,
 }: {
   name: string
   color: string
@@ -54,8 +53,8 @@ const TagChip = ({
         color: color,
         backgroundColor: backgroundColor,
         borderRadius: '2px',
-        padding: deleteIcon ? '6px 0px 6px 8px' : '0px 6px',
-        height: deleteIcon ? '1.5rem' : '1.25rem',
+        padding: onDelete ? '6px 0px 6px 8px' : '0px 6px',
+        height: onDelete ? '1.5rem' : '1.25rem',
         '& .MuiChip-label': {
           padding: '0px',
         },
@@ -65,17 +64,15 @@ const TagChip = ({
       }}
       onDelete={onDelete}
       deleteIcon={
-        deleteIcon ? (
-          <CloseIcon
-            style={{
-              height: '1.5rem',
-              width: '1.5rem',
-              right: 0,
-              display: 'relative',
-              margin: 0,
-            }}
-          />
-        ) : undefined
+        <CloseIcon
+          style={{
+            height: '1.5rem',
+            width: '1.5rem',
+            right: 0,
+            display: 'relative',
+            margin: 0,
+          }}
+        />
       }
     />
   )
