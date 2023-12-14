@@ -62,8 +62,8 @@ const MessageContainer = ({
   }, [originalMessageData, searchKeyword])
 
   const handleDelete = () => {
-    const requestBody = Array.from(selectedUsers).map((targetId) => ({
-      targetId,
+    const requestBody = Array.from(selectedUsers).map((conversationId) => ({
+      conversationId,
     }))
     axiosInstance
       .delete('/api/v1/message/delete-message', {

@@ -65,7 +65,7 @@ const MessageList = ({
               key={message.targetId}
               message={message}
               isManageMode={isManageMode}
-              isChecked={selectedUsers.has(message.targetId)}
+              isChecked={selectedUsers.has(message.conversationId)}
               toggleSelectUser={toggleSelectUser}
             />
           ))

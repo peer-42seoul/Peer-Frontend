@@ -27,7 +27,7 @@ export const PCMessageListItem = ({
         disableGutters
         onClick={
           isManageMode
-            ? () => toggleSelectUser(targetId)
+            ? () => toggleSelectUser(conversationId)
             : () => setDetailPage(conversationId, targetId)
         }
       >
