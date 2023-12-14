@@ -10,6 +10,7 @@ import useToast from '@/hook/useToast'
 import MessageList from './MessageList'
 import useMessageListState from '@/states/useMessageListState'
 import { SearchBar, ManageBar } from './MessageBar'
+import * as style from './MessageContainer.style'
 
 interface IMessageContainerProps {
   originalMessageData: IMessageListData[] | undefined
@@ -81,7 +82,7 @@ const MessageContainer = ({
 
   return (
     <>
-      <Stack spacing={'1.5rem'}>
+      <Stack spacing={'1.5rem'} sx={style.pcContainer}>
         {isManageMode ? (
           <ManageBar
             isSelectedAll={isSelectedAll(messageList)}
