@@ -1,15 +1,9 @@
 import dayjs from 'dayjs'
-import {
-  Avatar,
-  Chip,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, Chip, ListItemText, Stack, Typography } from '@mui/material'
 import { IMessageListData } from '@/types/IMessage'
 import UTCtoLocalTime from '@/utils/UTCtoLocalTime'
+import CuAvatar from '@/components/CuAvatar'
+import * as style from './MessageItemBase.style'
 
 const MessageItemBase = ({ message }: { message: IMessageListData }) => {
   const {
@@ -21,26 +15,45 @@ const MessageItemBase = ({ message }: { message: IMessageListData }) => {
   } = message
   return (
     <>
-      <ListItemAvatar>
-        <Avatar src={targetProfile} />
-      </ListItemAvatar>
-      <ListItemText primary={targetNickname} secondary={latestContent} />
-      <ListItemSecondaryAction>
-        <Stack alignItems={'flex-end'}>
-          <Typography>
-            {dayjs(UTCtoLocalTime(latestDate)).format('MM월 DD일')}
-          </Typography>
+      <CuAvatar sx={style.pcAvatar} src={targetProfile} />
+      <ListItemText
+        primary={targetNickname}
+        primaryTypographyProps={{
+          variant: 'Body2',
+          color: 'text.normal',
+          sx: style.listItemText,
+        }}
+        secondary={latestContent}
+        secondaryTypographyProps={{
+          variant: 'Body1',
+          color: 'text.alternative',
+          sx: style.listItemText,
+        }}
+      />
+      <Stack
+        height={'100%'}
+        alignItems={'flex-end'}
+        justifyContent={'space-between'}
+        spacing={'0.37rem'}
+      >
+        <Typography
+          sx={style.dateText}
+          variant={'Caption'}
+          color={'text.assistive'}
+        >
+          {dayjs(UTCtoLocalTime(latestDate)).format('MM월 DD일')}
+        </Typography>
+        {unreadMsgNumber > 0 ? (
           <Chip
-            label={
-              unreadMsgNumber > 0
-                ? unreadMsgNumber > 99
-                  ? '99+'
-                  : unreadMsgNumber
-                : null
-            }
+            sx={style.chip}
+            label={unreadMsgNumber}
+            size={'small'}
+            color={'primary'}
           />
-        </Stack>
-      </ListItemSecondaryAction>
+        ) : (
+          <Box sx={style.chip}></Box>
+        )}
+      </Stack>
     </>
   )
 }
