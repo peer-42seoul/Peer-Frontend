@@ -1,12 +1,24 @@
 'use client'
 
-import { Button, Stack, TextField } from '@mui/material'
+import {
+  Box,
+  Button,
+  IconButton,
+  InputBase,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import { IMessageListData, IMessageTarget } from '@/types/IMessage'
 import CuModal from '@/components/CuModal'
 import NewMessageForm from './NewMessageForm'
 import TargetList from './TargetList'
+import SearchIcon from '@/icons/SearchIcon'
+import CloseIcon from '@/icons/CloseIcon'
+import CuButton from '@/components/CuButton'
+import * as style from './NewMessageModal.style'
 
 interface INewMessageModalProps {
   isOpen: boolean
@@ -58,8 +70,42 @@ const NewMessageModal = ({
         onClick: handleClose,
       }}
     >
-      <Stack alignItems={'center'} spacing={2}>
-        <Stack direction={'row'} alignItems={'stretch'} sx={{ width: '100%' }}>
+      <Stack alignItems={'center'} spacing={'1rem'}>
+        <Stack spacing={'0.25rem'}>
+          <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
+            받는 이
+          </Typography>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            spacing={'0.38rem'}
+            sx={style.searchInput}
+          >
+            <SearchIcon sx={style.searchIcon} />
+            <InputBase
+              fullWidth
+              value={keyword}
+              placeholder={'닉네임을 검색해주세요.'}
+              sx={style.inputBase}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+            <CuButton
+              message={targetUser ? '취소' : '검색'}
+              variant={'text'}
+              action={
+                targetUser
+                  ? () => setTargetUser(undefined)
+                  : searchUserWithKeyword
+              }
+              TypographyProps={{
+                variant: 'CaptionEmphasis',
+                color: targetUser ? 'purple.strong' : 'text.normal',
+              }}
+            />
+          </Stack>
+        </Stack>
+        <Stack></Stack>
+        {/* <Stack direction={'row'} alignItems={'stretch'} sx={{ width: '100%' }}>
           <TextField
             sx={{ width: '100%' }}
             value={keyword}
@@ -79,7 +125,7 @@ const NewMessageModal = ({
           userInfo={targetUser}
           handleClose={handleClose}
           setMessageData={setMessageData}
-        />
+        /> */}
       </Stack>
     </CuModal>
   )
