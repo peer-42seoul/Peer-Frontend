@@ -16,14 +16,19 @@ export const date = {
   height: '100%',
 }
 
-const messageBase = {
+const pcBase = {
   padding: '1rem 1.25rem',
   borderRadius: '0.75rem',
   maxWidth: '32.5rem',
 }
 
-export const ownerMessage = {
-  ...messageBase,
+const mobileBase = {
+  padding: '0.75rem',
+  borderRadius: '0.75rem',
+  maxWidth: '70%',
+}
+
+const ownerBase = {
   backgroundColor: (theme: Theme) => theme.palette.purple.strong,
   color: '#E3E3E3', // 한군데만 적용되는 color는 theme에 추가하지 않아도 될 듯..?
 }
@@ -38,8 +43,27 @@ export const dummyAvatar = {
   visibility: 'hidden',
 }
 
-export const targetMessage = {
-  ...messageBase,
+const targetBase = {
   backgroundColor: (theme: Theme) => theme.palette.background.secondary,
   color: '#BABABA',
+}
+
+export const targetPc = {
+  ...pcBase,
+  ...targetBase,
+}
+
+export const ownerPc = {
+  ...pcBase,
+  ...ownerBase,
+}
+
+export const targetMobile = {
+  ...mobileBase,
+  ...targetBase,
+}
+
+export const ownerMobile = {
+  ...mobileBase,
+  ...ownerBase,
 }
