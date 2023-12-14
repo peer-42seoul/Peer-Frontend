@@ -7,7 +7,7 @@ import { getMessaging, onMessage, getToken } from 'firebase/messaging'
 
 const PushAlertBanner = () => {
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-  const [isShowPush, setIsShowPush] = useState<boolean>(true)
+  const [isShowPush, setIsShowPush] = useState<boolean>(false)
   const [isScroll, setIsScroll] = useState<number>(0)
 
   const handlePushFCM = () => {
@@ -26,7 +26,7 @@ const PushAlertBanner = () => {
     getToken(messaging, {
       vapidKey: `${process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY}`,
     })
-      .then((currentToken) => {
+      .then((currentToken: any) => {
         if (currentToken) {
           axiosInstance
             .post(`http://localhost:8082/alarm/send-push`, {
@@ -43,11 +43,11 @@ const PushAlertBanner = () => {
           )
         }
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log('An error occurred while retrieving token. ', err)
       })
 
-    onMessage(messaging, (payload) => {
+    onMessage(messaging, (payload: any) => {
       console.log('Message received. ', payload)
     })
   }
@@ -74,6 +74,8 @@ const PushAlertBanner = () => {
   useEffect(() => {
     if (localStorage && localStorage.getItem('isShowPush') === 'false') {
       setIsShowPush(false)
+    } else {
+      setIsShowPush(true)
     }
 
     window.addEventListener('scroll', handleScroll)

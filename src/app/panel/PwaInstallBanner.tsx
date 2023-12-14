@@ -12,7 +12,7 @@ declare global {
 }
 
 const PwaInstallBanner = () => {
-  const [isShowInstall, setIsShowInstall] = useState(true)
+  const [isShowInstall, setIsShowInstall] = useState(false)
   const { isPc } = useMedia()
   const [isSafari, setIsSafari] = useState(false)
   const [deferredPrompt, setDeferredPrompt] =
@@ -39,9 +39,9 @@ const PwaInstallBanner = () => {
   useEffect(() => {
     if (localStorage.getItem('isShowInstall') === 'false') {
       setIsShowInstall(false)
+    } else {
+      setIsShowInstall(true)
     }
-
-    console.log('navigator', navigator.userAgent)
 
     const isSafariBrowser =
       navigator.userAgent.includes('Safari') &&
