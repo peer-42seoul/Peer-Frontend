@@ -154,6 +154,7 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
                   checked={member.grant === TeamGrant.LEADER ? true : false}
                 />
               </Stack>
+              {/* 역할이 있을 때만 버튼이 보이게끔 */}
               <Button onClick={openChangeModal}>
                 <Typography fontSize="small">역할 변경</Typography>
               </Button>
