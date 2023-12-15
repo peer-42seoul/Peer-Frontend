@@ -76,9 +76,9 @@ const Hitchhiking = () => {
           <Typography>{message}</Typography>
         )}
       </Stack>
-      {cardList.length && (
-        <Interest id={cardList[cardList.length - 1].recruit_id} />
-      )}
+      {/* {cardList.length && ( */}
+      <Interest id={cardList[cardList.length - 1]?.recruit_id} />
+      {/* )} */}
     </Stack>
   )
 }
