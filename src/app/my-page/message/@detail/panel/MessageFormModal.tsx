@@ -5,14 +5,17 @@ import MessageForm from './MessageForm'
 
 interface IMessageFormModalProps {
   isOpen: boolean
-  targetId: number
+  target: {
+    id: number
+    nickname: string
+  }
   addNewMessage: (newMessage: IMessage) => void
   handleClose: () => void
 }
 
 const MessageFormModal = ({
   isOpen,
-  targetId,
+  target,
   addNewMessage,
   handleClose,
 }: IMessageFormModalProps) => {
@@ -20,7 +23,7 @@ const MessageFormModal = ({
     <CuModal
       open={isOpen}
       onClose={handleClose}
-      title={'쪽지 보내기'} // TODO : 쪽지 보내기 -> 상대방 닉네임으로 변경
+      title={target.nickname}
       mobileFullSize
       containedButton={{
         text: '보내기',
@@ -33,8 +36,7 @@ const MessageFormModal = ({
       }}
     >
       <MessageForm
-        view={'MOBILE_VIEW'}
-        targetId={targetId}
+        targetId={target.id}
         addNewMessage={addNewMessage}
         handleClose={handleClose}
       />
