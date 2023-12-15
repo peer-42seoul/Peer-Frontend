@@ -1,15 +1,17 @@
 'use client'
 
 import {
+  Autocomplete,
   Box,
   Button,
   IconButton,
   InputBase,
+  Popper,
   Stack,
   TextField,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import { IMessageListData, IMessageTarget } from '@/types/IMessage'
 import CuModal from '@/components/CuModal'
@@ -19,6 +21,7 @@ import SearchIcon from '@/icons/SearchIcon'
 import CloseIcon from '@/icons/CloseIcon'
 import CuButton from '@/components/CuButton'
 import * as style from './NewMessageModal.style'
+import { targetList } from './TargetList.style'
 
 interface INewMessageModalProps {
   isOpen: boolean
@@ -35,6 +38,7 @@ const NewMessageModal = ({
   const [targetUser, setTargetUser] = useState<IMessageTarget | undefined>()
   const [messageTargetList, setMessageTargetList] = useState<IMessageTarget[]>()
   const axiosInstance = useAxiosWithAuth()
+  const ref = useRef<HTMLDivElement>(null)
 
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {
@@ -54,6 +58,16 @@ const NewMessageModal = ({
     }
   }, [keyword])
 
+  const modalButtonAction = useCallback(() => {
+    if (targetUser) {
+      setTargetUser(undefined)
+      setKeyword('')
+    } else {
+      searchUserWithKeyword()
+    }
+    setMessageTargetList(undefined)
+  }, [targetUser, searchUserWithKeyword])
+
   return (
     <CuModal
       open={isOpen}
@@ -72,60 +86,61 @@ const NewMessageModal = ({
     >
       <Stack alignItems={'center'} spacing={'1rem'}>
         <Stack spacing={'0.25rem'}>
+          <Box>
+            <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
+              받는 이
+            </Typography>
+            <Stack
+              direction={'row'}
+              alignItems={'center'}
+              spacing={'0.38rem'}
+              sx={style.searchInput}
+              ref={ref}
+            >
+              <SearchIcon sx={style.searchIcon} />
+              <InputBase
+                fullWidth
+                value={targetUser ? targetUser.targetNickname : keyword}
+                disabled={!!targetUser}
+                placeholder={'닉네임을 검색해주세요.'}
+                sx={style.inputBase}
+                onChange={(e) => setKeyword(e.target.value)}
+              />
+              <CuButton
+                message={targetUser ? '취소' : '검색'}
+                variant={'text'}
+                action={modalButtonAction}
+                TypographyProps={{
+                  variant: 'CaptionEmphasis',
+                  color: targetUser ? 'purple.strong' : 'text.normal',
+                }}
+              />
+            </Stack>
+            <Popper
+              sx={style.targetListPopper}
+              open={!!targetList}
+              anchorEl={ref.current}
+            >
+              <TargetList
+                messageTargetState={{
+                  state: messageTargetList,
+                  resetState: () => setMessageTargetList(undefined),
+                }}
+                setTargetUser={setTargetUser}
+              />
+            </Popper>
+          </Box>
+        </Stack>
+        <Stack spacing={'0.25rem'}>
           <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-            받는 이
+            내용
           </Typography>
-          <Stack
-            direction={'row'}
-            alignItems={'center'}
-            spacing={'0.38rem'}
-            sx={style.searchInput}
-          >
-            <SearchIcon sx={style.searchIcon} />
-            <InputBase
-              fullWidth
-              value={keyword}
-              placeholder={'닉네임을 검색해주세요.'}
-              sx={style.inputBase}
-              onChange={(e) => setKeyword(e.target.value)}
-            />
-            <CuButton
-              message={targetUser ? '취소' : '검색'}
-              variant={'text'}
-              action={
-                targetUser
-                  ? () => setTargetUser(undefined)
-                  : searchUserWithKeyword
-              }
-              TypographyProps={{
-                variant: 'CaptionEmphasis',
-                color: targetUser ? 'purple.strong' : 'text.normal',
-              }}
-            />
-          </Stack>
-        </Stack>
-        <Stack></Stack>
-        {/* <Stack direction={'row'} alignItems={'stretch'} sx={{ width: '100%' }}>
-          <TextField
-            sx={{ width: '100%' }}
-            value={keyword}
-            placeholder="닉네임 혹은 이메일을 입력하세요"
-            variant="outlined"
-            onChange={(e) => setKeyword(e.target.value)}
+          <NewMessageForm
+            userInfo={targetUser}
+            handleClose={handleClose}
+            setMessageData={setMessageData}
           />
-          <Button onClick={searchUserWithKeyword}>검색</Button>
         </Stack>
-        {messageTargetList && (
-          <TargetList
-            messageTargetList={messageTargetList}
-            setTargetUser={setTargetUser}
-          />
-        )}
-        <NewMessageForm
-          userInfo={targetUser}
-          handleClose={handleClose}
-          setMessageData={setMessageData}
-        /> */}
       </Stack>
     </CuModal>
   )

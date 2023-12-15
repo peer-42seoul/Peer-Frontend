@@ -1,7 +1,9 @@
-import { useState } from 'react'
-import { TextField, Typography } from '@mui/material'
+import { FormEvent, useCallback, useState } from 'react'
+import { TextField } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import useToast from '@/hook/useToast'
 import { IMessageListData, IMessageTarget } from '@/types/IMessage'
+import CuToast from '@/components/CuToast'
 
 interface INewMessageFormProps {
   userInfo?: IMessageTarget
@@ -21,14 +23,26 @@ const NewMessageForm = ({
 }: INewMessageFormProps) => {
   const [content, setContent] = useState('')
   const axiosInstance = useAxiosWithAuth()
-  const messageSubmitHandler = async () => {
+  const { isOpen, openToast, closeToast, setToastMessage, toastMessage } =
+    useToast()
+
+  const setToast = useCallback(
+    (message: string) => {
+      setToastMessage(message)
+      openToast()
+    },
+    [openToast, setToastMessage],
+  )
+
+  const messageSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     // TODO : state 대신 formdata 사용할 수 있도록 수정
+    e.preventDefault()
     try {
       if (!content) {
-        alert('내용을 입력하세요.')
+        setToast('내용을 입력하세요.')
         return
       } else if (!userInfo) {
-        alert('받는 사람을 입력하세요.')
+        setToast('받는 이를 선택하세요.')
         return
       }
       const reqBody: IMessageData = {
@@ -43,25 +57,27 @@ const NewMessageForm = ({
       setMessageData(response.data)
       handleClose()
     } catch (error) {
-      alert('쪽지 전송에 실패하였습니다. 다시 시도해주세요.')
+      setToast('쪽지 전송에 실패했어요. 다시 시도해주세요.')
     }
   }
 
   return (
-    <form onSubmit={messageSubmitHandler} id={'new-message-form'}>
-      <Typography>{`받는 사람 : ${
-        userInfo ? userInfo.targetNickname : ''
-      }`}</Typography>
-      <TextField
-        sx={{ width: '100%' }}
-        value={content}
-        placeholder="내용을 입력하세요"
-        variant="outlined"
-        multiline
-        rows={3}
-        onChange={(e) => setContent(e.target.value)}
-      />
-    </form>
+    <>
+      <form onSubmit={messageSubmitHandler} id={'new-message-form'}>
+        <TextField
+          sx={{ width: '100%' }}
+          value={content}
+          placeholder="내용을 입력하세요"
+          variant="outlined"
+          multiline
+          rows={3}
+          onChange={(e) => setContent(e.target.value)}
+        />
+      </form>
+      <CuToast open={isOpen} onClose={closeToast} severity={'error'}>
+        {toastMessage}
+      </CuToast>
+    </>
   )
 }
 
