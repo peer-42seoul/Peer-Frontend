@@ -25,6 +25,7 @@ const ShowcaseEditor = () => {
     //  control,
     register,
     setValue,
+    watch,
   } = useForm({
     defaultValues: defaultValues,
   })
@@ -43,7 +44,7 @@ const ShowcaseEditor = () => {
           setValue={setValue}
         />
         <TeamName />
-        <SkillInput />
+        <SkillInput watch={watch} setValue={setValue} />
       </Stack>
     </form>
   )

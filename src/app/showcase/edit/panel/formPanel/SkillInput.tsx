@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack, InputAdornment, Autocomplete } from '@mui/material'
+import { Stack, InputAdornment, Autocomplete, SxProps } from '@mui/material'
 import TagIcon from '@/icons/TagIcon'
 import LabelWithIcon from '../LabelWithIcon'
 import CuTextField from '@/components/CuTextField'
@@ -9,6 +9,13 @@ import TagChip from '@/components/TagChip'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import { ITag } from '@/types/IPostDetail'
+
+const AutocompleteStyle: SxProps = {
+  fieldset: {
+    height: '2rem',
+    width: '26rem',
+  },
+}
 
 const SkillInput = ({
   setValue,
@@ -52,13 +59,15 @@ const SkillInput = ({
       <Autocomplete
         disableClearable
         multiple
+        // sx={{ height: '2rem', width: '26rem' }}
+        sx={AutocompleteStyle}
         options={nameList}
         onChange={handleInput}
         value={tags}
         renderTags={() => <></>}
-        sx={{ height: '2rem', width: '26rem' }}
         renderInput={(params: any) => (
           <CuTextField
+            sx={AutocompleteStyle}
             {...params}
             placeholder="등록할 기술을 입력하세요."
             fullWidth
