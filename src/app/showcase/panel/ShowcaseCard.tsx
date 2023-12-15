@@ -141,6 +141,7 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
                       </IconButton>
                     </Stack>
                   </Stack>
+
                   <Stack minHeight={'22.5rem'}>
                     <Typography>{data.description}</Typography>
                   </Stack>
@@ -231,7 +232,7 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
           />
           <Card
             sx={{
-              height: isTouched ? '80%' : '40%',
+              height: isTouched ? '65%' : '40%',
               position: 'absolute',
               bottom: 0,
               backgroundColor: 'rgba(0,0,0,0.8)',
@@ -239,25 +240,104 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
             }}
           >
             <CardActions onClick={handleCardClick}>
-              <CardContent>
-                <Stack direction={'row'}>
-                  <Typography>팀 이미지</Typography>
-                  <Typography>팀 이름: {data.name}</Typography>
-                  <Stack direction={'row'}>
-                    <IconButton onClick={clickLike}>
-                      <ThumbUpIcon />
-                    </IconButton>
-                    <Typography>{data.like}</Typography>
+              <CardContent sx={{ height: '30vhs' }}>
+                <Stack spacing={'1.5rem'}>
+                  <Stack direction={'row'} height={'1.5rem'}>
+                    <Stack direction={'row'} spacing={'0.5rem'}>
+                      <Avatar
+                        src={data.image!}
+                        sx={{ width: '1.5rem', height: '1.5rem' }}
+                      />
+                      <Typography color={'text.alternative'} width={'11rem'}>
+                        {data.name}
+                      </Typography>
+                    </Stack>
+                    <Stack direction={'row'} spacing={'1rem'}>
+                      <Stack direction={'row'} spacing={'0.5rem'}>
+                        <IconButton
+                          onClick={clickLike}
+                          color={data.liked ? 'primary' : 'inherit'}
+                          size="small"
+                          sx={{
+                            m: 0,
+                            p: 0,
+                          }}
+                        >
+                          <ThumbUpIcon />
+                        </IconButton>
+                        <Typography>{data.like}</Typography>
+                      </Stack>
+
+                      <IconButton
+                        onClick={clickFavorite}
+                        color={data.favorite ? 'primary' : 'inherit'}
+                        size="small"
+                        sx={{
+                          m: 0,
+                          p: 0,
+                        }}
+                      >
+                        <FavoriteIcon />
+                      </IconButton>
+
+                      <IconButton
+                        color="inherit"
+                        sx={{
+                          m: 0,
+                          p: 0,
+                        }}
+                      >
+                        <ThreeDotsIcon />
+                      </IconButton>
+                    </Stack>
                   </Stack>
-                  <Typography>관심 추가</Typography>
-                </Stack>
-                <Typography>글 내용: {data.description}</Typography>
-                <Stack>
-                  <Stack direction={'row'}>
-                    <Typography>시작일</Typography>
-                    <Typography>종료일</Typography>
+
+                  <Stack minHeight={'8.5rem'}>
+                    <Typography>{data.description}</Typography>
                   </Stack>
-                  <Typography>기술 스택</Typography>
+                  <Stack spacing={'0.5rem'}>
+                    <Stack
+                      direction={'column'}
+                      spacing={'0.5rem'}
+                      textAlign={'center'}
+                    >
+                      <Stack direction={'row'} spacing={'0.5rem'}>
+                        <CalendarIcon />
+                        <Typography color={'text.alternative'}>
+                          시작일
+                        </Typography>
+                        <Typography>
+                          {toStringByFormatting(new Date(data.start))}
+                        </Typography>
+                      </Stack>
+                      <Stack direction={'row'} spacing={'0.5rem'}>
+                        <CalendarIcon />
+                        <Typography color={'text.alternative'}>
+                          종료일
+                        </Typography>
+                        <Typography>
+                          {toStringByFormatting(new Date(data.end))}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                    <Stack
+                      direction={'row'}
+                      spacing={'1rem'}
+                      textAlign={'center'}
+                    >
+                      <Stack direction={'row'} spacing={'0.5rem'}>
+                        <TagIcon />
+                        <Typography color={'text.alternative'}>
+                          기술스택
+                        </Typography>
+                      </Stack>
+                      {data.skill.map((skill, index) => (
+                        <Typography key={skill.id + index}>
+                          {skill.name}
+                        </Typography>
+                      ))}
+                    </Stack>
+                  </Stack>
                 </Stack>
               </CardContent>
             </CardActions>

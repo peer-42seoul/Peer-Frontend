@@ -69,24 +69,30 @@ const ShowcasePage = () => {
 
   const handleTouchEnd = (e: TouchEvent) => {
     e.stopPropagation()
-    if (touchEnd < touchStart + 200) {
-      if (!data) return
-      if (index < data.content.length - 1) {
+    const swipeDistance = touchEnd - touchStart
+
+    if (Math.abs(swipeDistance) < 30) {
+      // 스와이프 거리가 충분하지 않음
+      return
+    }
+
+    if (swipeDistance < 0) {
+      // 위로 스와이프
+      if (index < cards.length - 1) {
         setIndex(index + 1)
         if (index === cards.length - 3) {
           setPage(page + 1)
         }
-        setTouchEnd(0)
-        setTouchStart(0)
       }
     } else {
-      if (!data) return
+      // 아래로 스와이프
       if (index > 0) {
         setIndex(index - 1)
-        setTouchEnd(0)
-        setTouchStart(0)
       }
     }
+
+    setTouchEnd(0)
+    setTouchStart(0)
   }
 
   const variants = {
@@ -140,7 +146,7 @@ const ShowcasePage = () => {
           exit={'exit'}
           transition={{ duration: 0.3 }}
         >
-          <ShowcaseCard data={cards[index]} />
+          <ShowcaseCard data={cards ? cards[index] : undefined} />
         </motion.div>
       </motion.div>
     </Stack>
