@@ -69,7 +69,7 @@ export const MobileNav = () => {
           icon={<ThumbUpAltOutlinedIcon />}
           label="히치하이킹"
           onClick={() => {
-            router.push('/')
+            router.push('/hitchhiking')
           }}
         />
         <BottomNavigationAction
@@ -148,7 +148,7 @@ export const PcNav = () => {
           <BottomNavigationAction
             label="히치하이킹"
             onClick={() => {
-              router.push('/')
+              router.push('/hitchhiking')
             }}
           />
 
