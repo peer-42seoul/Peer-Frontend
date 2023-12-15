@@ -27,7 +27,6 @@ const CardContainer = ({
   ) => void
 }) => {
   const { isPc } = useMedia()
-  // const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [dragged, setDragged] = useState(false)
 
   console.log('cardList')
@@ -48,7 +47,6 @@ const CardContainer = ({
   }
 
   const checkDragDirection = (x: number, y: number) => {
-    // if (Math.abs(dragStart.x - x) > Math.abs(dragStart.y - y)) {
     if (Math.abs(x) > Math.abs(y)) {
       return x < 0 ? ESwipeDirection.left : ESwipeDirection.right
     } else {
@@ -63,19 +61,15 @@ const CardContainer = ({
     title: string,
   ) => {
     // 위로 조금만 움직였을 때 카드가 사라지지 않도록 처리
-    console.log(info)
-    console.log(info.offset.y)
-    console.log(checkDragDirection(info.offset.x, info.offset.y))
     if (
       Math.abs(info.offset.y) < 150 ||
       checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
     ) {
-      // setDragStart({ x: 0, y: 0 })
       setDragged(false)
 
       return
     }
-    // setDragStart({ x: 0, y: 0 })
+
     setCardList((prev: IMainCard[]) => {
       console.log(`dislike api 호출 pathValue: ${recruit_id}, title: ${title}`)
       return prev.filter((card) => card.recruit_id !== recruit_id)
@@ -90,46 +84,53 @@ const CardContainer = ({
     <>
       <Box width={1} height={1} position={'relative'} sx={{ zIndex: 500 }}>
         <AnimatePresence>
-          {cardList.map((card) => (
-            <motion.div
-              key={card.recruit_id}
-              initial={{
-                scale: 1,
-                opacity: 1,
-              }}
-              animate={{
-                scale: 1,
-                opacity: 1,
-              }}
-              exit={{ opacity: 0 }}
-              drag
-              dragSnapToOrigin
-              whileDrag={{ scale: 1.2 }}
-              dragElastic={1}
-              dragConstraints={{
-                left: 0,
-                right: 0,
-                bottom: 0,
-              }}
-              dragTransition={{ bounceStiffness: 300, bounceDamping: 15 }}
-              onDragStart={() => setDragged(true)}
-              onDragEnd={(e: any, info: any) =>
-                handleDragEnd(e, info, card.recruit_id, card.title)
-              }
-            >
-              <HitchhikingCard
-                authorImage={card.user_thumbnail}
-                teamName={card.user_nickname}
-                title={card.title}
-                tagList={card.tagList}
-                image={card.image}
-                postId={card.recruit_id}
-                sx={cardStyle}
-                dragged={dragged}
-                setDragged={setDragged}
-              />
-            </motion.div>
-          ))}
+          {cardList.map((card, i) => {
+            if (cardList.length - i > 2) return null
+            return (
+              <motion.div
+                key={card.recruit_id}
+                initial={{
+                  scale: 0.8,
+                  opacity: 0,
+                }}
+                animate={{
+                  scale: i === cardList.length - 1 ? 1 : 0.8,
+                  opacity: i === cardList.length - 1 ? 1 : 0,
+                }}
+                style={{
+                  display: i === cardList.length - 1 ? 'block' : 'none',
+                }}
+                exit={{ opacity: 0 }}
+                drag
+                dragSnapToOrigin
+                whileDrag={{ scale: 1.2 }}
+                dragElastic={1}
+                dragConstraints={{
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+                dragTransition={{ bounceStiffness: 300, bounceDamping: 15 }}
+                onDragStart={() => setDragged(true)}
+                onDragEnd={(e: any, info: any) =>
+                  handleDragEnd(e, info, card.recruit_id, card.title)
+                }
+                transition={{ duration: 0.5 }}
+              >
+                <HitchhikingCard
+                  authorImage={card.user_thumbnail}
+                  teamName={card.user_nickname}
+                  title={card.title}
+                  tagList={card.tagList}
+                  image={card.image}
+                  postId={card.recruit_id}
+                  sx={cardStyle}
+                  dragged={dragged}
+                  setDragged={setDragged}
+                />
+              </motion.div>
+            )
+          })}
         </AnimatePresence>
       </Box>
 
