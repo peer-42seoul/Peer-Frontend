@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import useSWR from 'swr'
-import { Box, Container, Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
@@ -30,7 +30,7 @@ const NewMessageButton = ({ isPc, openModal }: INewMessageButtonProps) => {
   )
 }
 
-const MessageMain = () => {
+const MessageListPage = () => {
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
   const axiosWithAuth = useAxiosWithAuth()
@@ -48,7 +48,7 @@ const MessageMain = () => {
   }, [])
 
   return (
-    <Container sx={{ height: '90vh' }}>
+    <>
       <Box sx={{ width: '100%' }}>
         <NewMessageButton isPc={isPc} openModal={openModal} />
         <MessageContainer
@@ -58,6 +58,7 @@ const MessageMain = () => {
           isPC={isPc}
         />
       </Box>
+      )
       {isOpen && (
         <NewMessageModal
           isOpen={isOpen}
@@ -65,8 +66,8 @@ const MessageMain = () => {
           setMessageData={setMessageList}
         />
       )}
-    </Container>
+    </>
   )
 }
 
-export default MessageMain
+export default MessageListPage

@@ -5,6 +5,7 @@ import ProfileSection from './ProfileSection'
 import Link from 'next/link'
 
 const ProfileLink = (props: IUserProfileLink) => {
+  console.log(props.linkUrl)
   return (
     <Stack direction={'row'} spacing={0.5} alignItems={'center'}>
       <Box
@@ -16,7 +17,15 @@ const ProfileLink = (props: IUserProfileLink) => {
           height: '24px',
         }}
       />
-      <Link href={props.linkUrl} style={{ textDecorationColor: '#F6F6F6' }}>
+      <Link
+        href={
+          props.linkUrl.startsWith('http://') ||
+          props.linkUrl.startsWith('https://')
+            ? props.linkUrl
+            : `//${props.linkUrl}`
+        }
+        style={{ textDecorationColor: '#F6F6F6' }}
+      >
         <Typography variant={'Caption'} color={'text.strong'}>
           {props.linkName}
         </Typography>

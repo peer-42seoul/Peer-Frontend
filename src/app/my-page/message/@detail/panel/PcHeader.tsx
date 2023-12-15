@@ -1,20 +1,17 @@
-import useMedia from '@/hook/useMedia'
 import { Stack, Typography } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
-import * as style from './MessageHeader.style'
+import * as style from './PcHeader.style'
 
 const TARGETMESSAGE = '님과의 쪽지'
 
-const MessageHeader = ({
+const PcHeader = ({
   targetProfile,
   userNickname,
 }: {
   targetProfile: string | undefined
   userNickname: string
 }) => {
-  const { isPc } = useMedia()
-
-  return isPc ? (
+  return (
     <Stack
       direction="row"
       alignItems={'center'}
@@ -35,9 +32,7 @@ const MessageHeader = ({
         </Typography>
       </Stack>
     </Stack>
-  ) : (
-    <></>
   )
 }
 
-export default MessageHeader
+export default PcHeader
