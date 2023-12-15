@@ -3,7 +3,6 @@ import {
   Stack,
   InputAdornment,
   Autocomplete,
-  SxProps,
   Typography,
   Box,
 } from '@mui/material'
@@ -16,34 +15,6 @@ import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import { ITag } from '@/types/IPostDetail'
 import { Button } from '@mui/material'
-
-//  .MuiFormControl-root .MuiInputBase-root input
-
-/**
- * 
- * '& .MuiOutlinedInput-root': {
-      // Add your styles for the Autocomplete input
-      backgroundColor: '#22223A',
-      color: '#F6F6F6',
-    },
-    '& .MuiAutocomplete-popupIndicator': {
-      // Add your styles for the popup indicator
-      color: 'red',
-    },
-    // Add more styles as needed
-  }
- */
-const AutocompleteStyle: SxProps = {
-  '.MuiFormControl-root': {
-    '.MuiInputBase-root': {
-      input: {
-        height: '2rem',
-        width: '26rem',
-        padding: '0rem 0.75rem',
-      },
-    },
-  },
-}
 
 const SkillInput = ({
   setValue,
@@ -88,9 +59,8 @@ const SkillInput = ({
         <Autocomplete
           disableClearable
           multiple
-          // sx={{ height: '2rem', width: '26rem' }}
           forcePopupIcon={false}
-          sx={AutocompleteStyle}
+          sx={Style.AutocompleteStyle}
           options={nameList}
           onChange={handleInput}
           value={tags}

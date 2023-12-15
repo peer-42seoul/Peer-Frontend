@@ -15,4 +15,16 @@ const ShowcaseImageStyle: SxProps = {
   borderColor: 'line.alternative',
 }
 
-export { IconStyle, ShowcaseImageStyle }
+const AutocompleteStyle: SxProps = {
+  '.MuiFormControl-root': {
+    '.MuiInputBase-root': {
+      input: {
+        height: '2rem',
+        width: '26rem',
+        padding: '0rem 0.75rem',
+      },
+    },
+  },
+}
+
+export { IconStyle, ShowcaseImageStyle, AutocompleteStyle }
