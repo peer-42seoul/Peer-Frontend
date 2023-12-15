@@ -25,10 +25,12 @@ const HitchhikingCardBack = ({
     <Card
       sx={{
         ...sx,
-        backgroundColor: 'background.primary',
+        // backgroundColor: 'background.primary',
+        backgroundColor: 'text.normal',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        transform: 'rotateY(180deg)',
+        transform: 'rotateY(180deg) translate(50%, 0)',
+
         backfaceVisibility: 'hidden',
       }}
       // onTouchEnd={onTouchEnd}
@@ -94,9 +96,7 @@ const HitchhikingCard = ({
   return (
     <div
       style={{
-        transform: `perspective(800px) rotateY(${
-          isFlipped ? '180deg' : '0deg'
-        })`,
+        transform: ` rotateY(${isFlipped ? '180deg' : '0deg'})`,
         transformStyle: 'preserve-3d',
         width: '100%',
         height: '100%',
@@ -113,6 +113,7 @@ const HitchhikingCard = ({
         sx={{
           ...sx,
           backfaceVisibility: 'hidden',
+          transform: 'translate(-50%, 0)',
         }}
         onClick={handleMouseUp}
       />

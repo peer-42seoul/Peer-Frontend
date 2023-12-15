@@ -43,7 +43,7 @@ const Hitchhiking = () => {
     <Stack
       justifyContent={'space-between'}
       alignItems={'center'}
-      sx={{ width: '100%', height: '80svh' }}
+      sx={{ width: '100%', height: '80svh', overflow: 'hidden' }}
       direction={'column'}
     >
       <FormControlLabel
@@ -59,7 +59,7 @@ const Hitchhiking = () => {
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          width: isPc ? '20.5rem' : '92vw',
+          width: isPc ? '20.5rem' : '93vw',
           height: '27rem',
           maxWidth: '20.5rem',
           position: 'relative',

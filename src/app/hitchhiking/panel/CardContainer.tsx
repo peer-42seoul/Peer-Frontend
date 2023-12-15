@@ -27,7 +27,7 @@ const CardContainer = ({
   ) => void
 }) => {
   const { isPc } = useMedia()
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  // const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [dragged, setDragged] = useState(false)
 
   console.log('cardList')
@@ -43,21 +43,17 @@ const CardContainer = ({
     borderColor: 'line.base',
     borderStyle: 'solid',
     position: 'absolute',
-    top: 0,
-    left: 0,
+    top: '50%',
+    left: '50%',
   }
 
   const checkDragDirection = (x: number, y: number) => {
-    if (Math.abs(dragStart.x - x) > Math.abs(dragStart.y - y)) {
-      return dragStart.x - x > 0 ? ESwipeDirection.left : ESwipeDirection.right
+    // if (Math.abs(dragStart.x - x) > Math.abs(dragStart.y - y)) {
+    if (Math.abs(x) > Math.abs(y)) {
+      return x < 0 ? ESwipeDirection.left : ESwipeDirection.right
     } else {
-      return dragStart.y - y > 0 ? ESwipeDirection.up : ESwipeDirection.down
+      return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
     }
-  }
-
-  const handleDragStart = (e: any, info: any) => {
-    setDragStart({ x: info.point.x, y: info.point.y })
-    setDragged(true)
   }
 
   const handleDragEnd = (
@@ -67,16 +63,19 @@ const CardContainer = ({
     title: string,
   ) => {
     // 위로 조금만 움직였을 때 카드가 사라지지 않도록 처리
+    console.log(info)
+    console.log(info.offset.y)
+    console.log(checkDragDirection(info.offset.x, info.offset.y))
     if (
-      Math.abs(info.point.y - dragStart.y) < 150 ||
-      checkDragDirection(info.point.x, info.point.y) !== ESwipeDirection.up
+      Math.abs(info.offset.y) < 150 ||
+      checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
     ) {
-      setDragStart({ x: 0, y: 0 })
+      // setDragStart({ x: 0, y: 0 })
       setDragged(false)
 
       return
     }
-    setDragStart({ x: 0, y: 0 })
+    // setDragStart({ x: 0, y: 0 })
     setCardList((prev: IMainCard[]) => {
       console.log(`dislike api 호출 pathValue: ${recruit_id}, title: ${title}`)
       return prev.filter((card) => card.recruit_id !== recruit_id)
@@ -113,7 +112,7 @@ const CardContainer = ({
                 bottom: 0,
               }}
               dragTransition={{ bounceStiffness: 300, bounceDamping: 15 }}
-              onDragStart={handleDragStart}
+              onDragStart={() => setDragged(true)}
               onDragEnd={(e: any, info: any) =>
                 handleDragEnd(e, info, card.recruit_id, card.title)
               }
