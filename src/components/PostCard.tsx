@@ -14,7 +14,17 @@ import { ITag } from '@/types/IPostDetail'
 import { Chip } from '@mui/material'
 
 const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
-  { authorImage, teamName, title, tagList, image, sx }: IPostCard,
+  {
+    authorImage,
+    teamName,
+    title,
+    tagList,
+    image,
+    sx,
+    onClick,
+    onMouseUp,
+    onTouchEnd,
+  }: IPostCard,
   ref,
 ) {
   return (
@@ -26,12 +36,15 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
         backfaceVisibility: 'hidden',
       }}
       ref={ref}
+      onClick={onClick}
+      onMouseUp={onMouseUp}
+      onTouchEnd={onTouchEnd}
     >
       <CardMedia
         component="img"
         image={image}
         alt="post thumbnail"
-        sx={{ flexGrow: 1, objectFit: 'cover' }}
+        sx={{ flexGrow: 1, objectFit: 'cover', maxHeight: '15.6875rem' }}
       />
       <Stack
         sx={{ p: '1rem', pt: '0.75rem' }}

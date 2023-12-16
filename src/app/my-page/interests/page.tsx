@@ -145,10 +145,13 @@ const MyInterests = () => {
   useEffect(() => {
     if (!isLoading && data && !data.isLast) {
       setPostList((prev) => prev.concat(data.postList))
-      if (data.postList.length === pagesize) {
+      if (data?.postList.length === pagesize) {
         setPageLimit((prev) => prev + 1)
       }
     }
+  }, [isLoading, data])
+
+  useEffect(() => {
     if (error && error?.response?.data?.message) {
       setToastMessage({
         severity: 'error',
@@ -156,7 +159,7 @@ const MyInterests = () => {
       })
       openToast()
     }
-  }, [error, isLoading, data, openToast])
+  }, [error, openToast])
 
   const { target, spinner } = useInfiniteScroll({
     setPage,
