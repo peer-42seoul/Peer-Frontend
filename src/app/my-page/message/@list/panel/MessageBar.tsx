@@ -1,5 +1,5 @@
 import CuButton from '@/components/CuButton'
-import { Button, InputBase, Stack, TextField, Typography } from '@mui/material'
+import { InputBase, Stack, Typography } from '@mui/material'
 import SearchIcon from '@/icons/SearchIcon'
 import * as style from './MessageBar.style'
 

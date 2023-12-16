@@ -1,17 +1,6 @@
 'use client'
 
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Icon,
-  IconButton,
-  InputBase,
-  Popper,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { IconButton, InputBase, Popper, Stack, Typography } from '@mui/material'
 import React, { useCallback, useRef, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import { IMessageListData, IMessageTarget } from '@/types/IMessage'
@@ -22,7 +11,6 @@ import SearchIcon from '@/icons/SearchIcon'
 import CloseIcon from '@/icons/CloseIcon'
 import CuButton from '@/components/CuButton'
 import * as style from './NewMessageModal.style'
-import { targetList } from './TargetList.style'
 
 interface INewMessageModalProps {
   isOpen: boolean
