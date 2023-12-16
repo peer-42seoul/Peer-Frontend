@@ -34,6 +34,9 @@ export const inputBase = {
 
 export const targetListPopper = {
   zIndex: MODAL_ZINDEX,
+  boxSizing: 'border-box',
+  width: '31rem',
+  padding: '0.5rem',
   borderRadius: '0.25rem',
-  backgroundColor: (theme: Theme) => `${theme.palette.background.tertiary}`,
+  backgroundColor: (theme: Theme) => `${theme.palette.background.secondary}`,
 }
