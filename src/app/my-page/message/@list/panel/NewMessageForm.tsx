@@ -85,6 +85,7 @@ const NewMessageForm = ({
       <form onSubmit={messageSubmitHandler} id={'new-message-form'}>
         <Box sx={style.form}>
           <InputBase
+            fullWidth
             placeholder="내용을 입력하세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}

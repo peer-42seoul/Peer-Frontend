@@ -8,6 +8,7 @@ export const form = {
 
 export const input = {
   height: '13rem',
+  alignItems: 'flex-start',
   '& .MuiInputBase-input::placeholder': {
     color: (theme: Theme) => theme.palette.text.alternative,
     fontSize: (theme: Theme) => theme.typography.Caption.fontSize,
