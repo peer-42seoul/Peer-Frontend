@@ -11,4 +11,7 @@ export const listItemText = {
 
 export const dateText = { whiteSpace: 'nowrap' }
 
-export const chip = { minwidth: '2rem', height: '1.5rem' }
+export const chip = {
+  minWidth: '2rem',
+  height: '1.5rem',
+}
