@@ -2,80 +2,54 @@ import useAxiosWithAuth from '@/api/config'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
-import webpush from 'web-push'
+import { initializeApp } from 'firebase/app'
+import { getMessaging, onMessage, getToken } from 'firebase/messaging'
 
 const PushAlertBanner = () => {
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-  const [isShowPush, setIsShowPush] = useState<boolean>(true)
-  const [isScroll, setIsScroll] = useState<number>(1)
+  const [isShowPush, setIsShowPush] = useState<boolean>(false)
+  const [isScroll, setIsScroll] = useState<number>(0)
 
-  const urlBase64ToUint8Array = (base64String: string) => {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
-    const base64 = (base64String + padding)
-      .replace(/-/g, '+')
-      .replace(/_/g, '/')
-    const rawData = window.atob(base64)
-    const outputArray = new Uint8Array(rawData.length)
+  const handlePushFCM = () => {
+    const firebaseConfig = initializeApp({
+      apiKey: `${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
+      authDomain: `${process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}`,
+      projectId: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}`,
+      storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}`,
+      messagingSenderId: `${process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}`,
+      appId: `${process.env.NEXT_PUBLIC_FIREBASE_APP_ID}`,
+      measurementId: `${process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID}`,
+    })
 
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i)
-    }
+    const messaging = getMessaging(firebaseConfig)
 
-    return outputArray
-  }
-
-  const displayNotification = () => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      navigator.serviceWorker.ready.then((swReg) => {
-        swReg.showNotification('Hello world!')
+    getToken(messaging, {
+      vapidKey: `${process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY}`,
+    })
+      .then((currentToken: any) => {
+        if (currentToken) {
+          axiosInstance
+            .post(`http://localhost:8082/alarm/send-push`, {
+              token: currentToken,
+              title: '푸시 알림 테스트',
+              message: '푸시 알림 테스트 메시지입니다.',
+            })
+            .then((res) => {
+              console.log(res)
+            })
+        } else {
+          console.log(
+            'No registration token available. Request permission to generate one.',
+          )
+        }
       })
-    }
-  }
-
-  const createPushSubscription = (swReg: ServiceWorkerRegistration) => {
-    // 추후 서버 셋팅 한 뒤 사용
-    const vapidPublicKey = webpush.generateVAPIDKeys().publicKey
-    const convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey)
-    swReg.pushManager
-      .subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: convertedVapidPublicKey,
+      .catch((err: any) => {
+        console.log('An error occurred while retrieving token. ', err)
       })
-      .then((newSub) => {
-        let newSubData = newSub.toJSON()
-        let newSubString = JSON.stringify(newSubData)
 
-        return axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/push`,
-          {
-            subscription: newSubString,
-          },
-        )
-      })
-      .then((res) => {
-        console.log(res)
-        displayNotification()
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
-  const handlePushNotification = () => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      let reg: ServiceWorkerRegistration
-
-      navigator.serviceWorker.ready
-        .then((swReg) => {
-          reg = swReg
-          return swReg.pushManager.getSubscription()
-        })
-        .then((subscription) => {
-          if (subscription === null) {
-            createPushSubscription(reg)
-          }
-        })
-    }
+    onMessage(messaging, (payload: any) => {
+      console.log('Message received. ', payload)
+    })
   }
 
   const handlePush = () => {
@@ -83,7 +57,7 @@ const PushAlertBanner = () => {
       Notification.requestPermission((permission) => {
         if (permission === 'granted') {
           console.log('Notification permission granted.')
-          handlePushNotification()
+          handlePushFCM()
           setIsShowPush(false)
           localStorage.setItem('isShowPush', 'false')
         } else {
@@ -100,6 +74,8 @@ const PushAlertBanner = () => {
   useEffect(() => {
     if (localStorage && localStorage.getItem('isShowPush') === 'false') {
       setIsShowPush(false)
+    } else {
+      setIsShowPush(true)
     }
 
     window.addEventListener('scroll', handleScroll)
@@ -128,15 +104,21 @@ const PushAlertBanner = () => {
               사용하시겠습니까?
             </Typography>
             <Stack direction="row">
-              <Button onClick={handlePush}>네</Button>
-              <Button onClick={() => setIsShowPush(false)}>다음에</Button>
+              <Button onClick={handlePush}>
+                <Typography>네</Typography>
+              </Button>
+
+              <Button onClick={() => setIsShowPush(false)}>
+                <Typography>다음에</Typography>
+              </Button>
+
               <Button
                 onClick={() => {
                   setIsShowPush(false)
                   localStorage.setItem('isShowPush', 'false')
                 }}
               >
-                아니요
+                <Typography>아니요</Typography>
               </Button>
             </Stack>
           </Stack>
