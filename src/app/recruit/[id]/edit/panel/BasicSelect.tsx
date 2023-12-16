@@ -23,7 +23,6 @@ export default function BasicSelect({
 }: BasicSelectProps) {
   const handleChange = (event: SelectChangeEvent) => {
     setValue(event.target.value as string)
-    console.log(value)
   }
 
   let options = null
