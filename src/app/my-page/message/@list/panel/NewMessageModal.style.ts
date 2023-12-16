@@ -13,6 +13,12 @@ export const searchIcon = {
   height: '1.25rem',
 }
 
+export const closeIcon = {
+  width: '1rem',
+  height: '1rem',
+  color: (theme: Theme) => theme.palette.text.alternative,
+}
+
 export const inputBase = {
   '& .MuiInputBase-input::placeholder': {
     color: (theme: Theme) => theme.palette.text.alternative,
@@ -29,4 +35,5 @@ export const inputBase = {
 export const targetListPopper = {
   zIndex: MODAL_ZINDEX,
   borderRadius: '0.25rem',
+  backgroundColor: (theme: Theme) => `${theme.palette.background.tertiary}`,
 }

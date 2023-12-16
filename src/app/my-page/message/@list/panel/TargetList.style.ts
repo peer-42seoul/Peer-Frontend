@@ -1,7 +1,6 @@
 import { Theme } from '@mui/material'
 
 export const targetList = {
-  backgroundColor: (theme: Theme) => `${theme.palette.background.tertiary}`,
   borderRadius: '0.25rem',
   maxHeight: '11rem',
   overflowY: 'scroll',

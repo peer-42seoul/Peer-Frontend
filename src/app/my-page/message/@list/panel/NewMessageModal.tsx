@@ -4,6 +4,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  Icon,
   IconButton,
   InputBase,
   Popper,
@@ -84,54 +85,59 @@ const NewMessageModal = ({
         onClick: handleClose,
       }}
     >
-      <Stack alignItems={'center'} spacing={'1rem'}>
-        <Stack spacing={'0.25rem'}>
-          <Box>
-            <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-              받는 이
-            </Typography>
-            <Stack
-              direction={'row'}
-              alignItems={'center'}
-              spacing={'0.38rem'}
-              sx={style.searchInput}
-              ref={ref}
-            >
-              <SearchIcon sx={style.searchIcon} />
-              <InputBase
-                fullWidth
-                value={targetUser ? targetUser.targetNickname : keyword}
-                disabled={!!targetUser}
-                placeholder={'닉네임을 검색해주세요.'}
-                sx={style.inputBase}
-                onChange={(e) => setKeyword(e.target.value)}
-              />
-              <CuButton
-                message={targetUser ? '취소' : '검색'}
-                variant={'text'}
-                action={modalButtonAction}
-                TypographyProps={{
-                  variant: 'CaptionEmphasis',
-                  color: targetUser ? 'purple.strong' : 'text.normal',
-                }}
-              />
-            </Stack>
-            <Popper
-              sx={style.targetListPopper}
-              open={!!targetList}
-              anchorEl={ref.current}
-            >
-              <TargetList
-                messageTargetState={{
-                  state: messageTargetList,
-                  resetState: () => setMessageTargetList(undefined),
-                }}
-                setTargetUser={setTargetUser}
-              />
-            </Popper>
-          </Box>
+      <Stack alignItems={'center'} spacing={'1rem'} width={'31rem'}>
+        <Stack spacing={'0.25rem'} width={'100%'}>
+          <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
+            받는 이
+          </Typography>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            spacing={'0.38rem'}
+            sx={style.searchInput}
+            ref={ref}
+          >
+            <SearchIcon sx={style.searchIcon} />
+            <InputBase
+              fullWidth
+              value={targetUser ? targetUser.targetNickname : keyword}
+              disabled={!!targetUser}
+              placeholder={'닉네임 혹은 이메일을 입력하세요.'}
+              sx={style.inputBase}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+            <CuButton
+              message={targetUser ? '취소' : '검색'}
+              variant={'text'}
+              action={modalButtonAction}
+              TypographyProps={{
+                variant: 'CaptionEmphasis',
+                color: targetUser ? 'purple.strong' : 'text.normal',
+              }}
+            />
+          </Stack>
+          <Popper
+            sx={style.targetListPopper}
+            open={!!messageTargetList}
+            anchorEl={ref.current}
+          >
+            {messageTargetList ? (
+              <Stack alignItems={'flex-end'}>
+                <IconButton onClick={() => setMessageTargetList(undefined)}>
+                  <CloseIcon sx={style.closeIcon} />
+                </IconButton>
+              </Stack>
+            ) : null}
+            <TargetList
+              messageTargetState={{
+                state: messageTargetList,
+                resetState: () => setMessageTargetList(undefined),
+              }}
+              setTargetUser={setTargetUser}
+            />
+          </Popper>
         </Stack>
-        <Stack spacing={'0.25rem'}>
+        <Stack spacing={'0.25rem'} width={'100%'}>
           <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
             내용
           </Typography>
