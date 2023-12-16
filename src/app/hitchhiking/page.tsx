@@ -8,6 +8,7 @@ import { IPagination } from '@/types/IPagination'
 import CardContainer from './panel/CardContainer'
 import CuToggle from '@/components/CuToggle'
 import useMedia from '@/hook/useMedia'
+import Interest from './panel/Interest'
 
 // 1. 메인페이지 api 긁어오기
 // 2. 메인 카드 컴포넌트 가져오기
@@ -75,7 +76,9 @@ const Hitchhiking = () => {
           <Typography>{message}</Typography>
         )}
       </Stack>
-      <Typography variant="Title3Emphasis">관심있어요!</Typography>
+      {cardList.length && (
+        <Interest id={cardList[cardList.length - 1].recruit_id} />
+      )}
     </Stack>
   )
 }

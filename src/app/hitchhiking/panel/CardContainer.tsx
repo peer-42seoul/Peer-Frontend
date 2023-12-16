@@ -28,6 +28,7 @@ const CardContainer = ({
 }) => {
   const { isPc } = useMedia()
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  const [dragged, setDragged] = useState(false)
 
   console.log('cardList')
   console.log(cardList)
@@ -54,6 +55,11 @@ const CardContainer = ({
     }
   }
 
+  const handleDragStart = (e: any, info: any) => {
+    setDragStart({ x: info.point.x, y: info.point.y })
+    setDragged(true)
+  }
+
   const handleDragEnd = (
     e: any,
     info: any,
@@ -66,10 +72,11 @@ const CardContainer = ({
       checkDragDirection(info.point.x, info.point.y) !== ESwipeDirection.up
     ) {
       setDragStart({ x: 0, y: 0 })
+      setDragged(false)
+
       return
     }
     setDragStart({ x: 0, y: 0 })
-    // setCurrentIndex((prev) => prev - 1)
     setCardList((prev: IMainCard[]) => {
       console.log(`dislike api 호출 pathValue: ${recruit_id}, title: ${title}`)
       return prev.filter((card) => card.recruit_id !== recruit_id)
@@ -77,6 +84,7 @@ const CardContainer = ({
     if (cardList.length === 2) {
       update()
     }
+    setDragged(false)
   }
 
   return (
@@ -105,9 +113,7 @@ const CardContainer = ({
                 bottom: 0,
               }}
               dragTransition={{ bounceStiffness: 300, bounceDamping: 15 }}
-              onDragStart={(e, info) => {
-                setDragStart({ x: info.point.x, y: info.point.y })
-              }}
+              onDragStart={handleDragStart}
               onDragEnd={(e: any, info: any) =>
                 handleDragEnd(e, info, card.recruit_id, card.title)
               }
@@ -120,6 +126,8 @@ const CardContainer = ({
                 image={card.image}
                 postId={card.recruit_id}
                 sx={cardStyle}
+                dragged={dragged}
+                setDragged={setDragged}
               />
             </motion.div>
           ))}
