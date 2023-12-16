@@ -15,7 +15,6 @@ interface IBackgroundBoxProps {
  * @param children - children
  * @param pcSx - (선택) 기본 pc style에 추가해서 적용할 style
  * @param mobileSx - (선택) 기본 mobile style에 추가해서 적용할 style
- * @returns
  */
 
 const BackgroundBox = ({ children, mobileSx, pcSx }: IBackgroundBoxProps) => {
