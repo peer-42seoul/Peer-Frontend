@@ -117,8 +117,8 @@ const NewMessageModal = ({
             ) : null}
             <TargetList
               messageTargetState={{
-                state: messageTargetList,
-                resetState: () => setMessageTargetList(undefined),
+                targetList: messageTargetList,
+                resetList: () => setMessageTargetList(undefined),
               }}
               setTargetUser={setTargetUser}
             />

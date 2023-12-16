@@ -55,8 +55,8 @@ const TargetItem = ({
 
 interface ITargetListProps {
   messageTargetState: {
-    state: IMessageTarget[] | undefined
-    resetState: () => void
+    targetList: IMessageTarget[] | undefined
+    resetList: () => void
   }
   setTargetUser: (targetUser: IMessageTarget) => void
 }
@@ -65,21 +65,21 @@ const TargetList = ({
   messageTargetState,
   setTargetUser,
 }: ITargetListProps) => {
-  const { state, resetState } = messageTargetState
-  if (!state) return null
+  const { targetList, resetList } = messageTargetState
+  if (!targetList) return null
   return (
     <List disablePadding sx={style.targetList}>
-      {state.length === 0 ? (
+      {targetList.length === 0 ? (
         <Typography variant={'Body2'} color={'text.alternative'}>
           검색된 유저가 없어요.
         </Typography>
       ) : (
-        state.map((target: IMessageTarget) => (
+        targetList.map((target: IMessageTarget) => (
           <TargetItem
             key={target.targetId}
             messgeTarget={target}
             setTargetUser={setTargetUser}
-            resetMessageList={resetState}
+            resetMessageList={resetList}
           />
         ))
       )}
