@@ -1,29 +1,38 @@
 'use client'
-import CuButton from '@/components/CuButton'
 import PostCard from '@/components/PostCard'
-import { IPostCard } from '@/types/IPostCard'
-import { CardContent, SxProps, Typography } from '@mui/material'
+import { ITag } from '@/types/IPostDetail'
+import { Button, CardContent, SxProps, Typography } from '@mui/material'
 import { Box, Card, CardHeader, Chip, Stack } from '@mui/material'
 import React, { useState } from 'react'
 
 const HitchhikingCardBack = ({
   postId,
   sx,
+  onClick,
 }: {
   postId: number
   sx?: SxProps
+  onClick?: (e: React.MouseEvent) => void
 }) => {
   console.log(`HitchhikingCard Back API! ${postId}`)
+
+  const handleSeeAllMouse = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    console.log('handleSeeAll')
+  }
+
   return (
     <Card
       sx={{
         ...sx,
-        backgroundColor: 'text.normal',
+        backgroundColor: 'background.primary',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         transform: 'rotateY(180deg)',
-        // backfaceVisibility: 'hidden',
+        backfaceVisibility: 'hidden',
       }}
+      // onTouchEnd={onTouchEnd}
+      onClick={onClick}
     >
       <CardHeader>
         <Stack direction="row" justifyContent={'space-between'}>
@@ -45,7 +54,7 @@ const HitchhikingCardBack = ({
         <Box sx={{ backgroundColor: 'background.secondary' }}>Avatars</Box>
       </CardContent>
       <CardContent>
-        <CuButton message="전체 보기" />
+        <Button onClick={handleSeeAllMouse}>전체 보기</Button>
       </CardContent>
     </Card>
   )
@@ -58,19 +67,41 @@ const HitchhikingCard = ({
   tagList,
   image,
   postId,
+  dragged,
+  setDragged,
   sx,
-}: IPostCard) => {
+}: {
+  authorImage: string
+  teamName: string
+  title: string
+  tagList: Array<ITag>
+  image: string
+  postId: number
+  sx?: SxProps
+  dragged: boolean
+  setDragged: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const [isFlipped, setFlipped] = useState(false)
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!dragged) {
+      setFlipped((prev) => !prev)
+    }
+    setDragged(false)
+  }
 
   return (
     <div
       style={{
-        transform: `rotateY(${isFlipped ? '180deg' : '0deg'})`,
+        transform: `perspective(800px) rotateY(${
+          isFlipped ? '180deg' : '0deg'
+        })`,
+        transformStyle: 'preserve-3d',
         width: '100%',
         height: '100%',
         transition: 'transform 0.5s ease',
       }}
-      onClick={() => setFlipped(!isFlipped)}
     >
       <PostCard
         postId={postId}
@@ -82,18 +113,10 @@ const HitchhikingCard = ({
         sx={{
           ...sx,
           backfaceVisibility: 'hidden',
-          opacity: isFlipped ? 0 : 1,
-          transition: 'opacity 0.5s ease',
         }}
+        onClick={handleMouseUp}
       />
-      <HitchhikingCardBack
-        postId={postId}
-        sx={{
-          ...sx,
-          opacity: isFlipped ? 1 : 0,
-          transition: 'opacity 0.5s ease',
-        }}
-      />
+      <HitchhikingCardBack postId={postId} sx={sx} onClick={handleMouseUp} />
     </div>
   )
 }

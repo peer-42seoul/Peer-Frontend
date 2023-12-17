@@ -13,7 +13,7 @@ import {
 const Answers = ({ data }: { data: IFormInterview }) => {
   console.log('data.type', data.type)
   switch (data.type) {
-    case 'close': {
+    case 'CLOSE': {
       return (
         <Box>
           <RadioGroup
@@ -35,7 +35,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         </Box>
       )
     }
-    case 'open': {
+    case 'OPEN': {
       return (
         <TextField
           variant="standard"
@@ -44,7 +44,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         />
       )
     }
-    case 'check': {
+    case 'CHECK': {
       return (
         <Box>
           <FormGroup sx={{ paddingLeft: '10px' }}>
@@ -65,7 +65,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         </Box>
       )
     }
-    case 'ratio': {
+    case 'RATIO': {
       if (!data?.optionList) return
       const maxNumber = parseInt(data.optionList[0])
 
