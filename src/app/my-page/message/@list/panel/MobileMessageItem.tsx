@@ -1,8 +1,8 @@
 import { TouchEvent, useState, ReactNode, useRef } from 'react'
-import { useRouter } from 'next/navigation'
 import { ListItem, ListItemButton, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
+import useMessagePageState from '@/states/useMessagePageState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
 import * as style from './MobileMessageItem.style'
@@ -98,7 +98,7 @@ const SwappableMessageItem = ({
 
 const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
   const axiosWithAuth = useAxiosWithAuth()
-  const router = useRouter()
+  const { setDetailPage } = useMessagePageState()
   const { targetId, conversationId } = message
   const listItemRef = useRef(null)
   const deleteOneMessage = () => {
@@ -117,9 +117,7 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
       <SwappableMessageItem eventHandler={deleteOneMessage}>
         <ListItemButton
           ref={listItemRef}
-          onClick={() =>
-            router.push(`/my-page/message/${conversationId}?target=${targetId}`)
-          }
+          onClick={() => setDetailPage(conversationId, targetId)}
           sx={{ flex: '1 0 100%' }}
         >
           <MessageItemBase message={message} />

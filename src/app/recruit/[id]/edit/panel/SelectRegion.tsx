@@ -7,23 +7,29 @@ import { koreaDistrict } from '@/constant/DistrictData'
 
 interface BasicSelectProps {
   setValue: Dispatch<SetStateAction<string[]>>
+  region?: string[]
 }
 
-export default function SelectRegion({ setValue }: BasicSelectProps) {
+export default function SelectRegion({ setValue, region }: BasicSelectProps) {
   const [largeScaleData, setLargeScaleData] = useState<string>('')
   const [smallScaleData, setSmallScaleData] = useState<string>('')
 
   const handleChangeLargeScaleData = (event: SelectChangeEvent) => {
     setLargeScaleData(event.target.value as string)
+    setValue([event.target.value as string, smallScaleData])
   }
 
   const handleChangeSmallScaleData = (event: SelectChangeEvent) => {
     setSmallScaleData(event.target.value as string)
+    setValue([largeScaleData, event.target.value as string])
   }
 
   useEffect(() => {
-    setValue([largeScaleData, smallScaleData])
-  }, [largeScaleData, smallScaleData])
+    if (region) {
+      setLargeScaleData(region[0])
+      setSmallScaleData(region[1])
+    }
+  }, [region])
 
   let options1 = [
     koreaDistrict.largeScaleData.map((value) => {

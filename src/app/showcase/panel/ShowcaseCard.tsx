@@ -7,8 +7,6 @@ import {
   CardContent,
   IconButton,
   Stack,
-  SvgIcon,
-  ToggleButton,
   Typography,
 } from '@mui/material'
 import { MouseEvent, useCallback, useState } from 'react'
@@ -17,6 +15,8 @@ import { ICardData } from './types'
 import useAxiosWithAuth from '@/api/config'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import FavoriteIcon from '@mui/icons-material/Favorite'
+import { CalendarIcon, TagIcon, ThreeDotsIcon } from './icons'
+import Image from 'next/image'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -65,6 +65,7 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
 
   const clickFavorite = useCallback(() => {
     if (!data) return alert('로그인이 필요합니다.')
+    if (data.favorite) return alert('이미 관심을 추가한 팀입니다.')
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${data.id}`,
@@ -90,129 +91,101 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
           {data !== undefined ? (
             <CardActions onClick={handleCardClick}>
               <CardContent>
-                <Stack spacing={3}>
+                <Stack spacing={'1.5rem'}>
                   <Stack direction={'row'} height={'1.5rem'}>
-                    <Stack direction={'row'} spacing={1}>
+                    <Stack direction={'row'} spacing={'0.5rem'}>
                       <Avatar
                         src={data.image!}
                         sx={{ width: '1.5rem', height: '1.5rem' }}
                       />
-                      <Typography width={'11rem'}>{data.name}</Typography>
+                      <Typography color={'text.alternative'} width={'11rem'}>
+                        {data.name}
+                      </Typography>
                     </Stack>
-                    <Stack direction={'row'} spacing={1}>
-                      <IconButton
-                        onClick={clickLike}
-                        color="primary"
-                        size="small"
-                      >
-                        <ThumbUpIcon />
-                      </IconButton>
-                      <Typography>{data.like}</Typography>
+                    <Stack direction={'row'} spacing={'1rem'}>
+                      <Stack direction={'row'} spacing={'0.5rem'}>
+                        <IconButton
+                          onClick={clickLike}
+                          color={data.liked ? 'primary' : 'inherit'}
+                          size="small"
+                          sx={{
+                            m: 0,
+                            p: 0,
+                          }}
+                        >
+                          <ThumbUpIcon />
+                        </IconButton>
+                        <Typography>{data.like}</Typography>
+                      </Stack>
 
-                      <ToggleButton
-                        value={data.favorite}
+                      <IconButton
                         onClick={clickFavorite}
-                        selected={data.favorite}
-                        color="primary"
+                        color={data.favorite ? 'primary' : 'inherit'}
+                        size="small"
+                        sx={{
+                          m: 0,
+                          p: 0,
+                        }}
                       >
                         <FavoriteIcon />
-                      </ToggleButton>
+                      </IconButton>
+
+                      <IconButton
+                        color="inherit"
+                        sx={{
+                          m: 0,
+                          p: 0,
+                        }}
+                      >
+                        <ThreeDotsIcon />
+                      </IconButton>
                     </Stack>
                   </Stack>
                   <Stack minHeight={'22.5rem'}>
                     <Typography>{data.description}</Typography>
                   </Stack>
-                  <Stack>
-                    <Stack direction={'row'} spacing={2}>
-                      <Stack direction={'row'} spacing={1}>
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <path
-                              d="M12.6667 2.67188H3.33333C2.59695 2.67188 2 3.26883 2 4.00521V13.3385C2 14.0749 2.59695 14.6719 3.33333 14.6719H12.6667C13.403 14.6719 14 14.0749 14 13.3385V4.00521C14 3.26883 13.403 2.67188 12.6667 2.67188Z"
-                              stroke="#9B9B9B"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M10.6641 1.32812V3.99479"
-                              stroke="#9B9B9B"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M5.33594 1.32812V3.99479"
-                              stroke="#9B9B9B"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M2 6.67188H14"
-                              stroke="#9B9B9B"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </SvgIcon>
+                  <Stack spacing={'0.25rem'}>
+                    <Stack
+                      direction={'row'}
+                      spacing={'1rem'}
+                      textAlign={'center'}
+                    >
+                      <Stack direction={'row'} spacing={'0.5rem'}>
+                        <CalendarIcon />
+                        <Typography color={'text.alternative'}>
+                          시작일
+                        </Typography>
                         <Typography>
-                          시작일: {toStringByFormatting(new Date(data.start))}
+                          {toStringByFormatting(new Date(data.start))}
                         </Typography>
                       </Stack>
-                      <Stack direction={'row'} spacing={1}>
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <path
-                              d="M12.6667 2.67188H3.33333C2.59695 2.67188 2 3.26883 2 4.00521V13.3385C2 14.0749 2.59695 14.6719 3.33333 14.6719H12.6667C13.403 14.6719 14 14.0749 14 13.3385V4.00521C14 3.26883 13.403 2.67188 12.6667 2.67188Z"
-                              stroke="#9B9B9B"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M10.6641 1.32812V3.99479"
-                              stroke="#9B9B9B"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M5.33594 1.32812V3.99479"
-                              stroke="#9B9B9B"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M2 6.67188H14"
-                              stroke="#9B9B9B"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </SvgIcon>
-                        <Typography>종료일:</Typography>
+                      <Stack direction={'row'} spacing={'0.5rem'}>
+                        <CalendarIcon />
+                        <Typography color={'text.alternative'}>
+                          종료일
+                        </Typography>
                         <Typography>
                           {toStringByFormatting(new Date(data.end))}
                         </Typography>
                       </Stack>
                     </Stack>
-                    <Typography>기술 스택</Typography>
+                    <Stack
+                      direction={'row'}
+                      spacing={'1rem'}
+                      textAlign={'center'}
+                    >
+                      <Stack direction={'row'} spacing={'0.5rem'}>
+                        <TagIcon />
+                        <Typography color={'text.alternative'}>
+                          기술스택
+                        </Typography>
+                      </Stack>
+                      {data.skill.map((skill, index) => (
+                        <Typography key={skill.id + index}>
+                          {skill.name}
+                        </Typography>
+                      ))}
+                    </Stack>
                   </Stack>
                 </Stack>
               </CardContent>
@@ -248,10 +221,13 @@ const ShowcaseCard = ({ data }: { data: ICardData | undefined }) => {
         </>
       ) : (
         <>
-          <Avatar
+          <Image
             src={data ? data.image! : '/images/icons/icon-192x192.png'}
-            sx={{ width: '100%', height: '100%', mt: 10 }}
-            variant="rounded"
+            width={300}
+            height={500}
+            alt="team image"
+            // sx={{ width: '100%', height: '100%', mt: 10 }}
+            // variant="rounded"
           />
           <Card
             sx={{
