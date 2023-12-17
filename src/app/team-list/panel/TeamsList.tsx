@@ -30,12 +30,11 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
         maxHeight={'55vh'}
         flex={4}
       >
-        {prop.length === 0 && (
+        {prop.length ? (
+          prop.map((team, index) => <TeamCard key={index} team={team} />)
+        ) : (
           <Typography>아직 참가한 팀이 없습니다.</Typography>
         )}
-        {prop.map((team, index) => (
-          <TeamCard key={index} team={team} />
-        ))}
       </Stack>
     </Stack>
   )
