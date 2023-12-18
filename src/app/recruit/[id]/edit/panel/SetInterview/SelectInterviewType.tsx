@@ -27,10 +27,10 @@ export const SelectInterviewType = ({
           onChange={handleChange}
         >
           {[
-            { value: 'open', label: '주관식' },
-            { value: 'close', label: '객관식' },
-            { value: 'check', label: '체크박스' },
-            { value: 'ratio', label: '선형배율' },
+            { value: 'OPEN', label: '주관식' },
+            { value: 'CLOSE', label: '객관식' },
+            { value: 'CHECK', label: '체크박스' },
+            { value: 'RATIO', label: '선형배율' },
           ].map((item) => {
             return (
               <MenuItem
