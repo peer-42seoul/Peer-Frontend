@@ -14,6 +14,7 @@ export const swappableWrapper = {
 export const removeButton = {
   boxSizing: 'border-box',
   width: '2.5rem',
+  height: '4.5rem',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
