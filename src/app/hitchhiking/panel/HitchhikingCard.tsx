@@ -7,7 +7,6 @@ import {
   CardContent,
   SxProps,
   Typography,
-  Box,
   Card,
   CardHeader,
   Chip,
@@ -17,6 +16,7 @@ import {
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Members from './Members'
+import DropdownMenu from './DropdowntMenu'
 
 interface IHitchhikingCardBack {
   content: string
@@ -29,9 +29,8 @@ const HitchhikingCardBack = ({
   sx,
   onClick,
   flipped,
-  isProject,
-} // title,
-: {
+  isProject, // title,
+}: {
   postId: number
   sx?: SxProps
   onClick?: (e: React.MouseEvent) => void
@@ -117,7 +116,7 @@ const HitchhikingCardBack = ({
                   },
                 }}
               />
-              <Box sx={{ backgroundColor: 'background.secondary' }}>menu</Box>
+              <DropdownMenu />
             </Stack>
           </CardContent>
           <CardHeader
