@@ -103,6 +103,7 @@ const MessageContainer = ({
           />
         ) : (
           <SearchBar
+            isPc={isPc}
             setSearchKeyword={setSearchKeyword}
             handleMessageSearch={handleMessageSearch}
           />

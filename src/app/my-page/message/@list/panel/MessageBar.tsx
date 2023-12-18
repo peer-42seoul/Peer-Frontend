@@ -12,6 +12,7 @@ interface IContainerHeaderProps {
 }
 
 interface ISearchBarProps {
+  isPc: boolean
   setSearchKeyword: (keyword: string) => void
   handleMessageSearch: () => void
 }
@@ -64,16 +65,17 @@ export const ContainerHeader = ({
 export const SearchBar = ({
   setSearchKeyword,
   handleMessageSearch,
+  isPc,
 }: ISearchBarProps) => {
   return (
     <Stack spacing={'1.5rem'}>
       <Stack
-        sx={style.searchInputWrapper}
+        sx={isPc ? style.pcSearchWrapper : style.mobileSearchWrapper}
         direction={'row'}
         alignItems={'center'}
         spacing={'0.38rem'}
       >
-        <SearchIcon />
+        <SearchIcon width={'1.25rem'} height={'1.25rem'} />
         <InputBase
           sx={style.searchInput}
           onChange={(e) => setSearchKeyword(e.target.value)}
