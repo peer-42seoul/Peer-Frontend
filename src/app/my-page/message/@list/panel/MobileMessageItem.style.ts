@@ -4,6 +4,10 @@ export const swappableWrapper = {
   boxSizing: 'border-box',
   width: '100%',
   height: '4.5rem',
+  marginBottom: '1rem',
+  borderBottomWidth: '1px',
+  borderBottomStyle: 'solid',
+  borderBottomColor: 'line.alternative',
   transition: `transform ${TRANSITION_DURATION}`,
 }
 
