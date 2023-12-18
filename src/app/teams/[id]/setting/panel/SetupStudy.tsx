@@ -90,7 +90,8 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
   })
 
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
+    if (!e.target.files) return
+    const file = e.target.files[0]
     if (file) {
       const reader = new FileReader()
 
