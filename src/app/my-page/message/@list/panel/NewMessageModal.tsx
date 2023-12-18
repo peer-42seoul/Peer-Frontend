@@ -1,15 +1,18 @@
 'use client'
 
-import { IconButton, InputBase, Popper, Stack, Typography } from '@mui/material'
 import React, { useCallback, useRef, useState } from 'react'
+import { IconButton, InputBase, Popper, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import { IMessageListData, IMessageTarget } from '@/types/IMessage'
+import CuButton from '@/components/CuButton'
 import CuModal from '@/components/CuModal'
+import useToast from '@/hook/useToast'
+import { SearchIcon, CloseIcon } from '@/icons'
+import { IMessageListData, IMessageTarget } from '@/types/IMessage'
 import NewMessageForm from './NewMessageForm'
 import TargetList from './TargetList'
-import { SearchIcon, CloseIcon } from '@/icons'
-import CuButton from '@/components/CuButton'
 import * as style from './NewMessageModal.style'
+import CuToast from '@/components/CuToast'
+import { isAxiosError } from 'axios'
 
 interface INewMessageModalProps {
   isOpen: boolean
@@ -25,12 +28,20 @@ const NewMessageModal = ({
   const [keyword, setKeyword] = useState('')
   const [targetUser, setTargetUser] = useState<IMessageTarget | undefined>()
   const [messageTargetList, setMessageTargetList] = useState<IMessageTarget[]>()
+  const {
+    isOpen: isToastOpen,
+    openToast,
+    closeToast,
+    toastMessage,
+    setToastMessage,
+  } = useToast()
   const axiosInstance = useAxiosWithAuth()
   const ref = useRef<HTMLDivElement>(null)
 
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {
-      alert('검색어를 입력하세요.')
+      setToastMessage('검색어를 입력해주세요.')
+      openToast()
       return
     }
 
@@ -42,7 +53,17 @@ const NewMessageModal = ({
         ? setMessageTargetList(response.data)
         : setMessageTargetList([])
     } catch (error) {
-      alert('검색에 실패하였습니다. 다시 시도해주세요.')
+      if (
+        isAxiosError(error) &&
+        error.response?.status === 400 &&
+        error.response?.data?.messages
+      ) {
+        setToastMessage(error.response.data.messages[0])
+        openToast()
+      } else {
+        setToastMessage('검색에 실패했습니다. 다시 시도해주세요.')
+        openToast()
+      }
     }
   }, [keyword])
 
@@ -72,69 +93,74 @@ const NewMessageModal = ({
         onClick: handleClose,
       }}
     >
-      <Stack alignItems={'center'} spacing={'1rem'} width={'31rem'}>
-        <Stack spacing={'0.25rem'} width={'100%'}>
-          <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-            받는 이
-          </Typography>
-          <Stack
-            direction={'row'}
-            alignItems={'center'}
-            spacing={'0.38rem'}
-            sx={style.searchInput}
-            ref={ref}
-          >
-            <SearchIcon sx={style.searchIcon} />
-            <InputBase
-              fullWidth
-              value={targetUser ? targetUser.targetNickname : keyword}
-              disabled={!!targetUser}
-              placeholder={'닉네임 혹은 이메일을 입력하세요.'}
-              sx={style.inputBase}
-              onChange={(e) => setKeyword(e.target.value)}
-            />
-            <CuButton
-              message={targetUser ? '취소' : '검색'}
-              variant={'text'}
-              action={modalButtonAction}
-              TypographyProps={{
-                variant: 'CaptionEmphasis',
-                color: targetUser ? 'purple.strong' : 'text.normal',
-              }}
+      <>
+        <Stack alignItems={'center'} spacing={'1rem'} width={'31rem'}>
+          <Stack spacing={'0.25rem'} width={'100%'}>
+            <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
+              받는 이
+            </Typography>
+            <Stack
+              direction={'row'}
+              alignItems={'center'}
+              spacing={'0.38rem'}
+              sx={style.searchInput}
+              ref={ref}
+            >
+              <SearchIcon sx={style.searchIcon} />
+              <InputBase
+                fullWidth
+                value={targetUser ? targetUser.targetNickname : keyword}
+                disabled={!!targetUser}
+                placeholder={'닉네임 혹은 이메일을 입력하세요.'}
+                sx={style.inputBase}
+                onChange={(e) => setKeyword(e.target.value)}
+              />
+              <CuButton
+                message={targetUser ? '취소' : '검색'}
+                variant={'text'}
+                action={modalButtonAction}
+                TypographyProps={{
+                  variant: 'CaptionEmphasis',
+                  color: targetUser ? 'purple.strong' : 'text.normal',
+                }}
+              />
+            </Stack>
+            <Popper
+              sx={style.targetListPopper}
+              open={!!messageTargetList}
+              anchorEl={ref.current}
+            >
+              {messageTargetList ? (
+                <Stack alignItems={'flex-end'}>
+                  <IconButton onClick={() => setMessageTargetList(undefined)}>
+                    <CloseIcon sx={style.closeIcon} />
+                  </IconButton>
+                </Stack>
+              ) : null}
+              <TargetList
+                messageTargetState={{
+                  targetList: messageTargetList,
+                  resetList: () => setMessageTargetList(undefined),
+                }}
+                setTargetUser={setTargetUser}
+              />
+            </Popper>
+          </Stack>
+          <Stack spacing={'0.25rem'} width={'100%'}>
+            <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
+              내용
+            </Typography>
+            <NewMessageForm
+              userInfo={targetUser}
+              handleClose={handleClose}
+              setMessageData={setMessageData}
             />
           </Stack>
-          <Popper
-            sx={style.targetListPopper}
-            open={!!messageTargetList}
-            anchorEl={ref.current}
-          >
-            {messageTargetList ? (
-              <Stack alignItems={'flex-end'}>
-                <IconButton onClick={() => setMessageTargetList(undefined)}>
-                  <CloseIcon sx={style.closeIcon} />
-                </IconButton>
-              </Stack>
-            ) : null}
-            <TargetList
-              messageTargetState={{
-                targetList: messageTargetList,
-                resetList: () => setMessageTargetList(undefined),
-              }}
-              setTargetUser={setTargetUser}
-            />
-          </Popper>
         </Stack>
-        <Stack spacing={'0.25rem'} width={'100%'}>
-          <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-            내용
-          </Typography>
-          <NewMessageForm
-            userInfo={targetUser}
-            handleClose={handleClose}
-            setMessageData={setMessageData}
-          />
-        </Stack>
-      </Stack>
+        <CuToast open={isToastOpen} onClose={closeToast} severity={'error'}>
+          {toastMessage}
+        </CuToast>
+      </>
     </CuModal>
   )
 }
