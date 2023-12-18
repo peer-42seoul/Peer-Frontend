@@ -17,4 +17,9 @@ export const removeButton = {
   backgroundColor: 'red.tinted',
   borderRadius: '0',
   padding: '0rem 0.25rem',
+  marginLeft: '0.5rem',
+}
+
+export const listItemButton = {
+  flex: '1 0 100%',
 }

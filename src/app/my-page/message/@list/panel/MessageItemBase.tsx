@@ -17,6 +17,7 @@ const MessageItemBase = ({ message }: { message: IMessageListData }) => {
     <>
       <CuAvatar sx={style.pcAvatar} src={targetProfile} />
       <ListItemText
+        sx={style.listItemTextWrapper}
         primary={targetNickname}
         primaryTypographyProps={{
           variant: 'Body2',

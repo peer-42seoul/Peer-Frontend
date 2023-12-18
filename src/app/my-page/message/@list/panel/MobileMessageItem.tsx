@@ -24,7 +24,7 @@ interface IMobileMessageListItemProps {
 
 /* ANCHOR - constants */
 const TOUCH_OFFSET = 20 // 터치 이벤트를 발생시킬 최소 길이
-const DELETE_BUTTON_WIDTH = '2.5rem'
+const DELETE_BUTTON_WIDTH = '3rem' // left margin을 포함한 삭제 버튼의 너비
 
 /* ANCHOR - components */
 const SwappableMessageItem = ({
@@ -127,7 +127,7 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
         disableGutters
         ref={listItemRef}
         onClick={() => setDetailPage(conversationId, targetId)}
-        sx={{ flex: '1 0 100%' }}
+        sx={style.listItemButton}
       >
         <MessageItemBase message={message} />
       </ListItemButton>
