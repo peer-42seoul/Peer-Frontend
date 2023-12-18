@@ -6,6 +6,8 @@ import useMessagePageState from '@/states/useMessagePageState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
 import * as style from './MobileMessageItem.style'
+import useToast from '@/hook/useToast'
+import CuToast from '@/components/CuToast'
 
 /* ANCHOR - interface */
 interface ITouchState {
@@ -110,28 +112,34 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
   const { setDetailPage } = useMessagePageState()
   const { targetId, conversationId } = message
   const listItemRef = useRef(null)
+  const { isOpen, openToast, closeToast } = useToast()
+
   const deleteOneMessage = () => {
     axiosWithAuth
-      .delete('/api/v1/message/delete-message', {
+      .delete('/api/v1/message/delete-messdage', {
         data: { target: [{ targetId }] },
       })
       .catch(() => {
-        // 보완 예정
-        alert('쪽지 삭제에 실패했습니다.')
+        openToast()
       })
   }
 
   return (
-    <SwappableMessageItem eventHandler={deleteOneMessage}>
-      <ListItemButton
-        disableGutters
-        ref={listItemRef}
-        onClick={() => setDetailPage(conversationId, targetId)}
-        sx={style.listItemButton}
-      >
-        <MessageItemBase message={message} />
-      </ListItemButton>
-    </SwappableMessageItem>
+    <>
+      <SwappableMessageItem eventHandler={deleteOneMessage}>
+        <ListItemButton
+          disableGutters
+          ref={listItemRef}
+          onClick={() => setDetailPage(conversationId, targetId)}
+          sx={style.listItemButton}
+        >
+          <MessageItemBase message={message} />
+        </ListItemButton>
+      </SwappableMessageItem>
+      <CuToast open={isOpen} onClose={closeToast} severity="error">
+        삭제에 실패하였습니다.
+      </CuToast>
+    </>
   )
 }
 
