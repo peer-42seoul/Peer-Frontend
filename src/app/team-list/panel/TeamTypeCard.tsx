@@ -4,7 +4,7 @@ import { Box, Theme, Typography } from '@mui/material'
 const TeamTypeCard = ({ type }: { type: TeamType }) => {
   return (
     <Box
-      width={'30rem'}
+      width={'5rem'}
       sx={{
         py: '0.5rem',
         px: '1rem',

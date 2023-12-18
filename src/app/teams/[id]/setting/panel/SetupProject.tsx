@@ -179,7 +179,7 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
                     maxRows={1}
                     inputProps={{
                       style: {
-                        padding: '2.5rem',
+                        padding: '0.5rem',
                       },
                     }}
                     {...register('name', {

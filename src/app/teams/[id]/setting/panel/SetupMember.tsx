@@ -16,6 +16,7 @@ import { useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
+import { comfirmModalStyle } from './styles'
 
 interface ISetupMember {
   team: IMember[]
@@ -119,7 +120,7 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
 
   return (
     <>
-      <Grid container spacing={2} m={1}>
+      <Grid container spacing={'1rem'} m={'0.5rem'} overflow={'hidden'}>
         {members.map((member, index) => (
           <Grid
             component="div"
@@ -164,7 +165,7 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
       </Grid>
 
       <Modal open={isChangeOpen} onClose={closeChangeModal}>
-        <Box>
+        <Box sx={comfirmModalStyle}>
           <Typography>역할 변경</Typography>
           {/* <FormControl>
             <NativeSelect

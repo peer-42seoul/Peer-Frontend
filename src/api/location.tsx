@@ -8,7 +8,7 @@ export const locationData: ILocation[] = [
     name: '선택안함',
   },
   {
-    name: '서울시',
+    name: '서울특별시',
     subArea: [
       '강남구',
       '강동구',

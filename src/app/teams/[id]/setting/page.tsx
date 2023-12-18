@@ -30,7 +30,6 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       spacing={2}
       direction={'column'}
       flex={4}
-      border="1px solid"
       borderRadius={2}
       padding={2}
     >
@@ -44,10 +43,9 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
             <>
               <Card
                 sx={{
-                  borderRadius: '10px',
-                  p: 3,
+                  borderRadius: '1rem',
+                  p: '1.5rem',
                   height: 400,
-                  overflow: 'scroll',
                 }}
               >
                 <Stack direction={'row'} justifyContent={'space-between'}>
@@ -55,7 +53,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
 
                   <Button
                     onClick={openApplicant}
-                    sx={{ mt: 1, width: '9rem' }}
+                    sx={{ mt: '0.5rem', width: '9rem' }}
                     variant="contained"
                     color="primary"
                     fullWidth

@@ -16,9 +16,9 @@ const AddNewJob = () => {
     max: 1,
   })
 
-  const addNewJobNumber = () => setNewJob({ ...newJob, max: newJob.max + 1 })
+  const increaseNumber = () => setNewJob({ ...newJob, max: newJob.max + 1 })
 
-  const removeNewJobNumber = () => {
+  const decreaseNumber = () => {
     if (newJob.max === 1) return
     setNewJob({ ...newJob, max: newJob.max - 1 })
   }
@@ -31,11 +31,11 @@ const AddNewJob = () => {
     >
       <TextField sx={{ width: '20rem' }} />
       <Stack direction={'row'} alignItems={'center'}>
-        <IconButton onClick={removeNewJobNumber}>
+        <IconButton onClick={decreaseNumber}>
           <Typography>-</Typography>
         </IconButton>
         <Typography>{newJob.max}</Typography>
-        <IconButton onClick={addNewJobNumber}>
+        <IconButton onClick={increaseNumber}>
           <Typography>+</Typography>
         </IconButton>
       </Stack>

@@ -21,7 +21,7 @@ const mockJobs: Job[] = [
 
 const TeamJobAdd = () => {
   return (
-    <Card sx={{ p: 3, borderRadius: '1rem' }}>
+    <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
       <Stack spacing={2}>
         <Typography>팀원 추가</Typography>
         <Card
