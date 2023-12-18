@@ -29,22 +29,28 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
       key={team.id}
       sx={{
         overflow: 'visible',
-        py: 4,
-        px: 3,
+        py: '2rem',
+        px: '1.5rem',
         boxShadow: 'none',
-        borderRadius: 3,
+        borderRadius: '1.5rem',
       }}
     >
       <CardActionArea onClick={() => router.push(`/teams/${team.id}`)}>
-        <Stack direction={isPc ? 'row' : 'column'} spacing={1} my={1}>
+        <Stack
+          direction={isPc ? 'row' : 'column'}
+          spacing={'0.5rem'}
+          my={'0.5rem'}
+        >
           {TeamType(team.type)}
-          <Typography sx={isPc ? undefined : { height: '4rem', overflow: 'hidden' }}>
+          <Typography
+            sx={isPc ? undefined : { height: '4rem', overflow: 'hidden' }}
+          >
             {team.name}
           </Typography>
         </Stack>
-        <Stack direction={isPc ? 'row' : 'column'} spacing={1}>
-          <Stack direction={'row'} spacing={isPc ? 1 : 3}>
-            <Stack direction={'row'} spacing={0.5} alignItems={'center'}>
+        <Stack direction={isPc ? 'row' : 'column'} spacing={'0.5rem'}>
+          <Stack direction={'row'} spacing={isPc ? '0.5rem' : '1.5rem'}>
+            <Stack direction={'row'} spacing={'0.25rem'} alignItems={'center'}>
               <Stack direction={'row'} alignItems={'center'}>
                 <TargetIcon />
                 <Typography fontSize={'0.75rem'} color={'text.alternative'}>
@@ -55,7 +61,7 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
                 {team.dueTo}
               </Typography>
             </Stack>
-            <Stack direction={'row'} spacing={0.5} alignItems={'center'}>
+            <Stack direction={'row'} spacing={'0.25rem'} alignItems={'center'}>
               <Stack direction={'row'} alignItems={'center'}>
                 <GeoIcon />
                 <Typography fontSize={'0.75rem'} color={'text.alternative'}>
@@ -67,7 +73,7 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
               </Typography>
             </Stack>
           </Stack>
-          <Stack direction={'row'} spacing={0.5} alignItems={'center'}>
+          <Stack direction={'row'} spacing={'0.25rem'} alignItems={'center'}>
             <Stack direction={'row'} alignItems={'center'}>
               <WifiIcon />
               <Typography fontSize={'0.75rem'} color={'text.alternative'}>
@@ -75,11 +81,9 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
               </Typography>
             </Stack>
             <Typography fontSize={'0.75rem'} color={'text.alternative'}>
-              {team.operationFormat === TeamOperationForm.MIX
-                ? '온/오프라인'
-                : team.operationFormat === TeamOperationForm.OFFLINE
-                  ? '오프라인'
-                  : '온라인'}
+              {team.operationFormat === TeamOperationForm.ONLINE && '온라인'}
+              {team.operationFormat === TeamOperationForm.OFFLINE && '오프라인'}
+              {team.operationFormat === TeamOperationForm.MIX && '온/오프라인'}
             </Typography>
           </Stack>
         </Stack>

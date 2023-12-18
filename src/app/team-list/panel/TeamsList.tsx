@@ -10,9 +10,14 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
   const { showTeams } = useShowTeams()
 
   return (
-    <Stack spacing={1} sx={{ p: 1 }} height={'75vh'} flex={4}>
+    <Stack
+      spacing={'0.2rem'}
+      sx={{ p: '0.25rem' }}
+      height={'75vh'}
+      flex={'2rem'}
+    >
       <Stack>
-        <Typography fontWeight={'bold'} my={2}>
+        <Typography fontWeight={'bold'} my={'1rem'}>
           {showTeams === TeamStatus.RECRUITING
             ? '모집 중'
             : showTeams === TeamStatus.COMPLETE
@@ -23,12 +28,12 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
         </Typography>
       </Stack>
       <Stack
-        spacing={1}
+        spacing={'0.5rem'}
         overflow={'auto'}
-        sx={{ p: 1 }}
+        sx={{ p: '0.5rem' }}
         height={'55vh'}
         maxHeight={'55vh'}
-        flex={4}
+        flex={'2rem'}
       >
         {prop.length ? (
           prop.map((team, index) => <TeamCard key={index} team={team} />)

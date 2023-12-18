@@ -91,7 +91,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
 
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
-    if (e.target.files && e.target.files[0]) {
+    if (file) {
       const reader = new FileReader()
 
       reader.onload = () => {
@@ -131,10 +131,10 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
 
   return (
     <>
-      <Card sx={{ p: 3, borderRadius: '10px' }}>
+      <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
         <Typography>팀상태</Typography>
         <form ref={sendRef} onSubmit={onSubmit}>
-          <Box sx={{ m: 1, p: 1 }}>
+          <Box sx={{ m: '0.5rem', p: '0.5rem' }}>
             <Stack direction={'row'} alignItems={'center'} spacing={'0.5rem'}>
               <Box
                 width={[56, 100]}
@@ -152,7 +152,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                     variant="rounded"
                     src={preview}
                     alt="teamLogo"
-                    sx={{ width: 100, height: 100 }}
+                    sx={{ width: '6.25rem', height: '6.25rem' }}
                   />
                   <input
                     type="file"
@@ -166,7 +166,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
               <Typography>{team.name}</Typography>
             </Stack>
             <Stack direction={'row'} alignItems={'center'}>
-              <Stack direction={'row'} alignItems={'center'} m={1}>
+              <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
                 <PencilClearIcon />
                 <Stack
                   direction={'row'}
@@ -178,7 +178,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                     maxRows={1}
                     inputProps={{
                       style: {
-                        padding: 5,
+                        padding: '2.5rem',
                       },
                     }}
                     {...register('name', {
@@ -198,7 +198,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                   <Typography>{errors.name?.message}</Typography>
                 </Stack>
               </Stack>
-              <Stack direction={'row'} alignItems={'center'} m={1}>
+              <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
                 <TargetClearIcon />
                 <Stack
                   direction={'row'}
@@ -222,8 +222,8 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                           TeamStatus.BEFORE,
                           TeamStatus.ONGOING,
                           TeamStatus.COMPLETE,
-                        ].map((status, idx) => (
-                          <MenuItem key={'status' + idx} value={status}>
+                        ].map((status) => (
+                          <MenuItem key={status} value={status}>
                             {status === TeamStatus.RECRUITING && '모집 중'}
                             {status === TeamStatus.BEFORE && '진행 예정'}
                             {status === TeamStatus.ONGOING && '진행 중'}
@@ -238,7 +238,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
             </Stack>
 
             <Stack direction={'row'} alignItems={'center'}>
-              <Stack direction={'row'} alignItems={'center'} m={1}>
+              <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
                 <PieClearIcon />
                 <Stack
                   direction={'row'}
@@ -252,8 +252,8 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                     defaultValue={team.dueTo}
                     render={({ field }) => (
                       <Select size="small" defaultValue={team.dueTo} {...field}>
-                        {dueList.map((dueTo, idx) => (
-                          <MenuItem key={'dueTo' + idx} value={dueTo}>
+                        {dueList.map((dueTo) => (
+                          <MenuItem key={dueTo} value={dueTo}>
                             {dueTo}
                           </MenuItem>
                         ))}
@@ -262,7 +262,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                   />
                 </Stack>
               </Stack>
-              <Stack direction={'row'} alignItems={'center'} m={1}>
+              <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
                 <WifiClearIcon />
                 <Stack
                   direction={'row'}
@@ -284,8 +284,8 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                           TeamOperationForm.OFFLINE,
                           TeamOperationForm.ONLINE,
                           TeamOperationForm.MIX,
-                        ].map((operation, idx) => (
-                          <MenuItem key={'operation' + idx} value={operation}>
+                        ].map((operation) => (
+                          <MenuItem key={operation} value={operation}>
                             {operation === TeamOperationForm.OFFLINE &&
                               '오프라인'}
                             {operation === TeamOperationForm.ONLINE && '온라인'}
@@ -298,7 +298,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                   />
                 </Stack>
               </Stack>
-              <Stack direction={'row'} alignItems={'center'} m={1}>
+              <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
                 <GeoClearIcon />
                 <Stack
                   direction={'row'}
@@ -316,8 +316,8 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                         defaultValue={team.region[0]}
                         {...field}
                       >
-                        {locationData.map((region, idx) => (
-                          <MenuItem key={'region' + idx} value={region.name}>
+                        {locationData.map((region) => (
+                          <MenuItem key={region.name} value={region.name}>
                             {region.name}
                           </MenuItem>
                         ))}
@@ -339,8 +339,8 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                         )?.subArea ? (
                           locationData
                             .find((region) => region.name === team.region[0])
-                            ?.subArea?.map((region, idx) => (
-                              <MenuItem key={'region' + idx} value={region}>
+                            ?.subArea?.map((region) => (
+                              <MenuItem key={region} value={region}>
                                 {region}
                               </MenuItem>
                             ))
