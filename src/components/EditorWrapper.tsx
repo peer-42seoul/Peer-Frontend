@@ -1,10 +1,13 @@
 // ToastEditorWrapper.tsx
 import dynamic from 'next/dynamic'
 import React from 'react'
-import { Card } from '@mui/material'
 
 interface Props {
   initialValue: string
+  initialEditType?: string
+  previewStyle?: string
+  height?: string
+  theme?: string
 }
 
 const DynamicToastEditor = dynamic(
@@ -13,11 +16,7 @@ const DynamicToastEditor = dynamic(
 )
 
 const ToastEditorWrapper = (props: Props) => {
-  return (
-    <Card>
-      <DynamicToastEditor {...props} />
-    </Card>
-  )
+  return <DynamicToastEditor {...props} />
 }
 
 export default ToastEditorWrapper
