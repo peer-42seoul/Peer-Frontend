@@ -1,4 +1,5 @@
 'use client'
+// import useAxiosWithAuth from '@/api/config' // 백엔드 api 완성 이후 주석 해제
 import PostCard from '@/components/PostCard'
 import { ITag } from '@/types/IPostDetail'
 import {
@@ -11,19 +12,55 @@ import {
   CardHeader,
   Chip,
   Stack,
+  CircularProgress,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+
+interface IHitchhikingCardBack {
+  content: string
+  memberImage: Array<{ url: string }>
+  recruitmentQuota: number
+}
 
 const HitchhikingCardBack = ({
   postId,
   sx,
   onClick,
+  flipped,
+  isProject,
 }: {
   postId: number
   sx?: SxProps
   onClick?: (e: React.MouseEvent) => void
+  flipped?: boolean
+  isProject?: boolean
 }) => {
-  console.log(`HitchhikingCard Back API! ${postId}`)
+  const [data, setData] = useState<IHitchhikingCardBack | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  // const axiosInstance = useAxiosWithAuth()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(`fetchData ${postId}`)
+      setIsLoading(true)
+      // backend api 완성 이후 주석 해제
+      // await axiosInstance
+      //   .get(`/api/v1/hitch/${postId}`)
+      //   .then((res) => {
+      //     setData(res.data)
+      //   })
+      //   .catch((e) => {
+      //     console.log(e)
+      //   })
+      setData({
+        content: 'content',
+        memberImage: [{ url: 'https://picsum.photos/200' }],
+        recruitmentQuota: 8,
+      })
+      setIsLoading(false)
+    }
+    if (!isLoading && !data && flipped) fetchData()
+  }, [flipped])
 
   const handleSeeAllMouse = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -34,8 +71,8 @@ const HitchhikingCardBack = ({
     <Card
       sx={{
         ...sx,
-        // backgroundColor: 'background.primary',
-        backgroundColor: 'text.normal',
+        backgroundColor: 'background.primary',
+        // backgroundColor: 'text.normal',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         transform: 'rotateY(180deg) translate(50%, 0)',
@@ -45,28 +82,41 @@ const HitchhikingCardBack = ({
       // onTouchEnd={onTouchEnd}
       onClick={onClick}
     >
-      <CardHeader>
-        <Stack direction="row" justifyContent={'space-between'}>
-          <Chip label="팀명" />
-          <Box sx={{ backgroundColor: 'background.secondary' }}>menu</Box>
+      {data ? (
+        <>
+          <CardHeader>
+            <Stack direction="row" justifyContent={'space-between'}>
+              <Chip label="팀명" />
+              <Box sx={{ backgroundColor: 'background.secondary' }}>menu</Box>
+            </Stack>
+          </CardHeader>
+          <CardContent>
+            <Typography variant="Body1" color="text.normal">
+              title
+            </Typography>
+          </CardContent>
+          <CardContent>
+            <Typography variant="Caption" color={'text.alternative'}>
+              {data.content}
+            </Typography>
+          </CardContent>
+          <CardContent>
+            <Box sx={{ backgroundColor: 'background.secondary' }}>Avatars</Box>
+          </CardContent>
+          <CardContent>
+            <Button onClick={handleSeeAllMouse}>전체 보기</Button>
+          </CardContent>
+        </>
+      ) : (
+        <Stack
+          justifyContent={'center'}
+          alignItems={'center'}
+          width={1}
+          height={1}
+        >
+          <CircularProgress />
         </Stack>
-      </CardHeader>
-      <CardContent>
-        <Typography variant="Body1" color="text.normal">
-          title
-        </Typography>
-      </CardContent>
-      <CardContent>
-        <Typography variant="Caption" color={'text.alternative'}>
-          모집글 요약
-        </Typography>
-      </CardContent>
-      <CardContent>
-        <Box sx={{ backgroundColor: 'background.secondary' }}>Avatars</Box>
-      </CardContent>
-      <CardContent>
-        <Button onClick={handleSeeAllMouse}>전체 보기</Button>
-      </CardContent>
+      )}
     </Card>
   )
 }
@@ -81,6 +131,7 @@ const HitchhikingCard = ({
   dragged,
   setDragged,
   sx,
+  isProject,
 }: {
   authorImage: string
   teamName: string
@@ -91,6 +142,7 @@ const HitchhikingCard = ({
   sx?: SxProps
   dragged: boolean
   setDragged: React.Dispatch<React.SetStateAction<boolean>>
+  isProject?: boolean
 }) => {
   const [isFlipped, setIsFlipped] = useState(false)
 
@@ -126,7 +178,13 @@ const HitchhikingCard = ({
         }}
         onClick={handleMouseUp}
       />
-      <HitchhikingCardBack postId={postId} sx={sx} onClick={handleMouseUp} />
+      <HitchhikingCardBack
+        postId={postId}
+        sx={sx}
+        onClick={handleMouseUp}
+        flipped={isFlipped}
+        isProject={isProject}
+      />
     </div>
   )
 }
