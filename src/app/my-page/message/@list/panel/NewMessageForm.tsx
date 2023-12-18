@@ -96,7 +96,7 @@ const NewMessageForm = ({
       <CuTextModal
         open={modalOpen}
         title={'쪽지 보내기'}
-        onClose={() => {}}
+        onClose={closeModal}
         containedButton={{
           text: '보내기',
           onClick: () => {
