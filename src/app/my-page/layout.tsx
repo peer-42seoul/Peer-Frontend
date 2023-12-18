@@ -1,25 +1,22 @@
+'use client'
+
 import { Box, Container, Stack } from '@mui/material'
 import React from 'react'
 import NavBar from './panel/NavBar'
+import useMedia from '@/hook/useMedia'
+import * as style from './layout.style'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  const { isPc } = useMedia()
   return (
-    <Container sx={{ maxWidth: '124rem', padding: 0 }}>
+    <Container sx={isPc ? style.pcContainer : style.mobileContainer}>
       <Stack
         justifyContent={'space-between'}
-        width={1}
-        maxWidth={1280}
         direction={'row'}
-        sx={{ flex: '3, 4' }}
+        sx={isPc ? style.pcStack : style.mobileStack}
       >
         <NavBar />
-        <Box
-          sx={{
-            maxWidth: '57rem',
-          }}
-          flexGrow={1}
-          p={[2, 4]}
-        >
+        <Box sx={isPc ? style.pcContentBox : style.mobileContentBox}>
           {children}
         </Box>
       </Stack>
