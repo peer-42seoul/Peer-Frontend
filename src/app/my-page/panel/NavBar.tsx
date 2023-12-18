@@ -1,9 +1,10 @@
 'use client'
 import useMedia from '@/hook/useMedia'
-import { Box, SxProps, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Tab, Tabs, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
+import * as style from './NavBar.style'
 
 type TabValue =
   | 'profile'
@@ -22,17 +23,11 @@ const getTabValue = (path: string) => {
   else return 'profile'
 }
 
-const SubNavBar = ({ sx }: { sx: SxProps }) => {
+const NavBar = () => {
   const router = useRouter()
   const pathName = usePathname()
   const [value, setValue] = useState<TabValue>('profile')
   const { isPc } = useMedia()
-
-  const tabStyle: SxProps = {
-    maxWidth: '15.3rem',
-    padding: '0',
-    width: '100%',
-  }
 
   useEffect(() => {
     setValue(getTabValue(pathName))
@@ -43,56 +38,48 @@ const SubNavBar = ({ sx }: { sx: SxProps }) => {
   }
 
   return (
-    <Box
-      sx={{
-        p: '1.5rem 2rem',
-        ...sx,
-      }}
-    >
+    <Box sx={style.pcNavBar}>
       <Typography>마이페이지</Typography>
       <Tabs
         orientation="vertical"
         value={value}
         onChange={(event, newValue) => setValue(newValue)}
-        sx={{
-          borderColor: 'divider',
-          gap: '0.25rem',
-        }}
+        sx={style.pcTabs}
         variant="fullWidth"
       >
         <Tab
           label="프로필"
           onClick={() => router.push('/my-page/profile')}
           value={'profile'}
-          sx={tabStyle}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
         <Tab
           label="관심리스트"
           onClick={() => router.push('/my-page/interests')}
-          sx={tabStyle}
           value={'interests'}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
         <Tab
           label="쪽지"
           onClick={() => router.push('/my-page/message')}
-          sx={tabStyle}
           value={'message'}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
         <Tab
           label="개인정보"
           onClick={() => router.push('/my-page/privacy')}
-          sx={tabStyle}
           value={'privacy'}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
         <Tab
           label="홈페이지 설정"
           onClick={() => router.push('/my-page/homepage-setting')}
-          sx={tabStyle}
           value={'homepage-setting'}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
       </Tabs>
     </Box>
   )
 }
 
-export default SubNavBar
+export default NavBar
