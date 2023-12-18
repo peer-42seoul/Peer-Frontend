@@ -28,12 +28,14 @@ const HitchhikingCardBack = ({
   onClick,
   flipped,
   isProject,
+  title,
 }: {
   postId: number
   sx?: SxProps
   onClick?: (e: React.MouseEvent) => void
   flipped?: boolean
   isProject?: boolean
+  title: string
 }) => {
   const [data, setData] = useState<IHitchhikingCardBack | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -53,7 +55,8 @@ const HitchhikingCardBack = ({
       //     console.log(e)
       //   })
       setData({
-        content: 'content',
+        content:
+          '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
         memberImage: [{ url: 'https://picsum.photos/200' }],
         recruitmentQuota: 8,
       })
@@ -72,41 +75,107 @@ const HitchhikingCardBack = ({
       sx={{
         ...sx,
         backgroundColor: 'background.primary',
-        // backgroundColor: 'text.normal',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
         transform: 'rotateY(180deg) translate(50%, 0)',
-
         backfaceVisibility: 'hidden',
+        padding: '1rem',
       }}
-      // onTouchEnd={onTouchEnd}
       onClick={onClick}
     >
       {data ? (
-        <>
-          <CardHeader>
-            <Stack direction="row" justifyContent={'space-between'}>
-              <Chip label="팀명" />
+        <Stack
+          direction={'column'}
+          justifyContent={'space-between'}
+          alignItems={'stretch'}
+          height={'100%'}
+          width={'100%'}
+          spacing={'1rem'}
+        >
+          <CardContent sx={{ padding: 0 }}>
+            <Stack
+              direction="row"
+              justifyContent={'space-between'}
+              height={'2.5rem'}
+              alignItems={'center'}
+            >
+              <Chip
+                label={
+                  <Typography variant="Tag" color={'green.normal'}>
+                    {isProject ? '프로젝트' : '스터디'}
+                  </Typography>
+                }
+                sx={{
+                  height: '1.25rem',
+                  padding: '0 6px',
+                  backgroundColor: 'background.tertiary',
+                  borderRadius: '2px',
+                  '& .MuiChip-label': {
+                    padding: '0px',
+                  },
+                }}
+              />
               <Box sx={{ backgroundColor: 'background.secondary' }}>menu</Box>
             </Stack>
-          </CardHeader>
-          <CardContent>
-            <Typography variant="Body1" color="text.normal">
-              title
-            </Typography>
           </CardContent>
-          <CardContent>
-            <Typography variant="Caption" color={'text.alternative'}>
-              {data.content}
+          <CardHeader
+            title={
+              <Typography variant="Body1" color={'text.normal'}>
+                {title}
+              </Typography>
+            }
+            sx={{ padding: 0, maxHeight: '3rem', flexGrow: 1 }}
+          ></CardHeader>
+          <CardContent
+            sx={{
+              flexGrow: 1,
+              padding: 0,
+              // textOverflow: 'ellipsis',
+              // whiteSpace: 'pre-wrap',
+            }}
+          >
+            <Typography
+              variant="Caption"
+              color={'text.alternative'}
+              // component={'div'}
+              sx={{
+                width: '100%',
+                overflow: 'hidden',
+                height: '12rem',
+                lineHeight: '1.2rem',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 10 /* 라인수 */,
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              {data.content.split('\n').map((line) => {
+                return (
+                  <>
+                    {line}
+                    <br />
+                  </>
+                )
+              })}
             </Typography>
           </CardContent>
           <CardContent>
             <Box sx={{ backgroundColor: 'background.secondary' }}>Avatars</Box>
           </CardContent>
-          <CardContent>
-            <Button onClick={handleSeeAllMouse}>전체 보기</Button>
+          <CardContent
+          // sx={{ width: '100%', height: '0.5rem', position: 'relative' }}
+          >
+            <Button
+              onClick={handleSeeAllMouse}
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              전체 보기
+            </Button>
           </CardContent>
-        </>
+        </Stack>
       ) : (
         <Stack
           justifyContent={'center'}
@@ -184,6 +253,7 @@ const HitchhikingCard = ({
         onClick={handleMouseUp}
         flipped={isFlipped}
         isProject={isProject}
+        title={title}
       />
     </div>
   )
