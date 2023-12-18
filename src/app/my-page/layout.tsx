@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <Container sx={isPc ? style.pcContainer : style.mobileContainer}>
       <Stack
         justifyContent={'space-between'}
-        direction={'row'}
+        direction={isPc ? 'row' : 'column'}
         sx={isPc ? style.pcStack : style.mobileStack}
       >
         <NavBar />
