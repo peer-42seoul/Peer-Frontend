@@ -24,7 +24,7 @@ interface IMobileMessageListItemProps {
 
 /* ANCHOR - constants */
 const TOUCH_OFFSET = 20 // 터치 이벤트를 발생시킬 최소 길이
-const DELETE_BUTTON_WIDTH = '10.8%'
+const DELETE_BUTTON_WIDTH = '2.5rem'
 
 /* ANCHOR - components */
 const SwappableMessageItem = ({
@@ -71,28 +71,37 @@ const SwappableMessageItem = ({
   }
 
   return (
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      spacing={0}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
+    <ListItem
+      disablePadding
       sx={{
         ...style.swappableWrapper,
         transform: `translateX(${touchState.diffLength})`,
       }}
     >
-      {children}
-      <CuButton
-        message="삭제"
-        style={{
-          ...style.removeButton,
-          opacity: `${touchState.side === 'LEFT' ? 1 : 0}`,
-        }}
-        action={eventHandler}
-        variant="contained"
-      />
-    </Stack>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        spacing={0}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        width="100%"
+      >
+        {children}
+        <CuButton
+          message="삭제"
+          style={{
+            ...style.removeButton,
+            opacity: `${touchState.side === 'LEFT' ? 1 : 0}`,
+          }}
+          TypographyProps={{
+            variant: 'CaptionEmphasis',
+            color: 'red.strong',
+          }}
+          action={eventHandler}
+          variant="contained"
+        />
+      </Stack>
+    </ListItem>
   )
 }
 
@@ -113,17 +122,16 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
   }
 
   return (
-    <ListItem>
-      <SwappableMessageItem eventHandler={deleteOneMessage}>
-        <ListItemButton
-          ref={listItemRef}
-          onClick={() => setDetailPage(conversationId, targetId)}
-          sx={{ flex: '1 0 100%' }}
-        >
-          <MessageItemBase message={message} />
-        </ListItemButton>
-      </SwappableMessageItem>
-    </ListItem>
+    <SwappableMessageItem eventHandler={deleteOneMessage}>
+      <ListItemButton
+        disableGutters
+        ref={listItemRef}
+        onClick={() => setDetailPage(conversationId, targetId)}
+        sx={{ flex: '1 0 100%' }}
+      >
+        <MessageItemBase message={message} />
+      </ListItemButton>
+    </SwappableMessageItem>
   )
 }
 
