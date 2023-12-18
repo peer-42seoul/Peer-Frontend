@@ -14,7 +14,9 @@ import {
   Stack,
   CircularProgress,
 } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import Members from './Members'
 
 interface IHitchhikingCardBack {
   content: string
@@ -28,8 +30,8 @@ const HitchhikingCardBack = ({
   onClick,
   flipped,
   isProject,
-  title,
-}: {
+} // title,
+: {
   postId: number
   sx?: SxProps
   onClick?: (e: React.MouseEvent) => void
@@ -39,6 +41,8 @@ const HitchhikingCardBack = ({
 }) => {
   const [data, setData] = useState<IHitchhikingCardBack | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const router = useRouter()
+
   // const axiosInstance = useAxiosWithAuth()
 
   useEffect(() => {
@@ -58,16 +62,16 @@ const HitchhikingCardBack = ({
         content:
           '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
         memberImage: [{ url: 'https://picsum.photos/200' }],
-        recruitmentQuota: 8,
+        recruitmentQuota: 10,
       })
       setIsLoading(false)
     }
     if (!isLoading && !data && flipped) fetchData()
   }, [flipped])
 
-  const handleSeeAllMouse = (e: React.MouseEvent) => {
+  const handleSeeAll = (e: React.MouseEvent) => {
     e.stopPropagation()
-    console.log('handleSeeAll')
+    router.push(`/recruit/${postId}`)
   }
 
   return (
@@ -118,8 +122,24 @@ const HitchhikingCardBack = ({
           </CardContent>
           <CardHeader
             title={
-              <Typography variant="Body1" color={'text.normal'}>
-                {title}
+              <Typography
+                variant="Body1"
+                color={'text.normal'}
+                sx={{
+                  width: '100%',
+                  overflow: 'hidden',
+                  height: '46px',
+                  lineHeight: '22.5px',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2 /* 라인수 */,
+                  WebkitBoxOrient: 'vertical',
+                }}
+              >
+                {/* {title} */}
+                제목이 들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이
+                들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이 들어오는
+                자리입니다.
               </Typography>
             }
             sx={{ padding: 0, maxHeight: '3rem', flexGrow: 1 }}
@@ -128,14 +148,11 @@ const HitchhikingCardBack = ({
             sx={{
               flexGrow: 1,
               padding: 0,
-              // textOverflow: 'ellipsis',
-              // whiteSpace: 'pre-wrap',
             }}
           >
             <Typography
               variant="Caption"
               color={'text.alternative'}
-              // component={'div'}
               sx={{
                 width: '100%',
                 overflow: 'hidden',
@@ -157,19 +174,26 @@ const HitchhikingCardBack = ({
               })}
             </Typography>
           </CardContent>
-          <CardContent>
-            <Box sx={{ backgroundColor: 'background.secondary' }}>Avatars</Box>
+          <CardContent sx={{ padding: 0 }}>
+            <Members
+              members={data.memberImage}
+              recruitmentQuota={data.recruitmentQuota}
+            />
           </CardContent>
           <CardContent
-          // sx={{ width: '100%', height: '0.5rem', position: 'relative' }}
+            sx={{ position: 'relative', bottom: 0, height: '2.75rem' }}
           >
             <Button
-              onClick={handleSeeAllMouse}
+              onClick={handleSeeAll}
+              variant="contained"
               sx={{
                 position: 'absolute',
-                top: '50%',
+                top: 0,
                 left: '50%',
-                transform: 'translate(-50%, -50%)',
+                transform: 'translateX(-50%)',
+                marginBottom: '0.75rem',
+                padding: '0.75rem 1rem',
+                height: '2.25rem',
               }}
             >
               전체 보기
