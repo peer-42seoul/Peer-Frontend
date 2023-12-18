@@ -18,13 +18,14 @@ const CardContainer = ({
   cardList,
   update,
   setCardList,
+  isProject,
 }: {
   cardList: Array<IMainCard>
-  isLoading: boolean
   update: () => void
   setCardList: (
     cardList: IMainCard[] | ((prev: IMainCard[]) => IMainCard[]),
   ) => void
+  isProject: boolean
 }) => {
   const [dragged, setDragged] = useState(false)
 
@@ -112,6 +113,7 @@ const CardContainer = ({
                   sx={cardStyle}
                   dragged={dragged}
                   setDragged={setDragged}
+                  isProject={isProject}
                 />
               </motion.div>
             )

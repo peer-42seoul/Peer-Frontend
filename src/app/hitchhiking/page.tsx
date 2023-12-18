@@ -12,12 +12,14 @@ import Interest from './panel/Interest'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
-  const [isProject, setIsProject] = useState(true)
+  const [isProject, setIsProject] = useState(false)
   const [cardList, setCardList] = useState<Array<IMainCard>>([])
 
   const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=STUDY&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
+      isProject ? 'PROJECT' : 'STUDY'
+    }&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
     defaultGetFetcher,
   )
 
@@ -64,9 +66,9 @@ const Hitchhiking = () => {
         {!message ? (
           <CardContainer
             cardList={cardList}
-            isLoading={isLoading}
             update={() => setPage((prev) => (!data?.last ? prev + 1 : prev))}
             setCardList={setCardList}
+            isProject={isProject}
           />
         ) : (
           <Typography>{message}</Typography>
