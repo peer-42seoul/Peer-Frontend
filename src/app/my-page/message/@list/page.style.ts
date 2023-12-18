@@ -1,18 +1,18 @@
-import { Theme } from '@mui/material'
+import { SxProps } from '@mui/material'
 
-export const pcStack = {
+export const pcStack: SxProps = {
   padding: '2rem',
   width: '52.8rem',
-  backgroud: (theme: Theme) => theme.palette.background.primary,
+  backgroud: 'background.primary',
 }
-
-export const mobileStack = {}
 
 export const pcBox = {
   padding: '1.5rem',
 }
 
-export const mobileBox = {}
+export const mobileBox = {
+  padding: '0.5rem 1rem 1rem 1rem',
+}
 
 export const pcSendButton = {
   padding: '0.75rem 1rem',

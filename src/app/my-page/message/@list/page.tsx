@@ -48,7 +48,7 @@ const MessageListPage = () => {
 
   return (
     <>
-      <Stack spacing={'2rem'} sx={isPc ? style.pcStack : style.mobileStack}>
+      <Stack spacing={'2rem'} sx={isPc ? style.pcStack : undefined}>
         {isPc && <NewMessageButton openModal={openModal} />}
         <BackgroundBox mobileSx={style.mobileBox} pcSx={style.pcBox}>
           <MessageContainer
@@ -59,7 +59,6 @@ const MessageListPage = () => {
           />
         </BackgroundBox>
       </Stack>
-      )
       {isOpen && (
         <NewMessageModal
           isOpen={isOpen}

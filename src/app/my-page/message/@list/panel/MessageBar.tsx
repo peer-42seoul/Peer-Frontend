@@ -30,8 +30,12 @@ export const ContainerHeader = ({
   openNewMessageModal,
 }: IContainerHeaderProps) => {
   return (
-    <Stack direction={'row'} justifyContent={'space-between'}>
-      <Typography variant={'Title3Emphasis'}>
+    <Stack
+      direction={'row'}
+      justifyContent={'space-between'}
+      alignItems={'center'}
+    >
+      <Typography variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}>
         {isManageMode ? '대상 리스트 관리' : '대상 리스트'}
       </Typography>
       {isManageMode ? (
@@ -50,7 +54,7 @@ export const ContainerHeader = ({
         />
       ) : (
         <IconButton onClick={openNewMessageModal}>
-          <PlusIcon />
+          <PlusIcon width={'1.5rem'} height={'1.5rem'} />
         </IconButton>
       )}
     </Stack>
