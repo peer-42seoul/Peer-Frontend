@@ -1,5 +1,0 @@
-export { default as HeartIcon } from './HeartIcon'
-export { default as MessageIcon } from './MessageIcon'
-export { default as SettingIcon } from './SettingIcon'
-export { default as SilhouetteIcon } from './SilhouetteIcon'
-export { default as WhaleIcon } from './WhaleIcon'

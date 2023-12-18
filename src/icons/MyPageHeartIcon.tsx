@@ -1,6 +1,6 @@
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
-const HeartIcon = (props: SvgIconProps) => {
+const MyPageHeartIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <svg
@@ -19,4 +19,4 @@ const HeartIcon = (props: SvgIconProps) => {
   )
 }
 
-export default HeartIcon
+export default MyPageHeartIcon

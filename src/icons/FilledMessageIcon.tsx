@@ -1,6 +1,6 @@
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
-const MessageIcon = (props: SvgIconProps) => {
+const FilledMessageIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <svg
@@ -21,4 +21,4 @@ const MessageIcon = (props: SvgIconProps) => {
   )
 }
 
-export default MessageIcon
+export default FilledMessageIcon
