@@ -116,7 +116,7 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
 
   const deleteOneMessage = () => {
     axiosWithAuth
-      .delete('/api/v1/message/delete-messdage', {
+      .delete('/api/v1/message/delete-message', {
         data: { target: [{ targetId }] },
       })
       .catch(() => {
