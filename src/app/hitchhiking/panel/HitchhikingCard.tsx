@@ -1,8 +1,17 @@
 'use client'
 import PostCard from '@/components/PostCard'
 import { ITag } from '@/types/IPostDetail'
-import { Button, CardContent, SxProps, Typography } from '@mui/material'
-import { Box, Card, CardHeader, Chip, Stack } from '@mui/material'
+import {
+  Button,
+  CardContent,
+  SxProps,
+  Typography,
+  Box,
+  Card,
+  CardHeader,
+  Chip,
+  Stack,
+} from '@mui/material'
 import React, { useState } from 'react'
 
 const HitchhikingCardBack = ({
@@ -83,12 +92,12 @@ const HitchhikingCard = ({
   dragged: boolean
   setDragged: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  const [isFlipped, setFlipped] = useState(false)
+  const [isFlipped, setIsFlipped] = useState(false)
 
   const handleMouseUp = (e: React.MouseEvent) => {
     e.stopPropagation()
     if (!dragged) {
-      setFlipped((prev) => !prev)
+      setIsFlipped((prev) => !prev)
     }
     setDragged(false)
   }

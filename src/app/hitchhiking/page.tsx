@@ -10,10 +10,6 @@ import CuToggle from '@/components/CuToggle'
 import useMedia from '@/hook/useMedia'
 import Interest from './panel/Interest'
 
-// 1. 메인페이지 api 긁어오기
-// 2. 메인 카드 컴포넌트 가져오기
-// 3. 틴더 어쩌구 적용
-
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(true)

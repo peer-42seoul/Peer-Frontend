@@ -1,8 +1,7 @@
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import Favorite from '@mui/icons-material/Favorite'
-import { IconButton } from '@mui/material'
 import { motion, useAnimationControls } from 'framer-motion'
 
 const Interest = ({ id }: { id?: number }) => {

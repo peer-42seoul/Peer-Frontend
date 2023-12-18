@@ -3,9 +3,9 @@
 import { IMainCard } from '@/types/IPostDetail'
 import { Box, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import useMedia from '@/hook/useMedia'
 import { motion, AnimatePresence } from 'framer-motion'
 import HitchhikingCard from './HitchhikingCard'
+import { cardStyle } from './HitchhikingCard.style'
 
 enum ESwipeDirection {
   left = 'left',
@@ -26,25 +26,10 @@ const CardContainer = ({
     cardList: IMainCard[] | ((prev: IMainCard[]) => IMainCard[]),
   ) => void
 }) => {
-  const { isPc } = useMedia()
   const [dragged, setDragged] = useState(false)
 
   console.log('cardList')
   console.log(cardList)
-
-  const cardStyle = {
-    backgroundColor: 'background.primary',
-    width: isPc ? '20.5rem' : '90vw',
-    height: '27rem',
-    maxWidth: '20.5rem',
-    borderRadius: '0.75rem',
-    borderWidth: '2px',
-    borderColor: 'line.base',
-    borderStyle: 'solid',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-  }
 
   const checkDragDirection = (x: number, y: number) => {
     if (Math.abs(x) > Math.abs(y)) {
