@@ -1,9 +1,8 @@
 'use client'
 import useMedia from '@/hook/useMedia'
 import { Box, Tab, Tabs, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
 import {
   WhaleIcon,
   MyPageHeartIcon,
