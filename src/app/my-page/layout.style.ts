@@ -5,7 +5,7 @@ export const mobileContainer: SxProps = {}
 
 export const pcStack: SxProps = {
   width: '100%',
-  //   maxWidth: 1280, // 필요한 경우 주석 해제
+  maxWidth: 1280, // 픽셀로 변환?
   flex: '3, 4',
 }
 

@@ -38,7 +38,7 @@ const getTabValue = (path: string) => {
 //   isPc: boolean
 // }
 
-// NOTE : 스타일을 편하게 적용하고 싶은데 외부 컴포넌트로 빼면 스타일이 적용이 안되는 문제가 있음
+// NOTE : 중복 코드를 줄이고 스타일을 편하게 적용하고 싶은데 외부 컴포넌트로 빼면 스타일이 적용이 안되는 문제가 있음
 // const StyledTab = ({ label, onClick, value, icon, isPc }: IStyledTabProps) => {
 //   return (
 //     <Tab
