@@ -1,7 +1,6 @@
 'use client'
 
 import { ReactNode, useEffect } from 'react'
-import { Container } from '@mui/material'
 import useMessagePageState from '@/states/useMessagePageState'
 
 interface IMessageLayoutProps {
@@ -17,9 +16,9 @@ const MessageMain = ({ list, detail }: IMessageLayoutProps) => {
     }
   }, [])
   return (
-    <Container sx={{ height: '90vh' }}>
-      {messagePage === 'DETAIL' ? detail : list}
-    </Container>
+    // <Container sx={{ height: '90vh', padding: 0 }}>
+    <>{messagePage === 'DETAIL' ? detail : list}</>
+    // </Container>
   )
 }
 

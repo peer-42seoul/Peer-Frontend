@@ -12,9 +12,9 @@ export const pcStack: SxProps = {
 export const mobileStack: SxProps = {}
 
 export const pcContentBox: SxProps = {
-  maxWidth: '57rem',
+  maxWidth: '52.8rem',
   flexGrow: 1,
-  p: [2, 4],
+  padding: '2rem',
 }
 
 export const mobileContentBox: SxProps = {}

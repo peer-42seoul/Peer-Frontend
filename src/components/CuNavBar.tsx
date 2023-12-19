@@ -1,6 +1,13 @@
 import { useState, ReactElement, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { Box, Typography, Tabs, Tab, Stack, IconButton } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Stack,
+  IconButton,
+  ToggleButtonGroup,
+  ToggleButton,
+} from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import { ChevronLeft } from '@/icons'
 import * as style from './CuNavBar.style'
@@ -11,6 +18,8 @@ interface ITabInfo {
   onClick: () => void
   value: string
   icon: ReactElement
+  disabled?: boolean
+  new?: boolean
 }
 
 interface ICuNavBarProps {
@@ -51,7 +60,12 @@ const CuNavBar = ({
   return (
     <Box sx={isPc ? style.pcNavBar : style.mobileNavBar}>
       {isPc && (
-        <Stack direction={'row'} justifyContent={'flex-start'}>
+        <Stack
+          direction={'row'}
+          justifyContent={'flex-start'}
+          alignItems={'center'}
+          height={'2.5rem'}
+        >
           {prevButtonAction ? (
             <IconButton onClick={prevButtonAction}>
               <ChevronLeft width={'1.5rem'} height={'1.5rem'} />
@@ -60,27 +74,82 @@ const CuNavBar = ({
           <Typography variant={'Body2Emphasis'}>{title}</Typography>
         </Stack>
       )}
-      <Tabs
+      <ToggleButtonGroup
         orientation={isPc ? 'vertical' : 'horizontal'}
         value={value}
         sx={isPc ? style.pcTabs : style.mobileTabs}
-        variant="fullWidth"
-        textColor="primary"
-        centered
+        exclusive
+        onChange={(_event, newValue) => {
+          setValue(newValue)
+        }}
       >
-        {tabData.map((tab, index) => (
-          <Tab
-            key={index}
-            label={isPc ? tab.label : tab.mobileLabel ?? tab.label}
-            onClick={tab.onClick}
-            value={tab.value}
-            icon={tab.icon}
-            iconPosition={isPc ? 'start' : 'top'}
-            sx={isPc ? style.pcTab : style.mobileTab}
-          />
-        ))}
-      </Tabs>
+        <Stack width={'100%'}>
+          {tabData.map((tab, index) =>
+            isPc ? (
+              <PcToggleButton
+                key={index}
+                tab={tab}
+                selected={value === tab.value}
+              />
+            ) : (
+              <MobileToggleButton key={index} tab={tab} />
+            ),
+          )}
+        </Stack>
+      </ToggleButtonGroup>
     </Box>
+  )
+}
+
+const PcToggleButton = ({
+  tab,
+  selected,
+}: {
+  tab: ITabInfo
+  selected: boolean
+}) => {
+  return (
+    <ToggleButton
+      value={tab.value}
+      onClick={tab.onClick}
+      sx={style.pcTab}
+      disabled={tab.disabled}
+      selected={selected}
+    >
+      <Stack direction={'row'} spacing={'0.25rem'} alignItems={'center'}>
+        <Box sx={selected ? style.selectedIconBox : style.iconBox}>
+          {tab.icon}
+        </Box>
+        <Typography
+          variant={'Caption'}
+          color={selected ? 'purple.strong' : 'text.assistive'}
+        >
+          {tab.label}
+        </Typography>
+        {!tab.disabled && tab.new && (
+          <Typography sx={style.newTextBadge} variant={'Caption'}>
+            NEW
+          </Typography>
+        )}
+      </Stack>
+    </ToggleButton>
+  )
+}
+const MobileToggleButton = ({ tab }: { tab: ITabInfo }) => {
+  return (
+    <ToggleButton
+      value={tab.value}
+      onClick={tab.onClick}
+      sx={style.mobileTab}
+      disabled={tab.disabled}
+    >
+      <Stack direction={'column'} spacing={'0.12rem'} sx={style.buttonWrapper}>
+        {tab.icon}
+        <Typography variant={'Caption'}>
+          {tab.mobileLabel ?? tab.label}
+        </Typography>
+      </Stack>
+    </ToggleButton>
   )
 }
 
