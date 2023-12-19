@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button, Menu, MenuItem, Stack, Typography } from '@mui/material'
 import ShareIcon from '@/icons/ShareIcon'
+import MoreHorizontalIcon from '@/icons/MoreHorizontalIcon'
+import ReportIcon from '@/icons/ReportIcon'
 
 const IconMenuItem = ({
   handleClose,
@@ -42,7 +44,7 @@ const DropdownMenu = () => {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        <ShareIcon
+        <MoreHorizontalIcon
           sx={{
             color: 'text.alternative',
             width: '1.25rem',
@@ -75,7 +77,7 @@ const DropdownMenu = () => {
         <IconMenuItem
           handleClose={handleClose}
           icon={
-            <ShareIcon
+            <ReportIcon
               sx={{
                 color: 'text.alternative',
                 width: '1.25rem',

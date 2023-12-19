@@ -12,6 +12,7 @@ import {
   Chip,
   Stack,
   CircularProgress,
+  CardActionArea,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -82,7 +83,6 @@ const HitchhikingCardBack = ({
         backfaceVisibility: 'hidden',
         padding: '1rem',
       }}
-      onClick={onClick}
     >
       {data ? (
         <Stack
@@ -93,13 +93,14 @@ const HitchhikingCardBack = ({
           width={'100%'}
           spacing={'1rem'}
         >
-          <CardContent sx={{ padding: 0 }}>
-            <Stack
-              direction="row"
-              justifyContent={'space-between'}
-              height={'2.5rem'}
-              alignItems={'center'}
-            >
+          <Stack
+            direction="row"
+            justifyContent={'space-between'}
+            height={'2.5rem'}
+            alignItems={'center'}
+            sx={{ width: '100%' }}
+          >
+            <CardContent sx={{ padding: 0, flexGrow: 1 }} onClick={onClick}>
               <Chip
                 label={
                   <Typography variant="Tag" color={'green.normal'}>
@@ -116,9 +117,11 @@ const HitchhikingCardBack = ({
                   },
                 }}
               />
+            </CardContent>
+            <CardActionArea sx={{ padding: 0, width: 'auto' }}>
               <DropdownMenu />
-            </Stack>
-          </CardContent>
+            </CardActionArea>
+          </Stack>
           <CardHeader
             title={
               <Typography
@@ -142,12 +145,14 @@ const HitchhikingCardBack = ({
               </Typography>
             }
             sx={{ padding: 0, maxHeight: '3rem', flexGrow: 1 }}
+            onClick={onClick}
           ></CardHeader>
           <CardContent
             sx={{
               flexGrow: 1,
               padding: 0,
             }}
+            onClick={onClick}
           >
             <Typography
               variant="Caption"
@@ -173,7 +178,7 @@ const HitchhikingCardBack = ({
               })}
             </Typography>
           </CardContent>
-          <CardContent sx={{ padding: 0 }}>
+          <CardContent sx={{ padding: 0 }} onClick={onClick}>
             <Members
               members={data.memberImage}
               recruitmentQuota={data.recruitmentQuota}
@@ -181,6 +186,7 @@ const HitchhikingCardBack = ({
           </CardContent>
           <CardContent
             sx={{ position: 'relative', bottom: 0, height: '2.75rem' }}
+            onClick={onClick}
           >
             <Button
               onClick={handleSeeAll}
