@@ -11,6 +11,11 @@ export const pcTab = {
   maxWidth: '15.3rem',
   padding: 0,
   width: '100%',
+  '& .MuiTab-iconWrapper': {
+    width: '0.875rem',
+    height: '0.875rem',
+    marginRight: '0.25rem',
+  },
 }
 
 export const mobileTab = {
@@ -20,6 +25,11 @@ export const mobileTab = {
   minWidth: '3.6875rem', // mui 기본 설정 override
   padding: 0,
   fontSize: '0.6875rem',
+  '& .MuiTab-iconWrapper': {
+    width: '0.875rem',
+    height: '0.875rem',
+    marginBottom: '0.12rem',
+  },
 }
 
 export const pcTabs = {

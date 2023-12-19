@@ -66,6 +66,7 @@ const CuNavBar = ({
         sx={isPc ? style.pcTabs : style.mobileTabs}
         variant="fullWidth"
         textColor="primary"
+        centered
       >
         {tabData.map((tab, index) => (
           <Tab
