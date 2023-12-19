@@ -2,6 +2,10 @@
 
 import { IconButton, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
+import { Job } from '@/app/teams/types/types'
+import useAxiosWithAuth from '@/api/config'
 
 interface NewJob {
   name: string
@@ -9,7 +13,13 @@ interface NewJob {
   max: number
 }
 
-const AddNewJob = () => {
+interface Props {
+  onNewJob: (newJob: Job) => void
+  teamId: string
+}
+
+const AddNewJob = ({ onNewJob, teamId }: Props) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const [newJob, setNewJob] = useState<NewJob>({
     name: '',
     current: 0,
@@ -21,6 +31,25 @@ const AddNewJob = () => {
   const decreaseNumber = () => {
     if (newJob.max === 1) return
     setNewJob({ ...newJob, max: newJob.max - 1 })
+
+    // onNewJob(newJob)
+  }
+
+  const handleAddJob = () => {
+    axiosWithAuth
+      .post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/job/add/${teamId}`,
+        newJob,
+      )
+      .then((res) => {
+        console.log(res)
+        if (res.status === 200) {
+          onNewJob(res.data)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
@@ -28,24 +57,25 @@ const AddNewJob = () => {
       direction={'row'}
       alignItems={'center'}
       justifyContent={'space-between'}
+      px={'4rem'}
+      paddingTop={'1rem'}
     >
-      <TextField sx={{ width: '20rem' }} />
+      <TextField
+        placeholder="추가할 직업군을 입력하세요."
+        sx={{ width: '20rem' }}
+      />
       <Stack direction={'row'} alignItems={'center'}>
         <IconButton onClick={decreaseNumber}>
-          <Typography>-</Typography>
+          <RemoveIcon color="primary" />
         </IconButton>
         <Typography>{newJob.max}</Typography>
         <IconButton onClick={increaseNumber}>
-          <Typography>+</Typography>
+          <AddIcon color="primary" />
         </IconButton>
       </Stack>
       <Stack direction={'row'} alignItems={'center'}>
-        <IconButton>
+        <IconButton onClick={handleAddJob}>
           <Typography>추가</Typography>
-        </IconButton>
-
-        <IconButton>
-          <Typography>삭제</Typography>
         </IconButton>
       </Stack>
     </Stack>

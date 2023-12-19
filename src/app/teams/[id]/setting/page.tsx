@@ -38,7 +38,9 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         <>
           <RedirectionRecruit id={params.id} data={data} />
           <SetupPage team={data.team} />
-          {data.team.type === TeamType.PROJECT && <TeamJobAdd />}
+          {data.team.type === TeamType.PROJECT && (
+            <TeamJobAdd teamId={params.id} />
+          )}
           {!showApplicant ? (
             <>
               <Card
