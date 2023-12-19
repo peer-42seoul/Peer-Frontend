@@ -1,13 +1,16 @@
 const TRANSITION_DURATION = '800ms'
 
-export const swappableWrapper = {
-  boxSizing: 'border-box',
-  width: '100%',
-  height: '4.5rem',
+export const messageItem = {
   marginBottom: '1rem',
   borderBottomWidth: '1px',
   borderBottomStyle: 'solid',
   borderBottomColor: 'line.alternative',
+}
+
+export const swappableWrapper = {
+  boxSizing: 'border-box',
+  width: '100%',
+  height: '4.5rem',
   transition: `transform ${TRANSITION_DURATION}`,
 }
 

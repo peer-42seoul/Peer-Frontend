@@ -1,5 +1,5 @@
 import { TouchEvent, useState, ReactNode, useRef } from 'react'
-import { ListItem, ListItemButton, Stack } from '@mui/material'
+import { Box, ListItem, ListItemButton, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMessagePageState from '@/states/useMessagePageState'
@@ -125,7 +125,7 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
   }
 
   return (
-    <>
+    <Box sx={style.messageItem}>
       <SwappableMessageItem eventHandler={deleteOneMessage}>
         <ListItemButton
           disableGutters
@@ -139,7 +139,7 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
       <CuToast open={isOpen} onClose={closeToast} severity="error">
         삭제에 실패하였습니다.
       </CuToast>
-    </>
+    </Box>
   )
 }
 
