@@ -16,7 +16,7 @@ import {
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Members from './Members'
-import DropdownMenu from './DropdowntMenu'
+import DropdownMenu from './DropdownMenu'
 
 interface IHitchhikingCardBack {
   content: string
