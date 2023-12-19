@@ -61,6 +61,7 @@ const LinkForm = ({
                 value={value}
                 placeholder={'링크 이름'}
                 sx={{ width: '12.8rem', height: '2rem' }}
+                autoComplete="off"
               />
             )}
           />
@@ -73,6 +74,7 @@ const LinkForm = ({
                 value={value}
                 placeholder={'링크 주소'}
                 sx={{ width: '12.8rem', height: '2rem' }}
+                autoComplete="off"
               />
             )}
           />
