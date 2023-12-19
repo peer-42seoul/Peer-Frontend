@@ -24,12 +24,23 @@ const selectedTab = {
   },
 }
 
+const disabledTab = {
+  '&.Mui-disabled': {
+    color: 'custom.disabledNavTab',
+  },
+}
+
 export const pcTab = {
   height: '2rem',
   maxWidth: '15.3rem',
-  padding: 0,
   width: '100%',
+  padding: '0 1.5rem',
   ...selectedTab,
+  ...disabledTab,
+}
+
+export const newTab = {
+  padding: '0 1.5rem 0 4.06rem',
 }
 
 export const mobileTab = {
@@ -39,28 +50,41 @@ export const mobileTab = {
   ...selectedTab,
 }
 
-export const iconBox = {
-  // 내부 아이콘 크기 지정용
+const iconBoxBase = {
+  marginRight: '0.25rem',
+  // 아이콘
   '& svg': {
     width: '0.875rem',
     height: '0.875rem',
-    '& path': {
-      fill: (theme: Theme) => theme.palette.text.assistive,
-    },
+  },
+}
+
+export const iconBox = {
+  ...iconBoxBase,
+  // 아이콘
+  '& > svg > path': {
+    fill: (theme: Theme) => theme.palette.text.assistive,
   },
 }
 
 export const selectedIconBox = {
-  '& svg': {
-    width: '0.875rem',
-    height: '0.875rem',
-    '& path': {
-      fill: (theme: Theme) => theme.palette.purple.strong,
-    },
+  ...iconBoxBase,
+  // 아이콘
+  '& > svg > path': {
+    fill: (theme: Theme) => theme.palette.purple.strong,
+  },
+}
+
+export const disabledIconBox = {
+  ...iconBoxBase,
+  // 아이콘
+  '& > svg > path': {
+    fill: (theme: Theme) => theme.palette.custom.disabledNavTab,
   },
 }
 
 export const newTextBadge = {
+  display: 'float',
   marginLeft: '1rem',
   color: 'yellow.strong',
 }

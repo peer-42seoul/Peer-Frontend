@@ -108,25 +108,43 @@ const PcToggleButton = ({
   tab: ITabInfo
   selected: boolean
 }) => {
+  const isNewTab = tab.new && !tab.disabled
   return (
     <ToggleButton
       value={tab.value}
       onClick={tab.onClick}
-      sx={style.pcTab}
+      sx={{
+        ...style.pcTab,
+        ...(isNewTab ? style.newTab : undefined),
+      }}
       disabled={tab.disabled}
       selected={selected}
     >
-      <Stack direction={'row'} spacing={'0.25rem'} alignItems={'center'}>
-        <Box sx={selected ? style.selectedIconBox : style.iconBox}>
+      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'}>
+        <Box
+          sx={
+            selected
+              ? style.selectedIconBox
+              : tab.disabled
+                ? style.disabledIconBox
+                : style.iconBox
+          }
+        >
           {tab.icon}
         </Box>
         <Typography
           variant={'Caption'}
-          color={selected ? 'purple.strong' : 'text.assistive'}
+          color={
+            selected
+              ? 'purple.strong'
+              : tab.disabled
+                ? 'custom.disabledNavTab'
+                : 'text.assistive'
+          }
         >
           {tab.label}
         </Typography>
-        {!tab.disabled && tab.new && (
+        {isNewTab && (
           <Typography sx={style.newTextBadge} variant={'Caption'}>
             NEW
           </Typography>
@@ -143,7 +161,7 @@ const MobileToggleButton = ({ tab }: { tab: ITabInfo }) => {
       sx={style.mobileTab}
       disabled={tab.disabled}
     >
-      <Stack direction={'column'} spacing={'0.12rem'} sx={style.buttonWrapper}>
+      <Stack direction={'column'} spacing={'0.12rem'}>
         {tab.icon}
         <Typography variant={'Caption'}>
           {tab.mobileLabel ?? tab.label}

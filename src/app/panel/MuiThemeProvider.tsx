@@ -50,6 +50,8 @@ declare module '@mui/material/styles' {
     base?: string
     assistive?: string
     disable?: string
+    // 컬러 팔레트에 없는 컬러를 추가함.
+    disabledNavTab?: string
   }
 
   interface SimplePaletteColorOptions {
@@ -81,6 +83,7 @@ declare module '@mui/material/styles' {
     yellow: Palette['primary']
     pink: Palette['primary']
     line: Palette['primary']
+    custom: Palette['primary']
   }
 
   interface PaletteOptions {
@@ -92,6 +95,7 @@ declare module '@mui/material/styles' {
     yellow?: PaletteOptions['primary']
     pink?: PaletteOptions['primary']
     line?: PaletteOptions['primary']
+    custom?: PaletteOptions['primary']
   }
 
   interface TypeText {
@@ -557,6 +561,9 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         main: '#6F62FE',
         light: '#A39BFD',
         dark: '#877CFE',
+      },
+      custom: {
+        disabledNavTab: '#1E2024',
       },
     },
   })
