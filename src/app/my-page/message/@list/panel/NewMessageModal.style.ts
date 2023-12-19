@@ -42,7 +42,7 @@ export const inputBase = {
   },
   '& .MuiInputBase-input.Mui-disabled': {
     color: (theme: Theme) => theme.palette.text.normal,
-    '-webkit-text-fill-color': (theme: Theme) => theme.palette.text.normal,
+    WebkitTextFillColor: (theme: Theme) => theme.palette.text.normal,
   },
 }
 
