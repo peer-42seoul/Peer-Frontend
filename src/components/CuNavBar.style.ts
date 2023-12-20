@@ -11,12 +11,9 @@ export const mobileNavBar = {
   marginBottom: '2rem',
 }
 
-export const pcTabs = {
-  width: '100%',
+export const tabs = {
   padding: 0,
 }
-
-export const mobileTabs = {}
 
 const selectedTab = {
   '&.Mui-selected': {
@@ -27,6 +24,7 @@ const selectedTab = {
 const disabledTab = {
   '&.Mui-disabled': {
     color: 'custom.disabledNavTab',
+    backgroundColor: 'transparent',
   },
 }
 
@@ -45,9 +43,11 @@ export const newTab = {
 
 export const mobileTab = {
   height: '3rem',
-  width: '3.6875rem',
   padding: 0,
+  borderRadius: '0.5rem',
+  backgroundColor: 'custom.mobileNavTab',
   ...selectedTab,
+  ...disabledTab,
 }
 
 const iconBoxBase = {

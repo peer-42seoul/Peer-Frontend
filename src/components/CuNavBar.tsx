@@ -77,25 +77,41 @@ const CuNavBar = ({
       <ToggleButtonGroup
         orientation={isPc ? 'vertical' : 'horizontal'}
         value={value}
-        sx={isPc ? style.pcTabs : style.mobileTabs}
+        sx={style.tabs}
         exclusive
+        fullWidth
         onChange={(_event, newValue) => {
           setValue(newValue)
         }}
       >
-        <Stack width={'100%'}>
-          {tabData.map((tab, index) =>
-            isPc ? (
-              <PcToggleButton
-                key={index}
-                tab={tab}
-                selected={value === tab.value}
-              />
-            ) : (
-              <MobileToggleButton key={index} tab={tab} />
-            ),
+        <>
+          {isPc ? (
+            <>
+              {tabData.map((tab, index) => (
+                <PcToggleButton
+                  key={index}
+                  tab={tab}
+                  selected={value === tab.value}
+                />
+              ))}
+            </>
+          ) : (
+            <Box
+              width={'100%'}
+              display="grid"
+              gridTemplateColumns={`repeat(${tabData.length}, 1fr)`}
+              gap={'0.5rem'}
+            >
+              {tabData.map((tab, index) => (
+                <MobileToggleButton
+                  key={index}
+                  tab={tab}
+                  selected={value === tab.value}
+                />
+              ))}
+            </Box>
           )}
-        </Stack>
+        </>
       </ToggleButtonGroup>
     </Box>
   )
@@ -110,17 +126,70 @@ const PcToggleButton = ({
 }) => {
   const isNewTab = tab.new && !tab.disabled
   return (
+    <Box gridColumn={'span 1'}>
+      <ToggleButton
+        value={tab.value}
+        onClick={tab.onClick}
+        sx={{
+          ...style.pcTab,
+          ...(isNewTab ? style.newTab : undefined),
+        }}
+        disabled={tab.disabled}
+        selected={selected}
+      >
+        <Stack
+          direction={'row'}
+          alignItems={'center'}
+          justifyContent={'center'}
+        >
+          <Box
+            sx={
+              selected
+                ? style.selectedIconBox
+                : tab.disabled
+                  ? style.disabledIconBox
+                  : style.iconBox
+            }
+          >
+            {tab.icon}
+          </Box>
+          <Typography
+            variant={'Caption'}
+            color={
+              selected
+                ? 'purple.strong'
+                : tab.disabled
+                  ? 'custom.disabledNavTab'
+                  : 'text.assistive'
+            }
+          >
+            {tab.label}
+          </Typography>
+          {isNewTab && (
+            <Typography sx={style.newTextBadge} variant={'Caption'}>
+              NEW
+            </Typography>
+          )}
+        </Stack>
+      </ToggleButton>
+    </Box>
+  )
+}
+const MobileToggleButton = ({
+  tab,
+  selected,
+}: {
+  tab: ITabInfo
+  selected: boolean
+}) => {
+  return (
     <ToggleButton
       value={tab.value}
       onClick={tab.onClick}
-      sx={{
-        ...style.pcTab,
-        ...(isNewTab ? style.newTab : undefined),
-      }}
+      sx={style.mobileTab}
       disabled={tab.disabled}
-      selected={selected}
     >
-      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'}>
+      <Stack direction={'column'} spacing={'0.12rem'}>
         <Box
           sx={
             selected
@@ -132,37 +201,6 @@ const PcToggleButton = ({
         >
           {tab.icon}
         </Box>
-        <Typography
-          variant={'Caption'}
-          color={
-            selected
-              ? 'purple.strong'
-              : tab.disabled
-                ? 'custom.disabledNavTab'
-                : 'text.assistive'
-          }
-        >
-          {tab.label}
-        </Typography>
-        {isNewTab && (
-          <Typography sx={style.newTextBadge} variant={'Caption'}>
-            NEW
-          </Typography>
-        )}
-      </Stack>
-    </ToggleButton>
-  )
-}
-const MobileToggleButton = ({ tab }: { tab: ITabInfo }) => {
-  return (
-    <ToggleButton
-      value={tab.value}
-      onClick={tab.onClick}
-      sx={style.mobileTab}
-      disabled={tab.disabled}
-    >
-      <Stack direction={'column'} spacing={'0.12rem'}>
-        {tab.icon}
         <Typography variant={'Caption'}>
           {tab.mobileLabel ?? tab.label}
         </Typography>

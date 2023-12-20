@@ -52,6 +52,7 @@ declare module '@mui/material/styles' {
     disable?: string
     // 컬러 팔레트에 없는 컬러를 추가함.
     disabledNavTab?: string
+    mobileNavTab?: string
   }
 
   interface SimplePaletteColorOptions {
@@ -562,8 +563,10 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         light: '#A39BFD',
         dark: '#877CFE',
       },
+      // 컬러 팔레트에 없는 컬러를 추가함.
       custom: {
         disabledNavTab: '#1E2024',
+        mobileNavTab: '#0F0F27',
       },
     },
   })
