@@ -22,6 +22,7 @@ import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 import { PlusIcon } from '@/icons'
 import TrashIcon from '@/icons/TrashIcon'
+import useMedia from '@/hook/useMedia'
 
 interface IFormInput {
   nickname: string
@@ -58,6 +59,7 @@ const ProfileBioEditor = ({
   const imageRef = useRef<HTMLImageElement>(null)
   const [cropper, setCropper] = useState<Cropper | null>(null)
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
+  const { isPc } = useMedia()
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
@@ -306,9 +308,19 @@ const ProfileBioEditor = ({
         text: '취소',
         onClick: closeModal,
       }}
+      mobileFullSize
     >
-      <form onSubmit={handleSubmit(onSubmit)} id={'profile-bio-editor-form'}>
-        <Stack direction={'column'} spacing={'1rem'}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        id={'profile-bio-editor-form'}
+        style={{ height: '100%', marginTop: isPc ? '0' : '1.5rem' }}
+      >
+        <Stack
+          direction={'column'}
+          spacing={'1rem'}
+          justifyContent={'flex-start'}
+          sx={{ height: '100%' }}
+        >
           {/* profile image */}
           <Stack spacing={'0.25rem'} direction={'column'}>
             <CuTextFieldLabel htmlFor="profileImage">
@@ -440,9 +452,7 @@ const ProfileBioEditor = ({
                 },
               }}
             />
-            {/* </Stack> */}
             {/* introduction message */}
-            {/* <Stack spacing={'0.25rem'} direction={'column'}> */}
             <CuTextFieldLabel htmlFor="introduction">
               <Typography variant="CaptionEmphasis">소개</Typography>
             </CuTextFieldLabel>

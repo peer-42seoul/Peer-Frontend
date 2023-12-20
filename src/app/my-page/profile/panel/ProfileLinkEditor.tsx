@@ -130,6 +130,7 @@ const ProfileLinkEditor = ({
         text: '취소',
         onClick: closeModal,
       }}
+      mobileFullSize
     >
       <form onSubmit={handleSubmit(onSubmit)} id={'profile-link-editor-form'}>
         <Stack direction={'column'} spacing={'1rem'}>
