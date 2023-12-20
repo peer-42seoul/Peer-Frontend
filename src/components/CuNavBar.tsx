@@ -66,21 +66,20 @@ const CuNavBar = ({
         value={value}
         sx={style.tabs}
         exclusive
-        fullWidth
         onChange={(_event, newValue) => {
           setValue(newValue)
         }}
       >
         {isPc ? (
-          <>
-            {tabData.map((tab, index) => (
+          [
+            tabData.map((tab, index) => (
               <PcToggleButton
                 key={index}
                 tab={tab}
                 selected={value === tab.value}
               />
-            ))}
-          </>
+            )),
+          ]
         ) : (
           <Box
             width={'100%'}

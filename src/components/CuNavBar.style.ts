@@ -12,6 +12,7 @@ export const mobileNavBar = {
 }
 
 export const tabs = {
+  width: '100%',
   padding: 0,
 }
 
