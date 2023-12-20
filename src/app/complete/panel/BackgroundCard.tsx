@@ -64,32 +64,44 @@ const BackgroundCard = () => {
   }, [])
 
   return (
-    <Stack className="no-scroll" sx={{ overflowY: 'auto', width: '70rem' }}>
-      <Typography>PC Complete</Typography>
-      <Card sx={{ overflow: 'visible' }}>
-        <Stack spacing={'1rem'}>
-          <Typography>Team Review</Typography>
-          {teamReviews.map((review) => (
-            <TeamReviewCard key={review.id} review={review} />
-          ))}
-        </Stack>
-      </Card>
-      <Card sx={{ overflow: 'visible' }}>
-        <Stack spacing={'1rem'}>
-          <Typography>Peer Review</Typography>
-          {peerReviews.map((review) => (
-            <TeamReviewCard key={review.id} review={review} />
-          ))}
-        </Stack>
-      </Card>
-      <Card sx={{ overflow: 'visible' }}>
-        <Stack spacing={'1rem'}>
-          <Typography>Self Review</Typography>
-          {selfReviews.map((review) => (
-            <TeamReviewCard key={review.id} review={review} />
-          ))}
-        </Stack>
-      </Card>
+    <Stack
+      className="no-scroll"
+      spacing={'1rem'}
+      sx={{ overflowY: 'auto', width: '70%' }}
+    >
+      <Stack p={'1rem'}>
+        <Typography fontWeight={'bold'}>후기 남기기</Typography>
+      </Stack>
+      <Stack>
+        <Typography>팀 후기</Typography>
+        <Card sx={{ overflow: 'visible' }}>
+          <Stack spacing={'1rem'}>
+            {teamReviews.map((review) => (
+              <TeamReviewCard key={review.id} review={review} />
+            ))}
+          </Stack>
+        </Card>
+      </Stack>
+      <Stack>
+        <Typography>동료 후기</Typography>
+        <Card sx={{ overflow: 'visible' }}>
+          <Stack spacing={'1rem'}>
+            {peerReviews.map((review) => (
+              <TeamReviewCard key={review.id} review={review} />
+            ))}
+          </Stack>
+        </Card>
+      </Stack>
+      <Stack>
+        <Card sx={{ overflow: 'visible' }}>
+          <Stack spacing={'1rem'}>
+            <Typography>스스로 돌아보기</Typography>
+            {selfReviews.map((review) => (
+              <TeamReviewCard key={review.id} review={review} />
+            ))}
+          </Stack>
+        </Card>
+      </Stack>
     </Stack>
   )
 }

@@ -2,7 +2,6 @@
 
 import { Stack, Typography } from '@mui/material'
 import BackgroundCard from './panel/BackgroundCard'
-import ToastEditorWrapper from '@/components/EditorWrapper'
 
 const CompletePage = () => {
   return (
@@ -27,7 +26,6 @@ const CompletePage = () => {
           }}
         >
           <BackgroundCard />
-          <ToastEditorWrapper initialValue="" theme="dark" height="300px" />
         </Stack>
       </div>
     </>
