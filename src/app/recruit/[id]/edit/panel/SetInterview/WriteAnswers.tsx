@@ -73,7 +73,7 @@ const WriteAnswers = ({
   }
 
   switch (formType) {
-    case 'open': {
+    case 'OPEN': {
       return (
         <>
           <TextField
@@ -86,7 +86,7 @@ const WriteAnswers = ({
         </>
       )
     }
-    case 'close': {
+    case 'CLOSE': {
       return (
         <>
           <Box sx={{ paddingBottom: '20px' }}>
@@ -115,7 +115,7 @@ const WriteAnswers = ({
         </>
       )
     }
-    case 'check': {
+    case 'CHECK': {
       return (
         <>
           <Box
@@ -150,7 +150,7 @@ const WriteAnswers = ({
         </>
       )
     }
-    case 'ratio': {
+    case 'RATIO': {
       return (
         <>
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>

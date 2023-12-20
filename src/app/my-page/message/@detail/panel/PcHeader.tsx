@@ -24,6 +24,7 @@ const PcHeader = ({
         src={targetProfile}
       />
       <Stack direction={'row'} alignItems={'flex-end'} spacing={'0.5rem'}>
+        {/* TODO : 상대 프로필로 갈 수 있는 링크 추가 필요함. */}
         <Typography lineHeight="150%" variant="Title3">
           {userNickname}
         </Typography>

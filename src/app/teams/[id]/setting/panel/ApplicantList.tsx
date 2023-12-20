@@ -15,7 +15,6 @@ const ApplicantList = ({
   close: () => void
   teamId: string
 }) => {
-  console.log(teamId)
   const { isPc } = useMedia()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -31,6 +30,12 @@ const ApplicantList = ({
   const [member, setMember] = useState<IApplicant | null>(
     members ? members[index] : null,
   )
+
+  console.log(data)
+
+  useEffect(() => {
+    setMember(data ? data[index] : null)
+  }, [index, data])
 
   const handleAccept = () => {
     axiosWithAuth
@@ -164,7 +169,7 @@ const ApplicantList = ({
             height={isPc ? 300 : 100}
             ref={scrollRef}
           >
-            {member ? (
+            {member?.interview ? (
               member.interview.map((interview, index) => (
                 <Stack key={index} m={1}>
                   <Typography fontWeight="bold">
