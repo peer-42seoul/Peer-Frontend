@@ -8,8 +8,8 @@ import {
   InputAdornment,
   Typography,
   Stack,
-  alpha,
   useTheme,
+  alpha,
 } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
@@ -23,6 +23,7 @@ import 'cropperjs/dist/cropper.css'
 import { PlusIcon } from '@/icons'
 import TrashIcon from '@/icons/TrashIcon'
 import useMedia from '@/hook/useMedia'
+import * as style from './Profile.style'
 
 interface IFormInput {
   nickname: string
@@ -86,13 +87,6 @@ const ProfileBioEditor = ({
     openModal: openCropModal,
     closeModal: closeCropModal,
   } = useModal()
-
-  const squareBoxStyle = {
-    width: '100%',
-    height: 0,
-    paddingBottom: '100%',
-    position: 'relative',
-  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -313,13 +307,12 @@ const ProfileBioEditor = ({
       <form
         onSubmit={handleSubmit(onSubmit)}
         id={'profile-bio-editor-form'}
-        style={{ height: '100%', marginTop: isPc ? '0' : '1.5rem' }}
+        style={isPc ? style.formPcStyle : style.formMobileStyle}
       >
         <Stack
           direction={'column'}
           spacing={'1rem'}
           justifyContent={'flex-start'}
-          sx={{ height: '100%' }}
         >
           {/* profile image */}
           <Stack spacing={'0.25rem'} direction={'column'}>
@@ -328,58 +321,24 @@ const ProfileBioEditor = ({
             </CuTextFieldLabel>
             <Button
               component={previewImage ? 'button' : 'label'}
-              sx={{
-                position: 'relative',
-                width: '4rem',
-                height: '4rem',
-                borderRadius: '500px',
-              }}
+              sx={style.profileImageInputStyle}
               onClick={previewImage ? handleImageDelete : undefined}
               disableRipple
             >
               {previewImage && (
                 <TrashIcon
                   sx={{
-                    color: 'text.normal',
-                    opacity: 0,
-                    height: '1.25rem',
-                    width: '1.25rem',
-                    padding: '22px',
-                    border: '1px solid',
-                    borderColor: 'line.alternative',
+                    ...style.trashIconStyle,
                     bgcolor: alpha(theme.palette.background.tertiary, 0.8),
-                    borderRadius: '500px',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    zIndex: 200,
-                    '&:hover': {
-                      opacity: 1,
-                    },
                   }}
                 />
               )}
               <Avatar
                 src={previewImage ? previewImage : ''}
                 alt="profile image"
-                sx={{
-                  position: 'absolute',
-                  top: '0',
-                  left: '0',
-                  height: '100%',
-                  width: '100%',
-                  bgcolor: 'background.tertiary',
-                  border: '1px solid',
-                  borderColor: 'line.alternative',
-                }}
+                sx={style.avatarStyle}
               >
-                <PlusIcon
-                  sx={{
-                    color: 'text.normal',
-                    height: '1.5rem',
-                    width: '1.5rem',
-                  }}
-                />
+                <PlusIcon sx={style.plusIconStyle} />
               </Avatar>
 
               {!previewImage && (
@@ -484,12 +443,8 @@ const ProfileBioEditor = ({
                   />
                   <Typography
                     variant="Caption"
-                    sx={{
-                      position: 'absolute',
-                      bottom: '2rem',
-                      right: '1.5rem',
-                    }}
-                    color={'text.assistive'}
+                    sx={style.introductionMaxLengthStyle}
+                    color={'text.alternative'}
                   >
                     {field.value.length}/150 {}
                   </Typography>
@@ -522,17 +477,8 @@ const ProfileBioEditor = ({
             onClick: handleCancelCrop,
           }}
         >
-          <Box sx={squareBoxStyle}>
-            <img
-              ref={imageRef}
-              alt="Preview"
-              style={{
-                borderRadius: '50%',
-                width: '100%',
-                height: '100%',
-                display: 'none',
-              }}
-            />
+          <Box sx={style.squareBoxStyle}>
+            <img ref={imageRef} alt="Preview" style={style.cropBoxStyle} />
           </Box>
         </CuModal>
       </form>
