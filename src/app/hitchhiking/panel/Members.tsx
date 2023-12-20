@@ -52,7 +52,7 @@ const Members = ({
   return (
     <Stack direction={'row'} spacing={'0.25rem'} alignItems={'center'}>
       <Stack direction={'row'} spacing={'-0.4rem'} alignItems={'center'}>
-        {vacancies.length && vacancies}
+        {vacancies.length > 0 && vacancies}
         {vacancies.length < 6 &&
           members.map((member, idx) => {
             if (idx + vacancies.length > 6) return null
