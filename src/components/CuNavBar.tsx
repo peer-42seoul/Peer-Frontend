@@ -71,34 +71,32 @@ const CuNavBar = ({
           setValue(newValue)
         }}
       >
-        <>
-          {isPc ? (
-            <>
-              {tabData.map((tab, index) => (
-                <PcToggleButton
-                  key={index}
-                  tab={tab}
-                  selected={value === tab.value}
-                />
-              ))}
-            </>
-          ) : (
-            <Box
-              width={'100%'}
-              display="grid"
-              gridTemplateColumns={`repeat(${tabData.length}, 1fr)`}
-              gap={'0.5rem'}
-            >
-              {tabData.map((tab, index) => (
-                <MobileToggleButton
-                  key={index}
-                  tab={tab}
-                  selected={value === tab.value}
-                />
-              ))}
-            </Box>
-          )}
-        </>
+        {isPc ? (
+          <>
+            {tabData.map((tab, index) => (
+              <PcToggleButton
+                key={index}
+                tab={tab}
+                selected={value === tab.value}
+              />
+            ))}
+          </>
+        ) : (
+          <Box
+            width={'100%'}
+            display="grid"
+            gridTemplateColumns={`repeat(${tabData.length}, 1fr)`}
+            gap={'0.5rem'}
+          >
+            {tabData.map((tab, index) => (
+              <MobileToggleButton
+                key={index}
+                tab={tab}
+                selected={value === tab.value}
+              />
+            ))}
+          </Box>
+        )}
       </ToggleButtonGroup>
     </Box>
   )
@@ -113,53 +111,47 @@ const PcToggleButton = ({
 }) => {
   const isNewTab = tab.new && !tab.disabled
   return (
-    <Box gridColumn={'span 1'}>
-      <ToggleButton
-        value={tab.value}
-        onClick={tab.onClick}
-        sx={{
-          ...style.pcTab,
-          ...(isNewTab ? style.newTab : undefined),
-        }}
-        disabled={tab.disabled}
-        selected={selected}
-      >
-        <Stack
-          direction={'row'}
-          alignItems={'center'}
-          justifyContent={'center'}
+    <ToggleButton
+      value={tab.value}
+      onClick={tab.onClick}
+      sx={{
+        ...style.pcTab,
+        ...(isNewTab ? style.newTab : undefined),
+      }}
+      disabled={tab.disabled}
+      selected={selected}
+    >
+      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'}>
+        <Box
+          sx={
+            selected
+              ? style.selectedIconBox
+              : tab.disabled
+                ? style.disabledIconBox
+                : style.iconBox
+          }
         >
-          <Box
-            sx={
-              selected
-                ? style.selectedIconBox
-                : tab.disabled
-                  ? style.disabledIconBox
-                  : style.iconBox
-            }
-          >
-            {tab.icon}
-          </Box>
-          <Typography
-            variant={'Caption'}
-            color={
-              selected
-                ? 'purple.strong'
-                : tab.disabled
-                  ? 'custom.disabledNavTab'
-                  : 'text.assistive'
-            }
-          >
-            {tab.label}
+          {tab.icon}
+        </Box>
+        <Typography
+          variant={'Caption'}
+          color={
+            selected
+              ? 'purple.strong'
+              : tab.disabled
+                ? 'custom.disabledNavTab'
+                : 'text.assistive'
+          }
+        >
+          {tab.label}
+        </Typography>
+        {isNewTab && (
+          <Typography sx={style.newTextBadge} variant={'Caption'}>
+            NEW
           </Typography>
-          {isNewTab && (
-            <Typography sx={style.newTextBadge} variant={'Caption'}>
-              NEW
-            </Typography>
-          )}
-        </Stack>
-      </ToggleButton>
-    </Box>
+        )}
+      </Stack>
+    </ToggleButton>
   )
 }
 const MobileToggleButton = ({
@@ -178,7 +170,7 @@ const MobileToggleButton = ({
       disabled={tab.disabled}
       selected={selected}
     >
-      <Stack direction={'column'} alignItems={'center'} spacing={'0.25rem'}>
+      <Stack direction={'column'} alignItems={'center'}>
         <Badge sx={style.newBadge} variant={'dot'} invisible={!isNewTab}>
           <Box
             sx={

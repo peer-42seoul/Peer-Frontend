@@ -100,14 +100,14 @@ export const newBadge = {
     backgroundColor: (theme: Theme) => theme.palette.yellow.strong,
     // 기본 설정 디자인 오버라이딩
     transform: `scale(1) ${BADGE_TRANSLATE}`,
-    '-webkit-transform': `scale(1) ${BADGE_TRANSLATE}`,
-    '-ms-transform': `scale(1) ${BADGE_TRANSLATE}`,
-    '-moz-transform': `scale(1) ${BADGE_TRANSLATE}`,
+    WebkitTransform: `scale(1) ${BADGE_TRANSLATE}`,
+    msTransform: `scale(1) ${BADGE_TRANSLATE}`,
+    MozTransform: `scale(1) ${BADGE_TRANSLATE}`,
     '&.MuiBadge-invisible': {
       transform: `scale(0) ${BADGE_TRANSLATE}`,
-      '-webkit-transform': `scale(0) ${BADGE_TRANSLATE}`,
-      '-ms-transform': `scale(0) ${BADGE_TRANSLATE}`,
-      '-moz-transform': `scale(0) ${BADGE_TRANSLATE}`,
+      WebkitTransform: `scale(0) ${BADGE_TRANSLATE}`,
+      msTransform: `scale(0) ${BADGE_TRANSLATE}`,
+      MozTransform: `scale(0) ${BADGE_TRANSLATE}`,
     },
   },
 }
