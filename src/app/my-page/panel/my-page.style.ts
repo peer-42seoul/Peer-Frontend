@@ -1,8 +1,10 @@
 import { SxProps } from '@mui/material'
 
 const pagePcStyle: SxProps = {
-  padding: '2rem',
+  py: ['2rem'],
+  px: ['1.5rem', '2rem'],
   maxWidth: '52.75rem',
+  minWidth: '25rem',
   width: '47vw',
 }
 
