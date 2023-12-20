@@ -51,10 +51,8 @@ export const mobileTab = {
 }
 
 const iconBoxBase = {
-  width: '0.875rem',
-  height: '0.875rem',
-  // 아이콘
   '& svg': {
+    display: 'block',
     width: '0.875rem',
     height: '0.875rem',
   },
@@ -62,7 +60,6 @@ const iconBoxBase = {
 
 export const iconBox = {
   ...iconBoxBase,
-  // 아이콘
   '& > svg > path': {
     fill: (theme: Theme) => theme.palette.text.assistive,
   },
@@ -70,7 +67,6 @@ export const iconBox = {
 
 export const selectedIconBox = {
   ...iconBoxBase,
-  // 아이콘
   '& > svg > path': {
     fill: (theme: Theme) => theme.palette.purple.strong,
   },
@@ -78,7 +74,6 @@ export const selectedIconBox = {
 
 export const disabledIconBox = {
   ...iconBoxBase,
-  // 아이콘
   '& > svg > path': {
     fill: (theme: Theme) => theme.palette.custom.disabledNavTab,
   },
@@ -86,7 +81,7 @@ export const disabledIconBox = {
 
 export const newTextBadge = {
   display: 'float',
-  marginLeft: '1rem',
+  marginLeft: '1rem !important', // stack의 spacing을 덮어씌우기 위해 !important 사용
   color: 'yellow.strong',
 }
 

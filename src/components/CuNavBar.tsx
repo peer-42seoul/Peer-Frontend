@@ -121,7 +121,12 @@ const PcToggleButton = ({
       disabled={tab.disabled}
       selected={selected}
     >
-      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'}>
+      <Stack
+        direction={'row'}
+        spacing={'0.25rem'}
+        alignItems={'center'}
+        justifyContent={'center'}
+      >
         <Box
           sx={
             selected
@@ -170,7 +175,7 @@ const MobileToggleButton = ({
       disabled={tab.disabled}
       selected={selected}
     >
-      <Stack direction={'column'} alignItems={'center'}>
+      <Stack direction={'column'} spacing={'0.12rem'} alignItems={'center'}>
         <Badge sx={style.newBadge} variant={'dot'} invisible={!isNewTab}>
           <Box
             sx={
