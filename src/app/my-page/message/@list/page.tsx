@@ -47,26 +47,26 @@ const MessageListPage = () => {
   }, [])
 
   return (
-    // <>
-    <Stack spacing={'2rem'}>
-      {isPc && <NewMessageButton openModal={openModal} />}
-      <BackgroundBox mobileSx={style.mobileBox} pcSx={style.pcBox}>
-        <MessageContainer
-          originalMessageData={data}
-          error={error}
-          isLoading={isLoading}
-          openNewMessageModal={openModal}
+    <>
+      <Stack spacing={'2rem'}>
+        {isPc && <NewMessageButton openModal={openModal} />}
+        <BackgroundBox mobileSx={style.mobileBox} pcSx={style.pcBox}>
+          <MessageContainer
+            originalMessageData={data}
+            error={error}
+            isLoading={isLoading}
+            openNewMessageModal={openModal}
+          />
+        </BackgroundBox>
+      </Stack>
+      {isOpen && (
+        <NewMessageModal
+          isOpen={isOpen}
+          handleClose={closeModal}
+          setMessageData={setMessageList}
         />
-      </BackgroundBox>
-    </Stack>
-    //   {/* {isOpen && (
-    //     <NewMessageModal
-    //       isOpen={isOpen}
-    //       handleClose={closeModal}
-    //       setMessageData={setMessageList}
-    //     />
-    //   )}
-    // </> */}
+      )}
+    </>
   )
 }
 
