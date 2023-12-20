@@ -13,6 +13,7 @@ import CuButton from '@/components/CuButton'
 import { useRouter } from 'next/navigation'
 import MyInfoCard from './panel/MyInfoCard'
 import useMedia from '@/hook/useMedia'
+import * as style from '../panel/my-page.style'
 
 interface IModals {
   introduction: boolean
@@ -100,12 +101,8 @@ const MyProfile = () => {
   return (
     <Stack
       width={1}
-      spacing={isPc ? 4 : 3}
-      sx={{
-        padding: isPc ? '2rem' : 0,
-        maxWidth: '52.75rem',
-        width: isPc ? '47vw' : '91vw',
-      }}
+      spacing={isPc ? '2rem' : '1.5rem'}
+      sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
       justifyContent={'center'}
     >
       {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
