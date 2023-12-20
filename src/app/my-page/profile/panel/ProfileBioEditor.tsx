@@ -5,24 +5,23 @@ import {
   Avatar,
   Box,
   Button,
-  Grid,
-  IconButton,
   InputAdornment,
   Typography,
   Stack,
+  alpha,
+  useTheme,
 } from '@mui/material'
 import { IProfileCard } from '@/types/IUserProfile'
 import { useForm, Controller } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
-import PhotoCameraOutlinedIcon from '@mui/icons-material/PhotoCameraOutlined'
-import ClearIcon from '@mui/icons-material/Clear'
-import CuButton from '@/components/CuButton'
 import useAxiosWithAuth from '@/api/config'
 import useModal from '@/hook/useModal'
 import CuModal from '@/components/CuModal'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
+import { PlusIcon } from '@/icons'
+import TrashIcon from '@/icons/TrashIcon'
 
 interface IFormInput {
   nickname: string
@@ -164,10 +163,8 @@ const ProfileBioEditor = ({
 
   const handleImageDelete = () => {
     setValue('profileImage', null)
-    // setImage(null)
     setPreviewImage(null)
     setImageChanged(true)
-    console.log('handleImageDelete')
   }
 
   const nickname = watch('nickname')
@@ -209,7 +206,8 @@ const ProfileBioEditor = ({
             setToastOpen(true)
             setError('nickname', {
               type: 'notUnique',
-              message: '새로운 닉네임을 입력해주세요.',
+              message:
+                '사용할 수 업는 닉네임 입니다. 다른 닉네임을 입력해주세요.',
             })
             setIsLoading(false)
           })
@@ -221,8 +219,8 @@ const ProfileBioEditor = ({
     }, [isLoading, nickname, setIsNicknameUnique])
 
     return (
-      <CuButton
-        variant="contained"
+      <Button
+        variant="text"
         disabled={
           data.nickname === nickname ||
           isNicknameUnique ||
@@ -230,10 +228,11 @@ const ProfileBioEditor = ({
             ? true
             : isLoading
         }
-        action={onClick}
-        message="중복 확인"
-        TypographyProps={{ variant: 'CaptionEmphasis' }}
-      />
+        onClick={onClick}
+        sx={{ marginRight: '0.75rem' }}
+      >
+        <Typography variant="CaptionEmphasis">중복 확인</Typography>
+      </Button>
     )
   }
 
@@ -252,12 +251,6 @@ const ProfileBioEditor = ({
 
     console.log('닉네임 중복확인', isNicknameUnique)
     if (!isNicknameUnique) {
-      // setToastMessage({
-      //   severity: 'error',
-      //   message: '닉네임 중복확인이 필요합니다.',
-      // })
-      // setToastOpen(true)
-      // setNicknameError(true)
       setError('nickname', {
         type: 'notUnique',
         message: '닉네임 중복확인이 필요합니다.',
@@ -293,6 +286,12 @@ const ProfileBioEditor = ({
       })
   }
 
+  function getStringByteSize(str: string) {
+    const encoder = new TextEncoder()
+    const encoded = encoder.encode(str)
+    return encoded.length
+  }
+  const theme = useTheme()
   return (
     <CuModal
       open={open}
@@ -309,97 +308,91 @@ const ProfileBioEditor = ({
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)} id={'profile-bio-editor-form'}>
-        <Grid container spacing={2} rowSpacing={1}>
+        <Stack direction={'column'} spacing={'1rem'}>
           {/* profile image */}
-          <Grid item xs={12}>
-            {/* <Controller
-              render={({ field }) => ( */}
-            <Stack gap={2}>
+          <Stack spacing={'0.25rem'} direction={'column'}>
+            <CuTextFieldLabel htmlFor="profileImage">
               <Typography variant="CaptionEmphasis">프로필 사진</Typography>
-              <Box
-                width={[56, 100]}
-                height={[56, 100]}
-                sx={{ position: 'relative' }}
-              >
-                <IconButton
+            </CuTextFieldLabel>
+            <Button
+              component={previewImage ? 'button' : 'label'}
+              sx={{
+                position: 'relative',
+                width: '4rem',
+                height: '4rem',
+                borderRadius: '500px',
+              }}
+              onClick={previewImage ? handleImageDelete : undefined}
+              disableRipple
+            >
+              {previewImage && (
+                <TrashIcon
                   sx={{
+                    color: 'text.normal',
+                    opacity: 0,
+                    height: '1.25rem',
+                    width: '1.25rem',
+                    padding: '22px',
+                    border: '1px solid',
+                    borderColor: 'line.alternative',
+                    bgcolor: alpha(theme.palette.background.tertiary, 0.8),
+                    borderRadius: '500px',
                     position: 'absolute',
-                    top: '0',
-                    right: '6px',
-                    width: '16px',
-                    height: '16px',
-                    borderRadius: '50px',
-                    borderColor: 'lightgray',
-                    border: '1px',
-                    padding: '4px',
-                    backgroundColor: 'white',
-                    zIndex: '9999',
+                    top: 0,
+                    left: 0,
+                    zIndex: 200,
+                    '&:hover': {
+                      opacity: 1,
+                    },
                   }}
-                  onClick={handleImageDelete}
-                >
-                  <ClearIcon />
-                </IconButton>
-                <Button
-                  component="label"
-                  sx={{ position: 'relative', width: '100%', height: '100%' }}
-                >
-                  <Avatar
-                    src={previewImage ? previewImage : '/images/profile.jpeg'}
-                    alt="profile image"
-                    sx={{
-                      position: 'absolute',
-                      top: '0',
-                      left: '0',
-                      height: '100%',
-                      width: '100%',
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      bottom: '0',
-                      right: '6px',
-                      width: '24px',
-                      height: '24px',
-                      borderRadius: '50px',
-                      borderColor: 'lightgray',
-                      border: '1px',
-                      padding: '4px',
-                      backgroundColor: 'white',
-                    }}
-                  >
-                    <PhotoCameraOutlinedIcon />
-                  </Box>
-                  <input
-                    type="file"
-                    accept={'image/jpeg, image/jpg, image/png'}
-                    style={{ display: 'none' }}
-                    {...register('profileImage')}
-                    id="profileImage"
-                    name="profileImage"
-                    onChange={handleImageChange}
-                  />
-                </Button>
-              </Box>
-            </Stack>
-          </Grid>
-          {/* nickname, association, email, introduction */}
-          <Grid
-            item
-            container
-            spacing={3}
-            justifyContent={'flex-start'}
-            alignItems={'center'}
-          >
-            {/* 닉네임 수정 */}
-            <Grid item xs={3}>
-              <CuTextFieldLabel htmlFor="nickname">
-                <Typography variant="CaptionEmphasis">닉네임</Typography>
-              </CuTextFieldLabel>
-            </Grid>
-            <Grid item xs={9}>
-              <Controller
-                render={({ field }) => (
+                />
+              )}
+              <Avatar
+                src={previewImage ? previewImage : ''}
+                alt="profile image"
+                sx={{
+                  position: 'absolute',
+                  top: '0',
+                  left: '0',
+                  height: '100%',
+                  width: '100%',
+                  bgcolor: 'background.tertiary',
+                  border: '1px solid',
+                  borderColor: 'line.alternative',
+                }}
+              >
+                <PlusIcon
+                  sx={{
+                    color: 'text.normal',
+                    height: '1.5rem',
+                    width: '1.5rem',
+                  }}
+                />
+              </Avatar>
+
+              {!previewImage && (
+                <input
+                  type="file"
+                  accept={'image/jpeg, image/jpg, image/png'}
+                  style={{ display: 'none' }}
+                  {...register('profileImage')}
+                  id="profileImage"
+                  name="profileImage"
+                  onChange={handleImageChange}
+                />
+              )}
+            </Button>
+          </Stack>
+          {/* nickname, introduction */}
+
+          {/* 닉네임 수정 */}
+          <Stack spacing={'0.25rem'} direction={'column'}>
+            <CuTextFieldLabel htmlFor="nickname">
+              <Typography variant="CaptionEmphasis">닉네임</Typography>
+            </CuTextFieldLabel>
+            <Controller
+              render={({ field }) => (
+                <Box sx={{ height: '3.25rem', marginBottom: '0.25rem' }}>
                   <CuTextField
                     id="nickname"
                     variant="outlined"
@@ -410,7 +403,11 @@ const ProfileBioEditor = ({
                       if (errors?.nickname?.type === 'notUnique')
                         clearErrors('nickname')
                     }}
-                    helperText={errors.nickname?.message}
+                    helperText={
+                      <Typography variant="Caption" color={'red.strong'}>
+                        {errors.nickname?.message}
+                      </Typography>
+                    }
                     fullWidth={true}
                     error={errors.nickname ? true : false}
                     autoComplete="off"
@@ -427,47 +424,31 @@ const ProfileBioEditor = ({
                       ),
                     }}
                   />
-                )}
-                name="nickname"
-                control={control}
-                rules={{
-                  required: '닉네임은 필수로 기입해야 합니다.',
-                  maxLength: {
-                    value: 7,
-                    message: '닉네임은 최대 7글자까지만 적용 가능합니다.',
-                  },
-                  minLength: {
-                    value: 2,
-                    message: '닉네임은 최소 두 글자 이상 작성해야 합니다.',
-                  },
-                }}
-              />
-            </Grid>
-            {/* association */}
-            <Grid item xs={3}>
-              <Typography variant="CaptionEmphasis">소속</Typography>
-            </Grid>
-            <Grid item xs={9}>
-              <Typography variant="Caption">
-                {data.association ? data.association : '해당 없음'}
-              </Typography>
-            </Grid>
-            {/* email */}
-            <Grid item xs={3}>
-              <Typography variant="CaptionEmphasis">아이디</Typography>
-            </Grid>
-            <Grid item xs={9}>
-              <Typography variant="Caption">{data.email}</Typography>
-            </Grid>
+                </Box>
+              )}
+              name="nickname"
+              control={control}
+              rules={{
+                required: '닉네임은 필수로 기입해야 합니다.',
+                maxLength: {
+                  value: 7,
+                  message: '닉네임은 최대 7글자까지만 적용 가능합니다.',
+                },
+                minLength: {
+                  value: 2,
+                  message: '닉네임은 최소 두 글자 이상 작성해야 합니다.',
+                },
+              }}
+            />
+            {/* </Stack> */}
             {/* introduction message */}
-            <Grid item xs={12}>
-              <CuTextFieldLabel htmlFor="introduction">
-                <Typography variant="CaptionEmphasis">소개</Typography>
-              </CuTextFieldLabel>
-            </Grid>
-            <Grid item xs={12}>
-              <Controller
-                render={({ field }) => (
+            {/* <Stack spacing={'0.25rem'} direction={'column'}> */}
+            <CuTextFieldLabel htmlFor="introduction">
+              <Typography variant="CaptionEmphasis">소개</Typography>
+            </CuTextFieldLabel>
+            <Controller
+              render={({ field }) => (
+                <Box sx={{ position: 'relative' }} height={'auto'}>
                   <CuTextField
                     label=""
                     variant="outlined"
@@ -477,22 +458,46 @@ const ProfileBioEditor = ({
                     fullWidth
                     inputProps={{ maxLength: 150 }}
                     multiline
-                    maxRows={4}
-                    minRows={4}
+                    maxRows={12}
+                    minRows={12}
+                    error={errors.introduction ? true : false}
+                    helperText={
+                      <Box sx={{ height: '0.75rem' }}>
+                        <Typography variant="Caption" color={'red.strong'}>
+                          {/* {errors.introduction
+                              ? errors.introduction.message // NOTE: 테스트용으로 helperText를 사용했습니다. 버그 수정 시 원상복구 요망 
+                              : field.value.length} */}
+                          {getStringByteSize(field.value)}
+                        </Typography>
+                      </Box>
+                    }
                   />
-                )}
-                name="introduction"
-                control={control}
-                rules={{
-                  maxLength: {
-                    value: 150,
-                    message: '자기소개는 최대 150자까지만 입력 가능합니다.',
-                  },
-                }}
-              />
-            </Grid>
-          </Grid>
-        </Grid>
+                  <Typography
+                    variant="Caption"
+                    sx={{
+                      position: 'absolute',
+                      bottom: '2rem',
+                      right: '1.5rem',
+                    }}
+                    color={'text.assistive'}
+                  >
+                    {field.value.length}/150 {}
+                  </Typography>
+                </Box>
+              )}
+              name="introduction"
+              control={control}
+              rules={{
+                maxLength: {
+                  value: 150,
+                  message: '자기소개는 최대 150자까지만 입력 가능합니다.',
+                },
+              }}
+            />
+          </Stack>
+        </Stack>
+
+        {/* crop modal */}
         <CuModal
           open={isOpen}
           onClose={closeCropModal}

@@ -553,11 +553,17 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         disable: '#292C32',
         disabled: '#292C32',
       },
-      primary: {
-        main: '#6F62FE',
-        light: '#A39BFD',
-        dark: '#877CFE',
-      },
+    },
+  })
+
+  theme = createTheme(theme, {
+    palette: {
+      primary: theme.palette.purple,
+      secondary: theme.palette.blue,
+      error: theme.palette.red,
+      warning: theme.palette.yellow,
+      info: theme.palette.purple,
+      success: theme.palette.green,
     },
   })
 
@@ -649,10 +655,24 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
                 backgroundColor: theme.palette.background.tertiary,
                 opacity: 0.5,
               },
+              '&.Mui-error fieldset': {
+                borderColor: theme.palette.red.strong,
+              },
             },
             '& .MuiInputBase-inputMultiline': {
               height: 'auto',
               padding: '12px',
+            },
+            '.MuiFormHelperText-filled': {
+              margin: 0,
+              marginTop: '0.5rem',
+            },
+            '.MuiFormHelperText-root': {
+              margin: 0,
+              marginTop: '0.5rem',
+            },
+            '.MuiInputBase-inputMultiline': {
+              padding: '1rem',
             },
           },
         },
