@@ -10,18 +10,16 @@ import CuToggle from '@/components/CuToggle'
 import useMedia from '@/hook/useMedia'
 import Interest from './panel/Interest'
 
-// 1. 메인페이지 api 긁어오기
-// 2. 메인 카드 컴포넌트 가져오기
-// 3. 틴더 어쩌구 적용
-
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
-  const [isProject, setIsProject] = useState(true)
+  const [isProject, setIsProject] = useState(false)
   const [cardList, setCardList] = useState<Array<IMainCard>>([])
 
   const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=STUDY&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
+      isProject ? 'PROJECT' : 'STUDY'
+    }&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
     defaultGetFetcher,
   )
 
@@ -43,7 +41,7 @@ const Hitchhiking = () => {
     <Stack
       justifyContent={'space-between'}
       alignItems={'center'}
-      sx={{ width: '100%', height: '80svh' }}
+      sx={{ width: '100%', height: '80svh', overflow: 'hidden' }}
       direction={'column'}
     >
       <FormControlLabel
@@ -59,7 +57,7 @@ const Hitchhiking = () => {
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          width: isPc ? '20.5rem' : '92vw',
+          width: isPc ? '20.5rem' : '93vw',
           height: '27rem',
           maxWidth: '20.5rem',
           position: 'relative',
@@ -68,17 +66,17 @@ const Hitchhiking = () => {
         {!message ? (
           <CardContainer
             cardList={cardList}
-            isLoading={isLoading}
             update={() => setPage((prev) => (!data?.last ? prev + 1 : prev))}
             setCardList={setCardList}
+            isProject={isProject}
           />
         ) : (
           <Typography>{message}</Typography>
         )}
       </Stack>
-      {cardList.length && (
-        <Interest id={cardList[cardList.length - 1].recruit_id} />
-      )}
+      {/* {cardList.length && ( */}
+      <Interest id={cardList[cardList.length - 1]?.recruit_id} />
+      {/* )} */}
     </Stack>
   )
 }
