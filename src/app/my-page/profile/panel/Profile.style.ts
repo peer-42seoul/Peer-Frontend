@@ -71,6 +71,42 @@ const squareBoxStyle: React.CSSProperties = {
   position: 'relative',
 }
 
+const profileCardPcStyle: SxProps = {
+  padding: '1.5rem',
+  backgroundColor: 'background.secondary',
+  borderRadius: '1rem',
+}
+
+const profileCardMobileStyle: SxProps = {
+  padding: '1rem',
+  paddingTop: '0.5rem',
+  backgroundColor: 'background.secondary',
+  borderRadius: '1rem',
+}
+
+const profileImageModalStyle: SxProps = {
+  width: '80%',
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  border: 'none',
+  outline: 'none',
+  transform: 'translate(-50%, -50%)',
+  maxWidth: '20rem',
+  maxHeight: '20rem',
+}
+
+const profileImageStyle: SxProps = {
+  width: '3rem',
+  height: '3rem',
+}
+
+const faviconStyle: SxProps = {
+  width: '1.25rem',
+  height: '1.25rem',
+  backgroundColor: 'text.normal',
+}
+
 export {
   formPcStyle,
   formMobileStyle,
@@ -81,4 +117,9 @@ export {
   introductionMaxLengthStyle,
   cropBoxStyle,
   squareBoxStyle,
+  profileCardPcStyle,
+  profileCardMobileStyle,
+  profileImageModalStyle,
+  profileImageStyle,
+  faviconStyle,
 }
