@@ -60,6 +60,14 @@ const DropdownMenu = () => {
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
       >
         <IconMenuItem
           handleClose={handleClose}
