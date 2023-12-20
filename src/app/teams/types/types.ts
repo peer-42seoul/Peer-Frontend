@@ -24,6 +24,7 @@ export interface IMember {
   name: string
   id: string
   grant: TeamGrant
+  job: Job[]
 }
 
 export interface Job {

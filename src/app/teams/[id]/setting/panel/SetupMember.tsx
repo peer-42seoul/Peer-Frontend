@@ -2,9 +2,12 @@ import {
   Avatar,
   Box,
   Button,
+  Card,
+  FormControl,
   // FormControl,
   Grid,
   Modal,
+  NativeSelect,
   // NativeSelect,
   Stack,
   Switch,
@@ -17,6 +20,33 @@ import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
 import { comfirmModalStyle } from './styles'
+
+const mockJobsData: Job[] = [
+  {
+    id: 1,
+    name: '프론트엔드',
+    current: 3,
+    max: 5,
+  },
+  {
+    id: 2,
+    name: '백엔드',
+    current: 2,
+    max: 5,
+  },
+  {
+    id: 3,
+    name: '디자인',
+    current: 1,
+    max: 5,
+  },
+  {
+    id: 4,
+    name: '기획',
+    current: 1,
+    max: 5,
+  },
+]
 
 interface ISetupMember {
   team: IMember[]
@@ -34,7 +64,8 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
   } = useModal()
   const [members, setMembers] = useState<IMember[]>(team)
   const [member, setMember] = useState<IMember | null>(null)
-  // const [job, setJob] = useState<Job[]>(jobs)
+  const [job, setJob] = useState<Job[]>(mockJobsData)
+  const [selectedJobs, setSelectedJobs] = useState<Job[]>([])
   const axiosWithAuth = useAxiosWithAuth()
 
   // const changeJob = () => {
@@ -113,10 +144,25 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
       })
   }
 
-  // const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
-  //   if (jobs.length === 0) return console.log('역할이 없습니다.')
-  //   setJob([...job, e.target.value as Job])
-  // }
+  const handleChangeModal = (selectedMember: IMember) => {
+    console.log('팀원 역할 변경 모달 오픈', selectedMember)
+    setMember(selectedMember)
+    openChangeModal()
+  }
+
+  const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
+    const selectedJobId = e.target.value as number
+
+    // mockJobsData에서 선택한 직무 ID에 해당하는 직무 객체를 찾습니다.
+    const selectedJob = job.find((job) => job.id === selectedJobId)
+
+    if (selectedJob) {
+      // 찾은 직무 객체로 상태를 업데이트합니다.
+      setSelectedJobs([...selectedJobs, selectedJob])
+    } else {
+      console.log('선택한 역할을 찾을 수 없습니다.')
+    }
+  }
 
   return (
     <>
@@ -156,7 +202,7 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
                 />
               </Stack>
               {/* 역할이 있을 때만 버튼이 보이게끔 */}
-              <Button onClick={openChangeModal}>
+              <Button onClick={() => handleChangeModal(member)}>
                 <Typography fontSize="small">역할 변경</Typography>
               </Button>
             </Box>
@@ -164,38 +210,57 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
         ))}
       </Grid>
 
-      <Modal open={isChangeOpen} onClose={closeChangeModal}>
+      <Modal open={isChangeOpen} onClose={handleChangeModal}>
         <Box sx={comfirmModalStyle}>
-          <Typography>역할 변경</Typography>
-          {/* <FormControl>
-            <NativeSelect
-              value={job}
-              onChange={handleChangeJob}
-              inputProps={{ 'aria-label': 'role' }}
-            >
-              {jobs.map((job, index) => (
-                <option key={index} value={job.id}>
-                  {job.name}
-                </option>
-              ))}
-            </NativeSelect>
-          </FormControl>
-          <Stack direction={'row'} justifyContent={'space-evenly'}>
-            {job.map((j, index) => (
-              <Typography key={index}>{j.name}</Typography>
-            ))}
-          </Stack> */}
+          <Stack>
+            <Typography>역할 변경</Typography>
+          </Stack>
+          <Stack padding={'1rem'}>
+            <Typography>팀원이 변경할 역할을 선택해주세요.</Typography>
+            <Stack direction={'row'} padding={1}>
+              <Typography>현재 역할</Typography>
+              {/* {member?.job.map((job, index) => (
+                <Typography key={index}>{job.name}</Typography>
+              ))} */}
+            </Stack>
+            <Stack alignItems={'center'} padding={1}>
+              <Card sx={{ width: 'fit-content' }}>
+                <FormControl>
+                  <NativeSelect
+                    value={member?.job}
+                    onChange={handleChangeJob}
+                    inputProps={{ 'aria-label': 'role' }}
+                  >
+                    {job.map((job, index) => (
+                      <option key={index} value={job.id}>
+                        {job.name}
+                      </option>
+                    ))}
+                  </NativeSelect>
+                </FormControl>
+                <Stack direction={'row'} justifyContent={'space-between'}>
+                  {selectedJobs.map((job, index) => (
+                    <Typography key={index}>{job.name}</Typography>
+                  ))}
+                </Stack>
+              </Card>
 
-          <Button onClick={closeChangeModal}>취소</Button>
-          <Button onClick={closeChangeModal}>확인</Button>
+              <Stack direction={'row'}>
+                <Button onClick={closeChangeModal}>취소</Button>
+                <Button onClick={closeChangeModal}>확인</Button>
+              </Stack>
+            </Stack>
+          </Stack>
         </Box>
       </Modal>
 
       <Modal open={isOpen} onClose={closeChangeModal}>
-        <Box>
-          정말 팀원을 내보내시겠습니까?
-          <Button onClick={closeModal}>취소</Button>
-          <Button onClick={handleDelete}>확인</Button>
+        <Box sx={comfirmModalStyle}>
+          <Card>
+            <Typography>정말 팀원을 내보내시겠습니까?</Typography>
+            <Button onClick={closeModal}>취소</Button>
+            <Button onClick={handleDelete}>확인</Button>
+          </Card>
         </Box>
       </Modal>
     </>

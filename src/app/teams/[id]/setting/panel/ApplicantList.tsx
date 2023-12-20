@@ -31,9 +31,8 @@ const ApplicantList = ({
     members ? members[index] : null,
   )
 
-  console.log(data)
-
   useEffect(() => {
+    console.log(data)
     setMember(data ? data[index] : null)
   }, [index, data])
 
@@ -189,7 +188,7 @@ const ApplicantList = ({
           height={isPc ? 300 : 100}
           ref={scrollRef}
         >
-          {member ? (
+          {member && member.interview ? (
             member.interview.map((interview, index) => (
               <Stack key={index} m={1}>
                 <Typography fontWeight="bold">{interview.question}</Typography>
