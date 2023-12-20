@@ -29,28 +29,6 @@ const getTabValue = (path: string) => {
   else return 'profile'
 }
 
-// interface IStyledTabProps {
-//   label: string
-//   onClick: () => void
-//   value: TabValue
-//   icon: ReactElement
-//   isPc: boolean
-// }
-
-// NOTE : 중복 코드를 줄이고 스타일을 편하게 적용하고 싶은데 외부 컴포넌트로 빼면 스타일이 적용이 안되는 문제가 있음
-// const StyledTab = ({ label, onClick, value, icon, isPc }: IStyledTabProps) => {
-//   return (
-//     <Tab
-//       label={label}
-//       onClick={onClick}
-//       value={value}
-//       icon={icon}
-//       iconPosition={isPc ? 'start' : 'top'}
-//       sx={isPc ? style.pcTab : style.mobileTab}
-//     />
-//   )
-// }
-
 const NavBar = () => {
   const router = useRouter()
   const pathName = usePathname()
