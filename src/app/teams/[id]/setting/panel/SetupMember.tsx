@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import { IMember, Job, TeamGrant } from '../../../types/types'
 import useModal from '@/hook/useModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
@@ -74,6 +74,13 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
   //     job,
   //   )
   // }
+
+  useEffect(() => {
+    setJob(mockJobsData)
+    // if (selectedJobs.length > 0) {
+    //   changeJob()
+    // }
+  }, [selectedJobs])
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
