@@ -1,11 +1,11 @@
 import React from 'react'
 import { IUserProfileLink } from '@/types/IUserProfile'
-import { AlertColor, Grid } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
+import { AlertColor, Stack, Typography } from '@mui/material'
 
 interface IToastProps {
   severity?: AlertColor
@@ -40,7 +40,7 @@ const ProfileLinkEditor = ({
 
   for (let i = 0; i < emptyLinksLength; i++)
     defaultValues.push({
-      id: links ? links.length + i + 1 : i,
+      id: -1 * (i + 1),
       linkName: '',
       linkUrl: '',
     })
@@ -132,16 +132,16 @@ const ProfileLinkEditor = ({
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)} id={'profile-link-editor-form'}>
-        <Grid container rowSpacing={2}>
+        <Stack direction={'column'} spacing={'1rem'}>
           {defaultValues.map((link, i) => {
             return (
-              <Grid item container xs={12} key={link.id} rowSpacing={1}>
-                <Grid item xs={3}>
-                  <CuTextFieldLabel htmlFor={`${i}.linkName`}>
-                    제목
-                  </CuTextFieldLabel>
-                </Grid>
-                <Grid item xs={9}>
+              <Stack direction={'column'} spacing={'1rem'} key={link.id}>
+                <CuTextFieldLabel htmlFor={`${i}.linkName`}>
+                  <Typography variant="CaptionEmphasis">
+                    {`링크 ${i + 1}`}
+                  </Typography>
+                </CuTextFieldLabel>
+                <Stack direction={'column'} spacing={'0.5rem'}>
                   <Controller
                     render={({ field }) => (
                       <CuTextField
@@ -152,7 +152,12 @@ const ProfileLinkEditor = ({
                         error={errors[i]?.linkName ? true : false}
                         fullWidth
                         inputProps={{ maxLength: 20 }}
-                        helperText={errors[i]?.linkName?.message}
+                        helperText={
+                          <Typography variant="Caption" color="red.strong">
+                            {errors[i]?.linkName?.message}
+                          </Typography>
+                        }
+                        placeholder="링크 제목을 입력해주세요."
                       />
                     )}
                     name={`${i}.linkName`}
@@ -165,42 +170,38 @@ const ProfileLinkEditor = ({
                       },
                     }}
                   />
-                </Grid>
-                <Grid item container xs={12}>
-                  <Grid item xs={3}>
-                    <CuTextFieldLabel htmlFor={`${i}.linkUrl`}>
-                      링크
-                    </CuTextFieldLabel>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Controller
-                      render={({ field }) => (
-                        <CuTextField
-                          variant="outlined"
-                          id={`${i}.linkUrl`}
-                          {...field}
-                          autoComplete="off"
-                          error={errors[i]?.linkUrl ? true : false}
-                          fullWidth
-                          helperText={errors[i]?.linkUrl?.message}
-                          inputProps={{ maxLength: 300 }}
-                        />
-                      )}
-                      name={`${i}.linkUrl`}
-                      control={control}
-                      rules={{
-                        maxLength: {
-                          value: 300,
-                          message: '링크는 최대 300글자까지만 적용 가능합니다.',
-                        },
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
+                  <Controller
+                    render={({ field }) => (
+                      <CuTextField
+                        variant="outlined"
+                        id={`${i}.linkUrl`}
+                        {...field}
+                        autoComplete="off"
+                        error={errors[i]?.linkUrl ? true : false}
+                        fullWidth
+                        helperText={
+                          <Typography variant="Caption" color="red.strong">
+                            {errors[i]?.linkUrl?.message}
+                          </Typography>
+                        }
+                        inputProps={{ maxLength: 300 }}
+                        placeholder="링크 주소(URL)를 입력해주세요."
+                      />
+                    )}
+                    name={`${i}.linkUrl`}
+                    control={control}
+                    rules={{
+                      maxLength: {
+                        value: 300,
+                        message: '링크는 최대 300글자까지만 적용 가능합니다.',
+                      },
+                    }}
+                  />
+                </Stack>
+              </Stack>
             )
           })}
-        </Grid>
+        </Stack>
       </form>
     </CuModal>
   )

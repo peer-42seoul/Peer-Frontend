@@ -1,4 +1,4 @@
-import { Box, Container, Stack } from '@mui/material'
+import { Container, Stack } from '@mui/material'
 import React from 'react'
 import SubNavBar from './panel/SubNavBar'
 
@@ -13,15 +13,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         sx={{ flex: '3, 4' }}
       >
         <SubNavBar sx={{ width: '15.3rem' }} />
-        <Box
+        <Stack
+          direction={'column'}
+          alignItems={'center'}
           sx={{
-            maxWidth: '57rem',
+            maxWidth: '56.75rem',
           }}
           flexGrow={1}
-          p={[2, 4]}
         >
           {children}
-        </Box>
+        </Stack>
       </Stack>
     </Container>
   )
