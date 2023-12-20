@@ -85,7 +85,7 @@ export const newTextBadge = {
   color: 'yellow.strong',
 }
 
-const BADGE_TRANSLATE = 'translate(100%, 70%)'
+const BADGE_TRANSLATE = 'translate(130%, -50%)'
 
 export const newBadge = {
   '& .MuiBadge-badge': {

@@ -30,7 +30,6 @@ const TeamSidebar = ({ id }: { id: string }) => {
           onClick: () => router.push(`/teams/${id}`),
           value: 'main',
           icon: <MainIcon />,
-          new: true,
         },
         {
           label: '공지사항',
@@ -56,7 +55,6 @@ const TeamSidebar = ({ id }: { id: string }) => {
           value: 'peerlog',
           icon: <PeerlogIcon />,
           new: true,
-          disabled: true,
         },
         {
           label: '쇼케이스',
@@ -64,6 +62,7 @@ const TeamSidebar = ({ id }: { id: string }) => {
           value: 'showcase',
           icon: <ShowcaseIcon />,
           new: true,
+          disabled: true,
         },
       ]}
     />
