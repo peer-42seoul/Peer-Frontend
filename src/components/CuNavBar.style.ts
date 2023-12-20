@@ -51,7 +51,8 @@ export const mobileTab = {
 }
 
 const iconBoxBase = {
-  marginRight: '0.25rem',
+  width: '0.875rem',
+  height: '0.875rem',
   // 아이콘
   '& svg': {
     width: '0.875rem',
@@ -89,4 +90,24 @@ export const newTextBadge = {
   color: 'yellow.strong',
 }
 
-export const newBadge = {}
+const BADGE_TRANSLATE = 'translate(100%, 70%)'
+
+export const newBadge = {
+  '& .MuiBadge-badge': {
+    width: '3px',
+    minWidth: '3px', // 기본 설정 디자인 오버라이딩
+    height: '3px',
+    backgroundColor: (theme: Theme) => theme.palette.yellow.strong,
+    // 기본 설정 디자인 오버라이딩
+    transform: `scale(1) ${BADGE_TRANSLATE}`,
+    '-webkit-transform': `scale(1) ${BADGE_TRANSLATE}`,
+    '-ms-transform': `scale(1) ${BADGE_TRANSLATE}`,
+    '-moz-transform': `scale(1) ${BADGE_TRANSLATE}`,
+    '&.MuiBadge-invisible': {
+      transform: `scale(0) ${BADGE_TRANSLATE}`,
+      '-webkit-transform': `scale(0) ${BADGE_TRANSLATE}`,
+      '-ms-transform': `scale(0) ${BADGE_TRANSLATE}`,
+      '-moz-transform': `scale(0) ${BADGE_TRANSLATE}`,
+    },
+  },
+}

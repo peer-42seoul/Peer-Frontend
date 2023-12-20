@@ -63,6 +63,7 @@ const TeamSidebar = ({ id }: { id: string }) => {
           onClick: () => router.push(`/teams/${id}/showcase`),
           value: 'showcase',
           icon: <ShowcaseIcon />,
+          new: true,
         },
       ]}
     />

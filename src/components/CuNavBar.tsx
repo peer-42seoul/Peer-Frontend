@@ -7,6 +7,7 @@ import {
   IconButton,
   ToggleButtonGroup,
   ToggleButton,
+  Badge,
 } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import { ChevronLeft } from '@/icons'
@@ -28,20 +29,6 @@ interface ICuNavBarProps {
   prevButtonAction?: () => void
   tabData: ITabInfo[]
 }
-
-/**
- * @description 마이페이지와 개별 팀 페이지에서 사용되는 네비게이션 바 컴포넌트 입니다.
- *
- * @param getTabValue 현재 페이지의 탭 값을 가져오는 함수
- * @param title 타이틀
- * @param prevButtonAction (선택) 이전 버튼 클릭 시 실행되는 함수
- * @param tabData 탭 정보
- * - label 탭 이름
- * - mobileLabel (선택) 탭 이름 (모바일)
- * - onClick 탭 클릭 시 실행되는 함수
- * - value 탭 값
- * - icon 탭 아이콘
- */
 
 const CuNavBar = ({
   getTabValue,
@@ -182,26 +169,39 @@ const MobileToggleButton = ({
   tab: ITabInfo
   selected: boolean
 }) => {
+  const isNewTab = tab.new && !tab.disabled
   return (
     <ToggleButton
       value={tab.value}
       onClick={tab.onClick}
       sx={style.mobileTab}
       disabled={tab.disabled}
+      selected={selected}
     >
-      <Stack direction={'column'} spacing={'0.12rem'}>
-        <Box
-          sx={
+      <Stack direction={'column'} alignItems={'center'} spacing={'0.25rem'}>
+        <Badge sx={style.newBadge} variant={'dot'} invisible={!isNewTab}>
+          <Box
+            sx={
+              selected
+                ? style.selectedIconBox
+                : tab.disabled
+                  ? style.disabledIconBox
+                  : style.iconBox
+            }
+          >
+            {tab.icon}
+          </Box>
+        </Badge>
+        <Typography
+          variant={'Tag'}
+          color={
             selected
-              ? style.selectedIconBox
+              ? 'purple.strong'
               : tab.disabled
-                ? style.disabledIconBox
-                : style.iconBox
+                ? 'custom.disabledNavTab'
+                : 'text.assistive'
           }
         >
-          {tab.icon}
-        </Box>
-        <Typography variant={'Caption'}>
           {tab.mobileLabel ?? tab.label}
         </Typography>
       </Stack>
