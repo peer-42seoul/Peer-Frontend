@@ -6,6 +6,8 @@ import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
 import { AlertColor, Stack, Typography } from '@mui/material'
+import useMedia from '@/hook/useMedia'
+import * as style from './Profile.style'
 
 interface IToastProps {
   severity?: AlertColor
@@ -35,6 +37,7 @@ const ProfileLinkEditor = ({
         linkUrl: link.linkUrl,
       }))
     : ([] as Array<IUserProfileLink>)
+  const { isPc } = useMedia()
 
   const emptyLinksLength: number = 3 - (links ? links.length : 0)
 
@@ -132,7 +135,11 @@ const ProfileLinkEditor = ({
       }}
       mobileFullSize
     >
-      <form onSubmit={handleSubmit(onSubmit)} id={'profile-link-editor-form'}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        id={'profile-link-editor-form'}
+        style={isPc ? style.formPcStyle : style.formMobileStyle}
+      >
         <Stack direction={'column'} spacing={'1rem'}>
           {defaultValues.map((link, i) => {
             return (
