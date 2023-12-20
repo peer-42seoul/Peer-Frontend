@@ -35,10 +35,8 @@ const deleteModalStyle = {
 
 const SaveButtonStyle = {
   width: '4rem',
-  margin: 'auto',
   right: 0,
   bottom: 0,
-  position: 'absolute',
 }
 
 export {
