@@ -1,5 +1,7 @@
 import CuButton from '@/components/CuButton'
-import { Button, Stack, TextField } from '@mui/material'
+import { InputBase, Stack, Typography } from '@mui/material'
+import SearchIcon from '@/icons/SearchIcon'
+import * as style from './MessageBar.style'
 
 interface ISearchBarProps {
   setSearchKeyword: (keyword: string) => void
@@ -13,19 +15,39 @@ export const SearchBar = ({
   handleMessageSearch,
 }: ISearchBarProps) => {
   return (
-    <Stack direction="row">
-      <TextField
-        placeholder="사람을 검색해 주세요."
-        onChange={(e) => setSearchKeyword(e.target.value)}
-      />
-      <Button variant="contained" onClick={handleMessageSearch}>
-        검색
-      </Button>
-      <CuButton
-        variant="text"
-        action={() => setIsManageMode(true)}
-        message="관리"
-      />
+    <Stack spacing={'1.5rem'}>
+      <Stack direction={'row'} justifyContent={'space-between'}>
+        <Typography variant={'Title3Emphasis'}>대상 리스트</Typography>
+        <CuButton
+          TypographyProps={{ variant: 'CaptionEmphasis' }}
+          variant="text"
+          action={() => setIsManageMode(true)}
+          message="관리"
+        />
+      </Stack>
+      <Stack
+        sx={style.searchInputWrapper}
+        direction={'row'}
+        alignItems={'center'}
+        spacing={'0.38rem'}
+      >
+        <SearchIcon />
+        <InputBase
+          sx={style.searchInput}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          placeholder="닉네임을 검색해주세요."
+          fullWidth
+        />
+        <CuButton
+          TypographyProps={{
+            variant: 'CaptionEmphasis',
+            color: 'text.alternative',
+          }}
+          variant="text"
+          action={handleMessageSearch}
+          message="검색"
+        />
+      </Stack>
     </Stack>
   )
 }
@@ -46,22 +68,52 @@ export const ManageBar = ({
   setIsManageMode,
 }: IManageBarProps) => {
   return (
-    <Stack direction="row">
-      {isSelectedAll ? (
+    <Stack spacing={'1.5rem'}>
+      <Stack direction={'row'} justifyContent={'space-between'}>
+        <Typography variant={'Title3Emphasis'}>대상 리스트 관리</Typography>
         <CuButton
+          TypographyProps={{ variant: 'CaptionEmphasis' }}
           variant="text"
-          action={handleUnselectAll}
-          message="전체 선택 해제"
+          action={() => setIsManageMode(false)}
+          message="리스트로 돌아가기"
         />
-      ) : (
-        <CuButton variant="text" action={handleSelectAll} message="전체 선택" />
-      )}
-      <CuButton variant="text" action={handleDelete} message="삭제" />
-      <CuButton
-        variant="text"
-        action={() => setIsManageMode(false)}
-        message="리스트로 돌아가기"
-      />
+      </Stack>
+      <Stack
+        direction={'row'}
+        sx={style.manageBarStack}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+      >
+        {isSelectedAll ? (
+          <CuButton
+            TypographyProps={{
+              variant: 'CaptionEmphasis',
+              color: 'text.alternative',
+            }}
+            variant="text"
+            action={handleUnselectAll}
+            message="전체 선택 해제"
+          />
+        ) : (
+          <CuButton
+            TypographyProps={{
+              variant: 'CaptionEmphasis',
+              color: 'text.alternative',
+            }}
+            variant="text"
+            action={handleSelectAll}
+            message="전체 선택"
+          />
+        )}
+        <CuButton
+          TypographyProps={{
+            variant: 'CaptionEmphasis',
+          }}
+          variant="text"
+          action={handleDelete}
+          message="삭제"
+        />
+      </Stack>
     </Stack>
   )
 }
