@@ -16,12 +16,12 @@ const TeamsLayout = ({ children }: { children: ReactNode }) => {
   return (
     <Stack
       display="flex"
-      padding={1}
-      spacing={2}
-      px={isPc && !isTablet ? 21 : 3}
+      padding={'0.5rem'}
+      spacing={'1rem'}
+      px={isPc && !isTablet ? '10.5rem' : '1.5rem'}
       height={'81.5vh'}
     >
-      <Stack spacing={5} direction={isPc ? 'row' : 'column'}>
+      <Stack spacing={'2.5rem'} direction={isPc ? 'row' : 'column'}>
         <Sidebar />
         {children}
       </Stack>

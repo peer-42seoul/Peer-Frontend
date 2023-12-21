@@ -2,10 +2,10 @@ name: CI/CD
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: ['main', 'develop']
   pull_request:
-    branches: ["main", "develop"]
-    types: ["opened", "reopened", "synchronize", "closed"]
+    branches: ['main', 'develop']
+    types: ['opened', 'reopened', 'synchronize', 'closed']
 
 jobs:
   CI:
@@ -43,6 +43,10 @@ jobs:
       - name: Lint
         working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend
         run: npm run lint
+
+      - name: Build Test
+        working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend
+        run: npm run build
 
   CD:
     name: Deployment
