@@ -10,6 +10,7 @@ import useToast from '@/hook/useToast'
 import MessageList from './MessageList'
 import useMessageListState from '@/states/useMessageListState'
 import { SearchBar, ManageBar } from './MessageBar'
+import * as style from './MessageContainer.style'
 
 interface IMessageContainerProps {
   originalMessageData: IMessageListData[] | undefined
@@ -61,8 +62,8 @@ const MessageContainer = ({
   }, [originalMessageData, searchKeyword])
 
   const handleDelete = () => {
-    const requestBody = Array.from(selectedUsers).map((targetId) => ({
-      targetId,
+    const requestBody = Array.from(selectedUsers).map((conversationId) => ({
+      conversationId,
     }))
     axiosInstance
       .delete('/api/v1/message/delete-message', {
@@ -81,7 +82,7 @@ const MessageContainer = ({
 
   return (
     <>
-      <Stack spacing={2}>
+      <Stack spacing={'1.5rem'} sx={style.pcContainer}>
         {isManageMode ? (
           <ManageBar
             isSelectedAll={isSelectedAll(messageList)}

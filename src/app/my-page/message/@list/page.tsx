@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import useSWR from 'swr'
-import { Box, Stack } from '@mui/material'
+import { IconButton, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
@@ -11,6 +11,9 @@ import useMessageListState from '@/states/useMessageListState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageContainer from './panel/MessageContainer'
 import NewMessageModal from './panel/NewMessageModal'
+import BackgroundBox from '@/components/BackgroundBox'
+import PlusIcon from '@/icons/PlusIcon'
+import * as style from './page.style'
 
 interface INewMessageButtonProps {
   isPc: boolean
@@ -20,12 +23,19 @@ interface INewMessageButtonProps {
 const NewMessageButton = ({ isPc, openModal }: INewMessageButtonProps) => {
   return (
     <Stack direction="row" justifyContent={'flex-end'}>
-      <CuButton
-        variant="outlined"
-        action={openModal}
-        message={isPc ? '새 쪽지 보내기' : '+'}
-        style={{ marginBottom: '32px' }}
-      />
+      {isPc ? (
+        <CuButton
+          message="새 쪽지"
+          action={openModal}
+          variant={'contained'}
+          startIcon={<PlusIcon width={'1.25rem'} height={'1.25rem'} />}
+          style={style.pcSendButton}
+        />
+      ) : (
+        <IconButton onClick={openModal}>
+          <PlusIcon />
+        </IconButton>
+      )}
     </Stack>
   )
 }
@@ -49,15 +59,17 @@ const MessageListPage = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Stack spacing={'2rem'} sx={isPc ? style.pcStack : style.mobileStack}>
         <NewMessageButton isPc={isPc} openModal={openModal} />
-        <MessageContainer
-          originalMessageData={data}
-          error={error}
-          isLoading={isLoading}
-          isPC={isPc}
-        />
-      </Box>
+        <BackgroundBox mobileSx={style.mobileBox} pcSx={style.pcBox}>
+          <MessageContainer
+            originalMessageData={data}
+            error={error}
+            isLoading={isLoading}
+            isPC={isPc}
+          />
+        </BackgroundBox>
+      </Stack>
       )
       {isOpen && (
         <NewMessageModal
