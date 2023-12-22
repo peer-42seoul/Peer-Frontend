@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
 import CardContainer from './panel/CardContainer'
-import CuToggle from '@/components/CuToggle'
+import CuTypeToggle from '@/components/CuTypeToggle'
 import useMedia from '@/hook/useMedia'
 import Interest from './panel/Interest'
 
@@ -22,6 +22,11 @@ const Hitchhiking = () => {
     }&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
     defaultGetFetcher,
   )
+
+  const handleChange = () => {
+    setCardList([])
+    setIsProject((prev) => !prev)
+  }
 
   useEffect(() => {
     if (!isLoading && data?.content) {
@@ -49,15 +54,32 @@ const Hitchhiking = () => {
       }}
       direction={'column'}
     >
-      <FormControlLabel
-        control={
-          <CuToggle
-            checked={isProject}
-            onChange={() => setIsProject((prev) => !prev)}
-          />
-        }
-        label="Label"
-      />
+      <Stack
+        sx={{ width: '100%' }}
+        justifyContent={'center'}
+        alignItems={'center'}
+        direction={'row'}
+        spacing={'0.5rem'}
+      >
+        <Typography
+          variant="Caption"
+          color={!isProject ? 'purple.normal' : 'text.assistive'}
+          sx={{ transition: 'color 0.5s ease' }}
+        >
+          스터디
+        </Typography>
+        <FormControlLabel
+          control={<CuTypeToggle checked={isProject} onChange={handleChange} />}
+          label={''}
+        />
+        <Typography
+          variant="Caption"
+          color={isProject ? 'purple.normal' : 'text.assistive'}
+          sx={{ transition: 'color 0.5s ease' }}
+        >
+          프로젝트
+        </Typography>
+      </Stack>
       <Stack
         justifyContent={'center'}
         alignItems={'center'}
