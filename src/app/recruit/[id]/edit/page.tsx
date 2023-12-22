@@ -87,7 +87,13 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
 
   const { data, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.id}`,
-    (url: string) => axiosInstance.get(url).then((res) => res.data),
+    (url: string) =>
+      axiosInstance
+        .get(url)
+        .then((res) => res.data)
+        .catch((err) => {
+          if (err.response.status === 403) router.push(`/recruit/${params.id}`)
+        }),
   )
   let regionData = undefined
 
