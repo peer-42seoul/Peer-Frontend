@@ -134,12 +134,12 @@ const CardContainer = ({
                       right: 0,
                       bottom: 0,
                     }}
-                    dragTransition={{ bounceStiffness: 300, bounceDamping: 15 }}
+                    dragTransition={{ bounceStiffness: 300, bounceDamping: 50 }}
                     onDragStart={() => setDragged(true)}
                     onDragEnd={(e: any, info: any) =>
                       handleDragEnd(e, info, card.recruit_id, card.title)
                     }
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <HitchhikingCard
                       authorImage={card.user_thumbnail}
