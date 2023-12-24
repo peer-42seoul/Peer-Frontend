@@ -1,7 +1,7 @@
 import { Box, IconButton, Portal, Stack, Typography } from '@mui/material'
 import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
-import CalenderWidget from '@/app/teams/[id]/panel/widgets/Calendar/CalenderWidget'
+import CalenderWidget from '@/app/teams/[id]/panel/widgets/CalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
 import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'

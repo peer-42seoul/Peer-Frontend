@@ -1,12 +1,15 @@
+'use client'
 import { ReactNode } from 'react'
 import dayjs from 'dayjs'
 import { Box, Grid, Stack, Typography } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
+import useModal from '@/hook/useModal'
 import { SizeType } from '@/types/ITeamDnDLayout'
 import { IEvent } from '@/types/WidgetDataTypes'
 import WidgetCard from '../WidgetCard'
 import CalendarMini from './CalendarMini'
 import { getTodayData } from './utils'
+import PreviewModal from './PreviewModal'
 
 interface ICalendarWidget {
   data?: IEvent[]
@@ -24,6 +27,18 @@ interface IEventItem {
 }
 
 const CalenderWidget = ({ data, size }: ICalendarWidget) => {
+  const { isOpen, openModal, closeModal } = useModal()
+
+  return (
+    <>
+      <CalendarRender data={data} size={size} />
+      <PreviewModal open={isOpen} onClose={closeModal} events={data} />
+    </>
+  )
+  )
+}
+
+const CalendarRender = ({ data, size }: ICalendarWidget) => {
   if (size === 'S') return <CalendarSmall data={data} />
   if (size === 'M') return <CalendarMedium data={data} />
   return <CalendarLarge data={data} /> // size === 'L'

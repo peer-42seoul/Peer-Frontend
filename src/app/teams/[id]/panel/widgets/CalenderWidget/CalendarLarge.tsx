@@ -4,21 +4,17 @@ import dayjs from 'dayjs'
 import { Box, Stack } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import { IEvent } from '@/types/WidgetDataTypes'
-import { LargeToolbar, LargeDayEvent, events } from './CalendarComponent'
+import { LargeToolbar, LargeDayEvent } from '../../CalendarComponent'
 import '../style/CalendarLarge.scss'
 
 const localizer = dayjsLocalizer(dayjs)
 
 interface ICalendarLargeProps {
-  // events: IEvent[]
-  onSelectedEvent: (event: IEvent | null) => void
+  events?: IEvent[]
   onDrillDown: (date: Date) => void
 }
 
-const CalendarLarge = ({
-  onSelectedEvent,
-  onDrillDown,
-}: ICalendarLargeProps) => {
+const CalendarLarge = ({ events, onDrillDown }: ICalendarLargeProps) => {
   const [currentMonth, setCurrentMonth] = useState<Number>(
     new Date().getMonth(),
   )
@@ -37,7 +33,7 @@ const CalendarLarge = ({
           const { date, onDrillDown } = props
           const today = new Date()
           const isToday = dayjs(date).isSame(today, 'day')
-          const isEventDay = events.some(
+          const isEventDay = events?.some(
             (event) =>
               dayjs(event.start).isSame(date, 'day') ||
               dayjs(event.end).isSame(date, 'day'),
@@ -73,7 +69,6 @@ const CalendarLarge = ({
       }
       return {
         style: {
-          backgroundColor: event.color,
           color: 'white',
         },
       }
@@ -98,7 +93,7 @@ const CalendarLarge = ({
         components={components}
         events={events}
         eventPropGetter={styleEvent}
-        onSelectEvent={onSelectedEvent}
+        // onSelectEvent={onSelectedEvent}
         onDrillDown={onDrillDown}
         onNavigate={onNavigate}
       />
