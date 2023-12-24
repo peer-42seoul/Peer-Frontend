@@ -3,7 +3,6 @@ import dayjs from 'dayjs'
 import { IconButton } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import { IEvent } from '@/types/WidgetDataTypes'
 
 // Toolbar : 상단 달 표시 컴포넌트
 export const MiniToolbar = (props: ToolbarProps) => {
@@ -50,44 +49,3 @@ export const LargeDayEvent = (props: EventProps) => {
     </div>
   )
 }
-
-// ============= 이벤트 mock data ==============
-// TODO : api 연동 후 mock data 삭제
-
-export const events: IEvent[] = [
-  {
-    id: 0,
-    color: '#CB62D0',
-    title: 'aaaaaaaaa',
-    start: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-    end: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-  },
-  {
-    id: 1,
-    color: '#FFD976',
-    title: 'bbbbbbbb',
-    start: new Date(),
-    end: new Date(),
-  },
-  {
-    id: 2,
-    color: '#CB62D0',
-    title: 'cccccccc',
-    start: new Date(new Date().setDate(new Date().getDate() + 5)),
-    end: new Date(new Date().setDate(new Date().getDate() + 5)),
-  },
-  {
-    id: 3,
-    color: '#FFD976',
-    title: 'dddddddd',
-    start: new Date(new Date().setDate(new Date().getDate() + 5)),
-    end: new Date(new Date().setDate(new Date().getDate() + 6)),
-  },
-  {
-    id: 4,
-    color: '#CB62D0',
-    title: 'eeeeeeee',
-    start: new Date(new Date().setDate(new Date().getDate() + 10)),
-    end: new Date(new Date().setDate(new Date().getDate() + 10)),
-  },
-]

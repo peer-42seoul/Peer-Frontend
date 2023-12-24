@@ -1,19 +1,20 @@
 import { useMemo } from 'react'
 import { DateHeaderProps, Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
-import { Box, Stack } from '@mui/material'
+import { Box, Stack, SxProps } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
-import {
-  MiniToolbar,
-  MiniDayCell,
-  MiniDayEvent,
-  events,
-} from './CalendarComponent'
+import { MiniToolbar, MiniDayCell, MiniDayEvent } from '../../CalendarComponent'
 import '../style/CalendarMini.scss'
+import { IEvent } from '@/types/WidgetDataTypes'
+
+interface ICaledarMini {
+  events?: IEvent[]
+  sx?: SxProps
+}
 
 const localizer = dayjsLocalizer(dayjs)
 
-const CalendarMini = () => {
+const CalendarMini = ({ events, sx }: ICaledarMini) => {
   const formats = useMemo(
     () => ({
       weekdayFormat: (date: Date) => dayjs(date).format('dd')[0],
@@ -29,7 +30,7 @@ const CalendarMini = () => {
           const { date } = props
           const today = new Date()
           const isToday = dayjs(date).isSame(today, 'day')
-          const isEventDay = events.some(
+          const isEventDay = events?.some(
             (event) =>
               dayjs(event.start).isSame(date, 'day') ||
               dayjs(event.end).isSame(date, 'day'),
@@ -52,7 +53,7 @@ const CalendarMini = () => {
   )
 
   return (
-    <Box sx={{ height: '300px' }} className={'calendar-mini'}>
+    <Box sx={sx || { height: '300px' }} className={'calendar-mini'}>
       <Calendar
         localizer={localizer}
         formats={formats}

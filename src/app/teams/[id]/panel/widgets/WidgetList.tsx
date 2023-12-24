@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react'
 import { sizeRatio } from '@/app/teams/[id]/panel/TeamDnD'
 import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
-import TmpCalenderWidget from '@/app/teams/[id]/panel/widgets/TmpCalenderWidget'
+import CalenderWidget from '@/app/teams/[id]/panel/widgets/Calendar/CalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
@@ -85,7 +85,10 @@ const WidgetList = ({
           )
         case 'calender':
           return (
-            <TmpCalenderWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+            <CalenderWidget
+              data={undefined}
+              size={toolSize[typeValue] ?? 'S'}
+            />
           )
         case 'attendance':
           return (
