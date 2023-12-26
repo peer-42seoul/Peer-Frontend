@@ -58,7 +58,7 @@ const DisplaySetting = () => {
               sx={{
                 marginRight: '16px',
                 marginLeft: '0',
-                textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                // textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
               }}
             >
               라이트/ 다크 모드

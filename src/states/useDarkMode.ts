@@ -1,3 +1,4 @@
+'use client'
 import { create } from 'zustand'
 import LocalStorage from './localStorage'
 import { EDisplayMode, DarkModeState } from '@/types/DisplayTypes'
@@ -32,24 +33,24 @@ export const useDarkMode = create<DarkModeState>((set, get) => {
 
   const toggleSystemTheme = () => {
     set((state) => {
-      const newMode = get().useSystemTheme
+      const newMode = state.useSystemTheme
         ? getSystemTheme()
         : EDisplayMode.system
       LocalStorage.setItem('mode', newMode)
       return {
-        darkMode: getSystemTheme(), // 시스템 설정을 건드렸을 때 항상 현재의 시스템 테마를 가져옴
         useSystemTheme: !state.useSystemTheme,
+        darkMode: getSystemTheme(), // 시스템 설정을 건드렸을 때 항상 현재의 시스템 테마를 가져옴
       }
     })
   }
 
   return {
     darkMode:
-      LocalStorage.getItem('mode') === EDisplayMode.light
+      LocalStorage.getItem('mode') == EDisplayMode.light
         ? EDisplayMode.light
         : EDisplayMode.dark,
     useSystemTheme:
-      LocalStorage.getItem('mode') === EDisplayMode.system ? true : false,
+      LocalStorage.getItem('mode') == EDisplayMode.system ? true : false,
     isLightMode,
     toggleDarkMode,
     toggleSystemTheme,
