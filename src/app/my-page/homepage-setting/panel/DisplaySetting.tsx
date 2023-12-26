@@ -1,11 +1,11 @@
 'use client'
 import CuToggle from '@/components/CuToggle'
 import { FormControlLabel, Stack, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useDarkMode } from '@/states/useDarkMode'
 
 const DisplaySetting = () => {
-  const [useSystem, setUseSystem] = useState(false)
-  const [darkMode, setDarkMode] = useState(false)
+  const { useSystemTheme, isLightMode, toggleDarkMode, toggleSystemTheme } =
+    useDarkMode()
 
   return (
     <Stack
@@ -21,10 +21,8 @@ const DisplaySetting = () => {
         <FormControlLabel
           control={
             <CuToggle
-              checked={useSystem}
-              onChange={() => {
-                setUseSystem((prev) => !prev)
-              }}
+              checked={useSystemTheme}
+              onChange={toggleSystemTheme}
               inputProps={{ 'aria-label': `시스템 설정 토글` }}
             />
           }
@@ -40,13 +38,14 @@ const DisplaySetting = () => {
           labelPlacement="start"
         />
         <FormControlLabel
-          sx={{ opacity: useSystem ? 0 : 1, transition: 'opacity 0.5s ease' }}
+          sx={{
+            opacity: useSystemTheme ? 0 : 1,
+            transition: 'opacity 0.5s ease',
+          }}
           control={
             <CuToggle
-              checked={darkMode}
-              onChange={() => {
-                setDarkMode((prev) => !prev)
-              }}
+              checked={isLightMode()}
+              onChange={toggleDarkMode}
               inputProps={{ 'aria-label': `라이트/다크모드 토글` }}
               uncheckedtrackimage="/images/sign_moon.svg"
               checkedtrackimage="/images/sign_sun.svg"
