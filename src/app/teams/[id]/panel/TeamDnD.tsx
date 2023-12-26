@@ -39,21 +39,19 @@ const TeamDnD = ({ id }: { id: string }) => {
     trigger()
   }, [])
 
-  if (!data && isMutating) return <>로딩중입니다</>
-  if (!data && error) return <>에러 발생</>
+  // @todo api 에러 해결되면 다시 주석 해제
+  // if (!data && isMutating) return <>로딩중입니다</>
+  // if (!data && error) return <>에러 발생</>
 
   return (
     <Stack
       sx={{
         width: '100%',
         height: '100%',
-        border: 1.55,
-        padding: 2,
       }}
-      bgcolor={'beige'}
     >
+      {/*툴 박스 리스트*/}
       {edit && (
-        /* 툴 박스 리스트 */
         <WidgetList
           setIsDropping={setIsDropping}
           setType={setType}

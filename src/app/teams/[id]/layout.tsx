@@ -27,6 +27,7 @@ const TeamLayout = ({
           direction={isPc ? 'row' : 'column'}
           flex={4}
           borderRadius={2}
+          width={'100%'}
         >
           {children}
         </Stack>

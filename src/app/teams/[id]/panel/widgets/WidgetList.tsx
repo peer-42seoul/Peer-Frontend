@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { SizeType, WidgetType } from '@/types/ITeamDnDLayout'
 import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
 import { useCallback, useState } from 'react'
@@ -108,14 +108,16 @@ const WidgetList = ({
 
   return (
     <Box
-      bgcolor={'skyblue'}
       padding={1}
       width={'100%'}
       sx={{
-        overflowX: 'auto',
+        backgroundColor: 'background.secondary',
       }}
     >
-      <Stack direction={'row'} gap={1}>
+      <Typography>
+        원하는 위젯과 사이즈를 선택해서 원하는 위치에 드래그하세요.
+      </Typography>
+      <Stack direction={'row'} gap={1} sx={{ overflowX: 'auto' }}>
         {/*툴 박스 렌더링*/}
         {typeList?.map((typeValue: WidgetType) => (
           <Box key={typeValue} bgcolor={'lightgray'}>
@@ -149,8 +151,8 @@ const WidgetList = ({
                 key={typeValue}
                 margin={1}
                 flexDirection={'row'}
-                height={200 * 0.38 * sizeRatio[toolSize[typeValue] ?? 'S'].w}
-                width={200 * 0.38 * sizeRatio[toolSize[typeValue] ?? 'S'].h}
+                height={200 * 0.3 * sizeRatio[toolSize[typeValue] ?? 'S'].h}
+                width={200 * 0.3 * sizeRatio[toolSize[typeValue] ?? 'S'].w}
                 className="droppable-element"
                 draggable={true}
                 unselectable="on"

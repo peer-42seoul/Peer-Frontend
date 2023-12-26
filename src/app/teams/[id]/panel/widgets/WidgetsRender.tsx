@@ -6,7 +6,7 @@ import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
 import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import ReactGridLayout, {
   Layout,
   Responsive,
@@ -48,7 +48,6 @@ const WidgetsRender = ({
   setEdit,
 }: IWidgetsRenderProps) => {
   const [index, setIndex] = useState(0)
-
   /* 초기 widget값을 만드는 함수 */
   const setInitWidgets: IWidget[] = useMemo(() => {
     if (!data) return []
@@ -65,7 +64,6 @@ const WidgetsRender = ({
     })
   }, [data])
   const [widgets, setWidgets] = useState<IWidget[]>(setInitWidgets)
-
   const [isOpen, setOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
   const {
@@ -109,7 +107,10 @@ const WidgetsRender = ({
   const onLayoutChange = useCallback(
     (currentLayout: Layout[]) => {
       //레이아웃 범위를 넘어갈 시 처리 필요
-
+      console.log(
+        'layoutRef?.current?.clientWidth',
+        document.getElementsByClassName('react-grid-layout'),
+      )
       //드롭중일 경우 이미 onDrop에서 처리하고 있으므로 처리x
       if (!isDropping) {
         const updatedCurrentWidget: IWidget[] = currentLayout.map(
@@ -151,6 +152,7 @@ const WidgetsRender = ({
     }
   }, [axiosInstance, data, id, openFailedToast, openSuccessToast, widgets])
 
+  /* widget 가져오기 */
   const getWidget = useCallback(
     (type: WidgetType, wgData: any, wgSize: SizeType) => {
       switch (type) {
@@ -176,7 +178,7 @@ const WidgetsRender = ({
   )
 
   return (
-    <Box>
+    <Box bgcolor="background.secondary">
       {/*request와 관련된 toast*/}
       <Portal>
         <CuSuccessToast
@@ -229,7 +231,6 @@ const WidgetsRender = ({
           minHeight: edit ? '900px' : undefined,
           maxHeight: edit ? '900px' : undefined,
           borderRadius: '5px',
-          backgroundColor: 'yellow',
         }}
       >
         {widgets?.map(({ grid, type, size: wgSize, data: wgData }) => {
@@ -285,7 +286,7 @@ const WidgetsRender = ({
               setWidgets(setInitWidgets)
               setEdit(!edit)
             }}
-            variant={'outlined'}
+            variant={'contained'}
           />
         )}
         <CuButton
@@ -294,7 +295,7 @@ const WidgetsRender = ({
             if (edit) return setOpen(true)
             setEdit(!edit)
           }}
-          variant={edit ? 'contained' : 'outlined'}
+          variant={'contained'}
         />
       </Stack>
     </Box>
