@@ -9,17 +9,19 @@ import CardContainer from './panel/CardContainer'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import useMedia from '@/hook/useMedia'
 import Interest from './panel/Interest'
+import CuButton from '@/components/CuButton'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(false)
   const [cardList, setCardList] = useState<Array<IMainCard>>([])
+  const [draggedCardList, setDraggedCardList] = useState<IMainCard[]>([])
 
   const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
       isProject ? 'PROJECT' : 'STUDY'
-    }&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
+    }&sort=latest&page=${page}&pageSize=3&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
     defaultGetFetcher,
   )
 
@@ -37,9 +39,38 @@ const Hitchhiking = () => {
     }
   }, [isLoading, data?.content])
 
+  const removeCard = (recruit_id: number) => {
+    setDraggedCardList((prev: IMainCard[]) => {
+      prev.push(cardList[cardList.length - 1])
+      return prev
+    })
+    setCardList((prev: IMainCard[]) => {
+      return prev.filter((card) => card.recruit_id !== recruit_id)
+    })
+    if (cardList.length === 2) {
+      setPage((prev) => (!data?.last ? prev + 1 : prev))
+    }
+    console.log('cardList.length')
+    console.log(cardList.length)
+    console.log('cardList')
+    console.log(cardList)
+  }
+
+  const addCard = () => {
+    setCardList((prev: IMainCard[]) => {
+      return [...prev, draggedCardList[0]]
+    })
+    setDraggedCardList((prev: IMainCard[]) => {
+      return prev.filter(
+        (card) => card.recruit_id !== draggedCardList[0].recruit_id,
+      )
+    })
+  }
+
   let message: string = ''
 
-  if (isLoading && !cardList.length) message = '로딩중'
+  if (!isLoading && !cardList.length) message = '히치하이킹 끝!'
+  else if (isLoading && !cardList.length) message = '로딩중'
   else if (error) message = '에러 발생'
 
   return (
@@ -93,17 +124,29 @@ const Hitchhiking = () => {
         {!message ? (
           <CardContainer
             cardList={cardList}
-            update={() => setPage((prev) => (!data?.last ? prev + 1 : prev))}
-            setCardList={setCardList}
+            removeCard={removeCard}
             isProject={isProject}
           />
         ) : (
           <Typography>{message}</Typography>
         )}
       </Stack>
-      {/* {cardList.length && ( */}
-      <Interest id={cardList[cardList.length - 1]?.recruit_id} />
-      {/* )} */}
+      <Stack
+        sx={{ width: '100%' }}
+        direction={'row'}
+        justifyContent={'space-around'}
+      >
+        <CuButton
+          message="되돌리기"
+          action={addCard}
+          disabled={!draggedCardList.length}
+        />
+        <Interest id={cardList[cardList.length - 1]?.recruit_id} />
+        <CuButton
+          message="관심없음"
+          action={() => removeCard(cardList[cardList.length - 1]?.recruit_id)}
+        />
+      </Stack>
     </Stack>
   )
 }
