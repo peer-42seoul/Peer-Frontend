@@ -2,10 +2,10 @@
 import { useDarkMode } from '@/states/useDarkMode'
 import {
   ThemeProvider,
-  alpha,
   createTheme,
   StyledEngineProvider,
 } from '@mui/material/styles'
+import { useEffect } from 'react'
 
 declare module '@mui/material/styles' {
   // typography variant 추가
@@ -322,7 +322,13 @@ declare module '@mui/material/Chip' {
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
   let theme = createTheme()
 
-  const { darkMode } = useDarkMode()
+  const { theme: colorTheme, getModeFromLocalStorage } = useDarkMode()
+
+  useEffect(() => {
+    getModeFromLocalStorage()
+  }, [])
+
+  theme = createTheme(theme, colorTheme)
 
   theme = createTheme(theme, {
     breakpoints: {
@@ -542,64 +548,6 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       },
     },
   })
-
-  if (darkMode === 'dark') {
-    console.log('dark mode')
-    theme = createTheme(theme, {
-      palette: {
-        mode: darkMode,
-        background: {
-          primary: '#060623',
-          secondary: '#18182B',
-          tertiary: '#22223A',
-          paper: '#060623',
-          default: '#060623',
-        },
-        line: {
-          base: '#35373E',
-          alternative: '#2C2E35',
-        },
-        text: {
-          strong: '#FFFFFF',
-          primary: '#F6F6F6',
-          normal: '#F6F6F6',
-          alternative: '#9B9B9B',
-          secondary: '#9B9B9B',
-          assistive: '#42444C',
-          disable: '#292C32',
-          disabled: alpha('#9B9B9B', 0.5), // 기존에 디자이너님의 의도하신 것에 영향이 있을 수 있으나, textfield disabled 상태에서의 텍스트 색상을 위해 고쳤습니다.
-        },
-      },
-    })
-  } else {
-    console.log('light mode')
-    theme = createTheme(theme, {
-      palette: {
-        mode: darkMode,
-        background: {
-          primary: '#FFFFFF',
-          secondary: '#F7F8FA',
-          tertiary: '#F1F3F8',
-          paper: '#FFFFFF',
-          default: '#FFFFFF',
-        },
-        line: {
-          base: '#EAEBEE',
-          alternative: '#DDDFE3',
-        },
-        text: {
-          strong: '#000000',
-          primary: '#1A1A1A',
-          normal: '#1A1A1A',
-          alternative: '#878B93',
-          secondary: '#878B93',
-          assistive: '#AEB1B9',
-          disable: '#D7D9DE',
-          disabled: alpha('#878B93', 0.5), // 기존에 디자이너님의 의도하신 것에 영향이 있을 수 있으나, textfield disabled 상태에서의 텍스트 색상을 위해 고쳤습니다.
-        },
-      },
-    })
-  }
 
   theme = createTheme(theme, {
     components: {
