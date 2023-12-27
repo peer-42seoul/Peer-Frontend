@@ -1,11 +1,10 @@
 'use client'
 
-import { AppBar, Box, Stack, Toolbar, alpha } from '@mui/material'
+import { AppBar, Box, Stack, Toolbar, alpha, useTheme } from '@mui/material'
 import SearchButton from '../main-page/SearchButton'
 import AlertIcon from './AlertIcon'
 import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 import * as style from './Header.style'
-import { useTheme } from '@mui/material'
 
 /**
  * TODO : 상황에 따라 다른 헤더를 보여 줄 수 있어야 할 것 같습니다.

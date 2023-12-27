@@ -28,8 +28,4 @@ const PeerLogo = createSvgIcon(
   'PeerLogo',
 )
 
-// const PeerLogo = (props: SvgIconProps) => {
-//   return <SvgIcon {...props}></SvgIcon>
-// }
-
 export default PeerLogo
