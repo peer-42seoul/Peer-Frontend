@@ -99,7 +99,7 @@ const CuToast = ({
   return (
     <Snackbar
       open={open}
-      autoHideDuration={autoHideDuration ? autoHideDuration : 600000}
+      autoHideDuration={autoHideDuration ? autoHideDuration : 6000}
       onClose={onClose}
       sx={{ zIndex: 1600 }}
       TransitionComponent={TransitionLeft}
