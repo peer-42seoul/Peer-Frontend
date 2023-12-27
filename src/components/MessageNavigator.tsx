@@ -35,7 +35,7 @@ const MessageNavigator = ({
       />
       <Typography>{title}</Typography>
       <Box>
-        {messageType !== 'main' && <SearchIcon />}
+        {messageType !== 'main' && <SearchIcon sx={{ color: 'text.normal' }} />}
         <AddIcon onClick={onNewMessage} />
       </Box>
     </Box>

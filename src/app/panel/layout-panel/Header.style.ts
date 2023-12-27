@@ -1,6 +1,5 @@
-export const mobileHeader = {
-  background: 'rgba(6, 6, 35, 0.80)',
-}
+// alpha 함수와 useTheme 함수를 사용해야하기 때문에 mobileHeader의 background color를 제외하였습니다.
+export const mobileHeader = {}
 
 export const mobileHeaderToolbar = {
   boxSizing: 'border-box',

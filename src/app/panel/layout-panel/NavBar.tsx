@@ -130,7 +130,7 @@ export const PcNav = () => {
     >
       <Stack direction={'row'}>
         <Stack alignItems={'center'} justifyContent={'center'}>
-          <PeerLogo sx={{ width: 50, height: 50 }} />
+          <PeerLogo sx={{ width: 50, height: 50, color: 'text.normal' }} />
         </Stack>
         <BottomNavigation
           showLabels

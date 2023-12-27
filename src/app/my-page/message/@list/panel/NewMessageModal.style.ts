@@ -11,6 +11,7 @@ export const searchInput = {
 export const searchIcon = {
   width: '1.25rem',
   height: '1.25rem',
+  color: 'text.normal',
 }
 
 export const closeIcon = {
