@@ -3,8 +3,7 @@ import { SlideProps, Snackbar, Stack, SxProps, Typography } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import React from 'react'
 import { CloseIcon } from '@/icons'
-import { IconButton } from '@mui/material'
-import { Slide } from '@mui/material'
+import { IconButton, Slide } from '@mui/material'
 
 const iconStyle: SxProps = {
   width: '0.75rem',
@@ -44,7 +43,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
       backgroundColor = 'red.tinted'
     } else if (severity === 'warning') {
       backgroundColor = 'yellow.tinted'
-    } else if (severity === 'info') {
+    } else {
       backgroundColor = 'purple.tinted'
     }
 
