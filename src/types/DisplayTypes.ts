@@ -10,8 +10,6 @@ export type DarkModeState = {
   darkMode: EDisplayMode.dark | EDisplayMode.light
   useSystemTheme: boolean
   theme: Theme
-  lightTheme: Theme
-  darkTheme: Theme
   isLightMode: () => boolean
   toggleDarkMode: () => void
   toggleSystemTheme: () => void
