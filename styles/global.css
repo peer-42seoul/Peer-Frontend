@@ -13,7 +13,7 @@ body::-webkit-scrollbar {
 
 body * {
   transition:
-    color 0.3s ease,
+    color 0.1s ease,
     background-color 0.3s ease; /* Apply transition to all children */
 }
 
