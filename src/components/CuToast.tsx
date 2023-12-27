@@ -122,6 +122,7 @@ const CuToast = ({
           </Stack>
         }
       >
+        {/* 기존에는 타이포그래피를 넣게 하였으나 앞으로는 message prop에 넣는 것으로 처리해야 합니다.*/}
         <Typography variant="Body2">{message}</Typography>
         {children}
       </Alert>
