@@ -1,9 +1,16 @@
 'use client'
 import useMedia from '@/hook/useMedia'
-import { Box, SxProps, Tab, Tabs, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { Box, Tab, Tabs, Typography } from '@mui/material'
+import { useRouter, usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import {
+  WhaleIcon,
+  MyPageHeartIcon,
+  FilledMessageIcon,
+  SilhouetteIcon,
+  SettingIcon,
+} from '@/icons'
+import * as style from './NavBar.style'
 
 type TabValue =
   | 'profile'
@@ -22,77 +29,76 @@ const getTabValue = (path: string) => {
   else return 'profile'
 }
 
-const SubNavBar = ({ sx }: { sx: SxProps }) => {
+const NavBar = () => {
   const router = useRouter()
   const pathName = usePathname()
   const [value, setValue] = useState<TabValue>('profile')
   const { isPc } = useMedia()
 
-  const tabStyle: SxProps = {
-    maxWidth: '15.3rem',
-    padding: '0',
-    width: '100%',
-  }
-
   useEffect(() => {
     setValue(getTabValue(pathName))
   }, [pathName])
 
-  if (!isPc) {
-    return <div></div>
-  }
-
   return (
-    <Box
-      sx={{
-        p: '1.5rem 2rem',
-        ...sx,
-      }}
-    >
-      <Typography>마이페이지</Typography>
+    <Box sx={isPc ? style.pcNavBar : style.mobileNavBar}>
+      {isPc && <Typography>마이페이지</Typography>}
       <Tabs
-        orientation="vertical"
+        orientation={isPc ? 'vertical' : 'horizontal'}
         value={value}
         onChange={(event, newValue) => setValue(newValue)}
-        sx={{
-          borderColor: 'divider',
-          gap: '0.25rem',
-        }}
+        sx={isPc ? style.pcTabs : style.mobileTabs}
         variant="fullWidth"
+        textColor="primary"
       >
         <Tab
           label="프로필"
           onClick={() => router.push('/my-page/profile')}
           value={'profile'}
-          sx={tabStyle}
+          icon={<WhaleIcon sx={isPc ? style.pcIcon : style.mobileWhale} />}
+          iconPosition={isPc ? 'start' : 'top'}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
         <Tab
           label="관심리스트"
           onClick={() => router.push('/my-page/interests')}
-          sx={tabStyle}
           value={'interests'}
+          icon={
+            <MyPageHeartIcon sx={isPc ? style.pcIcon : style.mobileHeart} />
+          }
+          iconPosition={isPc ? 'start' : 'top'}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
         <Tab
           label="쪽지"
           onClick={() => router.push('/my-page/message')}
-          sx={tabStyle}
           value={'message'}
+          icon={
+            <FilledMessageIcon sx={isPc ? style.pcIcon : style.mobileMessage} />
+          }
+          iconPosition={isPc ? 'start' : 'top'}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
         <Tab
           label="개인정보"
           onClick={() => router.push('/my-page/privacy')}
-          sx={tabStyle}
           value={'privacy'}
+          icon={
+            <SilhouetteIcon sx={isPc ? style.pcIcon : style.mobileSilhouette} />
+          }
+          iconPosition={isPc ? 'start' : 'top'}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
         <Tab
-          label="홈페이지 설정"
+          label={isPc ? '홈페이지 설정' : '기기 설정'}
           onClick={() => router.push('/my-page/homepage-setting')}
-          sx={tabStyle}
           value={'homepage-setting'}
+          icon={<SettingIcon sx={isPc ? style.pcIcon : style.mobileSetting} />}
+          iconPosition={isPc ? 'start' : 'top'}
+          sx={isPc ? style.pcTab : style.mobileTab}
         />
       </Tabs>
     </Box>
   )
 }
 
-export default SubNavBar
+export default NavBar

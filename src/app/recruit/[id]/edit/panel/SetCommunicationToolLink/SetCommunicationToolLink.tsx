@@ -19,7 +19,7 @@ const SetCommunicationToolLink = ({
       <TextField
         variant="outlined"
         placeholder="link to communication tool"
-        sx={{ width: '416px' }}
+        sx={{ width: '26rem' }}
         value={value}
         onChange={handleChange}
       />

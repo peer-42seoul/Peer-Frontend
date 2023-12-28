@@ -36,6 +36,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
 import CuButton from '@/components/CuButton'
 import TagAutoComplete from '@/components/TagAutoComplete'
+import axios from 'axios'
 
 const componentName = {
   alignItems: 'center',
@@ -67,8 +68,7 @@ const CreateTeam = () => {
 
   const { data, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
-    // (url: string) => axios.get(url).then((res) => res.data), // 원래는 토큰 필요없어도됌
-    (url: string) => axiosInstance.get(url).then((res: any) => res.data),
+    (url: string) => axios.get(url).then((res) => res.data),
   )
 
   useEffect(() => {
@@ -120,12 +120,13 @@ const CreateTeam = () => {
           tagList: tagList.map((tag) => tag.tagId),
           roleList: roleList,
           interviewList: interviewList,
+          max: type === 'study' ? parseInt(teamsize) : null,
         },
       )
       router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
-    } catch (error) {
-      console.log(error)
-      setToastMessage('모집글 작성 실패, 다시 시도해주세요')
+    } catch (error: any) {
+      console.log('error : ', error)
+      setToastMessage('모집글 작성 실패, ' + error.response.data)
       openToast()
     }
   }
@@ -184,7 +185,7 @@ const CreateTeam = () => {
                 <Typography variant="h6">모집글 제목</Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px' }}
+                sx={{ width: '26rem' }}
                 variant="outlined"
                 value={title}
                 onChange={(e) => {
@@ -203,7 +204,7 @@ const CreateTeam = () => {
                 </Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px' }}
+                sx={{ width: '26rem' }}
                 variant="outlined"
                 value={name}
                 onChange={(e) => {
@@ -261,13 +262,15 @@ const CreateTeam = () => {
               />
             </Box>
             {/* 지역 선택 */}
-            <Box>
-              <Stack direction={'row'} gap={1} sx={componentName}>
-                <LocationOnOutlinedIcon />
-                <Typography variant="h6">지역</Typography>
-              </Stack>
-              <SelectRegion setValue={setRegion} />
-            </Box>
+            {place === 'ONLINE' ? null : (
+              <Box>
+                <Stack direction={'row'} gap={1} sx={componentName}>
+                  <LocationOnOutlinedIcon />
+                  <Typography variant="h6">지역</Typography>
+                </Stack>
+                <SelectRegion setValue={setRegion} />
+              </Box>
+            )}
             {/* 커뮤니케이션 링크 등록 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
@@ -321,7 +324,7 @@ const CreateTeam = () => {
                 </Typography>
               </Stack>
               <Button
-                sx={{ width: '416px' }}
+                sx={{ width: '26rem' }}
                 variant="outlined"
                 onClick={() => setOpenBasicModal(true)}
               >
