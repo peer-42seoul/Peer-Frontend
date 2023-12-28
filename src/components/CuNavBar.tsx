@@ -72,9 +72,9 @@ const CuNavBar = ({
       >
         {isPc ? (
           [
-            tabData.map((tab, index) => (
+            tabData.map((tab) => (
               <PcToggleButton
-                key={index}
+                key={crypto.randomUUID()}
                 tab={tab}
                 selected={value === tab.value}
               />
@@ -87,9 +87,9 @@ const CuNavBar = ({
             gridTemplateColumns={`repeat(${tabData.length}, 1fr)`}
             gap={'0.5rem'}
           >
-            {tabData.map((tab, index) => (
+            {tabData.map((tab) => (
               <MobileToggleButton
-                key={index}
+                key={crypto.randomUUID()}
                 tab={tab}
                 selected={value === tab.value}
               />
