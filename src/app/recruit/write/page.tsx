@@ -68,7 +68,7 @@ const CreateTeam = () => {
   const { data, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
     // (url: string) => axios.get(url).then((res) => res.data), // 원래는 토큰 필요없어도됌
-    (url: string) => axiosInstance.get(url).then((res:any) => res.data),
+    (url: string) => axiosInstance.get(url).then((res: any) => res.data),
   )
 
   useEffect(() => {
@@ -101,7 +101,10 @@ const CreateTeam = () => {
     }
     try {
       console.log('tagList when submit', tagList)
-      console.log('tagList when submit after 가공', tagList.map(tag => tag.tagId))
+      console.log(
+        'tagList when submit after 가공',
+        tagList.map((tag) => tag.tagId),
+      )
       const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
         {
@@ -114,7 +117,7 @@ const CreateTeam = () => {
           content: content,
           region: region,
           link: link,
-          tagList: tagList.map(tag => tag.tagId),
+          tagList: tagList.map((tag) => tag.tagId),
           roleList: roleList,
           interviewList: interviewList,
         },
@@ -284,7 +287,7 @@ const CreateTeam = () => {
                   tagList={allTagList}
                   datas={tagList}
                   setData={setTagList}
-                  style={{ width: '26rem', height: '32px'}}
+                  style={{ width: '26rem', height: '32px' }}
                 />
               ) : null}
             </Box>

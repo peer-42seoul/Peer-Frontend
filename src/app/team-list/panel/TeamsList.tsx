@@ -21,10 +21,10 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
           {showTeams === TeamStatus.RECRUITING
             ? '모집 중'
             : showTeams === TeamStatus.COMPLETE
-              ? '진행 완료'
-              : showTeams === TeamStatus.ONGOING
-                ? '진행 중'
-                : '모집 완료'}
+            ? '진행 완료'
+            : showTeams === TeamStatus.ONGOING
+            ? '진행 중'
+            : '모집 완료'}
         </Typography>
       </Stack>
       <Stack
@@ -77,8 +77,8 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
                     {team.operationFormat === TeamOperationForm.MIX
                       ? '온/오프라인'
                       : team.operationFormat === TeamOperationForm.OFFLINE
-                        ? '오프라인'
-                        : '온라인'}
+                      ? '오프라인'
+                      : '온라인'}
                   </Typography>
                 </Stack>
               </Stack>

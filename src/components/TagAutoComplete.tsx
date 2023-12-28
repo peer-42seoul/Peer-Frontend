@@ -9,10 +9,10 @@ import TagChip from '@/components/TagChip'
  * @param setData 선택한 값들의 리스트를 변경해주는 함수입니다 (useState로 관리해주세요)
  * @param placeholder 플레이스홀더입니다
  * @param style 스타일입니다
- * 
+ *
  * datas의 타입은 ITag로 바뀌었고, setDatas로 내보내지는 데이터의 타입도 ITag로 바뀌었습니다.
  * ITag 타입에는 id 타입이 추가되었고, 이를 사용해 태그를 삭제할 수 있습니다.
- * Tag API 변경으로 인해 수정되었습니다. 2021.12.14 
+ * Tag API 변경으로 인해 수정되었습니다. 2021.12.14
  */
 
 const TagAutoComplete = ({
@@ -45,9 +45,7 @@ const TagAutoComplete = ({
 
   /* 태그를 지웁니다 */
   const handleDelete = (id: number) => {
-    setData((chips: ITag[]) =>
-      chips.filter((tag) => tag.tagId !== id),
-    )
+    setData((chips: ITag[]) => chips.filter((tag) => tag.tagId !== id))
   }
 
   return (

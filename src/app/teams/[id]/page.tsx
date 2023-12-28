@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Typography, Stack, Box } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import TeamInfoContainer from './panel/TeamInfoContainer'
 import TeamDnD from './panel/TeamDnD'
 

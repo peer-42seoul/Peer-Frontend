@@ -28,7 +28,7 @@ const TeamDnD = ({ id }: { id: string }) => {
   const [size, setSize] = useState<SizeType>('S')
   const axiosInstance = useAxiosWithAuth()
   const { trigger, data, error, isMutating } = useSWRMutation<ITeamDnDLayout>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/read`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/read`,
     (url: string) =>
       axiosInstance
         .post(url, { teamId: id, type: 'team' })
@@ -39,9 +39,9 @@ const TeamDnD = ({ id }: { id: string }) => {
     trigger()
   }, [])
 
-  // @todo api 에러 해결되면 다시 주석 해제
-  // if (!data && isMutating) return <>로딩중입니다</>
-  // if (!data && error) return <>에러 발생</>
+  // api 에러 생길 시 주석 처리 필요
+  if (!data && isMutating) return <>로딩중입니다</>
+  if (!data && error) return <>에러 발생</>
 
   return (
     <Stack
@@ -49,16 +49,8 @@ const TeamDnD = ({ id }: { id: string }) => {
         width: '100%',
         height: '100%',
       }}
+      gap={4}
     >
-      {/*툴 박스 리스트*/}
-      {edit && (
-        <WidgetList
-          setIsDropping={setIsDropping}
-          setType={setType}
-          setSize={setSize}
-          setDroppingItem={setDroppingItem}
-        />
-      )}
       {/*dnd 렌더링*/}
       <WidgetsRender
         id={id}
@@ -70,7 +62,17 @@ const TeamDnD = ({ id }: { id: string }) => {
         droppingItem={droppingItem}
         edit={edit}
         setEdit={setEdit}
-      />
+      >
+        {/*툴 박스 리스트*/}
+        {edit && (
+          <WidgetList
+            setIsDropping={setIsDropping}
+            setType={setType}
+            setSize={setSize}
+            setDroppingItem={setDroppingItem}
+          />
+        )}
+      </WidgetsRender>
     </Stack>
   )
 }

@@ -21,7 +21,12 @@ import Image from 'next/image'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
-import { IFormInterview, IRoleWrite, ITag, statusEnum } from '@/types/IPostDetail'
+import {
+  IFormInterview,
+  IRoleWrite,
+  ITag,
+  statusEnum,
+} from '@/types/IPostDetail'
 import CuButton from '@/components/CuButton'
 import ImageIcon from '@mui/icons-material/Image'
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined'
@@ -154,7 +159,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
       )
       if (response.status === 200) router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
     } catch (error) {
-      console.log('error : ',error)
+      console.log('error : ', error)
       setToastMessage('모집글 작성 실패, 다시 시도해주세요')
       openToast()
     }

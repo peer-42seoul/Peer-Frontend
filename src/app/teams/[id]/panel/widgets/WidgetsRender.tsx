@@ -1,4 +1,4 @@
-import { Box, IconButton, Portal, Stack, Typography } from '@mui/material'
+import { Box, IconButton, Stack } from '@mui/material'
 import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
 import TmpCalenderWidget from '@/app/teams/[id]/panel/widgets/TmpCalenderWidget'
@@ -6,7 +6,7 @@ import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
 import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactGridLayout, {
   Layout,
   Responsive,
@@ -24,6 +24,7 @@ import useAxiosWithAuth from '@/api/config'
 
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import CuTextModal from '@/components/CuTextModal'
+import IToastProps from '@/types/IToastProps'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
@@ -36,6 +37,7 @@ interface IWidgetsRenderProps {
   droppingItem: ReactGridLayout.CoreProps['droppingItem']
   edit: boolean
   setEdit: (edit: boolean) => void
+  children?: React.ReactNode
 }
 const WidgetsRender = ({
   id,
@@ -46,8 +48,10 @@ const WidgetsRender = ({
   droppingItem,
   edit,
   setEdit,
+  children,
 }: IWidgetsRenderProps) => {
   const [index, setIndex] = useState(0)
+
   /* 초기 widget값을 만드는 함수 */
   const setInitWidgets: IWidget[] = useMemo(() => {
     if (!data) return []
@@ -63,94 +67,15 @@ const WidgetsRender = ({
       }
     })
   }, [data])
+
   const [widgets, setWidgets] = useState<IWidget[]>(setInitWidgets)
+  const [prevWidgets, setPrevWidgets] = useState<IWidget[]>([])
   const [isOpen, setOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
-  const {
-    CuToast: CuSuccessToast,
-    isOpen: isSuccessOpen,
-    openToast: openSuccessToast,
-    closeToast: closeSuccessToast,
-  } = useToast()
-  const {
-    CuToast: CuFailedToast,
-    isOpen: isFailedOpen,
-    openToast: openFailedToast,
-    closeToast: closeFailedToast,
-  } = useToast()
-
-  /* 드롭 시 호출 */
-  const onDrop = useCallback(
-    (layout: Layout[], layoutItem: Layout) => {
-      if (!edit) return
-      setWidgets([
-        ...widgets,
-        {
-          key: index,
-          grid: {
-            ...layoutItem,
-            i: index.toString(),
-          },
-          type,
-          size,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          data: null,
-        },
-      ])
-      setIndex(index + 1)
-    },
-    [widgets, index, type, size, edit],
+  const { CuToast, isOpen: toastOpen, openToast, closeToast } = useToast()
+  const [toastMessage, setToastMessage] = useState<IToastProps>(
+    {} as IToastProps,
   )
-
-  /* 레이아웃이 변경될때마다 호출 */
-  const onLayoutChange = useCallback(
-    (currentLayout: Layout[]) => {
-      //레이아웃 범위를 넘어갈 시 처리 필요
-      console.log(
-        'layoutRef?.current?.clientWidth',
-        document.getElementsByClassName('react-grid-layout'),
-      )
-      //드롭중일 경우 이미 onDrop에서 처리하고 있으므로 처리x
-      if (!isDropping) {
-        const updatedCurrentWidget: IWidget[] = currentLayout.map(
-          (grid: Layout, i: number) => ({
-            ...widgets[i],
-            grid,
-            updatedAt: new Date(),
-          }),
-        )
-        setWidgets(updatedCurrentWidget)
-      }
-    },
-    [isDropping, widgets],
-  )
-
-  /* 변경된 팀페이지 위젯 request */
-  const handleSave = useCallback(async () => {
-    try {
-      const teamWidgetInfo = {
-        teamId: id,
-        type: 'team',
-        widgets: widgets,
-      }
-      if (!data) {
-        await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/create`,
-          teamWidgetInfo,
-        )
-      } else
-        await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/update`,
-          teamWidgetInfo,
-        )
-      openSuccessToast()
-      setOpen(false)
-    } catch (e) {
-      console.log('e', e)
-      openFailedToast()
-    }
-  }, [axiosInstance, data, id, openFailedToast, openSuccessToast, widgets])
 
   /* widget 가져오기 */
   const getWidget = useCallback(
@@ -177,25 +102,120 @@ const WidgetsRender = ({
     [],
   )
 
+  /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
+  const isValidLayout = (newLayout: Layout[]) => {
+    const checkX = newLayout.some((item) => item?.x + item?.w > 4)
+    if (checkX) return false
+    const checkY = newLayout.some((item) => item?.y + item?.h > 4)
+    if (checkY) return false
+    return true
+  }
+
+  /*
+   * 현재 react-grid-layout에서 전체 height를 제한하는 코드가 없음
+   * onDrop시에는 우리가 직접 해당 아이템을 넣는 방식이기 때문에 widgets 배열에 넣지 않는 방식으로 제한 가능
+   * 그러나 onLayoutChange시에는 react-grid-layout에서 자동으로 아이템을 넣는 방식이기 때문에 제한 불가능
+   * 따라서 최대 높이를 제한하기 위해 위젯이 추가될 때마다 height를 계산하여 height가 제한 값을 넘은 경우 다시 재조정해줘야함
+   */
+  useEffect(() => {
+    if (prevWidgets) setWidgets(prevWidgets)
+  }, [prevWidgets])
+
+  /* 드롭 시 호출 */
+  const onDrop = useCallback(
+    (layout: Layout[], layoutItem: Layout) => {
+      if (!edit) return
+      if (!isValidLayout(layout)) return
+      setWidgets([
+        ...widgets,
+        {
+          key: index,
+          grid: {
+            ...layoutItem,
+            i: index.toString(),
+          },
+          type,
+          size,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          data: null,
+        },
+      ])
+      setIndex(index + 1)
+    },
+    [widgets, index, type, size, edit],
+  )
+
+  /* 레이아웃이 변경될때마다 호출 */
+  const onLayoutChange = useCallback(
+    (currentLayout: Layout[]) => {
+      //드롭중일 경우 이미 onDrop에서 처리하고 있으므로 처리x
+      if (isDropping) return
+      //레이아웃 범위를 넘어갈 시 처리
+      if (!isValidLayout(currentLayout)) {
+        setPrevWidgets(widgets)
+      }
+      const updatedCurrentWidget: IWidget[] = currentLayout.map(
+        (grid: Layout, i: number) => ({
+          ...widgets[i],
+          grid,
+          updatedAt: new Date(),
+        }),
+      )
+      setWidgets(updatedCurrentWidget)
+    },
+    [isDropping, widgets],
+  )
+
+  /* 변경된 팀페이지 위젯 request */
+  const handleSave = useCallback(async () => {
+    try {
+      const teamWidgetInfo = {
+        teamId: id,
+        type: 'team',
+        widgets: widgets,
+      }
+      if (!data) {
+        await axiosInstance.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/create`,
+          teamWidgetInfo,
+        )
+      } else
+        await axiosInstance.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/update`,
+          teamWidgetInfo,
+        )
+      setToastMessage({
+        severity: 'success',
+        message: '수정에 성공하였습니다.',
+      })
+      openToast()
+      setOpen(false)
+    } catch (e) {
+      console.log('e', e)
+      setToastMessage({
+        severity: 'error',
+        message: '수정에 실패하였습니다.',
+      })
+      openToast()
+    }
+  }, [axiosInstance, data, id, openToast, setToastMessage, widgets])
+
+  const removeWidget = useCallback((idx: string) => {
+    const newWidgets = widgets.filter((widget) => widget.grid.i !== idx)
+    setWidgets(newWidgets)
+  }, [])
+
   return (
-    <Box bgcolor="background.secondary">
+    <Box>
       {/*request와 관련된 toast*/}
-      <Portal>
-        <CuSuccessToast
-          open={isSuccessOpen}
-          onClose={closeSuccessToast}
-          severity="success"
-        >
-          <Typography>수정에 성공하였습니다.</Typography>
-        </CuSuccessToast>
-        <CuFailedToast
-          open={isFailedOpen}
-          onClose={closeFailedToast}
-          severity="error"
-        >
-          <Typography>수정에 실패하였습니다.</Typography>
-        </CuFailedToast>
-      </Portal>
+      <CuToast
+        severity={toastMessage?.severity}
+        open={toastOpen}
+        onClose={closeToast}
+      >
+        {toastMessage?.message}
+      </CuToast>
       {/*확인 모달*/}
       <CuTextModal
         open={isOpen}
@@ -211,92 +231,95 @@ const WidgetsRender = ({
         }}
         content={'팀 페이지를 저장하시겠습니까?'}
       />
-      {/* react-grid-layout 영역 */}
-      <ResponsiveGridLayout
-        className="layout"
-        breakpoints={{
-          sm: 768,
-          xs: 480,
-        }}
-        cols={{ sm: 4, xs: 2 }} //그리드의 열 수. pc면 4, 모바일이면 2
-        maxRows={4}
-        width={800}
-        rowHeight={200} //그리드 항목의 높이
-        onDrop={onDrop}
-        isDroppable={true} //true면 draggable={true}인 요소를 드래그 가능
-        onLayoutChange={onLayoutChange}
-        isResizable={false}
-        droppingItem={droppingItem}
-        style={{
-          minHeight: edit ? '900px' : undefined,
-          maxHeight: edit ? '900px' : undefined,
-          borderRadius: '5px',
-        }}
-      >
-        {widgets?.map(({ grid, type, size: wgSize, data: wgData }) => {
-          return (
-            <Box
-              key={grid.i}
-              data-grid={{ ...grid, isDraggable: edit }} //isDraggable 전체로 하는 방식있는데 안먹혀서 하나씩...
-              width={'100%'}
-              height={'100%'}
-            >
-              {/*위젯 삭제 버튼*/}
-              {edit && (
-                <IconButton
-                  onClick={() => {
-                    const newWidgets = widgets.filter(
-                      (widget) => widget.grid.i !== grid.i,
-                    )
-                    setWidgets(newWidgets)
-                  }}
-                  aria-label="delete"
-                  color="primary"
-                  sx={{
-                    position: 'absolute',
-                    top: -12,
-                    right: -12,
-                    zIndex: 999,
-                    color: 'black',
-                  }}
-                  size={'small'}
-                >
-                  <RemoveCircleIcon />
-                </IconButton>
-              )}
-              {/*위젯 type에 따라 렌더링*/}
-              {getWidget(type, wgData, wgSize)}
-            </Box>
-          )
-        })}
-      </ResponsiveGridLayout>
-      {/* 팀페이지 수정 버튼 */}
-      <Stack
-        alignItems={'center'}
-        marginY={2}
-        direction={'row'}
-        gap={1}
-        justifyContent={'center'}
-      >
-        {edit && (
+      <Stack gap={2}>
+        {/* 팀페이지 수정 버튼 */}
+        <Stack
+          alignItems={'center'}
+          direction={'row'}
+          gap={1}
+          justifyContent={'flex-end'}
+        >
+          {edit && (
+            <CuButton
+              message={'취소'}
+              action={() => {
+                // 취소 시 최초의 widget 상태로 되돌림
+                setWidgets(setInitWidgets)
+                setEdit(!edit)
+              }}
+              variant={'outlined'}
+            />
+          )}
           <CuButton
-            message={'취소'}
+            message={edit ? '팀페이지 저장' : '팀페이지 수정'}
             action={() => {
-              // 취소 시 최초의 widget 상태로 되돌림
-              setWidgets(setInitWidgets)
+              if (edit) return setOpen(true)
               setEdit(!edit)
             }}
             variant={'contained'}
           />
-        )}
-        <CuButton
-          message={edit ? '팀페이지 저장' : '팀페이지 수정'}
-          action={() => {
-            if (edit) return setOpen(true)
-            setEdit(!edit)
-          }}
-          variant={'contained'}
-        />
+        </Stack>
+        {/*toolbox 영역*/}
+        {children}
+        {/* react-grid-layout 영역 */}
+        <Box bgcolor="background.secondary">
+          <ResponsiveGridLayout
+            className="layout"
+            margin={[12, 12]}
+            breakpoints={{
+              sm: 700,
+              xs: 480,
+            }}
+            cols={{ sm: 4, xs: 2 }} //그리드의 열 수. pc면 4, 모바일이면 2
+            maxRows={4}
+            width={800}
+            rowHeight={200} //그리드 항목의 높이
+            onDrop={onDrop}
+            isDroppable={true} //true면 draggable={true}인 요소를 드래그 가능
+            onLayoutChange={onLayoutChange}
+            isResizable={false}
+            droppingItem={droppingItem}
+            style={{
+              minHeight: edit ? '900px' : undefined,
+              maxHeight: edit ? '900px' : undefined,
+              // maxWidth: '908px',
+              borderRadius: '5px',
+            }}
+          >
+            {widgets?.map(({ grid, type, size: wgSize, data: wgData }) => {
+              return (
+                <Box
+                  key={grid.i}
+                  data-grid={{ ...grid, isDraggable: edit }} //isDraggable 전체로 하는 방식있는데 안먹혀서 하나씩...
+                  width={'100%'}
+                  height={'100%'}
+                >
+                  {/*위젯 삭제 버튼*/}
+                  {edit && (
+                    <IconButton
+                      onClick={() => removeWidget(grid?.i)}
+                      aria-label="delete"
+                      color="primary"
+                      sx={{
+                        position: 'absolute',
+                        top: -12,
+                        right: -12,
+                        zIndex: 9999,
+                        color: 'white',
+                        ':hover': {},
+                      }}
+                      size={'small'}
+                    >
+                      <RemoveCircleIcon />
+                    </IconButton>
+                  )}
+                  {/*위젯 type에 따라 렌더링*/}
+                  {getWidget(type, wgData, wgSize)}
+                </Box>
+              )
+            })}
+          </ResponsiveGridLayout>
+        </Box>
       </Stack>
     </Box>
   )
