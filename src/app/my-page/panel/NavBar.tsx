@@ -2,12 +2,12 @@
 
 import CuNavBar from '@/components/CuNavBar'
 import {
-  FilledMessageIcon,
-  MyPageHeartIcon,
+  MessageIcon,
+  HeartIcon,
   SettingIcon,
   SilhouetteIcon,
   WhaleIcon,
-} from '@/icons'
+} from '@/icons/MyPage'
 import { useRouter } from 'next/navigation'
 
 const getTabValue = (path: string) => {
@@ -37,13 +37,13 @@ const NavBar = () => {
           label: '관심리스트',
           onClick: () => router.push('/my-page/interests'),
           value: 'interests',
-          icon: <MyPageHeartIcon width={'0.75rem'} height={'0.625rem'} />,
+          icon: <HeartIcon width={'0.75rem'} height={'0.625rem'} />,
         },
         {
           label: '쪽지',
           onClick: () => router.push('/my-page/message'),
           value: 'message',
-          icon: <FilledMessageIcon width={'0.75rem'} height={'0.625rem'} />,
+          icon: <MessageIcon width={'0.75rem'} height={'0.625rem'} />,
         },
         {
           label: '개인정보',
