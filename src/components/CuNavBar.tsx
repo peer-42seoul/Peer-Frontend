@@ -103,7 +103,7 @@ const CuNavBar = ({
 
 const getTextColor = (selected: boolean, disabled?: boolean) => {
   if (selected) return 'purple.strong'
-  if (disabled) return 'custom.disabledNavTab'
+  if (disabled) return 'text.disable'
   return 'text.assistive'
 }
 

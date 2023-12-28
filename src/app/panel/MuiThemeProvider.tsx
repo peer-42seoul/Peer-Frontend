@@ -51,7 +51,6 @@ declare module '@mui/material/styles' {
     assistive?: string
     disable?: string
     // 컬러 팔레트에 없는 컬러를 추가함.
-    disabledNavTab?: string
     mobileNavTab?: string
   }
 
@@ -555,7 +554,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         alternative: '#9B9B9B',
         secondary: '#9B9B9B',
         assistive: '#42444C',
-        disable: '#292C32',
+        disable: '#1E2024',
         disabled: alpha('#9B9B9B', 0.5), // 기존에 디자이너님의 의도하신 것에 영향이 있을 수 있으나, textfield disabled 상태에서의 텍스트 색상을 위해 고쳤습니다.
       },
       primary: {
@@ -565,7 +564,6 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       },
       // 컬러 팔레트에 없는 컬러를 추가함.
       custom: {
-        disabledNavTab: '#1E2024',
         mobileNavTab: '#0F0F27',
       },
     },

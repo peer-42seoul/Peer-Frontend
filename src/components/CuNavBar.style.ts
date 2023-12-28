@@ -33,10 +33,10 @@ const selectedTab = {
 
 const disabledTab = {
   '&.Mui-disabled': {
-    color: 'custom.disabledNavTab',
+    color: 'text.disable',
     backgroundColor: 'transparent',
     '& svg': {
-      fill: (theme: Theme) => theme.palette.custom.disabledNavTab,
+      fill: (theme: Theme) => theme.palette.text.disable,
     },
   },
 }
