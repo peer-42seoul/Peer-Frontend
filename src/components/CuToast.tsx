@@ -4,6 +4,35 @@ import CircleIcon from '@mui/icons-material/Circle'
 import React from 'react'
 import { CloseIcon } from '@/icons'
 import { IconButton, Slide } from '@mui/material'
+import useMedia from '@/hook/useMedia'
+import { useTheme } from '@mui/material'
+
+const hexToDecimalArray = (hex: string | undefined) => {
+  if (!hex) {
+    return [0, 0, 0]
+  }
+  hex = hex.replace(/^#/, '')
+
+  const red = parseInt(hex.substring(0, 2), 16)
+  const green = parseInt(hex.substring(2, 4), 16)
+  const blue = parseInt(hex.substring(4, 6), 16)
+
+  return [red, green, blue]
+}
+
+const calculateBlendedColor = (
+  topColor: Array<number>,
+  topAlpha: number,
+  bottomColor: Array<number>,
+) => {
+  const resultColor = [
+    Math.round(topColor[0] * topAlpha + bottomColor[0] * (1 - topAlpha)),
+    Math.round(topColor[1] * topAlpha + bottomColor[1] * (1 - topAlpha)),
+    Math.round(topColor[2] * topAlpha + bottomColor[2] * (1 - topAlpha)),
+  ]
+
+  return `rgb(${resultColor.join(', ')})`
+}
 
 const iconStyle: SxProps = {
   width: '0.75rem',
@@ -12,18 +41,20 @@ const iconStyle: SxProps = {
   flexShrink: 0,
 }
 
-const toastStyle: SxProps = {
+const toastPcStyle: SxProps = {
   padding: '1rem',
-  height: '4rem',
+  height: 'auto',
+  minHeight: '4rem',
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
   gap: '0.625rem',
-  width: '80vw',
+  width: '100%',
   flex: '1 0 0',
   position: 'relative',
   borderRadius: '0.75rem',
+  zIndex: 1600,
   '.MuiAlert-action': {
     marginLeft: '0',
     position: 'absolute',
@@ -35,17 +66,59 @@ const toastStyle: SxProps = {
   },
 }
 
+const toastMobileStyle: SxProps = {
+  padding: 0,
+  paddingLeft: '1.25rem',
+  paddingRight: '0.5rem',
+  height: 'auto',
+  minHeight: '4rem',
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '0.75rem',
+  width: '100%',
+  flex: '1 0 0',
+  borderRadius: '0.5rem',
+  // position: 'relative',
+  // bottom: '3.25rem',
+  boxSizing: 'border-box',
+  '.MuiAlert-action': {
+    marginLeft: '0',
+  },
+  '.MuiAlert-icon': {
+    marginRight: '0',
+    padding: '0',
+  },
+}
+
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   function Alert(props, ref) {
     const { severity } = props
     let backgroundColor
+    const theme = useTheme()
+
     if (severity === 'error') {
-      backgroundColor = 'red.tinted'
+      backgroundColor = calculateBlendedColor(
+        hexToDecimalArray(theme.palette.red.normal),
+        0.2,
+        hexToDecimalArray(theme.palette.background.primary),
+      )
     } else if (severity === 'warning') {
-      backgroundColor = 'yellow.tinted'
+      backgroundColor = calculateBlendedColor(
+        hexToDecimalArray(theme.palette.yellow.normal),
+        0.2,
+        hexToDecimalArray(theme.palette.background.primary),
+      )
     } else {
-      backgroundColor = 'purple.tinted'
+      backgroundColor = calculateBlendedColor(
+        hexToDecimalArray(theme.palette.purple.normal),
+        0.2,
+        hexToDecimalArray(theme.palette.background.primary),
+      )
     }
+    const { isPc } = useMedia()
+    const toastStyle: SxProps = isPc ? toastPcStyle : toastMobileStyle
 
     const customToastStyle: SxProps = {
       ...toastStyle,
@@ -76,12 +149,11 @@ function TransitionLeft(props: SlideProps) {
 
 const CuToast = ({
   open,
-  autoHideDuration,
+  autoHideDuration = 60000,
   onClose,
   severity,
-  children,
   message,
-  action,
+  subButton,
 }: {
   open: boolean
   autoHideDuration?: number
@@ -93,14 +165,29 @@ const CuToast = ({
   sx?: SxProps
   children?: React.ReactNode
   message?: string
-  action?: React.ReactNode
+  subButton?: React.ReactNode
 }) => {
+  const { isPc } = useMedia()
   return (
     <Snackbar
       open={open}
-      autoHideDuration={autoHideDuration ? autoHideDuration : 6000}
-      onClose={onClose}
-      sx={{ zIndex: 1600 }}
+      anchorOrigin={
+        isPc
+          ? { vertical: 'top', horizontal: 'center' }
+          : { vertical: 'bottom', horizontal: 'left' }
+      }
+      autoHideDuration={autoHideDuration}
+      // onClose={onClose}
+      sx={{
+        zIndex: 1600,
+        width: '100%',
+        paddingLeft: isPc ? '1.5rem' : '0.75rem',
+        paddingRight: isPc ? '1.5rem' : '1rem',
+        boxSizing: 'border-box',
+        '.MuiSnackbar-anchorOriginBottomLeft': {
+          bottom: '3.25rem',
+        },
+      }}
       TransitionComponent={TransitionLeft}
     >
       <Alert
@@ -108,7 +195,7 @@ const CuToast = ({
         severity={severity === 'success' ? 'info' : severity}
         action={
           <Stack flexDirection={'row'} spacing={'0.5rem'}>
-            {action}
+            {subButton}
             <IconButton size="small" aria-label="close" onClick={onClose}>
               <CloseIcon
                 sx={{
@@ -123,7 +210,6 @@ const CuToast = ({
       >
         {/* 기존에는 타이포그래피를 넣게 하였으나 앞으로는 message prop에 넣는 것으로 처리해야 합니다.*/}
         <Typography variant="Body2">{message}</Typography>
-        {children}
       </Alert>
     </Snackbar>
   )

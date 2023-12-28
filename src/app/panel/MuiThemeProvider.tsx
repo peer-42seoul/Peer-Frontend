@@ -365,6 +365,14 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
           },
         },
       },
+      MuiSnackbar: {
+        styleOverrides: {
+          root: {
+            left: 0,
+            right: 0,
+          },
+        },
+      },
       MuiTypography: {
         defaultProps: {
           variantMapping: {
