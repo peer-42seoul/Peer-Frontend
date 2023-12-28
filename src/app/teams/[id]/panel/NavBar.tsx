@@ -10,6 +10,7 @@ import {
   SettingIcon,
   ShowcaseIcon,
 } from '@/icons/TeamPage'
+import * as style from './NavBar.style'
 
 const getTabValue = (path: string) => {
   if (path.includes('/notice')) return 'notice'
@@ -29,38 +30,38 @@ const TeamSidebar = ({ id }: { id: string }) => {
           label: '메인',
           onClick: () => router.push(`/teams/${id}`),
           value: 'main',
-          icon: <MainIcon />,
+          icon: <MainIcon sx={style.main} />,
         },
         {
           label: '공지사항',
           onClick: () => router.push(`/teams/${id}/notice`),
           value: 'notice',
-          icon: <NoticeIcon />,
+          icon: <NoticeIcon sx={style.notice} />,
         },
         {
           label: '게시판',
           onClick: () => router.push(`/teams/${id}/board`),
           value: 'board',
-          icon: <BoardIcon />,
+          icon: <BoardIcon sx={style.board} />,
         },
         {
           label: '팀설정',
           onClick: () => router.push(`/teams/${id}/setting`),
           value: 'setting',
-          icon: <SettingIcon />,
+          icon: <SettingIcon sx={style.setting} />,
         },
         {
           label: '피어로그',
           onClick: () => router.push(`/teams/${id}/peerlog`),
           value: 'peerlog',
-          icon: <PeerlogIcon />,
+          icon: <PeerlogIcon sx={style.peerlog} />,
           new: true,
         },
         {
           label: '쇼케이스',
           onClick: () => router.push(`/teams/${id}/showcase`),
           value: 'showcase',
-          icon: <ShowcaseIcon />,
+          icon: <ShowcaseIcon sx={style.showcase} />,
           new: true,
           disabled: true,
         },

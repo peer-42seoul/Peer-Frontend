@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import CuNavBar from '@/components/CuNavBar'
 import {
   MessageIcon,
@@ -8,7 +9,7 @@ import {
   SilhouetteIcon,
   WhaleIcon,
 } from '@/icons/MyPage'
-import { useRouter } from 'next/navigation'
+import * as style from './NavBar.style'
 
 const getTabValue = (path: string) => {
   if (path.startsWith('/my-page/profile')) return 'profile'
@@ -31,32 +32,32 @@ const NavBar = () => {
           label: '프로필',
           onClick: () => router.push('/my-page/profile'),
           value: 'profile',
-          icon: <WhaleIcon width={'1.0625rem'} height={'0.875rem'} />,
+          icon: <WhaleIcon sx={style.whale} />,
         },
         {
           label: '관심리스트',
           onClick: () => router.push('/my-page/interests'),
           value: 'interests',
-          icon: <HeartIcon width={'0.75rem'} height={'0.625rem'} />,
+          icon: <HeartIcon sx={style.heart} />,
         },
         {
           label: '쪽지',
           onClick: () => router.push('/my-page/message'),
           value: 'message',
-          icon: <MessageIcon width={'0.75rem'} height={'0.625rem'} />,
+          icon: <MessageIcon sx={style.message} />,
         },
         {
           label: '개인정보',
           onClick: () => router.push('/my-page/privacy'),
           value: 'privacy',
-          icon: <SilhouetteIcon width={'0.625rem'} height={'0.625rem'} />,
+          icon: <SilhouetteIcon sx={style.silhouette} />,
         },
         {
           label: '홈페이지 설정',
           mobileLabel: '기기 설정',
           onClick: () => router.push('/my-page/homepage-setting'),
           value: 'homepage-setting',
-          icon: <SettingIcon width={'0.75rem'} height={'0.75rem'} />,
+          icon: <SettingIcon sx={style.setting} />,
         },
       ]}
     />
