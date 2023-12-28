@@ -16,9 +16,18 @@ export const tabs = {
   padding: 0,
 }
 
+const tabBase = {
+  svg: {
+    fill: (theme: Theme) => theme.palette.text.assistive,
+  },
+}
+
 const selectedTab = {
   '&.Mui-selected': {
     backgroundColor: 'purple.tinted',
+    '& svg': {
+      fill: (theme: Theme) => theme.palette.purple.strong,
+    },
   },
 }
 
@@ -26,6 +35,9 @@ const disabledTab = {
   '&.Mui-disabled': {
     color: 'custom.disabledNavTab',
     backgroundColor: 'transparent',
+    '& svg': {
+      fill: (theme: Theme) => theme.palette.custom.disabledNavTab,
+    },
   },
 }
 
@@ -34,6 +46,7 @@ export const pcTab = {
   maxWidth: '15.3rem',
   width: '100%',
   padding: '0 1.5rem',
+  ...tabBase,
   ...selectedTab,
   ...disabledTab,
 }
@@ -47,36 +60,16 @@ export const mobileTab = {
   padding: 0,
   borderRadius: '0.5rem',
   backgroundColor: 'custom.mobileNavTab',
+  ...tabBase,
   ...selectedTab,
   ...disabledTab,
 }
 
-const iconBoxBase = {
+export const iconBoxBase = {
   '& svg': {
     display: 'block',
     width: '0.875rem',
     height: '0.875rem',
-  },
-}
-
-export const iconBox = {
-  ...iconBoxBase,
-  '& > svg > path': {
-    fill: (theme: Theme) => theme.palette.text.assistive,
-  },
-}
-
-export const selectedIconBox = {
-  ...iconBoxBase,
-  '& > svg > path': {
-    fill: (theme: Theme) => theme.palette.purple.strong,
-  },
-}
-
-export const disabledIconBox = {
-  ...iconBoxBase,
-  '& > svg > path': {
-    fill: (theme: Theme) => theme.palette.custom.disabledNavTab,
   },
 }
 
@@ -91,10 +84,10 @@ const BADGE_TRANSLATE = 'translate(130%, -50%)'
 export const newBadge = {
   '& .MuiBadge-badge': {
     width: '3px',
-    minWidth: '3px', // 기본 설정 디자인 오버라이딩
+    minWidth: '3px', // mui 기본 설정 디자인 오버라이딩
     height: '3px',
     backgroundColor: (theme: Theme) => theme.palette.yellow.strong,
-    // 기본 설정 디자인 오버라이딩
+    // mui 기본 설정 디자인 오버라이딩
     transform: `scale(1) ${BADGE_TRANSLATE}`,
     WebkitTransform: `scale(1) ${BADGE_TRANSLATE}`,
     msTransform: `scale(1) ${BADGE_TRANSLATE}`,
