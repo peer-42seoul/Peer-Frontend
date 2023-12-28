@@ -15,11 +15,8 @@ const MessageMain = ({ list, detail }: IMessageLayoutProps) => {
       setListPage()
     }
   }, [])
-  return (
-    // <Container sx={{ height: '90vh', padding: 0 }}>
-    <>{messagePage === 'DETAIL' ? detail : list}</>
-    // </Container>
-  )
+  // TODO : #443에 추가된 페이지 레이아웃 디자인을 적용해야 함.
+  return <>{messagePage === 'DETAIL' ? detail : list}</>
 }
 
 export default MessageMain

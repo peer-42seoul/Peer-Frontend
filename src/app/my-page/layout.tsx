@@ -7,6 +7,7 @@ import useMedia from '@/hook/useMedia'
 import * as style from './layout.style'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  // TODO : #443에 추가된 페이지 레이아웃 디자인을 적용해야 함.
   const { isPc } = useMedia()
   return (
     <Container sx={isPc ? style.pcContainer : style.mobileContainer}>
