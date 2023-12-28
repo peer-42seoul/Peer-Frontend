@@ -14,19 +14,19 @@ const Page = () => {
   } = useToast()
 
   const handleInfo = () => {
-    setToastMessage('정보')
+    setToastMessage('자바스크립트가 키워드로 등록되었습니다.')
     setSeverity('info')
     openToast()
   }
 
   const handleError = () => {
-    setToastMessage('에러')
+    setToastMessage('자바스크립트가 키워드로 등록되었습니다.')
     setSeverity('error')
     openToast()
   }
 
   const handleWarning = () => {
-    setToastMessage('경고')
+    setToastMessage('자바스크립트가 키워드로 등록되었습니다.')
     setSeverity('warning')
     openToast()
   }

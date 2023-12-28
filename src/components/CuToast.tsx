@@ -76,19 +76,21 @@ const toastMobileStyle: SxProps = {
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: '0.75rem',
+  gap: '0',
   width: '100%',
+  maxWidth: '20.5rem',
   flex: '1 0 0',
   borderRadius: '0.5rem',
-  // position: 'relative',
-  // bottom: '3.25rem',
+  position: 'relative',
+  bottom: '3.25rem',
   boxSizing: 'border-box',
   '.MuiAlert-action': {
     marginLeft: '0',
+    paddingLeft: '0',
   },
   '.MuiAlert-icon': {
-    marginRight: '0',
     padding: '0',
+    marginRight: '0.75rem',
   },
 }
 
@@ -180,10 +182,10 @@ const CuToast = ({
       // onClose={onClose}
       sx={{
         zIndex: 1600,
-        width: '100%',
         paddingLeft: isPc ? '1.5rem' : '0.75rem',
         paddingRight: isPc ? '1.5rem' : '1rem',
         boxSizing: 'border-box',
+        width: '100%',
         '.MuiSnackbar-anchorOriginBottomLeft': {
           bottom: '3.25rem',
         },
@@ -194,13 +196,15 @@ const CuToast = ({
         onClose={onClose}
         severity={severity === 'success' ? 'info' : severity}
         action={
-          <Stack flexDirection={'row'} spacing={'0.5rem'}>
+          <Stack flexDirection={'row'} spacing={'0.5rem'} sx={{ padding: 0 }}>
             {subButton}
             <IconButton size="small" aria-label="close" onClick={onClose}>
               <CloseIcon
                 sx={{
                   width: '1.5rem',
                   height: '1.5rem',
+                  padding: 'calc(0.5rem - 5px)', // stack에 있는 기본 padding이 5px라서 5px를 빼줍니다.
+                  paddingLeft: subButton ? '0.5rem' : 'calc(0.5rem - 5px)',
                   color: 'text.assistive', // CloseIcon의 코드 변경이 필요합니다.
                 }}
               />
