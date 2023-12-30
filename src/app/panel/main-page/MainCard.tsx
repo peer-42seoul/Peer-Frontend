@@ -45,8 +45,8 @@ const MainCard = ({
               status === 'ONGOING'
                 ? '모집중'
                 : status === 'BEFORE'
-                ? '모집전'
-                : '모집완료'
+                  ? '모집전'
+                  : '모집완료'
             }
             sx={{
               position: 'absolute',

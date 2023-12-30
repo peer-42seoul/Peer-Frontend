@@ -41,8 +41,8 @@ const getModalWrapperStyle = (isPc: boolean, mobileFullSize?: boolean) => {
   return isPc
     ? style.pcWrapper
     : mobileFullSize
-    ? style.mobileFullSizeWrapper
-    : style.mobileWrapper
+      ? style.mobileFullSizeWrapper
+      : style.mobileWrapper
 }
 
 /**

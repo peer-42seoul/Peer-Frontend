@@ -21,10 +21,10 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
           {showTeams === TeamStatus.RECRUITING
             ? '모집 중'
             : showTeams === TeamStatus.COMPLETE
-            ? '진행 완료'
-            : showTeams === TeamStatus.ONGOING
-            ? '진행 중'
-            : '모집 완료'}
+              ? '진행 완료'
+              : showTeams === TeamStatus.ONGOING
+                ? '진행 중'
+                : '모집 완료'}
         </Typography>
       </Stack>
       <Stack
