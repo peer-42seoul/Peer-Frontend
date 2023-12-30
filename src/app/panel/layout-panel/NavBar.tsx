@@ -17,7 +17,6 @@ import Link from 'next/link'
 import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'
 import AlertIcon from './AlertIcon'
-import Image from 'next/image'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined'
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined'
@@ -150,49 +149,48 @@ export const PcNav = () => {
         paddingX: 3,
       }}
     >
-        <Stack direction={'row'}>
-            <Stack alignItems={'center'} justifyContent={'center'}>
-                <PeerLogo sx={{ width: 50, height: 50 }} />
-            </Stack>
-      <BottomNavigation
-        showLabels={true}
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue)
-        }}
-      >
-
-        <BottomNavigationAction
-          value={'home'}
-          label="홈"
-          onClick={() => {
-            router.push('/')
-          }}
-        />
-        <BottomNavigationAction
-          value={'hitchhiking'}
-          label="히치하이킹"
-          onClick={() => {
-            router.push('/')
-          }}
-        />
-
-        <BottomNavigationAction
-          value={'team-list'}
-          label="팀페이지"
-          onClick={() => {
-            router.push('/team-list')
-          }}
-        />
-        <BottomNavigationAction
-          value={'showcase'}
-          label="쇼케이스"
-          onClick={() => {
-            router.push('/showcase')
-          }}
-        />
-      </BottomNavigation>
+      <Stack direction={'row'}>
+        <Stack alignItems={'center'} justifyContent={'center'}>
+          <PeerLogo sx={{ width: 50, height: 50 }} />
         </Stack>
+        <BottomNavigation
+          showLabels={true}
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue)
+          }}
+        >
+          <BottomNavigationAction
+            value={'home'}
+            label="홈"
+            onClick={() => {
+              router.push('/')
+            }}
+          />
+          <BottomNavigationAction
+            value={'hitchhiking'}
+            label="히치하이킹"
+            onClick={() => {
+              router.push('/')
+            }}
+          />
+
+          <BottomNavigationAction
+            value={'team-list'}
+            label="팀페이지"
+            onClick={() => {
+              router.push('/team-list')
+            }}
+          />
+          <BottomNavigationAction
+            value={'showcase'}
+            label="쇼케이스"
+            onClick={() => {
+              router.push('/showcase')
+            }}
+          />
+        </BottomNavigation>
+      </Stack>
       <Stack direction={'row'} alignItems={'center'}>
         <AlertIcon />
         <SearchButton />
