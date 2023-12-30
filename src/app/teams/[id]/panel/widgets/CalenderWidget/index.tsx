@@ -1,7 +1,7 @@
 'use client'
 import { ReactNode } from 'react'
 import dayjs from 'dayjs'
-import { Grid, Stack, Typography } from '@mui/material'
+import { Box, Grid, Stack, Typography } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import useModal from '@/hook/useModal'
 import { SizeType } from '@/types/ITeamDnDLayout'
@@ -81,19 +81,22 @@ const CalendarMedium = ({ data }: ICalendar) => {
   const isEmpty = !todayEvents || todayEvents.length === 0
 
   return (
-    <Stack>
-      <Stack>
+    <Stack direction={'row'} spacing={'0.5rem'} sx={style.mediumContainer}>
+      <Stack justifyContent={'space-between'} sx={style.mediumToday}>
         <Today today={today} />
-        {!isEmpty && (
-          <Typography>{todayEvents.length}개의 일정이 있습니다.</Typography>
-        )}
+        <Typography variant={'Caption'} color={'purple.normal'}>
+          {/* 높이 유지를 위해 빈 문자 삽입 - 위젯 높이가 고정된다면 빈 문자 삭제 예정 */}
+          {isEmpty ? '\u00A0' : `${todayEvents.length}개의 일정이 있습니다.`}
+        </Typography>
       </Stack>
       {isEmpty ? (
-        <Typography>등록된 일정이 없습니다.</Typography>
+        <Typography variant={'Body2'} color={'text.alternative'}>
+          등록된 일정이 없습니다.
+        </Typography>
       ) : (
-        <Stack>
+        <Stack spacing={'1rem'}>
           {/* 최대 3개의 일정만 보여줌 */}
-          {todayEvents.slice(0, 4).map((event) => (
+          {todayEvents.slice(0, 3).map((event) => (
             <EventItem
               key={event.id}
               title={event.title}
@@ -146,13 +149,15 @@ const EventItem = ({ title, start, end }: IEventItem) => {
         width={'100%'}
       >
         <CircleIcon sx={style.eventItemDot} />
-        <Typography
-          variant={'Body2'}
-          color={'text.strong'}
-          sx={style.eventText}
-        >
-          {title}
-        </Typography>
+        <Box sx={style.eventTextWrapper}>
+          <Typography
+            variant={'Body2'}
+            color={'text.strong'}
+            sx={style.eventText}
+          >
+            {title}
+          </Typography>
+        </Box>
       </Stack>
       <Typography
         variant={'Caption'}
