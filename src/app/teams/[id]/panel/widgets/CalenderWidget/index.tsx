@@ -31,10 +31,11 @@ const CalenderWidget = ({ data, size }: ICalendarWidget) => {
 
   return (
     <>
-      <CalendarRender data={data} size={size} />
+      <WidgetCard onClick={openModal}>
+        <CalendarRender data={data} size={size} />
+      </WidgetCard>
       <PreviewModal open={isOpen} onClose={closeModal} events={data} />
     </>
-  )
   )
 }
 
@@ -48,30 +49,28 @@ const CalendarLarge = ({ data }: ICalendar) => {
   const { today, todayEvents } = getTodayData(data)
   const isEmpty = !todayEvents || todayEvents.length === 0
   return (
-    <WidgetCard>
+    <Stack>
       <Stack>
-        <Stack>
-          <Today today={today} />
-          <CalendarMini events={data} />
-        </Stack>
-        {isEmpty ? (
-          <Typography>등록된 일정이 없습니다.</Typography>
-        ) : (
-          <Grid>
-            {/* 최대 5개의 일정만 보여줌 */}
-            {todayEvents.slice(0, 5).map((event) => (
-              <Grid item key={event.id} xs={6}>
-                <EventItem
-                  title={event.title}
-                  start={event.start}
-                  end={event.end}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        )}
+        <Today today={today} />
+        <CalendarMini events={data} />
       </Stack>
-    </WidgetCard>
+      {isEmpty ? (
+        <Typography>등록된 일정이 없습니다.</Typography>
+      ) : (
+        <Grid>
+          {/* 최대 5개의 일정만 보여줌 */}
+          {todayEvents.slice(0, 5).map((event) => (
+            <Grid item key={event.id} xs={6}>
+              <EventItem
+                title={event.title}
+                start={event.start}
+                end={event.end}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Stack>
   )
 }
 
@@ -80,31 +79,29 @@ const CalendarMedium = ({ data }: ICalendar) => {
   const isEmpty = !todayEvents || todayEvents.length === 0
 
   return (
-    <WidgetCard>
+    <Stack>
       <Stack>
-        <Stack>
-          <Today today={today} />
-          {!isEmpty && (
-            <Typography>{todayEvents.length}개의 일정이 있습니다.</Typography>
-          )}
-        </Stack>
-        {isEmpty ? (
-          <Typography>등록된 일정이 없습니다.</Typography>
-        ) : (
-          <Stack>
-            {/* 최대 3개의 일정만 보여줌 */}
-            {todayEvents.slice(0, 4).map((event) => (
-              <EventItem
-                key={event.id}
-                title={event.title}
-                start={event.start}
-                end={event.end}
-              />
-            ))}
-          </Stack>
+        <Today today={today} />
+        {!isEmpty && (
+          <Typography>{todayEvents.length}개의 일정이 있습니다.</Typography>
         )}
       </Stack>
-    </WidgetCard>
+      {isEmpty ? (
+        <Typography>등록된 일정이 없습니다.</Typography>
+      ) : (
+        <Stack>
+          {/* 최대 3개의 일정만 보여줌 */}
+          {todayEvents.slice(0, 4).map((event) => (
+            <EventItem
+              key={event.id}
+              title={event.title}
+              start={event.start}
+              end={event.end}
+            />
+          ))}
+        </Stack>
+      )}
+    </Stack>
   )
 }
 
@@ -113,23 +110,21 @@ const CalendarSmall = ({ data }: ICalendar) => {
   const isEmpty = !todayEvents || todayEvents.length === 0
 
   return (
-    <WidgetCard>
-      <Stack>
-        <Today today={today} />
-        {!isEmpty && (
-          <EventItem
-            title={todayEvents[0].title}
-            start={todayEvents[0].start}
-            end={todayEvents[0].end}
-          />
-        )}
-        {isEmpty ? (
-          <Typography>등록된 일정이 없습니다.</Typography>
-        ) : (
-          <Typography>외 {todayEvents.length - 1}개의 일정</Typography>
-        )}
-      </Stack>
-    </WidgetCard>
+    <Stack>
+      <Today today={today} />
+      {!isEmpty && (
+        <EventItem
+          title={todayEvents[0].title}
+          start={todayEvents[0].start}
+          end={todayEvents[0].end}
+        />
+      )}
+      {isEmpty ? (
+        <Typography>등록된 일정이 없습니다.</Typography>
+      ) : (
+        <Typography>외 {todayEvents.length - 1}개의 일정</Typography>
+      )}
+    </Stack>
   )
 }
 
