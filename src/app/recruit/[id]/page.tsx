@@ -54,7 +54,6 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
       : defaultGetFetcher,
   )
 
-  console.log('Data', data)
   // const total = useMemo(() => {
   //   if (!data) return 0
   //   return data?.roleList?.reduce((acc, cur) => {
@@ -104,10 +103,10 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               {/*이미지, 제목, 프로필 영역*/}
               <Stack direction={'row'} gap={4} marginBottom={6}>
                 <Box
-                  src={data?.image ?? ''}
+                  src={data?.image}
                   alt="main_image"
-                  width={240}
-                  height={160}
+                  width={300}
+                  height={300}
                   component={'img'}
                 />
                 <Box display="flex" flexDirection="column" gap={2}>
@@ -275,10 +274,10 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
             </Stack>
           </Box>
           <Box
-            src={data?.image ?? ''}
-            alt="main_image"
-            width={240}
-            height={160}
+            src={data?.image}
+            alt="leader_profile"
+            width={300}
+            height={300}
             component={'img'}
           />
           <RecruitContentText label="목표 작업기간" content={data?.due} />

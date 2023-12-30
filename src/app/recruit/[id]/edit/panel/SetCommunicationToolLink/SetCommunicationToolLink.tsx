@@ -3,9 +3,13 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 
 interface CommunicationToolLinkProps {
   setValue: Dispatch<SetStateAction<string>>
+  value?: string
 }
 
-const SetCommunicationToolLink = ({ setValue }: CommunicationToolLinkProps) => {
+const SetCommunicationToolLink = ({
+  setValue,
+  value,
+}: CommunicationToolLinkProps) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value as string)
   }
@@ -15,7 +19,8 @@ const SetCommunicationToolLink = ({ setValue }: CommunicationToolLinkProps) => {
       <TextField
         variant="outlined"
         placeholder="link to communication tool"
-        sx={{ width: '416px'}}
+        sx={{ width: '26rem' }}
+        value={value}
         onChange={handleChange}
       />
     </Box>

@@ -1,26 +1,18 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
 import { ProjectType } from '@/app/panel/MainPage'
-import CloseButton from '@/components/CloseButton'
 import CuButton from '@/components/CuButton'
-import CuModal from '@/components/CuModal'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
 import { IMainCard } from '@/types/IPostDetail'
-import {
-  AlertColor,
-  MenuItem,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from '@mui/material'
+import { AlertColor, MenuItem, Tab, Tabs, Typography } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
+import CuTextModal from '@/components/CuTextModal'
 
 interface IInterestResponse {
   postList: IMainCard[]
@@ -77,35 +69,20 @@ const AlertModal = ({
   confirmAction: () => void
 }) => {
   return (
-    <CuModal
+    <CuTextModal
       open={isOpen}
-      handleClose={closeModal}
-      ariaTitle=""
-      ariaDescription=""
-    >
-      <Stack direction={'column'}>
-        <Typography>삭제</Typography>
-        <CloseButton
-          action={closeModal}
-          style={{ border: 'none', color: 'black' }}
-        />
-      </Stack>
-      <Typography>정말 삭제하시겠습니까?</Typography>
-      <Stack direction={'column'}>
-        <CuButton
-          message="취소"
-          action={closeModal}
-          variant="contained"
-          style={{ width: '50%' }}
-        />
-        <CuButton
-          message="삭제"
-          action={confirmAction}
-          variant="contained"
-          style={{ width: '50%' }}
-        />
-      </Stack>
-    </CuModal>
+      onClose={closeModal}
+      title={'삭제'}
+      content={'정말 삭제하시겠습니까?'}
+      containedButton={{
+        text: '삭제',
+        onClick: confirmAction,
+      }}
+      textButton={{
+        text: '취소',
+        onClick: closeModal,
+      }}
+    />
   )
 }
 
@@ -168,10 +145,13 @@ const MyInterests = () => {
   useEffect(() => {
     if (!isLoading && data && !data.isLast) {
       setPostList((prev) => prev.concat(data.postList))
-      if (data.postList.length === pagesize) {
+      if (data?.postList.length === pagesize) {
         setPageLimit((prev) => prev + 1)
       }
     }
+  }, [isLoading, data])
+
+  useEffect(() => {
     if (error && error?.response?.data?.message) {
       setToastMessage({
         severity: 'error',
@@ -179,7 +159,7 @@ const MyInterests = () => {
       })
       openToast()
     }
-  }, [error, isLoading, data, openToast])
+  }, [error, openToast])
 
   const { target, spinner } = useInfiniteScroll({
     setPage,

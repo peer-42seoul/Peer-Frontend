@@ -23,7 +23,6 @@ export default function BasicSelect({
 }: BasicSelectProps) {
   const handleChange = (event: SelectChangeEvent) => {
     setValue(event.target.value as string)
-    console.log(value)
   }
 
   let options = null
@@ -81,7 +80,7 @@ export default function BasicSelect({
     <Box>
       <FormControl fullWidth>
         <Select
-          sx={{ width: '416px', height: '32px' }}
+          sx={{ width: '26rem', height: '32px' }}
           value={value}
           onChange={handleChange}
         >

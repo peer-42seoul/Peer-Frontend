@@ -34,7 +34,6 @@ const ApplyButton = ({
         disableElevation
         onClick={handleMenuClick}
         endIcon={<KeyboardArrowDown />}
-        sx={{ zIndex: 1302 }}
       >
         지원하기
       </Button>

@@ -64,15 +64,15 @@ export interface IRole {
   number: number
 }
 
+export interface IRoleWrite {
+  name: string | null
+  number: number
+}
+
 export type TPostStatus = 'BEFORE' | 'ONGOING' | 'DONE'
 
 export enum statusEnum {
   BEFORE,
   ONGOING,
   AFTER,
-}
-
-export interface IRoleData {
-  role: string | null
-  member: number
 }

@@ -15,15 +15,13 @@ import Image from 'next/image'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import RowRadioButtonsGroup from '../[id]/edit/panel/radioGroup'
 import SetTeamRole from '../[id]/edit/panel/SetTeamRole/SetTeamRole'
-import TagAutoComplete from '../[id]/edit/panel/SetTeamTag/TagAutoComplete'
 import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
 import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import SelectRegion from '../[id]/edit/panel/SelectRegion'
-import { IFormInterview, IRoleData, ITag } from '@/types/IPostDetail'
+import { IFormInterview, IRoleWrite, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
-import axios from 'axios'
 import ImageIcon from '@mui/icons-material/Image'
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
@@ -37,34 +35,12 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
 import CuButton from '@/components/CuButton'
+import TagAutoComplete from '@/components/TagAutoComplete'
+import axios from 'axios'
 
 const componentName = {
-  // flex: 'row',
-  // paddingTop: '24px',
-  // paddingBottom: '8px',
   alignItems: 'center',
 }
-
-// react-base64-image.js
-// const convertImageToBase64 = (file: any) => {
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader()
-
-//     reader.onload = () => {
-//       if (typeof reader.result === 'string') {
-//         resolve(reader.result.split(',')[1]) // Base64 데이터에서 실제 데이터 부분만 추출
-//       } else {
-//         reject(new Error('Unexpected result type'))
-//       }
-//     }
-
-//     reader.onerror = (error) => {
-//       reject(error)
-//     }
-
-//     reader.readAsDataURL(file)
-//   })
-// }
 
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
@@ -81,7 +57,7 @@ const CreateTeam = () => {
   const [teamsize, setTeamsize] = useState<string>('')
   const [link, setCommunicationTool] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const [roleList, setRoleList] = useState<IRoleData[]>([])
+  const [roleList, setRoleList] = useState<IRoleWrite[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [allTagList, setAllTagList] = useState<ITag[]>()
   const [openBasicModal, setOpenBasicModal] = useState(false)
@@ -89,10 +65,9 @@ const CreateTeam = () => {
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
-  // const [selectedImage, setSelectedImage] = useState<any>(null)
 
   const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
     (url: string) => axios.get(url).then((res) => res.data),
   )
 
@@ -107,7 +82,7 @@ const CreateTeam = () => {
 
   const onHandlerFinish = async () => {
     if (type === 'project') {
-      setRoleList([{ role: null, member: parseInt(teamsize) }])
+      setRoleList([{ name: null, number: parseInt(teamsize) }])
     }
     if (
       !image ||
@@ -116,7 +91,6 @@ const CreateTeam = () => {
       !due ||
       !region ||
       !place ||
-      !link ||
       !tagList ||
       !roleList ||
       !interviewList ||
@@ -125,11 +99,12 @@ const CreateTeam = () => {
       alert('빈칸을 모두 채워주세요')
       return
     }
-    // const base64Data = await convertImageToBase64(image[0])
-    // setSelectedImage(base64Data)
-    // setSelectedImage(previewImage.split(',')[1])
-    // console.log(selectedImage)
     try {
+      console.log('tagList when submit', tagList)
+      console.log(
+        'tagList when submit after 가공',
+        tagList.map((tag) => tag.tagId),
+      )
       const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
         {
@@ -142,15 +117,16 @@ const CreateTeam = () => {
           content: content,
           region: region,
           link: link,
-          tagList: tagList,
+          tagList: tagList.map((tag) => tag.tagId),
           roleList: roleList,
           interviewList: interviewList,
+          max: type === 'study' ? parseInt(teamsize) : null,
         },
       )
       router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
-    } catch (error) {
-      console.log(error)
-      setToastMessage('모집글 작성 실패, 다시 시도해주세요')
+    } catch (error: any) {
+      console.log('error : ', error)
+      setToastMessage('모집글 작성 실패, ' + error.response.data)
       openToast()
     }
   }
@@ -174,6 +150,7 @@ const CreateTeam = () => {
           }}
         >
           <Stack gap={3}>
+            {/* 대표이미지 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <ImageIcon />
@@ -193,6 +170,7 @@ const CreateTeam = () => {
                 </Box>
               </ImageUploadButton>
             </Box>
+            {/* 스터디 or 프로젝트 선택 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <ContentPasteOutlinedIcon />
@@ -200,13 +178,14 @@ const CreateTeam = () => {
               </Stack>
               <RowRadioButtonsGroup setValue={setType} />
             </Box>
+            {/* 모집글 제목 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <EditOutlinedIcon />
                 <Typography variant="h6">모집글 제목</Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px' }}
+                sx={{ width: '26rem' }}
                 variant="outlined"
                 value={title}
                 onChange={(e) => {
@@ -216,13 +195,16 @@ const CreateTeam = () => {
                 }}
               />
             </Box>
+            {/* 스터디 명 / 프로젝트 명 */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <FormatListBulletedOutlinedIcon />
-                <Typography variant="h6">프로젝트 명</Typography>
+                <Typography variant="h6">
+                  {type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
+                </Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px' }}
+                sx={{ width: '26rem' }}
                 variant="outlined"
                 value={name}
                 onChange={(e) => {
@@ -232,6 +214,7 @@ const CreateTeam = () => {
                 }}
               />
             </Box>
+            {/* (프로젝트인 경우만) 역할 추가 */}
             {type === 'STUDY' ? null : (
               <Box>
                 <Stack direction={'row'} gap={1} sx={componentName}>
@@ -254,6 +237,7 @@ const CreateTeam = () => {
                 />
               </Box>
             )}
+            {/* 온/오프라인 활동방식 선택 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <WifiOutlinedIcon />
@@ -265,6 +249,7 @@ const CreateTeam = () => {
                 setValue={setPlace}
               />
             </Box>
+            {/* 목표기간 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <AccessTimeOutlinedIcon />
@@ -276,13 +261,17 @@ const CreateTeam = () => {
                 setValue={setMonth}
               />
             </Box>
-            <Box>
-              <Stack direction={'row'} gap={1} sx={componentName}>
-                <LocationOnOutlinedIcon />
-                <Typography variant="h6">지역</Typography>
-              </Stack>
-              <SelectRegion setValue={setRegion} />
-            </Box>
+            {/* 지역 선택 */}
+            {place === 'ONLINE' ? null : (
+              <Box>
+                <Stack direction={'row'} gap={1} sx={componentName}>
+                  <LocationOnOutlinedIcon />
+                  <Typography variant="h6">지역</Typography>
+                </Stack>
+                <SelectRegion setValue={setRegion} />
+              </Box>
+            )}
+            {/* 커뮤니케이션 링크 등록 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <InsertLinkOutlinedIcon />
@@ -290,6 +279,7 @@ const CreateTeam = () => {
               </Stack>
               <SetCommunicationToolLink setValue={setCommunicationTool} />
             </Box>
+            {/* 태그 추가 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <LocalOfferOutlinedIcon />
@@ -297,12 +287,14 @@ const CreateTeam = () => {
               </Stack>
               {allTagList ? (
                 <TagAutoComplete
+                  tagList={allTagList}
                   datas={tagList}
                   setData={setTagList}
-                  allTagList={allTagList}
+                  style={{ width: '26rem', height: '32px' }}
                 />
               ) : null}
             </Box>
+            {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <DescriptionOutlinedIcon />
@@ -320,6 +312,7 @@ const CreateTeam = () => {
                 multiline
               />
             </Box>
+            {/* 모집 인터뷰 */}
             <Stack>
               <Stack direction={'row'} gap={1} sx={componentName}>
                 <CreateNewFolderOutlinedIcon />
@@ -331,7 +324,7 @@ const CreateTeam = () => {
                 </Typography>
               </Stack>
               <Button
-                sx={{ width: '416px' }}
+                sx={{ width: '26rem' }}
                 variant="outlined"
                 onClick={() => setOpenBasicModal(true)}
               >
@@ -344,6 +337,7 @@ const CreateTeam = () => {
                 setInterviewData={setInterviewList}
               />
             </Stack>
+            {/* 등록, 취소 버튼 */}
             <Stack
               direction={'row'}
               gap={2}

@@ -57,7 +57,7 @@ export const MobileNav = () => {
         left: 0,
         right: 0,
         overflow: 'hidden',
-        zIndex: 1400,
+        zIndex: 1300, // NOTE : 가능한 가장 높은 값으로 설정한 것이므로 이 값은 높이지 말아주세요. (낮추는건 괜찮습니다.)
       }}
     >
       <BottomNavigation
@@ -81,7 +81,7 @@ export const MobileNav = () => {
           label="히치하이킹"
           value={'hitchhiking'}
           onClick={() => {
-            router.push('/')
+            router.push('/hitchhiking')
           }}
         />
         <BottomNavigationAction
@@ -145,7 +145,7 @@ export const PcNav = () => {
         right: 0,
         top: 0,
         overflow: 'hidden',
-        zIndex: 1400,
+        zIndex: 1300, // NOTE : 가능한 가장 높은 값으로 설정한 것이므로 이 값은 높이지 말아주세요. (낮추는건 괜찮습니다.)
         backgroundColor: 'background.primary',
         paddingX: 3,
       }}

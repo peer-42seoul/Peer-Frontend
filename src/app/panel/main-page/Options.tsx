@@ -16,6 +16,7 @@ import TagAutoComplete from '@/components/TagAutoComplete'
 import SetupSelect from '../../teams/[id]/setting/panel/SetupSelect'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
+import { ITag } from '@/types/IPostDetail'
 
 const Options = ({ setDetailOption }: { setDetailOption: any }) => {
   const { handleSubmit, control, reset } = useForm({
@@ -32,7 +33,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     defaultGetFetcher,
   )
   const [due, setDue] = useState<number[]>([0, 100])
-  const [tagData, setTagData] = useState<string[]>([])
+  const [tagData, setTagData] = useState<ITag[]>([])
   const [location, setLocation] = useState<string>('')
   const [parentLocation, setParentLocation] = useState<string>('선택안함')
   const dueList = [
