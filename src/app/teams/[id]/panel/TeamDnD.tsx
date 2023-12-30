@@ -28,7 +28,7 @@ const TeamDnD = ({ id }: { id: string }) => {
   const [size, setSize] = useState<SizeType>('S')
   const axiosInstance = useAxiosWithAuth()
   const { trigger, data, error, isMutating } = useSWRMutation<ITeamDnDLayout>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/read`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/read`,
     (url: string) =>
       axiosInstance
         .post(url, { teamId: id, type: 'team' })

@@ -177,12 +177,12 @@ const WidgetsRender = ({
       }
       if (!data) {
         await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/create`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/create`,
           teamWidgetInfo,
         )
       } else
         await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/update`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/update`,
           teamWidgetInfo,
         )
       setToastMessage({
