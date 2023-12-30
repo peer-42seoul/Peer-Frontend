@@ -1,4 +1,4 @@
-import { Autocomplete, Stack, TextField } from '@mui/material'
+import { Autocomplete, Stack, TextField, Typography } from '@mui/material'
 import { ITag } from '@/types/IPostDetail'
 import TagChip from '@/components/TagChip'
 
@@ -32,10 +32,7 @@ const TagAutoComplete = ({
 }) => {
   const nameList = tagList?.map(({ name }) => name)
   /* 태그를 추가합니다 */
-  const handleInput = (
-    event: React.SyntheticEvent,
-    value: readonly string[],
-  ) => {
+  const handleInput = (_: any, value: readonly string[]) => {
     const selectedTags = value
       .map((tagName) => {
         return tagList.find((tag) => tag.name === tagName)
@@ -46,9 +43,7 @@ const TagAutoComplete = ({
 
   /* 태그를 지웁니다 */
   const handleDelete = (id: number) => {
-    setData((chips: ITag[]) =>
-      chips.filter((tag) => tag.tagId !== id),
-    )
+    setData((chips: ITag[]) => chips.filter((tag) => tag.tagId !== id))
   }
 
   return (
@@ -67,7 +62,6 @@ const TagAutoComplete = ({
             <TextField
               {...params}
               size="small"
-
               placeholder={
                 placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
               }

@@ -65,7 +65,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
       MIX: placemix,
     })
 
-    const tag = tagData.length ? tagData.join(',') : ''
+    const tag = tagData.length ? tagData.map((tag) => tag.name).join(',') : ''
     //제출할 때는 숫자로 들어옴
     setDetailOption({
       due1: due[0],
