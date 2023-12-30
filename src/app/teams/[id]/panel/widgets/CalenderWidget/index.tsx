@@ -1,7 +1,7 @@
 'use client'
 import { ReactNode } from 'react'
 import dayjs from 'dayjs'
-import { Box, Grid, Stack, Typography } from '@mui/material'
+import { Grid, Stack, Typography } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import useModal from '@/hook/useModal'
 import { SizeType } from '@/types/ITeamDnDLayout'
@@ -10,6 +10,7 @@ import WidgetCard from '../WidgetCard'
 import CalendarMini from './CalendarMini'
 import { getTodayData } from './utils'
 import PreviewModal from './PreviewModal'
+import * as style from './index.style'
 
 interface ICalendarWidget {
   data?: IEvent[]
@@ -28,11 +29,12 @@ interface IEventItem {
 
 const CalenderWidget = ({ data, size }: ICalendarWidget) => {
   const { isOpen, openModal, closeModal } = useModal()
+  const calendarData = data || []
 
   return (
     <>
       <WidgetCard onClick={openModal}>
-        <CalendarRender data={data} size={size} />
+        <CalendarRender data={calendarData} size={size} />
       </WidgetCard>
       <PreviewModal open={isOpen} onClose={closeModal} events={data} />
     </>
@@ -49,8 +51,8 @@ const CalendarLarge = ({ data }: ICalendar) => {
   const { today, todayEvents } = getTodayData(data)
   const isEmpty = !todayEvents || todayEvents.length === 0
   return (
-    <Stack>
-      <Stack>
+    <Stack sx={style.largeContainer}>
+      <Stack direction={'row'} spacing={'3.875rem'}>
         <Today today={today} />
         <CalendarMini events={data} />
       </Stack>
@@ -108,9 +110,12 @@ const CalendarMedium = ({ data }: ICalendar) => {
 const CalendarSmall = ({ data }: ICalendar) => {
   const { today, todayEvents } = getTodayData(data)
   const isEmpty = !todayEvents || todayEvents.length === 0
+  const message = isEmpty
+    ? '등록된 일정이 없습니다.'
+    : `외 ${todayEvents.length - 1}개의 일정`
 
   return (
-    <Stack>
+    <Stack spacing={'0.56rem'} sx={style.smallContainer}>
       <Today today={today} />
       {!isEmpty && (
         <EventItem
@@ -119,11 +124,13 @@ const CalendarSmall = ({ data }: ICalendar) => {
           end={todayEvents[0].end}
         />
       )}
-      {isEmpty ? (
-        <Typography>등록된 일정이 없습니다.</Typography>
-      ) : (
-        <Typography>외 {todayEvents.length - 1}개의 일정</Typography>
-      )}
+      <Typography
+        variant="Body2"
+        color={isEmpty ? 'text.alternative' : 'text.strong'}
+        sx={style.eventText}
+      >
+        {message}
+      </Typography>
     </Stack>
   )
 }
@@ -132,11 +139,26 @@ const EventItem = ({ title, start, end }: IEventItem) => {
   if (!start || !end) return null
   return (
     <Stack>
-      <Box>
-        <CircleIcon />
-        <Typography>{title}</Typography>
-      </Box>
-      <Typography>
+      <Stack
+        direction={'row'}
+        spacing={'0.5rem'}
+        alignItems={'center'}
+        width={'100%'}
+      >
+        <CircleIcon sx={style.eventItemDot} />
+        <Typography
+          variant={'Body2'}
+          color={'text.strong'}
+          sx={style.eventText}
+        >
+          {title}
+        </Typography>
+      </Stack>
+      <Typography
+        variant={'Caption'}
+        color={'text.alternative'}
+        sx={style.eventText}
+      >
         {dayjs(start).format('HH:mm')}-{dayjs(end).format('HH:mm')}
       </Typography>
     </Stack>
@@ -145,9 +167,9 @@ const EventItem = ({ title, start, end }: IEventItem) => {
 
 const Today = ({ today }: { today: dayjs.Dayjs }) => {
   return (
-    <Stack>
-      <Typography>{today.format('dddd')}</Typography>
-      <Typography>{today.format('D')}</Typography>
+    <Stack spacing={'0.5rem'} sx={style.today}>
+      <Typography variant="Title3">{today.format('dddd')}</Typography>
+      <Typography variant="Headline">{today.format('D')}</Typography>
     </Stack>
   )
 }

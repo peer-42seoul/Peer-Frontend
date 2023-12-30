@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { Box, Stack, SxProps } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import { MiniToolbar, MiniDayCell, MiniDayEvent } from '../../CalendarComponent'
-import '../style/CalendarMini.scss'
+import './CalendarMini.scss'
 import { IEvent } from '@/types/WidgetDataTypes'
 
 interface ICaledarMini {
