@@ -170,11 +170,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           sx={{
             backgroundColor: 'Background.primary',
             border: '1px solid black',
+            width: '56.75rem',
           }}
         >
           <MainBanner />
           <SelectType type={type} setType={handleType} />
-          <Grid container p={2}>
+          <Grid container>
             <SearchOption
               openOption={openOption}
               setOpenOption={setOpenOption}
@@ -231,7 +232,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           {spinner && <CircularProgress />}
         </Container>
       </div>
-
       {/* pc view */}
       <div className="pc-layout">
         <Container
@@ -241,25 +241,23 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           }}
         >
           <Stack direction={'row'} border="1px solid black" spacing={4}>
-            <Stack flex={1}>
+            <Stack flex={1} gap={'0.5rem'}>
               <MainBanner />
               <SelectType type={type} setType={handleType} />
-              <Grid container p={2} bgcolor={'Background.primary'}>
+              <Grid container bgcolor={'Background.primary'}>
                 <SearchOption
                   openOption={openOption}
                   setOpenOption={setOpenOption}
                   setDetailOption={handleOption}
                 />
-                <Grid item xs={12}>
-                  <Stack
-                    direction="row"
-                    alignItems={'center'}
-                    justifyContent={'flex-end'}
-                  >
-                    <SelectSort sort={sort} setSort={handleSort} />
-                  </Stack>
-                </Grid>
               </Grid>
+              <Stack
+                direction="row"
+                alignItems={'center'}
+                justifyContent={'flex-end'}
+              >
+                <SelectSort sort={sort} setSort={handleSort} />
+              </Stack>
               {/*card list 영역*/}
               {isLoading && page == 1 ? (
                 <Typography>로딩중...</Typography>
@@ -269,7 +267,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 <Typography>데이터가 없습니다</Typography>
               ) : (
                 <>
-                  <Grid container spacing={2}>
+                  <Grid container spacing={'1rem'}>
                     {content?.map((project: IPost, index: number) => (
                       <Grid item key={index} sm={12} md={6} lg={4}>
                         <MainCard {...project} type={type} />
@@ -289,7 +287,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 </>
               )}
             </Stack>
-            <Stack width={'250px'} height={'100%'} gap={4}>
+            <Stack width={'19.25rem'} height={'100%'} gap={'1rem'}>
               <MainProfile />
               <MainShowcase />
               <MainCarousel />

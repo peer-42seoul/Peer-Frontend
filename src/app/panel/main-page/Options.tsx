@@ -28,7 +28,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     },
   })
   const { data: listData } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
     defaultGetFetcher,
   )
   const [due, setDue] = useState<number[]>([0, 100])
@@ -104,19 +104,20 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} padding={1.5}>
         <Grid item xs={12}>
-          <Typography>작업 스택</Typography>
           <TagAutoComplete
+            title={'기술스택'}
             tagList={listData || []}
             datas={tagData}
             setData={setTagData}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography>목표 기간</Typography>
+          <Typography variant={'Caption'}>목표기간</Typography>
           <Box paddingX={4}>
             <Slider
+              size="small"
               value={due}
               valueLabelFormat={valueLabelFormat}
               onChange={handleDueChange}
@@ -127,7 +128,22 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
           </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography>작업 지역</Typography>
+          <Typography variant={'Caption'}>작업단계</Typography>
+          <FormGroup row>
+            <FormCheckbox
+              name="statusonGoing"
+              label="모집중"
+              control={control}
+            />
+            <FormCheckbox
+              name="statusdone"
+              label="모집완료"
+              control={control}
+            />
+          </FormGroup>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Typography variant={'Caption'}>활동지역</Typography>
           <SetupSelect
             value={parentLocation}
             setValue={(event: SelectChangeEvent) =>
@@ -145,7 +161,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography>작업 유형</Typography>
+          <Typography variant={'Caption'}>활동방식</Typography>
           <FormGroup row>
             <FormCheckbox name="placeOnline" label="온라인" control={control} />
             <FormCheckbox
@@ -154,21 +170,6 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
               control={control}
             />
             <FormCheckbox name="placemix" label="혼합" control={control} />
-          </FormGroup>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography>작업 단계</Typography>
-          <FormGroup row>
-            <FormCheckbox
-              name="statusonGoing"
-              label="모집중"
-              control={control}
-            />
-            <FormCheckbox
-              name="statusdone"
-              label="모집완료"
-              control={control}
-            />
           </FormGroup>
         </Grid>
         <Grid item xs={12}>

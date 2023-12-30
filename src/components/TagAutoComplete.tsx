@@ -1,4 +1,4 @@
-import { Autocomplete, Stack, TextField } from '@mui/material'
+import { Autocomplete, Stack, TextField, Typography } from '@mui/material'
 import { ITag } from '@/types/IPostDetail'
 import TagChip from '@/components/TagChip'
 
@@ -14,14 +14,15 @@ const TagAutoComplete = ({
   datas,
   setData,
   placeholder,
+  title,
 }: {
   tagList: ITag[]
   datas: string[]
   setData: any
   placeholder?: string
+  title?: string
 }) => {
   const nameList = tagList?.map(({ name }) => name)
-
   /* 태그를 추가합니다 */
   const handleInput = (
     event: React.SyntheticEvent,
@@ -38,23 +39,27 @@ const TagAutoComplete = ({
   }
 
   return (
-    <>
-      <Autocomplete
-        disableClearable
-        multiple
-        options={nameList}
-        onChange={handleInput}
-        value={datas}
-        renderTags={() => <></>}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder={
-              placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
-            }
-          />
-        )}
-      />
+    <Stack gap={'0.5rem'}>
+      <Stack flexDirection={'row'} alignItems={'center'} gap={'1rem'}>
+        <Typography variant={'Caption'}>{title}</Typography>
+        <Autocomplete
+          disableClearable
+          multiple
+          options={nameList}
+          onChange={handleInput}
+          value={datas}
+          renderTags={() => <></>}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              size="small"
+              placeholder={
+                placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
+              }
+            />
+          )}
+        />
+      </Stack>
       <Stack gap={1} direction={'row'}>
         {datas?.map((tag: string, idx: number) => {
           const selectTag = tagList?.find((item) => item.name === tag)
@@ -70,7 +75,7 @@ const TagAutoComplete = ({
           )
         })}
       </Stack>
-    </>
+    </Stack>
   )
 }
 
