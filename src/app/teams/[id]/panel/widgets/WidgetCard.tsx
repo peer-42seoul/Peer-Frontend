@@ -10,7 +10,7 @@ interface IWigetCardProps {
 const WidgetCard = ({ children, onClick }: IWigetCardProps) => {
   return (
     <Card sx={style.widgetCard} onClick={onClick}>
-      <CardContent>{children}</CardContent>
+      <CardContent sx={style.widgetCardContent}>{children}</CardContent>
     </Card>
   )
 }
