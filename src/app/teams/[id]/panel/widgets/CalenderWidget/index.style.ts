@@ -14,6 +14,11 @@ export const smallContainer = {
 
 // large
 
+export const largeToday = {
+  width: '6rem',
+  minWidth: '6rem',
+}
+
 // medium
 
 export const mediumToday = {

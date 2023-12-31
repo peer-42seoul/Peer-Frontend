@@ -51,17 +51,19 @@ const CalendarLarge = ({ data }: ICalendar) => {
   const { today, todayEvents } = getTodayData(data)
   const isEmpty = !todayEvents || todayEvents.length === 0
   return (
-    <Stack sx={style.largeContainer}>
-      <Stack direction={'row'} spacing={'3.875rem'}>
+    <Stack spacing={'2.69rem'} sx={style.largeContainer}>
+      <Stack direction={'row'} spacing={'3.88rem'} sx={style.largeToday}>
         <Today today={today} />
         <CalendarMini events={data} />
       </Stack>
       {isEmpty ? (
-        <Typography>등록된 일정이 없습니다.</Typography>
+        <Typography variant={'Body2'} color={'text.alternative'}>
+          등록된 일정이 없습니다.
+        </Typography>
       ) : (
-        <Grid>
-          {/* 최대 5개의 일정만 보여줌 */}
-          {todayEvents.slice(0, 5).map((event) => (
+        <Grid container rowSpacing={'1rem'} columnSpacing={'0.5rem'}>
+          {/* 최대 4개의 일정만 보여줌 */}
+          {todayEvents.slice(0, 4).map((event) => (
             <Grid item key={event.id} xs={6}>
               <EventItem
                 title={event.title}
@@ -142,14 +144,14 @@ const EventItem = ({ title, start, end }: IEventItem) => {
   if (!start || !end) return null
   return (
     <Stack>
-      <Stack
-        direction={'row'}
-        spacing={'0.5rem'}
-        alignItems={'center'}
-        width={'100%'}
-      >
-        <CircleIcon sx={style.eventItemDot} />
-        <Box sx={style.eventTextWrapper}>
+      <Box sx={style.eventTextWrapper}>
+        <Stack
+          direction={'row'}
+          spacing={'0.5rem'}
+          alignItems={'center'}
+          width={'100%'}
+        >
+          <CircleIcon sx={style.eventItemDot} />
           <Typography
             variant={'Body2'}
             color={'text.strong'}
@@ -157,8 +159,8 @@ const EventItem = ({ title, start, end }: IEventItem) => {
           >
             {title}
           </Typography>
-        </Box>
-      </Stack>
+        </Stack>
+      </Box>
       <Typography
         variant={'Caption'}
         color={'text.alternative'}
