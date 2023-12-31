@@ -3,9 +3,9 @@ import { DateHeaderProps, Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
 import { Box, Stack, SxProps } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
-import { MiniToolbar, MiniDayCell, MiniDayEvent } from '../../CalendarComponent'
-import './CalendarMini.scss'
 import { IEvent } from '@/types/WidgetDataTypes'
+import { MiniToolbar, MiniDayCell, MiniDayEvent } from './CalendarComponent'
+import './CalendarMini.scss'
 
 interface ICaledarMini {
   events?: IEvent[]
