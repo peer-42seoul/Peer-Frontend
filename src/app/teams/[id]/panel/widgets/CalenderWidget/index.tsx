@@ -52,8 +52,10 @@ const CalendarLarge = ({ data }: ICalendar) => {
   const isEmpty = !todayEvents || todayEvents.length === 0
   return (
     <Stack spacing={'2.69rem'} sx={style.largeContainer}>
-      <Stack direction={'row'} spacing={'3.88rem'} sx={style.largeToday}>
-        <Today today={today} />
+      <Stack direction={'row'} spacing={'3.88rem'}>
+        <Box sx={style.largeToday}>
+          <Today today={today} />
+        </Box>
         <CalendarMini events={data} />
       </Stack>
       {isEmpty ? (
