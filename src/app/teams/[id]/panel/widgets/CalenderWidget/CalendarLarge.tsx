@@ -1,7 +1,9 @@
 import { useCallback, useState } from 'react'
 import { Box } from '@mui/material'
 import { IEvent } from '@/types/WidgetDataTypes'
+import useMedia from '@/hook/useMedia'
 import Calendar from './Calendar'
+import * as style from './CalendarLarge.style'
 import './CalendarLarge.scss'
 
 interface ICalendarLargeProps {
@@ -13,6 +15,7 @@ const CalendarLarge = ({ events, onDrillDown }: ICalendarLargeProps) => {
   const [currentMonth, setCurrentMonth] = useState<number>(
     new Date().getMonth(),
   )
+  const { isPc } = useMedia()
 
   const onNavigate = useCallback(
     (currentDate: Date) => {
@@ -24,7 +27,10 @@ const CalendarLarge = ({ events, onDrillDown }: ICalendarLargeProps) => {
   )
 
   return (
-    <Box sx={{ height: '600px', width: '500px' }} className={'calendar-large'}>
+    <Box
+      sx={isPc ? style.pcCalendar : style.mobileCalendar}
+      className={'calendar-large'}
+    >
       <Calendar
         size={'large'}
         events={events}
