@@ -73,8 +73,11 @@ const CuModal = ({
 }: ICuModalProps) => {
   const { isPc } = useMedia()
   return (
-    <Modal open={open} onClose={onClose} sx={sx} keepMounted={!!keepMounted}>
-      <Stack spacing={'1.5rem'} sx={getModalWrapperStyle(isPc, mobileFullSize)}>
+    <Modal open={open} onClose={onClose} keepMounted={!!keepMounted}>
+      <Stack
+        spacing={'1.5rem'}
+        sx={{ ...getModalWrapperStyle(isPc, mobileFullSize), ...sx }}
+      >
         <Stack
           direction={'row'}
           justifyContent={'space-between'}
