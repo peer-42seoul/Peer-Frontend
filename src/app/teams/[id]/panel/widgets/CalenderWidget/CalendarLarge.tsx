@@ -15,7 +15,7 @@ interface ICalendarLargeProps {
 }
 
 const CalendarLarge = ({ events, onDrillDown }: ICalendarLargeProps) => {
-  const [currentMonth, setCurrentMonth] = useState<Number>(
+  const [currentMonth, setCurrentMonth] = useState<number>(
     new Date().getMonth(),
   )
   const formats = useMemo(
