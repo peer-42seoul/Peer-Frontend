@@ -29,12 +29,11 @@ interface IEventItem {
 
 const CalenderWidget = ({ data, size }: ICalendarWidget) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const calendarData = data || []
 
   return (
     <>
       <WidgetCard onClick={openModal}>
-        <CalendarRender data={calendarData} size={size} />
+        <CalendarRender data={data} size={size} />
       </WidgetCard>
       <PreviewModal open={isOpen} onClose={closeModal} events={data} />
     </>

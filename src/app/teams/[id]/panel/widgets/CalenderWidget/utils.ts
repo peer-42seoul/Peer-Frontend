@@ -15,7 +15,7 @@ export const getTodayEvents = (
   today: dayjs.Dayjs,
   data: IEvent[] | undefined,
 ) => {
-  return data?.filter((event) => dayjs(event.start).isSame(today, 'day'))
+  return data?.filter((event) => dayjs(event.start).isSame(today, 'day')) || []
 }
 
 export const isPastEvent = (end: Date) => {
