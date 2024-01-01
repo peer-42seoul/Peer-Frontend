@@ -25,17 +25,6 @@
   }
 
   .rbc-month-view {
-    // ANCHOR : 요일 표시
-    .rbc-month-header {
-      gap: 1rem;
-      .rbc-header {
-        color: $dark-text-assistive;
-      }
-    }
-  }
-
-  // ANCHOR : 전체 캘린더 grid (flex)
-  .rbc-month-view {
     gap: 0.75rem;
     // ANCHOR : 요일 표시
     .rbc-month-header {
