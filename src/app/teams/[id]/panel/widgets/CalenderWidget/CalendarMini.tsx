@@ -6,7 +6,7 @@ import { IEvent } from '@/types/WidgetDataTypes'
 import {
   MiniToolbar,
   MiniDayCell,
-  MiniDayEvent,
+  DayEvent,
   MiniDateHeader,
 } from './CalendarComponent'
 import './CalendarMini.scss'
@@ -33,7 +33,7 @@ const CalendarMini = ({ events, sx }: ICaledarMini) => {
         dateHeader: (props: DateHeaderProps) => (
           <MiniDateHeader {...props} events={events} />
         ),
-        event: MiniDayEvent,
+        event: DayEvent,
       },
     }),
     [],

@@ -1,4 +1,4 @@
-import { DateHeaderProps, EventProps, ToolbarProps } from 'react-big-calendar'
+import { DateHeaderProps, ToolbarProps } from 'react-big-calendar'
 import dayjs from 'dayjs'
 import { IconButton, Stack } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
@@ -56,17 +56,7 @@ export const MiniDateHeader = (props: IMiniDateHeaderProps) => {
   )
 }
 
-// 위젯에서는 이벤트에 대한 상세 정보를 보여주지 않음.
-export const MiniDayEvent = () => {
+// 캘린더에서는 이벤트에 대한 상세 정보를 보여주지 않음.
+export const DayEvent = () => {
   return null
-}
-
-// 이벤트 컴포넌트
-
-export const LargeDayEvent = (props: EventProps) => {
-  return (
-    <div className="rbc-event">
-      <div className="rbc-event-content">{props.title}</div>
-    </div>
-  )
 }

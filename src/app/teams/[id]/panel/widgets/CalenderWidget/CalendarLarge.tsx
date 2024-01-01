@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { Box, Stack } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import { IEvent } from '@/types/WidgetDataTypes'
-import { LargeToolbar, LargeDayEvent } from './CalendarComponent'
+import { LargeToolbar, DayEvent } from './CalendarComponent'
 import './CalendarLarge.scss'
 
 const localizer = dayjsLocalizer(dayjs)
@@ -51,7 +51,7 @@ const CalendarLarge = ({ events, onDrillDown }: ICalendarLargeProps) => {
             </button>
           )
         },
-        event: LargeDayEvent,
+        event: DayEvent,
       },
     }),
     [],
