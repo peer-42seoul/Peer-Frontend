@@ -55,15 +55,11 @@
           @include flex-box(column, center, center);
           padding: 0;
           width: 1.25rem;
-          max-width: fit-content;
-          .rbc-day-header {
-            width: 1.25rem;
-            max-width: fit-content;
-            padding: 0;
-          }
+          max-width: 1.25rem;
           color: $dark-text-alternative;
           @include Body2;
-          .is-today {
+          // 오늘 날짜 표시
+          &.rbc-now {
             @include Body2-emphasis;
             color: $dark-purple-normal;
           }

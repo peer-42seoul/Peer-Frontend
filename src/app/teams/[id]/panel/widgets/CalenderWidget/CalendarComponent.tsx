@@ -43,19 +43,13 @@ export const MiniDayCell = () => {
 
 export const MiniDateHeader = (props: IMiniDateHeaderProps) => {
   const { date } = props
-  const today = new Date()
-  const isToday = dayjs(date).isSame(today, 'day')
   const isEventDay = props.events?.some(
     (event) =>
       dayjs(event.start).isSame(date, 'day') ||
       dayjs(event.end).isSame(date, 'day'),
   )
   return (
-    <Stack
-      alignItems={'center'}
-      justifyContent={'center'}
-      className={`rbc-day-header ${isToday ? 'is-today' : ''}`}
-    >
+    <Stack alignItems={'center'} justifyContent={'center'}>
       {date.getDate()}
       {isEventDay ? <CircleIcon className="event-icon" /> : null}
     </Stack>
