@@ -6,7 +6,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import CircleIcon from '@mui/icons-material/Circle'
 import { IEvent } from '@/types/WidgetDataTypes'
 
-interface IMiniDateHeaderProps extends DateHeaderProps {
+interface ICustomDateHeaderProps extends DateHeaderProps {
   events?: IEvent[]
 }
 
@@ -28,7 +28,7 @@ export const LargeToolbar = (props: ToolbarProps) => {
       <IconButton onClick={() => onNavigate('PREV')}>
         <ArrowBackIosIcon />
       </IconButton>
-      <span className="rbc-toolbar-label">{`${date.getMonth() + 1}월`}</span>
+      <span className="rbc-toolbar-label">{dayjs(date).format('MMMM')}</span>
       <IconButton onClick={() => onNavigate('NEXT')}>
         <ArrowForwardIosIcon />
       </IconButton>
@@ -37,11 +37,11 @@ export const LargeToolbar = (props: ToolbarProps) => {
 }
 
 // 날짜 칸 컴포넌트 (기본 스타일 제거용)
-export const MiniDayCell = () => {
+export const DayCell = () => {
   return <div className="rbc-day-bg" />
 }
 
-export const MiniDateHeader = (props: IMiniDateHeaderProps) => {
+export const MiniDateHeader = (props: ICustomDateHeaderProps) => {
   const { date } = props
   const isEventDay = props.events?.some(
     (event) =>
@@ -53,6 +53,15 @@ export const MiniDateHeader = (props: IMiniDateHeaderProps) => {
       {date.getDate()}
       {isEventDay ? <CircleIcon className="event-icon" /> : null}
     </Stack>
+  )
+}
+
+export const LargeDateHeader = (props: ICustomDateHeaderProps) => {
+  const { onDrillDown } = props
+  return (
+    <button onClick={onDrillDown} className="rbc-button-link">
+      <MiniDateHeader {...props} />
+    </button>
   )
 }
 

@@ -1,0 +1,31 @@
+@mixin flex-box($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+.rbc-calendar {
+  // 기본적으로 적용되어있는 border 제거
+  .rbc-month-view,
+  .rbc-header,
+  .rbc-month-row,
+  .rbc-day-bg {
+    border: none !important;
+  }
+  // 현재 달 외의 날짜는 보이지 않게
+  .rbc-off-range {
+    visibility: hidden;
+    cursor: pointer;
+  }
+
+  //   .rbc-off-range-bg,
+  //   .rbc-day-bg.rbc-today {
+  //     background-color: transparent;
+  //   }
+
+  // 이벤트가 표시되는 줄 : 이벤트가 표시되지 않으므로 숨김
+  .rbc-row-segment {
+    display: none;
+  }
+}

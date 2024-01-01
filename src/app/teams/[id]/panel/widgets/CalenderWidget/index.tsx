@@ -7,10 +7,11 @@ import useModal from '@/hook/useModal'
 import { SizeType } from '@/types/ITeamDnDLayout'
 import { IEvent } from '@/types/WidgetDataTypes'
 import WidgetCard from '../WidgetCard'
-import CalendarMini from './CalendarMini'
 import { getTodayData } from './utils'
 import PreviewModal from './PreviewModal'
+import CustomCalendar from './CustomCalendar'
 import * as style from './index.style'
+import './CalendarMini.scss'
 
 interface ICalendarWidget {
   data?: IEvent[]
@@ -55,7 +56,9 @@ const CalendarLarge = ({ data }: ICalendar) => {
         <Box sx={style.largeToday}>
           <Today today={today} />
         </Box>
-        <CalendarMini events={data} />
+        <Box height={'300px'} className={'calendar-mini'}>
+          <CustomCalendar size={'mini'} events={data} />
+        </Box>
       </Stack>
       {isEmpty ? (
         <Typography variant={'Body2'} color={'text.alternative'}>

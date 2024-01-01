@@ -1,33 +1,10 @@
 @import 'react-big-calendar/lib/sass/styles';
 @import './theme';
+@import './calendar';
 // TODO : 라이트모드 추가되면 테마에 맞게 색깔이 변경되도록 수정 예정입니다.
 // https://mui.com/material-ui/experimental-api/css-theme-variables/overview/
-@mixin flex-box($direction: row, $justify: center, $align: center) {
-  display: flex;
-  flex-direction: $direction;
-  justify-content: $justify;
-  align-items: $align;
-}
 
 .calendar-mini > .rbc-calendar {
-  // 기본적으로 적용되어있는 border 제거
-  .rbc-month-view,
-  .rbc-header,
-  .rbc-month-row,
-  .rbc-day-bg {
-    border: none;
-  }
-  // 현재 달 외의 날짜는 보이지 않게
-  .rbc-off-range {
-    visibility: hidden;
-    cursor: pointer;
-  }
-
-  // 이벤트가 표시되는 줄 : 위젯에는 이벤트가 표시되지 않으므로 숨김
-  .rbc-row-segment {
-    display: none;
-  }
-
   // ANCHOR : 달 표시
   .rbc-toolbar {
     margin-bottom: 1rem;
