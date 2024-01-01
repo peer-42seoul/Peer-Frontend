@@ -1,3 +1,6 @@
+@import 'react-big-calendar/lib/sass/styles';
+@import './theme';
+
 @mixin flex-box($direction: row, $justify: center, $align: center) {
   display: flex;
   flex-direction: $direction;
