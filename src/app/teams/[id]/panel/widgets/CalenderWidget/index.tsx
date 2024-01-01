@@ -9,7 +9,7 @@ import { IEvent } from '@/types/WidgetDataTypes'
 import WidgetCard from '../WidgetCard'
 import { getTodayData } from './utils'
 import PreviewModal from './PreviewModal'
-import CustomCalendar from './CustomCalendar'
+import Calendar from './Calendar'
 import * as style from './index.style'
 import './CalendarMini.scss'
 
@@ -57,7 +57,7 @@ const CalendarLarge = ({ data }: ICalendar) => {
           <Today today={today} />
         </Box>
         <Box height={'300px'} className={'calendar-mini'}>
-          <CustomCalendar size={'mini'} events={data} />
+          <Calendar size={'mini'} events={data} />
         </Box>
       </Stack>
       {isEmpty ? (

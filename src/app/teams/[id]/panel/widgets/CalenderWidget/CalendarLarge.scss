@@ -11,41 +11,4 @@
       color: $dark-text-strong;
     }
   }
-  // ANCHOR : 전체 캘린더 grid (flex)
-  .rbc-month-view {
-    gap: 0.75rem;
-    // ANCHOR : 요일 표시
-    .rbc-month-header {
-      gap: 1rem;
-      .rbc-header {
-        width: 1.25rem;
-        @include Caption;
-        color: $dark-text-assistive;
-      }
-    }
-    // ANCHOR : 날짜 표시
-    .rbc-month-row {
-      .rbc-row-content .rbc-row {
-        justify-content: space-between;
-        .rbc-date-cell {
-          @include flex-box(column, center, center);
-          padding: 0;
-          width: 1.25rem;
-          max-width: 1.25rem;
-          color: $dark-text-alternative;
-          @include Body2;
-          // 오늘 날짜 표시
-          &.rbc-now {
-            @include Body2-emphasis;
-            color: $dark-purple-normal;
-          }
-          .event-icon {
-            width: 0.25rem;
-            height: 0.25rem;
-            color: $dark-pink-normal;
-          }
-        }
-      }
-    }
-  }
 }

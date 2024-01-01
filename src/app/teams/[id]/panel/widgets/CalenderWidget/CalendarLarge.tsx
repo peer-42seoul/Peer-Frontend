@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { Box } from '@mui/material'
 import { IEvent } from '@/types/WidgetDataTypes'
-import CustomCalendar from './CustomCalendar'
+import Calendar from './Calendar'
 import './CalendarLarge.scss'
 
 interface ICalendarLargeProps {
@@ -25,7 +25,7 @@ const CalendarLarge = ({ events, onDrillDown }: ICalendarLargeProps) => {
 
   return (
     <Box sx={{ height: '600px', width: '500px' }} className={'calendar-large'}>
-      <CustomCalendar
+      <Calendar
         size={'large'}
         events={events}
         onDrillDown={onDrillDown}

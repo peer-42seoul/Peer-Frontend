@@ -1,6 +1,10 @@
 import { useMemo } from 'react'
 import dayjs from 'dayjs'
-import { DateHeaderProps, Calendar, dayjsLocalizer } from 'react-big-calendar'
+import {
+  DateHeaderProps,
+  Calendar as ReactBigCalendar,
+  dayjsLocalizer,
+} from 'react-big-calendar'
 import { IEvent } from '@/types/WidgetDataTypes'
 import * as Component from './CalendarComponent'
 
@@ -13,7 +17,7 @@ interface ICalendarProps {
   onNavigate?: (date: Date) => void
 }
 
-const CustomCalendar = ({
+const Calendar = ({
   size,
   events,
   onDrillDown,
@@ -43,7 +47,7 @@ const CustomCalendar = ({
     [size],
   )
   return (
-    <Calendar
+    <ReactBigCalendar
       localizer={localizer}
       formats={formats}
       components={components}
@@ -54,4 +58,4 @@ const CustomCalendar = ({
   )
 }
 
-export default CustomCalendar
+export default Calendar

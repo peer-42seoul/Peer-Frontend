@@ -19,13 +19,50 @@
     cursor: pointer;
   }
 
-  //   .rbc-off-range-bg,
-  //   .rbc-day-bg.rbc-today {
-  //     background-color: transparent;
-  //   }
-
   // 이벤트가 표시되는 줄 : 이벤트가 표시되지 않으므로 숨김
   .rbc-row-segment {
     display: none;
+  }
+
+  .rbc-month-view {
+    // ANCHOR : 요일 표시
+    .rbc-month-header {
+      gap: 1rem;
+      .rbc-header {
+        color: $dark-text-assistive;
+      }
+    }
+  }
+
+  // ANCHOR : 전체 캘린더 grid (flex)
+  .rbc-month-view {
+    gap: 0.75rem;
+    // ANCHOR : 요일 표시
+    .rbc-month-header {
+      gap: 1rem;
+      .rbc-header {
+        color: $dark-text-assistive;
+      }
+    }
+    // ANCHOR : 날짜 표시
+    .rbc-month-row {
+      .rbc-row-content .rbc-row {
+        justify-content: space-between;
+        .rbc-date-cell {
+          @include flex-box(column, center, center);
+          padding: 0;
+          color: $dark-text-alternative;
+          // 오늘 날짜 표시
+          &.rbc-now {
+            color: $dark-purple-normal;
+          }
+          .event-icon {
+            width: 0.25rem;
+            height: 0.25rem;
+            color: $dark-pink-normal;
+          }
+        }
+      }
+    }
   }
 }
