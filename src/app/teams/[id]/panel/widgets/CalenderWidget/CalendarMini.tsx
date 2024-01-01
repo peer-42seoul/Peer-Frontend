@@ -1,10 +1,14 @@
 import { useMemo } from 'react'
 import { DateHeaderProps, Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from 'dayjs'
-import { Box, Stack, SxProps } from '@mui/material'
-import CircleIcon from '@mui/icons-material/Circle'
+import { Box, SxProps } from '@mui/material'
 import { IEvent } from '@/types/WidgetDataTypes'
-import { MiniToolbar, MiniDayCell, MiniDayEvent } from './CalendarComponent'
+import {
+  MiniToolbar,
+  MiniDayCell,
+  MiniDayEvent,
+  MiniDateHeader,
+} from './CalendarComponent'
 import './CalendarMini.scss'
 
 interface ICaledarMini {
@@ -26,26 +30,9 @@ const CalendarMini = ({ events, sx }: ICaledarMini) => {
       toolbar: MiniToolbar,
       dateCellWrapper: MiniDayCell,
       month: {
-        dateHeader: (props: DateHeaderProps) => {
-          const { date } = props
-          const today = new Date()
-          const isToday = dayjs(date).isSame(today, 'day')
-          const isEventDay = events?.some(
-            (event) =>
-              dayjs(event.start).isSame(date, 'day') ||
-              dayjs(event.end).isSame(date, 'day'),
-          )
-          return (
-            <Stack
-              alignItems={'center'}
-              justifyContent={'center'}
-              className={`rbc-day-header ${isToday ? 'is-today' : ''}`}
-            >
-              {date.getDate()}
-              {isEventDay ? <CircleIcon className="event-icon" /> : null}
-            </Stack>
-          )
-        },
+        dateHeader: (props: DateHeaderProps) => (
+          <MiniDateHeader {...props} events={events} />
+        ),
         event: MiniDayEvent,
       },
     }),

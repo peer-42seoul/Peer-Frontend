@@ -1,8 +1,14 @@
-import { EventProps, ToolbarProps } from 'react-big-calendar'
+import { DateHeaderProps, EventProps, ToolbarProps } from 'react-big-calendar'
 import dayjs from 'dayjs'
-import { IconButton } from '@mui/material'
+import { IconButton, Stack } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import CircleIcon from '@mui/icons-material/Circle'
+import { IEvent } from '@/types/WidgetDataTypes'
+
+interface IMiniDateHeaderProps extends DateHeaderProps {
+  events?: IEvent[]
+}
 
 // Toolbar : 상단 달 표시 컴포넌트
 export const MiniToolbar = (props: ToolbarProps) => {
@@ -33,6 +39,27 @@ export const LargeToolbar = (props: ToolbarProps) => {
 // 날짜 칸 컴포넌트 (기본 스타일 제거용)
 export const MiniDayCell = () => {
   return <div className="rbc-day-bg" />
+}
+
+export const MiniDateHeader = (props: IMiniDateHeaderProps) => {
+  const { date } = props
+  const today = new Date()
+  const isToday = dayjs(date).isSame(today, 'day')
+  const isEventDay = props.events?.some(
+    (event) =>
+      dayjs(event.start).isSame(date, 'day') ||
+      dayjs(event.end).isSame(date, 'day'),
+  )
+  return (
+    <Stack
+      alignItems={'center'}
+      justifyContent={'center'}
+      className={`rbc-day-header ${isToday ? 'is-today' : ''}`}
+    >
+      {date.getDate()}
+      {isEventDay ? <CircleIcon className="event-icon" /> : null}
+    </Stack>
+  )
 }
 
 // 위젯에서는 이벤트에 대한 상세 정보를 보여주지 않음.
