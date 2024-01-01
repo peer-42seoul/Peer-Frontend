@@ -5,8 +5,20 @@
   .rbc-toolbar {
     margin-bottom: 1rem;
     .rbc-toolbar-label {
+      width: 5.5rem;
+      flex-grow: 0;
       @include Title3-emphasis;
       color: $dark-text-strong;
+    }
+    .rbc-toolbar-button {
+      @include flex-box(row, center, center);
+      border: none;
+      padding: 0;
+      color: $dark-text-strong;
+      background-color: transparent;
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
 }
