@@ -170,7 +170,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           sx={{
             backgroundColor: 'Background.primary',
             border: '1px solid black',
-            width: '56.75rem',
+            maxWidth: '56.75rem',
           }}
         >
           <MainBanner />
@@ -287,7 +287,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 </>
               )}
             </Stack>
-            <Stack width={'19.25rem'} height={'100%'} gap={'1rem'}>
+            <Stack maxWidth={'19.25rem'} height={'100%'} gap={'1rem'}>
               <MainProfile />
               <MainShowcase />
               <MainCarousel />

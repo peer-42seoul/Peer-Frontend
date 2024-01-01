@@ -22,12 +22,13 @@ const FavoriteButton = ({
   const changeFavorite = async () => {
     if (!isLogin) return router.push('/login?redirect=' + redirect_url)
     try {
+      setIsFavorite(!isFavorite)
       await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
       )
-      setIsFavorite(!isFavorite)
     } catch (e) {
       console.log('error', e)
+      setIsFavorite(!isFavorite)
     }
   }
 

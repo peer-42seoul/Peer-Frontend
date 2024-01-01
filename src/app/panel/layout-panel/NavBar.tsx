@@ -134,10 +134,10 @@ export const PcNav = () => {
 
   return (
     <Stack
-      width={'100%'}
       direction={'row'}
       justifyContent={'space-between'}
       alignItems={'center'}
+      width={'100%'}
       sx={{
         position: 'fixed',
         left: 0,
@@ -146,7 +146,6 @@ export const PcNav = () => {
         overflow: 'hidden',
         zIndex: 1300, // NOTE : 가능한 가장 높은 값으로 설정한 것이므로 이 값은 높이지 말아주세요. (낮추는건 괜찮습니다.)
         backgroundColor: 'background.primary',
-        paddingX: 3,
       }}
     >
       <Stack direction={'row'}>

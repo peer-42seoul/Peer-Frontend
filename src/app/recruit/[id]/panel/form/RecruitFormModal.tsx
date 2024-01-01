@@ -11,6 +11,7 @@ import useSWR from 'swr'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
 import CuTextField from '@/components/CuTextField'
+
 interface IInterviewData {
   question: string
   type: 'CLOSE' | 'OPEN' | 'RATIO' | 'CHECK'
@@ -133,9 +134,9 @@ const RecruitFormModal = ({
             justifyContent: 'center',
           }}
         >
-          <Box
-            border={'1px solid white'}
-            padding={4}
+          <Stack
+            gap={'1.5rem'}
+            padding={'1.5rem'}
             sx={{
               overflowY: 'auto',
               width: '70vw',
@@ -144,13 +145,21 @@ const RecruitFormModal = ({
               backgroundColor: 'background.primary',
             }}
           >
-            <Typography variant="h6" fontWeight={'bold'}>
-              {role ? `지원하는 역할: ${role}` : '지원하기'}
+            <Typography color={'text.strong'} fontWeight={600}>
+              인터뷰
             </Typography>
-            <Stack gap={1} marginY={1}>
+            <Typography>인터뷰에 답변하고 지원을 완료하세요.</Typography>
+            <Stack gap={'1rem'}>
               {data?.map((quest, idx) => (
-                <Box key={idx} sx={{ border: '1px solid black' }}>
-                  <Typography>{quest.question}</Typography>
+                <Box
+                  key={idx}
+                  bgcolor={'background.secondary'}
+                  padding={'1.25rem'}
+                  borderRadius={'0.75rem'}
+                >
+                  <Typography variant={'Body1Emphasis'} marginBottom={'1rem'}>
+                    {quest.question}
+                  </Typography>
                   {quest.type === 'OPEN' && (
                     <Controller
                       rules={{
@@ -162,6 +171,7 @@ const RecruitFormModal = ({
                       render={({ field }) => (
                         <CuTextField
                           {...field}
+                          placeholder={'텍스트로 답변을 입력할 수 있습니다.'}
                           variant="standard"
                           error={!!errors[idx]}
                           helperText={errors[idx]?.message as string}
@@ -209,7 +219,7 @@ const RecruitFormModal = ({
                 제출하기
               </Button>
             </Stack>
-          </Box>
+          </Stack>
         </Modal>
       </form>
     </>
