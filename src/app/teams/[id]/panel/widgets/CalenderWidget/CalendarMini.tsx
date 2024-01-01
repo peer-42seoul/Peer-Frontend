@@ -45,7 +45,7 @@ const CalendarMini = ({ events, sx }: ICaledarMini) => {
         localizer={localizer}
         formats={formats}
         components={components}
-        events={events || []}
+        events={events ?? []}
       />
     </Box>
   )

@@ -91,7 +91,7 @@ const CalendarLarge = ({ events, onDrillDown }: ICalendarLargeProps) => {
         localizer={localizer}
         formats={formats}
         components={components}
-        events={events || []}
+        events={events ?? []}
         eventPropGetter={styleEvent}
         // onSelectEvent={onSelectedEvent}
         onDrillDown={onDrillDown}
