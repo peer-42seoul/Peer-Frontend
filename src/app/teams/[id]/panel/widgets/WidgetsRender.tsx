@@ -126,6 +126,7 @@ const WidgetsRender = ({
     (layout: Layout[], layoutItem: Layout) => {
       if (!edit) return
       if (!isValidLayout(layout)) return
+      console.log('layout', layout)
       setWidgets([
         ...widgets,
         {
@@ -204,8 +205,9 @@ const WidgetsRender = ({
   const removeWidget = useCallback((idx: string) => {
     const newWidgets = widgets.filter((widget) => widget.grid.i !== idx)
     setWidgets(newWidgets)
-  }, [])
+  }, [widgets])
 
+  console.log('widget', widgets)
   return (
     <Box>
       {/*request와 관련된 toast*/}
@@ -241,6 +243,9 @@ const WidgetsRender = ({
         >
           {edit && (
             <CuButton
+              TypographyProps={{
+                variant: 'Body2Emphasis',
+              }}
               message={'취소'}
               action={() => {
                 // 취소 시 최초의 widget 상태로 되돌림
@@ -251,12 +256,15 @@ const WidgetsRender = ({
             />
           )}
           <CuButton
-            message={edit ? '팀페이지 저장' : '팀페이지 수정'}
+            message={edit ? '저장' : '팀페이지 수정'}
+            TypographyProps={{
+              variant: 'Body2Emphasis',
+            }}
             action={() => {
               if (edit) return setOpen(true)
               setEdit(!edit)
             }}
-            variant={'contained'}
+            variant={edit ? 'contained' : 'text'}
           />
         </Stack>
         {/*toolbox 영역*/}

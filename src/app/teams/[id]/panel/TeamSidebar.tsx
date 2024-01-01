@@ -53,6 +53,7 @@ const TeamSidebar = ({ id }: { id: string }) => {
     <>
       {isPc ? (
         <ToggleButtonGroup
+          fullWidth
           orientation="vertical"
           value={tab}
           exclusive
