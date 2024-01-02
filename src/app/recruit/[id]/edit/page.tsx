@@ -133,6 +133,38 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
   )
   let regionData = undefined
 
+  const doNeedMoreConditionAtProject = () => {
+    if (
+      !image ||
+      !title ||
+      !name ||
+      !due ||
+      !place ||
+      !tagList ||
+      !roleList ||
+      !content ||
+      (place !== 'ONLINE' && !region)
+    )
+      return true
+    else return false
+  }
+
+  const doNeedMoreConditionAtStudy = () => {
+    if (
+      !image ||
+      !title ||
+      !name ||
+      !due ||
+      !place ||
+      !tagList ||
+      !teamsize ||
+      !content ||
+      (place !== 'ONLINE' && !region)
+    )
+      return true
+    else return false
+  }
+
   useEffect(() => {
     console.log(data)
     if (error) {
@@ -160,27 +192,14 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
   }, [data])
 
   const onHandlerFinish = async () => {
-    if (type === 'project') {
-      setRoleList([{ name: null, number: parseInt(teamsize) }])
-    }
     if (
-      !image ||
-      !title ||
-      !name ||
-      !due ||
-      !region ||
-      !place ||
-      !tagList ||
-      !roleList ||
-      !content
+      (type === 'PROJECT' && doNeedMoreConditionAtProject()) ||
+      (type === 'STUDY' && doNeedMoreConditionAtStudy())
     ) {
       alert('빈칸을 모두 채워주세요')
       return
     }
     try {
-      if (type === 'project') {
-        setRoleList([{ name: null, number: parseInt(teamsize) }])
-      }
       const response = await axiosInstance.put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
         {
@@ -191,7 +210,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
           due: due,
           type: type,
           content: content,
-          region: region,
+          region: place === 'ONLINE' ? null : region,
           link: link,
           tagList: tagList,
           roleList: roleList,
@@ -203,9 +222,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
       if (response.status === 200) router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
     } catch (error: any) {
       console.log('error : ', error)
-      setToastMessage(
-        '모집글 작성 실패, 다시 시도해주세요' + error.response.data,
-      )
+      setToastMessage(error.response.data)
       openToast()
     }
   }

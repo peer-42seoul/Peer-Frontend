@@ -116,31 +116,47 @@ const CreateTeam = () => {
     }
   }, [data])
 
-  const onHandlerFinish = async () => {
-    if (type === 'project') {
-      setRoleList([{ name: null, number: parseInt(teamsize) }])
-    }
+  const doNeedMoreConditionAtProject = () => {
     if (
       !image ||
       !title ||
       !name ||
       !due ||
-      !region ||
       !place ||
       !tagList ||
       !roleList ||
-      !interviewList ||
-      !content
+      !content ||
+      (place !== 'ONLINE' && !region)
+    )
+      return true
+    else return false
+  }
+
+  const doNeedMoreConditionAtStudy = () => {
+    if (
+      !image ||
+      !title ||
+      !name ||
+      !due ||
+      !place ||
+      !tagList ||
+      !teamsize ||
+      !content ||
+      (place !== 'ONLINE' && !region)
+    )
+      return true
+    else return false
+  }
+
+  const onHandlerFinish = async () => {
+    if (
+      (type === 'PROJECT' && doNeedMoreConditionAtProject()) ||
+      (type === 'STUDY' && doNeedMoreConditionAtStudy())
     ) {
       alert('빈칸을 모두 채워주세요')
       return
     }
     try {
-      console.log('tagList when submit', tagList)
-      console.log(
-        'tagList when submit after 가공',
-        tagList.map((tag) => tag.tagId),
-      )
       const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
         {
@@ -151,18 +167,18 @@ const CreateTeam = () => {
           due: due,
           type: type,
           content: content,
-          region: region,
+          region: place === 'ONLINE' ? null : region,
           link: link,
           tagList: tagList.map((tag) => tag.tagId),
           roleList: roleList,
           interviewList: interviewList,
-          max: type === 'study' ? parseInt(teamsize) : null,
+          max: type === 'STUDY' ? parseInt(teamsize) : null,
         },
       )
       router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
     } catch (error: any) {
       console.log('error : ', error)
-      setToastMessage('모집글 작성 실패, ' + error.response.data)
+      setToastMessage(error.response.data)
       openToast()
     }
   }
