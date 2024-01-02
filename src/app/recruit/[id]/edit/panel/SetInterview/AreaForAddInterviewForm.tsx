@@ -4,6 +4,7 @@ import WriteAnswers from './WriteAnswers'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { IFormInterview } from '@/types/IPostDetail'
 import AddIcon from '@mui/icons-material/Add'
+import useMedia from '@/hook/useMedia'
 
 const AreaForAddInterviewForm = ({
   question,
@@ -26,6 +27,7 @@ const AreaForAddInterviewForm = ({
   const [max, setMax] = useState<string>('5')
   const [valueOfMin, setvalueOfMin] = useState<string>('')
   const [valueOfMax, setvalueOfMax] = useState<string>('')
+  const { isPc } = useMedia()
 
   const onHandlerEditQuestion = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -122,14 +124,25 @@ const AreaForAddInterviewForm = ({
           setvalueOfMax={setvalueOfMax}
         />
         <Button
-          sx={{
-            width: '6.8rem',
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingLeft: '1rem',
-            paddingRight: '1.38rem',
-          }}
+          sx={
+            isPc
+              ? {
+                  width: '6.8rem',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingLeft: '1rem',
+                  paddingRight: '1.38rem',
+                }
+              : {
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingLeft: '1rem',
+                  paddingRight: '1.38rem',
+                }
+          }
           variant="outlined"
           onClick={onHandlerAddQuestion}
         >
