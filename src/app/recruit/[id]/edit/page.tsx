@@ -21,7 +21,12 @@ import Image from 'next/image'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { useRouter } from 'next/navigation'
-import { IFormInterview, IRoleWrite, ITag, statusEnum } from '@/types/IPostDetail'
+import {
+  IFormInterview,
+  IRoleWrite,
+  ITag,
+  statusEnum,
+} from '@/types/IPostDetail'
 import CuButton from '@/components/CuButton'
 import ImageIcon from '@mui/icons-material/Image'
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined'
@@ -36,7 +41,7 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
 import TagAutoComplete from '@/components/TagAutoComplete'
-// import axios from 'axios'
+import axios from 'axios'
 
 const componentName = {
   alignItems: 'center',
@@ -63,25 +68,32 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
   const [status, setStatus] = useState<statusEnum>(statusEnum.BEFORE)
   const [allTagList, setAllTagList] = useState<ITag[]>([])
   const [isAnswered, setIsAnswered] = useState<boolean>(true)
+  const [isChangedImage, setIsChangedImage] = useState<boolean>(false)
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
 
-  // axiosInstance
-  // axios // 원래는 토큰이 필요없는 요청입니다. 백엔드 작업 기다리는중
-  //   .get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`)
-  //   .then((res) => setAllTagList(res.data))
-  //   .catch((err) => {
-  //     setToastMessage('태그를 불러오는데 실패했습니다.')
-  //     openToast()
-  //     console.log('서버에서 오는 err', err)
-  //   })
-  // useSWR을 두번 사용할 수 없는데, axios 요청을 직접 보내면 태그는 불러와지지만 무한요청이 발생함
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`)
+      .then((res) => setAllTagList(res.data))
+      .catch((err) => {
+        setToastMessage('태그를 불러오는데 실패했습니다.')
+        openToast()
+        console.log('서버에서 오는 err', err)
+      })
+  }, [])
 
   const { data, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.id}`,
-    (url: string) => axiosInstance.get(url).then((res) => res.data),
+    (url: string) =>
+      axiosInstance
+        .get(url)
+        .then((res) => res.data)
+        .catch((err) => {
+          if (err.response.status === 403) router.push(`/recruit/${params.id}`)
+        }),
   )
   let regionData = undefined
 
@@ -94,7 +106,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
     } else if (data) {
       regionData = [data.region1, data.region2]
       setTitle(data.title)
-      setPreviewImage(data.previewImage)
+      setPreviewImage(data.image)
       setName(data.name)
       setType(data.type)
       setTagList(data.tagList)
@@ -134,11 +146,11 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
       if (type === 'project') {
         setRoleList([{ name: null, number: parseInt(teamsize) }])
       }
-      const response = await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/edit/${params.id}`,
+      const response = await axiosInstance.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/${params.id}`,
         {
           place: place,
-          image: previewImage.split(',')[1],
+          image: isChangedImage ? previewImage.split(',')[1] : null,
           title: title,
           name: name,
           due: due,
@@ -150,14 +162,21 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
           roleList: roleList,
           interviewList: interviewList,
           status: status,
+          max: type === 'study' ? parseInt(teamsize) : null,
         },
       )
       if (response.status === 200) router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
-    } catch (error) {
-      console.log('error : ',error)
-      setToastMessage('모집글 작성 실패, 다시 시도해주세요')
+    } catch (error: any) {
+      console.log('error : ', error)
+      setToastMessage(
+        '모집글 작성 실패, 다시 시도해주세요' + error.response.data,
+      )
       openToast()
     }
+  }
+
+  const doesChangeImage = () => {
+    setIsChangedImage(true)
   }
 
   return (
@@ -188,6 +207,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
               <ImageUploadButton
                 setImage={setImage}
                 setPreviewImage={setPreviewImage}
+                onChange={doesChangeImage}
               >
                 <Box>
                   <Image
@@ -218,7 +238,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 <Typography variant="h6">모집글 제목</Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px' }}
+                sx={{ width: '26rem' }}
                 variant="outlined"
                 value={title}
                 onChange={(e) => {
@@ -237,7 +257,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 </Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px' }}
+                sx={{ width: '26rem' }}
                 variant="outlined"
                 value={name}
                 onChange={(e) => {
@@ -254,7 +274,11 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                   <HowToRegOutlinedIcon />
                   <Typography variant="h6">역할</Typography>
                 </Stack>
-                <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
+                <SetTeamRole
+                  roleData={roleList}
+                  setRoleData={setRoleList}
+                  disabled={true}
+                />
               </Box>
             )}
             {type === 'STUDY' && (
@@ -295,13 +319,15 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
               />
             </Box>
             {/* 지역 선택 */}
-            <Box>
-              <Stack direction={'row'} gap={1} sx={componentName}>
-                <LocationOnOutlinedIcon />
-                <Typography variant="h6">지역</Typography>
-              </Stack>
-              <SelectRegion setValue={setRegion} region={region} />
-            </Box>
+            {place === 'ONLINE' ? null : (
+              <Box>
+                <Stack direction={'row'} gap={1} sx={componentName}>
+                  <LocationOnOutlinedIcon />
+                  <Typography variant="h6">지역</Typography>
+                </Stack>
+                <SelectRegion setValue={setRegion} region={region} />
+              </Box>
+            )}
             {/* 커뮤니케이션 링크 등록 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
@@ -358,7 +384,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 </Typography>
               </Stack>
               <Button
-                sx={{ width: '416px' }}
+                sx={{ width: '26rem' }}
                 variant="outlined"
                 onClick={() => setOpenBasicModal(true)}
                 disabled={isAnswered}

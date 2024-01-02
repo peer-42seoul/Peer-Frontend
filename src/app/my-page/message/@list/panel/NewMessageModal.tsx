@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState, ReactNode } from 'react'
 import { IconButton, InputBase, Popper, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
@@ -13,11 +13,33 @@ import TargetList from './TargetList'
 import * as style from './NewMessageModal.style'
 import CuToast from '@/components/CuToast'
 import { isAxiosError } from 'axios'
+import useMedia from '@/hook/useMedia'
 
 interface INewMessageModalProps {
   isOpen: boolean
   handleClose: () => void
   setMessageData: (newMessageData: IMessageListData[]) => void
+}
+
+const InputContainer = ({
+  title,
+  children,
+}: {
+  title: string
+  children: ReactNode
+}) => {
+  return (
+    <Stack spacing={'0.25rem'} width={'100%'}>
+      <Typography
+        sx={style.subTitle}
+        variant={'CaptionEmphasis'}
+        color={'text.strong'}
+      >
+        {title}
+      </Typography>
+      {children}
+    </Stack>
+  )
 }
 
 const NewMessageModal = ({
@@ -37,6 +59,7 @@ const NewMessageModal = ({
   } = useToast()
   const axiosInstance = useAxiosWithAuth()
   const ref = useRef<HTMLDivElement>(null)
+  const { isPc } = useMedia()
 
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {
@@ -94,11 +117,12 @@ const NewMessageModal = ({
       }}
     >
       <>
-        <Stack alignItems={'center'} spacing={'1rem'} width={'31rem'}>
-          <Stack spacing={'0.25rem'} width={'100%'}>
-            <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-              받는 이
-            </Typography>
+        <Stack
+          alignItems={isPc ? 'center' : 'flex-start'}
+          spacing={'1rem'}
+          sx={isPc ? style.pcContainer : style.mobileContainer}
+        >
+          <InputContainer title={'받는 이'}>
             <Stack
               direction={'row'}
               alignItems={'center'}
@@ -126,7 +150,7 @@ const NewMessageModal = ({
               />
             </Stack>
             <Popper
-              sx={style.targetListPopper}
+              sx={isPc ? style.pcPopper : style.mobilePopper}
               open={!!messageTargetList}
               anchorEl={ref.current}
             >
@@ -145,17 +169,14 @@ const NewMessageModal = ({
                 setTargetUser={setTargetUser}
               />
             </Popper>
-          </Stack>
-          <Stack spacing={'0.25rem'} width={'100%'}>
-            <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-              내용
-            </Typography>
+          </InputContainer>
+          <InputContainer title={'내용'}>
             <NewMessageForm
               userInfo={targetUser}
               handleClose={handleClose}
               setMessageData={setMessageData}
             />
-          </Stack>
+          </InputContainer>
         </Stack>
         <CuToast open={isToastOpen} onClose={closeToast} severity={'error'}>
           {toastMessage}
