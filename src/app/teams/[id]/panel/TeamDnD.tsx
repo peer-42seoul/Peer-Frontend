@@ -39,8 +39,8 @@ const TeamDnD = ({ id }: { id: string }) => {
     trigger()
   }, [])
 
-  if (!data && isMutating) return <>로딩중입니다</>
-  if (!data && error) return <>에러 발생</>
+  // if (!data && isMutating) return <>로딩중입니다</>
+  // if (!data && error) return <>에러 발생</>
 
   return (
     <Stack

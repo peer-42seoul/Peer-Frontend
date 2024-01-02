@@ -13,9 +13,16 @@ const WidgetCard = ({
         width: '100%',
         height: '100%',
         backgroundColor: bgcolor,
+        position: 'relative',
       }}
     >
-      <CardContent>{children}</CardContent>
+      <CardContent
+        sx={{
+          padding: '1.5rem 1.5rem 2rem 1.5rem',
+        }}
+      >
+        {children}
+      </CardContent>
     </Card>
   )
 }

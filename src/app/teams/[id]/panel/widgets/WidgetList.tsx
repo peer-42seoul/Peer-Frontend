@@ -1,6 +1,6 @@
 import { Box, Button, Stack } from '@mui/material'
 import { SizeType, WidgetType } from '@/types/ITeamDnDLayout'
-import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
+import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
 import { useCallback, useState } from 'react'
 import { sizeRatio } from '@/app/teams/[id]/panel/TeamDnD'
 import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
