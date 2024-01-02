@@ -18,7 +18,7 @@ const SetCommunicationToolLink = ({
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <TextField
         variant="outlined"
-        placeholder="팀 커뮤니케이션 툴 링크를 입력해주세요. ex) 디스코드, 오픈카톡"
+        placeholder={'팀 커뮤니케이션 툴 링크를 입력해주세요.'}
         sx={{ width: '26rem' }}
         value={value}
         onChange={handleChange}
