@@ -12,6 +12,7 @@ import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import useMedia from '@/hook/useMedia'
 
 interface ITeamDnDWidgetListProps {
   setIsDropping: (isDropping: boolean) => void
@@ -37,6 +38,7 @@ const WidgetList = ({
   setSize,
   setDroppingItem,
 }: ITeamDnDWidgetListProps) => {
+  const { isPc, isTablet } = useMedia()
   /* 툴 박스의 사이즈 관리 */
   const [toolSize, setToolSize] = useState<IToolSizeType>({
     notice: 'S',
@@ -113,7 +115,7 @@ const WidgetList = ({
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: isTablet ? 2 : isPc ? 3 : 1,
     slidesToScroll: 1,
   }
 
@@ -142,7 +144,7 @@ const WidgetList = ({
                 {/*사이즈 버튼 렌더링*/}
                 <Stack flexDirection={'row'} justifyContent={'space-between'}>
                   <Typography variant={'Body2Emphasis'}>{typeValue}</Typography>
-                  <Stack direction={'row'}>
+                  <Stack direction={'row'} gap={'0.38rem'}>
                     {['S', 'M', 'L'].map((size) => (
                       <Button
                         sx={{
@@ -156,6 +158,7 @@ const WidgetList = ({
                               ? 'line.base'
                               : undefined,
                         }}
+                        size={'small'}
                         key={size}
                         variant="outlined"
                         onClick={() => {
@@ -189,12 +192,12 @@ const WidgetList = ({
                       key={typeValue}
                       margin={1}
                       flexDirection={'row'}
-                      height={
-                        `calc(4rem * ${sizeRatio[toolSize[typeValue] || 'S'].h})`
-                      }
-                      width={
-                        `calc(4rem * ${sizeRatio[toolSize[typeValue] ?? 'S'].w})`
-                      }
+                      height={`calc(4rem * ${
+                        sizeRatio[toolSize[typeValue] || 'S'].h
+                      })`}
+                      width={`calc(4rem * ${
+                        sizeRatio[toolSize[typeValue] ?? 'S'].w
+                      })`}
                       className="droppable-element"
                       draggable={true}
                       unselectable="on"

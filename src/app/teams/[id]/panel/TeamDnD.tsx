@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import 'react-grid-layout/css/styles.css'
 import { ITeamDnDLayout, SizeType, WidgetType } from '@/types/ITeamDnDLayout'
@@ -28,21 +28,21 @@ const TeamDnD = ({ id }: { id: string }) => {
   const [size, setSize] = useState<SizeType>('S')
   const axiosInstance = useAxiosWithAuth()
   const { trigger, data, error, isMutating } = useSWRMutation<ITeamDnDLayout>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/read`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/read`,
     (url: string) =>
       axiosInstance
         .post(url, { teamId: id, type: 'team' })
         .then((res) => res.data),
   )
-
   useEffect(() => {
     trigger()
   }, [])
 
   // api 에러 생길 시 주석 처리 필요
-  if (!data && isMutating) return <>로딩중입니다</>
-  if (!data && error) return <>에러 발생</>
+  if (!data && isMutating) return <Typography>로딩중입니다...</Typography>
+  if (!data && error) return <Typography>에러 발생</Typography>
 
+  console.log('data', data)
   return (
     <Stack
       sx={{

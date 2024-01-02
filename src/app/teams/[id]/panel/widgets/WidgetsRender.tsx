@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack } from '@mui/material'
+import { Box, IconButton, Stack, useMediaQuery } from '@mui/material'
 import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
 import TmpCalenderWidget from '@/app/teams/[id]/panel/widgets/TmpCalenderWidget'
@@ -21,10 +21,10 @@ import {
 import CuButton from '@/components/CuButton'
 import useToast from '@/hook/useToast'
 import useAxiosWithAuth from '@/api/config'
-
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import CuTextModal from '@/components/CuTextModal'
 import IToastProps from '@/types/IToastProps'
+import { BrowserView } from 'react-device-detect'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
@@ -39,6 +39,8 @@ interface IWidgetsRenderProps {
   setEdit: (edit: boolean) => void
   children?: React.ReactNode
 }
+export const WIDGET_WIDTH = 209
+
 const WidgetsRender = ({
   id,
   data,
@@ -69,13 +71,14 @@ const WidgetsRender = ({
   }, [data])
 
   const [widgets, setWidgets] = useState<IWidget[]>(setInitWidgets)
-  const [prevWidgets, setPrevWidgets] = useState<IWidget[]>([])
+  const [prevWidgets, setPrevWidgets] = useState<IWidget[] | null>(null)
   const [isOpen, setOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
   const { CuToast, isOpen: toastOpen, openToast, closeToast } = useToast()
   const [toastMessage, setToastMessage] = useState<IToastProps>(
     {} as IToastProps,
   )
+  const isOverTablet = useMediaQuery('(min-width:700px)')
 
   /* widget 가져오기 */
   const getWidget = useCallback(
@@ -118,7 +121,9 @@ const WidgetsRender = ({
    * 따라서 최대 높이를 제한하기 위해 위젯이 추가될 때마다 height를 계산하여 height가 제한 값을 넘은 경우 다시 재조정해줘야함
    */
   useEffect(() => {
-    if (prevWidgets) setWidgets(prevWidgets)
+    if (prevWidgets) {
+      setWidgets(prevWidgets)
+    }
   }, [prevWidgets])
 
   /* 드롭 시 호출 */
@@ -126,9 +131,7 @@ const WidgetsRender = ({
     (layout: Layout[], layoutItem: Layout) => {
       if (!edit) return
       if (!isValidLayout(layout)) return
-      console.log('layout', layout)
       setWidgets([
-        ...widgets,
         {
           key: index,
           grid: {
@@ -141,6 +144,7 @@ const WidgetsRender = ({
           updatedAt: new Date(),
           data: null,
         },
+        ...widgets,
       ])
       setIndex(index + 1)
     },
@@ -178,12 +182,12 @@ const WidgetsRender = ({
       }
       if (!data) {
         await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/create`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/create`,
           teamWidgetInfo,
         )
       } else
         await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/update`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/update`,
           teamWidgetInfo,
         )
       setToastMessage({
@@ -192,6 +196,7 @@ const WidgetsRender = ({
       })
       openToast()
       setOpen(false)
+      setEdit(false)
     } catch (e) {
       console.log('e', e)
       setToastMessage({
@@ -200,12 +205,15 @@ const WidgetsRender = ({
       })
       openToast()
     }
-  }, [axiosInstance, data, id, openToast, setToastMessage, widgets])
+  }, [axiosInstance, data, id, openToast, setEdit, widgets])
 
-  const removeWidget = useCallback((idx: string) => {
-    const newWidgets = widgets.filter((widget) => widget.grid.i !== idx)
-    setWidgets(newWidgets)
-  }, [widgets])
+  const removeWidget = useCallback(
+    (idx: string) => {
+      const newWidgets = widgets.filter((widget) => widget.grid.i !== idx)
+      setWidgets(newWidgets)
+    },
+    [widgets],
+  )
 
   console.log('widget', widgets)
   return (
@@ -234,44 +242,47 @@ const WidgetsRender = ({
         content={'팀 페이지를 저장하시겠습니까?'}
       />
       <Stack gap={2}>
-        {/* 팀페이지 수정 버튼 */}
-        <Stack
-          alignItems={'center'}
-          direction={'row'}
-          gap={1}
-          justifyContent={'flex-end'}
-        >
-          {edit && (
+        <BrowserView>
+          {/* 팀페이지 수정 버튼 */}
+          <Stack
+            alignItems={'center'}
+            direction={'row'}
+            gap={1}
+            justifyContent={'flex-end'}
+          >
+            {edit && (
+              <CuButton
+                TypographyProps={{
+                  variant: 'Body2Emphasis',
+                }}
+                message={'취소'}
+                action={() => {
+                  // 취소 시 최초의 widget 상태로 되돌림
+                  setWidgets(setInitWidgets)
+                  setEdit(!edit)
+                }}
+                variant={'outlined'}
+              />
+            )}
             <CuButton
+              message={edit ? '저장' : '팀페이지 수정'}
               TypographyProps={{
                 variant: 'Body2Emphasis',
               }}
-              message={'취소'}
               action={() => {
-                // 취소 시 최초의 widget 상태로 되돌림
-                setWidgets(setInitWidgets)
+                if (edit) return setOpen(true)
                 setEdit(!edit)
               }}
-              variant={'outlined'}
+              variant={edit ? 'contained' : 'text'}
             />
-          )}
-          <CuButton
-            message={edit ? '저장' : '팀페이지 수정'}
-            TypographyProps={{
-              variant: 'Body2Emphasis',
-            }}
-            action={() => {
-              if (edit) return setOpen(true)
-              setEdit(!edit)
-            }}
-            variant={edit ? 'contained' : 'text'}
-          />
-        </Stack>
+          </Stack>
+        </BrowserView>
         {/*toolbox 영역*/}
         {children}
         {/* react-grid-layout 영역 */}
         <Box bgcolor="background.secondary">
           <ResponsiveGridLayout
+            // isBounded={true}
             className="layout"
             margin={[12, 12]}
             breakpoints={{
@@ -280,17 +291,18 @@ const WidgetsRender = ({
             }}
             cols={{ sm: 4, xs: 2 }} //그리드의 열 수. pc면 4, 모바일이면 2
             maxRows={4}
-            width={800}
-            rowHeight={200} //그리드 항목의 높이
+            rowHeight={WIDGET_WIDTH} //그리드 항목의 높이
             onDrop={onDrop}
             isDroppable={true} //true면 draggable={true}인 요소를 드래그 가능
             onLayoutChange={onLayoutChange}
             isResizable={false}
             droppingItem={droppingItem}
             style={{
-              minHeight: edit ? '900px' : undefined,
-              maxHeight: edit ? '900px' : undefined,
-              // maxWidth: '908px',
+              height: edit
+                ? isOverTablet
+                  ? 4 * WIDGET_WIDTH + 100
+                  : 8 * WIDGET_WIDTH + 100
+                : undefined,
               borderRadius: '5px',
             }}
           >
