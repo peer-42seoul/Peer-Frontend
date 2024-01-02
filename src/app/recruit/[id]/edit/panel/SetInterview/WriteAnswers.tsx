@@ -1,10 +1,7 @@
 import {
   Box,
   Button,
-  Checkbox,
   FormControl,
-  FormControlLabel,
-  FormGroup,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -12,7 +9,6 @@ import {
   Typography,
 } from '@mui/material'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { Stack } from '@mui/material'
@@ -204,7 +200,7 @@ const WriteAnswers = ({
                 onChange={onHandlerEditValueOfMin}
               />
             </Stack>
-            <Stack direction={'row'} sx={{ alignItems: 'center' }} >
+            <Stack direction={'row'} sx={{ alignItems: 'center' }}>
               <Typography>{max}</Typography>
               <TextField
                 variant="standard"

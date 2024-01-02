@@ -7,7 +7,6 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography,
 } from '@mui/material'
 
 const Answers = ({ data }: { data: IFormInterview }) => {
@@ -41,7 +40,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
           variant="standard"
           value={'주관식 답변입니다.'}
           disabled={true}
-          sx={{ width: '70%'}}
+          sx={{ width: '70%' }}
         />
       )
     }
@@ -57,7 +56,11 @@ const Answers = ({ data }: { data: IFormInterview }) => {
                     label={``}
                     disabled={true}
                   />
-                  <TextField variant="standard" value={option} disabled={true}/>
+                  <TextField
+                    variant="standard"
+                    value={option}
+                    disabled={true}
+                  />
                 </Box>
               )
             })}
