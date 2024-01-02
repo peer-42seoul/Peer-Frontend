@@ -1,11 +1,10 @@
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import Favorite from '@mui/icons-material/Favorite'
-import { IconButton } from '@mui/material'
 import { motion, useAnimationControls } from 'framer-motion'
 
-const Interest = ({ id }: { id: number }) => {
+const Interest = ({ id }: { id?: number }) => {
   const [favorite, setFavorite] = useState(false)
   const axiosInstance = useAxiosWithAuth()
   const control = useAnimationControls()
@@ -20,6 +19,7 @@ const Interest = ({ id }: { id: number }) => {
   }
 
   const changeFavorite = async () => {
+    if (!id) return
     try {
       await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${id}`,

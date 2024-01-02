@@ -9,7 +9,7 @@ const modalBase = {
 
 export const pcWrapper = {
   ...modalBase,
-  minWidth: '35rem',
+  minWidth: '30rem',
   minHeight: '21.5rem',
   padding: '1.5rem 2rem',
   borderRadius: '2rem',
