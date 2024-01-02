@@ -8,6 +8,25 @@ import {
 } from '@mui/material'
 import { TeamOperationForm } from '../../../types/types'
 
+export const dueList = [
+  '1주일',
+  '2주일',
+  '3주일',
+  '4주일',
+  '1개월',
+  '2개월',
+  '3개월',
+  '4개월',
+  '5개월',
+  '6개월',
+  '7개월',
+  '8개월',
+  '9개월',
+  '10개월',
+  '11개월',
+  '12개월 이상',
+]
+
 export const SetupSelect = ({
   type,
   value,
@@ -19,25 +38,6 @@ export const SetupSelect = ({
   parentLocation?: string
   setValue: (event: SelectChangeEvent) => void
 }) => {
-  const dueList = [
-    '1주일',
-    '2주일',
-    '3주일',
-    '4주일',
-    '1개월',
-    '2개월',
-    '3개월',
-    '4개월',
-    '5개월',
-    '6개월',
-    '7개월',
-    '8개월',
-    '9개월',
-    '10개월',
-    '11개월',
-    '12개월 이상',
-  ]
-
   if (type === 'location') {
     return (
       <FormControl sx={{ m: 0, minWidth: 80 }} size="small">
@@ -48,6 +48,7 @@ export const SetupSelect = ({
           value={value}
           label="지역"
           onChange={setValue}
+          sx={{ backgroundColor: 'background.tertiary' }}
         >
           {!parentLocation &&
             locationData.map((region, idx) => (

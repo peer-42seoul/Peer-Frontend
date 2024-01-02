@@ -3,6 +3,10 @@ export const pcAvatar = {
   height: '2rem',
 }
 
+export const listItemTextWrapper = {
+  margin: '0 0.5rem',
+}
+
 export const listItemText = {
   overflow: 'hidden',
   textOverflow: 'ellipsis',

@@ -24,6 +24,14 @@ export interface IMember {
   name: string
   id: string
   grant: TeamGrant
+  job: Job[]
+}
+
+export interface Job {
+  id: number
+  name: string
+  max: number
+  current: number
 }
 
 export interface ITeam {
@@ -37,6 +45,7 @@ export interface ITeam {
     operationForm: TeamOperationForm
     region: string[]
     teamImage: string | null
+    // job: Job[]
   }
   member: IMember[]
 }

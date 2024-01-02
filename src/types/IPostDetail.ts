@@ -4,6 +4,8 @@ export interface ITag {
   tagId: number
   name: string
   color: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface IMainCard {
@@ -48,6 +50,7 @@ export interface IPostDetail {
   image: string
   totalNumber: number
   favorite: boolean
+  teamName: string
 }
 
 export interface IFormInterview {

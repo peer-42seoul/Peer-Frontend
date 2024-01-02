@@ -1,9 +1,9 @@
-import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { koreaDistrict } from '@/constant/DistrictData'
+import { Stack } from '@mui/material'
 
 interface BasicSelectProps {
   setValue: Dispatch<SetStateAction<string[]>>
@@ -52,17 +52,27 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
     : []
 
   return (
-    <Box sx={{ width: '416px', display: 'flex', flexDirection: 'row', gap: 2 }}>
-      <FormControl fullWidth sx={{ width: '204px' }}>
-        <Select value={largeScaleData} onChange={handleChangeLargeScaleData}>
+    <Stack
+      sx={{ width: '26rem', display: 'flex', flexDirection: 'row', gap: 1 }}
+    >
+      <FormControl sx={{ width: '12.75rem' }} fullWidth>
+        <Select
+          sx={{ width: '12.75rem', height: '2rem' }}
+          value={largeScaleData}
+          onChange={handleChangeLargeScaleData}
+        >
           {options1}
         </Select>
       </FormControl>
-      <FormControl fullWidth sx={{ width: '204px' }}>
-        <Select value={smallScaleData} onChange={handleChangeSmallScaleData}>
+      <FormControl sx={{ width: '12.75rem' }} fullWidth>
+        <Select
+          sx={{ width: '12.75rem', height: '2rem' }}
+          value={smallScaleData}
+          onChange={handleChangeSmallScaleData}
+        >
           {options2}
         </Select>
       </FormControl>
-    </Box>
+    </Stack>
   )
 }
