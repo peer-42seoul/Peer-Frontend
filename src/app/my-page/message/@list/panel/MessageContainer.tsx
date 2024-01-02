@@ -6,23 +6,25 @@ import { Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import { IMessageListData } from '@/types/IMessage'
 import useSelectCheckBox from '@/hook/useSelectCheckbox'
+import useMedia from '@/hook/useMedia'
 import useToast from '@/hook/useToast'
 import MessageList from './MessageList'
 import useMessageListState from '@/states/useMessageListState'
-import { SearchBar, ManageBar } from './MessageBar'
+import { SearchBar, ManageBar, ContainerHeader } from './MessageBar'
 import * as style from './MessageContainer.style'
 
 interface IMessageContainerProps {
   originalMessageData: IMessageListData[] | undefined
   error: any
   isLoading: boolean
-  isPC: boolean
+  openNewMessageModal: () => void
 }
 
 const MessageContainer = ({
   originalMessageData,
   error,
-  isLoading, // isPC,
+  isLoading,
+  openNewMessageModal,
 }: IMessageContainerProps) => {
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [isManageMode, setIsManageMode] = useState(false)
@@ -37,6 +39,7 @@ const MessageContainer = ({
 
   const axiosInstance = useAxiosWithAuth()
   const { messageList, setMessageList } = useMessageListState()
+  const { isPc } = useMedia()
 
   useEffect(() => {
     if (isManageMode) unselectAll()
@@ -83,6 +86,12 @@ const MessageContainer = ({
   return (
     <>
       <Stack spacing={'1.5rem'} sx={style.pcContainer}>
+        <ContainerHeader
+          isPc={isPc}
+          isManageMode={isManageMode}
+          setIsManageMode={setIsManageMode}
+          openNewMessageModal={openNewMessageModal}
+        />
         {isManageMode ? (
           <ManageBar
             isSelectedAll={isSelectedAll(messageList)}
@@ -91,12 +100,11 @@ const MessageContainer = ({
             }
             handleUnselectAll={unselectAll}
             handleDelete={handleDelete}
-            setIsManageMode={setIsManageMode}
           />
         ) : (
           <SearchBar
+            isPc={isPc}
             setSearchKeyword={setSearchKeyword}
-            setIsManageMode={setIsManageMode}
             handleMessageSearch={handleMessageSearch}
           />
         )}
