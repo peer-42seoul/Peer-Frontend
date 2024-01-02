@@ -11,6 +11,7 @@ import {
   // NativeSelect,
   Stack,
   Switch,
+  Theme,
   Typography,
 } from '@mui/material'
 import { IMember, Job, TeamGrant } from '../../../types/types'
@@ -173,7 +174,7 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
 
   return (
     <>
-      <Grid container spacing={'1rem'} m={'0.5rem'} overflow={'hidden'}>
+      <Grid container spacing={'1rem'} m={'0.5rem'} overflow={'auto'}>
         {members.map((member, index) => (
           <Grid
             component="div"
@@ -182,7 +183,17 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
             xs={isPc ? 2 : 6}
             textAlign="center"
           >
-            <Box component="div" p={1} sx={{ position: 'relative' }}>
+            <Box
+              component="div"
+              p={'1rem'}
+              sx={{
+                position: 'relative',
+                backgroundColor: (theme: Theme) =>
+                  theme.palette.background.tertiary,
+              }}
+              borderRadius={'0.5rem'}
+            >
+              {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
               <Button
                 size="small"
                 sx={{

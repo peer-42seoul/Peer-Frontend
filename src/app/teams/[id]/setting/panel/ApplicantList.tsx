@@ -139,7 +139,7 @@ const ApplicantList = ({
           신청 대기자 {index + 1} / {members.length}
         </Typography>
         <Button onClick={close} size="small">
-          X
+          리스트로 돌아가기
         </Button>
       </Stack>
       <Stack
@@ -148,37 +148,30 @@ const ApplicantList = ({
         justifyContent="space-between"
         margin="auto"
         width="80%"
-        height={'10rem'}
         p={2}
       >
-        <Button onClick={handlePrev}>◀︎</Button>
+        {index === 0 ? <Stack /> : <Button onClick={handlePrev}>◀︎</Button>}
         <Stack alignItems="center" spacing={1}>
           <Avatar>A</Avatar>
           {member && <Typography>{member.name}</Typography>}
         </Stack>
-        <Button onClick={handleNext}>▶︎</Button>
+        {index + 1 === members.length ? (
+          <Stack />
+        ) : (
+          <Button onClick={handleNext}>▶︎</Button>
+        )}
       </Stack>
 
-      <Stack direction="row" spacing={1}>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleAccept}
-        >
+      <Stack direction="row" spacing={1} justifyContent={'center'}>
+        <Button variant="contained" color="primary" onClick={handleAccept}>
           승인
         </Button>
-        <Button
-          variant="contained"
-          color="error"
-          fullWidth
-          onClick={handleReject}
-        >
+        <Button variant="contained" color="error" onClick={handleReject}>
           거절
         </Button>
       </Stack>
 
-      <Stack border="1px solid" borderRadius={2} p={2}>
+      <Stack p={2}>
         <Typography fontWeight="bold">팀 신청 설문</Typography>
         <Stack
           border="1px solid"
@@ -188,6 +181,19 @@ const ApplicantList = ({
           height={isPc ? 300 : 100}
           ref={scrollRef}
         >
+          {!member && (
+            <Stack borderRadius={2} height={400}>
+              <Stack
+                direction="row"
+                display="flex"
+                justifyContent="space-between"
+                p={2}
+              >
+                <Typography fontWeight="bold">신청 대기자</Typography>
+              </Stack>
+              <Typography>신청한 대기자가 없습니다.</Typography>
+            </Stack>
+          )}
           {member && member.interview ? (
             member.interview.map((interview, index) => (
               <Stack key={index} m={1}>
@@ -196,19 +202,16 @@ const ApplicantList = ({
               </Stack>
             ))
           ) : (
-            <Stack border="1px solid" borderRadius={2} height={400}>
+            <Stack borderRadius={2} height={400}>
               <Stack
                 direction="row"
                 display="flex"
                 justifyContent="space-between"
                 p={2}
               >
-                <Typography fontWeight="bold">신청 대기자</Typography>
-                <Button onClick={close} size="small">
-                  X
-                </Button>
+                <Typography fontWeight="bold">신청 대기자 인터뷰</Typography>
               </Stack>
-              <Typography>신청한 대기자가 없습니다.</Typography>
+              <Typography>인터뷰가 없습니다.</Typography>
             </Stack>
           )}
         </Stack>
