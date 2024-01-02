@@ -53,7 +53,7 @@ const PreviewModal = ({ open, onClose, events }: IPreviewModalProps) => {
                 등록된 일정이 없습니다.
               </Typography>
             ) : (
-              <Stack spacing={'0.5rem'}>
+              <Stack spacing={'0.5rem'} sx={style.eventList}>
                 {todayEvents?.map((event) => (
                   <EventItem
                     key={event.id}

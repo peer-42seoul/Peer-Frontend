@@ -10,6 +10,11 @@ export const eventListHeader = {
   marginBottom: '1rem',
 }
 
+export const eventList = {
+  height: '5.5rem',
+  overflowY: 'scroll',
+}
+
 export const eventItemIcon = {
   width: '0.375rem',
   height: '0.375rem',
