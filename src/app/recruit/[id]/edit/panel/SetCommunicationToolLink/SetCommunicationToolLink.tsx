@@ -21,7 +21,7 @@ const SetCommunicationToolLink = ({
         placeholder={'팀 커뮤니케이션 툴 링크를 입력해주세요.'}
         sx={{ width: '26rem' }}
         value={value}
-        onChange={() => {handleChange}}
+        onChange={handleChange}
       />
     </Box>
   )
