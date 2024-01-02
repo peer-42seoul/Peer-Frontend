@@ -98,7 +98,13 @@ const WriteAnswers = ({
               placeholder="옵션을 입력하세요."
               sx={{ width: '60%' }}
             />
-            <Button onClick={onHandlerAddOption}>옵션 추가</Button>
+            <Button
+              onClick={() => {
+                onHandlerAddOption
+              }}
+            >
+              옵션 추가
+            </Button>
           </Box>
           {option.map((data, index) => {
             return (
@@ -114,7 +120,12 @@ const WriteAnswers = ({
                   disabled={true}
                   sx={{ width: '60%' }}
                 />
-                <Button sx={{ width: '4%' }} onClick={onHandlerRemove(index)}>
+                <Button
+                  sx={{ width: '4%' }}
+                  onClick={() => {
+                    onHandlerRemove(index)
+                  }}
+                >
                   <CloseIcon color="primary" />
                 </Button>
               </Stack>
@@ -139,7 +150,13 @@ const WriteAnswers = ({
               value={value}
               onChange={onHandlerEditValue}
             />
-            <Button onClick={onHandlerAddOption}>옵션 추가</Button>
+            <Button
+              onClick={() => {
+                onHandlerAddOption
+              }}
+            >
+              옵션 추가
+            </Button>
           </Box>
           {option.map((data, index) => {
             return (
@@ -152,7 +169,12 @@ const WriteAnswers = ({
               >
                 <CheckBoxOutlineBlankIcon sx={{ color: 'grey' }} />
                 <TextField variant="standard" value={data} disabled={true} />
-                <Button sx={{ width: '4%' }} onClick={onHandlerRemove(index)}>
+                <Button
+                  sx={{ width: '4%' }}
+                  onClick={() => {
+                    onHandlerRemove(index)
+                  }}
+                >
                   <CloseIcon color="primary" />
                 </Button>
               </Box>

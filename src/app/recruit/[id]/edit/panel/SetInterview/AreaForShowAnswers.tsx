@@ -38,7 +38,11 @@ const AreaForShowAnswers = ({
               sx={{ width: '70%' }}
             />
             <Answers data={data} />
-            <Button onClick={onHandlerRemove(index)}>
+            <Button
+              onClick={() => {
+                onHandlerRemove(index)
+              }}
+            >
               <Typography>삭제</Typography>
             </Button>
           </Box>

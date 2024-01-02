@@ -220,7 +220,7 @@ const CreateTeam = () => {
                     setTitle(e.target.value.slice(0, 20) as string)
                   else setTitle(e.target.value as string)
                 }}
-                placeholder='모집글 제목을 입력해주세요.'
+                placeholder="모집글 제목을 입력해주세요."
               />
             </Box>
             {/* 스터디 명 / 프로젝트 명 */}
@@ -240,7 +240,7 @@ const CreateTeam = () => {
                     setName(e.target.value.slice(0, 20) as string)
                   else setName(e.target.value as string)
                 }}
-                placeholder='스터디 명 / 프로젝트 명을 입력해주세요.'
+                placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
               />
             </Box>
             {/* (프로젝트인 경우만) 역할 추가 */}

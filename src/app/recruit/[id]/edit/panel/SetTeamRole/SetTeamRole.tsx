@@ -41,7 +41,11 @@ const SetTeamRole = ({
           variant="outlined"
           value={role}
           onChange={onHandlerEditRole}
-          placeholder= { isPc ? "모집하는 역할을 입력해주세요, ex) 프론트엔드 개발자, 디자이너" : "모집 역할을 입력해주세요."}
+          placeholder={
+            isPc
+              ? '모집하는 역할을 입력해주세요, ex) 프론트엔드 개발자, 디자이너'
+              : '모집 역할을 입력해주세요.'
+          }
           disabled={disabled ? disabled : false}
         />
         <BasicSelectMember
@@ -51,7 +55,9 @@ const SetTeamRole = ({
         />
         <Button
           sx={{ padding: '0.25rem' }}
-          onClick={onHandlerAddRole}
+          onClick={() => {
+            onHandlerAddRole
+          }}
           disabled={disabled ? disabled : false}
         >
           추가
@@ -89,7 +95,12 @@ const SetTeamRole = ({
                   value={data.number}
                   disabled={true}
                 />
-                <Button sx={{ width: '4%' }} onClick={onHandlerRemove(index)}>
+                <Button
+                  sx={{ width: '4%' }}
+                  onClick={() => {
+                    onHandlerRemove(index)
+                  }}
+                >
                   <CloseIcon color="primary" />
                 </Button>
               </Stack>

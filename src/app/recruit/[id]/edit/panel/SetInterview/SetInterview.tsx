@@ -85,7 +85,12 @@ export const SetInterview = ({
                 인터뷰 작성
               </Typography>
             </Stack>
-            <Button sx={{ width: '4%' }} onClick={handleCloseBasicModal}>
+            <Button
+              sx={{ width: '4%' }}
+              onClick={() => {
+                handleCloseBasicModal
+              }}
+            >
               <CloseIcon color="primary" />
             </Button>
           </Stack>
