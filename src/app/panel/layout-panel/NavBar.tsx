@@ -42,8 +42,12 @@ export const MobileNav = () => {
       setValue('home')
     } else if (pathname === '/team-list') {
       setValue('team-list')
+    } else if (pathname === '/hitchhiking') {
+      setValue('hitchhiking')
     } else if (pathname === '/my-page') {
       setValue('my-page')
+    } else if (pathname === '/showcase') {
+      setValue('showcase')
     }
   }, [pathname])
 
@@ -129,6 +133,10 @@ export const PcNav = () => {
       setValue('home')
     } else if (pathname === '/team-list') {
       setValue('team-list')
+    } else if (pathname === '/hitchhiking') {
+      setValue('hitchhiking')
+    } else if (pathname === '/showcase') {
+      setValue('showcase')
     }
   }, [pathname])
 
@@ -170,7 +178,7 @@ export const PcNav = () => {
             value={'hitchhiking'}
             label="히치하이킹"
             onClick={() => {
-              router.push('/')
+              router.push('/hitchhiking')
             }}
           />
 
