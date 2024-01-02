@@ -136,7 +136,6 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     console.log(data)
     if (error) {
-      console.log('error ocurred!!')
       setToastMessage('데이터를 불러오는데 실패했습니다.')
       openToast()
     } else if (data) {

@@ -41,11 +41,9 @@ const WriteAnswers = ({
 
   const onHandlerAddOption = () => {
     if ((formType !== 'open' && value === '') || option.length === 10) {
-      console.log('onHandlerAddOption')
       // TODO 에러 처리 추가예정
       return
     }
-    console.log('WriteAnswers option', option)
     setOption([...option, value])
     setValue('')
   }
