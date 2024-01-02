@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import AreaForAddInterviewForm from './AreaForAddInterviewForm'
 import AreaForShowAnswers from './AreaForShowAnswers'
 import { Button, Container, Stack } from '@mui/material'
@@ -54,7 +54,7 @@ export const SetInterview = ({
   setInterviewData,
 }: {
   openBasicModal: boolean
-  handleCloseBasicModal: () => void
+  handleCloseBasicModal: Dispatch<SetStateAction<boolean>>
   interviewData: IFormInterview[]
   setInterviewData: React.Dispatch<React.SetStateAction<IFormInterview[]>>
 }) => {
@@ -66,7 +66,7 @@ export const SetInterview = ({
   return (
     <Modal
       open={openBasicModal}
-      onClose={handleCloseBasicModal}
+      onClose={() => handleCloseBasicModal}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -85,7 +85,10 @@ export const SetInterview = ({
                 인터뷰 작성
               </Typography>
             </Stack>
-            <Button sx={{ width: '4%' }} onClick={handleCloseBasicModal}>
+            <Button
+              sx={{ width: '4%' }}
+              onClick={() => handleCloseBasicModal(false)}
+            >
               <CloseIcon color="primary" />
             </Button>
           </Stack>

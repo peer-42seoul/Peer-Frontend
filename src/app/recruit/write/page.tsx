@@ -373,7 +373,7 @@ const CreateTeam = () => {
               </Button>
               <SetInterview
                 openBasicModal={openBasicModal}
-                handleCloseBasicModal={() => setOpenBasicModal(false)}
+                handleCloseBasicModal={setOpenBasicModal}
                 interviewData={interviewList}
                 setInterviewData={setInterviewList}
               />
