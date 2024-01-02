@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 
 const RecruitContentText = ({
   label,
@@ -11,14 +11,26 @@ const RecruitContentText = ({
   children?: React.ReactNode
   icon?: React.ReactNode
 }) => (
-  <Box>
-    <Stack direction={'row'} gap={1}>
-      <Box sx={{ color: 'text.normal' }}>{icon}</Box>
-      <Typography sx={{ fontWeight: 'bold' }}>{label}</Typography>
+  <Stack gap={'0.5rem'}>
+    <Stack direction={'row'} gap={'0.5rem'} alignItems={'center'}>
+      <Stack
+        sx={{ color: 'text.normal', width: '1rem', height: '1rem' }}
+        alignItems={'center'}
+        justifyContent={'center'}
+      >
+        {icon}
+      </Stack>
+      <Typography color={'text.strong'} fontSize={'0.75rem'}>
+        {label}
+      </Typography>
     </Stack>
-    {content && <Typography>{content}</Typography>}
+    {content && (
+      <Typography variant={'Body2'} color={'text.alternative'}>
+        {content}
+      </Typography>
+    )}
     {children && children}
-  </Box>
+  </Stack>
 )
 
 export default RecruitContentText

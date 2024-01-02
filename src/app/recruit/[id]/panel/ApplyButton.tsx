@@ -31,6 +31,7 @@ const ApplyButton = ({
         id="apply-option-button"
         variant="contained"
         size="large"
+        sx={{ width: '6.785rem' }}
         disableElevation
         onClick={handleMenuClick}
         endIcon={<KeyboardArrowDown />}

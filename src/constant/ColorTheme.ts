@@ -23,7 +23,7 @@ export const darkTheme = createTheme({
       alternative: '#9B9B9B',
       secondary: '#9B9B9B',
       assistive: '#42444C',
-      disable: '#292C32',
+      disable: '#1E2024',
       disabled: alpha('#9B9B9B', 0.5), // 기존에 디자이너님의 의도하신 것에 영향이 있을 수 있으나, textfield disabled 상태에서의 텍스트 색상을 위해 고쳤습니다.
     },
   },
