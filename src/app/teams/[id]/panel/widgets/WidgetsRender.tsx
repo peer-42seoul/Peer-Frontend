@@ -3,7 +3,7 @@ import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
 import TmpCalenderWidget from '@/app/teams/[id]/panel/widgets/TmpCalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
-import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
+import TextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
 import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -163,7 +163,7 @@ const WidgetsRender = ({
         case 'attendance':
           return <TmpAttendWidget data={wgData} size={wgSize} />
         case 'text':
-          return <TmpTextWidget data={wgData} size={wgSize} />
+          return <TextWidget data={wgData} size={wgSize} />
         case 'image':
           return <TmpImageWidget data={wgData} size={wgSize} />
         case 'linkTable':
