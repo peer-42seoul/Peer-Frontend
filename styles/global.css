@@ -31,3 +31,11 @@ body::-webkit-scrollbar {
     flex-direction: column;
   }
 }
+
+.no-scroll {
+  -ms-overflow-style: none; /* IE, Edge */
+  overflow: auto;
+}
+.no-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

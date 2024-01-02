@@ -1,7 +1,7 @@
 import { Box, IconButton, Stack, useMediaQuery } from '@mui/material'
 import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
-import TmpCalenderWidget from '@/app/teams/[id]/panel/widgets/TmpCalenderWidget'
+import CalenderWidget from '@/app/teams/[id]/panel/widgets/CalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
 import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
@@ -89,7 +89,7 @@ const WidgetsRender = ({
         case 'board':
           return <TmpBoardWidget data={wgData} size={wgSize} />
         case 'calender':
-          return <TmpCalenderWidget data={wgData} size={wgSize} />
+          return <CalenderWidget data={wgData} size={wgSize} />
         case 'attendance':
           return <TmpAttendWidget data={wgData} size={wgSize} />
         case 'text':

@@ -1,4 +1,4 @@
-import { Autocomplete, Stack, TextField } from '@mui/material'
+import { Autocomplete, Stack, TextField, Typography } from '@mui/material'
 import { ITag } from '@/types/IPostDetail'
 import TagChip from '@/components/TagChip'
 
@@ -20,6 +20,7 @@ const TagAutoComplete = ({
   datas,
   setData,
   placeholder,
+  title,
   style,
 }: {
   tagList: ITag[]
@@ -27,14 +28,11 @@ const TagAutoComplete = ({
   setData: any
   placeholder?: string
   style?: any
+  title?: string
 }) => {
   const nameList = tagList?.map(({ name }) => name)
-
   /* 태그를 추가합니다 */
-  const handleInput = (
-    event: React.SyntheticEvent,
-    value: readonly string[],
-  ) => {
+  const handleInput = (_: any, value: readonly string[]) => {
     const selectedTags = value
       .map((tagName) => {
         return tagList.find((tag) => tag.name === tagName)
@@ -49,25 +47,29 @@ const TagAutoComplete = ({
   }
 
   return (
-    <>
-      <Autocomplete
-        sx={style}
-        disableClearable
-        multiple
-        options={nameList}
-        onChange={handleInput}
-        value={datas.map((tag: ITag) => tag.name)}
-        renderTags={() => <></>}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder={
-              placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
-            }
-          />
-        )}
-      />
-      <Stack spacing={1} direction={'row'}>
+    <Stack gap={'0.5rem'}>
+      <Stack flexDirection={'row'} alignItems={'center'} gap={'1rem'}>
+        <Typography variant={'Caption'}>{title}</Typography>
+        <Autocomplete
+          sx={style}
+          disableClearable
+          multiple
+          options={nameList}
+          onChange={handleInput}
+          value={datas.map((tag: ITag) => tag.name)}
+          renderTags={() => <></>}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              size="small"
+              placeholder={
+                placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
+              }
+            />
+          )}
+        />
+      </Stack>
+      <Stack gap={1} direction={'row'}>
         {datas?.map((tag: ITag) => {
           return (
             <TagChip
@@ -81,7 +83,7 @@ const TagAutoComplete = ({
           )
         })}
       </Stack>
-    </>
+    </Stack>
   )
 }
 
