@@ -1,3 +1,7 @@
+export const modal = {
+  backgroundColor: 'background.secondary',
+}
+
 export const modalContent = {
   maxWidth: '31rem',
 }

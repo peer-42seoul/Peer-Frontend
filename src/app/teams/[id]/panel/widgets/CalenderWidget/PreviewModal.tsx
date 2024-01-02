@@ -26,7 +26,7 @@ const PreviewModal = ({ open, onClose, events }: IPreviewModalProps) => {
   const { selectedDate, setSelectedDate, todayEvents, isEmpty } =
     useCalendar(events)
   return (
-    <CuModal open={open} onClose={onClose} title={'캘린더'}>
+    <CuModal sx={style.modal} open={open} onClose={onClose} title={'캘린더'}>
       <Stack sx={style.modalContent}>
         <CalendarLarge
           events={events}
