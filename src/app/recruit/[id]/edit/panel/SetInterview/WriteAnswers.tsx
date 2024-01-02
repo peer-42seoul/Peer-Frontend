@@ -1,5 +1,6 @@
 import {
   Box,
+  Stack,
   Button,
   FormControl,
   MenuItem,
@@ -11,7 +12,6 @@ import {
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
-import { Stack } from '@mui/material'
 import { CloseIcon } from '@/icons'
 
 const WriteAnswers = ({
