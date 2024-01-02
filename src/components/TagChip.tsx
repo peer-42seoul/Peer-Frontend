@@ -1,4 +1,4 @@
-import { Chip } from '@mui/material'
+import { Chip, Typography } from '@mui/material'
 import { useMemo } from 'react'
 
 const TagChip = ({
@@ -20,7 +20,7 @@ const TagChip = ({
 
   return (
     <Chip
-      label={name ?? ''}
+      label={<Typography variant={'Caption'}>{name ?? ''}</Typography>}
       size="small"
       style={{
         color: color,

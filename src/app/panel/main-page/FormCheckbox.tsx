@@ -25,7 +25,7 @@ const FormCheckbox = ({
           )
         }
       />
-      <Typography>{label}</Typography>
+      <Typography variant={'Caption'}>{label}</Typography>
     </Stack>
   )
 }
