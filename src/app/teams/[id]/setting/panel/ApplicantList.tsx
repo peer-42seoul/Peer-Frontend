@@ -150,16 +150,20 @@ const ApplicantList = ({
         width="80%"
         p={2}
       >
-        {index === 0 ? <Stack /> : <Button onClick={handlePrev}>◀︎</Button>}
+        <Button disabled={index === 0 ? true : false} onClick={handlePrev}>
+          ◀︎
+        </Button>
         <Stack alignItems="center" spacing={1}>
           <Avatar>A</Avatar>
           {member && <Typography>{member.name}</Typography>}
         </Stack>
-        {index + 1 === members.length ? (
-          <Stack />
-        ) : (
-          <Button onClick={handleNext}>▶︎</Button>
-        )}
+
+        <Button
+          disabled={index + 1 === members.length ? true : false}
+          onClick={handleNext}
+        >
+          ▶︎
+        </Button>
       </Stack>
 
       <Stack direction="row" spacing={1} justifyContent={'center'}>
