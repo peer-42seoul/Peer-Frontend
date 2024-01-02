@@ -42,14 +42,13 @@ const TeamDnD = ({ id }: { id: string }) => {
   if (!data && isMutating) return <Typography>로딩중입니다...</Typography>
   if (!data && error) return <Typography>에러 발생</Typography>
 
-  console.log('data', data)
   return (
     <Stack
       sx={{
         width: '100%',
         height: '100%',
       }}
-      gap={4}
+      spacing={4}
     >
       {/*dnd 렌더링*/}
       <WidgetsRender

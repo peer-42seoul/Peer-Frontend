@@ -78,7 +78,7 @@ const CreateTeam = () => {
     } else if (data) {
       setAllTagList(data)
     }
-  }, [data])
+  }, [data, error, openToast])
 
   const onHandlerFinish = async () => {
     if (type === 'project') {
@@ -340,7 +340,7 @@ const CreateTeam = () => {
             {/* 등록, 취소 버튼 */}
             <Stack
               direction={'row'}
-              gap={2}
+              spacing={2}
               sx={componentName}
               justifyContent={'flex-end'}
             >

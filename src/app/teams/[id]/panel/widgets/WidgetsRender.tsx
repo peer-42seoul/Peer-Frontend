@@ -215,7 +215,6 @@ const WidgetsRender = ({
     [widgets],
   )
 
-  console.log('widget', widgets)
   return (
     <Box>
       {/*request와 관련된 toast*/}
@@ -241,13 +240,13 @@ const WidgetsRender = ({
         }}
         content={'팀 페이지를 저장하시겠습니까?'}
       />
-      <Stack gap={2}>
+      <Stack spacing={2}>
         <BrowserView>
           {/* 팀페이지 수정 버튼 */}
           <Stack
             alignItems={'center'}
             direction={'row'}
-            gap={1}
+            spacing={1}
             justifyContent={'flex-end'}
           >
             {edit && (

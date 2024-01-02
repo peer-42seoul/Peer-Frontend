@@ -13,6 +13,7 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import useMedia from '@/hook/useMedia'
+import { SizeButton } from '@/app/teams/[id]/panel/widgets/TeamDnD.style'
 
 interface ITeamDnDWidgetListProps {
   setIsDropping: (isDropping: boolean) => void
@@ -138,21 +139,17 @@ const WidgetList = ({
                 maxWidth={'15.25rem'}
                 maxHeight={'15.25rem'}
                 padding={'1rem'}
-                gap={'1rem'}
+                spacing={'1rem'}
                 justifyContent={'center'}
               >
                 {/*사이즈 버튼 렌더링*/}
                 <Stack flexDirection={'row'} justifyContent={'space-between'}>
                   <Typography variant={'Body2Emphasis'}>{typeValue}</Typography>
-                  <Stack direction={'row'} gap={'0.38rem'}>
+                  <Stack direction={'row'} spacing={'0.38rem'}>
                     {['S', 'M', 'L'].map((size) => (
                       <Button
                         sx={{
-                          minWidth: '1.75em',
-                          maxWidth: '1.75em',
-                          maxHeight: '1.75em',
-                          minHeight: '1.75em',
-                          borderColor: 'line.base',
+                          ...SizeButton,
                           backgroundColor:
                             toolSize[typeValue] === size
                               ? 'line.base'
