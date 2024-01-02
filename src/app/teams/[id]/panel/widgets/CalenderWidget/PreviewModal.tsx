@@ -47,13 +47,13 @@ const PreviewModal = ({ open, onClose, events }: IPreviewModalProps) => {
               <PlusIcon width={'1.25rem'} height={'1.25rem'} />
             </IconButton>
           </Stack>
-          <Stack>
+          <Stack sx={style.eventList}>
             {isEmpty ? (
               <Typography variant={'Body2'} color={'text.alternative'}>
                 등록된 일정이 없습니다.
               </Typography>
             ) : (
-              <Stack spacing={'0.5rem'} sx={style.eventList}>
+              <Stack spacing={'0.5rem'}>
                 {todayEvents?.map((event) => (
                   <EventItem
                     key={event.id}

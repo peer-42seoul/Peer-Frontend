@@ -11,6 +11,7 @@ export const eventListHeader = {
 }
 
 export const eventList = {
+  width: '31rem',
   height: '5.5rem',
   overflowY: 'scroll',
 }
