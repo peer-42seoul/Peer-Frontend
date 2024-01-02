@@ -48,6 +48,7 @@ export const SetupSelect = ({
           value={value}
           label="지역"
           onChange={setValue}
+          sx={{ backgroundColor: 'background.tertiary' }}
         >
           {!parentLocation &&
             locationData.map((region, idx) => (

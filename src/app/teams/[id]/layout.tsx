@@ -3,7 +3,7 @@
 import { ReactNode } from 'react'
 import useMedia from '@/hook/useMedia'
 import { Stack, Typography } from '@mui/material'
-import TeamSidebar from './panel/TeamSidebar'
+import TeamSidebar from './panel/NavBar'
 
 const TeamLayout = ({
   params,

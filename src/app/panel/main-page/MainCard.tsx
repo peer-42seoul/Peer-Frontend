@@ -42,19 +42,25 @@ const MainCard = ({
           />
           <Chip
             label={
-              status === 'ONGOING'
-                ? '모집중'
-                : status === 'BEFORE'
-                  ? '모집전'
-                  : '모집완료'
+              <Typography variant="Tag">
+                {status === 'ONGOING'
+                  ? '모집중'
+                  : status === 'BEFORE'
+                    ? '모집전'
+                    : '모집완료'}
+              </Typography>
             }
             sx={{
               position: 'absolute',
               top: 16,
               left: 16,
               borderRadius: 1,
-              backgroundColor: 'black',
+              backgroundColor: 'background.tertiary',
               color: 'white',
+              height: '1.25rem',
+              '.MuiChip-label': {
+                paddingX: '0.375rem',
+              },
             }}
             size="medium"
           />
@@ -73,7 +79,13 @@ const MainCard = ({
             </Avatar>
           </OthersProfile>
         }
-        action={<FavoriteButton favorite={favorite} recruit_id={recruit_id} />}
+        action={
+          <FavoriteButton
+            favorite={favorite}
+            recruit_id={recruit_id}
+            redirect_url={'/'}
+          />
+        }
         title={user_nickname}
       />
       <Link
@@ -81,7 +93,7 @@ const MainCard = ({
         style={{ textDecoration: 'none' }}
       >
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="Body1" color="text.secondary">
             {title}
           </Typography>
           <Stack gap={1} direction={'row'}>
