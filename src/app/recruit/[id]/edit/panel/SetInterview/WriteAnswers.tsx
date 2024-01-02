@@ -103,7 +103,7 @@ const WriteAnswers = ({
           {option.map((data, index) => {
             return (
               <Stack
-                key={index}
+                key={data + index}
                 direction={'row'}
                 sx={{ display: 'flex', alignItems: 'center' }}
               >
@@ -149,7 +149,7 @@ const WriteAnswers = ({
           {option.map((data, index) => {
             return (
               <Box
-                key={index}
+                key={data + index}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
