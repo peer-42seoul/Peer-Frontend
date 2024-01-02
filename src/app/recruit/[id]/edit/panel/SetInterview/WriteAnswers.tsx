@@ -98,13 +98,7 @@ const WriteAnswers = ({
               placeholder="옵션을 입력하세요."
               sx={{ width: '60%' }}
             />
-            <Button
-              onClick={() => {
-                onHandlerAddOption
-              }}
-            >
-              옵션 추가
-            </Button>
+            <Button onClick={onHandlerAddOption}>옵션 추가</Button>
           </Box>
           {option.map((data, index) => {
             return (
@@ -150,13 +144,7 @@ const WriteAnswers = ({
               value={value}
               onChange={onHandlerEditValue}
             />
-            <Button
-              onClick={() => {
-                onHandlerAddOption
-              }}
-            >
-              옵션 추가
-            </Button>
+            <Button onClick={onHandlerAddOption}>옵션 추가</Button>
           </Box>
           {option.map((data, index) => {
             return (

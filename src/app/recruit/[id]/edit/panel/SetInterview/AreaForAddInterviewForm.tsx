@@ -148,9 +148,7 @@ const AreaForAddInterviewForm = ({
         <Button
           sx={isPc ? AddQuestionButtonPc : AddQuestionButtonMobile}
           variant="outlined"
-          onClick={() => {
-            onHandlerAddQuestion
-          }}
+          onClick={onHandlerAddQuestion}
         >
           <AddIcon
             sx={{ color: 'primary', width: '1.25rem', height: '1.25rem' }}

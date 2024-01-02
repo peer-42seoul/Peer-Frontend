@@ -55,9 +55,7 @@ const SetTeamRole = ({
         />
         <Button
           sx={{ padding: '0.25rem' }}
-          onClick={() => {
-            onHandlerAddRole
-          }}
+          onClick={onHandlerAddRole}
           disabled={disabled ? disabled : false}
         >
           추가
