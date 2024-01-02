@@ -1,0 +1,12 @@
+@import './Calendar';
+
+.calendar-large > .rbc-calendar {
+  // ANCHOR : 달 표시
+  .rbc-toolbar {
+    margin-bottom: 1rem;
+    .rbc-toolbar-label {
+      @include Title3-emphasis;
+      color: $dark-text-strong;
+    }
+  }
+}

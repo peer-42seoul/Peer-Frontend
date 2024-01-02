@@ -35,6 +35,7 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import TagChip from '@/components/TagChip'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
+import Link from 'next/link'
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
@@ -74,6 +75,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   if (error) return <Typography>에러 발생</Typography>
   if (!data) return <Typography>데이터가 없습니다</Typography>
 
+  // pc뷰
   if (isPc) {
     return (
       <>
@@ -84,17 +86,18 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           role={role}
           setRoleOpen={setRoleOpen}
         />
-
         <Container sx={{ display: 'flex', flexDirection: 'column' }}>
           {/*돌아가기 버튼*/}
-          <Stack justifyContent={'flex-start'} direction={'row'}>
-            <Button
-              onClick={() => router.back()}
-              variant={'text'}
-              sx={{ color: 'text.strong' }}
-            >
-              돌아가기
-            </Button>
+          <Stack
+            justifyContent={'flex-start'}
+            direction={'row'}
+            marginBottom={'2rem'}
+          >
+            <Link href={'/'}>
+              <Button variant={'text'} sx={{ color: 'text.strong' }}>
+                돌아가기
+              </Button>
+            </Link>
           </Stack>
           {/* 모집글 영역 */}
           <Stack direction={'row'}>
@@ -104,12 +107,15 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 <Box
                   src={data?.image}
                   alt="main_image"
-                  width={300}
-                  height={300}
+                  width={'18.5rem'}
+                  height={'12.5rem'}
                   component={'img'}
+                  sx={{
+                    objectFit: 'cover',
+                  }}
                 />
                 <Box display="flex" flexDirection="column" gap={2}>
-                  <Stack gap={2} direction="row" alignItems={'center'}>
+                  <Stack gap={'1rem'} direction="row" alignItems={'center'}>
                     <Chip
                       label={type === 'STUDY' ? '스터디' : '프로젝트'}
                       size="medium"
@@ -121,16 +127,20 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                     />
                     <Typography variant={'Title3'}>{data?.title}</Typography>
                     <Typography color={'yellow.strong'} variant={'caption'}>
-                      {data?.status}
+                      {data?.status === 'ONGOING'
+                        ? '모집중'
+                        : data?.status === 'BEFORE'
+                          ? '모집전'
+                          : '모집완료'}
                     </Typography>
                   </Stack>
-                  <Stack gap={2} direction="row" alignItems={'center'}>
+                  <Stack gap={'1rem'} direction="row" alignItems={'center'}>
                     <Avatar
                       alt="avatar"
                       src={data?.leader_image}
                       sizes={'small'}
                     />
-                    <Typography>프로젝트명</Typography>
+                    <Typography variant={'Body2'}>{data?.teamName}</Typography>
                     <LinkButton href={data?.link} variant={'contained'} />
                   </Stack>
                   {data?.roleList?.length ? (
@@ -144,6 +154,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                       variant="contained"
                       size="large"
                       onClick={() => handleApply(null)}
+                      sx={{ width: '6.785rem', marginTop: '2rem' }}
                     >
                       지원하기
                     </Button>
@@ -151,10 +162,14 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                 </Box>
               </Stack>
               {/* 모집 내용 */}
-              <Stack gap={2}>
+              <Stack gap={'1.5rem'}>
                 <RecruitContentText
                   label="작성자"
-                  content={data?.leader_nickname}
+                  content={
+                    data?.leader_nickname
+                      ? data.leader_nickname
+                      : '존재하지 않는 유저'
+                  }
                   icon={<PersonOutlineOutlinedIcon />}
                 />
                 <RecruitContentText
@@ -166,6 +181,8 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                       data?.roleList.length ? (
                         data?.roleList?.map(({ name, number }, idx: number) => (
                           <Typography
+                            variant={'Body2'}
+                            color={'text.alternative'}
                             key={idx}
                           >{`${name} ${number} 명`}</Typography>
                         ))
@@ -173,7 +190,9 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                         <Typography>-</Typography>
                       )
                     ) : (
-                      <Typography>{(data?.totalNumber ?? 0) + '명'}</Typography>
+                      <Typography variant={'Body2'} color={'text.alternative'}>
+                        {(data?.totalNumber ?? 0) + '명'}
+                      </Typography>
                     )}
                   </Box>
                 </RecruitContentText>
@@ -192,11 +211,13 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                   icon={<LocationOnOutlinedIcon />}
                 >
                   {data?.region ? (
-                    <Typography>
+                    <Typography variant={'Body2'} color={'text.alternative'}>
                       {data.region[0] + ' ' + data.region?.[1]}
                     </Typography>
                   ) : (
-                    <Typography>없음</Typography>
+                    <Typography variant={'Body2'} color={'text.alternative'}>
+                      없음
+                    </Typography>
                   )}
                 </RecruitContentText>
                 <RecruitContentText
@@ -227,6 +248,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     )
   }
 
+  // 모바일 뷰
   return (
     <>
       <RecruitFormModal

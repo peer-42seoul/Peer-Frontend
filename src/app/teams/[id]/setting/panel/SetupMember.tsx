@@ -220,9 +220,14 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
                 />
               </Stack>
               {/* 역할이 있을 때만 버튼이 보이게끔 */}
-              <Button onClick={() => handleChangeModal(member)}>
-                <Typography fontSize="small">역할 변경</Typography>
-              </Button>
+              {member.job && (
+                <Button
+                  variant="contained"
+                  onClick={() => handleChangeModal(member)}
+                >
+                  <Typography fontSize="small">역할 변경</Typography>
+                </Button>
+              )}
             </Box>
           </Grid>
         ))}

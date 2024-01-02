@@ -7,7 +7,6 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography,
 } from '@mui/material'
 
 const Answers = ({ data }: { data: IFormInterview }) => {
@@ -41,6 +40,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
           variant="standard"
           value={'주관식 답변입니다.'}
           disabled={true}
+          sx={{ width: '70%' }}
         />
       )
     }
@@ -51,13 +51,16 @@ const Answers = ({ data }: { data: IFormInterview }) => {
             {data.optionList?.map((option, index) => {
               return (
                 <Box key={index}>
-                  <Typography>{`${index}번째 옵션`}</Typography>
                   <FormControlLabel
                     control={<Checkbox />}
                     label={``}
                     disabled={true}
                   />
-                  <TextField variant="standard" value={option} />
+                  <TextField
+                    variant="standard"
+                    value={option}
+                    disabled={true}
+                  />
                 </Box>
               )
             })}
