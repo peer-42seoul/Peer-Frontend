@@ -10,6 +10,7 @@ import CuTypeToggle from '@/components/CuTypeToggle'
 import useMedia from '@/hook/useMedia'
 import Interest from './panel/Interest'
 import CuButton from '@/components/CuButton'
+import * as style from './panel/HitchhikingCard.style'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
@@ -115,9 +116,7 @@ const Hitchhiking = () => {
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          width: isPc ? '20.5rem' : '93vw',
-          height: '27rem',
-          maxWidth: '20.5rem',
+          ...(isPc ? style.cardPcSize : style.cardMobileSize),
           position: 'relative',
         }}
       >
@@ -131,22 +130,16 @@ const Hitchhiking = () => {
           <Typography>{message}</Typography>
         )}
       </Stack>
-      <Stack
-        sx={{ width: '100%' }}
-        direction={'row'}
-        justifyContent={'space-around'}
-      >
-        <CuButton
+      {/* <CuButton
           message="되돌리기"
           action={addCard}
           disabled={!draggedCardList.length}
-        />
-        <Interest id={cardList[cardList.length - 1]?.recruit_id} />
-        <CuButton
+        /> */}
+      <Interest id={cardList[cardList.length - 1]?.recruit_id} />
+      {/* <CuButton
           message="관심없음"
           action={() => removeCard(cardList[cardList.length - 1]?.recruit_id)}
-        />
-      </Stack>
+        /> */}
     </Stack>
   )
 }

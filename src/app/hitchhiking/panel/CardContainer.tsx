@@ -61,22 +61,22 @@ const CardContainer = ({
 
   return (
     <>
-      <Box width={1} height={1} position={'relative'}>
+      <Box
+        position={'relative'}
+        sx={isPc ? style.cardPcSize : style.cardMobileSize}
+      >
         <motion.div
           animate={{
             opacity: cardList.length > 2 ? 1 : 0,
             transform: cardList.length > 2 ? 'rotate(-2.5deg)' : 'rotate(0deg)',
             position: 'absolute',
-            top: '0',
-            left: '0',
           }}
           transition={{ duration: 0.8 }}
         >
           <Box
             sx={{
-              ...(isPc ? style.cardPcStyleBase : style.cardMobileStyleBase),
+              ...(isPc ? style.cardPcSize : style.cardMobileSize),
               backgroundColor: 'text.assistive',
-              position: 'static',
             }}
           />
         </motion.div>
@@ -90,9 +90,8 @@ const CardContainer = ({
         >
           <Box
             sx={{
-              ...(isPc ? style.cardPcStyleBase : style.cardMobileStyleBase),
+              ...(isPc ? style.cardPcSize : style.cardMobileSize),
               backgroundColor: 'text.assistive',
-              position: 'static',
             }}
           />
         </motion.div>
