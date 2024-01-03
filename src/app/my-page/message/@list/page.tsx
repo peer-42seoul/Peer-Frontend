@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import useSWR from 'swr'
-import { IconButton, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
@@ -15,27 +15,16 @@ import BackgroundBox from '@/components/BackgroundBox'
 import PlusIcon from '@/icons/PlusIcon'
 import * as style from './page.style'
 
-interface INewMessageButtonProps {
-  isPc: boolean
-  openModal: () => void
-}
-
-const NewMessageButton = ({ isPc, openModal }: INewMessageButtonProps) => {
+const NewMessageButton = ({ openModal }: { openModal: () => void }) => {
   return (
     <Stack direction="row" justifyContent={'flex-end'}>
-      {isPc ? (
-        <CuButton
-          message="새 쪽지"
-          action={openModal}
-          variant={'contained'}
-          startIcon={<PlusIcon width={'1.25rem'} height={'1.25rem'} />}
-          style={style.pcSendButton}
-        />
-      ) : (
-        <IconButton onClick={openModal}>
-          <PlusIcon />
-        </IconButton>
-      )}
+      <CuButton
+        message="새 쪽지"
+        action={openModal}
+        variant={'contained'}
+        startIcon={<PlusIcon width={'1.25rem'} height={'1.25rem'} />}
+        style={style.pcSendButton}
+      />
     </Stack>
   )
 }
@@ -59,18 +48,17 @@ const MessageListPage = () => {
 
   return (
     <>
-      <Stack spacing={'2rem'} sx={isPc ? style.pcStack : style.mobileStack}>
-        <NewMessageButton isPc={isPc} openModal={openModal} />
+      <Stack spacing={'2rem'}>
+        {isPc && <NewMessageButton openModal={openModal} />}
         <BackgroundBox mobileSx={style.mobileBox} pcSx={style.pcBox}>
           <MessageContainer
             originalMessageData={data}
             error={error}
             isLoading={isLoading}
-            isPC={isPc}
+            openNewMessageModal={openModal}
           />
         </BackgroundBox>
       </Stack>
-      )
       {isOpen && (
         <NewMessageModal
           isOpen={isOpen}

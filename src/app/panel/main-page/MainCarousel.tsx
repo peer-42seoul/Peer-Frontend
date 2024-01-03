@@ -14,13 +14,13 @@ const MainCarousel = () => {
 
   return (
     <Slider {...settings}>
-      <Box height={'100px'} border="1px solid black">
+      <Box height={'7.5rem'} bgcolor={'white'}>
         배너 1
       </Box>
-      <Box height={'100px'} border="1px solid black">
+      <Box height={'7.5rem'} border="1px solid black" bgcolor={'white'}>
         배너 2
       </Box>
-      <Box height={'100px'} border="1px solid black">
+      <Box height={'7.5rem'} border="1px solid black" bgcolor={'white'}>
         배너 3
       </Box>
     </Slider>

@@ -13,7 +13,7 @@ const MyPage = () => {
 
   if (isPc) {
     router.push('/my-page/profile')
-    return <div></div>
+    return null
   }
   return (
     <div>

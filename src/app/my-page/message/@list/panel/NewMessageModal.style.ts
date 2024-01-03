@@ -2,6 +2,20 @@ import { Theme } from '@mui/material'
 
 const MODAL_ZINDEX = 1400
 
+export const pcContainer = {
+  width: '31rem',
+}
+
+export const mobileContainer = {
+  width: '100%',
+  height: '100%',
+}
+
+export const subTitle = {
+  height: '1.5rem',
+  lineHeight: '1.5rem',
+}
+
 export const searchInput = {
   padding: '0.25rem 0.75rem',
   borderRadius: '0.25rem',
@@ -29,15 +43,24 @@ export const inputBase = {
   },
   '& .MuiInputBase-input.Mui-disabled': {
     color: (theme: Theme) => theme.palette.text.normal,
-    '-webkit-text-fill-color': (theme: Theme) => theme.palette.text.normal,
+    WebkitTextFillColor: (theme: Theme) => theme.palette.text.normal,
   },
 }
 
-export const targetListPopper = {
+const popperBase = {
   zIndex: MODAL_ZINDEX,
   boxSizing: 'border-box',
-  width: '31rem',
   padding: '0.5rem',
   borderRadius: '0.25rem',
-  backgroundColor: (theme: Theme) => `${theme.palette.background.secondary}`,
+  backgroundColor: 'background.secondary',
+}
+
+export const pcPopper = {
+  ...popperBase,
+  width: '31rem',
+}
+
+export const mobilePopper = {
+  ...popperBase,
+  width: 'calc(100vw - 2rem)',
 }

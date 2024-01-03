@@ -1,4 +1,4 @@
-import { RadioGroup, FormControlLabel, Radio } from '@mui/material'
+import { RadioGroup, FormControlLabel, Radio, Typography } from '@mui/material'
 import { Controller } from 'react-hook-form'
 
 export type CloseQuestionList = string[]
@@ -32,7 +32,9 @@ const CloseQuestionForm = ({
               <FormControlLabel
                 disabled={disabled}
                 control={<Radio />}
-                label={label}
+                label={
+                  <Typography color={'text.alternative'}>{label}</Typography>
+                }
                 value={index}
                 key={index}
               />

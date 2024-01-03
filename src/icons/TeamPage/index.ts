@@ -1,0 +1,6 @@
+export { default as BoardIcon } from './BoardIcon'
+export { default as MainIcon } from './MainIcon'
+export { default as NoticeIcon } from './NoticeIcon'
+export { default as PeerlogIcon } from './PeerlogIcon'
+export { default as SettingIcon } from './SettingIcon'
+export { default as ShowcaseIcon } from './ShowcaseIcon'
