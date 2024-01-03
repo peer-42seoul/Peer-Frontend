@@ -5,7 +5,8 @@ import { Box } from '@mui/material'
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import HitchhikingCard from './HitchhikingCard'
-import { cardStyle } from './HitchhikingCard.style'
+import * as style from './HitchhikingCard.style'
+import useMedia from '@/hook/useMedia'
 
 enum ESwipeDirection {
   left = 'left',
@@ -24,6 +25,7 @@ const CardContainer = ({
   isProject: boolean
 }) => {
   const [dragged, setDragged] = useState(false)
+  const { isPc } = useMedia()
 
   console.log('cardList')
   console.log(cardList)
@@ -72,10 +74,8 @@ const CardContainer = ({
         >
           <Box
             sx={{
-              ...cardStyle,
+              ...(isPc ? style.cardPcStyleBase : style.cardMobileStyleBase),
               backgroundColor: 'text.assistive',
-              top: '0',
-              left: '0',
               position: 'static',
             }}
           />
@@ -90,7 +90,7 @@ const CardContainer = ({
         >
           <Box
             sx={{
-              ...cardStyle,
+              ...(isPc ? style.cardPcStyleBase : style.cardMobileStyleBase),
               backgroundColor: 'text.assistive',
               position: 'static',
             }}
@@ -135,7 +135,7 @@ const CardContainer = ({
                   tagList={card.tagList}
                   image={card.image}
                   postId={card.recruit_id}
-                  sx={cardStyle}
+                  sx={isPc ? style.cardPcStyleBase : style.cardMobileStyleBase}
                   dragged={dragged}
                   setDragged={setDragged}
                   isProject={isProject}
