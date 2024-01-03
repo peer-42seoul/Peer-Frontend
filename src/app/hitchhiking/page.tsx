@@ -18,7 +18,7 @@ const Hitchhiking = () => {
   const [isProject, setIsProject] = useState(false)
   const [cardList, setCardList] = useState<Array<IMainCard>>([])
   const [draggedCardList, setDraggedCardList] = useState<IMainCard[]>([])
-  console.log('draggedCardList')
+  console.log(draggedCardList)
 
   const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
