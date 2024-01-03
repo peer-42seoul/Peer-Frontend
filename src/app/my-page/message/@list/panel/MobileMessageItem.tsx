@@ -1,11 +1,13 @@
 import { TouchEvent, useState, ReactNode, useRef } from 'react'
-import { ListItem, ListItemButton, Stack } from '@mui/material'
+import { Box, ListItem, ListItemButton, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import useMessagePageState from '@/states/useMessagePageState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
 import * as style from './MobileMessageItem.style'
+import useToast from '@/hook/useToast'
+import CuToast from '@/components/CuToast'
 
 /* ANCHOR - interface */
 interface ITouchState {
@@ -24,7 +26,7 @@ interface IMobileMessageListItemProps {
 
 /* ANCHOR - constants */
 const TOUCH_OFFSET = 20 // 터치 이벤트를 발생시킬 최소 길이
-const DELETE_BUTTON_WIDTH = '10.8%'
+const DELETE_BUTTON_WIDTH = '3rem' // left margin을 포함한 삭제 버튼의 너비
 
 /* ANCHOR - components */
 const SwappableMessageItem = ({
@@ -71,28 +73,37 @@ const SwappableMessageItem = ({
   }
 
   return (
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      spacing={0}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
+    <ListItem
+      disablePadding
       sx={{
         ...style.swappableWrapper,
         transform: `translateX(${touchState.diffLength})`,
       }}
     >
-      {children}
-      <CuButton
-        message="삭제"
-        style={{
-          ...style.removeButton,
-          opacity: `${touchState.side === 'LEFT' ? 1 : 0}`,
-        }}
-        action={eventHandler}
-        variant="contained"
-      />
-    </Stack>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        spacing={0}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        width="100%"
+      >
+        {children}
+        <CuButton
+          message="삭제"
+          style={{
+            ...style.removeButton,
+            opacity: `${touchState.side === 'LEFT' ? 1 : 0}`,
+          }}
+          TypographyProps={{
+            variant: 'CaptionEmphasis',
+            color: 'red.strong',
+          }}
+          action={eventHandler}
+          variant="contained"
+        />
+      </Stack>
+    </ListItem>
   )
 }
 
@@ -101,29 +112,34 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
   const { setDetailPage } = useMessagePageState()
   const { targetId, conversationId } = message
   const listItemRef = useRef(null)
+  const { isOpen, openToast, closeToast } = useToast()
+
   const deleteOneMessage = () => {
     axiosWithAuth
       .delete('/api/v1/message/delete-message', {
         data: { target: [{ targetId }] },
       })
       .catch(() => {
-        // 보완 예정
-        alert('쪽지 삭제에 실패했습니다.')
+        openToast()
       })
   }
 
   return (
-    <ListItem>
+    <Box sx={style.messageItem}>
       <SwappableMessageItem eventHandler={deleteOneMessage}>
         <ListItemButton
+          disableGutters
           ref={listItemRef}
           onClick={() => setDetailPage(conversationId, targetId)}
-          sx={{ flex: '1 0 100%' }}
+          sx={style.listItemButton}
         >
           <MessageItemBase message={message} />
         </ListItemButton>
       </SwappableMessageItem>
-    </ListItem>
+      <CuToast open={isOpen} onClose={closeToast} severity="error">
+        삭제에 실패하였습니다.
+      </CuToast>
+    </Box>
   )
 }
 

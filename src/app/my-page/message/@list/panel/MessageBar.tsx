@@ -1,33 +1,20 @@
 import CuButton from '@/components/CuButton'
-import { Button, Stack, TextField } from '@mui/material'
+import { IconButton, InputBase, Stack, Typography } from '@mui/material'
+import SearchIcon from '@/icons/SearchIcon'
+import * as style from './MessageBar.style'
+import { PlusIcon } from '@/icons'
 
-interface ISearchBarProps {
-  setSearchKeyword: (keyword: string) => void
+interface IContainerHeaderProps {
+  isPc: boolean
+  isManageMode: boolean
   setIsManageMode: (isManageMode: boolean) => void
-  handleMessageSearch: () => void
+  openNewMessageModal: () => void
 }
 
-export const SearchBar = ({
-  setSearchKeyword,
-  setIsManageMode,
-  handleMessageSearch,
-}: ISearchBarProps) => {
-  return (
-    <Stack direction="row">
-      <TextField
-        placeholder="사람을 검색해 주세요."
-        onChange={(e) => setSearchKeyword(e.target.value)}
-      />
-      <Button variant="contained" onClick={handleMessageSearch}>
-        검색
-      </Button>
-      <CuButton
-        variant="text"
-        action={() => setIsManageMode(true)}
-        message="관리"
-      />
-    </Stack>
-  )
+interface ISearchBarProps {
+  isPc: boolean
+  setSearchKeyword: (keyword: string) => void
+  handleMessageSearch: () => void
 }
 
 interface IManageBarProps {
@@ -35,7 +22,78 @@ interface IManageBarProps {
   handleSelectAll: () => void
   handleUnselectAll: () => void
   handleDelete: () => void
-  setIsManageMode: (isManageMode: boolean) => void
+}
+
+export const ContainerHeader = ({
+  isPc,
+  isManageMode,
+  setIsManageMode,
+  openNewMessageModal,
+}: IContainerHeaderProps) => {
+  return (
+    <Stack
+      direction={'row'}
+      justifyContent={'space-between'}
+      alignItems={'center'}
+    >
+      <Typography variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}>
+        {isManageMode ? '대상 리스트 관리' : '대상 리스트'}
+      </Typography>
+      {isManageMode ? (
+        <CuButton
+          TypographyProps={{ variant: 'CaptionEmphasis' }}
+          variant="text"
+          action={() => setIsManageMode(false)}
+          message="리스트로 돌아가기"
+        />
+      ) : isPc ? (
+        <CuButton
+          TypographyProps={{ variant: 'CaptionEmphasis' }}
+          variant="text"
+          action={() => setIsManageMode(true)}
+          message="관리"
+        />
+      ) : (
+        <IconButton onClick={openNewMessageModal}>
+          <PlusIcon width={'1.5rem'} height={'1.5rem'} />
+        </IconButton>
+      )}
+    </Stack>
+  )
+}
+
+export const SearchBar = ({
+  setSearchKeyword,
+  handleMessageSearch,
+  isPc,
+}: ISearchBarProps) => {
+  return (
+    <Stack spacing={'1.5rem'}>
+      <Stack
+        sx={isPc ? style.pcSearchWrapper : style.mobileSearchWrapper}
+        direction={'row'}
+        alignItems={'center'}
+        spacing={'0.38rem'}
+      >
+        <SearchIcon width={'1.25rem'} height={'1.25rem'} />
+        <InputBase
+          sx={style.searchInput}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          placeholder="닉네임을 검색해주세요."
+          fullWidth
+        />
+        <CuButton
+          TypographyProps={{
+            variant: 'CaptionEmphasis',
+            color: 'text.alternative',
+          }}
+          variant="text"
+          action={handleMessageSearch}
+          message="검색"
+        />
+      </Stack>
+    </Stack>
+  )
 }
 
 export const ManageBar = ({
@@ -43,25 +101,45 @@ export const ManageBar = ({
   handleSelectAll,
   handleUnselectAll,
   handleDelete,
-  setIsManageMode,
 }: IManageBarProps) => {
   return (
-    <Stack direction="row">
-      {isSelectedAll ? (
+    <Stack spacing={'1.5rem'}>
+      <Stack
+        direction={'row'}
+        sx={style.manageBarStack}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+      >
+        {isSelectedAll ? (
+          <CuButton
+            TypographyProps={{
+              variant: 'CaptionEmphasis',
+              color: 'text.alternative',
+            }}
+            variant="text"
+            action={handleUnselectAll}
+            message="전체 선택 해제"
+          />
+        ) : (
+          <CuButton
+            TypographyProps={{
+              variant: 'CaptionEmphasis',
+              color: 'text.alternative',
+            }}
+            variant="text"
+            action={handleSelectAll}
+            message="전체 선택"
+          />
+        )}
         <CuButton
+          TypographyProps={{
+            variant: 'CaptionEmphasis',
+          }}
           variant="text"
-          action={handleUnselectAll}
-          message="전체 선택 해제"
+          action={handleDelete}
+          message="삭제"
         />
-      ) : (
-        <CuButton variant="text" action={handleSelectAll} message="전체 선택" />
-      )}
-      <CuButton variant="text" action={handleDelete} message="삭제" />
-      <CuButton
-        variant="text"
-        action={() => setIsManageMode(false)}
-        message="리스트로 돌아가기"
-      />
+      </Stack>
     </Stack>
   )
 }

@@ -8,8 +8,7 @@ import {
   CircularProgress,
 } from '@mui/material'
 import useMedia from '@/hook/useMedia'
-import ChevronLeft from '@/icons/ChevronLeft'
-import CloseIcon from '@/icons/CloseIcon'
+import { ChevronLeft, CloseIcon } from '@/icons'
 import CuButton from './CuButton'
 import * as style from './CuModal.style'
 
