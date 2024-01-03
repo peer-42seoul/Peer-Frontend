@@ -39,8 +39,8 @@ const TeamDnD = ({ id }: { id: string }) => {
   }, [])
 
   // api 에러 생길 시 주석 처리 필요
-  if (!data && isMutating) return <Typography>로딩중입니다...</Typography>
-  if (!data && error) return <Typography>에러 발생</Typography>
+  // if (!data && isMutating) return <Typography>로딩중입니다...</Typography>
+  // if (!data && error) return <Typography>에러 발생</Typography>
 
   return (
     <Stack

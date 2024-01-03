@@ -4,6 +4,7 @@ import { SizeType } from '@/types/ITeamDnDLayout'
 import Image from 'next/image'
 import EditIcon from '@/icons/EditIcon'
 import PictureIcon from '@/icons/PictureIcon'
+import * as style from './ImageWidget.style'
 
 const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
   const [iconHidden, setIconHidden] = useState<boolean>(true)
@@ -27,35 +28,10 @@ const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
   }
 
   return (
-    <Card
-      sx={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'background.tertiary',
-        padding: '0',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: '1rem',
-      }}
-    >
-      <CardContent
-        sx={{
-          height: 'calc(100% - 2px)',
-          padding: '1px',
-          '&:last-child': {
-            paddingBottom: '1px',
-          },
-        }}
-      >
+    <Card sx={style.CardStyle}>
+      <CardContent sx={style.CardContentStyle}>
         <div
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            position: 'relative',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          style={style.ContentDivStyle}
           onMouseEnter={() => setIconHidden(false)}
           onMouseLeave={() => setIconHidden(true)}
         >
@@ -70,18 +46,12 @@ const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
                   borderRadius: '1rem',
                 }}
               />
-              <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+              <div style={style.ButtonDivStyle}>
                 <IconButton
                   aria-label="edit"
                   sx={{
-                    backgroundColor: 'text.assistive',
-                    width: '3rem',
-                    height: '3rem',
-                    borderRadius: '50%',
-                    visibility: iconHidden ? 'hidden' : 'visible',
-                    '&:hover': {
-                      backgroundColor: 'text.assistive',
-                    },
+                    ...style.IconButtonStyle,
+                    display: iconHidden ? 'none' : '',
                   }}
                   onClick={() => inputRef.current?.click()}
                 >
