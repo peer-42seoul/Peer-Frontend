@@ -9,8 +9,9 @@ import CardContainer from './panel/CardContainer'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import useMedia from '@/hook/useMedia'
 import Interest from './panel/Interest'
-import CuButton from '@/components/CuButton'
-import * as style from './panel/HitchhikingCard.style'
+// import CuButton from '@/components/CuButton'
+import * as cardStyle from './panel/HitchhikingCard.style'
+// import * as style from './Hitchhiking.style'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
@@ -22,7 +23,7 @@ const Hitchhiking = () => {
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
       isProject ? 'PROJECT' : 'STUDY'
-    }&sort=latest&page=${page}&pageSize=3&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
+    }&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
     defaultGetFetcher,
   )
 
@@ -57,16 +58,16 @@ const Hitchhiking = () => {
     console.log(cardList)
   }
 
-  const addCard = () => {
-    setCardList((prev: IMainCard[]) => {
-      return [...prev, draggedCardList[0]]
-    })
-    setDraggedCardList((prev: IMainCard[]) => {
-      return prev.filter(
-        (card) => card.recruit_id !== draggedCardList[0].recruit_id,
-      )
-    })
-  }
+  // const addCard = () => {
+  //   setCardList((prev: IMainCard[]) => {
+  //     return [...prev, draggedCardList[0]]
+  //   })
+  //   setDraggedCardList((prev: IMainCard[]) => {
+  //     return prev.filter(
+  //       (card) => card.recruit_id !== draggedCardList[0].recruit_id,
+  //     )
+  //   })
+  // }
 
   let message: string = ''
 
@@ -116,7 +117,7 @@ const Hitchhiking = () => {
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          ...(isPc ? style.cardPcSize : style.cardMobileSize),
+          ...(isPc ? cardStyle.cardPcSize : cardStyle.cardMobileSize),
           position: 'relative',
         }}
       >
