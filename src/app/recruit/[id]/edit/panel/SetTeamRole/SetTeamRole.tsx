@@ -64,7 +64,6 @@ const SetTeamRole = ({
       <FormControl>
         {roleData.map((data, index) => {
           if (data.name === '' || data.number === 0) {
-            console.log('error')
             return
           }
           return (
