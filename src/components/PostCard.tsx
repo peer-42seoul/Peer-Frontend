@@ -77,7 +77,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
           </Typography>
         </CardContent>
         <CardContent sx={{ p: 0 }}>
-          <Stack gap={1} direction={'row'} justifyContent={'center'}>
+          <Stack spacing={1} direction={'row'} justifyContent={'center'}>
             {tagList?.map(({ name, color }: ITag, idx: number) => {
               const r = parseInt(color.slice(1, 3), 16),
                 g = parseInt(color.slice(3, 5), 16),
