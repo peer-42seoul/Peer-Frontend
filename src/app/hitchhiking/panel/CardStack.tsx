@@ -67,7 +67,7 @@ const CardStack = ({
       >
         <motion.div
           animate={{
-            opacity: cardList.length > 2 ? 1 : 0,
+            opacity: cardList.length > 1 ? 1 : 0,
             transform: cardList.length > 2 ? 'rotate(-2.5deg)' : 'rotate(0deg)',
             position: 'absolute',
           }}
@@ -82,7 +82,7 @@ const CardStack = ({
         </motion.div>
         <motion.div
           animate={{
-            opacity: cardList.length > 3 ? 1 : 0,
+            opacity: cardList.length > 2 ? 1 : 0,
             transform: cardList.length > 3 ? 'rotate(2.5deg)' : 'rotate(0deg)',
             position: 'absolute',
           }}
