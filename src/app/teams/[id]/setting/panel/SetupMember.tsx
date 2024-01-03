@@ -174,7 +174,7 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
 
   return (
     <>
-      <Grid container spacing={'1rem'} overflow={'auto'}>
+      <Grid container spacing={'1rem'} maxHeight={'20rem'} overflow={'auto'}>
         {members.map((member, index) => (
           <Grid
             component="div"

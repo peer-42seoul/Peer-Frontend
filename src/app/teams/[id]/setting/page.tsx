@@ -42,30 +42,33 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
             <TeamJobAdd teamId={params.id} />
           )}
           {!showApplicant ? (
-            <>
-              <Card
-                sx={{
-                  borderRadius: '1rem',
-                  p: '1.5rem',
-                  height: 400,
-                }}
+            <Card
+              sx={{
+                borderRadius: '1rem',
+                p: '1.5rem',
+                height: '100%',
+              }}
+            >
+              <Stack
+                direction={'row'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                mb={3}
               >
-                <Stack direction={'row'} justifyContent={'space-between'}>
-                  <Typography fontWeight="bold">팀원 목록</Typography>
+                <Typography fontWeight="bold">팀원 목록</Typography>
 
-                  <Button
-                    onClick={openApplicant}
-                    sx={{ mt: '0.5rem', width: '9rem' }}
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                  >
-                    신청 대기자 보기
-                  </Button>
-                </Stack>
-                <SetupMember team={data.member} teamId={data.team.id} />
-              </Card>
-            </>
+                <Button
+                  onClick={openApplicant}
+                  sx={{ width: '9rem' }}
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  신청 대기자 보기
+                </Button>
+              </Stack>
+              <SetupMember team={data.member} teamId={data.team.id} />
+            </Card>
           ) : (
             <ApplicantList close={closeApplicant} teamId={data.team.id} />
           )}

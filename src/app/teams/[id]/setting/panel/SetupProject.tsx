@@ -262,14 +262,10 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
                   direction={isPc ? 'row' : 'column'}
                   alignItems={isPc ? 'center' : ''}
                 >
-                  <Stack
-                    alignItems={'center'}
-                    m={'0.5rem'}
-                    justifyContent={'flex-start'}
-                  >
+                  <Stack m={'0.5rem'}>
                     <Stack
                       direction={'row'}
-                      alignItems={'center'}
+                      alignItems={'flex-start'}
                       spacing={'0.25rem'}
                     >
                       <PieClearIcon />
@@ -297,10 +293,10 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
                       )}
                     />
                   </Stack>
-                  <Stack alignItems={'center'} m={'0.35rem'}>
+                  <Stack m={'0.35rem'}>
                     <Stack
                       direction={'row'}
-                      alignItems={'center'}
+                      alignItems={'flex-start'}
                       spacing={'0.35rem'}
                     >
                       <WifiClearIcon />
@@ -334,10 +330,10 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
                       )}
                     />
                   </Stack>
-                  <Stack alignItems={'center'} m={'0.35rem'}>
+                  <Stack alignItems={'flex-start'} m={'0.35rem'}>
                     <Stack
                       direction={'row'}
-                      alignItems={'center'}
+                      alignItems={'flex-start'}
                       spacing={'0.35rem'}
                     >
                       <GeoClearIcon />
