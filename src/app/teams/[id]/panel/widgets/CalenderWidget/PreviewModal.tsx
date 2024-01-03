@@ -5,6 +5,7 @@ import { Box, IconButton, Stack, Typography } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import { PlusIcon } from '@/icons'
 import CuModal from '@/components/CuModal'
+import useMedia from '@/hook/useMedia'
 import { IEvent } from '@/types/WidgetDataTypes'
 import CalendarLarge from './CalendarLarge'
 import { isPastEvent, useCalendar } from './utils'
@@ -25,9 +26,13 @@ interface IEventItem {
 const PreviewModal = ({ open, onClose, events }: IPreviewModalProps) => {
   const { selectedDate, setSelectedDate, todayEvents, isEmpty } =
     useCalendar(events)
+  const { isPc } = useMedia()
   return (
     <CuModal sx={style.modal} open={open} onClose={onClose} title={'캘린더'}>
-      <Stack sx={style.modalContent}>
+      <Stack
+        sx={isPc ? style.modalContent : style.mobileModalContent}
+        spacing={'2.5rem'}
+      >
         <CalendarLarge
           events={events}
           onDrillDown={(date: Date) => setSelectedDate(dayjs(date))}
