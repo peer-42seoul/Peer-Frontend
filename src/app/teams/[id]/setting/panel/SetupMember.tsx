@@ -174,13 +174,13 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
 
   return (
     <>
-      <Grid container spacing={'1rem'} m={'0.5rem'} overflow={'auto'}>
+      <Grid container spacing={'1rem'} overflow={'auto'}>
         {members.map((member, index) => (
           <Grid
             component="div"
             key={index}
             item
-            xs={isPc ? 2 : 6}
+            xs={isPc ? 3 : 6}
             textAlign="center"
           >
             <Box

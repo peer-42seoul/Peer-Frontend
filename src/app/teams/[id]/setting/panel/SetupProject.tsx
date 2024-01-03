@@ -262,81 +262,88 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
                   direction={isPc ? 'row' : 'column'}
                   alignItems={isPc ? 'center' : ''}
                 >
-                  <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
-                    <PieClearIcon />
+                  <Stack
+                    alignItems={'center'}
+                    m={'0.5rem'}
+                    justifyContent={'flex-start'}
+                  >
                     <Stack
                       direction={'row'}
                       alignItems={'center'}
-                      spacing={'0.35rem'}
+                      spacing={'0.25rem'}
                     >
+                      <PieClearIcon />
                       <Typography textOverflow={'ellipsis'}>
                         목표기간
                       </Typography>
-                      <Controller
-                        name="dueTo"
-                        control={control}
-                        defaultValue={team.dueTo}
-                        render={({ field }) => (
-                          <Select
-                            size="small"
-                            defaultValue={team.dueTo}
-                            {...field}
-                          >
-                            {dueList.map((dueTo) => (
-                              <MenuItem key={dueTo} value={dueTo}>
-                                {dueTo}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
                     </Stack>
+
+                    <Controller
+                      name="dueTo"
+                      control={control}
+                      defaultValue={team.dueTo}
+                      render={({ field }) => (
+                        <Select
+                          size="small"
+                          defaultValue={team.dueTo}
+                          {...field}
+                        >
+                          {dueList.map((dueTo) => (
+                            <MenuItem key={dueTo} value={dueTo}>
+                              {dueTo}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
+                    />
                   </Stack>
-                  <Stack direction={'row'} alignItems={'center'} m={'0.35rem'}>
-                    <WifiClearIcon />
+                  <Stack alignItems={'center'} m={'0.35rem'}>
                     <Stack
                       direction={'row'}
                       alignItems={'center'}
                       spacing={'0.35rem'}
                     >
+                      <WifiClearIcon />
                       <Typography>활동방식</Typography>
-                      <Controller
-                        name="operationForm"
-                        control={control}
-                        defaultValue={team.operationForm}
-                        render={({ field }) => (
-                          <Select
-                            size="small"
-                            defaultValue={team.operationForm}
-                            {...field}
-                          >
-                            {[
-                              TeamOperationForm.OFFLINE,
-                              TeamOperationForm.ONLINE,
-                              TeamOperationForm.MIX,
-                            ].map((operation) => (
-                              <MenuItem key={operation} value={operation}>
-                                {operation === TeamOperationForm.OFFLINE &&
-                                  '오프라인'}
-                                {operation === TeamOperationForm.ONLINE &&
-                                  '온라인'}
-                                {operation === TeamOperationForm.MIX &&
-                                  '온/오프라인'}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
                     </Stack>
+                    <Controller
+                      name="operationForm"
+                      control={control}
+                      defaultValue={team.operationForm}
+                      render={({ field }) => (
+                        <Select
+                          size="small"
+                          defaultValue={team.operationForm}
+                          {...field}
+                        >
+                          {[
+                            TeamOperationForm.OFFLINE,
+                            TeamOperationForm.ONLINE,
+                            TeamOperationForm.MIX,
+                          ].map((operation) => (
+                            <MenuItem key={operation} value={operation}>
+                              {operation === TeamOperationForm.OFFLINE &&
+                                '오프라인'}
+                              {operation === TeamOperationForm.ONLINE &&
+                                '온라인'}
+                              {operation === TeamOperationForm.MIX &&
+                                '온/오프라인'}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
+                    />
                   </Stack>
-                  <Stack direction={'row'} alignItems={'center'} m={'0.35rem'}>
-                    <GeoClearIcon />
+                  <Stack alignItems={'center'} m={'0.35rem'}>
                     <Stack
                       direction={'row'}
                       alignItems={'center'}
                       spacing={'0.35rem'}
                     >
+                      <GeoClearIcon />
                       <Typography>활동지역</Typography>
+                    </Stack>
+                    <Stack direction={'row'} spacing={1}>
                       <Controller
                         name="region.0"
                         control={control}

@@ -8,6 +8,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
   Theme,
@@ -89,10 +90,9 @@ const TeamJobAdd = ({ teamId }: Props) => {
               theme.palette.background.tertiary,
           }}
         >
-          <Paper sx={{ overflow: 'auto', height: '15rem' }}>
-            <Table stickyHeader>
+          <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+            <Table sx={{ minWidth: '25rem' }} stickyHeader>
               <TableHead>
-                <TableCell align="left">id</TableCell>
                 <TableCell align="center">이름</TableCell>
                 <TableCell align="center">현재 인원</TableCell>
                 <TableCell align="center">최대 인원</TableCell>
@@ -101,7 +101,6 @@ const TeamJobAdd = ({ teamId }: Props) => {
               <TableBody>
                 {jobs.map((job) => (
                   <TableRow key={job.id}>
-                    <TableCell align="left">{job.id}</TableCell>
                     <TableCell align="center">{job.name}</TableCell>
                     <TableCell align="center">{job.current}</TableCell>
                     <TableCell align="center">
@@ -131,7 +130,7 @@ const TeamJobAdd = ({ teamId }: Props) => {
                 ))}
               </TableBody>
             </Table>
-          </Paper>
+          </TableContainer>
 
           <AddNewJob onNewJob={handleAddNewJob} teamId={teamId} />
         </Card>

@@ -57,7 +57,7 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
       direction={'row'}
       alignItems={'center'}
       justifyContent={'space-between'}
-      px={'4rem'}
+      px={'2rem'}
       paddingTop={'1rem'}
     >
       <TextField
