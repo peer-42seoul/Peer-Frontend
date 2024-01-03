@@ -4,6 +4,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { koreaDistrict } from '@/constant/DistrictData'
 import { Stack } from '@mui/material'
+import useMedia from '@/hook/useMedia'
 
 interface BasicSelectProps {
   setValue: Dispatch<SetStateAction<string[]>>
@@ -13,6 +14,7 @@ interface BasicSelectProps {
 export default function SelectRegion({ setValue, region }: BasicSelectProps) {
   const [largeScaleData, setLargeScaleData] = useState<string>('')
   const [smallScaleData, setSmallScaleData] = useState<string>('')
+  const { isPc } = useMedia()
 
   const handleChangeLargeScaleData = (event: SelectChangeEvent) => {
     setLargeScaleData(event.target.value as string)
@@ -53,20 +55,39 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
 
   return (
     <Stack
-      sx={{ width: '26rem', display: 'flex', flexDirection: 'row', gap: 1 }}
+      sx={isPc ? { width: '26rem' } : { width: '100%' }}
+      direction={'row'}
+      gap={'1rem'}
     >
-      <FormControl sx={{ width: '12.75rem' }} fullWidth>
+      <FormControl
+        sx={
+          isPc
+            ? { width: '12.75rem', height: '2rem' }
+            : { width: '100%', height: '2rem' }
+        }
+      >
         <Select
-          sx={{ width: '12.75rem', height: '2rem' }}
+          sx={
+            isPc
+              ? { width: '12.75rem', height: '2rem' }
+              : { width: '100%', height: '2rem' }
+          }
           value={largeScaleData}
           onChange={handleChangeLargeScaleData}
         >
           {options1}
         </Select>
       </FormControl>
-      <FormControl sx={{ width: '12.75rem' }} fullWidth>
+      <FormControl
+        sx={isPc ? { width: '12.75rem' } : { width: '100%' }}
+        fullWidth
+      >
         <Select
-          sx={{ width: '12.75rem', height: '2rem' }}
+          sx={
+            isPc
+              ? { width: '12.75rem', height: '2rem' }
+              : { width: '100%', height: '2rem' }
+          }
           value={smallScaleData}
           onChange={handleChangeSmallScaleData}
         >

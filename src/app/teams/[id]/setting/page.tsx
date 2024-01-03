@@ -29,9 +29,9 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       margin={4}
       spacing={2}
       direction={'column'}
-      flex={4}
       borderRadius={2}
       padding={2}
+      width={'93%'}
     >
       <Typography>설정</Typography>
       {data ? (
