@@ -2,7 +2,9 @@ import { SxProps } from '@mui/material'
 
 export const widgetCard: SxProps = {
   borderRadius: '1rem',
-  background: 'background.secondary',
+  backgroundColor: 'background.secondary',
+  width: '100%',
+  height: '100%',
 }
 
 export const widgetCardContent: SxProps = {

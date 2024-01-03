@@ -20,7 +20,7 @@ const TextWidget = ({ data, size }: { data: any; size: SizeType }) => {
   }
   return (
     <>
-      <WidgetCard bgcolor={'background.tertiary'}>
+      <WidgetCard contentSx={{ padding: '1.5rem 1.5rem 2rem 1.5rem' }}>
         <Stack height="100%" gap="1.5rem">
           <Stack
             direction="row"

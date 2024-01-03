@@ -6,6 +6,7 @@ import EditIcon from '@/icons/EditIcon'
 import PictureIcon from '@/icons/PictureIcon'
 
 const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
+  const [iconHidden, setIconHidden] = useState<boolean>(true)
   const [uploadedImage, setUploadedImage] = useState<
     string | ArrayBuffer | null
   >(null)
@@ -55,17 +56,21 @@ const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}
+          onMouseEnter={() => setIconHidden(false)}
+          onMouseLeave={() => setIconHidden(true)}
         >
           {uploadedImage || data ? (
-            <>
+            <div>
               <Image
                 src={uploadedImage || data}
                 alt="UploadedImage"
                 layout="fill"
                 objectFit="cover"
-                style={{ borderRadius: '1rem' }}
+                style={{
+                  borderRadius: '1rem',
+                }}
               />
-              <div style={{ position: 'absolute', top: '0', right: '0' }}>
+              <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
                 <IconButton
                   aria-label="edit"
                   sx={{
@@ -73,6 +78,10 @@ const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
                     width: '3rem',
                     height: '3rem',
                     borderRadius: '50%',
+                    visibility: iconHidden ? 'hidden' : 'visible',
+                    '&:hover': {
+                      backgroundColor: 'text.assistive',
+                    },
                   }}
                   onClick={() => inputRef.current?.click()}
                 >
@@ -86,7 +95,7 @@ const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
                   onChange={handleImageUpload}
                 />
               </div>
-            </>
+            </div>
           ) : (
             <>
               <IconButton

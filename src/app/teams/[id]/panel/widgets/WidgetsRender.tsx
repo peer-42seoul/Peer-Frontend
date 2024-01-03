@@ -304,7 +304,7 @@ const WidgetsRender = ({
                 : undefined,
               borderRadius: '5px',
             }}
-            draggableCancel=".MuiIconButton-root"
+            draggableCancel=".MuiButtonBase-root, .MuiModal-root"
           >
             {widgets?.map(({ grid, type, size: wgSize, data: wgData }) => {
               return (
