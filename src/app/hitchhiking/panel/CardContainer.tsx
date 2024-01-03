@@ -6,6 +6,7 @@ import { FormControlLabel, Stack, Typography } from '@mui/material'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import Interest from './Interest'
 import * as cardStyle from './HitchhikingCard.style'
+import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
 
 const CardContainer = ({
@@ -24,18 +25,26 @@ const CardContainer = ({
   const { isPc } = useMedia()
   return (
     <Stack
-      justifyContent={'space-between'}
+      justifyContent={'flex-start'}
       alignItems={'center'}
-      sx={{
-        width: '100%',
-        height: isPc ? '100%' : '80svh',
-        overflow: 'hidden',
-        bottom: 0,
-      }}
+      sx={
+        isPc
+          ? containerStyle.cardContainerPCStyle
+          : containerStyle.cardContainerMobileStyle
+      }
       direction={'column'}
     >
       <Stack
-        sx={{ width: '100%' }}
+        justifyContent={'center'}
+        alignItems={'center'}
+        sx={containerStyle.gnbContainerStyle}
+      >
+        <Typography component={'h4'} sx={containerStyle.gnbTypographyStyle}>
+          히치하이킹
+        </Typography>
+      </Stack>
+      <Stack
+        sx={containerStyle.toggleContainerStyle}
         justifyContent={'center'}
         alignItems={'center'}
         direction={'row'}

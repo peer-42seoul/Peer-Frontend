@@ -5,17 +5,18 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
 import useMedia from '@/hook/useMedia'
-import { Box } from '@mui/material'
+import { Box, IconButton, Stack } from '@mui/material'
 import CardContainer from './panel/CardContainer'
+import ArrowUp from '@/icons/ArrowUp'
 // import CuButton from '@/components/CuButton'
-// import * as style from './Hitchhiking.style'
+import * as style from './hitchhiking.style'
+import ArrowDown from '@/icons/ArrowDown'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(false)
   const [cardList, setCardList] = useState<Array<IMainCard>>([])
   const [draggedCardList, setDraggedCardList] = useState<IMainCard[]>([])
-  console.log(draggedCardList)
 
   const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
@@ -50,22 +51,18 @@ const Hitchhiking = () => {
     if (cardList.length === 2) {
       setPage((prev) => (!data?.last ? prev + 1 : prev))
     }
-    console.log('cardList.length')
-    console.log(cardList.length)
-    console.log('cardList')
-    console.log(cardList)
   }
 
-  // const addCard = () => {
-  //   setCardList((prev: IMainCard[]) => {
-  //     return [...prev, draggedCardList[0]]
-  //   })
-  //   setDraggedCardList((prev: IMainCard[]) => {
-  //     return prev.filter(
-  //       (card) => card.recruit_id !== draggedCardList[0].recruit_id,
-  //     )
-  //   })
-  // }
+  const addCard = () => {
+    setCardList((prev: IMainCard[]) => {
+      return [...prev, draggedCardList[0]]
+    })
+    setDraggedCardList((prev: IMainCard[]) => {
+      return prev.filter(
+        (card) => card.recruit_id !== draggedCardList[0].recruit_id,
+      )
+    })
+  }
 
   let message: string = ''
 
@@ -75,23 +72,49 @@ const Hitchhiking = () => {
 
   if (isPc) {
     return (
-      <Box
-        sx={{
-          width: '22.5rem',
-          height: '50rem',
-          borderColor: 'red.strong',
-          borderStyle: 'solid',
-          borderWidth: 2,
-        }}
+      <Stack
+        direction={'row'}
+        justifyContent={'center'}
+        alignItems={'end'}
+        spacing={'1.5rem'}
       >
-        <CardContainer
-          cardList={cardList}
-          removeCard={removeCard}
-          isProject={isProject}
-          message={message}
-          handleChange={handleChange}
-        />
-      </Box>
+        <Box sx={style.buttonContainerStyle}></Box>
+        <Box sx={style.phoneStyle}>
+          <Box sx={style.phoneStatusBarStyle} />
+          <CardContainer
+            cardList={cardList}
+            removeCard={removeCard}
+            isProject={isProject}
+            message={message}
+            handleChange={handleChange}
+          />
+        </Box>
+        <Stack
+          sx={style.buttonContainerStyle}
+          direction={'column'}
+          justifyContent={'flex-end'}
+          spacing={'1rem'}
+        >
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={addCard}
+            disabled={draggedCardList.length === 0}
+            disableFocusRipple
+          >
+            <ArrowUp sx={{ color: 'text.alternative' }} />
+          </IconButton>
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={() =>
+              removeCard(cardList[cardList.length - 1]?.recruit_id)
+            }
+            disabled={cardList.length === 0}
+            disableFocusRipple
+          >
+            <ArrowDown sx={{ color: 'text.alternative' }} />
+          </IconButton>
+        </Stack>
+      </Stack>
     )
   }
   return (

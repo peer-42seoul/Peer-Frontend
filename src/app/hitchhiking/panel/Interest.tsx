@@ -44,6 +44,7 @@ const Interest = ({ id }: { id?: number }) => {
       justifyContent={'center'}
       alignItems={'center'}
       spacing={1}
+      sx={{ p: '1rem 0 1.5rem 0', width: '100%' }}
     >
       <IconButton
         aria-label="add to favorites"
