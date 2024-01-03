@@ -99,9 +99,10 @@ const Hitchhiking = () => {
             sx={style.buttonStyle}
             onClick={addCard}
             disabled={draggedCardList.length === 0}
-            disableFocusRipple
           >
-            <ArrowUp sx={{ color: 'text.alternative' }} />
+            <ArrowUp
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
           </IconButton>
           <IconButton
             sx={style.buttonStyle}
@@ -109,9 +110,10 @@ const Hitchhiking = () => {
               removeCard(cardList[cardList.length - 1]?.recruit_id)
             }
             disabled={cardList.length === 0}
-            disableFocusRipple
           >
-            <ArrowDown sx={{ color: 'text.alternative' }} />
+            <ArrowDown
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
           </IconButton>
         </Stack>
       </Stack>

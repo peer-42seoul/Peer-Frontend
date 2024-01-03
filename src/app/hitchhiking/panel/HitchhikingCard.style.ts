@@ -8,8 +8,8 @@ export const cardSizeBase: SxProps = {
 
 export const cardPcSize: SxProps = {
   ...cardSizeBase,
-  width: '20.5rem',
-  height: '441px',
+  width: 'calc(80svh * 328 /800)',
+  height: 'calc(80svh * 441 /800)',
 }
 
 export const cardMobileSize: SxProps = {

@@ -1,7 +1,8 @@
 import { SxProps } from '@mui/material'
 
 export const phoneStyle: SxProps = {
-  width: '22.5rem',
+  width: 'calc(80svh * 360 /800)',
+  maxWidth: '22.5rem',
   height: '80vh',
   maxHeight: '50rem',
   borderColor: 'text.normal',
@@ -30,6 +31,15 @@ export const buttonStyle: SxProps = {
   backgroundColor: 'background.tertiary',
   borderRadius: '50px',
   padding: '0.5rem',
-  width: '3rem',
-  height: '3rem',
+  width: 'calc(80svh * 48 / 800)',
+  height: 'calc(80svh * 48 / 800)',
+  maxWidth: '3rem',
+  maxHeight: '3rem',
+}
+
+export const buttonIconStyle: SxProps = {
+  width: 'calc(80svh * 24 / 800)',
+  height: 'calc(80svh * 24 / 800)',
+  maxWidth: '1.5rem',
+  maxHeight: '1.5rem',
 }

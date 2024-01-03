@@ -235,11 +235,17 @@ const HitchhikingCard = ({
 }) => {
   const [isFlipped, setIsFlipped] = useState(false)
   const [cardWidth, setCardWidth] = useState(0)
+  const { isPc } = useMedia()
 
   useEffect(() => {
-    setCardWidth(window.innerWidth * 0.9)
+    setCardWidth(
+      isPc ? window.innerWidth * 0.9 : (window.innerHeight * 0.8 * 328) / 800,
+    )
     const handleResize = () => {
-      setCardWidth(window.innerWidth * 0.9)
+      const newCardWidth = isPc
+        ? window.innerWidth * 0.9
+        : (window.innerHeight * 0.8 * 328) / 800
+      setCardWidth(newCardWidth)
     }
 
     window.addEventListener('resize', handleResize)

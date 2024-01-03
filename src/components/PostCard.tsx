@@ -58,7 +58,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
         alt="post thumbnail"
         sx={{
           ...style.cardMediaStyleBase,
-          height: isPc ? '100%' : getHeight(251),
+          height: isPc ? 'calc(80svh * 251 /800)' : 'calc(90vw * 251 / 328)',
         }}
       />
       <Stack
@@ -92,8 +92,8 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
             color="text.normal"
             sx={{
               ...style.cardTitleStyleBase,
-              height: isPc ? '46px' : getLineCount(46, 22.5) * 22.5,
-              WebkitLineClamp: isPc ? 2 : getLineCount(46, 22.5),
+              height: getLineCount(46, 22.5) * 22.5,
+              WebkitLineClamp: getLineCount(46, 22.5),
             }}
           >
             {title}

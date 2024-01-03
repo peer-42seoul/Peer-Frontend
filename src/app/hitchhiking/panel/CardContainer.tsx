@@ -84,7 +84,7 @@ const CardContainer = ({
             isProject={isProject}
           />
         ) : (
-          <Typography>{message}</Typography>
+          <Typography variant="CaptionEmphasis">{message}</Typography>
         )}
       </Stack>
       <Interest id={cardList[cardList.length - 1]?.recruit_id} />
