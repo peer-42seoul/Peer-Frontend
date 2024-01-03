@@ -3,6 +3,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Dispatch, SetStateAction } from 'react'
+import useMedia from '@/hook/useMedia'
 
 export enum ComponentType {
   Month = 'Month',
@@ -26,6 +27,7 @@ export default function BasicSelect({
   }
 
   let options = null
+  const { isPc } = useMedia()
 
   switch (type) {
     case ComponentType.Month:
@@ -80,7 +82,7 @@ export default function BasicSelect({
     <Box>
       <FormControl fullWidth>
         <Select
-          sx={{ width: '26rem', height: '32px' }}
+          sx={ isPc ? { width: '26rem', height: '32px' } : { width: '100%', height: '32px'} }
           value={value}
           onChange={handleChange}
         >

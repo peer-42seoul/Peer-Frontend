@@ -48,7 +48,7 @@ const MessageListPage = () => {
 
   return (
     <>
-      <Stack spacing={'2rem'} sx={isPc ? style.pcStack : undefined}>
+      <Stack spacing={'2rem'}>
         {isPc && <NewMessageButton openModal={openModal} />}
         <BackgroundBox mobileSx={style.mobileBox} pcSx={style.pcBox}>
           <MessageContainer

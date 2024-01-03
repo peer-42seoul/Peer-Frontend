@@ -18,15 +18,24 @@ const SearchOption = ({
     return (
       <Stack flex={1}>
         <Stack
+          paddingY={'0.5rem'}
+          paddingX={'1rem'}
           flexDirection={'row'}
           alignItems={'center'}
-          bgcolor={'purple.strong'}
+          bgcolor={openOption ? undefined : 'purple.strong'}
+          borderRadius={'0.75rem'}
         >
-          <Typography variant="body2">
+          <Typography
+            variant="Title3"
+            color={openOption ? 'purple.strong' : undefined}
+          >
             맞춤 프로젝트를 빠르게 찾아요.
           </Typography>
-          <IconButton onClick={() => setOpenOption(!openOption)}>
-            {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
+          <IconButton
+            onClick={() => setOpenOption(!openOption)}
+            sx={{ color: openOption ? 'purple.strong' : undefined }}
+          >
+            {openOption ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </Stack>
         <Stack>
@@ -38,12 +47,18 @@ const SearchOption = ({
   return (
     <Stack flex={1}>
       <Stack
+        paddingY={'0.5rem'}
+        paddingX={'1rem'}
         flexDirection={'row'}
         alignItems={'center'}
         bgcolor={'purple.strong'}
+        borderRadius={'0.75rem'}
       >
-        <Typography variant="body1">맞춤 프로젝트를 빠르게 찾아요.</Typography>
-        <IconButton onClick={() => setOpenOption(!openOption)}>
+        <Typography variant="body2">맞춤 프로젝트를 빠르게 찾아요.</Typography>
+        <IconButton
+          onClick={() => setOpenOption(!openOption)}
+          sx={{ color: 'text.normal' }}
+        >
           {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
         </IconButton>
       </Stack>

@@ -1,32 +1,16 @@
 import { Card, CardContent } from '@mui/material'
+import * as style from './WidgetCard.style'
 
-const WidgetCard = ({
-  bgcolor,
-  children,
-}: {
-  bgcolor: string
+interface IWigetCardProps {
   children: React.ReactNode
-}) => {
+  bgcolor?: string // TODO : 타입에러 방지로 남겨두었습니다. 나중에 지워주세요.
+  onClick?: () => void
+}
+
+const WidgetCard = ({ children, onClick }: IWigetCardProps) => {
   return (
-    <Card
-      sx={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: bgcolor,
-        position: 'relative',
-        borderRadius: '1rem',
-      }}
-    >
-      <CardContent
-        sx={{
-          padding: '1.5rem 1.5rem 2rem 1.5rem',
-          '&:last-child': {
-            paddingBottom: '2rem',
-          },
-        }}
-      >
-        {children}
-      </CardContent>
+    <Card sx={style.widgetCard} onClick={onClick}>
+      <CardContent sx={style.widgetCardContent}>{children}</CardContent>
     </Card>
   )
 }
