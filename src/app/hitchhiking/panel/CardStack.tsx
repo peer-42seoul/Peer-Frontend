@@ -15,7 +15,7 @@ enum ESwipeDirection {
   down = 'down',
 }
 
-const CardContainer = ({
+const CardStack = ({
   cardList,
   removeCard,
   isProject,
@@ -148,4 +148,4 @@ const CardContainer = ({
   )
 }
 
-export default CardContainer
+export default CardStack

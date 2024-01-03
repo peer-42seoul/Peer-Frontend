@@ -5,7 +5,7 @@ import { FormControlLabel, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
-import CardContainer from './panel/CardContainer'
+import CardStack from './panel/CardStack'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import useMedia from '@/hook/useMedia'
 import Interest from './panel/Interest'
@@ -123,7 +123,7 @@ const Hitchhiking = () => {
         }}
       >
         {!message ? (
-          <CardContainer
+          <CardStack
             cardList={cardList}
             removeCard={removeCard}
             isProject={isProject}
