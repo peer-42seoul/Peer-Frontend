@@ -46,7 +46,6 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
               sx={{
                 borderRadius: '1rem',
                 p: '1.5rem',
-                height: '100%',
               }}
             >
               <Stack
