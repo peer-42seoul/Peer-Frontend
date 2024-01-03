@@ -7,7 +7,7 @@ import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
 import TmpCalenderWidget from '@/app/teams/[id]/panel/widgets/TmpCalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
-import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
+import TmpImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 
 interface ITeamDnDWidgetListProps {

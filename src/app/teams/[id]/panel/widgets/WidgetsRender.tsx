@@ -4,7 +4,7 @@ import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
 import TmpCalenderWidget from '@/app/teams/[id]/panel/widgets/TmpCalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
-import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
+import ImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 import React, { useCallback, useMemo, useState } from 'react'
 import ReactGridLayout, {
@@ -165,7 +165,7 @@ const WidgetsRender = ({
         case 'text':
           return <TextWidget data={wgData} size={wgSize} />
         case 'image':
-          return <TmpImageWidget data={wgData} size={wgSize} />
+          return <ImageWidget data={wgData} size={wgSize} />
         case 'linkTable':
           return <TmpLinkWidget data={wgData} size={wgSize} />
         default:
@@ -231,6 +231,7 @@ const WidgetsRender = ({
           borderRadius: '5px',
           backgroundColor: 'yellow',
         }}
+        draggableCancel=".MuiButtonBase-root" //버튼을 누를 때 드래그가 되지 않도록 함
       >
         {widgets?.map(({ grid, type, size: wgSize, data: wgData }) => {
           return (

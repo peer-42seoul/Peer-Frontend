@@ -4,6 +4,7 @@ import { SizeType } from '@/types/ITeamDnDLayout'
 import WidgetCard from './WidgetCard'
 import TextEditModal from './TextEditModal'
 import useModal from '@/hook/useModal'
+import TextIcon from '@/icons/TextIcon'
 
 /* 임시 위젯 */
 const TextWidget = ({ data, size }: { data: any; size: SizeType }) => {
@@ -19,17 +20,21 @@ const TextWidget = ({ data, size }: { data: any; size: SizeType }) => {
   }
   return (
     <>
-      <WidgetCard bgcolor={'pink'}>
+      <WidgetCard bgcolor={'background.tertiary'}>
         <Stack height="100%" gap="1.5rem">
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
           >
-            <Typography variant="Title3Emphasis" color="text.normal">
-              {'Text ' + size}
+            <Typography
+              variant="Title3Emphasis"
+              color="text.normal"
+              sx={{ display: 'flex', alightItems: 'center', gap: '0.25rem' }}
+            >
+              <TextIcon /> 텍스트박스
             </Typography>
-            <CardActions>
+            <CardActions sx={{ padding: '0' }}>
               <Button onClick={handleOpenModal}>
                 <Typography variant="CaptionEmphasis" color="text.alternative">
                   수정
@@ -39,9 +44,10 @@ const TextWidget = ({ data, size }: { data: any; size: SizeType }) => {
           </Stack>
           {text ? (
             <Typography
+              width="100%"
               height={sizeHeight[size]}
               variant="Body1"
-              overflow="scroll"
+              sx={{ overflowWrap: 'break-word', overflowY: 'scroll' }}
             >
               {text}
             </Typography>

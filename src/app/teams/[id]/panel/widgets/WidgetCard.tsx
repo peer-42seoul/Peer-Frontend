@@ -14,11 +14,15 @@ const WidgetCard = ({
         height: '100%',
         backgroundColor: bgcolor,
         position: 'relative',
+        borderRadius: '1rem',
       }}
     >
       <CardContent
         sx={{
           padding: '1.5rem 1.5rem 2rem 1.5rem',
+          '&:last-child': {
+            paddingBottom: '2rem',
+          },
         }}
       >
         {children}
