@@ -2,23 +2,20 @@
 
 import React, { useEffect, useRef } from 'react'
 import '@toast-ui/editor/dist/toastui-editor.css'
-import { Editor } from '@toast-ui/editor'
+import { Editor, IEditorOptions } from '@toast-ui/editor'
 import { Card } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-interface Props {
-  initialValue: string
-  initialEditType?: string
-  previewStyle?: string
-  height?: string
-}
+/**
+ * WARNING: SSR 환경에서 사용할 경우 충돌이 나기 때문에 실제 사용하기 위해서는 dynamic import로 불러오는 DynamicToastEditor를 사용해야 합니다.
+ */
 
 const ToastEditor = ({
-  initialValue,
-  initialEditType = 'markdown',
+  initialValue = '',
+  initialEditType = 'wysiwyg',
   previewStyle = 'vertical',
   height = '30rem',
-}: Props) => {
+}: IEditorOptions) => {
   const themed = useTheme()
   const editorRef = useRef<HTMLDivElement>(null)
 
@@ -28,7 +25,6 @@ const ToastEditor = ({
     )[0]
 
     if (editorEl) {
-      console.log(themed.palette.mode)
       if (themed.palette.mode === 'dark') {
         editorEl.classList.add('toastui-editor-dark')
       } else {
