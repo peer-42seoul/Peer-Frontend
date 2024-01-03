@@ -49,11 +49,12 @@ const HitchhikingCardBack = ({
   const { isPc } = useMedia()
 
   const getHeight = (originHeight: number) => {
-    return `${Math.floor((cardWidth * originHeight) / 328 / 16)}rem`
+    return `${(cardWidth * originHeight) / 328 / 16}rem`
   }
 
   const getLineCount = (originHeight: number, lineHeight: number) => {
-    return Math.floor((cardWidth * originHeight) / 328 / lineHeight)
+    const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
+    return lineCount ? lineCount : 1
   }
 
   useEffect(() => {
