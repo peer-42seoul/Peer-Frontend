@@ -12,6 +12,8 @@ import useAuthStore from '@/states/useAuthStore'
 import CuButton from '@/components/CuButton'
 import { useRouter } from 'next/navigation'
 import MyInfoCard from './panel/MyInfoCard'
+import useMedia from '@/hook/useMedia'
+import * as style from '../panel/my-page.style'
 
 interface IModals {
   introduction: boolean
@@ -37,6 +39,8 @@ const MyProfile = () => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
+
+  const { isPc } = useMedia()
 
   const [modalType, setModalType] = useState<string>('' as string)
   const [modalOpen, setModalOpen] = useState<IModals>({
@@ -95,7 +99,12 @@ const MyProfile = () => {
   }
 
   return (
-    <Stack width={1} spacing={4}>
+    <Stack
+      width={1}
+      spacing={isPc ? '2rem' : '1.5rem'}
+      sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
+      justifyContent={'center'}
+    >
       {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
       <ProfileCard
         profileImageUrl={userInfo.profileImageUrl}
