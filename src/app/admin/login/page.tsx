@@ -14,4 +14,5 @@ const CenteredLoginForm: React.FC = () => {
     </Box>
   )
 }
+
 export default CenteredLoginForm
