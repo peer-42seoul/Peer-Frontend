@@ -65,6 +65,7 @@ declare module '@mui/material/styles' {
     tinted?: string
     base?: string
     assistive?: string
+    mobileNavTab?: string
   }
 
   interface TypeBackground {
@@ -128,6 +129,7 @@ declare module '@mui/material/Button' {
     yellow: true
     pink: true
     line: true
+    custom?: string
   }
 }
 
@@ -140,6 +142,7 @@ declare module '@mui/material/IconButton' {
     yellow: true
     pink: true
     line: true
+    custom?: string
   }
 }
 
@@ -171,6 +174,7 @@ declare module '@mui/material/Typography' {
     pink: true
     line: true
     text: true
+    custom: true
   }
 }
 
@@ -183,6 +187,7 @@ declare module '@mui/material/TextField' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -195,6 +200,7 @@ declare module '@mui/material/OutlinedInput' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -207,6 +213,7 @@ declare module '@mui/material/InputLabel' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -219,6 +226,7 @@ declare module '@mui/material/Select' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -231,6 +239,7 @@ declare module '@mui/material/Checkbox' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -243,6 +252,7 @@ declare module '@mui/material/Radio' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -254,6 +264,8 @@ declare module '@mui/material/Switch' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -265,6 +277,8 @@ declare module '@mui/material/Slider' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -276,6 +290,8 @@ declare module '@mui/material/Alert' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -287,6 +303,8 @@ declare module '@mui/material/AlertTitle' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -298,6 +316,8 @@ declare module '@mui/material/Avatar' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -309,6 +329,8 @@ declare module '@mui/material/Badge' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -320,6 +342,8 @@ declare module '@mui/material/Chip' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
