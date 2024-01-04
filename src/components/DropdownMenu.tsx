@@ -50,6 +50,7 @@ const DropdownMenu = ({
   url: string
   content: string
   // COMMENT : #460이 머지되어야 사용 가능
+  message?: string // 클립보드에 복사할 메세지 ex) '피어에서 동료를 구해보세요! 이런 프로젝트가 있어요! ${url}'
   setInfoToastMessage?: (message: string) => void
   openInfoToast?: () => void
   setErrorToastMessage?: (message: string) => void
@@ -89,6 +90,20 @@ const DropdownMenu = ({
     } else {
       // setErrorToastMessage('공유하기를 지원하지 않는 브라우저입니다.')
       // openErrorToast()
+      const textarea = document.createElement('textarea')
+      textarea.value = `피어에서 동료를 구해보세요! 이런 프로젝트가 있어요!\n[${title}\n${url}`
+      textarea.id = 'temp'
+      document.body.appendChild(textarea)
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(textarea.value)
+      } else {
+        textarea.select()
+        document.execCommand('copy')
+      }
+
+      document.body.removeChild(textarea)
+      alert('클립보드에 복사되었습니다.')
       handleClose()
     }
   }
