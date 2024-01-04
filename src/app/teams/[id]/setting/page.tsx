@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Card, Stack, Typography } from '@mui/material'
-import SetupPage from './panel/SetupTeam'
+// import SetupPage from './panel/SetupTeam'
 import { useState } from 'react'
 import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
@@ -10,6 +10,7 @@ import useAxiosWithAuth from '@/api/config'
 import { ITeam, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectionRecruit'
 import TeamJobAdd from './panel/TeamJobAdd'
+import SetupInfo from './panel/SetupInfo'
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
@@ -37,7 +38,8 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       {data ? (
         <>
           <RedirectionRecruit id={params.id} data={data} />
-          <SetupPage team={data.team} />
+          <SetupInfo team={data.team} />
+          {/* <SetupPage team={data.team} /> */}
           {data.team.type === TeamType.PROJECT && (
             <TeamJobAdd teamId={params.id} />
           )}
@@ -46,6 +48,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
               sx={{
                 borderRadius: '1rem',
                 p: '1.5rem',
+                height: '20rem',
               }}
             >
               <Stack

@@ -108,27 +108,26 @@ const ApplicantList = ({
 
   if (!data) {
     return (
-      <>
-        <Stack border="1px solid" borderRadius={2} height={400}>
-          <Stack
-            direction="row"
-            display="flex"
-            justifyContent="space-between"
-            p={2}
-          >
-            <Typography fontWeight="bold">신청 대기자</Typography>
-            <Button onClick={close} size="small">
-              X
-            </Button>
-          </Stack>
-          <Typography>신청한 대기자가 없습니다.</Typography>
+      <Card sx={{ p: '1.5rem', borderRadius: '1rem', height: '23rem' }}>
+        <Stack
+          direction="row"
+          display="flex"
+          justifyContent="space-between"
+          alignItems={'center'}
+          mb={3}
+        >
+          <Typography fontWeight="bold">신청 대기자</Typography>
+          <Button onClick={close} size="small">
+            X
+          </Button>
         </Stack>
-      </>
+        <Typography>신청한 대기자가 없습니다.</Typography>
+      </Card>
     )
   }
 
   return (
-    <Card sx={{ p: 3, borderRadius: '10px' }}>
+    <Card sx={{ p: 3, borderRadius: '1rem', height: '23rem' }}>
       <Stack
         direction="row"
         display="flex"
@@ -167,37 +166,24 @@ const ApplicantList = ({
       </Stack>
 
       <Stack direction="row" spacing={1} justifyContent={'center'}>
-        <Button variant="contained" color="primary" onClick={handleAccept}>
-          승인
-        </Button>
-        <Button variant="contained" color="error" onClick={handleReject}>
+        <Button variant="contained" color="red" onClick={handleReject}>
           거절
+        </Button>
+        <Button variant="contained" color="green" onClick={handleAccept}>
+          승인
         </Button>
       </Stack>
 
       <Stack p={2}>
-        <Typography fontWeight="bold">팀 신청 설문</Typography>
+        <Typography fontWeight="bold">인터뷰 답변</Typography>
         <Stack
-          border="1px solid"
           borderRadius={2}
           p={2}
           overflow="auto"
           height={isPc ? 300 : 100}
           ref={scrollRef}
         >
-          {!member && (
-            <Stack borderRadius={2} height={400}>
-              <Stack
-                direction="row"
-                display="flex"
-                justifyContent="space-between"
-                p={2}
-              >
-                <Typography fontWeight="bold">신청 대기자</Typography>
-              </Stack>
-              <Typography>신청한 대기자가 없습니다.</Typography>
-            </Stack>
-          )}
+          {!member && <Typography>신청한 대기자가 없습니다.</Typography>}
           {member && member.interview ? (
             member.interview.map((interview, index) => (
               <Stack key={index} m={1}>
@@ -206,17 +192,7 @@ const ApplicantList = ({
               </Stack>
             ))
           ) : (
-            <Stack borderRadius={2} height={400}>
-              <Stack
-                direction="row"
-                display="flex"
-                justifyContent="space-between"
-                p={2}
-              >
-                <Typography fontWeight="bold">신청 대기자 인터뷰</Typography>
-              </Stack>
-              <Typography>인터뷰가 없습니다.</Typography>
-            </Stack>
+            <Typography>인터뷰가 없습니다.</Typography>
           )}
         </Stack>
       </Stack>

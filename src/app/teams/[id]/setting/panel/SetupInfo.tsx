@@ -13,17 +13,21 @@ import {
 } from '@mui/material'
 import { validation, validationNumber } from './utils'
 import { dueList } from './SetupSelect'
-import { ISetupTeam } from './SetupTeam'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import useModal from '@/hook/useModal'
 import CuButton from '@/components/CuButton'
-import { TeamOperationForm, TeamStatus } from '@/app/teams/types/types'
+import {
+  TeamOperationForm,
+  TeamStatus,
+  TeamType,
+} from '@/app/teams/types/types'
 import useAxiosWithAuth from '@/api/config'
 
 import ClearIcon from '@mui/icons-material/Clear'
 import { Controller, useForm } from 'react-hook-form'
 import { locationData } from '@/api/location'
 import * as styles from './styles'
+
 import {
   GeoClearIcon,
   PencilClearIcon,
@@ -33,7 +37,20 @@ import {
 } from './Icons'
 import useMedia from '@/hook/useMedia'
 
-const SetupStudy = ({ team }: { team: ISetupTeam }) => {
+interface ISetupTeam {
+  id: string
+  type: TeamType
+  name: string
+  maxMember: String
+  status: TeamStatus
+  dueTo: string
+  operationForm: TeamOperationForm
+  region: string[]
+  teamImage: string | null
+  // job: Job[] | null
+}
+
+const SetupInfo = ({ team }: { team: ISetupTeam }) => {
   const { isPc } = useMedia()
   const [preview, setPreview] = useState<string>(
     team.teamImage ? team.teamImage : '/images/teamLogo.png',
@@ -193,7 +210,12 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                       alignItems={'center'}
                       spacing={'0.5rem'}
                     >
-                      <Typography>프로젝트명</Typography>
+                      {team.type === TeamType.PROJECT && (
+                        <Typography>프로젝트명</Typography>
+                      )}
+                      {team.type === TeamType.STUDY && (
+                        <Typography>스터디명</Typography>
+                      )}
                       <TextField
                         maxRows={1}
                         inputProps={{
@@ -261,79 +283,92 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                   direction={isPc ? 'row' : 'column'}
                   alignItems={isPc ? 'center' : ''}
                 >
-                  <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
-                    <PieClearIcon />
+                  <Stack m={'0.5rem'}>
                     <Stack
                       direction={'row'}
-                      alignItems={'center'}
-                      spacing={'0.35rem'}
+                      alignItems={'flex-start'}
+                      spacing={'0.25rem'}
                     >
-                      <Typography>목표기간</Typography>
-                      <Controller
-                        name="dueTo"
-                        control={control}
-                        defaultValue={team.dueTo}
-                        render={({ field }) => (
-                          <Select
-                            size="small"
-                            defaultValue={team.dueTo}
-                            {...field}
-                          >
-                            {dueList.map((dueTo) => (
-                              <MenuItem key={dueTo} value={dueTo}>
-                                {dueTo}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
+                      <PieClearIcon />
+                      <Typography textOverflow={'ellipsis'}>
+                        목표기간
+                      </Typography>
                     </Stack>
+
+                    <Controller
+                      name="dueTo"
+                      control={control}
+                      defaultValue={team.dueTo}
+                      render={({ field }) => (
+                        <Select
+                          size="small"
+                          defaultValue={team.dueTo}
+                          sx={{
+                            m: 0,
+                            minWidth: '8rem',
+                          }}
+                          {...field}
+                        >
+                          {dueList.map((dueTo) => (
+                            <MenuItem key={dueTo} value={dueTo}>
+                              {dueTo}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
+                    />
                   </Stack>
-                  <Stack direction={'row'} alignItems={'center'} m={'0.35rem'}>
-                    <WifiClearIcon />
+                  <Stack m={'0.35rem'}>
                     <Stack
                       direction={'row'}
-                      alignItems={'center'}
+                      alignItems={'flex-start'}
                       spacing={'0.35rem'}
                     >
+                      <WifiClearIcon />
                       <Typography>활동방식</Typography>
-                      <Controller
-                        name="operationForm"
-                        control={control}
-                        defaultValue={team.operationForm}
-                        render={({ field }) => (
-                          <Select
-                            size="small"
-                            defaultValue={team.operationForm}
-                            {...field}
-                          >
-                            {[
-                              TeamOperationForm.OFFLINE,
-                              TeamOperationForm.ONLINE,
-                              TeamOperationForm.MIX,
-                            ].map((operation) => (
-                              <MenuItem key={operation} value={operation}>
-                                {operation === TeamOperationForm.OFFLINE &&
-                                  '오프라인'}
-                                {operation === TeamOperationForm.ONLINE &&
-                                  '온라인'}
-                                {operation === TeamOperationForm.MIX &&
-                                  '온/오프라인'}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
                     </Stack>
+                    <Controller
+                      name="operationForm"
+                      control={control}
+                      defaultValue={team.operationForm}
+                      render={({ field }) => (
+                        <Select
+                          size="small"
+                          defaultValue={team.operationForm}
+                          sx={{
+                            m: 0,
+                            minWidth: '8rem',
+                          }}
+                          {...field}
+                        >
+                          {[
+                            TeamOperationForm.OFFLINE,
+                            TeamOperationForm.ONLINE,
+                            TeamOperationForm.MIX,
+                          ].map((operation) => (
+                            <MenuItem key={operation} value={operation}>
+                              {operation === TeamOperationForm.OFFLINE &&
+                                '오프라인'}
+                              {operation === TeamOperationForm.ONLINE &&
+                                '온라인'}
+                              {operation === TeamOperationForm.MIX &&
+                                '온/오프라인'}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
+                    />
                   </Stack>
-                  <Stack direction={'row'} alignItems={'center'} m={'0.35rem'}>
-                    <GeoClearIcon />
+                  <Stack alignItems={'flex-start'} m={'0.35rem'}>
                     <Stack
                       direction={'row'}
-                      alignItems={'center'}
+                      alignItems={'flex-start'}
                       spacing={'0.35rem'}
                     >
+                      <GeoClearIcon />
                       <Typography>활동지역</Typography>
+                    </Stack>
+                    <Stack direction={'row'} spacing={1}>
                       <Controller
                         name="region.0"
                         control={control}
@@ -342,6 +377,10 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                           <Select
                             size="small"
                             defaultValue={team.region[0]}
+                            sx={{
+                              m: 0,
+                              minWidth: '8rem',
+                            }}
                             {...field}
                           >
                             {locationData.map((region) => (
@@ -360,6 +399,10 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
                           <Select
                             size="small"
                             defaultValue={team.region[1]}
+                            sx={{
+                              m: 0,
+                              minWidth: '8rem',
+                            }}
                             {...field}
                           >
                             {locationData.find(
@@ -427,6 +470,7 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
       </Card>
 
       <Modal
+        title="팀 정보 수정"
         open={isConfirmOpen}
         onClose={closeConfirmModel}
         sx={styles.comfirmModalStyle}
@@ -475,4 +519,4 @@ const SetupStudy = ({ team }: { team: ISetupTeam }) => {
   )
 }
 
-export default SetupStudy
+export default SetupInfo

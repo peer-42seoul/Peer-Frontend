@@ -174,64 +174,66 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
 
   return (
     <>
-      <Grid container spacing={'1rem'} maxHeight={'20rem'} overflow={'auto'}>
-        {members.map((member, index) => (
-          <Grid
-            component="div"
-            key={index}
-            item
-            xs={isPc ? 3 : 6}
-            textAlign="center"
-          >
-            <Box
+      <Stack height={'16rem'} overflow={'auto'}>
+        <Grid container spacing={'1rem'} height={'16rem'}>
+          {members.map((member, index) => (
+            <Grid
               component="div"
-              p={'1rem'}
-              sx={{
-                position: 'relative',
-                backgroundColor: (theme: Theme) =>
-                  theme.palette.background.tertiary,
-              }}
-              borderRadius={'0.5rem'}
+              key={index}
+              item
+              xs={isPc ? 3 : 6}
+              textAlign="center"
             >
-              {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
-              <Button
-                size="small"
+              <Box
+                component="div"
+                p={'1rem'}
                 sx={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  padding: 0,
-                  minWidth: 0.2,
+                  position: 'relative',
+                  backgroundColor: (theme: Theme) =>
+                    theme.palette.background.tertiary,
                 }}
-                onClick={() => handleOpenDelete(member)}
+                borderRadius={'0.5rem'}
               >
-                X
-              </Button>
-              <OthersProfile name={member.name} userId={member.id}>
-                <Avatar sx={{ margin: 'auto' }}>A</Avatar>
-              </OthersProfile>
-              <Typography fontWeight="bold">{member.name}</Typography>
-              <Stack direction="row" sx={{ justifyContent: 'center' }}>
-                <Typography fontSize="small">리더 권한</Typography>
-                <Switch
-                  size="small"
-                  onChange={() => handleGrant(member)}
-                  checked={member.grant === TeamGrant.LEADER ? true : false}
-                />
-              </Stack>
-              {/* 역할이 있을 때만 버튼이 보이게끔 */}
-              {member.job && (
+                {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
                 <Button
-                  variant="contained"
-                  onClick={() => handleChangeModal(member)}
+                  size="small"
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    padding: 0,
+                    minWidth: 0.2,
+                  }}
+                  onClick={() => handleOpenDelete(member)}
                 >
-                  <Typography fontSize="small">역할 변경</Typography>
+                  X
                 </Button>
-              )}
-            </Box>
-          </Grid>
-        ))}
-      </Grid>
+                <OthersProfile name={member.name} userId={member.id}>
+                  <Avatar sx={{ margin: 'auto' }}>A</Avatar>
+                </OthersProfile>
+                <Typography fontWeight="bold">{member.name}</Typography>
+                <Stack direction="row" sx={{ justifyContent: 'center' }}>
+                  <Typography fontSize="small">리더 권한</Typography>
+                  <Switch
+                    size="small"
+                    onChange={() => handleGrant(member)}
+                    checked={member.grant === TeamGrant.LEADER ? true : false}
+                  />
+                </Stack>
+                {/* 역할이 있을 때만 버튼이 보이게끔 */}
+                {member.job && (
+                  <Button
+                    variant="contained"
+                    onClick={() => handleChangeModal(member)}
+                  >
+                    <Typography fontSize="small">역할 변경</Typography>
+                  </Button>
+                )}
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+      </Stack>
 
       <Modal open={isChangeOpen} onClose={handleChangeModal}>
         <Box sx={comfirmModalStyle}>

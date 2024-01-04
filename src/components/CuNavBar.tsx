@@ -63,6 +63,7 @@ const CuNavBar = ({
       )}
       <ToggleButtonGroup
         orientation={isPc ? 'vertical' : 'horizontal'}
+        fullWidth={false}
         value={value}
         sx={style.tabs}
         exclusive
