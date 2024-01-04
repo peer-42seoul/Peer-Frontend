@@ -39,7 +39,15 @@ const IconMenuItem = ({
   )
 }
 
-const DropdownMenu = () => {
+const DropdownMenu = ({
+  title,
+  url,
+  content,
+}: {
+  title: string
+  url: string
+  content: string
+}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const { isPc } = useMedia()
@@ -57,8 +65,9 @@ const DropdownMenu = () => {
     if (navigator.share) {
       navigator
         .share({
-          title: 'WebShare API Demo',
-          url: 'https://codepen.io/ayoisaiah/pen/YbNazJ',
+          title: title,
+          url: url,
+          text: content,
         })
         .then(() => {
           console.log('Thanks for sharing!')
