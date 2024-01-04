@@ -84,3 +84,8 @@ export const actionButtonStyle: SxProps = {
   width: '2.5rem',
   height: '2.5rem',
 }
+
+export const closeIconStyle: SxProps = {
+  width: '1.5rem',
+  height: '1.5rem',
+}

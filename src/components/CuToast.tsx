@@ -156,9 +156,8 @@ const CuToast = ({
             >
               <CloseIcon
                 sx={{
-                  width: '1.5rem',
-                  height: '1.5rem',
-                  color: 'text.assistive', // CloseIcon의 코드 변경이 필요합니다.
+                  ...style.closeIconStyle,
+                  color: 'text.assistive',
                 }}
               />
             </IconButton>
