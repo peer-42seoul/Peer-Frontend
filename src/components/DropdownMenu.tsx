@@ -39,6 +39,7 @@ const IconMenuItem = ({
   )
 }
 
+// TODO : 신고하기 기능 구현, 수정하기 버튼 구현
 const DropdownMenu = ({
   title,
   url,
@@ -47,6 +48,11 @@ const DropdownMenu = ({
   title: string
   url: string
   content: string
+  // COMMENT : #460이 머지되어야 사용 가능
+  setInfoToastMessage?: (message: string) => void
+  openInfoToast?: () => void
+  setErrorToastMessage?: (message: string) => void
+  openErrorToast?: () => void
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -70,14 +76,18 @@ const DropdownMenu = ({
           text: content,
         })
         .then(() => {
-          console.log('Thanks for sharing!')
-          alert('Thanks for sharing!')
           handleClose()
+          // setInfoToastMessage('공유하기가 완료되었습니다.')
+          // openInfoToast()
         })
-        .catch(console.error)
+        .catch((e) => {
+          console.error(e)
+          // setErrorToastMessage('공유를 실패했습니다.')
+          // openErrorToast()
+        })
     } else {
-      console.log('공유하기가 지원되지 않습니다.')
-      alert('공유하기가 지원되지 않습니다.')
+      // setErrorToastMessage('공유하기를 지원하지 않는 브라우저입니다.')
+      // openErrorToast()
       handleClose()
     }
   }

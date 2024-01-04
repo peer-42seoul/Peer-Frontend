@@ -17,7 +17,7 @@ import {
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Members from './Members'
-import DropdownMenu from './DropdownMenu'
+import DropdownMenu from '@/components/DropdownMenu'
 import useMedia from '@/hook/useMedia'
 import * as style from './HitchhikingCard.style'
 
