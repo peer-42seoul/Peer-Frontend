@@ -6,6 +6,7 @@ import MoreHorizontalIcon from '@/icons/MoreHorizontalIcon'
 import ReportIcon from '@/icons/ReportIcon'
 import useMedia from '@/hook/useMedia'
 import * as style from './DropdownMenu.style'
+import { Fade } from '@mui/material'
 
 const IconMenuItem = ({
   icon,
@@ -128,6 +129,8 @@ const DropdownMenu = ({
           dense: true,
           sx: style.dropdownMenuStyle,
         }}
+        TransitionComponent={Fade}
+        TransitionProps={{ timeout: 300 }}
       >
         <MenuItem
           onClick={handleClose}
@@ -136,6 +139,8 @@ const DropdownMenu = ({
           <MoreHorizontalIcon
             sx={{
               ...style.dropdownMenuIconStyleBase,
+              position: 'absolute',
+              right: '0.6rem',
               transform: isPc || anchorEl ? 'rotate(0deg)' : 'rotate(90deg)',
               color: 'text.alternative',
             }}

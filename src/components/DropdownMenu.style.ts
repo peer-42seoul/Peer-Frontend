@@ -5,6 +5,7 @@ export const dropdownMenuStyle: SxProps = {
   boxSizing: 'border-box',
   paddingTop: 0,
   paddingBottom: '1rem',
+  backgroundColor: 'background.secondary',
 }
 
 export const dropdownMenuIconStyleBase: SxProps = {
