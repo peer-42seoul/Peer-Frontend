@@ -10,11 +10,11 @@ import {
   InputAdornment,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
-import SearchIcon from '@mui/icons-material/Search'
 import useMedia from '@/hook/useMedia'
 import NoticeList from './panel/NoticeList'
 import CuTextField from '@/components/CuTextField'
 import CuButton from '@/components/CuButton'
+import SearchIcon from '@/icons/SearchIcon'
 
 const SearchPopover = ({
   setKeyword,
@@ -40,7 +40,7 @@ const SearchPopover = ({
         onClick={handleOpenPopover}
         aria-describedby={'search-popover'}
       >
-        <SearchIcon />
+        <SearchIcon sx={{ color: 'text.normal' }} />
       </IconButton>
       <Popover
         id={'search-popover'}

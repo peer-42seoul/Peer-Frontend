@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { SizeType, WidgetType } from '@/types/ITeamDnDLayout'
 import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
 import { useCallback, useState } from 'react'
@@ -9,6 +9,11 @@ import CalenderWidget from '@/app/teams/[id]/panel/widgets/CalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+import useMedia from '@/hook/useMedia'
+import { SizeButton } from '@/app/teams/[id]/panel/widgets/TeamDnD.style'
 
 interface ITeamDnDWidgetListProps {
   setIsDropping: (isDropping: boolean) => void
@@ -34,6 +39,7 @@ const WidgetList = ({
   setSize,
   setDroppingItem,
 }: ITeamDnDWidgetListProps) => {
+  const { isPc, isTablet } = useMedia()
   /* 툴 박스의 사이즈 관리 */
   const [toolSize, setToolSize] = useState<IToolSizeType>({
     notice: 'S',
@@ -109,64 +115,105 @@ const WidgetList = ({
     [toolSize],
   )
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: isTablet ? 2 : isPc ? 3 : 1,
+    slidesToScroll: 1,
+  }
+
   return (
     <Box
-      bgcolor={'skyblue'}
-      padding={1}
       width={'100%'}
       sx={{
-        overflowX: 'auto',
+        backgroundColor: 'background.secondary',
       }}
     >
-      <Stack direction={'row'} gap={1}>
-        {/*툴 박스 렌더링*/}
-        {typeList?.map((typeValue: WidgetType) => (
-          <Box key={typeValue} bgcolor={'lightgray'}>
-            {/*사이즈 버튼 렌더링*/}
-            <Stack direction={'row'} gap={1}>
-              {['S', 'M', 'L'].map((size) => (
-                <Button
-                  sx={{
-                    minWidth: '30px',
-                    width: '30px',
-                    height: '30px',
-                  }}
-                  size={'small'}
-                  key={size}
-                  variant="outlined"
-                  onClick={() => {
-                    setToolSize({ ...toolSize, [typeValue]: size as SizeType })
-                  }}
-                >
-                  {size}
-                </Button>
-              ))}
-            </Stack>
-            <Stack
-              alignItems={'center'}
-              justifyContent={'center'}
-              flexDirection={'row'}
-            >
-              {/*react grid layout에서 drop 가능한 아이템으로 만들기*/}
+      <Stack padding={'1rem'}>
+        <Typography variant={'Body2Emphasis'}>
+          원하는 위젯과 사이즈를 선택해서 원하는 위치에 드래그하세요.
+        </Typography>
+        <Slider {...settings}>
+          {/*툴 박스 렌더링*/}
+          {typeList?.map((typeValue: WidgetType) => (
+            <div key={typeValue}>
               <Stack
-                key={typeValue}
-                margin={1}
-                flexDirection={'row'}
-                height={200 * 0.38 * sizeRatio[toolSize[typeValue] ?? 'S'].w}
-                width={200 * 0.38 * sizeRatio[toolSize[typeValue] ?? 'S'].h}
-                className="droppable-element"
-                draggable={true}
-                unselectable="on"
-                onDragStart={(e) => onDragStart(e, typeValue)}
-                onDragEnd={() => {
-                  setIsDropping(false)
-                }}
+                maxWidth={'15.25rem'}
+                maxHeight={'15.25rem'}
+                padding={'1rem'}
+                spacing={'1rem'}
+                justifyContent={'center'}
               >
-                {getWidget(typeValue)}
+                {/*사이즈 버튼 렌더링*/}
+                <Stack flexDirection={'row'} justifyContent={'space-between'}>
+                  <Typography variant={'Body2Emphasis'}>{typeValue}</Typography>
+                  <Stack direction={'row'} spacing={'0.38rem'}>
+                    {['S', 'M', 'L'].map((size) => (
+                      <Button
+                        sx={{
+                          ...SizeButton,
+                          backgroundColor:
+                            toolSize[typeValue] === size
+                              ? 'line.base'
+                              : undefined,
+                        }}
+                        size={'small'}
+                        key={size}
+                        variant="outlined"
+                        onClick={() => {
+                          setToolSize({
+                            ...toolSize,
+                            [typeValue]: size as SizeType,
+                          })
+                        }}
+                      >
+                        <Typography
+                          variant={'Body2'}
+                          color={'text.alternative'}
+                        >
+                          {size}
+                        </Typography>
+                      </Button>
+                    ))}
+                  </Stack>
+                </Stack>
+                <Stack alignItems={'center'}>
+                  <Stack
+                    bgcolor={'background.primary'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    width={'10rem'}
+                    height={'10rem'}
+                    borderRadius={'0.44rem'}
+                  >
+                    {/*react grid layout에서 drop 가능한 아이템으로 만들기*/}
+                    <Stack
+                      key={typeValue}
+                      margin={1}
+                      flexDirection={'row'}
+                      height={`calc(4rem * ${
+                        sizeRatio[toolSize[typeValue] || 'S'].h
+                      })`}
+                      width={`calc(4rem * ${
+                        sizeRatio[toolSize[typeValue] ?? 'S'].w
+                      })`}
+                      className="droppable-element"
+                      draggable={true}
+                      unselectable="on"
+                      onDragStart={(e) => onDragStart(e, typeValue)}
+                      onDragEnd={() => {
+                        setIsDropping(false)
+                      }}
+                    >
+                      {getWidget(typeValue)}
+                    </Stack>
+                  </Stack>
+                </Stack>
               </Stack>
-            </Stack>
-          </Box>
-        ))}
+            </div>
+          ))}
+        </Slider>
       </Stack>
     </Box>
   )

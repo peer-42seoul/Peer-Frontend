@@ -1,7 +1,11 @@
 'use client'
-
-// import { useDarkMode } from '@/states/useDarkMode'
-import { ThemeProvider, alpha, createTheme } from '@mui/material/styles'
+import { useDarkMode } from '@/states/useDarkMode'
+import {
+  ThemeProvider,
+  createTheme,
+  StyledEngineProvider,
+} from '@mui/material/styles'
+import { useEffect } from 'react'
 
 declare module '@mui/material/styles' {
   // typography variant 추가
@@ -320,9 +324,15 @@ declare module '@mui/material/Chip' {
 }
 
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  // const mode = useDarkMode().darkMode
-
   let theme = createTheme()
+
+  const { theme: colorTheme, getModeFromLocalStorage } = useDarkMode()
+
+  useEffect(() => {
+    getModeFromLocalStorage()
+  }, [])
+
+  theme = createTheme(theme, colorTheme)
 
   theme = createTheme(theme, {
     breakpoints: {
@@ -475,7 +485,6 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       },
     },
     palette: {
-      mode: 'dark',
       red: theme.palette.augmentColor({
         color: {
           main: '#FF5833',
@@ -536,27 +545,6 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         },
         name: 'pink',
       }),
-      background: {
-        primary: '#060623',
-        secondary: '#18182B',
-        tertiary: '#22223A',
-        paper: '#060623',
-        default: '#060623',
-      },
-      line: {
-        base: '#35373E',
-        alternative: '#2C2E35',
-      },
-      text: {
-        strong: '#FFFFFF',
-        primary: '#F6F6F6',
-        normal: '#F6F6F6',
-        alternative: '#9B9B9B',
-        secondary: '#9B9B9B',
-        assistive: '#42444C',
-        disable: '#1E2024',
-        disabled: alpha('#9B9B9B', 0.5), // 기존에 디자이너님의 의도하신 것에 영향이 있을 수 있으나, textfield disabled 상태에서의 텍스트 색상을 위해 고쳤습니다.
-      },
       primary: {
         main: '#6F62FE',
         light: '#A39BFD',
@@ -773,7 +761,11 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
     },
   })
 
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </StyledEngineProvider>
+  )
 }
 
 export default MuiThemeProvider
