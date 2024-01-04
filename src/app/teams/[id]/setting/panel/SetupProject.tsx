@@ -32,8 +32,10 @@ import {
   TargetClearIcon,
   WifiClearIcon,
 } from './Icons'
+import useMedia from '@/hook/useMedia'
 
 const SetupProject = ({ team }: { team: ISetupTeam }) => {
+  const { isPc } = useMedia()
   const [preview, setPreview] = useState<string>(
     team.teamImage ? team.teamImage : '/images/teamLogo.png',
   )
@@ -136,9 +138,22 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
       <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
         <Typography>팀상태</Typography>
         <form ref={sendRef} onSubmit={onSubmit}>
-          <Box sx={{ m: '0.5rem', p: '0.5rem' }}>
-            <Stack direction={'row'} alignItems={'center'}>
-              <Stack direction={'row'} alignItems={'center'} spacing={'0.5rem'}>
+          <Box
+            sx={{
+              m: '0.5rem',
+              p: '0.5rem',
+            }}
+          >
+            <Stack
+              direction={isPc ? 'row' : 'column'}
+              alignItems={isPc ? 'center' : ''}
+            >
+              <Stack
+                direction={'row'}
+                alignItems={'center'}
+                spacing={'0.5rem'}
+                p={'0.5rem'}
+              >
                 <Box
                   width={[56, 100]}
                   height={[56, 100]}
@@ -168,7 +183,10 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
                 </Box>
               </Stack>
               <Stack>
-                <Stack direction={'row'} alignItems={'center'}>
+                <Stack
+                  direction={isPc ? 'row' : 'column'}
+                  alignItems={isPc ? 'center' : ''}
+                >
                   <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
                     <PencilClearIcon />
                     <Stack
@@ -240,7 +258,10 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
                   </Stack>
                 </Stack>
 
-                <Stack direction={'row'} alignItems={'center'}>
+                <Stack
+                  direction={isPc ? 'row' : 'column'}
+                  alignItems={isPc ? 'center' : ''}
+                >
                   <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
                     <PieClearIcon />
                     <Stack
@@ -248,7 +269,9 @@ const SetupProject = ({ team }: { team: ISetupTeam }) => {
                       alignItems={'center'}
                       spacing={'0.35rem'}
                     >
-                      <Typography>목표기간</Typography>
+                      <Typography textOverflow={'ellipsis'}>
+                        목표기간
+                      </Typography>
                       <Controller
                         name="dueTo"
                         control={control}
