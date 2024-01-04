@@ -1,9 +1,9 @@
 'use client'
 
 import { useMediaQuery, IconButton, Modal, Box } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
 import useModal from '@/hook/useModal'
 import SearchBody from '../../search/panel/SearchBody'
+import { SearchIcon } from '@/icons'
 
 const StyleMobileSearch = {
   position: 'absolute' as 'absolute',
@@ -26,7 +26,7 @@ const SearchPc = () => {
   return (
     <>
       <IconButton color="inherit" aria-label="menu" onClick={openModal}>
-        <SearchIcon color="primary" />
+        <SearchIcon sx={{ color: 'text.alternative' }} />
       </IconButton>
       {/* NOTE : 기본 모달과 형태가 달라 CuModal을 사용하지 않았습니다. */}
       <Modal
@@ -48,7 +48,7 @@ const SearchMobile = () => {
   return (
     <>
       <IconButton color="inherit" aria-label="menu" onClick={openModal}>
-        <SearchIcon />
+        <SearchIcon sx={{ color: 'text.normal' }} />
       </IconButton>
       {/* NOTE : 기본 모달과 형태가 달라 CuModal을 사용하지 않았습니다. */}
       <Modal

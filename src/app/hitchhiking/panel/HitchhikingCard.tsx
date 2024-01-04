@@ -18,6 +18,8 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Members from './Members'
 import DropdownMenu from './DropdownMenu'
+import useMedia from '@/hook/useMedia'
+import * as style from './HitchhikingCard.style'
 
 interface IHitchhikingCardBack {
   content: string
@@ -31,6 +33,7 @@ const HitchhikingCardBack = ({
   onClick,
   flipped,
   isProject, // title,
+  cardWidth,
 }: {
   postId: number
   sx?: SxProps
@@ -38,12 +41,21 @@ const HitchhikingCardBack = ({
   flipped?: boolean
   isProject?: boolean
   title: string
+  cardWidth: number
 }) => {
   const [data, setData] = useState<IHitchhikingCardBack | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
+  const { isPc } = useMedia()
 
-  // const axiosInstance = useAxiosWithAuth()
+  const getHeight = (originHeight: number) => {
+    return `${(cardWidth * originHeight) / 328 / 16}rem`
+  }
+
+  const getLineCount = (originHeight: number, lineHeight: number) => {
+    const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
+    return lineCount ? lineCount : 1
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,7 +90,6 @@ const HitchhikingCardBack = ({
     <Card
       sx={{
         ...sx,
-        backgroundColor: 'background.primary',
         transform: 'rotateY(180deg) translate(50%, 0)',
         backfaceVisibility: 'hidden',
         padding: '1rem',
@@ -108,13 +119,8 @@ const HitchhikingCardBack = ({
                   </Typography>
                 }
                 sx={{
-                  height: '1.25rem',
-                  padding: '0 6px',
-                  backgroundColor: 'background.tertiary',
-                  borderRadius: '2px',
-                  '& .MuiChip-label': {
-                    padding: '0px',
-                  },
+                  ...style.cardChipStyleBase,
+                  height: isPc ? '1.5rem' : getHeight(24),
                 }}
               />
             </CardContent>
@@ -128,14 +134,11 @@ const HitchhikingCardBack = ({
                 variant="Body1"
                 color={'text.normal'}
                 sx={{
-                  width: '100%',
-                  overflow: 'hidden',
-                  height: '46px',
-                  lineHeight: '22.5px',
-                  textOverflow: 'ellipsis',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2 /* 라인수 */,
-                  WebkitBoxOrient: 'vertical',
+                  ...style.cardTitleStyleBase,
+                  height: isPc ? '46px' : getLineCount(46, 22.5) * 22.5,
+                  WebkitLineClamp: isPc
+                    ? 2
+                    : getLineCount(46, 22.5) /* 라인수 */,
                 }}
               >
                 {/* {title} */}
@@ -157,15 +160,11 @@ const HitchhikingCardBack = ({
             <Typography
               variant="Caption"
               color={'text.alternative'}
+              // ref={containerRef}
               sx={{
-                width: '100%',
-                overflow: 'hidden',
-                height: '12rem',
-                lineHeight: '1.2rem',
-                textOverflow: 'ellipsis',
-                display: '-webkit-box',
-                WebkitLineClamp: 10 /* 라인수 */,
-                WebkitBoxOrient: 'vertical',
+                ...style.cardContentStyleBase,
+                height: isPc ? '11.25rem' : getLineCount(180, 18) * 18,
+                WebkitLineClamp: isPc ? 10 : getLineCount(180, 18) /* 라인수 */,
               }}
             >
               {data.content.split('\n').map((line) => {
@@ -191,15 +190,7 @@ const HitchhikingCardBack = ({
             <Button
               onClick={handleSeeAll}
               variant="contained"
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                marginBottom: '0.75rem',
-                padding: '0.75rem 1rem',
-                height: '2.25rem',
-              }}
+              sx={style.cardMoreButtonStyle}
             >
               전체 보기
             </Button>
@@ -243,6 +234,20 @@ const HitchhikingCard = ({
   isProject?: boolean
 }) => {
   const [isFlipped, setIsFlipped] = useState(false)
+  const [cardWidth, setCardWidth] = useState(0)
+
+  useEffect(() => {
+    setCardWidth(window.innerWidth * 0.9)
+    const handleResize = () => {
+      setCardWidth(window.innerWidth * 0.9)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const handleMouseUp = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -275,6 +280,7 @@ const HitchhikingCard = ({
           transform: 'translate(-50%, 0)',
         }}
         onClick={handleMouseUp}
+        cardWidth={cardWidth}
       />
       <HitchhikingCardBack
         postId={postId}
@@ -283,6 +289,7 @@ const HitchhikingCard = ({
         flipped={isFlipped}
         isProject={isProject}
         title={title}
+        cardWidth={cardWidth}
       />
     </div>
   )
