@@ -5,6 +5,7 @@ import {
   CardMedia,
   Stack,
   Typography,
+  alpha,
 } from '@mui/material'
 import React from 'react'
 import { IPostCard } from '@/types/IPostCard'
@@ -25,7 +26,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
     onClick,
     onMouseUp,
     onTouchEnd,
-    cardWidth, // 모바일의 경우 width 기준으로 크기 조절을 하므로 무조건 있어야 합니다.
+    cardWidth, // width 기준으로 text overflow를 조절하므로 꼭 필요합니다.
   }: IPostCard,
   ref,
 ) {
@@ -99,13 +100,6 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
             }}
           >
             {tagList?.map(({ name, color }: ITag, idx: number) => {
-              const r = parseInt(color.slice(1, 3), 16),
-                g = parseInt(color.slice(3, 5), 16),
-                b = parseInt(color.slice(5, 7), 16)
-              const alpha = '0.3'
-              const backgroundColor =
-                'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')'
-
               return (
                 <Chip
                   label={
@@ -116,7 +110,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
                   size="small"
                   key={idx}
                   style={{
-                    backgroundColor: backgroundColor,
+                    backgroundColor: alpha(color, 0.3),
                     borderRadius: 2,
                     height: '1.25rem',
                   }}
