@@ -47,6 +47,19 @@ const mockJobs: Job[] = [
   },
 ]
 
+interface TableColumn {
+  id: string
+  label: string
+  minWidth: number
+}
+
+const tableColumn: TableColumn[] = [
+  { id: 'name', label: '역할 이름', minWidth: 170 },
+  { id: 'current', label: '현재 인원', minWidth: 100 },
+  { id: 'max', label: '최대 인원', minWidth: 100 },
+  { id: 'delete', label: '', minWidth: 100 },
+]
+
 interface Props {
   teamId: string
 }
@@ -86,22 +99,35 @@ const TeamJobAdd = ({ teamId }: Props) => {
           sx={{
             p: 2,
             borderRadius: '1rem',
+
             backgroundColor: (theme: Theme) =>
               theme.palette.background.tertiary,
           }}
         >
-          <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+          <TableContainer
+            component={Paper}
+            sx={{ overflowX: 'auto', height: '18rem' }}
+          >
             <Table sx={{ minWidth: '25rem' }} stickyHeader>
               <TableHead>
-                <TableCell align="center">이름</TableCell>
-                <TableCell align="center">현재 인원</TableCell>
-                <TableCell align="center">최대 인원</TableCell>
-                <TableCell align="center"></TableCell>
+                <TableRow>
+                  {tableColumn.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align="center"
+                      sx={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
               </TableHead>
               <TableBody>
                 {jobs.map((job) => (
                   <TableRow key={job.id}>
-                    <TableCell align="center">{job.name}</TableCell>
+                    <TableCell component={'th'} scope="row" align="center">
+                      {job.name}
+                    </TableCell>
                     <TableCell align="center">{job.current}</TableCell>
                     <TableCell align="center">
                       <IconButton
