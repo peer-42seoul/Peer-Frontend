@@ -28,6 +28,8 @@ const Hitchhiking = () => {
 
   const handleChange = () => {
     setCardList([])
+    setDraggedCardList([])
+    setPage(1)
     setIsProject((prev) => !prev)
   }
 
