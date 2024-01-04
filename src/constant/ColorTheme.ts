@@ -26,6 +26,10 @@ export const darkTheme = createTheme({
       disable: '#292C32',
       disabled: alpha('#9B9B9B', 0.5), // 기존에 디자이너님의 의도하신 것에 영향이 있을 수 있으나, textfield disabled 상태에서의 텍스트 색상을 위해 고쳤습니다.
     },
+    custom: {
+      main: '#0F0F27',
+      mobileNavTab: '#0F0F27', // 모바일 네비게이션 탭 배경색
+    },
   },
 })
 
@@ -53,6 +57,10 @@ export const lightTheme = createTheme({
       assistive: '#AEB1B9',
       disable: '#D7D9DE',
       disabled: alpha('#878B93', 0.5), // 기존에 디자이너님의 의도하신 것에 영향이 있을 수 있으나, textfield disabled 상태에서의 텍스트 색상을 위해 고쳤습니다.
+    },
+    custom: {
+      main: '#F7F8FA',
+      mobileNavTab: '#F7F8FA', // 모바일 네비게이션 탭 배경색. light 관련 사항은 여기 피그마 코멘트 참고
     },
   },
 })
