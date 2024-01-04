@@ -32,10 +32,8 @@ const HitchhikingCardBack = ({
   sx,
   onClick,
   flipped,
-  isProject,
+  isProject, // title,
   cardWidth,
-  title,
-  currentDomain,
 }: {
   postId: number
   sx?: SxProps
@@ -44,7 +42,6 @@ const HitchhikingCardBack = ({
   isProject?: boolean
   title: string
   cardWidth: number
-  currentDomain: string
 }) => {
   const [data, setData] = useState<IHitchhikingCardBack | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -121,11 +118,7 @@ const HitchhikingCardBack = ({
               />
             </CardContent>
             <CardActionArea sx={{ padding: 0, width: 'auto' }}>
-              <DropdownMenu
-                title={title}
-                url={`${currentDomain}/recruit/${postId}`}
-                content={data.content}
-              />
+              <DropdownMenu />
             </CardActionArea>
           </Stack>
           <CardHeader
@@ -235,14 +228,9 @@ const HitchhikingCard = ({
 }) => {
   const [isFlipped, setIsFlipped] = useState(false)
   const [cardWidth, setCardWidth] = useState(0)
-  const [currentDomain, setCurrentDomain] = useState('')
   const { isPc } = useMedia()
 
   useEffect(() => {
-    // 현재 도메인 설정
-    setCurrentDomain(window.location.origin)
-
-    // 카드 너비 설정
     setCardWidth(
       isPc ? window.innerWidth * 0.9 : (window.innerHeight * 0.8 * 328) / 800,
     )
@@ -301,7 +289,6 @@ const HitchhikingCard = ({
         isProject={isProject}
         title={title}
         cardWidth={cardWidth}
-        currentDomain={currentDomain}
       />
     </div>
   )
