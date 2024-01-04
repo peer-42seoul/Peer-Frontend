@@ -30,10 +30,6 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
   ref,
 ) {
   const { isPc } = useMedia()
-  const getHeight = (originHeight: number) => {
-    const height = (cardWidth * originHeight) / 328 / 16
-    return height > 2 ? `2rem` : `${height}rem`
-  }
 
   const getLineCount = (originHeight: number, lineHeight: number) => {
     const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
@@ -56,10 +52,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
         component="img"
         image={image}
         alt="post thumbnail"
-        sx={{
-          ...style.cardMediaStyleBase,
-          height: isPc ? 'calc(80svh * 251 /800)' : 'calc(90vw * 251 / 328)',
-        }}
+        sx={isPc ? style.cardMediaPcStyle : style.cardMediaMobileStyle}
       />
       <Stack
         sx={{ p: '1rem', pt: '0.75rem' }}
@@ -71,11 +64,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
             <CuAvatar
               aria-label="profile"
               src={authorImage}
-              sx={{
-                width: isPc ? '2rem' : getHeight(32),
-                height: isPc ? '2rem' : getHeight(32),
-                boxSizing: 'border-box',
-              }}
+              sx={style.cardAuthorAvatarStyle}
             />
           }
           title={
