@@ -41,6 +41,7 @@ const IconMenuItem = ({
 }
 
 // TODO : 신고하기 기능 구현, 수정하기 버튼 구현
+// TODO : toast 동작하도록 처리
 const DropdownMenu = ({
   title,
   url,
@@ -88,22 +89,29 @@ const DropdownMenu = ({
           // openErrorToast()
         })
     } else {
-      // setErrorToastMessage('공유하기를 지원하지 않는 브라우저입니다.')
-      // openErrorToast()
-      const textarea = document.createElement('textarea')
-      textarea.value = `피어에서 동료를 구해보세요! 이런 프로젝트가 있어요!\n[${title}\n${url}`
-      textarea.id = 'temp'
-      document.body.appendChild(textarea)
+      // COMMENT : #460이 머지된 이후 message를 사용하도록 수정
+      const copyText = `피어에서 동료를 구해보세요! 이런 프로젝트가 있어요:)\n[${title}]\n${url}\n`
 
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(textarea.value)
+        navigator.clipboard
+          .writeText(copyText)
+          .then(() => alert('클립보드에 복사되었습니다.'))
+          .catch((e) => {
+            console.error(e)
+            // setErrorToastMessage('클립보드에 복사하지 못했습니다.')
+            // openErrorToast()
+          })
       } else {
+        const textarea = document.createElement('textarea')
+        textarea.value = copyText
+        textarea.id = 'temp'
+        document.body.appendChild(textarea)
         textarea.select()
         document.execCommand('copy')
+        document.body.removeChild(textarea)
+        alert('클립보드에 복사되었습니다.')
       }
 
-      document.body.removeChild(textarea)
-      alert('클립보드에 복사되었습니다.')
       handleClose()
     }
   }
