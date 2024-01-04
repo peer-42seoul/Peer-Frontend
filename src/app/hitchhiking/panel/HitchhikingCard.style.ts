@@ -52,6 +52,8 @@ export const cardChipStyleBase: SxProps = {
   padding: '0 6px',
   backgroundColor: 'background.tertiary',
   borderRadius: '2px',
+  height: 'calc(90vw * 24 / 328)',
+  maxHeight: '1.5rem',
   '& .MuiChip-label': {
     padding: '0px',
   },

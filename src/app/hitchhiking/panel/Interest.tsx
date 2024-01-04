@@ -31,6 +31,7 @@ const Interest = ({ id }: { id?: number }) => {
       })
     } catch (e) {
       console.log('error', e)
+      // TODO: error handling
     }
   }
 

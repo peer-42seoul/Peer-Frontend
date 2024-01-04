@@ -39,7 +39,6 @@ const Members = ({
   members: Array<{ url: string }>
   recruitmentQuota: number
 }) => {
-  console.log(recruitmentQuota - members.length)
   const vacancies = []
   for (
     let i = 0;

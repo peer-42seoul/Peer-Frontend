@@ -27,9 +27,6 @@ const CardStack = ({
   const [dragged, setDragged] = useState(false)
   const { isPc } = useMedia()
 
-  console.log('cardList')
-  console.log(cardList)
-
   const checkDragDirection = (x: number, y: number) => {
     if (Math.abs(x) > Math.abs(y)) {
       return x < 0 ? ESwipeDirection.left : ESwipeDirection.right
@@ -54,6 +51,7 @@ const CardStack = ({
       return
     }
     removeCard(recruit_id)
+    // TODO: backend api 연결 시 콘솔 삭제 및 api 호출
     console.log(`dislike api 호출 pathValue: ${recruit_id}, title: ${title}`)
 
     setDragged(false)
@@ -97,7 +95,6 @@ const CardStack = ({
         </motion.div>
         <AnimatePresence>
           {cardList.map((card, i) => {
-            console.log(`i : ${i}`)
             if (cardList.length > 2 && cardList.length - i > 2) return null
             return (
               <motion.div
