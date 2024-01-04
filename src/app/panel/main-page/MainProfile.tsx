@@ -21,22 +21,26 @@ const MainProfile = () => {
   return (
     isClient && (
       <Stack
-        height="150px"
+        height="12.5rem"
+        borderRadius={'0.75rem'}
         alignItems="center"
         justifyContent={'center'}
         bgcolor={'background.secondary'}
+        gap={'0.375rem'}
       >
         <Avatar
           alt="avatar"
           src={data?.profileImageUrl}
-          sx={{ width: 56, height: 56 }}
+          sx={{ width: '4rem', height: '4rem' }}
         />
         {isLogin ? (
           <>
-            <Typography>{data?.nickname}</Typography>
+            <Typography variant={'Body1'}>{data?.nickname}</Typography>
             <Typography>{data?.association}</Typography>
             <Link style={{ textDecoration: 'none' }} href={'/my-page/profile'}>
-              내 프로필 보기
+              <Typography variant={'Tag'} color={'text.alternative'}>
+                내 프로필 보기
+              </Typography>
             </Link>
           </>
         ) : (

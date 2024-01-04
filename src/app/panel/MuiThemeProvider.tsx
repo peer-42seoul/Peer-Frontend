@@ -1,7 +1,11 @@
 'use client'
-
-// import { useDarkMode } from '@/states/useDarkMode'
-import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { useDarkMode } from '@/states/useDarkMode'
+import {
+  ThemeProvider,
+  createTheme,
+  StyledEngineProvider,
+} from '@mui/material/styles'
+import { useEffect } from 'react'
 
 declare module '@mui/material/styles' {
   // typography variant 추가
@@ -50,6 +54,8 @@ declare module '@mui/material/styles' {
     base?: string
     assistive?: string
     disable?: string
+    // 컬러 팔레트에 없는 컬러를 추가함.
+    mobileNavTab?: string
   }
 
   interface SimplePaletteColorOptions {
@@ -81,6 +87,7 @@ declare module '@mui/material/styles' {
     yellow: Palette['primary']
     pink: Palette['primary']
     line: Palette['primary']
+    custom: Palette['primary']
   }
 
   interface PaletteOptions {
@@ -92,6 +99,7 @@ declare module '@mui/material/styles' {
     yellow?: PaletteOptions['primary']
     pink?: PaletteOptions['primary']
     line?: PaletteOptions['primary']
+    custom?: PaletteOptions['primary']
   }
 
   interface TypeText {
@@ -316,9 +324,15 @@ declare module '@mui/material/Chip' {
 }
 
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  // const mode = useDarkMode().darkMode
-
   let theme = createTheme()
+
+  const { theme: colorTheme, getModeFromLocalStorage } = useDarkMode()
+
+  useEffect(() => {
+    getModeFromLocalStorage()
+  }, [])
+
+  theme = createTheme(theme, colorTheme)
 
   theme = createTheme(theme, {
     breakpoints: {
@@ -471,7 +485,6 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       },
     },
     palette: {
-      mode: 'dark',
       red: theme.palette.augmentColor({
         color: {
           main: '#FF5833',
@@ -532,31 +545,14 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         },
         name: 'pink',
       }),
-      background: {
-        primary: '#060623',
-        secondary: '#18182B',
-        tertiary: '#22223A',
-        paper: '#060623',
-        default: '#060623',
-      },
-      line: {
-        base: '#35373E',
-        alternative: '#2C2E35',
-      },
-      text: {
-        strong: '#FFFFFF',
-        primary: '#F6F6F6',
-        normal: '#F6F6F6',
-        alternative: '#9B9B9B',
-        secondary: '#9B9B9B',
-        assistive: '#42444C',
-        disable: '#292C32',
-        disabled: '#292C32',
-      },
       primary: {
         main: '#6F62FE',
         light: '#A39BFD',
         dark: '#877CFE',
+      },
+      // 컬러 팔레트에 없는 컬러를 추가함.
+      custom: {
+        mobileNavTab: '#0F0F27',
       },
     },
   })
@@ -765,7 +761,11 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
     },
   })
 
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </StyledEngineProvider>
+  )
 }
 
 export default MuiThemeProvider

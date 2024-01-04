@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import 'react-grid-layout/css/styles.css'
 import { ITeamDnDLayout, SizeType, WidgetType } from '@/types/ITeamDnDLayout'
@@ -28,39 +28,28 @@ const TeamDnD = ({ id }: { id: string }) => {
   const [size, setSize] = useState<SizeType>('S')
   const axiosInstance = useAxiosWithAuth()
   const { trigger, data, error, isMutating } = useSWRMutation<ITeamDnDLayout>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/temp/dnd/read`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/read`,
     (url: string) =>
       axiosInstance
         .post(url, { teamId: id, type: 'team' })
         .then((res) => res.data),
   )
-
   useEffect(() => {
     trigger()
   }, [])
 
-  if (!data && isMutating) return <>로딩중입니다</>
-  if (!data && error) return <>에러 발생</>
+  // api 에러 생길 시 주석 처리 필요
+  if (!data && isMutating) return <Typography>로딩중입니다...</Typography>
+  if (!data && error) return <Typography>에러 발생</Typography>
 
   return (
     <Stack
       sx={{
         width: '100%',
         height: '100%',
-        border: 1.55,
-        padding: 2,
       }}
-      bgcolor={'beige'}
+      spacing={4}
     >
-      {edit && (
-        /* 툴 박스 리스트 */
-        <WidgetList
-          setIsDropping={setIsDropping}
-          setType={setType}
-          setSize={setSize}
-          setDroppingItem={setDroppingItem}
-        />
-      )}
       {/*dnd 렌더링*/}
       <WidgetsRender
         id={id}
@@ -72,7 +61,17 @@ const TeamDnD = ({ id }: { id: string }) => {
         droppingItem={droppingItem}
         edit={edit}
         setEdit={setEdit}
-      />
+      >
+        {/*툴 박스 리스트*/}
+        {edit && (
+          <WidgetList
+            setIsDropping={setIsDropping}
+            setType={setType}
+            setSize={setSize}
+            setDroppingItem={setDroppingItem}
+          />
+        )}
+      </WidgetsRender>
     </Stack>
   )
 }
