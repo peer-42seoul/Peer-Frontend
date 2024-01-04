@@ -6,14 +6,19 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
 import CardContainer from './panel/CardContainer'
-import CuToggle from '@/components/CuToggle'
+import CuTypeToggle from '@/components/CuTypeToggle'
 import useMedia from '@/hook/useMedia'
 import Interest from './panel/Interest'
+// import CuButton from '@/components/CuButton'
+import * as cardStyle from './panel/HitchhikingCard.style'
+// import * as style from './Hitchhiking.style'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(false)
   const [cardList, setCardList] = useState<Array<IMainCard>>([])
+  const [draggedCardList, setDraggedCardList] = useState<IMainCard[]>([])
+  console.log(draggedCardList)
 
   const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
@@ -22,6 +27,11 @@ const Hitchhiking = () => {
     }&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
     defaultGetFetcher,
   )
+
+  const handleChange = () => {
+    setCardList([])
+    setIsProject((prev) => !prev)
+  }
 
   useEffect(() => {
     if (!isLoading && data?.content) {
@@ -32,51 +42,106 @@ const Hitchhiking = () => {
     }
   }, [isLoading, data?.content])
 
+  const removeCard = (recruit_id: number) => {
+    setDraggedCardList((prev: IMainCard[]) => {
+      prev.push(cardList[cardList.length - 1])
+      return prev
+    })
+    setCardList((prev: IMainCard[]) => {
+      return prev.filter((card) => card.recruit_id !== recruit_id)
+    })
+    if (cardList.length === 2) {
+      setPage((prev) => (!data?.last ? prev + 1 : prev))
+    }
+    console.log('cardList.length')
+    console.log(cardList.length)
+    console.log('cardList')
+    console.log(cardList)
+  }
+
+  // const addCard = () => {
+  //   setCardList((prev: IMainCard[]) => {
+  //     return [...prev, draggedCardList[0]]
+  //   })
+  //   setDraggedCardList((prev: IMainCard[]) => {
+  //     return prev.filter(
+  //       (card) => card.recruit_id !== draggedCardList[0].recruit_id,
+  //     )
+  //   })
+  // }
+
   let message: string = ''
 
-  if (isLoading && !cardList.length) message = '로딩중'
+  if (!isLoading && !cardList.length) message = '히치하이킹 끝!'
+  else if (isLoading && !cardList.length) message = '로딩중'
   else if (error) message = '에러 발생'
 
   return (
     <Stack
       justifyContent={'space-between'}
       alignItems={'center'}
-      sx={{ width: '100%', height: '80svh', overflow: 'hidden' }}
+      sx={{
+        width: '100%',
+        height: isPc ? '90svh' : '80svh',
+        overflow: 'hidden',
+        bottom: 0,
+      }}
       direction={'column'}
     >
-      <FormControlLabel
-        control={
-          <CuToggle
-            checked={isProject}
-            onChange={() => setIsProject((prev) => !prev)}
-          />
-        }
-        label="Label"
-      />
+      <Stack
+        sx={{ width: '100%' }}
+        justifyContent={'center'}
+        alignItems={'center'}
+        direction={'row'}
+        spacing={'0.5rem'}
+      >
+        <Typography
+          variant="Caption"
+          color={!isProject ? 'purple.normal' : 'text.assistive'}
+          sx={{ transition: 'color 0.5s ease' }}
+        >
+          스터디
+        </Typography>
+        <FormControlLabel
+          control={<CuTypeToggle checked={isProject} onChange={handleChange} />}
+          label={''}
+        />
+        <Typography
+          variant="Caption"
+          color={isProject ? 'purple.normal' : 'text.assistive'}
+          sx={{ transition: 'color 0.5s ease' }}
+        >
+          프로젝트
+        </Typography>
+      </Stack>
       <Stack
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          width: isPc ? '20.5rem' : '93vw',
-          height: '27rem',
-          maxWidth: '20.5rem',
+          ...(isPc ? cardStyle.cardPcSize : cardStyle.cardMobileSize),
           position: 'relative',
         }}
       >
         {!message ? (
           <CardContainer
             cardList={cardList}
-            update={() => setPage((prev) => (!data?.last ? prev + 1 : prev))}
-            setCardList={setCardList}
+            removeCard={removeCard}
             isProject={isProject}
           />
         ) : (
           <Typography>{message}</Typography>
         )}
       </Stack>
-      {/* {cardList.length && ( */}
+      {/* <CuButton
+          message="되돌리기"
+          action={addCard}
+          disabled={!draggedCardList.length}
+        /> */}
       <Interest id={cardList[cardList.length - 1]?.recruit_id} />
-      {/* )} */}
+      {/* <CuButton
+          message="관심없음"
+          action={() => removeCard(cardList[cardList.length - 1]?.recruit_id)}
+        /> */}
     </Stack>
   )
 }
