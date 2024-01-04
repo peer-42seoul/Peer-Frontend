@@ -37,9 +37,8 @@ const HomepageSetting = () => {
         severity={toastMessage.severity}
         open={isOpen}
         onClose={clearToast}
-      >
-        {toastMessage.message}
-      </CuToast>
+        message={toastMessage.message}
+      />
     </Stack>
   )
 }
