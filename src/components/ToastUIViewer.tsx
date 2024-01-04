@@ -13,6 +13,7 @@ import { useEffect, useRef } from 'react'
 const ToastViewer = ({
   initialValue = '',
   height = '30rem',
+  sx,
 }: IViewerOptions) => {
   const viewerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -30,7 +31,7 @@ const ToastViewer = ({
       viewer.destroy()
     }
   }, [initialValue, viewerRef])
-  return <Box ref={viewerRef} />
+  return <Box sx={sx} ref={viewerRef} />
 }
 
 export default ToastViewer

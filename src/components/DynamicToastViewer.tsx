@@ -10,8 +10,6 @@ const ToastViewer = dynamic(
  * SSR 환경에서 발생하는 충돌을 막기 위해서 dynamic import로 ToastViewer를 불러오는 컴포넌트
  */
 const DynamicToastViewer = (props: IViewerOptions) => {
-  const { initialValue } = props
-  console.log(initialValue)
   return <ToastViewer {...props} />
 }
 
