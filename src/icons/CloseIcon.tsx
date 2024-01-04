@@ -17,7 +17,7 @@ const CloseIcon = createSvgIcon(
     />
     <path
       d="M5 5L15 15"
-      stroke="currentCo"
+      stroke="currentColor"
       strokeWidth="1.25"
       strokeLinecap="round"
       strokeLinejoin="round"
