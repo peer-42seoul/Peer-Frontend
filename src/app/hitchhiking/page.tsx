@@ -55,11 +55,14 @@ const Hitchhiking = () => {
 
   const addCard = () => {
     setCardList((prev: IMainCard[]) => {
-      return [...prev, draggedCardList[0]]
+      prev.push(draggedCardList[draggedCardList.length - 1])
+      return prev
     })
     setDraggedCardList((prev: IMainCard[]) => {
       return prev.filter(
-        (card) => card.recruit_id !== draggedCardList[0].recruit_id,
+        (card) =>
+          card.recruit_id !==
+          draggedCardList[draggedCardList.length - 1].recruit_id,
       )
     })
   }
