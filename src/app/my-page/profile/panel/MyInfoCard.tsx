@@ -4,6 +4,8 @@ import Skills from './Skills'
 import ProfileLinksSection from './ProfileLinksSection'
 import CuButton from '@/components/CuButton'
 import { IUserProfileLink } from '@/types/IUserProfile'
+import useMedia from '@/hook/useMedia'
+import * as style from './Profile.style'
 
 const MyInfoCard = ({
   linkList,
@@ -14,15 +16,13 @@ const MyInfoCard = ({
   setModalType: (type: string) => void
   handleLogout: () => void
 }) => {
+  const { isPc } = useMedia()
   return (
     <Grid
       container
-      p={3}
-      pl={2}
-      pt={0}
-      rowSpacing={3}
-      columnSpacing={1}
-      sx={{ backgroundColor: 'background.secondary', borderRadius: '1rem' }}
+      rowSpacing={isPc ? 3 : 2}
+      columnSpacing={0.75}
+      sx={isPc ? style.profileCardPcStyle : style.profileCardMobileStyle}
       width={'100%'}
     >
       <Grid item xs={12}>

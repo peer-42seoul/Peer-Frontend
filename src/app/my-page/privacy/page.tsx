@@ -7,6 +7,8 @@ import useAxiosWithAuth from '@/api/config'
 import { useState } from 'react'
 import useToast from '@/hook/useToast'
 import IToastProps from '@/types/IToastProps'
+import useMedia from '@/hook/useMedia'
+import * as pageStyle from '../panel/my-page.style'
 
 const PrivacyStack = {
   backgroundColor: 'background.secondary',
@@ -23,6 +25,7 @@ const PrivacyPage = () => {
   const { data, error, isLoading } = useSWR('/api/v1/info', (url: string) =>
     axiosWithAuth.get(url).then((res) => res.data),
   )
+  const { isPc } = useMedia()
 
   const [toastProps, setToastProps] = useState<IToastProps>({
     severity: 'info',
@@ -36,7 +39,10 @@ const PrivacyPage = () => {
 
   const { name, email, local, authenticationFt, authenticationGoogle } = data
   return (
-    <Stack spacing={4}>
+    <Stack
+      spacing={4}
+      sx={isPc ? pageStyle.pagePcStyle : pageStyle.pageMobileStyle}
+    >
       <Stack sx={PrivacyStack}>
         <Typography variant="Title2Emphasis" color="text.normal">
           개인 정보
