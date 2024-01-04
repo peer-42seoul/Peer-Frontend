@@ -148,7 +148,12 @@ const CuToast = ({
             sx={{ padding: '0 ! important' }}
           >
             {subButton}
-            <IconButton size="small" aria-label="close" onClick={onClose}>
+            <IconButton
+              size="small"
+              aria-label="close"
+              onClick={onClose}
+              sx={style.actionButtonStyle}
+            >
               <CloseIcon
                 sx={{
                   width: '1.5rem',

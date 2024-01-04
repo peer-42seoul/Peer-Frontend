@@ -78,3 +78,9 @@ export const snackbarMobileStyle: SxProps = {
   paddingLeft: '0.75rem',
   paddingRight: '1rem',
 }
+
+export const actionButtonStyle: SxProps = {
+  boxSizing: 'border-box',
+  width: '2.5rem',
+  height: '2.5rem',
+}
