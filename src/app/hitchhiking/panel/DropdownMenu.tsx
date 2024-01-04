@@ -16,13 +16,13 @@ const IconMenuItem = ({
   text: string
 }) => {
   return (
-    <MenuItem dense onClick={handleClose}>
+    <MenuItem dense onClick={handleClose} sx={style.menuItemStyle}>
       <Stack
         direction={'row'}
         spacing={'0.375rem'}
         alignItems={'center'}
         justifyContent={'center'}
-        sx={style.menuItemStyle}
+        sx={style.menuContentStyle}
       >
         {icon}
         <Typography variant="Caption" color={'text.alternative'}>
@@ -55,13 +55,21 @@ const DropdownMenu = () => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        sx={style.dropdownMenuButtonStyle}
+        sx={{
+          width: '2.5rem',
+          height: '2.5rem',
+          boxSizing: 'border-box',
+          p: '0.0625rem',
+        }}
       >
         <MoreHorizontalIcon
           sx={{
-            ...style.dropdownMenuIconStyleBase,
-            transform: isPc || anchorEl ? 'rotate(0deg)' : 'rotate(90deg)',
             color: 'text.alternative',
+            width: '1.25rem',
+            height: '1.25rem',
+            boxSizing: 'border-box',
+            transform: isPc || anchorEl ? 'rotate(0deg)' : 'rotate(90deg)',
+            transition: 'transform 0.2s ease-in-out',
           }}
         />
       </Button>
@@ -90,9 +98,14 @@ const DropdownMenu = () => {
         >
           <MoreHorizontalIcon
             sx={{
-              ...style.dropdownMenuIconStyleBase,
-              transform: isPc || anchorEl ? 'rotate(0deg)' : 'rotate(90deg)',
               color: 'text.alternative',
+              width: '1.25rem',
+              height: '1.25rem',
+              boxSizing: 'border-box',
+              transform: isPc || anchorEl ? 'rotate(0deg)' : 'rotate(90deg)',
+              transition: 'transform 0.2s ease-in-out',
+              position: 'absolute',
+              right: '0.6rem',
             }}
           />
         </MenuItem>
@@ -101,9 +114,11 @@ const DropdownMenu = () => {
           icon={
             <ShareIcon
               sx={{
-                ...style.menuItemIconStyleBase,
-                padding: '0.125rem',
                 color: 'text.alternative',
+                width: '1.5rem',
+                height: '1.5rem',
+                padding: '0.125rem',
+                boxSizing: 'border-box',
               }}
             />
           }
@@ -113,7 +128,11 @@ const DropdownMenu = () => {
           handleClose={handleClose}
           icon={
             <ReportIcon
-              sx={{ ...style.menuItemIconStyleBase, color: 'text.alternative' }}
+              sx={{
+                color: 'text.alternative',
+                width: '1.5rem',
+                height: '1.5rem',
+              }}
             />
           }
           text={'신고'}
