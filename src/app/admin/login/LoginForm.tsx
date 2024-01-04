@@ -1,35 +1,49 @@
 import React from 'react'
-import { Button, TextField, Grid, Paper, Typography } from '@mui/material'
+import {
+  Button,
+  TextField,
+  Typography,
+  Container,
+  Stack,
+} from '@mui/material'
+
+const sheetSytle = {
+  width: 'auto',
+  height: 'auto',
+  backgroundColor: 'background.secondary',
+  padding: '2rem',
+}
 
 const LoginForm = () => {
   return (
-    <Grid container component={Paper} elevation={2} padding={2}>
-      <Grid item xs={12}>
-        <Typography variant="h5">관리자</Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          label="아이디"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          label="비밀번호"
-          type="password"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <Button variant="contained" color="primary" fullWidth>
-          로그인
-        </Button>
-      </Grid>
-    </Grid>
+    <Container sx={sheetSytle}>
+      <Stack gap={'1rem'}>
+        <Typography variant="h3" align="center">
+          관리자 로그인
+        </Typography>
+        <Stack direction={'row'} justifyContent={'center'} columnGap={'0.5rem'}>
+          <Stack>
+            <Stack
+              direction={'row'}
+              justifyContent={'space-between'}
+              gap={'0.5rem'}
+            >
+              <Typography variant="h6">ID</Typography>
+              <TextField />
+            </Stack>
+            <Stack
+              direction={'row'}
+              justifyContent={'space-between'}
+              gap={'0.5rem'}
+            >
+              <Typography variant="h6">PW</Typography>
+              <TextField />
+            </Stack>
+          </Stack>
+          <Button variant="outlined">로그인</Button>
+        </Stack>
+      </Stack>
+    </Container>
   )
 }
 export default LoginForm
