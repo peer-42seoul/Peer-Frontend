@@ -7,16 +7,21 @@ import useMedia from '@/hook/useMedia'
 import * as style from './DropdownMenu.style'
 
 const IconMenuItem = ({
-  handleClose,
   icon,
   text,
+  action,
 }: {
-  handleClose: () => void
   icon: React.ReactNode
   text: string
+  action?: () => void
 }) => {
+  const handleClick = () => {
+    if (action) {
+      action()
+    }
+  }
   return (
-    <MenuItem dense onClick={handleClose}>
+    <MenuItem dense onClick={handleClick}>
       <Stack
         direction={'row'}
         spacing={'0.375rem'}
@@ -45,6 +50,23 @@ const DropdownMenu = () => {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: 'WebShare API Demo',
+          url: 'https://codepen.io/ayoisaiah/pen/YbNazJ',
+        })
+        .then(() => {
+          console.log('Thanks for sharing!')
+          handleClose()
+        })
+        .catch(console.error)
+    } else {
+      console.log('공유하기가 지원되지 않습니다.')
+    }
   }
 
   return (
@@ -97,7 +119,7 @@ const DropdownMenu = () => {
           />
         </MenuItem>
         <IconMenuItem
-          handleClose={handleClose}
+          action={handleShare}
           icon={
             <ShareIcon
               sx={{
@@ -110,7 +132,7 @@ const DropdownMenu = () => {
           text={'공유'}
         />
         <IconMenuItem
-          handleClose={handleClose}
+          action={handleClose}
           icon={
             <ReportIcon
               sx={{ ...style.menuItemIconStyleBase, color: 'text.alternative' }}
