@@ -1,4 +1,3 @@
-'use client'
 import { createSvgIcon } from '@mui/material'
 
 const SearchIcon = createSvgIcon(

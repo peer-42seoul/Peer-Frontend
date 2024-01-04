@@ -1,4 +1,3 @@
-'use client'
 import React from 'react'
 import { Button, Menu, MenuItem, Stack, Typography } from '@mui/material'
 import ShareIcon from '@/icons/ShareIcon'
@@ -62,14 +61,11 @@ const DropdownMenu = () => {
         })
         .then(() => {
           console.log('Thanks for sharing!')
-          alert('Thanks for sharing!')
           handleClose()
         })
         .catch(console.error)
     } else {
       console.log('공유하기가 지원되지 않습니다.')
-      alert('공유하기가 지원되지 않습니다.')
-      handleClose()
     }
   }
 

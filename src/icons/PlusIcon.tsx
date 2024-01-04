@@ -1,4 +1,3 @@
-'use client'
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
 const PlusIcon = (props: SvgIconProps) => {

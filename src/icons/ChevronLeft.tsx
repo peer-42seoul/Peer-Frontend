@@ -1,4 +1,3 @@
-'use client'
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
 const ChevronLeft = (props: SvgIconProps) => {
