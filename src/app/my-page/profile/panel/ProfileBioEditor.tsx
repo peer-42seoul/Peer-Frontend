@@ -431,14 +431,16 @@ const ProfileBioEditor = ({
                     minRows={12}
                     error={errors.introduction ? true : false}
                     helperText={
-                      <Box sx={{ height: '0.75rem' }}>
-                        <Typography variant="Caption" color={'red.strong'}>
-                          {/* {errors.introduction
+                      <Typography
+                        variant="Caption"
+                        color={'red.strong'}
+                        sx={{ height: '0.75rem' }}
+                      >
+                        {/* {errors.introduction
                               ? errors.introduction.message // NOTE: 테스트용으로 helperText를 사용했습니다. 버그 수정 시 원상복구 요망 
                               : field.value.length} */}
-                          {getStringByteSize(field.value)}
-                        </Typography>
-                      </Box>
+                        {getStringByteSize(field.value)}
+                      </Typography>
                     }
                   />
                   <Typography
