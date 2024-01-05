@@ -1,22 +1,23 @@
 import { SxProps } from '@mui/material'
 import React from 'react'
 
-const formPcStyle: React.CSSProperties = {
+export const formPcStyle: React.CSSProperties = {
   height: '100%',
 }
-const formMobileStyle: React.CSSProperties = {
+
+export const formMobileStyle: React.CSSProperties = {
   height: '100%',
   marginTop: '1rem',
 }
 
-const profileImageInputStyle: SxProps = {
+export const profileImageInputStyle: SxProps = {
   position: 'relative',
   width: '4rem',
   height: '4rem',
   borderRadius: '500px',
 }
 
-const trashIconStyle: SxProps = {
+export const trashIconStyle: SxProps = {
   color: 'text.normal',
   opacity: 0,
   height: '1.25rem',
@@ -34,13 +35,13 @@ const trashIconStyle: SxProps = {
   },
 }
 
-const plusIconStyle: SxProps = {
+export const plusIconStyle: SxProps = {
   color: 'text.normal',
   height: '1.5rem',
   width: '1.5rem',
 }
 
-const avatarStyle: SxProps = {
+export const avatarStyle: SxProps = {
   position: 'absolute',
   top: '0',
   left: '0',
@@ -51,40 +52,40 @@ const avatarStyle: SxProps = {
   borderColor: 'line.alternative',
 }
 
-const introductionMaxLengthStyle: SxProps = {
+export const introductionMaxLengthStyle: SxProps = {
   position: 'absolute',
   bottom: '2rem',
   right: '1.5rem',
 }
 
-const cropBoxStyle: React.CSSProperties = {
+export const cropBoxStyle: React.CSSProperties = {
   borderRadius: '50%',
   width: '100%',
   height: '100%',
   display: 'none',
 }
 
-const squareBoxStyle: React.CSSProperties = {
+export const squareBoxStyle: React.CSSProperties = {
   width: '100%',
   height: 0,
   paddingBottom: '100%',
   position: 'relative',
 }
 
-const profileCardPcStyle: SxProps = {
+export const profileCardPcStyle: SxProps = {
   padding: '1.5rem',
   backgroundColor: 'background.secondary',
   borderRadius: '1rem',
 }
 
-const profileCardMobileStyle: SxProps = {
+export const profileCardMobileStyle: SxProps = {
   padding: '1rem',
   paddingTop: '0.5rem',
   backgroundColor: 'background.secondary',
   borderRadius: '1rem',
 }
 
-const profileImageModalStyle: SxProps = {
+export const profileImageModalStyle: SxProps = {
   width: '80%',
   position: 'absolute',
   top: '50%',
@@ -96,30 +97,22 @@ const profileImageModalStyle: SxProps = {
   maxHeight: '20rem',
 }
 
-const profileImageStyle: SxProps = {
+export const profileImageStyle: SxProps = {
   width: '3rem',
   height: '3rem',
 }
 
-const faviconStyle: SxProps = {
+export const faviconStyle: SxProps = {
   width: '1.25rem',
   height: '1.25rem',
   backgroundColor: 'text.normal',
 }
 
-export {
-  formPcStyle,
-  formMobileStyle,
-  profileImageInputStyle,
-  trashIconStyle,
-  plusIconStyle,
-  avatarStyle,
-  introductionMaxLengthStyle,
-  cropBoxStyle,
-  squareBoxStyle,
-  profileCardPcStyle,
-  profileCardMobileStyle,
-  profileImageModalStyle,
-  profileImageStyle,
-  faviconStyle,
+export const profileIntroductionStyle: SxProps = {
+  width: '100%',
+  wordBreak: 'pre',
+  wordWrap: 'break-word',
+  whiteSpace: 'pre-line',
+  minHeight: '4.5rem',
+  display: 'block',
 }
