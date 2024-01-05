@@ -1,7 +1,11 @@
 'use client'
-
-// import { useDarkMode } from '@/states/useDarkMode'
-import { ThemeProvider, alpha, createTheme } from '@mui/material/styles'
+import { useDarkMode } from '@/states/useDarkMode'
+import {
+  ThemeProvider,
+  createTheme,
+  StyledEngineProvider,
+} from '@mui/material/styles'
+import { useEffect } from 'react'
 
 declare module '@mui/material/styles' {
   // typography variant 추가
@@ -61,6 +65,7 @@ declare module '@mui/material/styles' {
     tinted?: string
     base?: string
     assistive?: string
+    mobileNavTab?: string
   }
 
   interface TypeBackground {
@@ -124,6 +129,7 @@ declare module '@mui/material/Button' {
     yellow: true
     pink: true
     line: true
+    custom?: string
   }
 }
 
@@ -136,6 +142,7 @@ declare module '@mui/material/IconButton' {
     yellow: true
     pink: true
     line: true
+    custom?: string
   }
 }
 
@@ -167,6 +174,7 @@ declare module '@mui/material/Typography' {
     pink: true
     line: true
     text: true
+    custom: true
   }
 }
 
@@ -179,6 +187,7 @@ declare module '@mui/material/TextField' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -191,6 +200,7 @@ declare module '@mui/material/OutlinedInput' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -203,6 +213,7 @@ declare module '@mui/material/InputLabel' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -215,6 +226,7 @@ declare module '@mui/material/Select' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -227,6 +239,7 @@ declare module '@mui/material/Checkbox' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -239,6 +252,7 @@ declare module '@mui/material/Radio' {
     yellow: true
     pink: true
     line: true
+    custom: true
   }
 }
 
@@ -250,6 +264,8 @@ declare module '@mui/material/Switch' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -261,6 +277,8 @@ declare module '@mui/material/Slider' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -272,6 +290,8 @@ declare module '@mui/material/Alert' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -283,6 +303,8 @@ declare module '@mui/material/AlertTitle' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -294,6 +316,8 @@ declare module '@mui/material/Avatar' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -305,6 +329,8 @@ declare module '@mui/material/Badge' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
@@ -316,13 +342,21 @@ declare module '@mui/material/Chip' {
     green: true
     yellow: true
     pink: true
+    line: true
+    custom: true
   }
 }
 
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  // const mode = useDarkMode().darkMode
-
   let theme = createTheme()
+
+  const { theme: colorTheme, getModeFromLocalStorage } = useDarkMode()
+
+  useEffect(() => {
+    getModeFromLocalStorage()
+  }, [])
+
+  theme = createTheme(theme, colorTheme)
 
   theme = createTheme(theme, {
     breakpoints: {
@@ -356,6 +390,14 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         styleOverrides: {
           root: {
             minWidth: '40px',
+          },
+        },
+      },
+      MuiSnackbar: {
+        styleOverrides: {
+          root: {
+            left: 0,
+            right: 0,
           },
         },
       },
@@ -475,7 +517,6 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       },
     },
     palette: {
-      mode: 'dark',
       red: theme.palette.augmentColor({
         color: {
           main: '#FF5833',
@@ -536,35 +577,10 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         },
         name: 'pink',
       }),
-      background: {
-        primary: '#060623',
-        secondary: '#18182B',
-        tertiary: '#22223A',
-        paper: '#060623',
-        default: '#060623',
-      },
-      line: {
-        base: '#35373E',
-        alternative: '#2C2E35',
-      },
-      text: {
-        strong: '#FFFFFF',
-        primary: '#F6F6F6',
-        normal: '#F6F6F6',
-        alternative: '#9B9B9B',
-        secondary: '#9B9B9B',
-        assistive: '#42444C',
-        disable: '#1E2024',
-        disabled: alpha('#9B9B9B', 0.5), // 기존에 디자이너님의 의도하신 것에 영향이 있을 수 있으나, textfield disabled 상태에서의 텍스트 색상을 위해 고쳤습니다.
-      },
       primary: {
         main: '#6F62FE',
         light: '#A39BFD',
         dark: '#877CFE',
-      },
-      // 컬러 팔레트에 없는 컬러를 추가함.
-      custom: {
-        mobileNavTab: '#0F0F27',
       },
     },
   })
@@ -657,10 +673,24 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
                 backgroundColor: theme.palette.background.tertiary,
                 opacity: 0.5,
               },
+              '&.Mui-error fieldset': {
+                borderColor: theme.palette.red.strong,
+              },
             },
             '& .MuiInputBase-inputMultiline': {
               height: 'auto',
               padding: '12px',
+            },
+            '.MuiFormHelperText-filled': {
+              margin: 0,
+              marginTop: '0.5rem',
+            },
+            '.MuiFormHelperText-root': {
+              margin: 0,
+              marginTop: '0.5rem',
+            },
+            '.MuiInputBase-inputMultiline': {
+              padding: '1rem',
             },
           },
         },
@@ -773,7 +803,11 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
     },
   })
 
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </StyledEngineProvider>
+  )
 }
 
 export default MuiThemeProvider
