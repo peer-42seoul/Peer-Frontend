@@ -39,7 +39,6 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         <>
           <RedirectionRecruit id={params.id} data={data} />
           <SetupInfo team={data.team} />
-          {/* <SetupPage team={data.team} /> */}
           {data.team.type === TeamType.PROJECT && (
             <TeamJobAdd teamId={params.id} />
           )}

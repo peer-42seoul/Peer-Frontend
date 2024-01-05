@@ -94,7 +94,7 @@ const TeamJobAdd = ({ teamId }: Props) => {
   return (
     <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
       <Stack spacing={2}>
-        <Typography>팀원 추가</Typography>
+        <Typography>역할 추가</Typography>
         <Card
           sx={{
             p: 2,

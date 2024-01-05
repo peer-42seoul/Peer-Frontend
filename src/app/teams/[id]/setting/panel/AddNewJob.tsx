@@ -36,6 +36,17 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
   }
 
   const handleAddJob = () => {
+    onNewJob({
+      id: 0,
+      name: newJob.name,
+      current: 0,
+      max: newJob.max,
+    })
+    setNewJob({
+      name: '',
+      current: 0,
+      max: 1,
+    })
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/job/add/${teamId}`,
@@ -61,6 +72,8 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
       paddingTop={'1rem'}
     >
       <TextField
+        value={newJob.name}
+        onChange={(e) => setNewJob({ ...newJob, name: e.target.value })}
         placeholder="추가할 직업군을 입력하세요."
         sx={{ width: '20rem' }}
       />
