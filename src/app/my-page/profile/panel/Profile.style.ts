@@ -54,7 +54,7 @@ export const avatarStyle: SxProps = {
 
 export const introductionMaxLengthStyle: SxProps = {
   position: 'absolute',
-  bottom: '2rem',
+  bottom: '3rem',
   right: '1.5rem',
 }
 

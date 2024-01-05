@@ -77,10 +77,16 @@ const ProfileBioEditor = ({
     setValue,
     setError,
     clearErrors,
+    reset,
   } = useForm<IFormInput>({
     defaultValues: defaultValues,
     mode: 'onChange',
   })
+
+  const handleCloseModal = () => {
+    reset(defaultValues)
+    closeModal()
+  }
 
   const {
     isOpen,
@@ -301,7 +307,7 @@ const ProfileBioEditor = ({
   return (
     <CuModal
       open={open}
-      onClose={closeModal}
+      onClose={handleCloseModal}
       title={'소개 수정'}
       containedButton={{
         text: isSubmitting ? '제출 중' : '완료',
