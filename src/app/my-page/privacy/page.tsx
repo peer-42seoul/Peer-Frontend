@@ -86,9 +86,8 @@ const PrivacyPage = () => {
           open={isOpen}
           onClose={closeToast}
           severity={toastProps.severity}
-        >
-          <Typography>{toastProps.message}</Typography>
-        </CuToast>
+          message={toastProps.message}
+        />
       </Stack>
     </Stack>
   )
