@@ -23,7 +23,14 @@ const MyInfoCard = ({
       direction={'column'}
       sx={isPc ? style.profileCardPcStyle : style.profileCardMobileStyle}
     >
-      <Typography variant={'Title3Emphasis'}>내 정보</Typography>
+      <Stack
+        direction={'row'}
+        justifyContent={'flex-start'}
+        alignItems={'center'}
+        height={'2.5rem'}
+      >
+        <Typography variant={'Title3Emphasis'}>내 정보</Typography>
+      </Stack>
       <Skills setModalType={setModalType} />
       <ProfileLinksSection linkList={linkList} setModalType={setModalType} />
       <CuButton variant="text" action={handleLogout} message="로그아웃" />
