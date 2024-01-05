@@ -112,7 +112,6 @@ const ProfileBioEditor = ({
           cropBoxResizable: false,
           cropBoxMovable: false,
           modal: true,
-          // ... other options
         })
 
         setCropper(newCropper)
@@ -165,6 +164,11 @@ const ProfileBioEditor = ({
 
   const nickname = watch('nickname')
 
+  const isValidNickname = (value: string) => {
+    if (value.includes('\n\t\f\v')) return '공백 문자는 띄어쓰기만 허용됩니다.'
+    else return true
+  }
+
   const NicknameCheckButton = ({
     nickname,
     setIsNicknameUnique,
@@ -202,8 +206,7 @@ const ProfileBioEditor = ({
             setToastOpen(true)
             setError('nickname', {
               type: 'notUnique',
-              message:
-                '사용할 수 업는 닉네임 입니다. 다른 닉네임을 입력해주세요.',
+              message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
             })
             setIsLoading(false)
           })
@@ -214,20 +217,27 @@ const ProfileBioEditor = ({
       // TODO status code가 200이 아닐 경우 false 처리나 toast 띄우기
     }, [isLoading, nickname, setIsNicknameUnique])
 
+    const isDisabled = () => {
+      return data.nickname === nickname ||
+        isNicknameUnique ||
+        (errors.nickname && errors.nickname?.type !== 'notUnique')
+        ? true
+        : isLoading
+    }
+
     return (
       <Button
         variant="text"
-        disabled={
-          data.nickname === nickname ||
-          isNicknameUnique ||
-          (errors.nickname && errors.nickname?.type !== 'notUnique')
-            ? true
-            : isLoading
-        }
+        disabled={isDisabled()}
         onClick={onClick}
         sx={{ marginRight: '0.75rem' }}
       >
-        <Typography variant="CaptionEmphasis">중복 확인</Typography>
+        <Typography
+          variant="CaptionEmphasis"
+          color={isDisabled() ? 'text.assistive' : 'text.normal'}
+        >
+          중복 확인
+        </Typography>
       </Button>
     )
   }
@@ -273,10 +283,10 @@ const ProfileBioEditor = ({
         mutate()
         closeModal()
       })
-      .catch(() => {
+      .catch((e) => {
         setToastMessage({
           severity: 'error',
-          message: '프로필 변경에 실패하였습니다.',
+          message: e.response.data.message,
         })
         setToastOpen(true)
       })
@@ -354,7 +364,6 @@ const ProfileBioEditor = ({
               )}
             </Button>
           </Stack>
-          {/* nickname, introduction */}
 
           {/* 닉네임 수정 */}
           <Stack spacing={'0.25rem'} direction={'column'}>
@@ -379,14 +388,22 @@ const ProfileBioEditor = ({
                         {errors.nickname?.message}
                       </Typography>
                     }
+                    FormHelperTextProps={{ sx: { height: '0.25rem' } }}
                     fullWidth={true}
                     error={errors.nickname ? true : false}
                     autoComplete="off"
                     placeholder="닉네임은 두 글자 이상이어야 합니다."
-                    inputProps={{ minLength: 2, maxLength: 7 }}
+                    inputProps={{ minLength: 2, maxLength: 30 }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
+                          <Typography
+                            variant="Caption"
+                            color={'text.alternative'}
+                            sx={{ marginRight: '0.5rem' }}
+                          >
+                            {field.value.length}/30
+                          </Typography>
                           <NicknameCheckButton
                             nickname={nickname}
                             setIsNicknameUnique={setIsNicknameUnique}
@@ -394,6 +411,7 @@ const ProfileBioEditor = ({
                         </InputAdornment>
                       ),
                     }}
+                    sx={{ height: '2.75rem' }}
                   />
                 </Box>
               )}
@@ -402,16 +420,17 @@ const ProfileBioEditor = ({
               rules={{
                 required: '닉네임은 필수로 기입해야 합니다.',
                 maxLength: {
-                  value: 7,
-                  message: '닉네임은 최대 7글자까지만 적용 가능합니다.',
+                  value: 30,
+                  message: '닉네임은 최대 30글자까지만 적용 가능합니다.',
                 },
                 minLength: {
                   value: 2,
                   message: '닉네임은 최소 두 글자 이상 작성해야 합니다.',
                 },
+                validate: isValidNickname,
               }}
             />
-            {/* introduction message */}
+            {/* 소개 수정 */}
             <CuTextFieldLabel htmlFor="introduction">
               <Typography variant="CaptionEmphasis">소개</Typography>
             </CuTextFieldLabel>
@@ -448,7 +467,7 @@ const ProfileBioEditor = ({
                     sx={style.introductionMaxLengthStyle}
                     color={'text.alternative'}
                   >
-                    {field.value.length}/150 {}
+                    {field.value.length}/150
                   </Typography>
                 </Box>
               )}
