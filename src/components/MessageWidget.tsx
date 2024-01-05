@@ -6,11 +6,13 @@ import * as style from './MessageWidget.style'
 
 const MessageWidget = ({
   title,
+  titleComponent, // titleComponent가 있으면 title을 무시합니다.
   children,
   StackProps,
   TitleTypographyProps,
 }: {
   title: string
+  titleComponent?: React.ReactNode
   children: React.ReactNode
   StackProps?: StackProps
   TitleTypographyProps?: TypographyProps
@@ -25,20 +27,24 @@ const MessageWidget = ({
       }}
       {...StackProps}
     >
-      <Stack
-        direction={'row'}
-        justifyContent={'flex-start'}
-        alignItems={'center'}
-        height={'2.5rem'}
-      >
-        <Typography
-          variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}
-          component={'h3'}
-          {...TitleTypographyProps}
+      {titleComponent ? (
+        titleComponent
+      ) : (
+        <Stack
+          direction={'row'}
+          justifyContent={'flex-start'}
+          alignItems={'center'}
+          height={'2.5rem'}
         >
-          {title}
-        </Typography>
-      </Stack>
+          <Typography
+            variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}
+            component={'h3'}
+            {...TitleTypographyProps}
+          >
+            {title}
+          </Typography>
+        </Stack>
+      )}
       {children}
     </Stack>
   )

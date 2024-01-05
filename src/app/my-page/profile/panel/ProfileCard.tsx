@@ -68,8 +68,9 @@ const ProfileCard = ({
         sectionTitle={'introduction'}
         setModalType={setModalType}
         titleTypographyProps={{
-          variant: 'Title3Emphasis',
+          variant: isPc ? 'Title3Emphasis' : 'Body1Emphasis',
           color: 'text.normal',
+          component: 'h3',
         }}
         sx={{ height: '2.5rem' }}
       />
