@@ -100,8 +100,12 @@ const ProfileCard = ({
           </Typography>
         </Stack>
       </Stack>
-      <Box width={1} sx={{ minHeight: '4.5rem' }}>
-        <Typography variant="Body2" color={'text.normal'}>
+      <Box width={1}>
+        <Typography
+          variant="Body2"
+          color={'text.normal'}
+          sx={style.profileIntroductionStyle}
+        >
           {introduction}
         </Typography>
       </Box>
