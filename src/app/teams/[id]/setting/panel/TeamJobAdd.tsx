@@ -83,7 +83,8 @@ const TeamJobAdd = ({ teamId }: Props) => {
 
   const handleDelete = (id: number) => {
     if (jobs.length === 1) return alert('최소 한 개의 직군이 필요합니다.')
-    console.log('delete', id)
+    if (jobs.find((job) => job.id === id)?.current !== 0)
+      return alert('현재 인원이 0명이 아닌 직군은 삭제할 수 없습니다.')
     setJobs(jobs.filter((job) => job.id !== id))
   }
 
@@ -99,7 +100,6 @@ const TeamJobAdd = ({ teamId }: Props) => {
           sx={{
             p: 2,
             borderRadius: '1rem',
-
             backgroundColor: (theme: Theme) =>
               theme.palette.background.tertiary,
           }}

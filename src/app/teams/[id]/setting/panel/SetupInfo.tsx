@@ -51,7 +51,7 @@ interface ISetupTeam {
 }
 
 const SetupInfo = ({ team }: { team: ISetupTeam }) => {
-  const { isPc } = useMedia()
+  const { isPc, isTablet } = useMedia()
   const [preview, setPreview] = useState<string>(
     team.teamImage ? team.teamImage : '/images/teamLogo.png',
   )
@@ -171,8 +171,8 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                 p={'0.5rem'}
               >
                 <Box
-                  width={[56, 100]}
-                  height={[56, 100]}
+                  width={[56, '10rem']}
+                  height={[56, '10rem']}
                   sx={{ position: 'relative' }}
                 >
                   <IconButton sx={styles.closeButtonStyle} onClick={openModal}>
@@ -186,7 +186,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                       variant="rounded"
                       src={preview}
                       alt="teamLogo"
-                      sx={{ width: '6.25rem', height: '6.25rem' }}
+                      sx={{ width: '10rem', height: '10rem' }}
                     />
                     <input
                       type="file"
@@ -199,10 +199,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                 </Box>
               </Stack>
               <Stack>
-                <Stack
-                  direction={isPc ? 'row' : 'column'}
-                  alignItems={isPc ? 'center' : ''}
-                >
+                <Stack>
                   <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
                     <PencilClearIcon />
                     <Stack
@@ -277,13 +274,12 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                       />
                     </Stack>
                   </Stack>
-                </Stack>
-
-                <Stack
-                  direction={isPc ? 'row' : 'column'}
-                  alignItems={isPc ? 'center' : ''}
-                >
-                  <Stack m={'0.5rem'}>
+                  <Stack
+                    direction={'row'}
+                    alignItems={'center'}
+                    m={'0.5rem'}
+                    spacing={'0.5rem'}
+                  >
                     <Stack
                       direction={'row'}
                       alignItems={'flex-start'}
@@ -318,7 +314,12 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                       )}
                     />
                   </Stack>
-                  <Stack m={'0.35rem'}>
+                  <Stack
+                    direction={'row'}
+                    alignItems={'center'}
+                    m={'0.35rem'}
+                    spacing={'0.5rem'}
+                  >
                     <Stack
                       direction={'row'}
                       alignItems={'flex-start'}
@@ -359,7 +360,12 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                       )}
                     />
                   </Stack>
-                  <Stack alignItems={'flex-start'} m={'0.35rem'}>
+                  <Stack
+                    direction={'row'}
+                    alignItems={'center'}
+                    spacing={'0.5rem'}
+                    m={'0.35rem'}
+                  >
                     <Stack
                       direction={'row'}
                       alignItems={'flex-start'}

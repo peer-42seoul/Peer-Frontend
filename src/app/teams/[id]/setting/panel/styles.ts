@@ -2,11 +2,12 @@
 
 const closeButtonStyle = {
   position: 'absolute',
-  top: '0.3rem',
-  right: '0.3rem',
+  top: '0.5rem',
+  right: '0.5rem',
   width: '1rem',
   height: '1rem',
   zIndex: '100',
+  color: 'primary.main',
 }
 
 const comfirmModalStyle = {

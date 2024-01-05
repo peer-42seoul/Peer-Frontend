@@ -21,7 +21,7 @@ const TeamLayout = ({
         <Typography fontWeight="bold">나의 팀페이지</Typography>
       </Stack>
       <Stack
-        spacing={'4rem'}
+        spacing={'0.5rem'}
         direction={isPc ? 'row' : 'column'}
         justifyContent={'center'}
       >
