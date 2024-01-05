@@ -8,6 +8,7 @@ import useAxiosWithAuth from '@/api/config'
 // import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
+import * as style from './page.style'
 
 interface NoticeContentContainerProps {
   children: ReactNode
@@ -116,18 +117,7 @@ const TeamNoticeView = ({
           <Stack spacing={1}>
             <Typography>설명</Typography>
           </Stack>
-          <DynamicToastViewer
-            sx={{
-              width: '100%',
-              height: '30rem',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              overflow: 'hidden',
-              padding: '1rem',
-              backgroundColor: '#fff',
-            }}
-            initialValue={data.content}
-          />
+          <DynamicToastViewer sx={style.viewer} initialValue={data.content} />
           {/* <ToastViewer initialValue={data.content} /> */}
           <Stack alignItems={'flex-end'}>
             {data.isAuthor ? (
