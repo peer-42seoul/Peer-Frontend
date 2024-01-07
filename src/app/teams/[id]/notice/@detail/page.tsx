@@ -14,16 +14,13 @@ import useTeamPageState from '@/states/useTeamPageState'
 interface NoticeContentContainerProps {
   children: ReactNode
   isAuthor: boolean
-  params: { id: string; postId: string }
 }
 
 const NoticeContentContainer = ({
   children,
   isAuthor,
-  params,
 }: NoticeContentContainerProps) => {
-  const { setNotice } = useTeamPageState()
-  const { postId } = params
+  const { setNotice, postId } = useTeamPageState()
   return (
     <Stack spacing={2} width={'100%'}>
       <Button onClick={() => setNotice('LIST')} variant={'text'}>
@@ -36,10 +33,7 @@ const NoticeContentContainer = ({
       >
         <Typography variant="body2">공지사항</Typography>
         {isAuthor ? (
-          <Button
-            onClick={() => setNotice('EDIT', parseInt(postId))}
-            variant="text"
-          >
+          <Button onClick={() => setNotice('EDIT', postId)} variant="text">
             수정
           </Button>
         ) : null}
@@ -49,13 +43,10 @@ const NoticeContentContainer = ({
   )
 }
 
-const TeamNoticeView = ({
-  params,
-}: {
-  params: { id: string; postId: string }
-}) => {
-  const { postId, id } = params
+const TeamNoticeView = ({ params }: { params: { id: string } }) => {
+  const { id } = params
   const axiosWithAuth = useAxiosWithAuth()
+  const { postId } = useTeamPageState()
   const router = useRouter()
   // const { error, isLoading } = useSWR<ITeamNoticeDetail>(
   //   `/api/v1/team/notice/${postId}`,
@@ -89,9 +80,12 @@ const TeamNoticeView = ({
   //       <Typography>문제가 발생했습니다.</Typography>
   //     </NoticeContentContainer>
   //   )
+
+  if (postId === undefined) return null
+
   return (
     <Stack>
-      <NoticeContentContainer isAuthor={data.isAuthor} params={params}>
+      <NoticeContentContainer isAuthor={data.isAuthor}>
         {/* {isLoading ? (
           <Typography>로딩중...</Typography>
         ) :  */}
@@ -124,7 +118,7 @@ const TeamNoticeView = ({
           </Stack>
         </>
       </NoticeContentContainer>
-      <CommentList postId={parseInt(postId)} teamId={parseInt(id)} />
+      <CommentList postId={postId} teamId={parseInt(id)} />
     </Stack>
   )
 }

@@ -1,9 +1,9 @@
 'use client'
 import { FormEvent, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Stack, Typography, OutlinedInput } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import DynamicToastEditor from '@/components/DynamicToastEditor'
+import useTeamPageState from '@/states/useTeamPageState'
 
 const NoticeEditForm = ({
   teamId,
@@ -13,7 +13,7 @@ const NoticeEditForm = ({
   postId?: string
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
-  const router = useRouter()
+  const { setNotice } = useTeamPageState()
   const [previousData, setPreviousData] = useState({
     title: '',
     content: '',
@@ -33,7 +33,7 @@ const NoticeEditForm = ({
         })
         .catch(() => {
           alert('게시글을 불러오는데 실패했습니다.')
-          router.back()
+          setNotice('LIST')
         })
         .finally(() => {
           setIsLoading(false)
@@ -53,7 +53,6 @@ const NoticeEditForm = ({
         .put(`/api/v1/team/notice/${postId}`, form)
         .then(() => {
           alert('공지사항을 수정했습니다.')
-          router.push(`/teams/${teamId}/notice/${postId}`)
         })
         .catch(() => {
           alert('공지사항 수정에 실패했습니다.')
@@ -67,7 +66,7 @@ const NoticeEditForm = ({
       })
       .then((res) => {
         alert('공지사항이 등록되었습니다.')
-        router.push(`/teams/${teamId}/notice/${res.data.postId}`)
+        setNotice('DETAIL', res.data.id)
       })
       .catch(() => {
         alert('공지사항 작성에 실패했습니다.')
