@@ -2,10 +2,10 @@
 import { ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import dayjs from 'dayjs'
-// import useSWR from 'swr'
+import useSWR from 'swr'
 import { Button, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-// import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
+import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
 import * as style from './page.style'
@@ -48,17 +48,10 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { postId } = useTeamPageState()
   const router = useRouter()
-  // const { error, isLoading } = useSWR<ITeamNoticeDetail>(
-  //   `/api/v1/team/notice/${postId}`,
-  //   (url: string) => axiosWithAuth.get(url).then((res) => res.data),
-  // )
-  const data = {
-    title: '제목',
-    authorNickname: '작성자',
-    createdAt: new Date(),
-    content: '내내내내내요요요요요용',
-    isAuthor: true,
-  }
+  const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
+    `/api/v1/team/notice/${postId}`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  )
 
   const handleDelete = () => {
     const confirm = window.confirm('공지사항을 삭제하시겠습니까?')
@@ -74,49 +67,49 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       })
   }
 
-  // if (error || !data)
-  //   return (
-  //     <NoticeContentContainer isAuthor={!!data?.isAuthor} params={params}>
-  //       <Typography>문제가 발생했습니다.</Typography>
-  //     </NoticeContentContainer>
-  //   )
+  if (error || !data)
+    return (
+      <NoticeContentContainer isAuthor={!!data?.isAuthor}>
+        <Typography>문제가 발생했습니다.</Typography>
+      </NoticeContentContainer>
+    )
 
   if (postId === undefined) return null
 
   return (
     <Stack>
       <NoticeContentContainer isAuthor={data.isAuthor}>
-        {/* {isLoading ? (
+        {isLoading ? (
           <Typography>로딩중...</Typography>
-        ) :  */}
-        (
-        <>
-          <Stack spacing={1}>
-            <Typography>제목</Typography>
-            <Typography>{data.title}</Typography>
-          </Stack>
-          <Stack spacing={1}>
-            <Typography>작성자</Typography>
-            <Typography>{data.authorNickname}</Typography>
-          </Stack>
-          <Stack spacing={1}>
-            <Typography>작성일</Typography>
-            <Typography>
-              {dayjs(data.createdAt).format('YYYY-MM-DD')}
-            </Typography>
-          </Stack>
-          <Stack spacing={1}>
-            <Typography>설명</Typography>
-          </Stack>
-          <DynamicToastViewer sx={style.viewer} initialValue={data.content} />
-          <Stack alignItems={'flex-end'}>
-            {data.isAuthor ? (
-              <Button variant={'text'} color="warning" onClick={handleDelete}>
-                삭제
-              </Button>
-            ) : null}
-          </Stack>
-        </>
+        ) : (
+          <>
+            <Stack spacing={1}>
+              <Typography>제목</Typography>
+              <Typography>{data.title}</Typography>
+            </Stack>
+            <Stack spacing={1}>
+              <Typography>작성자</Typography>
+              <Typography>{data.authorNickname}</Typography>
+            </Stack>
+            <Stack spacing={1}>
+              <Typography>작성일</Typography>
+              <Typography>
+                {dayjs(data.createdAt).format('YYYY-MM-DD')}
+              </Typography>
+            </Stack>
+            <Stack spacing={1}>
+              <Typography>설명</Typography>
+            </Stack>
+            <DynamicToastViewer sx={style.viewer} initialValue={data.content} />
+            <Stack alignItems={'flex-end'}>
+              {data.isAuthor ? (
+                <Button variant={'text'} color="warning" onClick={handleDelete}>
+                  삭제
+                </Button>
+              ) : null}
+            </Stack>
+          </>
+        )}
       </NoticeContentContainer>
       <CommentList postId={postId} teamId={parseInt(id)} />
     </Stack>
