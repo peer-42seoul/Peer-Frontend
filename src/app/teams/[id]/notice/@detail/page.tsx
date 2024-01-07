@@ -9,6 +9,7 @@ import useAxiosWithAuth from '@/api/config'
 import CommentList from './panel/CommentList'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
 import * as style from './page.style'
+import useTeamPageState from '@/states/useTeamPageState'
 
 interface NoticeContentContainerProps {
   children: ReactNode
@@ -21,14 +22,11 @@ const NoticeContentContainer = ({
   isAuthor,
   params,
 }: NoticeContentContainerProps) => {
-  const router = useRouter()
-  const { id, postId } = params
+  const { setNotice } = useTeamPageState()
+  const { postId } = params
   return (
     <Stack spacing={2} width={'100%'}>
-      <Button
-        onClick={() => router.push(`/teams/${id}/notice`)}
-        variant={'text'}
-      >
+      <Button onClick={() => setNotice('LIST')} variant={'text'}>
         이전 페이지
       </Button>
       <Stack
@@ -39,7 +37,7 @@ const NoticeContentContainer = ({
         <Typography variant="body2">공지사항</Typography>
         {isAuthor ? (
           <Button
-            onClick={() => router.push(`/teams/${id}/notice-edit/${postId}`)}
+            onClick={() => setNotice('EDIT', parseInt(postId))}
             variant="text"
           >
             수정
@@ -63,7 +61,6 @@ const TeamNoticeView = ({
   //   `/api/v1/team/notice/${postId}`,
   //   (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   // )
-
   const data = {
     title: '제목',
     authorNickname: '작성자',
@@ -118,7 +115,6 @@ const TeamNoticeView = ({
             <Typography>설명</Typography>
           </Stack>
           <DynamicToastViewer sx={style.viewer} initialValue={data.content} />
-          {/* <ToastViewer initialValue={data.content} /> */}
           <Stack alignItems={'flex-end'}>
             {data.isAuthor ? (
               <Button variant={'text'} color="warning" onClick={handleDelete}>

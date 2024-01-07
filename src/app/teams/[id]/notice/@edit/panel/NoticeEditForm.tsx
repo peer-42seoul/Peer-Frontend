@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Stack, Typography, OutlinedInput } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import DynamicToastEditor from '@/components/DynamicToastEditor'
 
 const NoticeEditForm = ({
   teamId,
@@ -87,14 +88,8 @@ const NoticeEditForm = ({
         </Stack>
         <Stack>
           <Typography>내용</Typography>
-          <OutlinedInput
-            disabled={isLoading}
-            fullWidth
-            name={'content'}
-            placeholder={'내용을 입력해주세요.'}
-            multiline
-            rows={10}
-            defaultValue={previousData?.content ? previousData.content : ''}
+          <DynamicToastEditor
+            initialValue={previousData?.content ? previousData.content : ''}
           />
         </Stack>
       </form>
