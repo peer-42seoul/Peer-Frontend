@@ -66,7 +66,7 @@ const NoticeEditForm = ({
       })
       .then((res) => {
         alert('공지사항이 등록되었습니다.')
-        setNotice('DETAIL', res.data.id)
+        setNotice('DETAIL', res.data.postId)
       })
       .catch(() => {
         alert('공지사항 작성에 실패했습니다.')

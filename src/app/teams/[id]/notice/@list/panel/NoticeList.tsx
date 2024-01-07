@@ -1,4 +1,4 @@
-import { ReactNode, Fragment, useState, useEffect } from 'react'
+import { ReactNode, Fragment, useEffect } from 'react'
 import dayjs from 'dayjs'
 import { Box, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
@@ -55,11 +55,11 @@ const NoticeList = ({
   keyword: string
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
-  const [size, setSize] = useState(0)
-  const { data, isLoading, error, targetRef } = useInfiniteSWRScroll(
-    `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
-  )
+  const { data, error, isLoading, size, setSize, targetRef } =
+    useInfiniteSWRScroll(
+      `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
+      (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    )
   useEffect(() => {
     // keyword가 바뀔 때마다 size를 0으로 초기화 (size의 초깃값은 0입니다.)
     if (!isLoading && size !== 0) setSize(0)

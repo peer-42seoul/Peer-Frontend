@@ -5,11 +5,11 @@ import dayjs from 'dayjs'
 import useSWR from 'swr'
 import { Button, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
+import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
-import DynamicToastViewer from '@/components/DynamicToastViewer'
 import * as style from './page.style'
-import useTeamPageState from '@/states/useTeamPageState'
 
 interface NoticeContentContainerProps {
   children: ReactNode
