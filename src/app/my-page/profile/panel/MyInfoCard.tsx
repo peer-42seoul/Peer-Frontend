@@ -2,7 +2,7 @@ import Skills from './Skills'
 import ProfileLinksSection from './ProfileLinksSection'
 import CuButton from '@/components/CuButton'
 import { IUserProfileLink } from '@/types/IUserProfile'
-import MessageWidget from '@/components/MessageWidget'
+import TitleBox from '@/components/TitleBox'
 
 const MyInfoCard = ({
   linkList,
@@ -14,11 +14,11 @@ const MyInfoCard = ({
   handleLogout: () => void
 }) => {
   return (
-    <MessageWidget title="내 정보">
+    <TitleBox title="내 정보">
       <Skills setModalType={setModalType} />
       <ProfileLinksSection linkList={linkList} setModalType={setModalType} />
       <CuButton variant="text" action={handleLogout} message="로그아웃" />
-    </MessageWidget>
+    </TitleBox>
   )
 }
 

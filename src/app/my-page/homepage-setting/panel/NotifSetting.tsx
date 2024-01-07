@@ -1,6 +1,6 @@
 'use client'
 import CuToggle from '@/components/CuToggle'
-import MessageWidget from '@/components/MessageWidget'
+import TitleBox from '@/components/TitleBox'
 import {
   AlertColor,
   Box,
@@ -62,7 +62,7 @@ const NotifSetting = ({
 
   console.log(setToastMessage)
   return (
-    <MessageWidget title="알림 설정">
+    <TitleBox title="알림 설정">
       <Stack spacing={2}>
         <Notif
           type="키워드 알림"
@@ -85,7 +85,7 @@ const NotifSetting = ({
           handleChange={() => setNight((prev) => !prev)}
         />
       </Stack>
-    </MessageWidget>
+    </TitleBox>
   )
 }
 

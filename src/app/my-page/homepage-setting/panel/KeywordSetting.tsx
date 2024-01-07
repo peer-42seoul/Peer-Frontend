@@ -17,7 +17,7 @@ import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
 import TagChip from './TagChip'
 import CuTextModal from '@/components/CuTextModal'
-import MessageWidget from '@/components/MessageWidget'
+import TitleBox from '@/components/TitleBox'
 import useMedia from '@/hook/useMedia'
 
 interface IChip {
@@ -271,7 +271,7 @@ const KeywordSetting = ({
   )
 
   return (
-    <MessageWidget
+    <TitleBox
       title="알림 설정"
       titleComponent={
         <Stack
@@ -304,7 +304,7 @@ const KeywordSetting = ({
         isLoading={isLoading}
         error={error}
       />
-    </MessageWidget>
+    </TitleBox>
   )
 }
 

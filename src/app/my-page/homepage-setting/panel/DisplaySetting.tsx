@@ -2,14 +2,14 @@
 import CuToggle from '@/components/CuToggle'
 import { FormControlLabel, Stack, Typography } from '@mui/material'
 import { useDarkMode } from '@/states/useDarkMode'
-import MessageWidget from '@/components/MessageWidget'
+import TitleBox from '@/components/TitleBox'
 
 const DisplaySetting = () => {
   const { useSystemTheme, isLightMode, toggleDarkMode, toggleSystemTheme } =
     useDarkMode()
 
   return (
-    <MessageWidget title="화면 설정">
+    <TitleBox title="화면 설정">
       <Stack direction={'row'} spacing={2}>
         <FormControlLabel
           control={
@@ -60,7 +60,7 @@ const DisplaySetting = () => {
           labelPlacement="start"
         />
       </Stack>
-    </MessageWidget>
+    </TitleBox>
   )
 }
 

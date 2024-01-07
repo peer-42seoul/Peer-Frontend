@@ -2,7 +2,7 @@
 import useMedia from '@/hook/useMedia'
 import { Stack, StackProps, Typography, TypographyProps } from '@mui/material'
 import React from 'react'
-import * as style from './MessageWidget.style'
+import * as style from './TitleBox.style'
 
 const MessageWidget = ({
   title,

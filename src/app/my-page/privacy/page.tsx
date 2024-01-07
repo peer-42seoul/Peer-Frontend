@@ -9,7 +9,7 @@ import useToast from '@/hook/useToast'
 import IToastProps from '@/types/IToastProps'
 import useMedia from '@/hook/useMedia'
 import * as pageStyle from '../panel/my-page.style'
-import MessageWidget from '@/components/MessageWidget'
+import TitleBox from '@/components/TitleBox'
 
 const PrivacyPage = () => {
   const axiosWithAuth = useAxiosWithAuth()
@@ -34,7 +34,7 @@ const PrivacyPage = () => {
       spacing={isPc ? 4 : 3}
       sx={isPc ? pageStyle.pagePcStyle : pageStyle.pageMobileStyle}
     >
-      <MessageWidget title="개인정보">
+      <TitleBox title="개인정보">
         <Stack spacing={1}>
           <Typography variant="CaptionEmphasis" color="text.strong">
             이름
@@ -58,8 +58,8 @@ const PrivacyPage = () => {
           setToastProps={setToastProps}
           openToast={openToast}
         />
-      </MessageWidget>
-      <MessageWidget title={'계정 관리'}>
+      </TitleBox>
+      <TitleBox title={'계정 관리'}>
         <Typography variant="Body2" color="text.alternative">
           계정을 삭제하시면....
         </Typography>
@@ -67,7 +67,7 @@ const PrivacyPage = () => {
           setToastProps={setToastProps}
           openToast={openToast}
         />
-      </MessageWidget>
+      </TitleBox>
       <CuToast
         open={isOpen}
         onClose={closeToast}
