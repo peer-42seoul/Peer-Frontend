@@ -3,8 +3,8 @@ import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
 import CalenderWidget from '@/app/teams/[id]/panel/widgets/CalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
-import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
-import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
+import TextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
+import ImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactGridLayout, {
@@ -93,9 +93,9 @@ const WidgetsRender = ({
         case 'attendance':
           return <TmpAttendWidget data={wgData} size={wgSize} />
         case 'text':
-          return <TmpTextWidget data={wgData} size={wgSize} />
+          return <TextWidget data={wgData} size={wgSize} />
         case 'image':
-          return <TmpImageWidget data={wgData} size={wgSize} />
+          return <ImageWidget data={wgData} size={wgSize} />
         case 'linkTable':
           return <TmpLinkWidget data={wgData} size={wgSize} />
         default:
@@ -304,6 +304,7 @@ const WidgetsRender = ({
                 : undefined,
               borderRadius: '5px',
             }}
+            draggableCancel=".MuiButtonBase-root, .MuiModal-root"
           >
             {widgets?.map(({ grid, type, size: wgSize, data: wgData }) => {
               return (
