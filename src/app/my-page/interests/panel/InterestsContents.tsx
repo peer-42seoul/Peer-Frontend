@@ -1,6 +1,7 @@
 import MainCard from '@/app/panel/main-page/MainCard'
 import { ProjectType } from '@/app/panel/MainPage'
 import CuButton from '@/components/CuButton'
+import useMedia from '@/hook/useMedia'
 import { IMainCard } from '@/types/IPostDetail'
 import { Box, CircularProgress, Stack } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
@@ -21,18 +22,25 @@ const InterestsContents = ({
   removeAll: () => void
   isDeleting: boolean
 }) => {
+  const { isPc } = useMedia()
+
   return (
     <Grid
       container
-      rowSpacing={{ xs: 2, sm: 3 }}
-      columnSpacing={{ xs: 0, sm: 2 }}
+      rowSpacing={isPc ? 3 : 2}
+      columnSpacing={isPc ? 2 : 0}
       alignItems="center"
-      justifyContent={['space-evenly', 'flex-start']}
+      justifyContent={isPc ? 'flex-start' : 'space-evenly'}
       direction="row"
       columns={12}
-      p={{ xs: 0, sm: 3 }}
+      py={isPc ? 3 : 0}
+      px={isPc ? 2 : 0}
+      sx={{
+        backgroundColor: isPc ? 'background.secondary' : 'transparent',
+        borderRadius: '1rem',
+      }}
     >
-      <Grid xs={12} style={{ padding: 0 }}>
+      <Grid xs={12}>
         <Stack
           direction={'row'}
           justifyContent={'flex-end'}
@@ -52,7 +60,7 @@ const InterestsContents = ({
         </Stack>
       </Grid>
       {postList.map((item) => (
-        <Grid key={item.recruit_id} xs={12} sm={6} md={4}>
+        <Grid key={item.recruit_id} xs={11} sm={6} md={4}>
           <MainCard {...item} type={type as ProjectType} />
         </Grid>
       ))}
