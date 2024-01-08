@@ -70,32 +70,25 @@ const CuNavBar = ({
           setValue(newValue)
         }}
       >
-        {isPc ? (
-          [
-            tabData.map((tab) => (
-              <PcToggleButton
-                key={crypto.randomUUID()}
-                tab={tab}
-                selected={value === tab.value}
-              />
-            )),
-          ]
-        ) : (
-          <Box
-            width={'100%'}
-            display="grid"
-            gridTemplateColumns={`repeat(${tabData.length}, 1fr)`}
-            gap={'0.5rem'}
-          >
-            {tabData.map((tab) => (
-              <MobileToggleButton
-                key={crypto.randomUUID()}
-                tab={tab}
-                selected={value === tab.value}
-              />
-            ))}
-          </Box>
-        )}
+        {isPc
+          ? [
+              tabData.map((tab) => (
+                <PcToggleButton
+                  key={crypto.randomUUID()}
+                  tab={tab}
+                  selected={value === tab.value}
+                />
+              )),
+            ]
+          : [
+              tabData.map((tab) => (
+                <MobileToggleButton
+                  key={crypto.randomUUID()}
+                  tab={tab}
+                  selected={value === tab.value}
+                />
+              )),
+            ]}
       </ToggleButtonGroup>
     </Box>
   )
