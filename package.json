@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^9.7.2",
-    "@emotion/react": "^11.11.1",
+    "@emotion/cache": "^11.11.0",
+    "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.8",
     "@mui/material": "^5.14.8",
+    "@mui/material-nextjs": "^5.15.3",
     "@next/eslint-plugin-next": "^13.4.19",
     "@toast-ui/editor": "^3.2.2",
     "@types/lodash": "^4.14.199",

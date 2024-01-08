@@ -25,8 +25,6 @@ const TypeTabs = ({
   type: string
   handleChange: (e: React.SyntheticEvent, newValue: string) => void
 }) => {
-  console.log('tab', type)
-
   return (
     <Tabs
       value={type}
