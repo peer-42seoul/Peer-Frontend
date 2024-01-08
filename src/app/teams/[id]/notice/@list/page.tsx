@@ -1,6 +1,5 @@
 'use client'
 import { useState, MouseEvent, useRef } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   Typography,
   Button,
@@ -10,11 +9,12 @@ import {
   InputAdornment,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
-import useMedia from '@/hook/useMedia'
-import NoticeList from './panel/NoticeList'
 import CuTextField from '@/components/CuTextField'
 import CuButton from '@/components/CuButton'
+import useMedia from '@/hook/useMedia'
 import SearchIcon from '@/icons/SearchIcon'
+import useTeamPageState from '@/states/useTeamPageState'
+import NoticeList from './panel/NoticeList'
 
 const SearchPopover = ({
   setKeyword,
@@ -85,7 +85,7 @@ const SearchPopover = ({
 const TeamNotice = ({ params }: { params: { id: string } }) => {
   const { id } = params
   const { isPc } = useMedia()
-  const router = useRouter()
+  const { setNotice } = useTeamPageState()
   const [keyword, setKeyword] = useState<string>('')
   return (
     <Stack width={'100%'}>
@@ -93,7 +93,7 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
         <Stack direction={'row'} justifyContent={'flex-end'}>
           <SearchPopover setKeyword={setKeyword} />
           <Button
-            onClick={() => router.push(`/teams/${id}/notice-edit`)}
+            onClick={() => setNotice('EDIT')}
             variant="contained"
             startIcon={<AddIcon />}
           >
@@ -106,7 +106,7 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
         {isPc ? null : (
           <Stack direction={'row'}>
             <SearchPopover setKeyword={setKeyword} />
-            <IconButton onClick={() => router.push(`/teams/${id}/notice-edit`)}>
+            <IconButton onClick={() => setNotice('EDIT')}>
               <AddIcon />
             </IconButton>
           </Stack>
