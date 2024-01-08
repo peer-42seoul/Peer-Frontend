@@ -6,7 +6,15 @@ import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
 import { IMainCard } from '@/types/IPostDetail'
-import { AlertColor, Stack, Tab, Tabs, Typography } from '@mui/material'
+import {
+  AlertColor,
+  Box,
+  CircularProgress,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
@@ -206,6 +214,9 @@ const MyInterests = () => {
         direction={'column'}
         spacing={3}
         sx={isPc ? pageStyle.pagePcStyle : pageStyle.pageMobileStyle}
+        justifyContent={'center'}
+        alignItems={'space-evenly'}
+        height={1}
       >
         <TypeTabs type={type} handleChange={handleTabChange} />
 
@@ -218,10 +229,39 @@ const MyInterests = () => {
             removeAll={openModal}
             isDeleting={isDeleting}
           />
-        ) : isLoading ? (
-          <Typography>로딩 중</Typography>
         ) : (
-          <Typography>관심있다고 표시한 페이지가 없습니다.</Typography>
+          <Box
+            width={1}
+            height={1}
+            sx={{
+              backgroundColor: isPc ? 'background.secondary' : 'transparent',
+              borderRadius: '1rem',
+            }}
+            position={'relative'}
+          >
+            {isLoading ? (
+              <CircularProgress
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                }}
+              />
+            ) : (
+              <Typography
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                }}
+                variant="Caption"
+              >
+                관심있다고 표시한 페이지가 없습니다.
+              </Typography>
+            )}
+          </Box>
         )}
       </Stack>
     </>

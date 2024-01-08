@@ -7,6 +7,7 @@ export const tabStyleBase: SxProps = {
   height: '2.5rem',
   minHeight: '2.5rem',
   boxSizing: 'border-box',
+  width: '100%',
 }
 
 export const tabPcStyle: SxProps = {
