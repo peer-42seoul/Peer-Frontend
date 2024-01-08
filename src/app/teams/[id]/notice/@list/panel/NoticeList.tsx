@@ -1,7 +1,11 @@
 import { Fragment, useEffect } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import { ListStack, ListItem } from '@/components/board/ListPanel'
+import {
+  ListStack,
+  StatusMessage,
+  ListItem,
+} from '@/components/board/ListPanel'
 import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
@@ -54,20 +58,6 @@ const mockData = [
     ],
   },
 ]
-
-const StatusMessage = ({ message }: { message: string }) => {
-  return (
-    <ListStack>
-      <Typography
-        textAlign={'center'}
-        variant={'Body2'}
-        color={'text.alternative'}
-      >
-        {message}
-      </Typography>
-    </ListStack>
-  )
-}
 
 const NoticeList = ({
   teamId,

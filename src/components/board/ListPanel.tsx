@@ -37,6 +37,20 @@ export const ListStack = ({ children }: IChildrenProps) => {
   )
 }
 
+export const StatusMessage = ({ message }: { message: string }) => {
+  return (
+    <ListStack>
+      <Typography
+        textAlign={'center'}
+        variant={'Body2'}
+        color={'text.alternative'}
+      >
+        {message}
+      </Typography>
+    </ListStack>
+  )
+}
+
 export const ListItem = ({
   title,
   authorNickname,
