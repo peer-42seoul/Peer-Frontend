@@ -1,3 +1,4 @@
+'use client'
 import { createSvgIcon } from '@mui/material'
 import React from 'react'
 
