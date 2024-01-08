@@ -12,21 +12,21 @@ const TextIcon = (props: SvgIconProps) => {
       >
         <path
           d="M4 7V4H20V7"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
           d="M9 20H15"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
           d="M12 4V20"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"

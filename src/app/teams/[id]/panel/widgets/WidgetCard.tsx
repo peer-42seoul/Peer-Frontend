@@ -1,4 +1,4 @@
-import { Card, CardContent, SxProps } from '@mui/material'
+import { Card, CardContent, SxProps, Theme } from '@mui/material'
 import * as style from './WidgetCard.style'
 
 interface IWigetCardProps {
@@ -8,10 +8,12 @@ interface IWigetCardProps {
   contentSx?: SxProps
 }
 
-const WidgetCard = ({ children, onClick, contentSx }: IWigetCardProps) => {
+const WidgetCard = ({ children, onClick, contentSx = {} }: IWigetCardProps) => {
   return (
     <Card sx={style.widgetCard} onClick={onClick}>
-      <CardContent sx={(style.widgetCardContent, { ...contentSx })}>
+      <CardContent
+        sx={{ ...style.widgetCardContent, ...contentSx } as SxProps<Theme>}
+      >
         {children}
       </CardContent>
     </Card>

@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react'
-import { Card, CardContent, IconButton } from '@mui/material'
+import { IconButton } from '@mui/material'
 import { SizeType } from '@/types/ITeamDnDLayout'
 import Image from 'next/image'
 import EditIcon from '@/icons/EditIcon'
 import PictureIcon from '@/icons/PictureIcon'
 import * as style from './ImageWidget.style'
+import WidgetCard from './WidgetCard'
 
 const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
   const [iconHidden, setIconHidden] = useState<boolean>(true)
@@ -28,51 +29,33 @@ const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
   }
 
   return (
-    <Card sx={style.CardStyle}>
-      <CardContent sx={style.CardContentStyle}>
-        <div
-          style={style.ContentDivStyle}
-          onMouseEnter={() => setIconHidden(false)}
-          onMouseLeave={() => setIconHidden(true)}
-        >
-          {uploadedImage || data ? (
-            <div>
-              <Image
-                src={uploadedImage || data}
-                alt="UploadedImage"
-                layout="fill"
-                objectFit="cover"
-                style={{
-                  borderRadius: '1rem',
-                }}
-              />
-              <div style={style.ButtonDivStyle}>
-                <IconButton
-                  aria-label="edit"
-                  sx={{
-                    ...style.IconButtonStyle,
-                    display: iconHidden ? 'none' : '',
-                  }}
-                  onClick={() => inputRef.current?.click()}
-                >
-                  <EditIcon />
-                </IconButton>
-                <input
-                  ref={inputRef}
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={handleImageUpload}
-                />
-              </div>
-            </div>
-          ) : (
-            <>
+    <WidgetCard contentSx={style.CardContentStyle}>
+      <div
+        style={style.ContentDivStyle}
+        onMouseEnter={() => setIconHidden(false)}
+        onMouseLeave={() => setIconHidden(true)}
+      >
+        {uploadedImage || data ? (
+          <div>
+            <Image
+              src={uploadedImage || data}
+              alt="UploadedImage"
+              layout="fill"
+              objectFit="cover"
+              style={{
+                borderRadius: '1rem',
+              }}
+            />
+            <div style={style.ButtonDivStyle}>
               <IconButton
+                aria-label="edit"
+                sx={{
+                  ...style.IconButtonStyle,
+                  display: iconHidden ? 'none' : '',
+                }}
                 onClick={() => inputRef.current?.click()}
-                sx={{ p: '2rem' }}
               >
-                <PictureIcon />
+                <EditIcon sx={{ color: 'white' }} />
               </IconButton>
               <input
                 ref={inputRef}
@@ -81,11 +64,27 @@ const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
                 hidden
                 onChange={handleImageUpload}
               />
-            </>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            </div>
+          </div>
+        ) : (
+          <>
+            <IconButton
+              onClick={() => inputRef.current?.click()}
+              sx={{ p: '2rem' }}
+            >
+              <PictureIcon sx={{ color: '#42444C' }} />
+            </IconButton>
+            <input
+              ref={inputRef}
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={handleImageUpload}
+            />
+          </>
+        )}
+      </div>
+    </WidgetCard>
   )
 }
 export default ImageWidget

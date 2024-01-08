@@ -1,23 +1,12 @@
-import { SxProps } from '@mui/system'
+import { SxProps } from '@mui/material'
 import React from 'react'
 
-export const CardStyle: SxProps = {
-  width: '100%',
-  height: '100%',
-  backgroundColor: 'background.tertiary',
-  padding: '0',
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: '1rem',
-}
-
 export const CardContentStyle: SxProps = {
-  height: 'calc(100% - 2px)',
-  width: 'calc(100% - 2px)',
+  boxSizing: 'border-box',
+  height: '100%',
+  width: '100%',
   padding: '1px',
-  '&:last-child': {
-    paddingBottom: '1px',
-  },
+  backgroundColor: 'background.tertiary',
 }
 
 export const ContentDivStyle: React.CSSProperties = {

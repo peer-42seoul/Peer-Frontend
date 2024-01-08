@@ -13,9 +13,7 @@ const TextWidget = ({ data, size }: { data: any; size: SizeType }) => {
   const { isOpen, openModal, closeModal } = useModal()
   const [text, setText] = useState(data)
 
-  const handleOpenModal = (e: any) => {
-    console.log(e)
-    e.stopPropagation()
+  const handleOpenModal = () => {
     openModal()
   }
   return (
@@ -32,7 +30,7 @@ const TextWidget = ({ data, size }: { data: any; size: SizeType }) => {
               color="text.normal"
               sx={{ display: 'flex', alightItems: 'center', gap: '0.25rem' }}
             >
-              <TextIcon /> 텍스트박스
+              <TextIcon sx={{ color: 'text.normal' }} /> 텍스트박스
             </Typography>
             <CardActions sx={{ padding: '0' }}>
               <Button onClick={handleOpenModal}>
