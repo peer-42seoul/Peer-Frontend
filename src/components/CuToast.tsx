@@ -107,6 +107,18 @@ function TransitionLeft(props: SlideProps) {
   return <Slide {...props} direction="right" />
 }
 
+/**
+ *
+ * @param open      : toast를 띄울지 말지 결정하는 boolean
+ * @param onClose   : toast를 닫는 함수
+ * @param severity  : toast의 색깔을 결정하는 string
+ * @param message   : toast에 띄울 메시지
+ * @param subButton : toast에 띄울 버튼
+ * @param sx        : toast의 style
+ * @param autoHideDuration : toast가 얼마나 띄워질지 결정하는 number
+ * @returns         : toast
+ */
+
 const CuToast = ({
   open,
   autoHideDuration = 60000,
@@ -124,7 +136,7 @@ const CuToast = ({
   severity?: AlertColor | undefined
   sx?: SxProps
   children?: React.ReactNode
-  message?: string
+  message?: React.ReactNode
   subButton?: React.ReactNode
 }) => {
   const { isPc } = useMedia()
@@ -170,7 +182,6 @@ const CuToast = ({
           </Stack>
         }
       >
-        {/* 기존에는 타이포그래피를 넣게 하였으나 앞으로는 message prop에 넣는 것으로 처리해야 합니다.*/}
         <Typography variant="Body2">{message}</Typography>
       </Alert>
     </Snackbar>
