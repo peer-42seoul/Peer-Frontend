@@ -7,33 +7,16 @@ import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
 import { IMainCard } from '@/types/IPostDetail'
-import { AlertColor, MenuItem, Tab, Tabs, Typography } from '@mui/material'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { AlertColor, Stack, Tab, Tabs, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
 import CuTextModal from '@/components/CuTextModal'
+import * as style from '../panel/my-page.style'
 
 interface IInterestResponse {
   postList: IMainCard[]
   isLast: boolean
-}
-
-const TypeToggle = ({
-  type,
-  handleChange,
-}: {
-  type: string
-  handleChange: (e: SelectChangeEvent) => void
-}) => {
-  console.log('dropdown', type)
-  return (
-    <Select value={type} onChange={handleChange} variant="standard">
-      <MenuItem value={'PROJECT'}>프로젝트</MenuItem>
-      <MenuItem value={'STUDY'}>스터디</MenuItem>
-      {/* <MenuItem value={'showcase'}>쇼케이스</MenuItem> 2step */}
-    </Select>
-  )
 }
 
 const TypeTabs = ({
@@ -103,12 +86,6 @@ const MyInterests = () => {
     severity: '' as AlertColor,
   })
 
-  const handleSelectChange = (event: SelectChangeEvent) => {
-    console.log('event.target.value as string : ', event.target.value as string)
-    setType(event.target.value as string)
-    setPostList([])
-  }
-
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     console.log('newValue: ', newValue)
     console.log('11', event.currentTarget, event.target)
@@ -169,7 +146,7 @@ const MyInterests = () => {
   })
 
   return (
-    <div>
+    <>
       <CuToast
         open={isToastOpen}
         onClose={closeToast}
@@ -182,31 +159,44 @@ const MyInterests = () => {
         closeModal={closeModal}
         confirmAction={deleteAll}
       />
-      {isPc ? (
-        <TypeToggle type={type} handleChange={handleSelectChange} />
-      ) : (
+      <Stack
+        direction={'column'}
+        spacing={3}
+        sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
+      >
         <TypeTabs type={type} handleChange={handleTabChange} />
-      )}
-      <CuButton
-        variant="text"
-        message="전체 삭제"
-        action={openModal}
-        disabled={isDeleting}
-      />
+        <Stack
+          direction={'row'}
+          justifyContent={'flex-end'}
+          sx={{ paddingRight: '0.5rem' }}
+        >
+          <CuButton
+            variant="text"
+            message="관심 모두 해제"
+            action={openModal}
+            disabled={isDeleting}
+            TypographyProps={{
+              variant: 'CaptionEmphasis',
+              color: 'text.alternative',
+            }}
+            style={{ height: '2rem' }}
+          />
+        </Stack>
 
-      {postList.length ? (
-        <InterestsContents
-          postList={postList}
-          spinner={spinner}
-          target={target}
-          type={type as ProjectType}
-        />
-      ) : isLoading ? (
-        <Typography>로딩 중</Typography>
-      ) : (
-        <Typography>관심있다고 표시한 페이지가 없습니다.</Typography>
-      )}
-    </div>
+        {postList.length ? (
+          <InterestsContents
+            postList={postList}
+            spinner={spinner}
+            target={target}
+            type={type as ProjectType}
+          />
+        ) : isLoading ? (
+          <Typography>로딩 중</Typography>
+        ) : (
+          <Typography>관심있다고 표시한 페이지가 없습니다.</Typography>
+        )}
+      </Stack>
+    </>
   )
 }
 
