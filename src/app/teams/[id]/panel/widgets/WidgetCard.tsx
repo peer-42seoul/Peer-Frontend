@@ -8,7 +8,7 @@ interface IWigetCardProps {
   contentSx?: SxProps
 }
 
-const WidgetCard = ({ children, onClick, contentSx = {} }: IWigetCardProps) => {
+const WidgetCard = ({ children, onClick, contentSx }: IWigetCardProps) => {
   return (
     <Card sx={style.widgetCard} onClick={onClick}>
       <CardContent
