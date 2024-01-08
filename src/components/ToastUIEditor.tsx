@@ -2,9 +2,10 @@
 
 import React, { useEffect, useRef } from 'react'
 import '@toast-ui/editor/dist/toastui-editor.css'
-import { Editor, IEditorOptions } from '@toast-ui/editor'
+import { IEditorOptions } from '@toast-ui/editor'
 import { Card } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
+// import { useTheme } from '@mui/material/styles'
+import useEditorState from '@/states/useEditorState'
 
 /**
  * WARNING: SSR 환경에서 사용할 경우 충돌이 나기 때문에 실제 사용하기 위해서는 dynamic import로 불러오는 DynamicToastEditor를 사용해야 합니다.
@@ -16,42 +17,40 @@ const ToastEditor = ({
   previewStyle = 'vertical',
   height = '30rem',
 }: IEditorOptions) => {
-  const themed = useTheme()
+  // const themed = useTheme()
   const editorRef = useRef<HTMLDivElement>(null)
+  const { editor, setEditor, resetEditor } = useEditorState()
 
-  const toggleDark = () => {
-    const editorEl = editorRef.current?.getElementsByClassName(
-      'toastui-editor-defaultUI',
-    )[0]
+  // const toggleDark = () => {
+  //   const editorEl = editorRef.current?.getElementsByClassName(
+  //     'toastui-editor-defaultUI',
+  //   )[0]
 
-    if (editorEl) {
-      if (themed.palette.mode === 'dark') {
-        editorEl.classList.add('toastui-editor-dark')
-      } else {
-        editorEl.classList.remove('toastui-editor-dark')
-      }
-    }
-  }
+  //   if (editorEl) {
+  //     if (themed.palette.mode === 'dark') {
+  //       editorEl.classList.add('toastui-editor-dark')
+  //     } else {
+  //       editorEl.classList.remove('toastui-editor-dark')
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     if (!editorRef.current) {
       return
     }
-
-    const editor = new Editor({
+    setEditor({
       el: editorRef.current,
       initialEditType: initialEditType,
       previewStyle: previewStyle,
       height: height,
       initialValue: initialValue,
     })
-
-    toggleDark()
-
     return () => {
-      editor.destroy()
+      editor?.destroy()
+      resetEditor()
     }
-  }, [initialValue, themed.palette.mode, toggleDark])
+  }, [editorRef, initialEditType, previewStyle, height, initialValue])
 
   return (
     <Card sx={{ backgroundColor: 'white', color: 'black' }} ref={editorRef} />

@@ -4,6 +4,7 @@ import { Stack, Typography, OutlinedInput } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import DynamicToastEditor from '@/components/DynamicToastEditor'
 import useTeamPageState from '@/states/useTeamPageState'
+import useEditorState from '@/states/useEditorState'
 
 const NoticeEditForm = ({
   teamId,
@@ -19,6 +20,7 @@ const NoticeEditForm = ({
     content: '',
   })
   const [isLoading, setIsLoading] = useState(false)
+  const { editor } = useEditorState()
   useEffect(() => {
     if (postId) {
       setIsLoading(true)
@@ -42,6 +44,8 @@ const NoticeEditForm = ({
   }, [postId])
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!editor) return
+    // editor를 이용해서 데이터를 가져올 것
     const formData = new FormData(event.currentTarget)
     const form = {
       title: formData.get('title') as string,
