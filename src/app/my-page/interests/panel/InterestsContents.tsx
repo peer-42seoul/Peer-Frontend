@@ -6,6 +6,7 @@ import { IMainCard } from '@/types/IPostDetail'
 import { Box, CircularProgress, Stack } from '@mui/material'
 import React from 'react'
 import Grid from '@mui/material/Unstable_Grid2'
+import { centeredPosition } from '@/constant/centerdPosition.style'
 
 const InterestsContents = ({
   postList,
@@ -65,7 +66,9 @@ const InterestsContents = ({
         </Grid>
       ))}
       <Grid xs={10} sm={4}>
-        <Box ref={target}>{spinner && <CircularProgress />}</Box>
+        <Box ref={target} position={'relative'}>
+          {spinner && <CircularProgress sx={centeredPosition} />}
+        </Box>
       </Grid>
     </Grid>
   )
