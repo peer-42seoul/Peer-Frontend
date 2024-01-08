@@ -17,6 +17,8 @@ import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
 import TagChip from './TagChip'
 import CuTextModal from '@/components/CuTextModal'
+import TitleBox from '@/components/TitleBox'
+import useMedia from '@/hook/useMedia'
 
 interface IChip {
   key: number
@@ -246,6 +248,8 @@ const KeywordSetting = ({
 }: {
   setToastMessage: (message: IToastProps) => void
 }) => {
+  const { isPc } = useMedia()
+
   const axiosWithAuth = useAxiosWithAuth()
 
   const getKeywords = async (url: string) =>
@@ -267,18 +271,27 @@ const KeywordSetting = ({
   )
 
   return (
-    <Stack
-      p={3}
-      spacing={3}
-      alignSelf={'stretch'}
-      bgcolor={'background.secondary'}
-      borderRadius={2}
+    <TitleBox
+      title="알림 설정"
+      titleComponent={
+        <Stack
+          direction={'row'}
+          justifyContent={'flex-start'}
+          alignItems={'center'}
+          height={'2.5rem'}
+        >
+          <CuTextFieldLabel htmlFor="keyword-field">
+            <Typography
+              variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}
+              component={'h3'}
+              color={'text.normal'}
+            >
+              키워드 설정
+            </Typography>
+          </CuTextFieldLabel>
+        </Stack>
+      }
     >
-      <CuTextFieldLabel style={{ margin: '8px 0px' }} htmlFor="keyword-field">
-        <Typography variant="Title3Emphasis" color={'text.normal'}>
-          키워드 설정
-        </Typography>
-      </CuTextFieldLabel>
       <KeywordAddingField
         setToastMessage={setToastMessage}
         mutate={mutate}
@@ -291,7 +304,7 @@ const KeywordSetting = ({
         isLoading={isLoading}
         error={error}
       />
-    </Stack>
+    </TitleBox>
   )
 }
 

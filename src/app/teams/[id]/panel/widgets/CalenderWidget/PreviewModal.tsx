@@ -1,14 +1,15 @@
 'use client'
 import { ReactNode } from 'react'
 import dayjs from 'dayjs'
-import { Box, IconButton, Modal, Stack, Typography } from '@mui/material'
-import Circle from '@mui/icons-material/Circle'
-import useMedia from '@/hook/useMedia'
+import { Box, IconButton, Stack, Typography } from '@mui/material'
+import CircleIcon from '@mui/icons-material/Circle'
 import { PlusIcon } from '@/icons'
+import CuModal from '@/components/CuModal'
+import useMedia from '@/hook/useMedia'
 import { IEvent } from '@/types/WidgetDataTypes'
 import CalendarLarge from './CalendarLarge'
 import { isPastEvent, useCalendar } from './utils'
-import * as modalStyle from '@/components/CuModal.style'
+import * as style from './PreviewModal.style'
 
 interface IPreviewModalProps {
   open: boolean
@@ -23,31 +24,41 @@ interface IEventItem {
 }
 
 const PreviewModal = ({ open, onClose, events }: IPreviewModalProps) => {
-  const { isPc } = useMedia()
   const { selectedDate, setSelectedDate, todayEvents, isEmpty } =
     useCalendar(events)
-  const modalWrapperStyle = isPc
-    ? modalStyle.pcWrapper
-    : modalStyle.mobileWrapper
+  const { isPc } = useMedia()
   return (
-    <Modal open={open} onClose={onClose} keepMounted>
-      <Stack sx={modalWrapperStyle}>
+    <CuModal sx={style.modal} open={open} onClose={onClose} title={'캘린더'}>
+      <Stack
+        sx={isPc ? style.modalContent : style.mobileModalContent}
+        spacing={'2.5rem'}
+      >
         <CalendarLarge
           events={events}
           onDrillDown={(date: Date) => setSelectedDate(dayjs(date))}
         />
         <Box>
-          <Stack>
-            <Typography>{`${selectedDate.format('M.D')} 일정`}</Typography>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            justifyContent={'space-between'}
+            sx={style.eventListHeader}
+          >
+            <Typography
+              variant={'Body1Emphasis'}
+              color={'text.strong'}
+            >{`${selectedDate.format('M.D')} 일정`}</Typography>
             <IconButton>
-              <PlusIcon />
+              <PlusIcon width={'1.25rem'} height={'1.25rem'} />
             </IconButton>
           </Stack>
-          <Stack>
+          <Stack sx={style.eventList}>
             {isEmpty ? (
-              <Typography>등록된 일정이 없습니다.</Typography>
+              <Typography variant={'Body2'} color={'text.alternative'}>
+                등록된 일정이 없습니다.
+              </Typography>
             ) : (
-              <Stack>
+              <Stack spacing={'0.5rem'}>
                 {todayEvents?.map((event) => (
                   <EventItem
                     key={event.id}
@@ -61,19 +72,33 @@ const PreviewModal = ({ open, onClose, events }: IPreviewModalProps) => {
           </Stack>
         </Box>
       </Stack>
-    </Modal>
+    </CuModal>
   )
 }
 
 const EventItem = ({ title, start, end }: IEventItem) => {
   if (!start || !end) return null
   const isPast = isPastEvent(end)
-  const fontColor = isPast ? 'text.assertive' : 'text.normal'
   return (
-    <Stack>
-      <Circle />
-      <Typography color={fontColor}>{title}</Typography>
-      <Typography color={fontColor}>
+    <Stack direction={'row'} alignItems={'center'} spacing={'0.5rem'}>
+      <CircleIcon
+        sx={{
+          ...style.eventItemIcon,
+          color: isPast ? 'text.assistive' : 'text.strong',
+        }}
+      />
+      <Typography
+        variant={'Body2'}
+        color={isPast ? 'text.assistive' : 'text.strong'}
+        sx={style.eventItemText}
+      >
+        {title}
+      </Typography>
+      <Typography
+        variant={'Caption'}
+        color={isPast ? 'text.assistive' : 'text.alternative'}
+        sx={style.eventItemTime}
+      >
         {`${dayjs(start).format('HH:mm')}-${dayjs(end).format('HH:mm')}`}
       </Typography>
     </Stack>
