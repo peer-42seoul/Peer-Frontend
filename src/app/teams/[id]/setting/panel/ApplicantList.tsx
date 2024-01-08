@@ -39,9 +39,11 @@ const ApplicantList = ({
   const handleAccept = () => {
     axiosWithAuth
       .put(
-        `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/api/v1/team/accept/${teamId}?userId=${member!.userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/accept/${teamId}`,
+        {
+          teamJobId: member!.applyId.teamJobId,
+          teamUserId: member!.applyId.teamUserId,
+        },
       )
       .then((res) => {
         if (res.status === 200) {
@@ -60,9 +62,11 @@ const ApplicantList = ({
     console.log('reject')
     axiosWithAuth
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/deny/${teamId}?userId=${
-          member!.userId
-        }`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/reject/${teamId}`,
+        {
+          teamJobId: member!.applyId.teamJobId,
+          teamUserId: member!.applyId.teamUserId,
+        },
       )
       .then((res) => {
         if (res.status === 200) {
@@ -106,7 +110,7 @@ const ApplicantList = ({
     )
   }
 
-  if (!data) {
+  if (!data || data.length === 0) {
     return (
       <Card sx={{ p: '1.5rem', borderRadius: '1rem', height: '23rem' }}>
         <Stack
@@ -184,8 +188,8 @@ const ApplicantList = ({
           ref={scrollRef}
         >
           {!member && <Typography>신청한 대기자가 없습니다.</Typography>}
-          {member && member.interview ? (
-            member.interview.map((interview, index) => (
+          {member && member.answers ? (
+            member.answers.map((interview, index) => (
               <Stack key={index} m={1}>
                 <Typography fontWeight="bold">{interview.question}</Typography>
                 <FormAnswer interview={interview} index={index} />

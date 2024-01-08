@@ -18,34 +18,7 @@ import AddNewJob from './AddNewJob'
 import { Job } from '@/app/teams/types/types'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
-import { useState } from 'react'
-
-const mockJobs: Job[] = [
-  {
-    id: 1,
-    name: '프론트엔드',
-    current: 2,
-    max: 4,
-  },
-  {
-    id: 2,
-    name: '백엔드',
-    current: 1,
-    max: 2,
-  },
-  {
-    id: 3,
-    name: '디자이너',
-    current: 0,
-    max: 1,
-  },
-  {
-    id: 4,
-    name: '기획자',
-    current: 0,
-    max: 1,
-  },
-]
+import { useEffect, useState } from 'react'
 
 interface TableColumn {
   id: string
@@ -62,10 +35,16 @@ const tableColumn: TableColumn[] = [
 
 interface Props {
   teamId: string
+  jobList: Job[]
 }
 
-const TeamJobAdd = ({ teamId }: Props) => {
-  const [jobs, setJobs] = useState<Job[]>(mockJobs)
+const TeamJobAdd = ({ teamId, jobList }: Props) => {
+  const [jobs, setJobs] = useState<Job[]>(jobList)
+
+  useEffect(() => {
+    setJobs(jobList)
+  }, [jobList])
+
   const handleAdd = (id: number) => {
     console.log('add', id)
     setJobs(

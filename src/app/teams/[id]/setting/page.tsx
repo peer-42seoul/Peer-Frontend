@@ -23,6 +23,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
+  console.log(data)
   if (isLoading) return <Typography>로딩중</Typography>
 
   return (
@@ -40,7 +41,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
           <RedirectionRecruit id={params.id} data={data} />
           <SetupInfo team={data.team} />
           {data.team.type === TeamType.PROJECT && (
-            <TeamJobAdd teamId={params.id} />
+            <TeamJobAdd teamId={params.id} jobList={data.job} />
           )}
           {!showApplicant ? (
             <Card
@@ -68,7 +69,11 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                   신청 대기자 보기
                 </Button>
               </Stack>
-              <SetupMember team={data.member} teamId={data.team.id} />
+              <SetupMember
+                team={data.member}
+                teamId={data.team.id}
+                jobs={data.job}
+              />
             </Card>
           ) : (
             <ApplicantList close={closeApplicant} teamId={data.team.id} />

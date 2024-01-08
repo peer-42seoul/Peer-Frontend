@@ -20,11 +20,12 @@ export enum TeamOperationForm {
   ONLINE = 'ONLINE',
   MIX = 'MIX',
 }
+
 export interface IMember {
   name: string
   id: string
   grant: TeamGrant
-  job: Job[]
+  job: string[]
 }
 
 export interface Job {
@@ -35,6 +36,7 @@ export interface Job {
 }
 
 export interface ITeam {
+  job: Job[]
   team: {
     id: string
     type: TeamType
@@ -45,7 +47,6 @@ export interface ITeam {
     operationForm: TeamOperationForm
     region: string[]
     teamImage: string | null
-    // job: Job[]
   }
   member: IMember[]
 }
@@ -75,8 +76,14 @@ export interface IInterview {
   optionList: CloseQuestionList | RatioQuestionList | CheckQuestionList | null
 }
 
+export interface IApply {
+  teamJobId: number
+  teamUserId: number
+}
+
 export interface IApplicant {
   name: string
   userId: string
-  interview: IInterview[]
+  answers: IInterview[]
+  applyId: IApply
 }

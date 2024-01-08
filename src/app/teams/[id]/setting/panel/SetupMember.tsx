@@ -22,40 +22,13 @@ import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
 import { comfirmModalStyle } from './styles'
 
-const mockJobsData: Job[] = [
-  {
-    id: 1,
-    name: '프론트엔드',
-    current: 3,
-    max: 5,
-  },
-  {
-    id: 2,
-    name: '백엔드',
-    current: 2,
-    max: 5,
-  },
-  {
-    id: 3,
-    name: '디자인',
-    current: 1,
-    max: 5,
-  },
-  {
-    id: 4,
-    name: '기획',
-    current: 1,
-    max: 5,
-  },
-]
-
 interface ISetupMember {
   team: IMember[]
   teamId: string
-  jobs?: Job[]
+  jobs: Job[]
 }
 
-const SetupMember = ({ team, teamId }: ISetupMember) => {
+const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   const {
@@ -65,7 +38,7 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
   } = useModal()
   const [members, setMembers] = useState<IMember[]>(team)
   const [member, setMember] = useState<IMember | null>(null)
-  const [job, setJob] = useState<Job[]>(mockJobsData)
+  const [job, setJob] = useState<Job[]>(jobs)
   const [selectedJobs, setSelectedJobs] = useState<Job[]>([])
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -77,11 +50,11 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
   // }
 
   useEffect(() => {
-    setJob(mockJobsData)
+    setJob(jobs)
     // if (selectedJobs.length > 0) {
     //   changeJob()
     // }
-  }, [selectedJobs])
+  }, [setJob, jobs])
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')

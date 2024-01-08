@@ -42,12 +42,12 @@ const ToggleButtonStyle = {
   },
 }
 
-const SearchTextfieldStyle = {
-  flexGrow: 1,
-  '& .MuiInputBase-root': {
-    borderRadius: '2rem',
-  },
-}
+// const SearchTextfieldStyle = {
+//   flexGrow: 1,
+//   '& .MuiInputBase-root': {
+//     borderRadius: '2rem',
+//   },
+// }
 
 interface SearchBodyProps {
   onClose: () => void
