@@ -86,4 +86,5 @@ export interface IApplicant {
   userId: string
   answers: IInterview[]
   applyId: IApply
+  jobName: string
 }

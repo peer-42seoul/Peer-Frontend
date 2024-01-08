@@ -159,6 +159,7 @@ const ApplicantList = ({
         <Stack alignItems="center" spacing={1}>
           <Avatar>A</Avatar>
           {member && <Typography>{member.name}</Typography>}
+          {member?.jobName && <Typography>{member.jobName}</Typography>}
         </Stack>
 
         <Button
