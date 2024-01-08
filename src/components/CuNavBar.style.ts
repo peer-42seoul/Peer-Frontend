@@ -38,6 +38,7 @@ const disabledTab = {
   '&.Mui-disabled': {
     color: 'text.disable',
     backgroundColor: 'transparent',
+    border: 'none',
     '& svg': {
       fill: (theme: Theme) => theme.palette.text.disable,
     },
@@ -61,7 +62,7 @@ export const newTab = {
 
 export const mobileTab = {
   height: '3rem',
-  minWidth: '3.69rem',
+  minWidth: '3rem',
   // width: 인라인에서 비율로 지정해둠
   padding: 0,
   borderRadius: '0.5rem',

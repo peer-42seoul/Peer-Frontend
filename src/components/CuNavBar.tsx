@@ -86,7 +86,7 @@ const CuNavBar = ({
                   key={crypto.randomUUID()}
                   tab={tab}
                   selected={value === tab.value}
-                  width={95 / tabData.length}
+                  width={90 / tabData.length}
                 />
               )),
             ]}
