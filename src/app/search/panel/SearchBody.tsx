@@ -8,12 +8,46 @@ import {
   Typography,
   Button,
   Box,
-  ButtonGroup,
   Stack,
+  ToggleButtonGroup,
+  ToggleButton,
 } from '@mui/material'
-import { useState } from 'react'
+import { MouseEvent, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
+import SearchIcon from '@mui/icons-material/Search'
+
+const SearchButton = () => {
+  return (
+    <Button type="submit">
+      <SearchIcon />
+    </Button>
+  )
+}
+
+const ToggleButtonStyle = {
+  color: 'gray',
+  border: 'none',
+  fontSize: '1.5rem',
+  margin: 0,
+  marginRight: '0.5rem',
+  padding: 0,
+  '&.Mui-selected': {
+    backgroundColor: 'transparent',
+    color: '#fff',
+  },
+  '&:hover': {
+    border: 'none',
+    color: '#fff',
+  },
+}
+
+const SearchTextfieldStyle = {
+  flexGrow: 1,
+  '& .MuiInputBase-root': {
+    borderRadius: '2rem',
+  },
+}
 
 interface SearchBodyProps {
   onClose: () => void
@@ -28,6 +62,7 @@ const StyleSeachPc = {
   width: '60%',
   ml: 'auto',
   mr: 'auto',
+  mt: '2%',
 }
 
 const StyleSeachMobile = {
@@ -39,8 +74,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
   const { isPc } = useMedia()
   const { control, handleSubmit, setValue } = useForm()
   const [type, setType] = useState<SearchType>(SearchType.STUDY)
-  const clickStudy = () => setType(SearchType.STUDY)
-  const clickProject = () => setType(SearchType.PROJECT)
+
   const onSubmit = (data: any) => {
     const keyword = data.searchWord
 
@@ -67,6 +101,14 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
     onClose()
   }
 
+  const handleChanged = (
+    event: MouseEvent<HTMLElement>,
+    newAlignment: SearchType,
+  ) => {
+    if (newAlignment === null) return
+    setType(newAlignment)
+  }
+
   return (
     <>
       <Stack sx={{ m: 0, p: 0 }}>
@@ -79,7 +121,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
             }}
           >
             <Button
-              style={{ border: 'none', color: 'white' }}
+              style={{ border: 'none', color: 'normal' }}
               onClick={onClose}
             >
               <ArrowBackIosNewIcon />
@@ -90,34 +132,50 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
         </AppBar>
 
         <Box sx={isPc ? StyleSeachPc : StyleSeachMobile}>
-          <ButtonGroup>
-            <Button onClick={clickStudy} sx={{ border: 'none' }}>
+          <ToggleButtonGroup onChange={handleChanged} exclusive value={type}>
+            <ToggleButton
+              size="large"
+              sx={ToggleButtonStyle}
+              value={SearchType.STUDY}
+            >
               스터디
-            </Button>
-            <Button onClick={clickProject} sx={{ border: 'none' }}>
+            </ToggleButton>
+            <ToggleButton
+              size="large"
+              sx={ToggleButtonStyle}
+              value={SearchType.PROJECT}
+            >
               프로젝트
-            </Button>
-          </ButtonGroup>
+            </ToggleButton>
+          </ToggleButtonGroup>
 
-          <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Controller
-                name="searchWord"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField
-                    sx={{ width: '100%' }}
-                    placeholder={
-                      type === SearchType.PROJECT
-                        ? '프로젝트를 찾는 중...'
-                        : '스터디를 찾는 중...'
-                    }
-                    {...field}
-                  />
-                )}
-              />
-              <Button type="submit">검색</Button>
+          <Stack direction="row" spacing={1} sx={{ width: '100%', mt: 1 }}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              style={{ width: '100%', height: '2.5rem' }}
+            >
+              <Stack direction="row" spacing={1}>
+                <Controller
+                  name="searchWord"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      sx={{ flexGrow: 1 }}
+                      InputProps={{
+                        endAdornment: <SearchButton />,
+                        style: { borderRadius: '2rem' },
+                      }}
+                      placeholder={
+                        type === SearchType.PROJECT
+                          ? '프로젝트를 찾는 중...'
+                          : '스터디를 찾는 중...'
+                      }
+                      {...field}
+                    />
+                  )}
+                />
+              </Stack>
             </form>
           </Stack>
           <SearchHistory searchwordSet={setValue} />

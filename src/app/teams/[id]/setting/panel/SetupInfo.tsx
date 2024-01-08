@@ -51,7 +51,7 @@ interface ISetupTeam {
 }
 
 const SetupInfo = ({ team }: { team: ISetupTeam }) => {
-  const { isPc, isTablet } = useMedia()
+  const { isPc } = useMedia()
   const [preview, setPreview] = useState<string>(
     team.teamImage ? team.teamImage : '/images/teamLogo.png',
   )
@@ -199,237 +199,240 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                 </Box>
               </Stack>
               <Stack>
-                <Stack>
-                  <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
-                    <PencilClearIcon />
-                    <Stack
-                      direction={'row'}
-                      alignItems={'center'}
-                      spacing={'0.5rem'}
-                    >
-                      {team.type === TeamType.PROJECT && (
-                        <Typography>프로젝트명</Typography>
-                      )}
-                      {team.type === TeamType.STUDY && (
-                        <Typography>스터디명</Typography>
-                      )}
-                      <TextField
-                        maxRows={1}
-                        inputProps={{
-                          style: {
-                            padding: '0.5rem',
-                          },
-                        }}
-                        {...register('name', {
-                          required: '필수 입력사항입니다.',
-                          maxLength: 10,
-                          minLength: {
-                            value: 2,
-                            message: '2글자 이상 입력해주세요.',
-                          },
-                          pattern: {
-                            value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/,
-                            message: '한글, 영문, 숫자만 입력 가능합니다.',
-                          },
-                        })}
-                        type="text"
-                      />
-                      <Typography>{errors.name?.message}</Typography>
-                    </Stack>
-                  </Stack>
-                  <Stack direction={'row'} alignItems={'center'} m={'0.5rem'}>
-                    <TargetClearIcon />
-                    <Stack
-                      direction={'row'}
-                      alignItems={'center'}
-                      spacing={'0.5rem'}
-                    >
-                      <Typography>상태</Typography>
-                      <Controller
-                        name="status"
-                        control={control}
-                        defaultValue={team.status}
-                        render={({ field }) => (
-                          <Select
-                            size="small"
-                            sx={{ m: 0 }}
-                            defaultValue={team.status}
-                            {...field}
-                          >
-                            {[
-                              TeamStatus.RECRUITING,
-                              TeamStatus.BEFORE,
-                              TeamStatus.ONGOING,
-                              TeamStatus.COMPLETE,
-                            ].map((status) => (
-                              <MenuItem key={status} value={status}>
-                                {status === TeamStatus.RECRUITING && '모집 중'}
-                                {status === TeamStatus.BEFORE && '진행 예정'}
-                                {status === TeamStatus.ONGOING && '진행 중'}
-                                {status === TeamStatus.COMPLETE && '완료'}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
-                    </Stack>
-                  </Stack>
+                <Stack
+                  direction={'row'}
+                  alignItems={'center'}
+                  m={'0.5rem'}
+                  spacing={'0.25rem'}
+                >
+                  <PencilClearIcon />
                   <Stack
                     direction={'row'}
                     alignItems={'center'}
-                    m={'0.5rem'}
                     spacing={'0.5rem'}
                   >
-                    <Stack
-                      direction={'row'}
-                      alignItems={'flex-start'}
-                      spacing={'0.25rem'}
-                    >
-                      <PieClearIcon />
-                      <Typography textOverflow={'ellipsis'}>
-                        목표기간
-                      </Typography>
-                    </Stack>
-
-                    <Controller
-                      name="dueTo"
-                      control={control}
-                      defaultValue={team.dueTo}
-                      render={({ field }) => (
-                        <Select
-                          size="small"
-                          defaultValue={team.dueTo}
-                          sx={{
-                            m: 0,
-                            minWidth: '8rem',
-                          }}
-                          {...field}
-                        >
-                          {dueList.map((dueTo) => (
-                            <MenuItem key={dueTo} value={dueTo}>
-                              {dueTo}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      )}
+                    {team.type === TeamType.PROJECT && (
+                      <Typography>프로젝트명</Typography>
+                    )}
+                    {team.type === TeamType.STUDY && (
+                      <Typography>스터디명</Typography>
+                    )}
+                    <TextField
+                      maxRows={1}
+                      inputProps={{
+                        style: {
+                          padding: '0.5rem',
+                        },
+                      }}
+                      {...register('name', {
+                        required: '필수 입력사항입니다.',
+                        maxLength: 10,
+                        minLength: {
+                          value: 2,
+                          message: '2글자 이상 입력해주세요.',
+                        },
+                        pattern: {
+                          value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/,
+                          message: '한글, 영문, 숫자만 입력 가능합니다.',
+                        },
+                      })}
+                      type="text"
                     />
+                    <Typography>{errors.name?.message}</Typography>
                   </Stack>
+                </Stack>
+                <Stack
+                  direction={'row'}
+                  alignItems={'center'}
+                  m={'0.5rem'}
+                  spacing={'0.25rem'}
+                >
+                  <TargetClearIcon />
                   <Stack
                     direction={'row'}
                     alignItems={'center'}
-                    m={'0.35rem'}
                     spacing={'0.5rem'}
                   >
-                    <Stack
-                      direction={'row'}
-                      alignItems={'flex-start'}
-                      spacing={'0.35rem'}
-                    >
-                      <WifiClearIcon />
-                      <Typography>활동방식</Typography>
-                    </Stack>
+                    <Typography>상태</Typography>
                     <Controller
-                      name="operationForm"
+                      name="status"
                       control={control}
-                      defaultValue={team.operationForm}
+                      defaultValue={team.status}
                       render={({ field }) => (
                         <Select
                           size="small"
-                          defaultValue={team.operationForm}
-                          sx={{
-                            m: 0,
-                            minWidth: '8rem',
-                          }}
+                          sx={{ m: 0 }}
+                          defaultValue={team.status}
                           {...field}
                         >
                           {[
-                            TeamOperationForm.OFFLINE,
-                            TeamOperationForm.ONLINE,
-                            TeamOperationForm.MIX,
-                          ].map((operation) => (
-                            <MenuItem key={operation} value={operation}>
-                              {operation === TeamOperationForm.OFFLINE &&
-                                '오프라인'}
-                              {operation === TeamOperationForm.ONLINE &&
-                                '온라인'}
-                              {operation === TeamOperationForm.MIX &&
-                                '온/오프라인'}
+                            TeamStatus.RECRUITING,
+                            TeamStatus.BEFORE,
+                            TeamStatus.ONGOING,
+                            TeamStatus.COMPLETE,
+                          ].map((status) => (
+                            <MenuItem key={status} value={status}>
+                              {status === TeamStatus.RECRUITING && '모집 중'}
+                              {status === TeamStatus.BEFORE && '진행 예정'}
+                              {status === TeamStatus.ONGOING && '진행 중'}
+                              {status === TeamStatus.COMPLETE && '완료'}
                             </MenuItem>
                           ))}
                         </Select>
                       )}
                     />
                   </Stack>
+                </Stack>
+                <Stack
+                  direction={'row'}
+                  alignItems={'center'}
+                  m={'0.5rem'}
+                  spacing={'0.5rem'}
+                >
                   <Stack
                     direction={'row'}
-                    alignItems={'center'}
-                    spacing={'0.5rem'}
-                    m={'0.35rem'}
+                    alignItems={'flex-start'}
+                    spacing={'0.25rem'}
                   >
-                    <Stack
-                      direction={'row'}
-                      alignItems={'flex-start'}
-                      spacing={'0.35rem'}
-                    >
-                      <GeoClearIcon />
-                      <Typography>활동지역</Typography>
-                    </Stack>
-                    <Stack direction={'row'} spacing={1}>
-                      <Controller
-                        name="region.0"
-                        control={control}
-                        defaultValue={team.region[0]}
-                        render={({ field }) => (
-                          <Select
-                            size="small"
-                            defaultValue={team.region[0]}
-                            sx={{
-                              m: 0,
-                              minWidth: '8rem',
-                            }}
-                            {...field}
-                          >
-                            {locationData.map((region) => (
-                              <MenuItem key={region.name} value={region.name}>
-                                {region.name}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
-                      <Controller
-                        name="region.1"
-                        control={control}
-                        defaultValue={team.region[1]}
-                        render={({ field }) => (
-                          <Select
-                            size="small"
-                            defaultValue={team.region[1]}
-                            sx={{
-                              m: 0,
-                              minWidth: '8rem',
-                            }}
-                            {...field}
-                          >
-                            {locationData.find(
-                              (region) => region.name === team.region[0],
-                            )?.subArea ? (
-                              locationData
-                                .find(
-                                  (region) => region.name === team.region[0],
-                                )
-                                ?.subArea?.map((region) => (
-                                  <MenuItem key={region} value={region}>
-                                    {region}
-                                  </MenuItem>
-                                ))
-                            ) : (
-                              <MenuItem key={'region'} value={''}></MenuItem>
-                            )}
-                          </Select>
-                        )}
-                      />
-                    </Stack>
+                    <PieClearIcon />
+                    <Typography textOverflow={'ellipsis'}>목표기간</Typography>
+                  </Stack>
+
+                  <Controller
+                    name="dueTo"
+                    control={control}
+                    defaultValue={team.dueTo}
+                    render={({ field }) => (
+                      <Select
+                        size="small"
+                        defaultValue={team.dueTo}
+                        sx={{
+                          m: 0,
+                          minWidth: '8rem',
+                        }}
+                        {...field}
+                      >
+                        {dueList.map((dueTo) => (
+                          <MenuItem key={dueTo} value={dueTo}>
+                            {dueTo}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </Stack>
+                <Stack
+                  direction={'row'}
+                  alignItems={'center'}
+                  m={'0.35rem'}
+                  spacing={'0.5rem'}
+                >
+                  <Stack
+                    direction={'row'}
+                    alignItems={'flex-start'}
+                    spacing={'0.35rem'}
+                  >
+                    <WifiClearIcon />
+                    <Typography>활동방식</Typography>
+                  </Stack>
+                  <Controller
+                    name="operationForm"
+                    control={control}
+                    defaultValue={team.operationForm}
+                    render={({ field }) => (
+                      <Select
+                        size="small"
+                        defaultValue={team.operationForm}
+                        sx={{
+                          m: 0,
+                          minWidth: '8rem',
+                        }}
+                        {...field}
+                      >
+                        {[
+                          TeamOperationForm.OFFLINE,
+                          TeamOperationForm.ONLINE,
+                          TeamOperationForm.MIX,
+                        ].map((operation) => (
+                          <MenuItem key={operation} value={operation}>
+                            {operation === TeamOperationForm.OFFLINE &&
+                              '오프라인'}
+                            {operation === TeamOperationForm.ONLINE && '온라인'}
+                            {operation === TeamOperationForm.MIX &&
+                              '온/오프라인'}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </Stack>
+                <Stack
+                  direction={'row'}
+                  alignItems={'center'}
+                  spacing={'0.5rem'}
+                  m={'0.35rem'}
+                >
+                  <Stack
+                    direction={'row'}
+                    alignItems={'flex-start'}
+                    spacing={'0.35rem'}
+                  >
+                    <GeoClearIcon />
+                    <Typography>활동지역</Typography>
+                  </Stack>
+                  <Stack direction={'row'} spacing={1}>
+                    <Controller
+                      name="region.0"
+                      control={control}
+                      defaultValue={team.region[0]}
+                      render={({ field }) => (
+                        <Select
+                          size="small"
+                          defaultValue={team.region[0]}
+                          sx={{
+                            m: 0,
+                            minWidth: '8rem',
+                          }}
+                          {...field}
+                        >
+                          {locationData.map((region) => (
+                            <MenuItem key={region.name} value={region.name}>
+                              {region.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
+                    />
+                    <Controller
+                      name="region.1"
+                      control={control}
+                      defaultValue={team.region[1]}
+                      render={({ field }) => (
+                        <Select
+                          size="small"
+                          defaultValue={team.region[1]}
+                          sx={{
+                            m: 0,
+                            minWidth: '8rem',
+                          }}
+                          {...field}
+                        >
+                          {locationData.find(
+                            (region) => region.name === team.region[0],
+                          )?.subArea ? (
+                            locationData
+                              .find((region) => region.name === team.region[0])
+                              ?.subArea?.map((region) => (
+                                <MenuItem key={region} value={region}>
+                                  {region}
+                                </MenuItem>
+                              ))
+                          ) : (
+                            <MenuItem key={'region'} value={''}></MenuItem>
+                          )}
+                        </Select>
+                      )}
+                    />
                   </Stack>
                 </Stack>
               </Stack>
