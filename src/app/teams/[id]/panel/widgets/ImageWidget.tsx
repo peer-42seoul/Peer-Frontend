@@ -55,7 +55,7 @@ const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
                 }}
                 onClick={() => inputRef.current?.click()}
               >
-                <EditIcon sx={{ color: 'white' }} />
+                <EditIcon sx={{ color: 'text.strong' }} />
               </IconButton>
               <input
                 ref={inputRef}
@@ -72,7 +72,7 @@ const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
               onClick={() => inputRef.current?.click()}
               sx={{ p: '2rem' }}
             >
-              <PictureIcon sx={{ color: '#42444C' }} />
+              <PictureIcon sx={{ color: 'text.assistive' }} />
             </IconButton>
             <input
               ref={inputRef}
