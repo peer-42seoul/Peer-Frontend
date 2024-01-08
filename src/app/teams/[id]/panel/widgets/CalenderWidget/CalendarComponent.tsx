@@ -1,9 +1,8 @@
 import { DateHeaderProps, ToolbarProps } from 'react-big-calendar'
 import dayjs from 'dayjs'
 import { IconButton, Stack } from '@mui/material'
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import CircleIcon from '@mui/icons-material/Circle'
+import { ChevronLeft, ChevronRight } from '@/icons'
 import { IEvent } from '@/types/WidgetDataTypes'
 
 interface ICustomDateHeaderProps extends DateHeaderProps {
@@ -24,15 +23,27 @@ export const MiniToolbar = (props: ToolbarProps) => {
 export const LargeToolbar = (props: ToolbarProps) => {
   const { date, onNavigate } = props
   return (
-    <div className="rbc-toolbar">
-      <IconButton onClick={() => onNavigate('PREV')}>
-        <ArrowBackIosIcon />
+    <Stack
+      direction={'row'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      spacing={'1rem'}
+      className="rbc-toolbar"
+    >
+      <IconButton
+        className={'rbc-toolbar-button'}
+        onClick={() => onNavigate('PREV')}
+      >
+        <ChevronLeft />
       </IconButton>
       <span className="rbc-toolbar-label">{dayjs(date).format('MMMM')}</span>
-      <IconButton onClick={() => onNavigate('NEXT')}>
-        <ArrowForwardIosIcon />
+      <IconButton
+        className={'rbc-toolbar-button'}
+        onClick={() => onNavigate('NEXT')}
+      >
+        <ChevronRight />
       </IconButton>
-    </div>
+    </Stack>
   )
 }
 

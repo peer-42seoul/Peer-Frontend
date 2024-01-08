@@ -19,7 +19,7 @@ export const getTodayEvents = (
 }
 
 export const isPastEvent = (end: Date) => {
-  return dayjs(end).isBefore(dayjs())
+  return dayjs(end).isBefore(dayjs(), 'minute')
 }
 
 export const useCalendar = (events?: IEvent[]) => {

@@ -151,9 +151,8 @@ const MyInterests = () => {
         open={isToastOpen}
         onClose={closeToast}
         severity={toastMessage.severity}
-      >
-        {toastMessage.message}
-      </CuToast>
+        message={toastMessage.message}
+      />
       <AlertModal
         isOpen={isModalOpen}
         closeModal={closeModal}

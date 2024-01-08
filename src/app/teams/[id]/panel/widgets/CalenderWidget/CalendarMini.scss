@@ -21,7 +21,6 @@
     // ANCHOR : 날짜 표시
     .rbc-month-row {
       .rbc-row-content .rbc-row .rbc-date-cell {
-        @include flex-box(column, center, center);
         width: 1.25rem;
         max-width: 1.25rem;
         @include Body2;
