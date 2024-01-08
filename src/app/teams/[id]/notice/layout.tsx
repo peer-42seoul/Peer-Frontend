@@ -15,7 +15,6 @@ const TeamNoticeMain = ({ list, detail, edit }: ITeamLayoutProps) => {
       resetState()
     }
   }, [])
-  console.log('boardType: ', boardType)
   if (boardType === 'EDIT') {
     return edit
   }
