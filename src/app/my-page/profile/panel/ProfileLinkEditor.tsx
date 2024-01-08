@@ -55,10 +55,16 @@ const ProfileLinkEditor = ({
     control,
     setError,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<Array<IUserProfileLink>>({
     defaultValues: { ...defaultValues },
     mode: 'onChange',
   })
+
+  const handleCloseModal = () => {
+    reset(defaultValues)
+    closeModal()
+  }
 
   const onSubmit = async (data: Array<IUserProfileLink>) => {
     const requestBody: {
@@ -107,6 +113,7 @@ const ProfileLinkEditor = ({
           message: '링크 변경에 성공하였습니다.',
         })
         setToastOpen(true)
+        reset(defaultValues)
         closeModal()
         mutate()
       })
@@ -122,7 +129,7 @@ const ProfileLinkEditor = ({
   return (
     <CuModal
       open={open}
-      onClose={closeModal}
+      onClose={handleCloseModal}
       title="링크 수정"
       containedButton={{
         text: isSubmitting ? '제출 중' : '완료',
