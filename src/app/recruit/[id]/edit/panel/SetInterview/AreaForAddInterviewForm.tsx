@@ -70,7 +70,6 @@ const AreaForAddInterviewForm = ({
           valueOfMin === '' ||
           valueOfMax === ''
         ) {
-          console.log('모든 값을 입력해주세요')
           alert('모든 값을 입력해주세요')
           return
         }
@@ -93,7 +92,6 @@ const AreaForAddInterviewForm = ({
       }
       case 'OPEN': {
         if (question === '') {
-          console.log('모든 값을 입력해주세요')
           alert('모든 값을 입력해주세요')
           return
         }

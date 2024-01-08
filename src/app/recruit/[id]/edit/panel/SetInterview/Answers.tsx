@@ -10,7 +10,6 @@ import {
 } from '@mui/material'
 
 const Answers = ({ data }: { data: IFormInterview }) => {
-  console.log('data.type', data.type)
   switch (data.type) {
     case 'CLOSE': {
       return (

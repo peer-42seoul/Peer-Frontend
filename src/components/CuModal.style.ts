@@ -18,6 +18,7 @@ export const pcWrapper = {
 
 export const mobileWrapper = {
   ...modalBase,
+  width: '85vw',
   minWidth: '20.5rem',
   borderRadius: '2rem',
   padding: '1.25rem 1.25rem 1.5rem 1.25rem',
