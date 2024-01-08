@@ -78,7 +78,6 @@ const SendCodeForm = ({
 
   const onSubmit = async (data: { code: string }) => {
     const code = data.code
-    //console.log(codeData)
 
     try {
       const res = await axios.post(`${API_URL}/api/v1/signin/find-password`, {

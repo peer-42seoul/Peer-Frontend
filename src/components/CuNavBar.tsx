@@ -152,7 +152,6 @@ const MobileToggleButton = ({
   width: number
 }) => {
   const isNewTab = tab.new && !tab.disabled
-  console.log(width)
   return (
     <ToggleButton
       value={tab.value}
