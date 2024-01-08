@@ -3,6 +3,7 @@ import { ProjectType } from '@/app/panel/MainPage'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import { IMainCard } from '@/types/IPostDetail'
+import { useMediaQuery, useTheme } from '@mui/material'
 import { Box, CircularProgress, Grid, Stack } from '@mui/material'
 import React from 'react'
 
@@ -22,13 +23,27 @@ const InterestsContents = ({
   isDeleting: boolean
 }) => {
   const { isPc } = useMedia()
+  const theme = useTheme()
+  const isMiddle = useMediaQuery(theme.breakpoints.up('md'))
+
+  const getStyle = (i: number) => {
+    if (isMiddle) {
+      if (i % 3 === 0) {
+        return { paddingLeft: 0 }
+      }
+    } else if (isPc && i % 2 === 0) {
+      return { paddingLeft: 0 }
+    }
+    return undefined
+  }
+
   return (
     <Grid
       container
       rowSpacing={[2, 3]}
       columnSpacing={[0, 2]}
       alignItems="center"
-      justifyContent={['space-evenly', 'flex-start']}
+      justifyContent={['space-evenly', 'flex-end']}
       style={{ width: '100%', boxSizing: 'border-box' }}
       direction="row"
     >
@@ -56,8 +71,9 @@ const InterestsContents = ({
           item
           key={item.recruit_id}
           xs={10}
-          sm={4}
-          style={{ paddingLeft: isPc && i % 3 === 0 ? 0 : undefined }}
+          sm={6}
+          md={4}
+          style={getStyle(i)}
         >
           <MainCard {...item} type={type as ProjectType} />
         </Grid>

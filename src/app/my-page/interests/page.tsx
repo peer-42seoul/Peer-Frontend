@@ -1,7 +1,6 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
 import { ProjectType } from '@/app/panel/MainPage'
-import CuButton from '@/components/CuButton'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
