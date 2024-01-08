@@ -3,13 +3,9 @@ import { ProjectType } from '@/app/panel/MainPage'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import { IMainCard } from '@/types/IPostDetail'
-import {
-  Box,
-  CircularProgress,
-  Stack,
-  Unstable_Grid2 as Grid,
-} from '@mui/material'
+import { Box, CircularProgress, Stack } from '@mui/material'
 import React from 'react'
+import Grid from '@mui/material/Unstable_Grid2'
 
 const InterestsContents = ({
   postList,

@@ -11,7 +11,8 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
 import CuTextModal from '@/components/CuTextModal'
-import * as style from '../panel/my-page.style'
+import * as pageStyle from '../panel/my-page.style'
+import * as style from './interests.style'
 
 interface IInterestResponse {
   postList: IMainCard[]
@@ -25,16 +26,62 @@ const TypeTabs = ({
   type: string
   handleChange: (e: React.SyntheticEvent, newValue: string) => void
 }) => {
+  const { isPc } = useMedia()
+
+  const getColor = (value: string) => {
+    if (value === type) {
+      return 'text.normal'
+    } else if (isPc) {
+      return 'text.alternative'
+    }
+    return 'text.assistive'
+  }
+
   return (
     <Tabs
       value={type}
       onChange={handleChange}
       aria-label="menu tabs"
       variant="fullWidth"
+      sx={{
+        '& .MuiTabs-indicator': {
+          display: 'none',
+        },
+        '& .MuiTabs-indicatorSpan': {
+          display: 'none',
+        },
+      }}
     >
-      <Tab label="프로젝트" value={'PROJECT'} />
-      <Tab label="스터디" value={'STUDY'} />
-      {/* <Tab label="쇼케이스" value={'showcase'} /> */}
+      <Tab
+        label={
+          <Typography variant="Body2" color={getColor('PROJECT')}>
+            프로젝트
+          </Typography>
+        }
+        value={'PROJECT'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      />
+      <Tab
+        label={
+          <Typography variant="Body2" color={getColor('STUDY')}>
+            스터디
+          </Typography>
+        }
+        value={'STUDY'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      />
+      {/* <Tab
+        label={
+          <Typography
+            variant="Body2"
+            color={getColor('SHOWCASE')}
+          >
+            쇼케이스
+          </Typography>
+        }
+        value={'SHOWCASE'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      /> */}
     </Tabs>
   )
 }
@@ -158,7 +205,7 @@ const MyInterests = () => {
       <Stack
         direction={'column'}
         spacing={3}
-        sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
+        sx={isPc ? pageStyle.pagePcStyle : pageStyle.pageMobileStyle}
       >
         <TypeTabs type={type} handleChange={handleTabChange} />
 
