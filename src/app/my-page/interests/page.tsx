@@ -21,6 +21,7 @@ import InterestsContents from './panel/InterestsContents'
 import CuTextModal from '@/components/CuTextModal'
 import * as pageStyle from '../panel/my-page.style'
 import * as style from './interests.style'
+import { centeredPosition } from '@/constant/centerdPosition.style'
 
 interface IInterestResponse {
   postList: IMainCard[]
@@ -240,24 +241,9 @@ const MyInterests = () => {
             position={'relative'}
           >
             {isLoading ? (
-              <CircularProgress
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                }}
-              />
+              <CircularProgress sx={centeredPosition} />
             ) : (
-              <Typography
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                }}
-                variant="Caption"
-              >
+              <Typography sx={centeredPosition} variant="Caption">
                 관심있다고 표시한 페이지가 없습니다.
               </Typography>
             )}
