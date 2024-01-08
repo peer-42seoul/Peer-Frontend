@@ -17,6 +17,7 @@ export const tabs = {
 }
 
 const tabBase = {
+  border: 'none',
   svg: {
     fill: (theme: Theme) => theme.palette.text.assistive,
   },
