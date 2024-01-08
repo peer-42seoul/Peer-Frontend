@@ -5,28 +5,25 @@ import dayjs from 'dayjs'
 import useSWR from 'swr'
 import { Button, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
+import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
+import * as style from './page.style'
 
 interface NoticeContentContainerProps {
   children: ReactNode
   isAuthor: boolean
-  params: { id: string; postId: string }
 }
 
 const NoticeContentContainer = ({
   children,
   isAuthor,
-  params,
 }: NoticeContentContainerProps) => {
-  const router = useRouter()
-  const { id, postId } = params
+  const { setNotice, postId } = useTeamPageState()
   return (
     <Stack spacing={2} width={'100%'}>
-      <Button
-        onClick={() => router.push(`/teams/${id}/notice`)}
-        variant={'text'}
-      >
+      <Button onClick={() => setNotice('LIST')} variant={'text'}>
         이전 페이지
       </Button>
       <Stack
@@ -36,10 +33,7 @@ const NoticeContentContainer = ({
       >
         <Typography variant="body2">공지사항</Typography>
         {isAuthor ? (
-          <Button
-            onClick={() => router.push(`/teams/${id}/notice-edit/${postId}`)}
-            variant="text"
-          >
+          <Button onClick={() => setNotice('EDIT', postId)} variant="text">
             수정
           </Button>
         ) : null}
@@ -49,13 +43,10 @@ const NoticeContentContainer = ({
   )
 }
 
-const TeamNoticeView = ({
-  params,
-}: {
-  params: { id: string; postId: string }
-}) => {
-  const { postId, id } = params
+const TeamNoticeView = ({ params }: { params: { id: string } }) => {
+  const { id } = params
   const axiosWithAuth = useAxiosWithAuth()
+  const { postId } = useTeamPageState()
   const router = useRouter()
   const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
     `/api/v1/team/notice/${postId}`,
@@ -78,13 +69,16 @@ const TeamNoticeView = ({
 
   if (error || !data)
     return (
-      <NoticeContentContainer isAuthor={!!data?.isAuthor} params={params}>
+      <NoticeContentContainer isAuthor={!!data?.isAuthor}>
         <Typography>문제가 발생했습니다.</Typography>
       </NoticeContentContainer>
     )
+
+  if (postId === undefined) return null
+
   return (
     <Stack>
-      <NoticeContentContainer isAuthor={data.isAuthor} params={params}>
+      <NoticeContentContainer isAuthor={data.isAuthor}>
         {isLoading ? (
           <Typography>로딩중...</Typography>
         ) : (
@@ -105,8 +99,8 @@ const TeamNoticeView = ({
             </Stack>
             <Stack spacing={1}>
               <Typography>설명</Typography>
-              <Typography>{data.content}</Typography>
             </Stack>
+            <DynamicToastViewer sx={style.viewer} initialValue={data.content} />
             <Stack alignItems={'flex-end'}>
               {data.isAuthor ? (
                 <Button variant={'text'} color="warning" onClick={handleDelete}>
@@ -117,7 +111,7 @@ const TeamNoticeView = ({
           </>
         )}
       </NoticeContentContainer>
-      <CommentList postId={parseInt(postId)} teamId={parseInt(id)} />
+      <CommentList postId={postId} teamId={parseInt(id)} />
     </Stack>
   )
 }

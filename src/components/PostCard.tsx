@@ -5,6 +5,7 @@ import {
   CardMedia,
   Stack,
   Typography,
+  alpha,
 } from '@mui/material'
 import React from 'react'
 import { IPostCard } from '@/types/IPostCard'
@@ -25,15 +26,11 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
     onClick,
     onMouseUp,
     onTouchEnd,
-    cardWidth, // 모바일의 경우 width 기준으로 크기 조절을 하므로 무조건 있어야 합니다.
+    cardWidth, // width 기준으로 text overflow를 조절하므로 꼭 필요합니다.
   }: IPostCard,
   ref,
 ) {
   const { isPc } = useMedia()
-  const getHeight = (originHeight: number) => {
-    const height = (cardWidth * originHeight) / 328 / 16
-    return height > 2 ? `2rem` : `${height}rem`
-  }
 
   const getLineCount = (originHeight: number, lineHeight: number) => {
     const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
@@ -56,10 +53,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
         component="img"
         image={image}
         alt="post thumbnail"
-        sx={{
-          ...style.cardMediaStyleBase,
-          height: isPc ? '100%' : getHeight(251),
-        }}
+        sx={isPc ? style.cardMediaPcStyle : style.cardMediaMobileStyle}
       />
       <Stack
         sx={{ p: '1rem', pt: '0.75rem' }}
@@ -71,11 +65,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
             <CuAvatar
               aria-label="profile"
               src={authorImage}
-              sx={{
-                width: isPc ? '2rem' : getHeight(32),
-                height: isPc ? '2rem' : getHeight(32),
-                boxSizing: 'border-box',
-              }}
+              sx={style.cardAuthorAvatarStyle}
             />
           }
           title={
@@ -92,8 +82,8 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
             color="text.normal"
             sx={{
               ...style.cardTitleStyleBase,
-              height: isPc ? '46px' : getLineCount(46, 22.5) * 22.5,
-              WebkitLineClamp: isPc ? 2 : getLineCount(46, 22.5),
+              height: getLineCount(46, 22.5) * 22.5,
+              WebkitLineClamp: getLineCount(46, 22.5),
             }}
           >
             {title}
@@ -110,13 +100,6 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
             }}
           >
             {tagList?.map(({ name, color }: ITag, idx: number) => {
-              const r = parseInt(color.slice(1, 3), 16),
-                g = parseInt(color.slice(3, 5), 16),
-                b = parseInt(color.slice(5, 7), 16)
-              const alpha = '0.3'
-              const backgroundColor =
-                'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')'
-
               return (
                 <Chip
                   label={
@@ -127,7 +110,7 @@ const PostCard = React.forwardRef<HTMLDivElement, IPostCard>(function PostCard(
                   size="small"
                   key={idx}
                   style={{
-                    backgroundColor: backgroundColor,
+                    backgroundColor: alpha(color, 0.3),
                     borderRadius: 2,
                     height: '1.25rem',
                   }}

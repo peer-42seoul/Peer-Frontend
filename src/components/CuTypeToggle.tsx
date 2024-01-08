@@ -17,6 +17,9 @@ const CuTypeToggle = styled((props: SwitchProps) => (
     },
   },
   '& .MuiSwitch-switchBase': {
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
     padding: 0,
     width: 60,
     height: 28,

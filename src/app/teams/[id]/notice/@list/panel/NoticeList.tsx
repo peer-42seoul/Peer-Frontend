@@ -1,9 +1,9 @@
-import { ReactNode, useEffect, Fragment } from 'react'
-import Link from 'next/link'
+import { ReactNode, Fragment, useEffect } from 'react'
 import dayjs from 'dayjs'
 import { Box, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
+import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
 
 interface NoticeItemProps {
@@ -22,9 +22,20 @@ const NoticeListContainer = ({ children }: { children: ReactNode }) => {
   )
 }
 
-const NoticeItem = ({ title, author, date, id, teamId }: NoticeItemProps) => {
+const NoticeItem = ({ title, author, date, id }: NoticeItemProps) => {
+  const { setNotice } = useTeamPageState()
   return (
-    <Link href={`/teams/${teamId}/notice/${id}`}>
+    <Box
+      onClick={() => {
+        setNotice('DETAIL', id)
+      }}
+      sx={{
+        cursor: 'pointer',
+        '&:hover': {
+          backgroundColor: 'primary.light',
+        },
+      }}
+    >
       <Stack>
         <Typography variant={'Body1'}>{title}</Typography>
       </Stack>
@@ -32,7 +43,7 @@ const NoticeItem = ({ title, author, date, id, teamId }: NoticeItemProps) => {
         <Typography variant={'Body2'}>{author}</Typography>
         <Typography variant={'Caption'}>{date}</Typography>
       </Stack>
-    </Link>
+    </Box>
   )
 }
 

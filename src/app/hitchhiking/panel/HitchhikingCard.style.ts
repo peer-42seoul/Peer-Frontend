@@ -8,8 +8,8 @@ export const cardSizeBase: SxProps = {
 
 export const cardPcSize: SxProps = {
   ...cardSizeBase,
-  width: '20.5rem',
-  height: '441px',
+  width: 'calc(80svh * 328 /800)',
+  height: 'calc(80svh * 441 /800)',
 }
 
 export const cardMobileSize: SxProps = {
@@ -52,6 +52,8 @@ export const cardChipStyleBase: SxProps = {
   padding: '0 6px',
   backgroundColor: 'background.tertiary',
   borderRadius: '2px',
+  height: 'calc(90vw * 24 / 328)',
+  maxHeight: '1.5rem',
   '& .MuiChip-label': {
     padding: '0px',
   },
