@@ -44,7 +44,7 @@ const InterestsContents = ({
       columnSpacing={[0, 2]}
       alignItems="center"
       justifyContent={['space-evenly', 'flex-end']}
-      style={{ width: '100%', boxSizing: 'border-box' }}
+      // style={{ width: '100%', boxSizing: 'border-box' }}
       direction="row"
     >
       <Grid item xs={12} style={{ padding: 0 }}>
@@ -73,7 +73,7 @@ const InterestsContents = ({
           xs={10}
           sm={6}
           md={4}
-          style={getStyle(i)}
+          // style={getStyle(i)}
         >
           <MainCard {...item} type={type as ProjectType} />
         </Grid>
