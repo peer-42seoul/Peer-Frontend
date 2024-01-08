@@ -12,6 +12,8 @@ export const mobileNavBar = {
 }
 
 export const tabs = {
+  display: 'flex',
+  justifyContent: 'space-between',
   width: '100%',
   padding: 0,
 }
@@ -47,6 +49,7 @@ export const pcTab = {
   maxWidth: '15.3rem',
   width: '100%',
   padding: '0 1.5rem',
+  margin: '0.25rem 0',
   ...tabBase,
   ...selectedTab,
   ...disabledTab,
@@ -58,6 +61,8 @@ export const newTab = {
 
 export const mobileTab = {
   height: '3rem',
+  minWidth: '3.69rem',
+  // width: 인라인에서 비율로 지정해둠
   padding: 0,
   borderRadius: '0.5rem',
   backgroundColor: 'custom.mobileNavTab',

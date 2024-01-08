@@ -86,6 +86,7 @@ const CuNavBar = ({
                   key={crypto.randomUUID()}
                   tab={tab}
                   selected={value === tab.value}
+                  width={95 / tabData.length}
                 />
               )),
             ]}
@@ -144,16 +145,19 @@ const PcToggleButton = ({
 const MobileToggleButton = ({
   tab,
   selected,
+  width,
 }: {
   tab: ITabInfo
   selected: boolean
+  width: number
 }) => {
   const isNewTab = tab.new && !tab.disabled
+  console.log(width)
   return (
     <ToggleButton
       value={tab.value}
       onClick={tab.onClick}
-      sx={style.mobileTab}
+      sx={{ ...style.mobileTab, width: `${width}%` }}
       disabled={tab.disabled}
       selected={selected}
     >
