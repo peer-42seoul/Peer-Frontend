@@ -14,8 +14,6 @@ import React from 'react'
 import { CloseIcon } from '@/icons'
 import useMedia from '@/hook/useMedia'
 import * as style from './CuToast.style'
-import { useDarkMode } from '@/states/useDarkMode'
-import { EDisplayMode } from '@/types/DisplayTypes'
 
 const hexToDecimalArray = (hex: string | undefined) => {
   if (!hex) {
@@ -128,7 +126,6 @@ const CuToast = ({
   subButton?: React.ReactNode
 }) => {
   const { isPc } = useMedia()
-  const { darkMode } = useDarkMode()
   return (
     <Snackbar
       open={open}
@@ -160,10 +157,7 @@ const CuToast = ({
               <CloseIcon
                 sx={{
                   ...style.closeIconStyle,
-                  color:
-                    darkMode === EDisplayMode.dark
-                      ? 'text.alternative'
-                      : 'text.assistive',
+                  color: 'text.assistive',
                 }}
               />
             </IconButton>
