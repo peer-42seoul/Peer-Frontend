@@ -60,8 +60,7 @@ const ProfileCard = ({
 
   return (
     <Stack
-      spacing={3}
-      p={3}
+      spacing={isPc ? 3 : 2}
       alignSelf={'stretch'}
       sx={isPc ? style.profileCardPcStyle : style.profileCardMobileStyle}
     >
@@ -69,18 +68,20 @@ const ProfileCard = ({
         sectionTitle={'introduction'}
         setModalType={setModalType}
         titleTypographyProps={{
-          variant: 'Title3Emphasis',
+          variant: isPc ? 'Title3Emphasis' : 'Body1Emphasis',
           color: 'text.normal',
+          component: 'h3',
         }}
+        sx={{ height: '2.5rem' }}
       />
       <Stack direction="row" spacing={0.75} alignItems={'center'}>
         {/* image component */}
-
         <CuAvatar
           src={profileImageUrl ? profileImageUrl : ''}
           onClick={() => setOpen(true)}
           sx={style.profileImageStyle}
         />
+
         {/* 유저 이름, 소속, 유저 아이디, 유저 이메일 */}
         <Stack spacing={0.5}>
           <Typography variant="Body2" color={'text.normal'}>
@@ -100,11 +101,13 @@ const ProfileCard = ({
           </Typography>
         </Stack>
       </Stack>
-      <Box width={1} sx={{ minHeight: '4.5rem' }}>
-        <Typography variant="Body2" color={'text.normal'}>
-          {introduction}
-        </Typography>
-      </Box>
+      <Typography
+        variant="Body2"
+        color={'text.normal'}
+        sx={style.profileIntroductionStyle}
+      >
+        {introduction}
+      </Typography>
       <ProfileImageModal
         open={open}
         handleModalClose={handleModalClose}

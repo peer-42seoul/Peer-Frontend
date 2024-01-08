@@ -41,7 +41,7 @@
       .rbc-row-content .rbc-row {
         justify-content: space-between;
         .rbc-date-cell {
-          @include flex-box(column, center, center);
+          @include flex-box(column, flex-start, center);
           padding: 0;
           color: $dark-text-alternative;
           // 오늘 날짜 표시
