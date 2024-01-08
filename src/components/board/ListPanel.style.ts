@@ -21,3 +21,10 @@ export const ListStack = {
   height: '300px',
   overflowY: 'scroll',
 }
+
+export const ListItem = {
+  padding: '0.625rem 1rem',
+  '&:hover': {
+    cursor: 'pointer',
+  },
+}

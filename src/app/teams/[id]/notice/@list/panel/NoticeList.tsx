@@ -1,8 +1,7 @@
-import { ReactNode, Fragment, useEffect } from 'react'
-import dayjs from 'dayjs'
-import { Box, Stack, Typography } from '@mui/material'
+import { Fragment, useEffect } from 'react'
+import { Box, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import { ListStack } from '@/components/board/ListPanel'
+import { ListStack, ListItem } from '@/components/board/ListPanel'
 import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
@@ -56,39 +55,6 @@ const mockData = [
   },
 ]
 
-interface NoticeItemProps {
-  title: string
-  author: string
-  date: string
-  id: number
-  teamId: number
-}
-
-const NoticeItem = ({ title, author, date, id }: NoticeItemProps) => {
-  const { setNotice } = useTeamPageState()
-  return (
-    <Box
-      onClick={() => {
-        setNotice('DETAIL', id)
-      }}
-      sx={{
-        cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: 'primary.light',
-        },
-      }}
-    >
-      <Stack>
-        <Typography variant={'Body1'}>{title}</Typography>
-      </Stack>
-      <Stack direction={'row'} alignItems={'center'}>
-        <Typography variant={'Body2'}>{author}</Typography>
-        <Typography variant={'Caption'}>{date}</Typography>
-      </Stack>
-    </Box>
-  )
-}
-
 const StatusMessage = ({ message }: { message: string }) => {
   return (
     <ListStack>
@@ -111,6 +77,7 @@ const NoticeList = ({
   keyword: string
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
+  const { setNotice } = useTeamPageState()
   const { error, isLoading, size, setSize, targetRef } = useInfiniteSWRScroll(
     `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
@@ -137,13 +104,14 @@ const NoticeList = ({
           <Fragment key={index}>
             {page.content.map((notice: ITeamNotice) => {
               return (
-                <NoticeItem
+                <ListItem
                   key={notice.postId}
                   title={notice.title}
-                  author={notice.authorNickname}
-                  date={dayjs(notice.createdAt).format('MM[월] DD[일]')}
-                  id={notice.postId}
-                  teamId={teamId}
+                  authorNickname={notice.authorNickname}
+                  createdAt={notice.createdAt}
+                  onClick={() => {
+                    setNotice('DETAIL', notice.postId)
+                  }}
                 />
               )
             })}
