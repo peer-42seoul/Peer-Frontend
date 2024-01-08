@@ -11,6 +11,14 @@ import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
 import * as style from './page.style'
 
+const mockData = {
+  title: '제목',
+  authorNickname: '작성자',
+  createdAt: new Date(),
+  content: '내용',
+  isAuthor: true,
+}
+
 interface NoticeContentContainerProps {
   children: ReactNode
   isAuthor: boolean
@@ -44,14 +52,16 @@ const NoticeContentContainer = ({
 }
 
 const TeamNoticeView = ({ params }: { params: { id: string } }) => {
-  const { id } = params
+  const { id: teamId } = params
   const axiosWithAuth = useAxiosWithAuth()
   const { postId } = useTeamPageState()
   const router = useRouter()
-  const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
+  const { error, isLoading } = useSWR<ITeamNoticeDetail>(
     `/api/v1/team/notice/${postId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
+
+  const data = mockData
 
   const handleDelete = () => {
     const confirm = window.confirm('공지사항을 삭제하시겠습니까?')
@@ -60,14 +70,14 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       .delete(`/api/v1/team/notice/${postId}`)
       .then(() => {
         alert('공지사항을 삭제했습니다.')
-        router.push(`/teams/${id}/notice`)
+        router.push(`/teams/${teamId}/notice`)
       })
       .catch(() => {
         alert('공지사항 삭제에 실패했습니다.')
       })
   }
 
-  if (error || !data)
+  if (!data)
     return (
       <NoticeContentContainer isAuthor={!!data?.isAuthor}>
         <Typography>문제가 발생했습니다.</Typography>
@@ -111,7 +121,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
           </>
         )}
       </NoticeContentContainer>
-      <CommentList postId={postId} teamId={parseInt(id)} />
+      <CommentList postId={postId} teamId={parseInt(teamId)} />
     </Stack>
   )
 }

@@ -87,10 +87,11 @@ const SearchPopover = ({
 }
 
 const TeamNotice = ({ params }: { params: { id: string } }) => {
-  const { id } = params
+  const { id: teamId } = params
   const { isPc } = useMedia()
   const { setNotice } = useTeamPageState()
   const [keyword, setKeyword] = useState<string>('')
+
   return (
     <ListPageContainer>
       {isPc ? (
@@ -122,7 +123,7 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
             </Stack>
           )}
         </Stack>
-        <NoticeList teamId={parseInt(id)} keyword={keyword} />
+        <NoticeList teamId={parseInt(teamId)} keyword={keyword} />
       </ListBoxContainer>
     </ListPageContainer>
   )
