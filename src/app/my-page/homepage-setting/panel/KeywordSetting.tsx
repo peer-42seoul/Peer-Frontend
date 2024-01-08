@@ -27,7 +27,7 @@ interface IChip {
 
 interface IToastProps {
   severity: AlertColor | undefined
-  message: string
+  message: React.ReactNode
 }
 
 const KeywordAddingField = ({
@@ -68,7 +68,11 @@ const KeywordAddingField = ({
       .then(() => {
         setToastMessage({
           severity: 'success',
-          message: `'${trimmed}'를 알림 키워드 목록에 추가하였습니다.`,
+          message: (
+            <>
+              <b>{trimmed}</b>(이)가 키워드로 등록되었습니다.
+            </>
+          ),
         })
         mutate()
       })
@@ -81,7 +85,11 @@ const KeywordAddingField = ({
         } else {
           setToastMessage({
             severity: 'error',
-            message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
+            message: (
+              <>
+                <b>{trimmed}</b>(을)를 알림 키워드 목록에 추가하지 못했습니다.
+              </>
+            ),
           })
         }
       })
