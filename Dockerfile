@@ -1,7 +1,9 @@
-FROM node:16-alpine
+FROM alpine
+RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
+USER nonroot
 WORKDIR ./src/app
 COPY package*.json ./
-RUN npm install
+RUN npm install --ignore-scripts
 COPY . .
 EXPOSE 3000
 RUN npm run build
