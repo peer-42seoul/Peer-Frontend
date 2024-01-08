@@ -1,19 +1,13 @@
 'use client'
-import { useRouter } from 'next/navigation'
 import { Stack, Button } from '@mui/material'
+import useTeamPageState from '@/states/useTeamPageState'
 
 // NOTE : postId가 있으면 수정, 없으면 새로 작성
-const NoticeEditButton = ({
-  teamId,
-  postId,
-}: {
-  teamId: string
-  postId?: string
-}) => {
-  const router = useRouter()
+const NoticeEditButton = ({ postId }: { postId?: string }) => {
+  const { setNotice } = useTeamPageState()
   const handleGoBack = () => {
-    if (postId) router.push(`/teams/${teamId}/notice/${postId}`)
-    else router.push(`/teams/${teamId}/notice`)
+    if (postId) setNotice('DETAIL', parseInt(postId)) // 공지사항 수정
+    else setNotice('LIST') // 공지사항 작성
   }
   return (
     <Stack direction={'row'} justifyContent={'flex-end'}>

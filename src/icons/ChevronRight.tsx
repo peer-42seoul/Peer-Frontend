@@ -1,7 +1,6 @@
-'use client'
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
-const ChevronLeft = (props: SvgIconProps) => {
+const ChevronRight = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <svg
@@ -13,7 +12,7 @@ const ChevronLeft = (props: SvgIconProps) => {
         stroke="currentColor"
       >
         <path
-          d="M13 15L8 10L13 5"
+          d="M8 15L13 10L8 5"
           strokeWidth="1.25"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -23,4 +22,4 @@ const ChevronLeft = (props: SvgIconProps) => {
   )
 }
 
-export default ChevronLeft
+export default ChevronRight

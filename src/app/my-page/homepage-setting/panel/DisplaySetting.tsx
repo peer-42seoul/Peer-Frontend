@@ -2,21 +2,14 @@
 import CuToggle from '@/components/CuToggle'
 import { FormControlLabel, Stack, Typography } from '@mui/material'
 import { useDarkMode } from '@/states/useDarkMode'
+import TitleBox from '@/components/TitleBox'
 
 const DisplaySetting = () => {
   const { useSystemTheme, isLightMode, toggleDarkMode, toggleSystemTheme } =
     useDarkMode()
 
   return (
-    <Stack
-      bgcolor={'background.secondary'}
-      p={3}
-      spacing={3}
-      sx={{ borderRadius: '16px' }}
-    >
-      <Typography variant="Title3Emphasis" color={'text.normal'}>
-        화면 스타일
-      </Typography>
+    <TitleBox title="화면 설정">
       <Stack direction={'row'} spacing={2}>
         <FormControlLabel
           control={
@@ -67,7 +60,7 @@ const DisplaySetting = () => {
           labelPlacement="start"
         />
       </Stack>
-    </Stack>
+    </TitleBox>
   )
 }
 

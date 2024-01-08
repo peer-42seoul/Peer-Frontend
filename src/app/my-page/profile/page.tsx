@@ -27,7 +27,6 @@ interface IToastProps {
   message: string
 }
 
-// TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
 const MyProfile = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const {
@@ -145,14 +144,14 @@ const MyProfile = () => {
         mutate={mutate}
         open={modalOpen.links}
       />
+
       {/* toast */}
       <CuToast
         open={isToastOpen}
         onClose={closeToast}
         severity={toastMessage.severity}
-      >
-        <Typography>{toastMessage.message}</Typography>
-      </CuToast>
+        message={toastMessage.message}
+      />
     </Stack>
   )
 }
