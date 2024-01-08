@@ -1,24 +1,22 @@
 'use client'
 import { defaultGetFetcher } from '@/api/fetchers'
 import { IMainCard } from '@/types/IPostDetail'
-import { FormControlLabel, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
-import CardContainer from './panel/CardContainer'
-import CuTypeToggle from '@/components/CuTypeToggle'
 import useMedia from '@/hook/useMedia'
-import Interest from './panel/Interest'
+import { Box, IconButton, Stack } from '@mui/material'
+import CardContainer from './panel/CardContainer'
+import ArrowUp from '@/icons/ArrowUp'
 // import CuButton from '@/components/CuButton'
-import * as cardStyle from './panel/HitchhikingCard.style'
-// import * as style from './Hitchhiking.style'
+import * as style from './hitchhiking.style'
+import ArrowDown from '@/icons/ArrowDown'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(false)
   const [cardList, setCardList] = useState<Array<IMainCard>>([])
   const [draggedCardList, setDraggedCardList] = useState<IMainCard[]>([])
-  console.log(draggedCardList)
 
   const { isPc } = useMedia()
   const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
@@ -30,6 +28,8 @@ const Hitchhiking = () => {
 
   const handleChange = () => {
     setCardList([])
+    setDraggedCardList([])
+    setPage(1)
     setIsProject((prev) => !prev)
   }
 
@@ -53,22 +53,21 @@ const Hitchhiking = () => {
     if (cardList.length === 2) {
       setPage((prev) => (!data?.last ? prev + 1 : prev))
     }
-    console.log('cardList.length')
-    console.log(cardList.length)
-    console.log('cardList')
-    console.log(cardList)
   }
 
-  // const addCard = () => {
-  //   setCardList((prev: IMainCard[]) => {
-  //     return [...prev, draggedCardList[0]]
-  //   })
-  //   setDraggedCardList((prev: IMainCard[]) => {
-  //     return prev.filter(
-  //       (card) => card.recruit_id !== draggedCardList[0].recruit_id,
-  //     )
-  //   })
-  // }
+  const addCard = () => {
+    setCardList((prev: IMainCard[]) => {
+      prev.push(draggedCardList[draggedCardList.length - 1])
+      return prev
+    })
+    setDraggedCardList((prev: IMainCard[]) => {
+      return prev.filter(
+        (card) =>
+          card.recruit_id !==
+          draggedCardList[draggedCardList.length - 1].recruit_id,
+      )
+    })
+  }
 
   let message: string = ''
 
@@ -76,73 +75,63 @@ const Hitchhiking = () => {
   else if (isLoading && !cardList.length) message = '로딩중'
   else if (error) message = '에러 발생'
 
-  return (
-    <Stack
-      justifyContent={'space-between'}
-      alignItems={'center'}
-      sx={{
-        width: '100%',
-        height: isPc ? '90svh' : '80svh',
-        overflow: 'hidden',
-        bottom: 0,
-      }}
-      direction={'column'}
-    >
+  if (isPc) {
+    return (
       <Stack
-        sx={{ width: '100%' }}
-        justifyContent={'center'}
-        alignItems={'center'}
         direction={'row'}
-        spacing={'0.5rem'}
-      >
-        <Typography
-          variant="Caption"
-          color={!isProject ? 'purple.normal' : 'text.assistive'}
-          sx={{ transition: 'color 0.5s ease' }}
-        >
-          스터디
-        </Typography>
-        <FormControlLabel
-          control={<CuTypeToggle checked={isProject} onChange={handleChange} />}
-          label={''}
-        />
-        <Typography
-          variant="Caption"
-          color={isProject ? 'purple.normal' : 'text.assistive'}
-          sx={{ transition: 'color 0.5s ease' }}
-        >
-          프로젝트
-        </Typography>
-      </Stack>
-      <Stack
         justifyContent={'center'}
-        alignItems={'center'}
-        sx={{
-          ...(isPc ? cardStyle.cardPcSize : cardStyle.cardMobileSize),
-          position: 'relative',
-        }}
+        alignItems={'end'}
+        spacing={'1.5rem'}
       >
-        {!message ? (
+        <Box sx={style.buttonContainerStyle}></Box>
+        <Box sx={style.phoneStyle}>
+          <Box sx={style.phoneStatusBarStyle} />
           <CardContainer
             cardList={cardList}
             removeCard={removeCard}
             isProject={isProject}
+            message={message}
+            handleChange={handleChange}
           />
-        ) : (
-          <Typography>{message}</Typography>
-        )}
+        </Box>
+        <Stack
+          sx={style.buttonContainerStyle}
+          direction={'column'}
+          justifyContent={'flex-end'}
+          spacing={'1rem'}
+        >
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={addCard}
+            disabled={draggedCardList.length === 0}
+          >
+            <ArrowUp
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={() =>
+              removeCard(cardList[cardList.length - 1]?.recruit_id)
+            }
+            disabled={cardList.length === 0}
+          >
+            <ArrowDown
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
+        </Stack>
       </Stack>
-      {/* <CuButton
-          message="되돌리기"
-          action={addCard}
-          disabled={!draggedCardList.length}
-        /> */}
-      <Interest id={cardList[cardList.length - 1]?.recruit_id} />
-      {/* <CuButton
-          message="관심없음"
-          action={() => removeCard(cardList[cardList.length - 1]?.recruit_id)}
-        /> */}
-    </Stack>
+    )
+  }
+  return (
+    <CardContainer
+      cardList={cardList}
+      removeCard={removeCard}
+      isProject={isProject}
+      message={message}
+      handleChange={handleChange}
+    />
   )
 }
 

@@ -51,10 +51,6 @@ const HitchhikingCardBack = ({
   const router = useRouter()
   const { isPc } = useMedia()
 
-  const getHeight = (originHeight: number) => {
-    return `${(cardWidth * originHeight) / 328 / 16}rem`
-  }
-
   const getLineCount = (originHeight: number, lineHeight: number) => {
     const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
     return lineCount ? lineCount : 1
@@ -121,10 +117,7 @@ const HitchhikingCardBack = ({
                     {isProject ? '프로젝트' : '스터디'}
                   </Typography>
                 }
-                sx={{
-                  ...style.cardChipStyleBase,
-                  height: isPc ? '1.5rem' : getHeight(24),
-                }}
+                sx={style.cardChipStyleBase}
               />
             </CardContent>
             <CardActionArea sx={{ padding: 0, width: 'auto' }}>
@@ -254,7 +247,10 @@ const HitchhikingCard = ({
       isPc ? window.innerWidth * 0.9 : (window.innerHeight * 0.8 * 328) / 800,
     )
     const handleResize = () => {
-      setCardWidth(window.innerWidth * 0.9)
+      const newCardWidth = isPc
+        ? window.innerWidth * 0.9
+        : (window.innerHeight * 0.8 * 328) / 800
+      setCardWidth(newCardWidth)
     }
 
     window.addEventListener('resize', handleResize)
