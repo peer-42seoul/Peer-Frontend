@@ -165,23 +165,6 @@ const MyInterests = () => {
         sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
       >
         <TypeTabs type={type} handleChange={handleTabChange} />
-        <Stack
-          direction={'row'}
-          justifyContent={'flex-end'}
-          sx={{ paddingRight: '0.5rem' }}
-        >
-          <CuButton
-            variant="text"
-            message="관심 모두 해제"
-            action={openModal}
-            disabled={isDeleting}
-            TypographyProps={{
-              variant: 'CaptionEmphasis',
-              color: 'text.alternative',
-            }}
-            style={{ height: '2rem' }}
-          />
-        </Stack>
 
         {postList.length ? (
           <InterestsContents
@@ -189,6 +172,8 @@ const MyInterests = () => {
             spinner={spinner}
             target={target}
             type={type as ProjectType}
+            removeAll={openModal}
+            isDeleting={isDeleting}
           />
         ) : isLoading ? (
           <Typography>로딩 중</Typography>
