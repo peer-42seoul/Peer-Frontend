@@ -70,32 +70,26 @@ const CuNavBar = ({
           setValue(newValue)
         }}
       >
-        {isPc ? (
-          [
-            tabData.map((tab) => (
-              <PcToggleButton
-                key={crypto.randomUUID()}
-                tab={tab}
-                selected={value === tab.value}
-              />
-            )),
-          ]
-        ) : (
-          <Box
-            width={'100%'}
-            display="grid"
-            gridTemplateColumns={`repeat(${tabData.length}, 1fr)`}
-            gap={'0.5rem'}
-          >
-            {tabData.map((tab) => (
-              <MobileToggleButton
-                key={crypto.randomUUID()}
-                tab={tab}
-                selected={value === tab.value}
-              />
-            ))}
-          </Box>
-        )}
+        {isPc
+          ? [
+              tabData.map((tab) => (
+                <PcToggleButton
+                  key={crypto.randomUUID()}
+                  tab={tab}
+                  selected={value === tab.value}
+                />
+              )),
+            ]
+          : [
+              tabData.map((tab) => (
+                <MobileToggleButton
+                  key={crypto.randomUUID()}
+                  tab={tab}
+                  selected={value === tab.value}
+                  width={90 / tabData.length}
+                />
+              )),
+            ]}
       </ToggleButtonGroup>
     </Box>
   )
@@ -151,16 +145,18 @@ const PcToggleButton = ({
 const MobileToggleButton = ({
   tab,
   selected,
+  width,
 }: {
   tab: ITabInfo
   selected: boolean
+  width: number
 }) => {
   const isNewTab = tab.new && !tab.disabled
   return (
     <ToggleButton
       value={tab.value}
       onClick={tab.onClick}
-      sx={style.mobileTab}
+      sx={{ ...style.mobileTab, width: `${width}%` }}
       disabled={tab.disabled}
       selected={selected}
     >
