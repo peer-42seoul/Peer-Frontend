@@ -24,7 +24,7 @@ const LinkButton = ({
 }) => {
   return (
     <LinkTooltip placement="bottom-start" title={href}>
-      <Button variant={variant} size="large" href={href} sx={style.button}>
+      <Button variant={variant} href={href} sx={style.button} disabled={!href}>
         <InsertLinkOutlinedIcon />
       </Button>
     </LinkTooltip>

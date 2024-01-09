@@ -19,6 +19,7 @@ const ProfileSection = ({
   sectionTitle,
   setModalType,
   titleTypographyProps,
+  sx,
 }: {
   sectionTitle: 'introduction' | 'achievements' | 'skills' | 'links'
   setModalType: (type: string) => void
@@ -35,7 +36,8 @@ const ProfileSection = ({
       direction="row"
       justifyContent="space-between"
       alignItems={'center'}
-      minHeight={'24px'}
+      minHeight={'1.5rem'}
+      sx={sx}
     >
       <Typography {...titleTypographyProps}>
         {sectionTypeMap.get(sectionTitle)}
@@ -43,7 +45,12 @@ const ProfileSection = ({
       <Button
         variant="text"
         onClick={handleEditClick}
-        sx={{ padding: '0 4px', width: '29px', height: '24px' }}
+        sx={{
+          padding: '0 0.25rem',
+          width: 'fit-content',
+          height: '1.5rem',
+          minWidth: '1.8rem',
+        }}
       >
         <Typography
           variant="CaptionEmphasis"

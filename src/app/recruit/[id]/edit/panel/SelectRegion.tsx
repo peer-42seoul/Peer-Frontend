@@ -1,9 +1,10 @@
-import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { koreaDistrict } from '@/constant/DistrictData'
+import { Stack } from '@mui/material'
+import useMedia from '@/hook/useMedia'
 
 interface BasicSelectProps {
   setValue: Dispatch<SetStateAction<string[]>>
@@ -13,6 +14,7 @@ interface BasicSelectProps {
 export default function SelectRegion({ setValue, region }: BasicSelectProps) {
   const [largeScaleData, setLargeScaleData] = useState<string>('')
   const [smallScaleData, setSmallScaleData] = useState<string>('')
+  const { isPc } = useMedia()
 
   const handleChangeLargeScaleData = (event: SelectChangeEvent) => {
     setLargeScaleData(event.target.value as string)
@@ -52,17 +54,46 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
     : []
 
   return (
-    <Box sx={{ width: '416px', display: 'flex', flexDirection: 'row', gap: 2 }}>
-      <FormControl fullWidth sx={{ width: '204px' }}>
-        <Select value={largeScaleData} onChange={handleChangeLargeScaleData}>
+    <Stack
+      sx={isPc ? { width: '26rem' } : { width: '100%' }}
+      direction={'row'}
+      gap={'1rem'}
+    >
+      <FormControl
+        sx={
+          isPc
+            ? { width: '12.75rem', height: '2rem' }
+            : { width: '100%', height: '2rem' }
+        }
+      >
+        <Select
+          sx={
+            isPc
+              ? { width: '12.75rem', height: '2rem' }
+              : { width: '100%', height: '2rem' }
+          }
+          value={largeScaleData}
+          onChange={handleChangeLargeScaleData}
+        >
           {options1}
         </Select>
       </FormControl>
-      <FormControl fullWidth sx={{ width: '204px' }}>
-        <Select value={smallScaleData} onChange={handleChangeSmallScaleData}>
+      <FormControl
+        sx={isPc ? { width: '12.75rem' } : { width: '100%' }}
+        fullWidth
+      >
+        <Select
+          sx={
+            isPc
+              ? { width: '12.75rem', height: '2rem' }
+              : { width: '100%', height: '2rem' }
+          }
+          value={smallScaleData}
+          onChange={handleChangeSmallScaleData}
+        >
           {options2}
         </Select>
       </FormControl>
-    </Box>
+    </Stack>
   )
 }

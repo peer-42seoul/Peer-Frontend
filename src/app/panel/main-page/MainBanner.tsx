@@ -6,8 +6,8 @@ const MainBanner = () => {
 
   return (
     <Box
-      height={isPc ? '200px' : '100px'}
-      border="1px solid white"
+      height={isPc ? '12.5rem' : '100px'}
+      borderRadius={'0.75rem'}
       bgcolor={'white'}
     >
       피어 소개 배너

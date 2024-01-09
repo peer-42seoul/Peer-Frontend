@@ -7,22 +7,16 @@ import useAxiosWithAuth from '@/api/config'
 import { useState } from 'react'
 import useToast from '@/hook/useToast'
 import IToastProps from '@/types/IToastProps'
-
-const PrivacyStack = {
-  backgroundColor: 'background.secondary',
-  borderRadius: '1rem',
-  padding: '1.5rem',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
-  gap: '1.5rem',
-  alignSelf: 'stretch',
-}
+import useMedia from '@/hook/useMedia'
+import * as pageStyle from '../panel/my-page.style'
+import TitleBox from '@/components/TitleBox'
 
 const PrivacyPage = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, error, isLoading } = useSWR('/api/v1/info', (url: string) =>
     axiosWithAuth.get(url).then((res) => res.data),
   )
+  const { isPc } = useMedia()
 
   const [toastProps, setToastProps] = useState<IToastProps>({
     severity: 'info',
@@ -36,11 +30,11 @@ const PrivacyPage = () => {
 
   const { name, email, local, authenticationFt, authenticationGoogle } = data
   return (
-    <Stack spacing={4}>
-      <Stack sx={PrivacyStack}>
-        <Typography variant="Title2Emphasis" color="text.normal">
-          개인 정보
-        </Typography>
+    <Stack
+      spacing={isPc ? 4 : 3}
+      sx={isPc ? pageStyle.pagePcStyle : pageStyle.pageMobileStyle}
+    >
+      <TitleBox title="개인정보">
         <Stack spacing={1}>
           <Typography variant="CaptionEmphasis" color="text.strong">
             이름
@@ -64,11 +58,8 @@ const PrivacyPage = () => {
           setToastProps={setToastProps}
           openToast={openToast}
         />
-      </Stack>
-      <Stack sx={PrivacyStack}>
-        <Typography variant="Title2Emphasis" color="text.normal">
-          계정 관리
-        </Typography>
+      </TitleBox>
+      <TitleBox title={'계정 관리'}>
         <Typography variant="Body2" color="text.alternative">
           계정을 삭제하시면....
         </Typography>
@@ -76,14 +67,13 @@ const PrivacyPage = () => {
           setToastProps={setToastProps}
           openToast={openToast}
         />
-        <CuToast
-          open={isOpen}
-          onClose={closeToast}
-          severity={toastProps.severity}
-        >
-          <Typography>{toastProps.message}</Typography>
-        </CuToast>
-      </Stack>
+      </TitleBox>
+      <CuToast
+        open={isOpen}
+        onClose={closeToast}
+        severity={toastProps.severity}
+        message={toastProps.message}
+      />
     </Stack>
   )
 }
