@@ -79,7 +79,7 @@ const NoticeList = ({
 
   const data = mockData
 
-  if (error || !data) return <StatusMessage message="오류가 발생했습니다." />
+  if (!data) return <StatusMessage message="문제가 발생했습니다." />
 
   if (!data && isLoading)
     return <StatusMessage message="공지사항을 불러오는 중입니다..." />
