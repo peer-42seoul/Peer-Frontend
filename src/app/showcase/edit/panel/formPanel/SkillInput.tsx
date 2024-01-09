@@ -15,6 +15,7 @@ import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import { ITag } from '@/types/IPostDetail'
 import { Button } from '@mui/material'
+import TagAutoComplete from '@/components/TagAutoComplete'
 
 const SkillInput = ({
   setValue,
@@ -29,9 +30,9 @@ const SkillInput = ({
   }
 
   const tagList: ITag[] = [
-    { name: 'React', color: '#FF5833' },
-    { name: 'Vue', color: '#FF5833' },
-    { name: 'test', color: '#FF5833' },
+    { name: 'React', color: '#FF5833', tagId: 1, createdAt: '', updatedAt: '' },
+    { name: 'vue', color: '#FF5833', tagId: 2, createdAt: '', updatedAt: '' },
+    { name: 'js', color: '#FF5833', tagId: 3, createdAt: '', updatedAt: '' },
   ]
 
   const nameList = tagList?.map(({ name }) => name)
@@ -54,7 +55,11 @@ const SkillInput = ({
         svgIcon={<TagIcon sx={Style.IconStyle} />}
         message="기술 스택"
       />
-      {/* <TagAutoComplete datas={skills} setData={setData} tagList={tagList} /> */}
+
+      {/* MEMO : 작업 당시에는 TagAutoComplete과 UI가 같았으나 현재는 달라진 것으로 보임.
+          우선 UI는 이전에 구현해둔 것이 있으니 백엔드와 논의 후 로직 결정할 것 */}
+      <TagAutoComplete datas={tagList} setData={setData} tagList={tagList} />
+      {/* 아래 코드는 이전에 작업 해두었던 것 */}
       <Box sx={{ height: '2rem', width: '26rem' }}>
         <Autocomplete
           disableClearable
@@ -84,7 +89,7 @@ const SkillInput = ({
                         padding: '0rem 0.25rem',
                       }}
                     >
-                      <Typography variant="caption">등록</Typography>
+                      <Typography variant="Caption">등록</Typography>
                     </Button>
                   </InputAdornment>
                 ),
