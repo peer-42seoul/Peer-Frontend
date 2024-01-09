@@ -1,8 +1,9 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
+import { Stack } from '@mui/material'
+import useTeamPageState from '@/states/useTeamPageState'
 import useMedia from '@/hook/useMedia'
-import { Stack, Typography } from '@mui/material'
 import TeamSidebar from './panel/NavBar'
 
 const TeamLayout = ({
@@ -13,21 +14,27 @@ const TeamLayout = ({
   children: ReactNode
 }) => {
   const { isPc } = useMedia()
+  const { layout, resetState } = useTeamPageState()
   const id = params.id
+
+  useEffect(() => {
+    return () => {
+      resetState()
+    }
+  }, [])
 
   return (
     <Stack display="flex" padding={1} spacing={2} px={isPc ? 10 : 1}>
-      <Stack textAlign="center">
-        <Typography fontWeight="bold">나의 팀페이지</Typography>
-      </Stack>
       <Stack
         spacing={'0.5rem'}
         direction={isPc ? 'row' : 'column'}
         justifyContent={'center'}
       >
-        <Stack borderRadius={2} maxWidth="19.25rem">
-          <TeamSidebar id={id} />
-        </Stack>
+        {layout === 'SIDEBAR' && (
+          <Stack borderRadius={2}>
+            <TeamSidebar id={id} />
+          </Stack>
+        )}
         <Stack
           spacing={2}
           direction={isPc ? 'row' : 'column'}

@@ -6,14 +6,14 @@ const ChevronLeft = (props: SvgIconProps) => {
     <SvgIcon {...props}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
+        width="21"
         height="20"
-        viewBox="0 0 20 20"
+        viewBox="0 0 21 20"
         fill="none"
+        stroke="currentColor"
       >
         <path
-          d="M12.5 15L7.5 10L12.5 5"
-          stroke="white"
+          d="M13 15L8 10L13 5"
           strokeWidth="1.25"
           strokeLinecap="round"
           strokeLinejoin="round"
