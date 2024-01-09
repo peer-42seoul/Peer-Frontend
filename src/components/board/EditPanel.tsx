@@ -1,4 +1,4 @@
-import { OutlinedInput, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import BackgroundBox from '../BackgroundBox'
 import * as style from './EditPanel.style'
 import DynamicToastEditor from '../DynamicToastEditor'
@@ -9,6 +9,7 @@ interface IChildrenProps {
 }
 
 interface IEditFormProps {
+  isLoading: boolean
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
   initialTitle: string
   initialContent: string
@@ -37,6 +38,7 @@ export const EditBox = ({ children }: IChildrenProps) => {
 }
 
 export const EditForm = ({
+  isLoading,
   onSubmit,
   initialTitle,
   initialContent,
@@ -49,6 +51,7 @@ export const EditForm = ({
           <CuTextField
             name={'title'}
             placeholder={'제목을 입력해주세요.'}
+            disabled={isLoading}
             defaultValue={initialTitle}
             sx={{ maxWidth: '26rem' }}
           />
