@@ -1,65 +1,65 @@
 'use client'
 import { ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
-import dayjs from 'dayjs'
-import useSWR from 'swr'
-import { Button, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import DynamicToastViewer from '@/components/DynamicToastViewer'
+import {
+  DetailPage,
+  DetailContentCotainer,
+  DetailContent,
+} from '@/components/board/DetailPanel'
+import CuButton from '@/components/CuButton'
 import useTeamPageState from '@/states/useTeamPageState'
-import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
-import * as style from './page.style'
 
 const mockData = {
   title: '제목',
   authorNickname: '작성자',
   createdAt: new Date(),
-  content: '내용',
+  content:
+    '팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.',
   isAuthor: true,
 }
 
-interface NoticeContentContainerProps {
-  children: ReactNode
-  isAuthor: boolean
+interface IStatusMessageProps {
+  message: string
+  onClickEditButton?: () => void
+  author: boolean
 }
 
-const NoticeContentContainer = ({
-  children,
-  isAuthor,
-}: NoticeContentContainerProps) => {
-  const { setNotice, postId } = useTeamPageState()
+const StatusMessage = ({
+  message,
+  onClickEditButton,
+  author,
+}: IStatusMessageProps) => {
   return (
-    <Stack spacing={2} width={'100%'}>
-      <Button onClick={() => setNotice('LIST')} variant={'text'}>
-        이전 페이지
-      </Button>
-      <Stack
-        direction={'row'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
+    <DetailContentCotainer
+      containerTitle={'공지사항'}
+      onClickEditButton={onClickEditButton}
+      author={author}
+    >
+      <Typography
+        textAlign={'center'}
+        variant={'Body2'}
+        color={'text.alternative'}
       >
-        <Typography variant="body2">공지사항</Typography>
-        {isAuthor ? (
-          <Button onClick={() => setNotice('EDIT', postId)} variant="text">
-            수정
-          </Button>
-        ) : null}
-      </Stack>
-      {children}
-    </Stack>
+        {message}
+      </Typography>
+    </DetailContentCotainer>
   )
 }
 
 const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
   const axiosWithAuth = useAxiosWithAuth()
-  const { postId } = useTeamPageState()
+  const { postId, setNotice } = useTeamPageState()
   const router = useRouter()
-  const { error, isLoading } = useSWR<ITeamNoticeDetail>(
-    `/api/v1/team/notice/${postId}`,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
-  )
+  // const { error, isLoading } = useSWR<ITeamNoticeDetail>(
+  //   `/api/v1/team/notice/${postId}`,
+  //   (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  // )
+  const isLoading = false
+  const error = false
 
   const data = mockData
 
@@ -77,52 +77,62 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       })
   }
 
+  if (postId === undefined) return null
   if (!data)
     return (
-      <NoticeContentContainer isAuthor={!!data?.isAuthor}>
-        <Typography>문제가 발생했습니다.</Typography>
-      </NoticeContentContainer>
+      <StatusMessage
+        message={'문제가 발생했습니다.'}
+        onClickEditButton={() => setNotice('EDIT', postId)}
+        author={!!data?.isAuthor}
+      />
     )
-
-  if (postId === undefined) return null
-
+  if (isLoading)
+    return (
+      <StatusMessage
+        message={'공지사항을 불러오는 중입니다...'}
+        onClickEditButton={() => setNotice('EDIT', postId)}
+        author={!!data?.isAuthor}
+      />
+    )
   return (
-    <Stack>
-      <NoticeContentContainer isAuthor={data.isAuthor}>
-        {isLoading ? (
-          <Typography>로딩중...</Typography>
-        ) : (
-          <>
-            <Stack spacing={1}>
-              <Typography>제목</Typography>
-              <Typography>{data.title}</Typography>
-            </Stack>
-            <Stack spacing={1}>
-              <Typography>작성자</Typography>
-              <Typography>{data.authorNickname}</Typography>
-            </Stack>
-            <Stack spacing={1}>
-              <Typography>작성일</Typography>
-              <Typography>
-                {dayjs(data.createdAt).format('YYYY-MM-DD')}
-              </Typography>
-            </Stack>
-            <Stack spacing={1}>
-              <Typography>설명</Typography>
-            </Stack>
-            <DynamicToastViewer sx={style.viewer} initialValue={data.content} />
-            <Stack alignItems={'flex-end'}>
-              {data.isAuthor ? (
-                <Button variant={'text'} color="warning" onClick={handleDelete}>
-                  삭제
-                </Button>
-              ) : null}
-            </Stack>
-          </>
+    <DetailPage>
+      <CuButton
+        message={'이전 페이지'}
+        action={() => setNotice('LIST')}
+        variant={'text'}
+        TypographyProps={{
+          color: 'text.strong',
+          variant: 'Body2Emphasis',
+        }}
+        style={{ width: 'fit-content' }}
+      />
+      <DetailContentCotainer
+        containerTitle={'공지사항'}
+        onClickEditButton={() => setNotice('EDIT', postId)}
+        author={data.isAuthor}
+      >
+        <DetailContent
+          title={data.title}
+          createdAt={data.createdAt}
+          authorNickname={data.authorNickname}
+          content={data.content}
+        />
+        {data.isAuthor && (
+          <Stack>
+            <CuButton
+              message={'삭제'}
+              action={handleDelete}
+              variant={'text'}
+              TypographyProps={{
+                color: 'red.normal',
+                variant: 'Caption',
+              }}
+            />
+          </Stack>
         )}
-      </NoticeContentContainer>
+      </DetailContentCotainer>
       <CommentList postId={postId} teamId={parseInt(teamId)} />
-    </Stack>
+    </DetailPage>
   )
 }
 
