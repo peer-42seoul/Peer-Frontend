@@ -24,23 +24,23 @@ const TeamLayout = ({
   }, [])
 
   return (
-    <Stack display="flex" padding={1} spacing={2} px={isPc ? 10 : 1}>
+    <Stack padding={1} spacing={2} px={isPc ? 10 : 1}>
       <Stack
+        display="flex"
         spacing={'4rem'}
         direction={isPc ? 'row' : 'column'}
         justifyContent={'center'}
       >
         {layout === 'SIDEBAR' && (
-          <Stack borderRadius={2}>
+          <Stack borderRadius={2} flex={1}>
             <TeamSidebar id={id} />
           </Stack>
         )}
         <Stack
           spacing={2}
-          direction={isPc ? 'row' : 'column'}
-          flex={4}
+          flex={'auto'}
           borderRadius={2}
-          width={'100%'}
+          width="100%"
           maxWidth="56.75rem"
         >
           {children}

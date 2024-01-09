@@ -6,12 +6,8 @@ import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
 import ImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import ReactGridLayout, {
-  Layout,
-  Responsive,
-  WidthProvider,
-} from 'react-grid-layout'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import GridLayout, { Layout } from 'react-grid-layout'
 import {
   ITeamDnDLayout,
   IWidget,
@@ -26,8 +22,6 @@ import CuTextModal from '@/components/CuTextModal'
 import IToastProps from '@/types/IToastProps'
 import { BrowserView } from 'react-device-detect'
 
-const ResponsiveGridLayout = WidthProvider(Responsive)
-
 interface IWidgetsRenderProps {
   id: number | string
   data: ITeamDnDLayout | undefined
@@ -39,8 +33,8 @@ interface IWidgetsRenderProps {
   setEdit: (edit: boolean) => void
   children?: React.ReactNode
 }
-export const WIDGET_WIDTH = 209
 
+/** @todo 나중에 위젯 데이터 받는 방식 결정나면 저장버튼-툴박스-렌더 컴포넌트가 형제컴포넌트가 되도록 리팩토링 **/
 const WidgetsRender = ({
   id,
   data,
@@ -53,6 +47,7 @@ const WidgetsRender = ({
   children,
 }: IWidgetsRenderProps) => {
   const [index, setIndex] = useState(0)
+  const layoutRef = useRef<HTMLInputElement | null>(null)
 
   /* 초기 widget값을 만드는 함수 */
   const setInitWidgets: IWidget[] = useMemo(() => {
@@ -78,6 +73,7 @@ const WidgetsRender = ({
   const [toastMessage, setToastMessage] = useState<IToastProps>(
     {} as IToastProps,
   )
+  /* tablet 보다 크면 4개, 작으면 2개 */
   const isOverTablet = useMediaQuery('(min-width:700px)')
 
   /* widget 가져오기 */
@@ -106,13 +102,13 @@ const WidgetsRender = ({
   )
 
   /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
-  const isValidLayout = (newLayout: Layout[]) => {
+  const isValidLayout = useCallback((newLayout: Layout[]) => {
     const checkX = newLayout.some((item) => item?.x + item?.w > 4)
     if (checkX) return false
     const checkY = newLayout.some((item) => item?.y + item?.h > 4)
     if (checkY) return false
     return true
-  }
+  }, [])
 
   /*
    * 현재 react-grid-layout에서 전체 height를 제한하는 코드가 없음
@@ -125,6 +121,17 @@ const WidgetsRender = ({
       setWidgets(prevWidgets)
     }
   }, [prevWidgets])
+
+  /* 윈도우 resize시 위젯 다시 렌더링 */
+  useEffect(() => {
+    const handleResize = () => {
+      setWidgets((prev) => [...prev])
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   /* 드롭 시 호출 */
   const onDrop = useCallback(
@@ -148,7 +155,7 @@ const WidgetsRender = ({
       ])
       setIndex(index + 1)
     },
-    [widgets, index, type, size, edit],
+    [edit, isValidLayout, index, type, size, widgets],
   )
 
   /* 레이아웃이 변경될때마다 호출 */
@@ -215,6 +222,13 @@ const WidgetsRender = ({
     [widgets],
   )
 
+  /* 위젯 너비 계산 */
+  const widgetWidth = useMemo(() => {
+    const width = layoutRef?.current?.clientWidth
+    if (!width) return 0
+    return isOverTablet ? width / 4 : width / 2
+  }, [isOverTablet, layoutRef?.current?.clientWidth])
+
   return (
     <Box>
       {/*request와 관련된 toast*/}
@@ -279,18 +293,13 @@ const WidgetsRender = ({
         {/*toolbox 영역*/}
         {children}
         {/* react-grid-layout 영역 */}
-        <Box bgcolor="background.secondary">
-          <ResponsiveGridLayout
-            // isBounded={true}
+        <Box bgcolor="background.secondary" ref={layoutRef} width={'100%'}>
+          <GridLayout
+            width={isOverTablet ? widgetWidth * 4 : widgetWidth * 2}
             className="layout"
             margin={[12, 12]}
-            breakpoints={{
-              sm: 700,
-              xs: 480,
-            }}
-            cols={{ sm: 4, xs: 2 }} //그리드의 열 수. pc면 4, 모바일이면 2
-            maxRows={4}
-            rowHeight={WIDGET_WIDTH} //그리드 항목의 높이
+            cols={isOverTablet ? 4 : 2} //그리드의 열 수. pc면 4, 모바일이면 2
+            rowHeight={widgetWidth} //그리드 항목의 높이
             onDrop={onDrop}
             isDroppable={true} //true면 draggable={true}인 요소를 드래그 가능
             onLayoutChange={onLayoutChange}
@@ -299,8 +308,8 @@ const WidgetsRender = ({
             style={{
               height: edit
                 ? isOverTablet
-                  ? 4 * WIDGET_WIDTH + 100
-                  : 8 * WIDGET_WIDTH + 100
+                  ? 4 * widgetWidth + 100
+                  : 8 * widgetWidth + 100
                 : undefined,
               borderRadius: '5px',
             }}
@@ -309,6 +318,7 @@ const WidgetsRender = ({
             {widgets?.map(({ grid, type, size: wgSize, data: wgData }) => {
               return (
                 <Box
+                  className={'layout-element'}
                   key={grid.i}
                   data-grid={{ ...grid, isDraggable: edit }} //isDraggable 전체로 하는 방식있는데 안먹혀서 하나씩...
                   width={'100%'}
@@ -338,7 +348,7 @@ const WidgetsRender = ({
                 </Box>
               )
             })}
-          </ResponsiveGridLayout>
+          </GridLayout>
         </Box>
       </Stack>
     </Box>
