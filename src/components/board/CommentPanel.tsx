@@ -1,11 +1,12 @@
 import { Icon, IconButton, Stack } from '@mui/material'
 import Typography from '@mui/material/Typography'
-import { TrashIcon, EditIcon } from '@/icons'
+import { TrashIcon, EditIcon, SendIcon } from '@/icons'
 import { ITeamComment } from '@/types/TeamBoardTypes'
 import * as style from './CommentPanel.style'
 import { FormEvent } from 'react'
 import CuAvatar from '../CuAvatar'
 import dayjs from 'dayjs'
+import CuTextField from '../CuTextField'
 
 interface IChildrenProps {
   children: React.ReactNode
@@ -15,6 +16,7 @@ interface ICommentProps {
   comment: ITeamComment
   isEditMode: boolean
   handleDelete: (answerId: number) => void
+  setEditMode: (isEditMode: boolean) => void
   handleEdit: (e: FormEvent<HTMLFormElement>) => void
 }
 
@@ -45,6 +47,7 @@ export const CommentItem = ({
   comment,
   isEditMode,
   handleDelete,
+  setEditMode,
   handleEdit,
 }: ICommentProps) => {
   return (
@@ -62,23 +65,60 @@ export const CommentItem = ({
             {comment.authorNickname}
           </Typography>
         </Stack>
-        <Typography variant={'Body2'}>{comment.content}</Typography>
-        <Typography variant={'Tag'} color={'text.assistive'}>
-          {dayjs(comment.createdAt).format('YYYY년 M월 D일 h:m A')}
-        </Typography>
+        {isEditMode ? (
+          <></>
+        ) : (
+          <>
+            <Typography variant={'Body2'}>{comment.content}</Typography>
+            <Typography variant={'Tag'} color={'text.assistive'}>
+              {dayjs(comment.createdAt).format('YYYY년 M월 D일 h:m A')}
+            </Typography>
+          </>
+        )}
       </Stack>
       {/* icon button */}
-      <Stack direction={'row'} spacing={'1rem'} alignItems={'flex-start'}>
-        <IconButton sx={style.IconButton} onClick={() => handleEdit}>
-          <EditIcon sx={style.Icon} />
-        </IconButton>
-        <IconButton
-          sx={style.IconButton}
-          onClick={() => handleDelete(comment.answerId)}
-        >
-          <TrashIcon sx={style.Icon} />
+      {!isEditMode && (
+        <Stack direction={'row'} spacing={'1rem'} alignItems={'flex-start'}>
+          <IconButton sx={style.IconButton} onClick={() => setEditMode(true)}>
+            <EditIcon sx={style.Icon} />
+          </IconButton>
+          <IconButton
+            sx={style.IconButton}
+            onClick={() => handleDelete(comment.answerId)}
+          >
+            <TrashIcon sx={style.Icon} />
+          </IconButton>
+        </Stack>
+      )}
+    </Stack>
+  )
+}
+
+export const CommentFormContainer = ({
+  handleSubmit,
+  isLoading,
+}: {
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
+  isLoading: boolean
+}) => {
+  return (
+    <form onSubmit={handleSubmit}>
+      <Stack
+        sx={style.CommentForm}
+        direction={'row'}
+        spacing={'1rem'}
+        alignItem={'center'}
+      >
+        <CuTextField
+          placeholder={'댓글을 작성해주세요.'}
+          fullWidth
+          name={'new-content'}
+          id={'new-content'}
+        />
+        <IconButton sx={style.IconButton} disabled={isLoading} type={'submit'}>
+          <SendIcon sx={style.SendIcon} />
         </IconButton>
       </Stack>
-    </Stack>
+    </form>
   )
 }

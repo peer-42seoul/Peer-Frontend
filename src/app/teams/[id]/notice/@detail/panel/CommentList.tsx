@@ -1,11 +1,6 @@
 'use client'
-import { ReactNode, FormEvent, useState } from 'react'
-import dayjs from 'dayjs'
-import useSWR from 'swr'
-import { Avatar, Divider, IconButton, Stack, Typography } from '@mui/material'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlined'
-import EditIcon from '@mui/icons-material/Edit'
+import { FormEvent, useState } from 'react'
+import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuTextField from '@/components/CuTextField'
 import CuButton from '@/components/CuButton'
@@ -14,6 +9,7 @@ import {
   CommentContainer,
   StatusMessage,
   CommentItem,
+  CommentFormContainer,
 } from '@/components/board/CommentPanel'
 
 const mockData = [
@@ -177,54 +173,9 @@ const Comment = ({
       comment={comment}
       isEditMode={isEditMode}
       handleDelete={handleDelete}
+      setEditMode={setEditMode}
       handleEdit={handleEdit}
     />
-    // <Stack>
-    //   <Stack
-    //     direction={'row'}
-    //     alignItems={'center'}
-    //     justifyContent={'space-between'}
-    //   >
-    //     <Stack
-    //       direction={'row'}
-    //       alignItems={'center'}
-    //       justifyContent={'flex-start'}
-    //     >
-    //       <Avatar alt="comment profile" src={authorImage} />
-    //       <Typography>{authorNickname}</Typography>
-    //     </Stack>
-    //     {isAuthor && !isEditMode ? (
-    //       <Stack
-    //         direction={'row'}
-    //         alignItems={'center'}
-    //         divider={
-    //           <Divider orientation="vertical" variant="middle" flexItem />
-    //         }
-    //       >
-    //         <IconButton onClick={() => setEditMode(true)}>
-    //           <EditIcon />
-    //         </IconButton>
-    //         <IconButton onClick={handleDelete}>
-    //           <DeleteOutlinedIcon />
-    //         </IconButton>
-    //       </Stack>
-    //     ) : null}
-    //   </Stack>
-    //   {isEditMode ? (
-    //     <CommentEditForm
-    //       commentId={answerId}
-    //       initialComment={content}
-    //       setEditMode={setEditMode}
-    //     />
-    //   ) : (
-    //     <>
-    //       <Typography>{content}</Typography>
-    //       <Typography>
-    //         {dayjs(createdAt).format('YYYY년 MM월 DD일 hh:mm A')}
-    //       </Typography>
-    //     </>
-    //   )}
-    // </Stack>
   )
 }
 
@@ -250,19 +201,7 @@ const CommentForm = ({ postId, teamId }: ICommentProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack direction={'row'}>
-        <CuTextField
-          placeholder={'댓글을 작성해주세요.'}
-          fullWidth
-          name={'new-content'}
-          id={'new-content'}
-        />
-        <IconButton disabled={isLoading} type={'submit'}>
-          <InsertEmoticonOutlinedIcon />
-        </IconButton>
-      </Stack>
-    </form>
+    <CommentFormContainer handleSubmit={handleSubmit} isLoading={isLoading} />
   )
 }
 
@@ -293,12 +232,14 @@ const CommentList = ({ postId, teamId }: ICommentProps) => {
   }
 
   return (
-    <CommentContainer>
-      {data.map((comment: ITeamComment) => (
-        <Comment key={comment.answerId} postId={postId} comment={comment} />
-      ))}
+    <Stack>
+      <CommentContainer>
+        {data.map((comment: ITeamComment) => (
+          <Comment key={comment.answerId} postId={postId} comment={comment} />
+        ))}
+      </CommentContainer>
       <CommentForm postId={postId} teamId={teamId} />
-    </CommentContainer>
+    </Stack>
   )
 }
 
