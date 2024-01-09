@@ -46,14 +46,12 @@ const TeamJobAdd = ({ teamId, jobList }: Props) => {
   }, [jobList])
 
   const handleAdd = (id: number) => {
-    console.log('add', id)
     setJobs(
       jobs.map((job) => (job.id === id ? { ...job, max: job.max + 1 } : job)),
     )
   }
 
   const handleRemove = (id: number) => {
-    console.log('remove', id)
     if (jobs.find((job) => job.id === id)?.max === 1) return
     setJobs(
       jobs.map((job) => (job.id === id ? { ...job, max: job.max - 1 } : job)),

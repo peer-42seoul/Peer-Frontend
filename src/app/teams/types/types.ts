@@ -24,7 +24,7 @@ export enum TeamOperationForm {
 export interface IMember {
   name: string
   id: string
-  grant: TeamGrant
+  role: TeamGrant
   job: string[]
 }
 

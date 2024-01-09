@@ -9,7 +9,6 @@ import useAxiosWithAuth from '@/api/config'
 
 interface NewJob {
   name: string
-  current: number
   max: number
 }
 
@@ -22,7 +21,6 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [newJob, setNewJob] = useState<NewJob>({
     name: '',
-    current: 0,
     max: 1,
   })
 
@@ -36,17 +34,6 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
   }
 
   const handleAddJob = () => {
-    onNewJob({
-      id: 0,
-      name: newJob.name,
-      current: 0,
-      max: newJob.max,
-    })
-    setNewJob({
-      name: '',
-      current: 0,
-      max: 1,
-    })
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/job/add/${teamId}`,
@@ -55,6 +42,7 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
       .then((res) => {
         console.log(res)
         if (res.status === 200) {
+          console.log(res.data)
           onNewJob(res.data)
         }
       })
