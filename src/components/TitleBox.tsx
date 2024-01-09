@@ -49,7 +49,7 @@ const TitleBox = ({
           >
             {title}
           </Typography>
-          {titleEndAdornment && titleEndAdornment}
+          {titleEndAdornment}
         </Stack>
       )}
       {children}
