@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import MyInfoCard from './panel/MyInfoCard'
 import useMedia from '@/hook/useMedia'
 import * as style from '../panel/my-page.style'
+import MyPortfolio from './panel/MyPortfolio'
 
 interface IModals {
   introduction: boolean
@@ -121,6 +122,7 @@ const MyProfile = () => {
         handleLogout={handleLogout}
       />
 
+      <MyPortfolio />
       {/* modals */}
       <ProfileBioEditor
         data={{
