@@ -15,7 +15,7 @@ import {
 import Grid from '@mui/material/Unstable_Grid2'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import * as titleBoxStyle from '@/components/TitleBox.style'
+import * as style from './Profile.style'
 import useMedia from '@/hook/useMedia'
 
 const MyPortfolio = () => {
@@ -72,14 +72,13 @@ const MyPortfolio = () => {
     <TitleBox
       title="내 작업물"
       titleEndAdornment={<DisclosureToggle />}
-      titleBoxSx={
-        isPc ? titleBoxStyle.titleBoxPcStyle : titleBoxStyle.titleBoxMobileStyle
-      }
+      titleBoxSx={isPc ? style.myPortfolioPcStyle : undefined}
       titleContainerSx={{
         px: isPc ? '0.5rem' : 0,
         width: '100%',
         boxSizing: 'border-box',
       }}
+      titleBoxSpacing={isPc ? '0.75rem' : '0.5rem'}
     >
       <Grid container rowSpacing={[2, 3]} columnSpacing={[0, 2]} columns={12}>
         {postList.map((post) => (

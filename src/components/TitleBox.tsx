@@ -12,6 +12,7 @@ const TitleBox = ({
   titleBoxSx,
   titleSx,
   titleContainerSx,
+  titleBoxSpacing,
 }: {
   title: string
   titleComponent?: React.ReactNode
@@ -20,14 +21,15 @@ const TitleBox = ({
   titleBoxSx?: SxProps
   titleSx?: SxProps
   titleContainerSx?: SxProps
+  titleBoxSpacing?: number | string | Array<number | string>
 }) => {
   const { isPc } = useMedia()
 
   return (
     <Stack
-      spacing={isPc ? '1.5rem' : '1rem'}
+      spacing={titleBoxSpacing || (isPc ? '1.5rem' : '1rem')}
       sx={
-        titleBoxSx || isPc ? style.titleBoxPcStyle : style.titleBoxMobileStyle
+        titleBoxSx || (isPc ? style.titleBoxPcStyle : style.titleBoxMobileStyle)
       }
     >
       {titleComponent ? (

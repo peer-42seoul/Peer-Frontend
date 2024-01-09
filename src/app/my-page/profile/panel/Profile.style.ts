@@ -120,9 +120,5 @@ export const profileIntroductionStyle: SxProps = {
 
 export const myPortfolioPcStyle: SxProps = {
   ...titleBoxStyle.titleBoxPcStyle,
-  px: '0.5rem',
-}
-
-export const myPortfolioMobileStyle: SxProps = {
-  ...titleBoxStyle.titleBoxMobileStyle,
+  px: '1rem',
 }

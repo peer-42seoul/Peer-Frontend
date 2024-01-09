@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardContent,
   CardHeader,
@@ -87,50 +88,56 @@ function PostCard({
           }
           sx={{ p: 0 }}
         />
-
-        <CardContent sx={{ p: 0 }}>
-          <Typography
-            variant="Body1"
-            color="text.normal"
-            sx={{
-              ...style.cardTitleStyleBase,
-              height: getLineCount(46, 22.5) * 22.5,
-              WebkitLineClamp: getLineCount(46, 22.5),
-            }}
-          >
-            {title}
-          </Typography>
-        </CardContent>
-        <CardContent sx={{ p: 0 }}>
-          <Stack
-            gap={1}
-            direction={'row'}
-            justifyContent={'center'}
-            sx={{
-              overflow: 'hidden',
-              height: getLineCount(46, 22.5) * 20 + 8,
-            }}
-          >
-            {tagList?.map(({ name, color }: ITag, idx: number) => {
-              return (
-                <Chip
-                  label={
-                    <Typography variant="Tag" color={color}>
-                      {name}
-                    </Typography>
-                  }
-                  size="small"
-                  key={idx}
-                  style={{
-                    backgroundColor: alpha(color, 0.3),
-                    borderRadius: 2,
-                    height: '1.25rem',
-                  }}
-                />
-              )
-            })}
-          </Stack>
-        </CardContent>
+        <Box
+          sx={{
+            height: (currentCardWidth * 190) / 328,
+            boxSizing: 'border-box',
+          }}
+        >
+          <CardContent sx={{ p: 0 }}>
+            <Typography
+              variant="Body1"
+              color="text.normal"
+              sx={{
+                ...style.cardTitleStyleBase,
+                height: getLineCount(46, 22.5) * 22.5,
+                WebkitLineClamp: getLineCount(46, 22.5),
+              }}
+            >
+              {title}
+            </Typography>
+          </CardContent>
+          <CardContent sx={{ p: 0 }}>
+            <Stack
+              gap={1}
+              direction={'row'}
+              justifyContent={'center'}
+              sx={{
+                overflow: 'hidden',
+                height: getLineCount(46, 22.5) * 20 + 8,
+              }}
+            >
+              {tagList?.map(({ name, color }: ITag, idx: number) => {
+                return (
+                  <Chip
+                    label={
+                      <Typography variant="Tag" color={color}>
+                        {name}
+                      </Typography>
+                    }
+                    size="small"
+                    key={idx}
+                    style={{
+                      backgroundColor: alpha(color, 0.3),
+                      borderRadius: 2,
+                      height: '1.25rem',
+                    }}
+                  />
+                )
+              })}
+            </Stack>
+          </CardContent>
+        </Box>
       </Stack>
     </Card>
   )
