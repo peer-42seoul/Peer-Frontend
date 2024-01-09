@@ -118,7 +118,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
           content={data.content}
         />
         {data.isAuthor && (
-          <Stack>
+          <Stack alignItems={'flex-end'}>
             <CuButton
               message={'삭제'}
               action={handleDelete}
@@ -127,6 +127,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
                 color: 'red.normal',
                 variant: 'Caption',
               }}
+              style={{ width: 'fit-content' }}
             />
           </Stack>
         )}
