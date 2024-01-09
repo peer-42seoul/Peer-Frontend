@@ -2,7 +2,6 @@
 import { useState, MouseEvent, useRef } from 'react'
 import {
   Typography,
-  Button,
   Stack,
   IconButton,
   Popover,
@@ -96,13 +95,12 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
     <ListPageContainer>
       {isPc ? (
         <Stack direction={'row'} justifyContent={'flex-end'}>
-          <Button
-            onClick={() => setNotice('EDIT')}
-            variant="contained"
-            startIcon={<AddIcon />}
-          >
-            새 글쓰기
-          </Button>
+          <CuButton
+            message={'새 글쓰기'}
+            startIcon={<AddIcon sx={{ color: 'text.normal' }} />}
+            action={() => setNotice('EDIT')}
+            style={{ backgroundColor: 'purple.strong' }}
+          />
         </Stack>
       ) : null}
       <ListBoxContainer>
