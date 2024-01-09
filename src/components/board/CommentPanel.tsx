@@ -1,4 +1,4 @@
-import { Icon, IconButton, Stack } from '@mui/material'
+import { IconButton, Stack } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { TrashIcon, EditIcon, SendIcon } from '@/icons'
 import { ITeamComment } from '@/types/TeamBoardTypes'
@@ -7,6 +7,7 @@ import { FormEvent } from 'react'
 import CuAvatar from '../CuAvatar'
 import dayjs from 'dayjs'
 import CuTextField from '../CuTextField'
+import CuButton from '../CuButton'
 
 interface IChildrenProps {
   children: React.ReactNode
@@ -66,7 +67,30 @@ export const CommentItem = ({
           </Typography>
         </Stack>
         {isEditMode ? (
-          <></>
+          <form onSubmit={handleEdit}>
+            <Stack spacing={1} alignItems={'flex-end'}>
+              <CuTextField
+                placeholder={'댓글을 작성해주세요.'}
+                fullWidth
+                name={'content'}
+                id={'content'}
+                defaultValue={comment.content}
+                multiline
+              />
+              <Stack direction={'row'} spacing={1}>
+                <CuButton
+                  message={'취소'}
+                  action={() => setEditMode(false)}
+                  variant={'outlined'}
+                />
+                <CuButton
+                  message={'수정'}
+                  type={'submit'}
+                  variant={'contained'}
+                />
+              </Stack>
+            </Stack>
+          </form>
         ) : (
           <>
             <Typography variant={'Body2'}>{comment.content}</Typography>
@@ -107,7 +131,7 @@ export const CommentFormContainer = ({
         sx={style.CommentForm}
         direction={'row'}
         spacing={'1rem'}
-        alignItem={'center'}
+        alignItems={'center'}
       >
         <CuTextField
           placeholder={'댓글을 작성해주세요.'}

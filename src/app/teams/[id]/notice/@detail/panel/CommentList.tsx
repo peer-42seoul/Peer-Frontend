@@ -2,8 +2,6 @@
 import { FormEvent, useState } from 'react'
 import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import CuTextField from '@/components/CuTextField'
-import CuButton from '@/components/CuButton'
 import { ITeamComment } from '@/types/TeamBoardTypes'
 import {
   CommentContainer,
@@ -77,65 +75,7 @@ interface ICommentProps {
   teamId: number
 }
 
-interface CommentEditFormProps {
-  commentId: number
-  initialComment: string
-  setEditMode: (isEditMode: boolean) => void
-}
-
-const CommentEditForm = ({
-  commentId,
-  initialComment,
-  setEditMode,
-}: CommentEditFormProps) => {
-  const axiosWithAuth = useAxiosWithAuth()
-  // const handleEdit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-  //   const formData = new FormData(e.currentTarget)
-  //   axiosWithAuth
-  //     .put(`/api/v1/team/notice/answer/${commentId}`, {
-  //       content: formData.get('content') as string,
-  //     })
-  //     .then(() => {
-  //       alert('댓글을 수정했습니다.')
-  //       setEditMode(false)
-  //     })
-  //     .catch(() => {
-  //       alert('댓글 수정에 실패했습니다.')
-  //     })
-  // }
-
-  return (
-    <form onSubmit={handleEdit}>
-      <Stack spacing={1} alignItems={'flex-end'}>
-        <CuTextField
-          placeholder={'댓글을 작성해주세요.'}
-          fullWidth
-          name={'content'}
-          id={'content'}
-          defaultValue={initialComment}
-          multiline
-        />
-        <Stack direction={'row'} spacing={1}>
-          <CuButton
-            message={'취소'}
-            action={() => setEditMode(false)}
-            variant={'outlined'}
-          />
-          <CuButton message={'수정'} type={'submit'} variant={'contained'} />
-        </Stack>
-      </Stack>
-    </form>
-  )
-}
-
-const Comment = ({
-  comment,
-  postId,
-}: {
-  comment: ITeamComment
-  postId: number
-}) => {
+const Comment = ({ comment }: { comment: ITeamComment }) => {
   const [isEditMode, setEditMode] = useState(false)
   const axiosWithAuth = useAxiosWithAuth()
 
