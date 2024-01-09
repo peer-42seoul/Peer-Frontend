@@ -1,5 +1,6 @@
 import { SxProps } from '@mui/material'
 import React from 'react'
+import * as titleBoxStyle from '@/components/TitleBox.style'
 
 export const formPcStyle: React.CSSProperties = {
   height: '100%',
@@ -115,4 +116,13 @@ export const profileIntroductionStyle: SxProps = {
   whiteSpace: 'pre-line',
   minHeight: '4.5rem',
   display: 'block',
+}
+
+export const myPortfolioPcStyle: SxProps = {
+  ...titleBoxStyle.titleBoxPcStyle,
+  px: '0.5rem',
+}
+
+export const myPortfolioMobileStyle: SxProps = {
+  ...titleBoxStyle.titleBoxMobileStyle,
 }
