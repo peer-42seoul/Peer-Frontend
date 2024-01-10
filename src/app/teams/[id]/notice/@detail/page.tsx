@@ -1,67 +1,28 @@
 'use client'
-import { ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
-import { Stack, Typography } from '@mui/material'
+import useSWR from 'swr'
+import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import {
   DetailPage,
   DetailContentCotainer,
+  StatusMessage,
   DetailContent,
 } from '@/components/board/DetailPanel'
 import CuButton from '@/components/CuButton'
 import useTeamPageState from '@/states/useTeamPageState'
+import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
-
-const mockData = {
-  title: '제목',
-  authorNickname: '작성자',
-  createdAt: new Date(),
-  content:
-    '팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요. 팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.팀이 진행하고자 하는 스터디 혹은 프로젝트에 대해 설명해 주세요.',
-  isAuthor: true,
-}
-
-interface IStatusMessageProps {
-  message: string
-  onClickEditButton?: () => void
-  author: boolean
-}
-
-const StatusMessage = ({
-  message,
-  onClickEditButton,
-  author,
-}: IStatusMessageProps) => {
-  return (
-    <DetailContentCotainer
-      containerTitle={'공지사항'}
-      onClickEditButton={onClickEditButton}
-      author={author}
-    >
-      <Typography
-        textAlign={'center'}
-        variant={'Body2'}
-        color={'text.alternative'}
-      >
-        {message}
-      </Typography>
-    </DetailContentCotainer>
-  )
-}
 
 const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
   const axiosWithAuth = useAxiosWithAuth()
   const { postId, setNotice } = useTeamPageState()
   const router = useRouter()
-  // const { error, isLoading } = useSWR<ITeamNoticeDetail>(
-  //   `/api/v1/team/notice/${postId}`,
-  //   (url: string) => axiosWithAuth.get(url).then((res) => res.data),
-  // )
-  const isLoading = false
-  const error = false
-
-  const data = mockData
+  const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
+    `/api/v1/team/notice/${postId}`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  )
 
   const handleDelete = () => {
     const confirm = window.confirm('공지사항을 삭제하시겠습니까?')
@@ -78,7 +39,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   }
 
   if (postId === undefined) return null
-  if (!data)
+  if (!data || error)
     return (
       <StatusMessage
         message={'문제가 발생했습니다.'}

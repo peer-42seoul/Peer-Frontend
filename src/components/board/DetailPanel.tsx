@@ -15,6 +15,12 @@ interface IDetailContentContainerProps {
   onClickEditButton?: () => void
 }
 
+interface IStatusMessageProps {
+  message: string
+  onClickEditButton?: () => void
+  author: boolean
+}
+
 interface IDetailContentProps {
   title: string
   createdAt: Date
@@ -54,6 +60,28 @@ export const DetailContentCotainer = ({
       </Stack>
       {children}
     </Stack>
+  )
+}
+
+export const StatusMessage = ({
+  message,
+  onClickEditButton,
+  author,
+}: IStatusMessageProps) => {
+  return (
+    <DetailContentCotainer
+      containerTitle={'공지사항'}
+      onClickEditButton={onClickEditButton}
+      author={author}
+    >
+      <Typography
+        textAlign={'center'}
+        variant={'Body2'}
+        color={'text.alternative'}
+      >
+        {message}
+      </Typography>
+    </DetailContentCotainer>
   )
 }
 

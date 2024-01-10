@@ -1,74 +1,15 @@
 'use client'
 import { FormEvent, useState } from 'react'
+import useSWR from 'swr'
 import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import { ITeamComment } from '@/types/TeamBoardTypes'
 import {
   CommentContainer,
   StatusMessage,
   CommentItem,
   CommentFormContainer,
 } from '@/components/board/CommentPanel'
-
-const mockData = [
-  {
-    answerId: 1,
-    authorImage: '/assets/images/profile.png',
-    authorNickname: '작성자',
-    content:
-      '댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용댓글 내용',
-    createdAt: '2021-10-10T10:10:10',
-    isAuthor: true,
-  },
-  {
-    answerId: 2,
-    authorImage: '/assets/images/profile.png',
-    authorNickname: '작성자',
-    content: '댓글 내용',
-    createdAt: '2021-10-10T10:10:10',
-    isAuthor: true,
-  },
-  {
-    answerId: 3,
-    authorImage: '/assets/images/profile.png',
-    authorNickname: '작성자',
-    content: '댓글 내용',
-    createdAt: '2021-10-10T10:10:10',
-    isAuthor: true,
-  },
-  {
-    answerId: 4,
-    authorImage: '/assets/images/profile.png',
-    authorNickname: '작성자',
-    content: '댓글 내용',
-    createdAt: '2021-10-10T10:10:10',
-    isAuthor: true,
-  },
-  {
-    answerId: 5,
-    authorImage: '/assets/images/profile.png',
-    authorNickname: '작성자',
-    content: '댓글 내용',
-    createdAt: '2021-10-10T10:10:10',
-    isAuthor: true,
-  },
-  {
-    answerId: 6,
-    authorImage: '/assets/images/profile.png',
-    authorNickname: '작성자',
-    content: '댓글 내용',
-    createdAt: '2021-10-10T10:10:10',
-    isAuthor: true,
-  },
-  {
-    answerId: 7,
-    authorImage: '/assets/images/profile.png',
-    authorNickname: '작성자',
-    content: '댓글 내용',
-    createdAt: '2021-10-10T10:10:10',
-    isAuthor: true,
-  },
-]
+import { ITeamComment } from '@/types/TeamBoardTypes'
 
 interface ICommentProps {
   postId: number
@@ -147,30 +88,22 @@ const CommentForm = ({ postId, teamId }: ICommentProps) => {
 
 const CommentList = ({ postId, teamId }: ICommentProps) => {
   const axiosWithAuth = useAxiosWithAuth()
-  // const { data, isLoading, error } = useSWR(
-  //   `/api/v1/team/notice/answer/${postId}`,
-  //   (url: string) => axiosWithAuth.get(url).then((res) => res.data),
-  // )
-
-  const isLoading = false
-  const error = false
-  const data = mockData
-  // const data = []
+  const { data, isLoading, error } = useSWR(
+    `/api/v1/team/notice/answer/${postId}`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  )
 
   if (error || !data) {
     return <StatusMessage message={'댓글을 불러오는데 실패했습니다.'} />
   }
-
   if (isLoading) {
     return <StatusMessage message={'댓글을 불러오는 중입니다...'} />
   }
-
   if (data.length === 0) {
     return (
       <StatusMessage message={'댓글이 없습니다. 첫 댓글을 작성해보세요!'} />
     )
   }
-
   return (
     <Stack>
       <CommentContainer>
