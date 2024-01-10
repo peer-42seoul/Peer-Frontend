@@ -1,4 +1,4 @@
-import { IconButton, Stack } from '@mui/material'
+import { Box, IconButton, Stack } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { TrashIcon, EditIcon, SendIcon } from '@/icons'
 import { ITeamComment } from '@/types/TeamBoardTypes'
@@ -101,19 +101,25 @@ export const CommentItem = ({
         )}
       </Stack>
       {/* icon button */}
-      {!isEditMode && (
-        <Stack direction={'row'} spacing={'1rem'} alignItems={'flex-start'}>
+      <Stack direction={'row'} spacing={'1rem'} alignItems={'flex-start'}>
+        {!isEditMode && comment.isAuthor ? (
           <IconButton sx={style.IconButton} onClick={() => setEditMode(true)}>
             <EditIcon sx={style.Icon} />
           </IconButton>
+        ) : (
+          <Box sx={style.Icon} />
+        )}
+        {!isEditMode && comment.isAuthor ? (
           <IconButton
             sx={style.IconButton}
             onClick={() => handleDelete(comment.answerId)}
           >
             <TrashIcon sx={style.Icon} />
           </IconButton>
-        </Stack>
-      )}
+        ) : (
+          <Box sx={style.Icon} />
+        )}
+      </Stack>
     </Stack>
   )
 }
