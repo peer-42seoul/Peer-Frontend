@@ -32,17 +32,11 @@ const TeamLayout = ({
         justifyContent={'center'}
       >
         {layout === 'SIDEBAR' && (
-          <Stack borderRadius={2} flex={1}>
+          <Stack borderRadius={2}>
             <TeamSidebar id={id} />
           </Stack>
         )}
-        <Stack
-          spacing={2}
-          flex={'auto'}
-          borderRadius={2}
-          width="100%"
-          maxWidth="56.75rem"
-        >
+        <Stack spacing={2} borderRadius={2} width={'100%'} maxWidth="56.75rem">
           {children}
         </Stack>
       </Stack>
