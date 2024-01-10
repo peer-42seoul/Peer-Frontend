@@ -11,7 +11,7 @@ import {
 } from '@/components/board/CommentPanel'
 import { ITeamComment } from '@/types/TeamBoardTypes'
 
-interface ICommentProps {
+interface ICommentFormProps {
   postId: number
   teamId: number
 }
@@ -60,7 +60,7 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
   )
 }
 
-const CommentForm = ({ postId, teamId }: ICommentProps) => {
+const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setIsLoading] = useState(false)
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -86,7 +86,7 @@ const CommentForm = ({ postId, teamId }: ICommentProps) => {
   )
 }
 
-const CommentList = ({ postId, teamId }: ICommentProps) => {
+const CommentList = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
     `/api/v1/team/notice/answer/${postId}`,
@@ -108,7 +108,7 @@ const CommentList = ({ postId, teamId }: ICommentProps) => {
     <Stack>
       <CommentContainer>
         {data.map((comment: ITeamComment) => (
-          <Comment key={comment.answerId} postId={postId} comment={comment} />
+          <Comment key={comment.answerId} comment={comment} />
         ))}
       </CommentContainer>
       <CommentForm postId={postId} teamId={teamId} />
