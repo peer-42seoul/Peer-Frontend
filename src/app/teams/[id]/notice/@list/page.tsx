@@ -99,7 +99,10 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
             message={'새 글쓰기'}
             startIcon={<AddIcon sx={{ color: 'text.normal' }} />}
             action={() => setNotice('EDIT')}
-            style={{ backgroundColor: 'purple.strong' }}
+            style={{
+              backgroundColor: 'purple.strong',
+              padding: '0.75rem 1rem 0.75rem 0.625rem',
+            }}
           />
         </Stack>
       ) : null}
