@@ -1,5 +1,3 @@
-import { Theme } from '@mui/material'
-
 export const DetailPage = {
   width: '100%',
 }
@@ -13,7 +11,5 @@ export const ContentTitle = {
 }
 
 export const Viewer = {
-  '.toastui-editor-contents': {
-    color: (theme: Theme) => theme.palette.text.alternative,
-  },
+  color: 'text.alternative',
 }
