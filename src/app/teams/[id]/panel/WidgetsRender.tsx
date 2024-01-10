@@ -74,7 +74,7 @@ const WidgetsRender = ({
     {} as IToastProps,
   )
   /* tablet 보다 크면 4개, 작으면 2개 */
-  const isOverTablet = useMediaQuery('(min-width:700px)')
+  const isFourRow = useMediaQuery('(min-width:900px)')
 
   /* widget 가져오기 */
   const getWidget = useCallback(
@@ -226,8 +226,8 @@ const WidgetsRender = ({
   const widgetWidth = useMemo(() => {
     const width = layoutRef?.current?.clientWidth
     if (!width) return 0
-    return isOverTablet ? width / 4 : width / 2
-  }, [isOverTablet, layoutRef?.current?.clientWidth])
+    return isFourRow ? width / 4 : width / 2
+  }, [isFourRow, layoutRef?.current?.clientWidth])
 
   return (
     <Box>
@@ -295,10 +295,10 @@ const WidgetsRender = ({
         {/* react-grid-layout 영역 */}
         <Box bgcolor="background.secondary" ref={layoutRef} width={'100%'}>
           <GridLayout
-            width={isOverTablet ? widgetWidth * 4 : widgetWidth * 2}
+            width={isFourRow ? widgetWidth * 4 : widgetWidth * 2}
             className="layout"
             margin={[12, 12]}
-            cols={isOverTablet ? 4 : 2} //그리드의 열 수. pc면 4, 모바일이면 2
+            cols={isFourRow ? 4 : 2} //그리드의 열 수. pc면 4, 모바일이면 2
             rowHeight={widgetWidth} //그리드 항목의 높이
             onDrop={onDrop}
             isDroppable={true} //true면 draggable={true}인 요소를 드래그 가능
@@ -307,7 +307,7 @@ const WidgetsRender = ({
             droppingItem={droppingItem}
             style={{
               height: edit
-                ? isOverTablet
+                ? isFourRow
                   ? 4 * widgetWidth + 100
                   : 8 * widgetWidth + 100
                 : undefined,
