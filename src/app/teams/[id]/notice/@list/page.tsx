@@ -25,7 +25,7 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
           setNotice('EDIT')
         }}
       />
-      <ListBoxContainer>
+      <ListBoxContainer isPc={isPc}>
         <Stack
           direction={'row'}
           alignItems={'center'}

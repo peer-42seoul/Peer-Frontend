@@ -22,6 +22,7 @@ interface IIsPcProps {
 }
 
 interface IListItemProps {
+  isPc: boolean
   title: string
   authorNickname: string
   createdAt: Date
@@ -149,17 +150,29 @@ export const IconButtonContainer = ({
   )
 }
 
-export const ListBoxContainer = ({ children }: IChildrenProps) => {
+export const ListBoxContainer = ({
+  children,
+  isPc,
+}: IChildrenProps & { isPc?: boolean }) => {
   return (
-    <Stack sx={style.ListBoxContainer} spacing={'1.5rem'}>
+    <Stack
+      sx={{
+        ...style.ListBoxContainer,
+        padding: isPc ? '1.5rem' : '0.5rem 1rem 1rem 1rem',
+      }}
+      spacing={'1.5rem'}
+    >
       {children}
     </Stack>
   )
 }
 
-export const ListStack = ({ children }: IChildrenProps) => {
+export const ListStack = ({
+  children,
+  isPc,
+}: IChildrenProps & { isPc?: boolean }) => {
   return (
-    <Stack sx={style.ListStack} spacing={'1rem'}>
+    <Stack sx={isPc ? style.PcListStack : undefined} spacing={'1rem'}>
       {children}
     </Stack>
   )
@@ -180,13 +193,18 @@ export const StatusMessage = ({ message }: { message: string }) => {
 }
 
 export const ListItem = ({
+  isPc,
   title,
   authorNickname,
   createdAt,
   onClick,
 }: IListItemProps) => {
   return (
-    <Stack sx={style.ListItem} onClick={onClick} spacing={'0.25rem'}>
+    <Stack
+      sx={{ ...style.ListItem, padding: isPc ? '0.625rem 1rem' : '0' }}
+      onClick={onClick}
+      spacing={'0.25rem'}
+    >
       <Typography variant={'Body1'} color={'text.strong'}>
         {title}
       </Typography>
