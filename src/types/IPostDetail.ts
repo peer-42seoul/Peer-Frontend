@@ -62,6 +62,7 @@ export interface IFormInterview {
 export interface IRole {
   name: string
   number: number
+  current: number
 }
 
 export interface IRoleWrite {
