@@ -1,5 +1,4 @@
 'use client'
-import { defaultGetFetcher } from '@/api/fetchers'
 import CuToggle from '@/components/CuToggle'
 import PostCard from '@/components/PostCard'
 import TitleBox from '@/components/TitleBox'
@@ -17,27 +16,28 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import * as style from './Profile.style'
 import useMedia from '@/hook/useMedia'
+import useAxiosWithAuth from '@/api/config'
 
 const MyPortfolio = () => {
+  const [isVisible, setIsVisible] = useState<boolean>(true)
+
+  // 무한 스크롤
   const [page, setPage] = useState<number>(1)
   const [postList, setPostList] = useState<Array<IMainCard>>([])
   const [pageLimit, setPageLimit] = useState(1)
   const { isPc } = useMedia()
 
-  const {
-    data,
-    isLoading,
-    // error,
-    mutate,
-  } = useSWR<IPagination<Array<IMainCard>>>(
+  const axiosWithAuth = useAxiosWithAuth()
+
+  const { data, isLoading } = useSWR<IPagination<Array<IMainCard>>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=PROJECT&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
-    defaultGetFetcher,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   useEffect(() => {
     if (!isLoading && data && !data.last) {
       setPostList((prev) => prev.concat(data.content))
-      if (data?.content.length === 5) {
+      if (!data.last) {
         setPageLimit((prev) => prev + 1)
       }
     }
@@ -45,25 +45,32 @@ const MyPortfolio = () => {
 
   const { target, spinner } = useInfiniteScroll({
     setPage,
-    mutate,
+    // mutate,
+    mutate: () => {},
     pageLimit,
     page,
   })
 
-  const DisclosureToggle = () => {
+  const DisclosureToggle = ({
+    checked,
+    handleChange,
+  }: {
+    checked: boolean
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  }) => {
     return (
       <FormControlLabel
-        control={<CuToggle />}
+        control={<CuToggle checked={checked} onChange={handleChange} />}
         label={
           <Typography variant="CaptionEmphasis" color={'text.assistive'}>
             공개 여부
           </Typography>
         }
         labelPlacement="start"
-        onClick={() => {
-          console.log('공개 여부')
+        sx={{
+          margin: 0,
+          // transition: 'transform 0.5s ease, borderColor 0.5s ease',
         }}
-        sx={{ margin: 0 }}
       />
     )
   }
@@ -71,7 +78,12 @@ const MyPortfolio = () => {
   return (
     <TitleBox
       title="내 작업물"
-      titleEndAdornment={<DisclosureToggle />}
+      titleEndAdornment={
+        <DisclosureToggle
+          checked={isVisible}
+          handleChange={(e) => setIsVisible(e.target.checked)}
+        />
+      }
       titleBoxSx={isPc ? style.myPortfolioPcStyle : undefined}
       titleContainerSx={{
         px: isPc ? '0.5rem' : 0,
@@ -81,23 +93,37 @@ const MyPortfolio = () => {
       titleBoxSpacing={isPc ? '0.75rem' : '0.5rem'}
     >
       <Grid container rowSpacing={[2, 3]} columnSpacing={[0, 2]} columns={12}>
-        {postList.map((post) => (
-          <Grid xs={12} sm={6} key={post.recruit_id}>
-            <PostCard
-              authorImage={post.user_thumbnail}
-              title={post.title}
-              tagList={post.tagList}
-              image={post.image}
-              teamName={post.user_nickname}
-              postId={post.recruit_id}
-            />
+        {!isVisible ? (
+          <Grid xs={12}>
+            <Typography
+              variant="Body2"
+              color={'text.alternative'}
+              //TODO #470 머지 후 centeredPosition style 객체 넣기
+            >
+              비공개 상태입니다.
+            </Typography>
           </Grid>
-        ))}
-        <Grid xs={12} sm={6}>
-          <Box position={'relative'} ref={target}>
-            {spinner && <CircularProgress />}
-          </Box>
-        </Grid>
+        ) : (
+          <>
+            {postList.map((post) => (
+              <Grid xs={12} sm={6} key={post.recruit_id}>
+                <PostCard
+                  authorImage={post.user_thumbnail}
+                  title={post.title}
+                  tagList={post.tagList}
+                  image={post.image}
+                  teamName={post.user_nickname}
+                  postId={post.recruit_id}
+                />
+              </Grid>
+            ))}
+            <Grid xs={12} sm={6}>
+              <Box position={'relative'} ref={target} height={1}>
+                {spinner && <CircularProgress />}
+              </Box>
+            </Grid>
+          </>
+        )}
       </Grid>
     </TitleBox>
   )

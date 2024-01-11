@@ -121,4 +121,6 @@ export const profileIntroductionStyle: SxProps = {
 export const myPortfolioPcStyle: SxProps = {
   ...titleBoxStyle.titleBoxPcStyle,
   px: '1rem',
+  pb: '1rem',
+  position: 'relative',
 }
