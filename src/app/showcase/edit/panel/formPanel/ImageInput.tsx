@@ -5,19 +5,21 @@ import LabelWithIcon from '../LabelWithIcon'
 import ImageIcon from '@/icons/ImageIcon'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import * as Style from '../ShowcaseEditor.style'
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
-import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
+// import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
+// import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 
 const ImageInput = ({
   previewImage,
   setPreviewImage,
-  register,
-  setValue,
+  // register,
+  // setValue,
+  setImage,
 }: {
   previewImage: string
   setPreviewImage: (image: string) => void
-  register: UseFormRegister<IShowcaseEditorFields>
-  setValue: UseFormSetValue<IShowcaseEditorFields>
+  // register: UseFormRegister<IShowcaseEditorFields>
+  // setValue: UseFormSetValue<IShowcaseEditorFields>
+  setImage: (image: File[]) => void
 }) => {
   return (
     <Stack direction={'column'} spacing={'0.5rem'} alignItems={'flex-start'}>
@@ -27,10 +29,9 @@ const ImageInput = ({
       />
       <ImageUploadButton
         setImage={(image: File[]) => {
-          setValue('image', image)
+          setImage(image)
         }}
         setPreviewImage={setPreviewImage}
-        register={register('image')}
       >
         {previewImage ? (
           <Box
