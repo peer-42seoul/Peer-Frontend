@@ -24,10 +24,9 @@ const TeamLayout = ({
   }, [])
 
   return (
-    <Stack padding={1} spacing={2} px={isPc ? 10 : 1}>
+    <Stack display="flex" padding={1} spacing={2} px={isPc ? 10 : 1}>
       <Stack
-        display="flex"
-        spacing={'4rem'}
+        spacing={'0.5rem'}
         direction={isPc ? 'row' : 'column'}
         justifyContent={'center'}
       >
@@ -36,7 +35,14 @@ const TeamLayout = ({
             <TeamSidebar id={id} />
           </Stack>
         )}
-        <Stack spacing={2} borderRadius={2} width={'100%'} maxWidth="56.75rem">
+        <Stack
+          spacing={2}
+          direction={isPc ? 'row' : 'column'}
+          flex={4}
+          borderRadius={2}
+          width={'100%'}
+          maxWidth="56.75rem"
+        >
           {children}
         </Stack>
       </Stack>
