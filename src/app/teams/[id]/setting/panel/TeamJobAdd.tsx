@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  Button,
   Card,
   IconButton,
   Paper,
@@ -11,6 +12,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Theme,
   Typography,
 } from '@mui/material'
@@ -19,6 +21,8 @@ import { Job } from '@/app/teams/types/types'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useEffect, useState } from 'react'
+import CloseButton from '@/components/CloseButton'
+import { SettingIcon } from '@/icons/TeamPage'
 
 interface TableColumn {
   id: string
@@ -40,6 +44,7 @@ interface Props {
 
 const TeamJobAdd = ({ teamId, jobList }: Props) => {
   const [jobs, setJobs] = useState<Job[]>(jobList)
+  const [isSettingButton, setIsSettingButton] = useState('')
 
   useEffect(() => {
     setJobs(jobList)
@@ -67,6 +72,11 @@ const TeamJobAdd = ({ teamId, jobList }: Props) => {
 
   const handleAddNewJob = (newJob: Job) => {
     setJobs([...jobs, newJob])
+  }
+
+  const handleSettingButton = (name: string) => {
+    if (isSettingButton === name) setIsSettingButton('')
+    else setIsSettingButton(name)
   }
 
   return (
@@ -103,31 +113,58 @@ const TeamJobAdd = ({ teamId, jobList }: Props) => {
                 {jobs.map((job) => (
                   <TableRow key={job.id}>
                     <TableCell component={'th'} scope="row" align="center">
-                      {job.name}
+                      {isSettingButton === job.name ? (
+                        <TextField value={job.name} />
+                      ) : (
+                        <Typography variant="body1">{job.name}</Typography>
+                      )}
                     </TableCell>
                     <TableCell align="center">{job.current}</TableCell>
                     <TableCell align="center">
-                      <IconButton
-                        sx={{ py: 0 }}
-                        onClick={() => handleRemove(job.id)}
-                      >
-                        <RemoveIcon color="primary" />
-                      </IconButton>
-                      {job.max}
-                      <IconButton
-                        sx={{ py: 0 }}
-                        onClick={() => handleAdd(job.id)}
-                      >
-                        <AddIcon color="primary" />
-                      </IconButton>
+                      {isSettingButton === job.name ? (
+                        <>
+                          <IconButton
+                            sx={{ py: 0 }}
+                            onClick={() => handleRemove(job.id)}
+                          >
+                            <RemoveIcon color="primary" />
+                          </IconButton>
+                          {job.max}
+                          <IconButton
+                            sx={{ py: 0 }}
+                            onClick={() => handleAdd(job.id)}
+                          >
+                            <AddIcon color="primary" />
+                          </IconButton>
+                        </>
+                      ) : (
+                        <Typography>{job.max}</Typography>
+                      )}
                     </TableCell>
-                    <TableCell align="center">
-                      <IconButton
-                        sx={{ py: 0 }}
-                        onClick={() => handleDelete(job.id)}
-                      >
-                        <Typography>삭제</Typography>
-                      </IconButton>
+                    <TableCell align="right">
+                      {isSettingButton === job.name ? (
+                        <>
+                          <Button>저장</Button>
+                          <Button onClick={() => handleSettingButton('')}>
+                            취소
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <IconButton
+                            sx={{ p: 0, m: 0 }}
+                            onClick={() => handleSettingButton(job.name)}
+                          >
+                            <SettingIcon />
+                          </IconButton>
+                          <IconButton
+                            sx={{ p: 0, m: 0 }}
+                            onClick={() => handleDelete(job.id)}
+                          >
+                            <CloseButton />
+                          </IconButton>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
