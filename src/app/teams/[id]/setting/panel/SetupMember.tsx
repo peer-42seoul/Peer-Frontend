@@ -3,11 +3,9 @@ import {
   Box,
   Button,
   Card,
-  FormControl,
   // FormControl,
   Grid,
   Modal,
-  NativeSelect,
   // NativeSelect,
   Stack,
   Switch,
@@ -28,41 +26,41 @@ interface ISetupMember {
   jobs: Job[]
 }
 
-interface ICurrentJobCard {
-  job: Job
-  deleteJob: () => void
-}
+// interface ICurrentJobCard {
+//   job: Job
+//   deleteJob: () => void
+// }
 
-const CurrentJobCard = ({ job, deleteJob }: ICurrentJobCard) => {
-  return (
-    <Card
-      sx={{
-        p: '0.25rem',
-        width: 'fit-content',
-        backgroundColor: 'background.tertiary',
-        borderRadius: '1rem',
-      }}
-    >
-      <Stack alignItems={'center'} direction={'row'}>
-        <Typography>{job.name}</Typography>
-        <Button onClick={deleteJob}>X</Button>
-      </Stack>
-    </Card>
-  )
-}
+// const CurrentJobCard = ({ job, deleteJob }: ICurrentJobCard) => {
+//   return (
+//     <Card
+//       sx={{
+//         p: '0.25rem',
+//         width: 'fit-content',
+//         backgroundColor: 'background.tertiary',
+//         borderRadius: '1rem',
+//       }}
+//     >
+//       <Stack alignItems={'center'} direction={'row'}>
+//         <Typography>{job.name}</Typography>
+//         <Button onClick={deleteJob}>X</Button>
+//       </Stack>
+//     </Card>
+//   )
+// }
 
 const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
-  const {
-    isOpen: isChangeOpen,
-    closeModal: closeChangeModal,
-    openModal: openChangeModal,
-  } = useModal()
+  // const {
+  //   isOpen: isChangeOpen,
+  //   closeModal: closeChangeModal,
+  //   openModal: openChangeModal,
+  // } = useModal()
   const [members, setMembers] = useState<IMember[]>(team)
   const [member, setMember] = useState<IMember | null>(null)
   const [job, setJob] = useState<Job[]>(jobs)
-  const [selectedJobs, setSelectedJobs] = useState<Job[]>([])
+  // const [selectedJobs, setSelectedJobs] = useState<Job[]>([])
   const axiosWithAuth = useAxiosWithAuth()
 
   // const changeJob = () => {
@@ -74,6 +72,7 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
 
   useEffect(() => {
     setJob(jobs)
+    console.log(job)
     // if (selectedJobs.length > 0) {
     //   changeJob()
     // }
@@ -148,42 +147,42 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
       })
   }
 
-  const handleChangeModal = (selectedMember: IMember) => {
-    setMember(selectedMember)
-    const selectedJobs = job.filter((jobItem) =>
-      selectedMember.job.includes(jobItem.name),
-    )
-    setSelectedJobs(selectedJobs)
-    openChangeModal()
-  }
+  // const handleChangeModal = (selectedMember: IMember) => {
+  //   setMember(selectedMember)
+  //   const selectedJobs = job.filter((jobItem) =>
+  //     selectedMember.job.includes(jobItem.name),
+  //   )
+  //   setSelectedJobs(selectedJobs)
+  //   openChangeModal()
+  // }
 
-  const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedJobId = e.target.value as string
+  // const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
+  //   const selectedJobId = e.target.value as string
 
-    const selectJob = job.find((job) => job.name === selectedJobId)
+  //   const selectJob = job.find((job) => job.name === selectedJobId)
 
-    if (selectedJobs.includes(selectJob as Job)) {
-      // TODO: 토스트 알림으로 변경
-      console.log('이미 선택한 역할입니다.')
-      return
-    }
+  //   if (selectedJobs.includes(selectJob as Job)) {
+  //     // TODO: 토스트 알림으로 변경
+  //     console.log('이미 선택한 역할입니다.')
+  //     return
+  //   }
 
-    if (selectJob) {
-      setSelectedJobs([...selectedJobs, selectJob])
-    } else {
-      // TODO: 토스트 알림으로 변경
-      console.log('선택한 역할을 찾을 수 없습니다.')
-    }
-  }
+  //   if (selectJob) {
+  //     setSelectedJobs([...selectedJobs, selectJob])
+  //   } else {
+  //     // TODO: 토스트 알림으로 변경
+  //     console.log('선택한 역할을 찾을 수 없습니다.')
+  //   }
+  // }
 
-  const handleDeleteButton = (job: Job) => {
-    if (selectedJobs.length === 1) {
-      //TODO: 토스트 알림으로 변경
-      console.log('최소 한 개의 역할이 필요합니다.')
-      return
-    }
-    setSelectedJobs(selectedJobs.filter((selectedJob) => selectedJob !== job))
-  }
+  // const handleDeleteButton = (job: Job) => {
+  //   if (selectedJobs.length === 1) {
+  //     //TODO: 토스트 알림으로 변경
+  //     console.log('최소 한 개의 역할이 필요합니다.')
+  //     return
+  //   }
+  //   setSelectedJobs(selectedJobs.filter((selectedJob) => selectedJob !== job))
+  // }
 
   return (
     <>
@@ -226,7 +225,7 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
                 </OthersProfile>
                 <Typography fontWeight="bold">{member.name}</Typography>
                 <Stack direction="row" sx={{ justifyContent: 'center' }}>
-                  <Typography fontSize="small">리더 권한</Typography>
+                  <Typography variant="body2">리더 권한</Typography>
                   <Switch
                     size="small"
                     onChange={() => handleGrant(member)}
@@ -234,21 +233,21 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
                   />
                 </Stack>
                 {/* 역할이 있을 때만 버튼이 보이게끔 */}
-                {member.job && (
+                {/* {member.job && (
                   <Button
                     variant="contained"
                     onClick={() => handleChangeModal(member)}
                   >
                     <Typography fontSize="small">역할 변경</Typography>
                   </Button>
-                )}
+                )} */}
               </Box>
             </Grid>
           ))}
         </Grid>
       </Stack>
 
-      <Modal open={isChangeOpen} onClose={closeChangeModal}>
+      {/* <Modal open={isChangeOpen} onClose={closeChangeModal}>
         <Box sx={comfirmModalStyle}>
           <Stack>
             <Typography fontWeight={'bold'} fontSize={'large'}>
@@ -294,9 +293,9 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
             </Stack>
           </Stack>
         </Box>
-      </Modal>
+      </Modal> */}
 
-      <Modal open={isOpen} onClose={closeChangeModal}>
+      <Modal open={isOpen} onClose={closeModal}>
         <Box sx={comfirmModalStyle}>
           <Card>
             <Typography>정말 팀원을 내보내시겠습니까?</Typography>
