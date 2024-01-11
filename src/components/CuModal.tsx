@@ -98,9 +98,13 @@ const CuModal = ({
           >
             {title}
           </Typography>
-          <IconButton onClick={onClose} sx={style.headerCloseButton}>
-            <CloseIcon />
-          </IconButton>
+          {isPc && !mobileFullSize ? (
+            <IconButton onClick={onClose} sx={style.headerCloseButton}>
+              <CloseIcon />
+            </IconButton>
+          ) : (
+            <Box sx={style.headerDummyButton}></Box>
+          )}
         </Stack>
         <Stack sx={style.modalContent} justifyContent={'center'}>
           {children}

@@ -2,6 +2,7 @@ import { Stack, Typography } from '@mui/material'
 import DynamicToastViewer from '../DynamicToastViewer'
 import dayjs from 'dayjs'
 import CuButton from '../CuButton'
+import CuModal from '../CuModal'
 import * as style from './DetailPanel.style'
 
 interface IChildrenProps {
@@ -12,27 +13,56 @@ interface IDetailContentContainerProps {
   children: React.ReactNode
   containerTitle: string
   author: boolean
+  isPc?: boolean
   onClickEditButton?: () => void
+}
+
+interface IDetailPageProps extends IChildrenProps {
+  isPc: boolean
+  handleGoBack: () => void
 }
 
 interface IStatusMessageProps {
   message: string
   onClickEditButton?: () => void
   author: boolean
+  isPc?: boolean
 }
 
 interface IDetailContentProps {
+  isPc?: boolean
   title: string
   createdAt: Date
   authorNickname: string
   content: string
 }
 
-export const DetailPage = ({ children }: IChildrenProps) => {
+export const DetailPage = ({
+  children,
+  isPc,
+  handleGoBack,
+}: IDetailPageProps) => {
+  if (isPc) {
+    return (
+      <Stack sx={style.DetailPage} spacing={'1.5rem'}>
+        {children}
+      </Stack>
+    )
+  }
   return (
-    <Stack sx={style.DetailPage} spacing={'1.5rem'}>
-      {children}
-    </Stack>
+    <CuModal
+      open={true}
+      title={'공지사항'}
+      onClose={handleGoBack}
+      mobileFullSize
+    >
+      <Stack
+        sx={{ ...style.DetailPage, height: '100%', overflowY: 'scrollㄷ' }}
+        spacing={'1.5rem'}
+      >
+        {children}
+      </Stack>
+    </CuModal>
   )
 }
 
@@ -40,12 +70,13 @@ export const DetailContentCotainer = ({
   containerTitle,
   children,
   author,
+  isPc,
   onClickEditButton,
 }: IDetailContentContainerProps) => {
   return (
-    <Stack sx={style.DetailContent} spacing={'2rem'}>
+    <Stack sx={isPc ? style.DetailContent : undefined} spacing={'2rem'}>
       <Stack direction={'row'} justifyContent={'space-between'}>
-        <Typography>{containerTitle}</Typography>
+        <Typography>{isPc ? containerTitle : ''}</Typography>
         {author && (
           <CuButton
             message={'수정'}
@@ -67,12 +98,14 @@ export const StatusMessage = ({
   message,
   onClickEditButton,
   author,
+  isPc,
 }: IStatusMessageProps) => {
   return (
     <DetailContentCotainer
       containerTitle={'공지사항'}
       onClickEditButton={onClickEditButton}
       author={author}
+      isPc={isPc}
     >
       <Typography
         textAlign={'center'}
@@ -102,13 +135,14 @@ const Content = ({ content }: { content: string }) => {
 }
 
 export const DetailContent = ({
+  isPc,
   title,
   createdAt,
   authorNickname,
   content,
 }: IDetailContentProps) => {
   return (
-    <Stack spacing={'1.5rem'}>
+    <Stack spacing={isPc ? '1.5rem' : '1rem'}>
       <Stack spacing={'0.5rem'}>
         <ContentTitle title={'제목'} />
         <Content content={title} />

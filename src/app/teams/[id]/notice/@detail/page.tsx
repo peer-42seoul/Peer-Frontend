@@ -1,5 +1,4 @@
 'use client'
-import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
@@ -13,16 +12,18 @@ import CuButton from '@/components/CuButton'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
+import axios from 'axios'
+import useMedia from '@/hook/useMedia'
 
 const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
   const axiosWithAuth = useAxiosWithAuth()
   const { postId, setNotice } = useTeamPageState()
-  const router = useRouter()
   const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
     `/api/v1/team/notice/${postId}`,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    (url: string) => axios.get(url).then((res) => res.data),
   )
+  const { isPc } = useMedia()
 
   const handleDelete = () => {
     const confirm = window.confirm('공지사항을 삭제하시겠습니까?')
@@ -31,11 +32,15 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       .delete(`/api/v1/team/notice/${postId}`)
       .then(() => {
         alert('공지사항을 삭제했습니다.')
-        router.push(`/teams/${teamId}/notice`)
+        setNotice('LIST')
       })
       .catch(() => {
         alert('공지사항 삭제에 실패했습니다.')
       })
+  }
+
+  const handleGoBack = () => {
+    setNotice('LIST')
   }
 
   if (postId === undefined) return null
@@ -56,23 +61,27 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       />
     )
   return (
-    <DetailPage>
-      <CuButton
-        message={'이전 페이지'}
-        action={() => setNotice('LIST')}
-        variant={'text'}
-        TypographyProps={{
-          color: 'text.strong',
-          variant: 'Body2Emphasis',
-        }}
-        style={{ width: 'fit-content' }}
-      />
+    <DetailPage isPc={isPc} handleGoBack={handleGoBack}>
+      {isPc && (
+        <CuButton
+          message={'이전 페이지'}
+          action={handleGoBack}
+          variant={'text'}
+          TypographyProps={{
+            color: 'text.strong',
+            variant: 'Body2Emphasis',
+          }}
+          style={{ width: 'fit-content' }}
+        />
+      )}
       <DetailContentCotainer
         containerTitle={'공지사항'}
+        isPc={isPc}
         onClickEditButton={() => setNotice('EDIT', postId)}
         author={data.isAuthor}
       >
         <DetailContent
+          isPc={isPc}
           title={data.title}
           createdAt={data.createdAt}
           authorNickname={data.authorNickname}
