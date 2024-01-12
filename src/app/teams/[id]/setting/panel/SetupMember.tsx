@@ -5,6 +5,7 @@ import {
   Card,
   // FormControl,
   Grid,
+  IconButton,
   Modal,
   // NativeSelect,
   Stack,
@@ -19,6 +20,7 @@ import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
 import { comfirmModalStyle } from './styles'
+import CloseButton from '@/components/CloseButton'
 
 interface ISetupMember {
   team: IMember[]
@@ -207,7 +209,7 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
                 borderRadius={'0.5rem'}
               >
                 {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
-                <Button
+                <IconButton
                   size="small"
                   sx={{
                     position: 'absolute',
@@ -218,8 +220,8 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
                   }}
                   onClick={() => handleOpenDelete(member)}
                 >
-                  X
-                </Button>
+                  <CloseButton />
+                </IconButton>
                 <OthersProfile name={member.name} userId={member.id}>
                   <Avatar sx={{ margin: 'auto' }}>A</Avatar>
                 </OthersProfile>
