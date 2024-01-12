@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
 import '../../styles/global.css'
 import '../../styles/reset.css'
-import { MobileNav, PcNav } from './panel/NavBar'
-import Header from './panel/Header'
 import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
-import { Box } from '@mui/material'
 import CuSWRConfig from './panel/CuSWRConfig'
 import { io } from 'socket.io-client'
+import MainLayout from './panel/MainLayout'
+import { Pretendard } from './panel/font'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -24,7 +23,8 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/public/icons/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         {/* 사파리 설정*/}
         <link
@@ -50,22 +50,12 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="peer" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" />
-        <meta name="theme-color" content="#8936FF" />
+        <meta name="theme-color" content="#010456" />
       </head>
-      <body>
+      <body className={Pretendard.className}>
         <CuSWRConfig>
           <MuiThemeProvider>
-            <div className="mobile-layout">
-              <Header />
-              {/* 헤더 고정 시 여기에 margin-top: 추가 */}
-              {/* 상하단 여백 어떻게 할지 조정 필요 */}
-              <Box sx={{ marginBottom: '56px' }}>{children}</Box>
-              <MobileNav />
-            </div>
-            <div className="pc-layout">
-              <PcNav />
-              <Box sx={{ marginY: '56px' }}>{children}</Box>
-            </div>
+            <MainLayout>{children}</MainLayout>
             <div id="modal-root"></div>
           </MuiThemeProvider>
         </CuSWRConfig>

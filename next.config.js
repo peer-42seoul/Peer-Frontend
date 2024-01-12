@@ -6,7 +6,6 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   register: true,
   skipWaiting: true,
   disable: false,
-  swSrc: 'service-worker.js',
   // disable: prod ? false : true, 나중에 true로 바꿔야함
   // runtimeCaching,
 })
@@ -20,7 +19,29 @@ const nextConfig = withPWA({
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['picsum.photos', 'source.unsplash.com'],
+    domains: [
+      'picsum.photos',
+      'source.unsplash.com',
+      'lh3.googleusercontent.com',
+      'kr1-api-object-storage.nhncloudservice.com',
+    ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://back.peer-test.co.kr/api/:path*',
+      },
+    ]
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: ['@svgr/webpack'],
+    })
+
+    return config
   },
 })
 

@@ -24,6 +24,7 @@ const PasswordField = ({
     field.onChange('')
   }
 
+  const [showValidating, setShowValidating] = useState<boolean>(false)
   const isLengthValid = field.value.length >= 8
   const isNumberValid = /\d/.test(field.value)
   const isSpecialValid = /[!@#$%^&*]/.test(field.value)
@@ -31,16 +32,21 @@ const PasswordField = ({
 
   return (
     <>
-      <CuTextFieldLabel htmlFor="password">비밀번호</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="password">
+        <Typography variant="Caption">비밀번호</Typography>
+      </CuTextFieldLabel>
       <CuTextField
         {...field}
         autoComplete="new-password"
         error={false}
         type={showPassword}
-        placeholder="비밀번호를 입력하세요"
+        placeholder="비밀번호를 입력하세요."
         inputProps={{
           minLength: 8,
           maxLength: 20,
+        }}
+        onFocus={() => {
+          setShowValidating(true)
         }}
         InputProps={{
           endAdornment: (
@@ -50,36 +56,47 @@ const PasswordField = ({
                 setShowPassword={setShowPassword}
               />
               <IconButton onClick={deletePassword} size="small">
-                <HighlightOffIcon />
+                <HighlightOffIcon sx={{ color: 'text.alternative' }} />
               </IconButton>
             </>
           ),
         }}
       />
-      <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: showValidating ? 'flex' : 'none',
+          gap: '10px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
         <Typography
-          color={isAlphabetValid ? 'primary' : ''}
+          variant="Caption"
+          color={isAlphabetValid ? 'primary' : 'text.assistive'}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
           <CheckIcon sx={{ fontSize: '16px', marginRight: '4px' }} />
           대소문자
         </Typography>
         <Typography
-          color={isLengthValid ? 'primary' : ''}
+          variant="Caption"
+          color={isLengthValid ? 'primary' : 'text.assistive'}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
           <CheckIcon sx={{ fontSize: '16px', marginRight: '4px' }} />
           최소 8자
         </Typography>
         <Typography
-          color={isNumberValid ? 'primary' : ''}
+          variant="Caption"
+          color={isNumberValid ? 'primary' : 'text.assistive'}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
           <CheckIcon sx={{ fontSize: '16px', marginRight: '4px' }} />
           숫자
         </Typography>
         <Typography
-          color={isSpecialValid ? 'primary' : ''}
+          variant="Caption"
+          color={isSpecialValid ? 'primary' : 'text.assistive'}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
           <CheckIcon sx={{ fontSize: '16px', marginRight: '4px' }} />

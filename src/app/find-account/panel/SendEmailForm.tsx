@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import axios from 'axios'
-import { Box, Typography, Button, Container } from '@mui/material'
+import { Box, Typography, Button, Container, Stack } from '@mui/material'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import CuTextField from '@/components/CuTextField'
 import SendCodeForm from './SendCodeForm'
@@ -13,7 +13,7 @@ const Form = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '24px',
+  gap: '8px',
 }
 
 const LabelBox = {
@@ -58,12 +58,8 @@ const SendEmailForm = ({
 
   return (
     <>
-      <Box sx={Form}>
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}
-        >
+      <Container disableGutters={true}>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={Form}>
           <Controller
             name="email"
             control={control}
@@ -76,8 +72,10 @@ const SendEmailForm = ({
               },
             }}
             render={({ field }) => (
-              <Container sx={LabelBox}>
-                <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
+              <Container sx={LabelBox} disableGutters={true}>
+                <CuTextFieldLabel htmlFor="email">
+                  <Typography variant="Caption">이메일</Typography>
+                </CuTextFieldLabel>
                 <CuTextField
                   {...field}
                   id="email"
@@ -85,14 +83,46 @@ const SendEmailForm = ({
                   style={{ width: '100%' }}
                   disabled={isEmailSuccessful}
                 />
-                {errors.email && (
-                  <Typography>{errors.email.message}</Typography>
+                {!isEmailSuccessful ? (
+                  <Typography color="error" variant="Caption">
+                    {errors.email ? errors.email.message : <>&nbsp;</>}
+                  </Typography>
+                ) : (
+                  <Stack
+                    direction="row"
+                    sx={{
+                      width: '100%',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography variant="Caption" color="purple.normal">
+                      입력하신 메일로 코드를 보냈어요.
+                    </Typography>
+                    <Typography variant="Caption" color="purple.normal">
+                      코드를 받지 못했나요?{' '}
+                      <Button
+                        variant="text"
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
+                        <Typography variant="CaptionEmphasis">
+                          재전송
+                        </Typography>
+                      </Button>
+                    </Typography>
+                  </Stack>
                 )}
               </Container>
             )}
           />
           {!isEmailSuccessful && (
-            <Button type="submit" disabled={isSubmitting}>
+            <Button
+              fullWidth
+              variant="contained"
+              type="submit"
+              disabled={isSubmitting}
+            >
               코드 발송
             </Button>
           )}
@@ -109,7 +139,7 @@ const SendEmailForm = ({
             />
           </Box>
         )}
-      </Box>
+      </Container>
       <CuToast open={isOpen} onClose={closeToast} severity="error">
         <Typography>{errorMessage}</Typography>
       </CuToast>

@@ -2,21 +2,22 @@
 
 import { Dispatch, SetStateAction } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Button, Typography, Container, Stack } from '@mui/material'
+import { Button, Typography, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
 import IChangePassword from '../types/IChangePassword'
-
 import PasswordField from './PasswordField'
 
 export default function UserInfoEdit({
   local,
-  authentication,
+  authenticationFt,
+  authenticationGoogle,
   setToastProps,
   openToast,
 }: {
   local?: string
-  authentication?: string
+  authenticationFt?: string
+  authenticationGoogle?: string
   setToastProps: Dispatch<SetStateAction<IToastProps>>
   openToast: () => void
 }) {
@@ -34,8 +35,31 @@ export default function UserInfoEdit({
     },
     mode: 'onChange',
   })
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
 
   const axiosWithAuth = useAxiosWithAuth()
+
+  // const linkFt = async () => {
+  //   try {
+  //     const response = await axiosWithAuth.get('/oauth2/authorization/ft')
+
+  //     console.log(response)
+  //   } catch (error) {
+  //     // 오류 처리
+  //     console.error('Error:', error)
+  //   }
+  // }
+  // const linkGoogle = async () => {
+  //   try {
+  //     const response = await axiosWithAuth.get('/oauth2/authorization/google')
+
+  //     console.log(response)
+  //   } catch (error) {
+  //     // 오류 처리
+  //     console.error('Error:', error)
+  //   }
+  // }
+
   const changePassword: SubmitHandler<IChangePassword> = async (data) => {
     try {
       await axiosWithAuth.put(`/api/v1/info/password`, data)
@@ -67,105 +91,139 @@ export default function UserInfoEdit({
 
   return (
     <>
-      <Container
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-        component="main"
-      >
-        <Typography>지역</Typography>
-        {local ? <Typography>{local}</Typography> : null}
-        <Button>인증하기</Button>
-        <Typography>42계정</Typography>
-        {authentication ? <Typography>{authentication}</Typography> : null}
-        <Button>인증하기</Button>
-        <form onSubmit={handleSubmit(changePassword)}>
-          <Stack spacing={1}>
-            <Typography>비밀번호</Typography>
-            <Controller
-              name="presentPassword"
-              control={control}
-              defaultValue=""
-              rules={{ required: true }}
-              render={({ field }) => (
-                <PasswordField
-                  field={field}
-                  autoComplete="off"
-                  placeholder="현재 비밀번호"
-                  error={errors.presentPassword ? true : false}
-                />
-              )}
-            />
-            <Controller
-              name="newPassword"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                validate: {
-                  minLength: (value) =>
-                    value.length >= 8 || '비밀번호는 8자 이상이어야 합니다',
-                  maxLength: (value) =>
-                    value.length <= 20 || '비밀번호는 20자 이하여야 합니다',
-                  includeNumber: (value) =>
-                    /\d/.test(value) || '비밀번호에 숫자가 포함되어야 합니다',
-                  includeSpecial: (value) =>
-                    /[!@#$%^&*]/.test(value) ||
-                    '비밀번호에 특수문자가 포함되어야 합니다',
-                  includeCapital: (value) =>
-                    /[A-Z]/.test(value) ||
-                    '비밀번호에 대문자가 포함되어야 합니다',
-                  includeSmall: (value) =>
-                    /[a-z]/.test(value) ||
-                    '비밀번호에 소문자가 포함되어야 합니다',
-                },
-              }}
-              render={({ field }) => (
-                <PasswordField
-                  field={field}
-                  autoComplete="off"
-                  placeholder="새로운 비밀번호"
-                  error={errors.newPassword ? true : false}
-                />
-              )}
-            />
-            <Controller
-              name="confirmPassword"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                validate: (value) =>
-                  value === getValues('newPassword') ||
-                  '비밀번호가 일치하지 않습니다',
-              }}
-              render={({ field }) => (
-                <PasswordField
-                  field={field}
-                  autoComplete="off"
-                  placeholder="새로운 비밀번호 확인"
-                  error={errors.confirmPassword ? true : false}
-                />
-              )}
-            />
-            {errors.newPassword ? (
-              <Typography color="error">
-                {errors.newPassword.message
-                  ? errors.newPassword.message
-                  : '비밀번호를 입력해주세요'}
-              </Typography>
-            ) : errors.confirmPassword ? (
-              <Typography color="error">
-                {errors.confirmPassword.message}
-              </Typography>
-            ) : (
-              <Typography>&nbsp;</Typography>
+      <Stack spacing={2} direction="row" alignItems={'center'}>
+        <Typography variant="CaptionEmphasis" color="text.strong">
+          42 계정
+        </Typography>
+        {authenticationFt ? (
+          <Typography variant="Body2" color="text.alternative">
+            {authenticationFt}
+          </Typography>
+        ) : (
+          <Button
+            variant="contained"
+            href={`${API_URL}/oauth2/authorization/ft`}
+          >
+            <Typography variant="CaptionEmphasis" color="text.strong">
+              인증하기
+            </Typography>
+          </Button>
+        )}
+      </Stack>
+      <Stack spacing={2} direction="row" alignItems={'center'}>
+        <Typography variant="CaptionEmphasis" color="text.strong">
+          구글 계정
+        </Typography>
+        {authenticationGoogle ? (
+          <Typography variant="Body2" color="text.alternative">
+            {authenticationGoogle}
+          </Typography>
+        ) : (
+          <Button
+            variant="contained"
+            href={`${API_URL}/oauth2/authorization/google`}
+          >
+            <Typography variant="CaptionEmphasis" color="text.strong">
+              인증하기
+            </Typography>
+          </Button>
+        )}
+      </Stack>
+      <Stack spacing={2} direction="row" alignItems={'center'}>
+        <Typography variant="CaptionEmphasis" color="text.strong">
+          지역
+        </Typography>
+        {local ? (
+          <Typography variant="Body2" color="text.alternative">
+            {local}
+          </Typography>
+        ) : (
+          <Button variant="contained">
+            <Typography variant="CaptionEmphasis" color="text.strong">
+              인증하기
+            </Typography>
+          </Button>
+        )}
+      </Stack>
+      <form onSubmit={handleSubmit(changePassword)}>
+        <Stack spacing={1}>
+          <Typography variant="CaptionEmphasis" color="text.strong">
+            비밀번호
+          </Typography>
+          <Controller
+            name="presentPassword"
+            control={control}
+            defaultValue=""
+            rules={{ required: true }}
+            render={({ field }) => (
+              <PasswordField
+                field={field}
+                autoComplete="off"
+                placeholder="현재 비밀번호"
+                error={errors.presentPassword ? true : false}
+              />
             )}
-          </Stack>
-          <Button type="submit">변경하기</Button>
-        </form>
-      </Container>
+          />
+          <Controller
+            name="newPassword"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+              validate: {
+                minLength: (value) =>
+                  value.length >= 8 || '비밀번호는 8자 이상이어야 합니다',
+                maxLength: (value) =>
+                  value.length <= 20 || '비밀번호는 20자 이하여야 합니다',
+                includeNumber: (value) =>
+                  /\d/.test(value) || '비밀번호에 숫자가 포함되어야 합니다',
+                includeSpecial: (value) =>
+                  /[!@#$%^&*]/.test(value) ||
+                  '비밀번호에 특수문자가 포함되어야 합니다',
+                includeCapital: (value) =>
+                  /[A-Z]/.test(value) ||
+                  '비밀번호에 대문자가 포함되어야 합니다',
+                includeSmall: (value) =>
+                  /[a-z]/.test(value) ||
+                  '비밀번호에 소문자가 포함되어야 합니다',
+              },
+            }}
+            render={({ field }) => (
+              <PasswordField
+                field={field}
+                autoComplete="off"
+                placeholder="새로운 비밀번호"
+                error={errors.newPassword ? true : false}
+              />
+            )}
+          />
+          <Controller
+            name="confirmPassword"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+              validate: (value) =>
+                value === getValues('newPassword') ||
+                '비밀번호가 일치하지 않습니다',
+            }}
+            render={({ field }) => (
+              <PasswordField
+                field={field}
+                autoComplete="off"
+                placeholder="새로운 비밀번호 확인"
+                error={errors.confirmPassword ? true : false}
+              />
+            )}
+          />
+          <Typography color="error" variant="Caption">
+            {errors.newPassword?.message ||
+              errors.confirmPassword?.message ||
+              '\u00A0'}
+          </Typography>
+        </Stack>
+        <Button type="submit">변경하기</Button>
+      </form>
     </>
   )
 }

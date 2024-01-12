@@ -2,15 +2,18 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
-import FormLabel from '@mui/material/FormLabel'
 import { Dispatch, SetStateAction } from 'react'
 
 interface RowRadioButtonsGroupProps {
   setValue: Dispatch<SetStateAction<string>>
+  disabled?: boolean
+  defaultChecked?: string
 }
 
 export default function RowRadioButtonsGroup({
   setValue,
+  disabled,
+  defaultChecked,
 }: RowRadioButtonsGroupProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value)
@@ -18,26 +21,26 @@ export default function RowRadioButtonsGroup({
 
   return (
     <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label">
-        스터디 or 프로젝트
-      </FormLabel>
       <RadioGroup
         row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        name="row-radio-buttons-group"
+        aria-labelledby="team-type-radio-buttons-group-label"
+        name="team-type-radio-buttons-group"
         onChange={handleChange}
-        defaultValue="project"
+        defaultValue="PROJECT"
       >
         <FormControlLabel
-          value="study"
+          value="PROJECT"
           control={<Radio />}
-          label="Study-group"
+          label="프로젝트"
+          disabled={disabled}
+          defaultChecked={defaultChecked === 'PROJECT'}
         />
         <FormControlLabel
-          value="project"
+          value="STUDY"
           control={<Radio />}
-          label="Project-team"
-          defaultChecked
+          label="스터디"
+          disabled={disabled}
+          defaultChecked={defaultChecked === 'STUDY'}
         />
       </RadioGroup>
     </FormControl>

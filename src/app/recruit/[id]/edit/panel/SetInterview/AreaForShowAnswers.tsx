@@ -1,6 +1,6 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import Answers from './Answers'
-import { IFormInterview } from '@/app/recruit/write/page'
+import { IFormInterview } from '@/types/IPostDetail'
 
 const AreaForShowAnswers = ({
   interviewData,
@@ -9,38 +9,46 @@ const AreaForShowAnswers = ({
   interviewData: IFormInterview[]
   setInterviewData: React.Dispatch<React.SetStateAction<IFormInterview[]>>
 }) => {
-  const onHandlerRemove = (index: number) => () => {
+  const onHandlerRemove = (index: number) => {
     setInterviewData(interviewData.filter((_, i) => i !== index))
   }
 
   return (
-    <Box sx={{ border: 1, borderRadius: 2, boxShadow: 1 }}>
+    <Stack gap={'1.5rem'}>
       {interviewData.map((data, index) => {
         return (
           <Box
             key={index}
             sx={{
+              display: 'flex',
+              flexDirection: 'column',
               border: 1,
-              borderRadius: 2,
+              borderBottom: '1.5rem',
               boxShadow: 1,
-              padding: `10px`,
+              borderRadius: '0.75rem',
+              backgroundColor: 'background.secondary',
+              padding: '1rem 1.25rem 1rem 1.25rem',
             }}
+            gap={'1rem'}
           >
-            <Box key={index}>
-              <Typography>{`${index}번째 질문`}</Typography>
-              <TextField
-                variant="standard"
-                value={data.question}
-                disabled={true}
-              ></TextField>
-              <Typography>답변 유형</Typography>
-              <Answers data={data} />
-            </Box>
-            <Button onClick={onHandlerRemove(index)}>제거</Button>
+            <TextField
+              variant="standard"
+              value={data.question}
+              disabled={true}
+              sx={{ width: '70%' }}
+            />
+            <Answers data={data} />
+            <Button
+              onClick={() => {
+                onHandlerRemove(index)
+              }}
+            >
+              <Typography>삭제</Typography>
+            </Button>
           </Box>
         )
       })}
-    </Box>
+    </Stack>
   )
 }
 

@@ -1,46 +1,46 @@
-import { Card, CardActionArea, Stack, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { Stack, Typography } from '@mui/material'
 import { ITeamInfo } from '../page'
+import { TeamStatus } from '@/app/teams/types/types'
+
+//icons
+import useShowTeams from '@/states/useShowTeams'
+import TeamCard from './TeamCard'
 
 const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
-  const router = useRouter()
+  const { showTeams } = useShowTeams()
 
   return (
     <Stack
-      spacing={1}
-      sx={{ p: 1 }}
-      flex={4}
-      border="1px solid"
-      borderRadius={2}
+      spacing={'0.2rem'}
+      sx={{ p: '0.25rem' }}
+      height={'75vh'}
+      flex={'2rem'}
     >
-      {prop.map((team, index) => (
-        <Card
-          key={index}
-          sx={{
-            p: 2,
-            boxShadow: 'none',
-            border: '1px solid',
-          }}
-        >
-          <CardActionArea onClick={() => router.push(`/teams/${team.id}`)}>
-            {/* 기획상 문제로 임시로 주석처리 */}
-            {/* {team.myRole && (
-                <IconButton
-                  sx={{ float: 'right' }}
-                  onClick={() => router.push(`/teams/setup/${index}`)}
-                >
-                  <SettingsIcon />
-                </IconButton>
-              )}  */}
-            <Typography>팀 종류: {team.type}</Typography>
-            <Typography>팀 이름: {team.name}</Typography>
-            <Typography>팀 상태: {team.status}</Typography>
-            <Typography>팀 활동 기간: {team.dueTo}</Typography>
-            <Typography>활동 장소: {team.region}</Typography>
-            <Typography>활동 시간: {team.operationForm}</Typography>
-          </CardActionArea>
-        </Card>
-      ))}
+      <Stack>
+        <Typography fontWeight={'bold'} my={'1rem'}>
+          {showTeams === TeamStatus.RECRUITING
+            ? '모집 중'
+            : showTeams === TeamStatus.COMPLETE
+              ? '진행 완료'
+              : showTeams === TeamStatus.ONGOING
+                ? '진행 중'
+                : '모집 완료'}
+        </Typography>
+      </Stack>
+      <Stack
+        spacing={'0.5rem'}
+        overflow={'auto'}
+        sx={{ p: '0.5rem' }}
+        height={'55vh'}
+        maxHeight={'55vh'}
+        flex={'2rem'}
+      >
+        {prop.length ? (
+          prop.map((team, index) => <TeamCard key={index} team={team} />)
+        ) : (
+          <Typography>아직 참가한 팀이 없습니다.</Typography>
+        )}
+      </Stack>
     </Stack>
   )
 }

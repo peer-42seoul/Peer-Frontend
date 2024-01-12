@@ -5,6 +5,9 @@ import DisplaySetting from './panel/DisplaySetting'
 import KeywordSetting from './panel/KeywordSetting'
 import useToast from '@/hook/useToast'
 import { AlertColor } from '@mui/material/Alert'
+import { Stack } from '@mui/material'
+import * as style from '../panel/my-page.style'
+import useMedia from '@/hook/useMedia'
 
 interface IToast {
   severity: AlertColor | undefined
@@ -14,6 +17,7 @@ interface IToast {
 const HomepageSetting = () => {
   const [toastMessage, setToastMessage] = useState({} as IToast)
   const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const { isPc } = useMedia()
 
   useEffect(() => {
     if (toastMessage.message) {
@@ -26,9 +30,13 @@ const HomepageSetting = () => {
     closeToast()
     setToastMessage((prev) => ({ ...prev, message: '' }))
   }
+  const pageStyle = isPc ? style.pagePcStyle : style.pageMobileStyle
 
   return (
-    <div>
+    <Stack
+      sx={{ ...pageStyle, whiteSpace: 'pre-line', wordBreak: 'keep-all' }}
+      spacing={isPc ? '2rem' : '1.5rem'}
+    >
       <NotifSetting setToastMessage={setToastMessage} />
       <KeywordSetting setToastMessage={setToastMessage} />
       <DisplaySetting />
@@ -36,10 +44,9 @@ const HomepageSetting = () => {
         severity={toastMessage.severity}
         open={isOpen}
         onClose={clearToast}
-      >
-        {toastMessage.message}
-      </CuToast>
-    </div>
+        message={toastMessage.message}
+      />
+    </Stack>
   )
 }
 

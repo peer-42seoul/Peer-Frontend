@@ -1,4 +1,10 @@
-import { Box, Button, Stack, SxProps, Typography } from '@mui/material'
+import {
+  Button,
+  Stack,
+  SxProps,
+  Typography,
+  TypographyProps,
+} from '@mui/material'
 import React from 'react'
 
 // TODO 모바일에서 페이지로 넘어가는 것이 아닌 모달을 띄우는 것으로 변경됨 리펙토링 필요
@@ -11,14 +17,14 @@ const SectionType = {
 
 const ProfileSection = ({
   sectionTitle,
-  children,
   setModalType,
+  titleTypographyProps,
   sx,
 }: {
   sectionTitle: 'introduction' | 'achievements' | 'skills' | 'links'
-  children: React.ReactNode
   setModalType: (type: string) => void
   sx?: SxProps
+  titleTypographyProps?: TypographyProps
 }) => {
   const sectionTypeMap = new Map(Object.entries(SectionType))
   const handleEditClick = () => {
@@ -26,18 +32,35 @@ const ProfileSection = ({
   }
 
   return (
-    <Box sx={sx}>
-      {/* 스타일을 넣기 위해 우선 넣었습니다. */}
-      <section>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography>{sectionTypeMap.get(sectionTitle)}</Typography>
-          <Button variant="text" onClick={handleEditClick}>
-            <Typography>수정</Typography>
-          </Button>
-        </Stack>
-        {children}
-      </section>
-    </Box>
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems={'center'}
+      minHeight={'1.5rem'}
+      sx={sx}
+    >
+      <Typography {...titleTypographyProps}>
+        {sectionTypeMap.get(sectionTitle)}
+      </Typography>
+      <Button
+        variant="text"
+        onClick={handleEditClick}
+        sx={{
+          padding: '0 0.25rem',
+          width: 'fit-content',
+          height: '1.5rem',
+          minWidth: '1.8rem',
+        }}
+      >
+        <Typography
+          variant="CaptionEmphasis"
+          color={'text.alternative'}
+          sx={{ padding: 0, whiteSpace: 'pre-line', wordBreak: 'keep-all' }}
+        >
+          수정
+        </Typography>
+      </Button>
+    </Stack>
   )
 }
 

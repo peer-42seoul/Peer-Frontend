@@ -34,7 +34,7 @@ const NickNameField = ({
         autoComplete="nickname"
         error={nickNameSendStatus === 'error'}
         type="text"
-        placeholder="닉네임을 입력하세요"
+        placeholder="닉네임을 입력하세요."
         inputProps={{
           minLength: 2,
           maxLength: 7,
@@ -43,19 +43,19 @@ const NickNameField = ({
           endAdornment: (
             <InputAdornment position="end">
               <Button
-                variant="contained"
+                variant="text"
                 disabled={isSubmitting}
                 onClick={submitNickName}
               >
-                중복 확인
+                <Typography variant="CaptionEmphasis">중복 확인</Typography>
               </Button>
             </InputAdornment>
           ),
         }}
       />
-      {(error && <Typography color="error">{error.message}</Typography>) || (
-        <Typography>&nbsp;</Typography>
-      )}
+      <Typography color="error" variant="Caption">
+        {error?.message || '\u00A0'}
+      </Typography>
     </>
   )
 }

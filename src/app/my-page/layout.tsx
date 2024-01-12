@@ -1,34 +1,27 @@
-import { Container, Grid } from '@mui/material'
+'use client'
+
+import { Box, Container, Stack } from '@mui/material'
 import React from 'react'
-import SubNavBar from './panel/SubNavBar'
+import NavBar from './panel/NavBar'
+import useMedia from '@/hook/useMedia'
+import * as style from './layout.style'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  // TODO : #443에 추가된 페이지 레이아웃 디자인을 적용해야 함.
+  const { isPc } = useMedia()
   return (
-    <Container sx={{ maxWidth: '1980' }}>
-      <Grid
-        container
-        columns={7}
-        columnSpacing={[0, 8]}
+    <Container sx={isPc ? style.pcContainer : style.mobileContainer}>
+      <Stack
         justifyContent={'space-between'}
-        width={1}
-        maxWidth={1280}
+        direction={isPc ? 'row' : 'column'}
+        spacing={'2rem'}
+        sx={isPc ? style.pcStack : style.mobileStack}
       >
-        <Grid item xs={0} sm={3} sx={{ maxWidth: '308px' }}>
-          <SubNavBar />
-        </Grid>
-        <Grid
-          item
-          xs={7}
-          sm={4}
-          width={1}
-          sx={{
-            maxWidth: '844px',
-            padding: '32px',
-          }}
-        >
+        <NavBar />
+        <Box sx={isPc ? style.pcContentBox : style.mobileContentBox}>
           {children}
-        </Grid>
-      </Grid>
+        </Box>
+      </Stack>
     </Container>
   )
 }

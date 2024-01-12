@@ -1,3 +1,4 @@
+import { IFormInterview } from '@/types/IPostDetail'
 import {
   Box,
   Checkbox,
@@ -6,14 +7,11 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography,
 } from '@mui/material'
-import { IFormInterview } from '@/app/recruit/write/page'
 
 const Answers = ({ data }: { data: IFormInterview }) => {
-  console.log('data.type', data.type)
   switch (data.type) {
-    case '객관식': {
+    case 'CLOSE': {
       return (
         <Box>
           <RadioGroup
@@ -27,6 +25,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
                   value={option}
                   control={<Radio />}
                   label={option}
+                  disabled={true}
                 />
               )
             })}
@@ -34,29 +33,33 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         </Box>
       )
     }
-    case '주관식': {
+    case 'OPEN': {
       return (
         <TextField
           variant="standard"
-          value={data.type}
+          value={'주관식 답변입니다.'}
           disabled={true}
-        ></TextField>
+          sx={{ width: '70%' }}
+        />
       )
     }
-    case '체크박스': {
+    case 'CHECK': {
       return (
         <Box>
           <FormGroup sx={{ paddingLeft: '10px' }}>
             {data.optionList?.map((option, index) => {
               return (
                 <Box key={index}>
-                  <Typography>{`${index}번째 옵션`}</Typography>
-                  <FormControlLabel control={<Checkbox />} label={``} />
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label={``}
+                    disabled={true}
+                  />
                   <TextField
                     variant="standard"
                     value={option}
                     disabled={true}
-                  ></TextField>
+                  />
                 </Box>
               )
             })}
@@ -64,9 +67,9 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         </Box>
       )
     }
-    case '선형배율': {
-      if (!data?.ratioList) return
-      const maxNumber = parseInt(data.ratioList?.max)
+    case 'RATIO': {
+      if (!data?.optionList) return
+      const maxNumber = parseInt(data.optionList[0])
 
       return (
         <Box>
@@ -85,9 +88,12 @@ const Answers = ({ data }: { data: IFormInterview }) => {
                       value={`${num}`}
                       control={<Radio />}
                       label={``}
+                      disabled={true}
                     />
-                    {num === 1 ? data.ratioList?.valueOfMin : null}
-                    {num === maxNumber ? data.ratioList?.valueOfMax : null}
+                    {num === 1 && data.optionList ? data.optionList[1] : null}
+                    {num === maxNumber && data.optionList
+                      ? data.optionList[2]
+                      : null}
                   </Box>
                 ),
               )}

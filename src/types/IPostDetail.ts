@@ -1,8 +1,11 @@
 import { ProjectType } from '@/app/panel/MainPage'
 
 export interface ITag {
+  tagId: number
   name: string
   color: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface IMainCard {
@@ -35,25 +38,34 @@ export interface IPostDetail {
   status: TPostStatus
   due: string
   content: string
-  user_id: string
-  user_nickname: string
-  user_thumbnail: string
+  leader_id: string
+  leader_image: string
+  leader_nickname: string
   region: string[]
   link: string
   tagList: ITag[]
   roleList: IRole[]
   // interviewList: IFormInterview[]
   place: string
+  image: string
+  totalNumber: number
+  favorite: boolean
+  teamName: string
 }
 
 export interface IFormInterview {
   question: string
   type: string
-  optionList: string[]
+  optionList: string[] | null
 }
 
 export interface IRole {
   name: string
+  number: number
+}
+
+export interface IRoleWrite {
+  name: string | null
   number: number
 }
 

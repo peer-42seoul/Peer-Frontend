@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import LocalStorage from './localStorage'
 import axios from 'axios'
+import { setCookie } from 'cookies-next'
 
 interface IAuthStore {
   isLogin: boolean
@@ -24,6 +25,7 @@ const useAuthStore = create<IAuthStore>((set) => {
       // save userId, accessToken to LocalStorage
       const authDataToSave = { accessToken }
       LocalStorage.setItem('authData', JSON.stringify(authDataToSave))
+      setCookie('accessToken', accessToken)
       // set state
       set(() => ({
         isLogin: true,

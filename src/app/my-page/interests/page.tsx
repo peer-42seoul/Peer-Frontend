@@ -1,47 +1,22 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
 import { ProjectType } from '@/app/panel/MainPage'
-import CloseButton from '@/components/CloseButton'
 import CuButton from '@/components/CuButton'
-import CuModal from '@/components/CuModal'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
 import { IMainCard } from '@/types/IPostDetail'
-import {
-  AlertColor,
-  MenuItem,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from '@mui/material'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { AlertColor, Stack, Tab, Tabs, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
+import CuTextModal from '@/components/CuTextModal'
+import * as style from '../panel/my-page.style'
 
 interface IInterestResponse {
   postList: IMainCard[]
   isLast: boolean
-}
-
-const TypeToggle = ({
-  type,
-  handleChange,
-}: {
-  type: string
-  handleChange: (e: SelectChangeEvent) => void
-}) => {
-  console.log('dropdown', type)
-  return (
-    <Select value={type} onChange={handleChange} variant="standard">
-      <MenuItem value={'PROJECT'}>프로젝트</MenuItem>
-      <MenuItem value={'STUDY'}>스터디</MenuItem>
-      {/* <MenuItem value={'showcase'}>쇼케이스</MenuItem> 2step */}
-    </Select>
-  )
 }
 
 const TypeTabs = ({
@@ -77,35 +52,20 @@ const AlertModal = ({
   confirmAction: () => void
 }) => {
   return (
-    <CuModal
+    <CuTextModal
       open={isOpen}
-      handleClose={closeModal}
-      ariaTitle=""
-      ariaDescription=""
-    >
-      <Stack direction={'column'}>
-        <Typography>삭제</Typography>
-        <CloseButton
-          action={closeModal}
-          style={{ border: 'none', color: 'black' }}
-        />
-      </Stack>
-      <Typography>정말 삭제하시겠습니까?</Typography>
-      <Stack direction={'column'}>
-        <CuButton
-          message="취소"
-          action={closeModal}
-          variant="contained"
-          style={{ width: '50%' }}
-        />
-        <CuButton
-          message="삭제"
-          action={confirmAction}
-          variant="contained"
-          style={{ width: '50%' }}
-        />
-      </Stack>
-    </CuModal>
+      onClose={closeModal}
+      title={'삭제'}
+      content={'정말 삭제하시겠습니까?'}
+      containedButton={{
+        text: '삭제',
+        onClick: confirmAction,
+      }}
+      textButton={{
+        text: '취소',
+        onClick: closeModal,
+      }}
+    />
   )
 }
 
@@ -125,12 +85,6 @@ const MyInterests = () => {
     message: '',
     severity: '' as AlertColor,
   })
-
-  const handleSelectChange = (event: SelectChangeEvent) => {
-    console.log('event.target.value as string : ', event.target.value as string)
-    setType(event.target.value as string)
-    setPostList([])
-  }
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     console.log('newValue: ', newValue)
@@ -168,10 +122,13 @@ const MyInterests = () => {
   useEffect(() => {
     if (!isLoading && data && !data.isLast) {
       setPostList((prev) => prev.concat(data.postList))
-      if (data.postList.length === pagesize) {
+      if (data?.postList.length === pagesize) {
         setPageLimit((prev) => prev + 1)
       }
     }
+  }, [isLoading, data])
+
+  useEffect(() => {
     if (error && error?.response?.data?.message) {
       setToastMessage({
         severity: 'error',
@@ -179,7 +136,7 @@ const MyInterests = () => {
       })
       openToast()
     }
-  }, [error, isLoading, data])
+  }, [error, openToast])
 
   const { target, spinner } = useInfiniteScroll({
     setPage,
@@ -189,44 +146,56 @@ const MyInterests = () => {
   })
 
   return (
-    <div>
+    <>
       <CuToast
         open={isToastOpen}
         onClose={closeToast}
         severity={toastMessage.severity}
-      >
-        {toastMessage.message}
-      </CuToast>
+        message={toastMessage.message}
+      />
       <AlertModal
         isOpen={isModalOpen}
         closeModal={closeModal}
         confirmAction={deleteAll}
       />
-      {isPc ? (
-        <TypeToggle type={type} handleChange={handleSelectChange} />
-      ) : (
+      <Stack
+        direction={'column'}
+        spacing={3}
+        sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
+      >
         <TypeTabs type={type} handleChange={handleTabChange} />
-      )}
-      <CuButton
-        variant="text"
-        message="전체 삭제"
-        action={openModal}
-        disabled={isDeleting}
-      />
+        <Stack
+          direction={'row'}
+          justifyContent={'flex-end'}
+          sx={{ paddingRight: '0.5rem' }}
+        >
+          <CuButton
+            variant="text"
+            message="관심 모두 해제"
+            action={openModal}
+            disabled={isDeleting}
+            TypographyProps={{
+              variant: 'CaptionEmphasis',
+              color: 'text.alternative',
+            }}
+            style={{ height: '2rem' }}
+          />
+        </Stack>
 
-      {postList.length ? (
-        <InterestsContents
-          postList={postList}
-          spinner={spinner}
-          target={target}
-          type={type as ProjectType}
-        />
-      ) : isLoading ? (
-        <Typography>로딩 중</Typography>
-      ) : (
-        <Typography>관심있다고 표시한 페이지가 없습니다.</Typography>
-      )}
-    </div>
+        {postList.length ? (
+          <InterestsContents
+            postList={postList}
+            spinner={spinner}
+            target={target}
+            type={type as ProjectType}
+          />
+        ) : isLoading ? (
+          <Typography>로딩 중</Typography>
+        ) : (
+          <Typography>관심있다고 표시한 페이지가 없습니다.</Typography>
+        )}
+      </Stack>
+    </>
   )
 }
 

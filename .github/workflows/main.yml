@@ -44,6 +44,10 @@ jobs:
         working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend
         run: npm run lint
 
+      - name: Build Test
+        working-directory: /home/runner/work/Peer-Frontend/Peer-Frontend
+        run: npm run build
+
   CD:
     name: Deployment
     if: github.ref == 'refs/heads/develop' && (github.event.pull_request.merged == true || github.event_name == 'push')

@@ -5,37 +5,34 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
+type TabValue =
+  | 'profile'
+  | 'interests'
+  | 'message'
+  | 'privacy'
+  | 'homepage-setting'
+
 const getTabValue = (path: string) => {
-  switch (path) {
-    case '/my-page/profile':
-      return 0
-
-    case '/my-page/interests':
-      return 1
-
-    case '/my-page/message':
-      return 2
-
-    case '/my-page/privacy':
-      return 3
-
-    case '/my-page/homepage-setting':
-      return 4
-
-    default:
-      return 0
-  }
+  if (path.startsWith('/my-page/profile')) return 'profile'
+  else if (path.startsWith('/my-page/interests')) return 'interests'
+  else if (path.startsWith('/my-page/message')) return 'message'
+  else if (path.startsWith('/my-page/privacy')) return 'privacy'
+  else if (path.startsWith('/my-page/homepage-setting'))
+    return 'homepage-setting'
+  else return 'profile'
 }
 
-const SubNavBar = () => {
+const SubNavBar = ({ sx }: { sx: SxProps }) => {
   const router = useRouter()
-  console.log(router)
   const pathName = usePathname()
-  console.log(pathName)
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState<TabValue>('profile')
   const { isPc } = useMedia()
 
-  const tabStyle: SxProps = { maxWidth: '244px', padding: '0 24px' }
+  const tabStyle: SxProps = {
+    maxWidth: '15.3rem',
+    padding: '0',
+    width: '100%',
+  }
 
   useEffect(() => {
     setValue(getTabValue(pathName))
@@ -45,13 +42,12 @@ const SubNavBar = () => {
     return <div></div>
   }
 
-  // console.log(pathName)
-
   return (
     <Box
       sx={{
-        padding: '24px 32px',
-        maxWidth: '244px',
+        px: ['1rem', '2rem'],
+        py: ['1.5rem'],
+        ...sx,
       }}
     >
       <Typography>마이페이지</Typography>
@@ -60,42 +56,40 @@ const SubNavBar = () => {
         value={value}
         onChange={(event, newValue) => setValue(newValue)}
         sx={{
-          // borderRight: 1,
           borderColor: 'divider',
-          // padding: '24px 32px',
-          gap: '4px',
+          gap: '0.25rem',
         }}
         variant="fullWidth"
       >
         <Tab
           label="프로필"
           onClick={() => router.push('/my-page/profile')}
-          value={0}
+          value={'profile'}
           sx={tabStyle}
         />
         <Tab
           label="관심리스트"
           onClick={() => router.push('/my-page/interests')}
           sx={tabStyle}
-          value={1}
+          value={'interests'}
         />
         <Tab
           label="쪽지"
           onClick={() => router.push('/my-page/message')}
           sx={tabStyle}
-          value={2}
+          value={'message'}
         />
         <Tab
           label="개인정보"
           onClick={() => router.push('/my-page/privacy')}
           sx={tabStyle}
-          value={3}
+          value={'privacy'}
         />
         <Tab
           label="홈페이지 설정"
           onClick={() => router.push('/my-page/homepage-setting')}
           sx={tabStyle}
-          value={4}
+          value={'homepage-setting'}
         />
       </Tabs>
     </Box>

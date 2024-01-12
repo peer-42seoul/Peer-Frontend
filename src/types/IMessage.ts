@@ -4,7 +4,7 @@ export interface IMessageListData {
   targetId: number
   conversationId: number
   targetNickname: string
-  targetProfile: string
+  targetProfile: string | undefined
   unreadMsgNumber: number // 아직 확인하지 않은 메시지 데이터 수
   latestContent: string
   latestDate: string // 최신 메시지 날짜
@@ -25,6 +25,10 @@ export interface IMessageUser {
   userId: number
   userProfile: string
   userNickname: string
+}
+
+export interface IMessageTargetUser extends IMessageUser {
+  deleted: boolean
 }
 
 // 메시지 전송 타입

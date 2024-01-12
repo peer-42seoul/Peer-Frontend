@@ -7,19 +7,18 @@ import {
   Stack,
   Typography,
   CircularProgress,
-  Button,
 } from '@mui/material'
-import { useEffect, useState } from 'react'
-import EditButton from './EditButton'
-import MainCard from './MainCard'
-import SearchOption from './SearchOption'
-import SelectSort from './SelectSort'
-import SelectType from './SelectType'
+import { useCallback, useEffect, useState } from 'react'
+import FloatEditButton from './main-page/FloatEditButton'
+import MainCard from './main-page/MainCard'
+import SearchOption from './main-page/SearchOption'
+import SelectSort from './main-page/SelectSort'
+import SelectType from './main-page/SelectType'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
-import MainProfile from './MainProfile'
-import MainShowcase from './MainShowcase'
-import MainCarousel from './MainCarousel'
+import MainProfile from './main-page/MainProfile'
+import MainShowcase from './main-page/MainShowcase'
+import MainCarousel from './main-page/MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
 import { IPost } from '@/types/IPostDetail'
@@ -27,9 +26,11 @@ import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
-import useMedia from '@/hook/useMedia'
+import PwaInstallBanner from './PwaInstallBanner'
+import PushAlertBanner from './PushAlertBanner'
+import MainBanner from '@/app/panel/main-page/MainBanner'
 
-interface BeforeInstallPromptEvent extends Event {
+export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
   readonly userChoice: Promise<{
     outcome: 'accepted' | 'dismissed'
@@ -42,7 +43,8 @@ export type ProjectSort = 'latest' | 'hit'
 export type ProjectType = 'STUDY' | 'PROJECT'
 export interface IDetailOption {
   isInit?: boolean
-  due: string
+  due1: number
+  due2: number
   region1: string
   region2: string
   place: string
@@ -51,8 +53,6 @@ export interface IDetailOption {
 }
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  const { isPc } = useMedia()
-  const [isShowInstall, setIsShowInstall] = useState<boolean>(true)
   const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
@@ -61,13 +61,22 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   /* 추후 디자인 추가되면 schedule 추가하기 */
   const [detailOption, setDetailOption] = useState<IDetailOption>({
     isInit: true,
-    due: '',
+    due1: 0,
+    due2: 100,
     region1: '',
     region2: '',
     place: '',
     status: '',
     tag: '',
   })
+  const dueObject: { [key: number]: string } = {
+    0: '1주일',
+    20: '1개월',
+    40: '3개월',
+    60: '6개월',
+    80: '9개월',
+    100: '12개월 이상',
+  }
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
@@ -75,66 +84,35 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
   )
-  const [deferredPrompt, setDeferredPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null)
-  /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
 
+  /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
   const pageSize = 6
   const {
     data: newData,
     isLoading,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    (page == 1 && !type && !sort && detailOption.isInit && keyword == '')
+    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${type ?? 'STUDY'
-      }&sort=${sort ?? 'latest'
-      }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${detailOption.due
-      }&region1=${detailOption.region1}&region2=${detailOption.region2
-      }&place=${detailOption.place}&status=${detailOption.status}&tag=${detailOption.tag
-      }`,
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
+          type ?? 'STUDY'
+        }&sort=${
+          sort ?? 'latest'
+        }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
+          dueObject[detailOption.due1]
+        }&due=${dueObject[detailOption.due2]}&region1=${
+          detailOption.region1
+        }&region2=${detailOption.region2}&place=${detailOption.place}&status=${
+          detailOption.status
+        }&tag=${detailOption.tag}`,
     isLogin
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
 
   useEffect(() => {
-    if (localStorage && localStorage.getItem('isShowInstall') === 'false') {
-      setIsShowInstall(false)
-    }
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log('Notification granted')
-      }
-    })
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((reg) => {
-          console.log('Service worker registered', reg)
-        })
-        .catch((err) => {
-          console.warn('Service worker failed', err.message)
-        })
-    }
-
-    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
-      e.preventDefault()
-      setDeferredPrompt(e)
-      setIsShowInstall(true)
-    }
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-    window.addEventListener('appinstalled', () => {
-      console.log('installed')
-      setIsShowInstall(false)
-    })
-  }, [deferredPrompt, isShowInstall])
-
-  useEffect(() => {
     if (!newData || !newData?.content) return
-    //page가 1일 경우 == initData가 설정되어있을경우, 무한스크롤시 page는 무조건 2부터 시작함. 
+    //page가 1일 경우 == initData가 설정되어있을경우, 무한스크롤시 page는 무조건 2부터 시작함.
     //따라서 page가 1일 경우에는 옵션이 달라진 것임. 고로 무조건 새로운 데이터로 setContent를 해준다.
     if (page == 1) {
       setContent(newData.content)
@@ -157,65 +135,47 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     page,
   )
 
-  const handleType = (value: ProjectType) => {
+  const handleType = useCallback((value: ProjectType) => {
     setType(value)
-    //type이 변경될 경우 초기화 
+    //type이 변경될 경우 초기화
     setPage(1)
     setDetailOption({
-      due: '',
+      due1: 0,
+      due2: 100,
       region1: '',
       region2: '',
       place: '',
       status: '',
       tag: '',
     })
-    setSort("latest")
-  }
+    setSort('latest')
+  }, [])
 
-  const handleSort = (value: ProjectSort) => {
+  const handleSort = useCallback((value: ProjectSort) => {
     setSort(value)
     setPage(1)
-  }
+  }, [])
 
-  const handleOption = (value: IDetailOption) => {
+  const handleOption = useCallback((value: IDetailOption) => {
     setDetailOption(value)
     setPage(1)
-  }
+  }, [])
 
   return (
     <>
-      {isShowInstall ? (
-        <Box height={'50px'} border="1px solid black">
-          <Stack>
-            사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
-            {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
-            <Stack direction="row">
-              <Button
-                onClick={() => {
-                  if (!deferredPrompt) return
-                  // @ts-ignore
-                  deferredPrompt.prompt()
-                }}
-              >
-                설치
-              </Button>
-              <Button
-                onClick={() => {
-                  setIsShowInstall(false)
-                  localStorage.setItem('isShowInstall', 'false')
-                }}
-              >
-                닫기
-              </Button>
-            </Stack>
-          </Stack>
-        </Box>
-      ) : null}
+      <PushAlertBanner />
       {/* mobile view */}
-      <Container className="mobile-layout">
-        <Box sx={{ backgroundColor: 'white' }} border="1px solid black">
+      <div className="mobile-layout">
+        <Container
+          sx={{
+            backgroundColor: 'Background.primary',
+            border: '1px solid black',
+            maxWidth: '56.75rem',
+          }}
+        >
+          <MainBanner />
           <SelectType type={type} setType={handleType} />
-          <Grid container p={2}>
+          <Grid container>
             <SearchOption
               openOption={openOption}
               setOpenOption={setOpenOption}
@@ -231,6 +191,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               </Stack>
             </Grid>
           </Grid>
+          {/*card list 영역*/}
           {isLoading && page == 1 ? (
             <Typography>로딩중...</Typography>
           ) : error || !initData ? (
@@ -239,23 +200,16 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <Typography>데이터가 없습니다</Typography>
           ) : (
             <>
-              <Stack alignItems={'center'} gap={2}>
-                {content?.map((project: IPost, index: number) => (
-                  <Box key={index}>
-                    <MainCard {...project} type={type} />
-                  </Box>
-                ))}
+              <Stack alignItems={'center'}>
+                <Stack gap={2}>
+                  {content?.map((project: IPost, index: number) => (
+                    <Box key={index}>
+                      <MainCard {...project} type={type} />
+                    </Box>
+                  ))}
+                </Stack>
               </Stack>
-              <Box
-                sx={{
-                  position: 'fixed',
-                  right: 20,
-                  bottom: 80,
-                }}
-              >
-                <EditButton />
-              </Box>
-              {spinner && <CircularProgress />}
+              {/* 무한 스크롤 */}
               <Box
                 sx={{
                   bottom: 0,
@@ -266,70 +220,82 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               />
             </>
           )}
-        </Box>
-      </Container>
+          <Box
+            sx={{
+              position: 'fixed',
+              right: 20,
+              bottom: 80,
+            }}
+          >
+            <FloatEditButton />
+          </Box>
+          {spinner && <CircularProgress />}
+        </Container>
+      </div>
       {/* pc view */}
-      <Container
-        sx={{ backgroundColor: 'white', border: '1px solid black' }}
-        className="pc-layout"
-      >
-        <Stack direction={'row'} border="1px solid black">
-          <Stack flex={1}>
-            <Box height={'200px'} border="1px solid black">
-              피어 소개 배너
-            </Box>
-            <SelectType type={type} setType={handleType} pc />
-            <Grid container p={2}>
-              <SearchOption
-                openOption={openOption}
-                setOpenOption={setOpenOption}
-                setDetailOption={handleOption}
-              />
-              <Grid item xs={12}>
-                <Stack
-                  direction="row"
-                  alignItems={'center'}
-                  justifyContent={'space-between'}
-                >
-                  <Typography>모집글</Typography>
-                  <SelectSort sort={sort} setSort={handleSort} />
-                </Stack>
-              </Grid>
-            </Grid>
-            {isLoading && page == 1 ? (
-              <Typography>로딩중...</Typography>
-            ) : error ? (
-              <Typography>에러 발생</Typography>
-            ) : content?.length == 0 ? (
-              <Typography>데이터가 없습니다</Typography>
-            ) : (
-              <>
-                <Grid container spacing={2}>
-                  {content?.map((project: IPost, index: number) => (
-                    <Grid item key={index} sm={12} md={4}>
-                      <MainCard {...project} type={type} />
-                    </Grid>
-                  ))}
-                </Grid>
-                {spinner && <CircularProgress />}
-                <Box
-                  sx={{
-                    bottom: 0,
-                    height: '1vh',
-                    backgroundColor: 'primary.main',
-                  }}
-                  ref={target}
+      <div className="pc-layout">
+        <Container
+          sx={{
+            backgroundColor: 'Background.primary',
+            border: '1px solid black',
+          }}
+        >
+          <Stack direction={'row'} border="1px solid black" spacing={4}>
+            <Stack flex={1} gap={'0.5rem'}>
+              <MainBanner />
+              <SelectType type={type} setType={handleType} />
+              <Grid container bgcolor={'Background.primary'}>
+                <SearchOption
+                  openOption={openOption}
+                  setOpenOption={setOpenOption}
+                  setDetailOption={handleOption}
                 />
-              </>
-            )}
+              </Grid>
+              <Stack
+                direction="row"
+                alignItems={'center'}
+                justifyContent={'flex-end'}
+              >
+                <SelectSort sort={sort} setSort={handleSort} />
+              </Stack>
+              {/*card list 영역*/}
+              {isLoading && page == 1 ? (
+                <Typography>로딩중...</Typography>
+              ) : error ? (
+                <Typography>에러 발생</Typography>
+              ) : content?.length == 0 ? (
+                <Typography>데이터가 없습니다</Typography>
+              ) : (
+                <>
+                  <Grid container spacing={'1rem'}>
+                    {content?.map((project: IPost, index: number) => (
+                      <Grid item key={index} sm={12} md={6} lg={4}>
+                        <MainCard {...project} type={type} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                  {/* 무한 스크롤 */}
+                  {spinner && <CircularProgress />}
+                  <Box
+                    sx={{
+                      bottom: 0,
+                      height: '1vh',
+                      backgroundColor: 'primary.main',
+                    }}
+                    ref={target}
+                  />
+                </>
+              )}
+            </Stack>
+            <Stack maxWidth={'19.25rem'} height={'100%'} gap={'1rem'}>
+              <MainProfile />
+              <MainShowcase />
+              <MainCarousel />
+            </Stack>
           </Stack>
-          <Stack width={'250px'} height={'100%'}>
-            <MainProfile />
-            <MainShowcase />
-            <MainCarousel />
-          </Stack>
-        </Stack>
-      </Container>
+        </Container>
+      </div>
+      <PwaInstallBanner />
     </>
   )
 }

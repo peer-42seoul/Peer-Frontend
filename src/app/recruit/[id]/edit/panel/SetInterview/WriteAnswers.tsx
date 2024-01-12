@@ -1,10 +1,8 @@
 import {
   Box,
+  Stack,
   Button,
-  Checkbox,
   FormControl,
-  FormControlLabel,
-  FormGroup,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -12,8 +10,9 @@ import {
   Typography,
 } from '@mui/material'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import { CloseIcon } from '@/icons'
 
 const WriteAnswers = ({
   formType,
@@ -41,12 +40,10 @@ const WriteAnswers = ({
   const [value, setValue] = useState<string>('')
 
   const onHandlerAddOption = () => {
-    if ((formType !== '주관식' && value === '') || option.length === 10) {
-      console.log('onHandlerAddOption')
+    if ((formType !== 'open' && value === '') || option.length === 10) {
       // TODO 에러 처리 추가예정
       return
     }
-    console.log('WriteAnswers option', option)
     setOption([...option, value])
     setValue('')
   }
@@ -73,96 +70,128 @@ const WriteAnswers = ({
   }
 
   switch (formType) {
-    case '주관식': {
+    case 'OPEN': {
       return (
         <>
           <TextField
-            variant="outlined"
+            variant="standard"
             disabled={true}
-            value={'주관식 답변입니다.'}
+            placeholder="텍스트로 답변을 입력할 수 있어요."
+            sx={{ width: '70%' }}
           >
             주관식 답변입니다.
           </TextField>
         </>
       )
     }
-    case '객관식': {
+    case 'CLOSE': {
       return (
         <>
-          <Box sx={{ paddingBottom: '20px' }}>
-            <RadioButtonCheckedIcon />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <RadioButtonUncheckedIcon sx={{ color: 'grey' }} />
             <TextField
-              variant="outlined"
-              value={value}
-              onChange={onHandlerEditValue}
-              label="옵션을 입력하세요."
-            />
-            <Button onClick={onHandlerAddOption}>옵션 추가</Button>
-          </Box>
-          <Box>
-            {option.map((data, index) => {
-              return (
-                <Box key={index}>
-                  <RadioButtonCheckedIcon />
-                  <TextField variant="outlined" value={data} disabled={true} />
-                  <Button variant="outlined" onClick={onHandlerRemove(index)}>
-                    제거
-                  </Button>
-                </Box>
-              )
-            })}
-          </Box>
-        </>
-      )
-    }
-    case '체크박스': {
-      return (
-        <>
-          <Box
-            sx={{ paddingLeft: '10px', display: 'flex', flexDirection: 'row' }}
-          >
-            <CheckBoxOutlineBlankIcon />
-            <TextField
-              sx={{ paddingRight: '17px' }}
               variant="standard"
               value={value}
               onChange={onHandlerEditValue}
-            ></TextField>
+              placeholder="옵션을 입력하세요."
+              sx={{ width: '60%' }}
+            />
             <Button onClick={onHandlerAddOption}>옵션 추가</Button>
           </Box>
-          <Box>
-            <FormGroup>
-              {option.map((data, index) => {
-                return (
-                  <Box key={index}>
-                    <FormControlLabel control={<Checkbox />} label={``} />
-                    <TextField
-                      variant="standard"
-                      value={data}
-                      disabled={true}
-                    />
-                    <Button onClick={onHandlerRemove(index)}>제거</Button>
-                  </Box>
-                )
-              })}
-            </FormGroup>
-          </Box>
+          {option.map((data, index) => {
+            return (
+              <Stack
+                key={data + index}
+                direction={'row'}
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
+                <RadioButtonUncheckedIcon sx={{ color: 'grey' }} />
+                <TextField
+                  variant="standard"
+                  value={data}
+                  disabled={true}
+                  sx={{ width: '60%' }}
+                />
+                <Button
+                  sx={{ width: '4%' }}
+                  onClick={() => {
+                    onHandlerRemove(index)
+                  }}
+                >
+                  <CloseIcon color="primary" />
+                </Button>
+              </Stack>
+            )
+          })}
         </>
       )
     }
-    case '선형배율': {
+    case 'CHECK': {
       return (
         <>
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <CheckBoxOutlineBlankIcon sx={{ color: 'grey' }} />
+            <TextField
+              variant="standard"
+              value={value}
+              onChange={onHandlerEditValue}
+            />
+            <Button onClick={onHandlerAddOption}>옵션 추가</Button>
+          </Box>
+          {option.map((data, index) => {
+            return (
+              <Box
+                key={data + index}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <CheckBoxOutlineBlankIcon sx={{ color: 'grey' }} />
+                <TextField variant="standard" value={data} disabled={true} />
+                <Button
+                  sx={{ width: '4%' }}
+                  onClick={() => {
+                    onHandlerRemove(index)
+                  }}
+                >
+                  <CloseIcon color="primary" />
+                </Button>
+              </Box>
+            )
+          })}
+        </>
+      )
+    }
+    case 'RATIO': {
+      return (
+        <>
+          <Box
+            sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+            gap={'0.5rem'}
+          >
             <FormControl>
-              <Select defaultValue={1}>
+              <Select
+                sx={{ width: '3.5rem', height: '2.5rem' }}
+                defaultValue={1}
+              >
                 <MenuItem value={1}>{`1`}</MenuItem>
               </Select>
             </FormControl>
-            <Typography> ~ </Typography>
+            <Typography color={'primary'}> ~ </Typography>
             <FormControl>
-              <Select value={max} onChange={onHandlerEditMax}>
-                {['2', '3', '4', '5', '6', '7', '8', '10'].map((value) => {
+              <Select
+                sx={{ width: '3.5rem', height: '2.5rem' }}
+                value={max}
+                onChange={onHandlerEditMax}
+              >
+                {['2', '3', '4', '5'].map((value) => {
                   return (
                     <MenuItem key={value} value={value}>{`${value}`}</MenuItem>
                   )
@@ -171,18 +200,22 @@ const WriteAnswers = ({
             </FormControl>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography>최소값</Typography>
-            <TextField
-              variant="standard"
-              value={valueOfMin}
-              onChange={onHandlerEditValueOfMin}
-            ></TextField>
-            <Typography>최대값</Typography>
-            <TextField
-              variant="standard"
-              value={valueOfMax}
-              onChange={onHandlerEditValueOfMax}
-            ></TextField>
+            <Stack direction={'row'} sx={{ alignItems: 'center' }}>
+              <Typography>1</Typography>
+              <TextField
+                variant="standard"
+                value={valueOfMin}
+                onChange={onHandlerEditValueOfMin}
+              />
+            </Stack>
+            <Stack direction={'row'} sx={{ alignItems: 'center' }}>
+              <Typography>{max}</Typography>
+              <TextField
+                variant="standard"
+                value={valueOfMax}
+                onChange={onHandlerEditValueOfMax}
+              />
+            </Stack>
           </Box>
         </>
       )

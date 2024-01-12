@@ -1,7 +1,10 @@
 'use client'
-import { Avatar, Box, Modal, Stack, Typography } from '@mui/material'
-import { IProfileCard } from '@/types/IUserProfile'
+import { Box, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
+import ProfileSection from './ProfileSection'
+import * as style from './Profile.style'
+import useMedia from '@/hook/useMedia'
+import CuAvatar from '@/components/CuAvatar'
 
 // TODO css 다른 파일로 빼기
 
@@ -25,19 +28,10 @@ const ProfileImageModal = ({
       sx={{ border: 'none', outline: 'none' }}
     >
       <Box
-        component="img"
+        component={'img'}
+        sx={style.profileImageModalStyle}
+        alt="profile image"
         src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
-        aria-labelledby="유저 이미지"
-        aria-describedby="확대된 유저 이미지"
-        sx={{
-          width: '80%',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          border: 'none',
-          outline: 'none',
-          transform: 'translate(-50%, -50%)',
-        }}
       />
     </Modal>
   )
@@ -49,57 +43,77 @@ const ProfileCard = ({
   association,
   introduction,
   email,
-}: IProfileCard) => {
+  setModalType,
+}: {
+  profileImageUrl: string | null
+  nickname: string
+  association: string | null
+  introduction: string | null
+  email: string
+  setModalType: (type: string) => void
+}) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleModalClose = () => {
     setOpen(false)
   }
+  const { isPc } = useMedia()
 
   return (
-    <div>
-      <Stack direction="row">
+    <Stack
+      spacing={isPc ? 3 : 2}
+      alignSelf={'stretch'}
+      sx={isPc ? style.profileCardPcStyle : style.profileCardMobileStyle}
+    >
+      <ProfileSection
+        sectionTitle={'introduction'}
+        setModalType={setModalType}
+        titleTypographyProps={{
+          variant: isPc ? 'Title3Emphasis' : 'Body1Emphasis',
+          color: 'text.normal',
+          component: 'h3',
+        }}
+        sx={{ height: '2.5rem' }}
+      />
+      <Stack direction="row" spacing={0.75} alignItems={'center'}>
         {/* image component */}
-        <div
-          style={{
-            width: '56px',
-            height: '56px',
-            padding: '5px 3px',
-          }}
-        >
-          <Avatar
-            src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
-            onClick={() => setOpen(true)}
-            sx={{
-              width: '100%',
-              height: '100%',
-            }}
-          />
-        </div>
+        <CuAvatar
+          src={profileImageUrl ? profileImageUrl : ''}
+          onClick={() => setOpen(true)}
+          sx={style.profileImageStyle}
+        />
+
         {/* 유저 이름, 소속, 유저 아이디, 유저 이메일 */}
-        <Stack
-          spacing={0.5}
-          sx={{
-            margin: '0 0 0 4px',
-          }}
-        >
-          <Typography>{nickname}</Typography>
-          {association ? (
-            <Typography>{association}</Typography>
-          ) : (
-            <Typography />
+        <Stack spacing={0.5}>
+          <Typography variant="Body2" color={'text.normal'}>
+            {nickname}
+          </Typography>
+          {association && (
+            <Typography
+              variant="Caption"
+              color={'text.alternative'}
+              sx={{ marginRight: '0.25rem' }}
+            >
+              {association}
+            </Typography>
           )}
-          <Typography>아이디({email})</Typography>
+          <Typography variant="Caption" color={'text.alternative'}>
+            {email}
+          </Typography>
         </Stack>
       </Stack>
-      <Box>
-        <Typography>{introduction}</Typography>
-      </Box>
+      <Typography
+        variant="Body2"
+        color={'text.normal'}
+        sx={style.profileIntroductionStyle}
+      >
+        {introduction}
+      </Typography>
       <ProfileImageModal
         open={open}
         handleModalClose={handleModalClose}
         profileImageUrl={profileImageUrl}
       />
-    </div>
+    </Stack>
   )
 }
 

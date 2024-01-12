@@ -1,51 +1,33 @@
 import React from 'react'
-import { Button, Popover, Typography } from '@mui/material'
+import {
+  Button,
+  Tooltip,
+  TooltipProps,
+  styled,
+  tooltipClasses,
+} from '@mui/material'
+import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined'
+import * as style from './LinkButton.style'
 
-const LinkButton = ({ href }: { href: string }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+const LinkTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(() => ({
+  [`& .${tooltipClasses.tooltip}`]: style.tooltip,
+}))
 
-  const open = Boolean(anchorEl)
-  const id = open ? 'link-popover' : undefined
-
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null)
-  }
-
+const LinkButton = ({
+  href,
+  variant,
+}: {
+  href: string
+  variant: 'text' | 'outlined' | 'contained'
+}) => {
   return (
-    <div>
-      <Button
-        aria-describedby={id}
-        variant="contained"
-        size="large"
-        href={href}
-        onMouseEnter={handlePopoverOpen}
-        sx={{ zIndex: 1304 }}
-      >
-        소통링크
+    <LinkTooltip placement="bottom-start" title={href}>
+      <Button variant={variant} href={href} sx={style.button} disabled={!href}>
+        <InsertLinkOutlinedIcon />
       </Button>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handlePopoverClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        sx={{ zIndex: 1303 }}
-        container={() => document.getElementById('modal-root')}
-      >
-        <Typography sx={{ padding: 2 }}>{href}</Typography>
-      </Popover>
-    </div>
+    </LinkTooltip>
   )
 }
 

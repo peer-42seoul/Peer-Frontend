@@ -1,66 +1,66 @@
 'use client'
-import { Button, Skeleton, Stack, Typography } from '@mui/material'
-import { Box } from '@mui/system'
-// import Image from 'next/image'
-// import React, { useEffect, useState } from 'react'
-
-const ImageButton = ({
-  teamImage,
-  alt,
-  text,
-  action,
-}: {
-  teamImage: string
-  alt: string
-  text: string
-  action: () => void
-}) => {
-  console.log(teamImage, alt)
-  return (
-    <Button onClick={action}>
-      <Stack>
-        {/* <Image src={teamImage} alt={alt} width={100} height={100} /> 이미지가 없어서 우선 스켈레톤으로 적용 해두었습니다.*/}
-        <Skeleton variant="rectangular" width={100} height={100} />
-        <Typography>{text}</Typography>
-      </Stack>
-    </Button>
-  )
-}
+import CuToggle from '@/components/CuToggle'
+import { FormControlLabel, Stack, Typography } from '@mui/material'
+import { useDarkMode } from '@/states/useDarkMode'
+import TitleBox from '@/components/TitleBox'
 
 const DisplaySetting = () => {
-  // const [themeType, setThemeType] = useState<'light' | 'dark' | 'system'>(
-  //   'light',
-  // )
-
-  // useEffect(() => {
-  //   console.log('API call!')
-  // }, [themeType])
-  const apiCall = (themeType: string) => {
-    console.log('API Call!', themeType)
-  }
+  const { useSystemTheme, isLightMode, toggleDarkMode, toggleSystemTheme } =
+    useDarkMode()
 
   return (
-    <Box>
-      <Typography>화면 스타일</Typography>
-      <ImageButton
-        teamImage="https://picsum.photos/200"
-        alt="라이트 모드 이미지"
-        text="라이트 모드"
-        action={() => apiCall('light')}
-      />
-      <ImageButton
-        teamImage="https://picsum.photos/200"
-        alt="다크 모드 이미지"
-        text="다크 모드"
-        action={() => apiCall('dark')}
-      />
-      <ImageButton
-        teamImage="https://picsum.photos/200"
-        alt="기기 설정 이미지"
-        text="기기 설정"
-        action={() => apiCall('system')}
-      />
-    </Box>
+    <TitleBox title="화면 설정">
+      <Stack direction={'row'} spacing={2}>
+        <FormControlLabel
+          control={
+            <CuToggle
+              checked={useSystemTheme}
+              onChange={toggleSystemTheme}
+              inputProps={{ 'aria-label': `시스템 설정 토글` }}
+            />
+          }
+          label={
+            <Typography
+              variant="CaptionEmphasis"
+              color={'text.strong'}
+              sx={{ marginRight: '16px', marginLeft: '0' }}
+            >
+              시스템 설정
+            </Typography>
+          }
+          labelPlacement="start"
+        />
+        <FormControlLabel
+          sx={{
+            opacity: useSystemTheme ? 0 : 1,
+            transition: 'opacity 0.5s ease',
+          }}
+          control={
+            <CuToggle
+              checked={isLightMode()}
+              onChange={toggleDarkMode}
+              inputProps={{ 'aria-label': `라이트/다크모드 토글` }}
+              uncheckedtrackimage="/images/sign_moon.svg"
+              checkedtrackimage="/images/sign_sun.svg"
+            />
+          }
+          label={
+            <Typography
+              variant="CaptionEmphasis"
+              color={'text.alternative'}
+              sx={{
+                marginRight: '16px',
+                marginLeft: '0',
+                // textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+              }}
+            >
+              라이트/ 다크 모드
+            </Typography>
+          }
+          labelPlacement="start"
+        />
+      </Stack>
+    </TitleBox>
   )
 }
 

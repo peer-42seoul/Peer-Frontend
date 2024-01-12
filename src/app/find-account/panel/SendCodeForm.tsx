@@ -70,15 +70,14 @@ const SendCodeForm = ({
 
   const adornment = (
     <>
-      <Typography>{`${Math.floor(timer / 60)}:${(timer % 60)
-        .toString()
-        .padStart(2, '0')}`}</Typography>
+      <Typography variant="Caption" sx={{ marginRight: '12px' }}>{`${Math.floor(
+        timer / 60,
+      )}:${(timer % 60).toString().padStart(2, '0')}`}</Typography>
     </>
   )
 
   const onSubmit = async (data: { code: string }) => {
     const code = data.code
-    //console.log(codeData)
 
     try {
       const res = await axios.post(`${API_URL}/api/v1/signin/find-password`, {
@@ -110,13 +109,15 @@ const SendCodeForm = ({
             required: '코드를 입력해주세요',
           }}
           render={({ field }) => (
-            <Container sx={LabelBox}>
-              <CuTextFieldLabel htmlFor="code">인증코드</CuTextFieldLabel>
+            <Container sx={LabelBox} disableGutters={true}>
+              <CuTextFieldLabel htmlFor="code">
+                <Typography variant="Caption">인증코드</Typography>
+              </CuTextFieldLabel>
               <CuTextField
                 {...field}
                 type="code"
                 id="code"
-                placeholder="이메일로 받은 코드를 입력하세요"
+                placeholder="인증 코드를 입력하세요"
                 style={{ width: '100%' }}
                 InputProps={{
                   endAdornment: (
@@ -124,12 +125,21 @@ const SendCodeForm = ({
                   ),
                 }}
               />
-              {errors.code && <Typography>{errors.code.message}</Typography>}
+              {
+                <Typography variant="Caption">
+                  {errors.code ? errors.code.message : '\u00A0'}
+                </Typography>
+              }
             </Container>
           )}
         />
       </Box>
-      <Button type="submit" disabled={isSubmitting}>
+      <Button
+        variant="contained"
+        type="submit"
+        disabled={isSubmitting}
+        fullWidth
+      >
         임시 비밀번호 발급
       </Button>
     </Box>

@@ -1,14 +1,18 @@
-import React from 'react';
-import { Select, MenuItem, Box } from '@mui/material';
-import CuTextFieldLabel from '@/components/CuTextFieldLabel';
+import React from 'react'
+import { Select, MenuItem, Box } from '@mui/material'
+import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 
 interface IReportTypeSelectProps {
-  field: any;
-  label: string;
-  options: string[];
+  field: any
+  label: string
+  options: string[]
 }
 
-const ReportTypeSelect = ({ field, label, options } : IReportTypeSelectProps) => {
+const ReportTypeSelect = ({
+  field,
+  label,
+  options,
+}: IReportTypeSelectProps) => {
   return (
     <Box style={{ display: 'flex', alignItems: 'center' }}>
       <CuTextFieldLabel htmlFor={field.name} style={{ width: '120px' }}>
@@ -26,7 +30,7 @@ const ReportTypeSelect = ({ field, label, options } : IReportTypeSelectProps) =>
         ))}
       </Select>
     </Box>
-  );
-};
+  )
+}
 
-export default ReportTypeSelect;
+export default ReportTypeSelect

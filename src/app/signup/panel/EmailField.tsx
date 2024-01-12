@@ -20,14 +20,16 @@ const EmailField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="email">이메일</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="email">
+        <Typography variant="Caption">새로운 이메일</Typography>
+      </CuTextFieldLabel>
       <CuTextField
         {...field}
         disabled={emailSendStatus === 'submit'}
         autoComplete="email"
         error={emailSendStatus === 'error'}
         type="text"
-        placeholder="이메일을 입력하세요"
+        placeholder="가입할 이메일을 입력하세요."
         inputProps={{
           maxLength: 30,
         }}
@@ -35,19 +37,19 @@ const EmailField = ({
           endAdornment: (
             <InputAdornment position="end">
               <Button
-                variant="contained"
+                variant="text"
                 disabled={isSubmitting || emailSendStatus === 'submit'}
                 onClick={submitEmail}
               >
-                이메일 인증
+                <Typography variant="CaptionEmphasis">코드 전송</Typography>
               </Button>
             </InputAdornment>
           ),
         }}
       />
-      {(error && <Typography color="error">{error.message}</Typography>) || (
-        <Typography>&nbsp;</Typography>
-      )}
+      <Typography color="error" variant="Caption">
+        {error?.message || '\u00A0'}
+      </Typography>
     </>
   )
 }
