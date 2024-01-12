@@ -1,51 +1,14 @@
-import { ReactNode, Fragment, useEffect } from 'react'
-import dayjs from 'dayjs'
-import { Box, Stack, Typography } from '@mui/material'
+import { Fragment, useEffect } from 'react'
+import { Box } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
+import {
+  ListStack,
+  StatusMessage,
+  ListItem,
+} from '@/components/board/ListPanel'
 import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
-
-interface NoticeItemProps {
-  title: string
-  author: string
-  date: string
-  id: number
-  teamId: number
-}
-
-const NoticeListContainer = ({ children }: { children: ReactNode }) => {
-  return (
-    <Stack spacing={3} sx={{ height: '300px', overflowY: 'scroll' }}>
-      {children}
-    </Stack>
-  )
-}
-
-const NoticeItem = ({ title, author, date, id }: NoticeItemProps) => {
-  const { setNotice } = useTeamPageState()
-  return (
-    <Box
-      onClick={() => {
-        setNotice('DETAIL', id)
-      }}
-      sx={{
-        cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: 'primary.light',
-        },
-      }}
-    >
-      <Stack>
-        <Typography variant={'Body1'}>{title}</Typography>
-      </Stack>
-      <Stack direction={'row'} alignItems={'center'}>
-        <Typography variant={'Body2'}>{author}</Typography>
-        <Typography variant={'Caption'}>{date}</Typography>
-      </Stack>
-    </Box>
-  )
-}
 
 const NoticeList = ({
   teamId,
@@ -55,6 +18,7 @@ const NoticeList = ({
   keyword: string
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
+  const { setNotice } = useTeamPageState()
   const { data, error, isLoading, size, setSize, targetRef } =
     useInfiniteSWRScroll(
       `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
@@ -65,41 +29,26 @@ const NoticeList = ({
     if (!isLoading && size !== 0) setSize(0)
   }, [keyword])
 
-  if (error || !data)
-    return (
-      <NoticeListContainer>
-        <Typography>문제가 발생했습니다.</Typography>
-      </NoticeListContainer>
-    )
-
+  if (!data || error) return <StatusMessage message="문제가 발생했습니다." />
   if (!data && isLoading)
-    return (
-      <NoticeListContainer>
-        <Typography>로딩중입니다...</Typography>
-      </NoticeListContainer>
-    )
-
+    return <StatusMessage message="공지사항을 불러오는 중입니다..." />
   if (data.length === 0 || data[0].content.length === 0)
-    return (
-      <NoticeListContainer>
-        <Typography>공지사항이 없습니다.</Typography>
-      </NoticeListContainer>
-    )
-
+    return <StatusMessage message="등록된 글이 없습니다." />
   return (
-    <NoticeListContainer>
+    <ListStack>
       {data.map((page, index) => {
         return (
           <Fragment key={index}>
             {page.content.map((notice: ITeamNotice) => {
               return (
-                <NoticeItem
+                <ListItem
                   key={notice.postId}
                   title={notice.title}
-                  author={notice.authorNickname}
-                  date={dayjs(notice.createdAt).format('MM[월] DD[일]')}
-                  id={notice.postId}
-                  teamId={teamId}
+                  authorNickname={notice.authorNickname}
+                  createdAt={notice.createdAt}
+                  onClick={() => {
+                    setNotice('DETAIL', notice.postId)
+                  }}
                 />
               )
             })}
@@ -107,7 +56,7 @@ const NoticeList = ({
         )
       })}
       <Box ref={targetRef}>{isLoading && '로딩중입니다...'}</Box>
-    </NoticeListContainer>
+    </ListStack>
   )
 }
 

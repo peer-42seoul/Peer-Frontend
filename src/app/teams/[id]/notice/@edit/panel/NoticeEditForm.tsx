@@ -1,9 +1,9 @@
 'use client'
 import { FormEvent, useEffect, useState } from 'react'
-import { Stack, Typography, OutlinedInput } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import DynamicToastEditor from '@/components/DynamicToastEditor'
 import useTeamPageState from '@/states/useTeamPageState'
+import useEditorState from '@/states/useEditorState'
+import { EditForm } from '@/components/board/EditPanel'
 
 const NoticeEditForm = ({
   teamId,
@@ -19,6 +19,7 @@ const NoticeEditForm = ({
     content: '',
   })
   const [isLoading, setIsLoading] = useState(false)
+  const { editor } = useEditorState()
   useEffect(() => {
     if (postId) {
       setIsLoading(true)
@@ -42,10 +43,11 @@ const NoticeEditForm = ({
   }, [postId])
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!editor) return
     const formData = new FormData(event.currentTarget)
     const form = {
       title: formData.get('title') as string,
-      content: formData.get('content') as string,
+      content: editor.getMarkdown(),
     }
     if (postId) {
       // 글 수정
@@ -74,25 +76,12 @@ const NoticeEditForm = ({
   }
 
   return (
-    <Stack>
-      <form onSubmit={handleSubmit} id={'notice-form'}>
-        <Stack>
-          <Typography>제목</Typography>
-          <OutlinedInput
-            disabled={isLoading}
-            name={'title'}
-            placeholder={'제목을 입력해주세요.'}
-            defaultValue={previousData?.title ? previousData.title : ''}
-          />
-        </Stack>
-        <Stack>
-          <Typography>내용</Typography>
-          <DynamicToastEditor
-            initialValue={previousData?.content ? previousData.content : ''}
-          />
-        </Stack>
-      </form>
-    </Stack>
+    <EditForm
+      isLoading={isLoading}
+      onSubmit={handleSubmit}
+      initialTitle={previousData.title || ''}
+      initialContent={previousData.content || ''}
+    />
   )
 }
 
