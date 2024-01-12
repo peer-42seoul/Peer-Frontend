@@ -29,6 +29,8 @@ import { IPagination } from '@/types/IPagination'
 import PwaInstallBanner from './PwaInstallBanner'
 import PushAlertBanner from './PushAlertBanner'
 import MainBanner from '@/app/panel/main-page/MainBanner'
+import io from 'socket.io-client'
+import { getCookie } from 'cookies-next'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -51,6 +53,14 @@ export interface IDetailOption {
   status: string
   tag: string
 }
+
+export const socket = io('ws://back.peer-test.co.kr:8081', {
+  path: '/',
+  transports: ['websocket'],
+  query: {
+    token: getCookie('accessToken') ? getCookie('accessToken') : '',
+  },
+})
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [content, setContent] = useState<IPost[]>(initData?.content)
@@ -109,6 +119,22 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('socket connected')
+    })
+    socket.on('disconnect', () => {
+      console.log('socket disconnected')
+    })
+    socket.on('connect_error', (err) => {
+      console.log(err)
+    })
+    socket.on('whoAmI', () => {
+      console.log('whoAmI')
+      console.log(socket)
+    })
+  }, [])
 
   useEffect(() => {
     if (!newData || !newData?.content) return

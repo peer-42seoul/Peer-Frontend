@@ -2,7 +2,7 @@
 
 import { Button, Card, Stack, Typography } from '@mui/material'
 // import SetupPage from './panel/SetupTeam'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
@@ -11,6 +11,7 @@ import { ITeam, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectionRecruit'
 import TeamJobAdd from './panel/TeamJobAdd'
 import SetupInfo from './panel/SetupInfo'
+import { socket } from '@/app/panel/MainPage'
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
@@ -23,7 +24,19 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
-  console.log(data)
+  useEffect(() => {
+    socket.emit(
+      'whoAmI',
+      {
+        teamId: params.id,
+        teamName: data?.team.name,
+      },
+      (data: any) => {
+        console.log(data)
+      },
+    )
+  }, [])
+
   if (isLoading) return <Typography>로딩중</Typography>
 
   return (
