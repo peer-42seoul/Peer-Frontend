@@ -55,12 +55,11 @@ const SkillInput = ({
         svgIcon={<TagIcon sx={Style.IconStyle} />}
         message="기술 스택"
       />
-
       {/* MEMO : 작업 당시에는 TagAutoComplete과 UI가 같았으나 현재는 달라진 것으로 보임.
           우선 UI는 이전에 구현해둔 것이 있으니 백엔드와 논의 후 로직 결정할 것 */}
-      <TagAutoComplete datas={tagList} setData={setData} tagList={tagList} />
+      {/* <TagAutoComplete datas={tagList} setData={setData} tagList={tagList} /> */}
       {/* 아래 코드는 이전에 작업 해두었던 것 */}
-      <Box sx={{ height: '2rem', width: '26rem' }}>
+      {/* <Box sx={{ height: '2rem', width: '26rem' }}>
         <Autocomplete
           disableClearable
           multiple
@@ -97,8 +96,7 @@ const SkillInput = ({
             />
           )}
         />
-      </Box>
-
+      </Box> */}
       <Stack
         spacing={0.75}
         py={1}

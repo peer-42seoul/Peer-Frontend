@@ -50,7 +50,7 @@ const LinkForm = ({
           <PlusIcon sx={Style.IconStyle} />
         </IconButton>
       </Stack>
-      {fields.map((field, index) => (
+      {/* {fields.map((field, index) => (
         <Stack key={field.id} direction={'row'} spacing={'0.5rem'}>
           <Controller
             name={`links.${index}.linkName`}
@@ -79,7 +79,7 @@ const LinkForm = ({
             )}
           />
         </Stack>
-      ))}
+      ))} */}
     </Stack>
   )
 }

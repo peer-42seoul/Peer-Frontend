@@ -42,7 +42,7 @@ const TypeTabs = ({
   )
 }
 
-const AlertModal = ({
+export const AlertModal = ({
   isOpen,
   closeModal,
   confirmAction,
