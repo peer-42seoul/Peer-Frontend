@@ -124,8 +124,12 @@ const KeywordAddingField = ({
             <InputAdornment position="end">
               <CuButton
                 action={handleOnClick}
-                variant="contained"
+                variant="text"
                 message="추가"
+                TypographyProps={{
+                  variant: 'CaptionEmphasis',
+                  color: 'text.alternative',
+                }}
               />
             </InputAdornment>
           ),
@@ -200,6 +204,10 @@ const KeywordDisplayBox = ({
       .then(() => {
         closeModal()
         mutate()
+        setToastMessage({
+          severity: 'success',
+          message: '모든 키워드를 삭제하였습니다.',
+        })
       })
   }
 
