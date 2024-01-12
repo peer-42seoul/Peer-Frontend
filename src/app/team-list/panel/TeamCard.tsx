@@ -35,7 +35,14 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
         borderRadius: '1.5rem',
       }}
     >
-      <CardActionArea onClick={() => router.push(`/teams/${team.id}`)}>
+      <CardActionArea
+        sx={{
+          '.MuiCardActionArea-focusHighlight': {
+            background: 'transparent',
+          },
+        }}
+        onClick={() => router.push(`/teams/${team.id}`)}
+      >
         <Stack
           direction={isPc ? 'row' : 'column'}
           spacing={'0.5rem'}

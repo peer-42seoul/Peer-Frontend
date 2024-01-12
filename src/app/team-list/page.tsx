@@ -20,6 +20,8 @@ export interface ITeamInfo {
   myRole: boolean
   region: string
   operationFormat: TeamOperationForm
+  // isApproved: boolean
+  // roles: string[]
 }
 
 const TeamsListPage = () => {
