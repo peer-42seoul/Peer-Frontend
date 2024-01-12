@@ -47,7 +47,7 @@ const KeywordAddingField = ({
     if (trimmed.length < 2) {
       setToastMessage({
         severity: 'error',
-        message: '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
+        message: '알림 키워드는 최소 2자 이상이어야 합니다.',
       })
       return false
     } else if (keywordList?.some((keyword) => keyword.label === trimmed)) {
