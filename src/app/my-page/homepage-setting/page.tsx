@@ -11,7 +11,7 @@ import useMedia from '@/hook/useMedia'
 
 interface IToast {
   severity: AlertColor | undefined
-  message: string
+  message: React.ReactNode
 }
 
 const HomepageSetting = () => {
