@@ -227,7 +227,7 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
                 </OthersProfile>
                 <Typography fontWeight="bold">{member.name}</Typography>
                 <Stack direction="row" sx={{ justifyContent: 'center' }}>
-                  <Typography variant="body2">리더 권한</Typography>
+                  <Typography variant="Body2">리더 권한</Typography>
                   <Switch
                     size="small"
                     onChange={() => handleGrant(member)}
