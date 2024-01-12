@@ -94,7 +94,7 @@ const TeamJobAdd = ({ teamId, jobList }: Props) => {
 
   // const changeJob = () => {
   //   axiosWithAuth.put(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/change`,
+  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/job/change`,
   //     job,
   //   )
   // }
