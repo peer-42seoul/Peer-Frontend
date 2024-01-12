@@ -2,33 +2,86 @@ import {
   Avatar,
   Box,
   Button,
+  Card,
+  FormControl,
+  // FormControl,
   Grid,
   Modal,
+  NativeSelect,
+  // NativeSelect,
   Stack,
   Switch,
+  Theme,
   Typography,
 } from '@mui/material'
-import { IMember, TeamGrant } from '../../../types/types'
+import { IMember, Job, TeamGrant } from '../../../types/types'
 import useModal from '@/hook/useModal'
 import { useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
+import { comfirmModalStyle } from './styles'
 
-const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
+interface ISetupMember {
+  team: IMember[]
+  teamId: string
+  jobs: Job[]
+}
+
+interface ICurrentJobCard {
+  job: Job
+  deleteJob: () => void
+}
+
+const CurrentJobCard = ({ job, deleteJob }: ICurrentJobCard) => {
+  return (
+    <Card
+      sx={{
+        p: '0.25rem',
+        width: 'fit-content',
+        backgroundColor: 'background.tertiary',
+        borderRadius: '1rem',
+      }}
+    >
+      <Stack alignItems={'center'} direction={'row'}>
+        <Typography>{job.name}</Typography>
+        <Button onClick={deleteJob}>X</Button>
+      </Stack>
+    </Card>
+  )
+}
+
+const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
-  const [members, setMembers] = useState<IMember[]>([])
+  const {
+    isOpen: isChangeOpen,
+    closeModal: closeChangeModal,
+    openModal: openChangeModal,
+  } = useModal()
+  const [members, setMembers] = useState<IMember[]>(team)
   const [member, setMember] = useState<IMember | null>(null)
+  const [job, setJob] = useState<Job[]>(jobs)
+  const [selectedJobs, setSelectedJobs] = useState<Job[]>([])
   const axiosWithAuth = useAxiosWithAuth()
 
+  // const changeJob = () => {
+  //   axiosWithAuth.put(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/change`,
+  //     job,
+  //   )
+  // }
+
   useEffect(() => {
-    setMembers(team)
-  }, [team])
+    setJob(jobs)
+    // if (selectedJobs.length > 0) {
+    //   changeJob()
+    // }
+  }, [setJob, jobs])
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
-    if (member.grant === TeamGrant.LEADER) {
+    if (member.role === TeamGrant.LEADER) {
       axiosWithAuth
         .post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
@@ -95,35 +148,66 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
       })
   }
 
+  const handleChangeModal = (selectedMember: IMember) => {
+    setMember(selectedMember)
+    const selectedJobs = job.filter((jobItem) =>
+      selectedMember.job.includes(jobItem.name),
+    )
+    setSelectedJobs(selectedJobs)
+    openChangeModal()
+  }
+
+  const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
+    const selectedJobId = e.target.value as string
+
+    const selectJob = job.find((job) => job.name === selectedJobId)
+
+    if (selectedJobs.includes(selectJob as Job)) {
+      // TODO: 토스트 알림으로 변경
+      console.log('이미 선택한 역할입니다.')
+      return
+    }
+
+    if (selectJob) {
+      setSelectedJobs([...selectedJobs, selectJob])
+    } else {
+      // TODO: 토스트 알림으로 변경
+      console.log('선택한 역할을 찾을 수 없습니다.')
+    }
+  }
+
+  const handleDeleteButton = (job: Job) => {
+    if (selectedJobs.length === 1) {
+      //TODO: 토스트 알림으로 변경
+      console.log('최소 한 개의 역할이 필요합니다.')
+      return
+    }
+    setSelectedJobs(selectedJobs.filter((selectedJob) => selectedJob !== job))
+  }
+
   return (
     <>
-      <Box
-        sx={{
-          border: '1px solid',
-          borderRadius: 2,
-          p: 2,
-          height: 400,
-          overflow: 'scroll',
-        }}
-      >
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography fontWeight="bold">팀원 목록</Typography>
-          </Grid>
+      <Stack height={'16rem'} overflow={'auto'}>
+        <Grid container spacing={'1rem'} height={'16rem'}>
           {members.map((member, index) => (
             <Grid
               component="div"
               key={index}
               item
-              xs={isPc ? 4 : 6}
+              xs={isPc ? 3 : 6}
               textAlign="center"
             >
               <Box
                 component="div"
-                border="1px solid"
-                p={1}
-                sx={{ position: 'relative' }}
+                p={'1rem'}
+                sx={{
+                  position: 'relative',
+                  backgroundColor: (theme: Theme) =>
+                    theme.palette.background.tertiary,
+                }}
+                borderRadius={'0.5rem'}
               >
+                {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
                 <Button
                   size="small"
                   sx={{
@@ -146,20 +230,79 @@ const SetupMember = ({ team, teamId }: { team: IMember[]; teamId: string }) => {
                   <Switch
                     size="small"
                     onChange={() => handleGrant(member)}
-                    checked={member.grant === TeamGrant.LEADER ? true : false}
+                    checked={member.role === TeamGrant.LEADER ? true : false}
                   />
                 </Stack>
+                {/* 역할이 있을 때만 버튼이 보이게끔 */}
+                {member.job && (
+                  <Button
+                    variant="contained"
+                    onClick={() => handleChangeModal(member)}
+                  >
+                    <Typography fontSize="small">역할 변경</Typography>
+                  </Button>
+                )}
               </Box>
             </Grid>
           ))}
         </Grid>
-      </Box>
+      </Stack>
 
-      <Modal open={isOpen}>
-        <Box sx={{ backgroundColor: 'white' }}>
-          정말 팀원을 내보내시겠습니까?
-          <Button onClick={closeModal}>취소</Button>
-          <Button onClick={handleDelete}>확인</Button>
+      <Modal open={isChangeOpen} onClose={closeChangeModal}>
+        <Box sx={comfirmModalStyle}>
+          <Stack>
+            <Typography fontWeight={'bold'} fontSize={'large'}>
+              역할 변경
+            </Typography>
+          </Stack>
+          <Stack padding={'1rem'}>
+            <Typography>팀원이 변경할 역할을 선택해주세요.</Typography>
+            <Stack my={'1rem'}>
+              <Typography>현재 역할</Typography>
+
+              <Stack direction={'row'} spacing={'0.25rem'} minWidth={'10rem'}>
+                {selectedJobs.map((job) => (
+                  <CurrentJobCard
+                    key={job.name}
+                    job={job}
+                    deleteJob={() => handleDeleteButton(job)}
+                  />
+                ))}
+              </Stack>
+            </Stack>
+            <Stack alignItems={'center'} padding={1}>
+              <Card sx={{ width: 'fit-content' }}>
+                <FormControl>
+                  <NativeSelect
+                    value={selectedJobs[0]?.name}
+                    onChange={handleChangeJob}
+                    inputProps={{ 'aria-label': 'role' }}
+                  >
+                    {job.map((job, index) => (
+                      <option key={index} value={job.name}>
+                        {job.name}
+                      </option>
+                    ))}
+                  </NativeSelect>
+                </FormControl>
+              </Card>
+
+              <Stack direction={'row'}>
+                <Button onClick={closeChangeModal}>취소</Button>
+                <Button onClick={closeChangeModal}>확인</Button>
+              </Stack>
+            </Stack>
+          </Stack>
+        </Box>
+      </Modal>
+
+      <Modal open={isOpen} onClose={closeChangeModal}>
+        <Box sx={comfirmModalStyle}>
+          <Card>
+            <Typography>정말 팀원을 내보내시겠습니까?</Typography>
+            <Button onClick={closeModal}>취소</Button>
+            <Button onClick={handleDelete}>확인</Button>
+          </Card>
         </Box>
       </Modal>
     </>

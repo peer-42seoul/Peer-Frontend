@@ -4,8 +4,10 @@ import {
   ListItemText,
   IconButton,
   Typography,
+  Stack,
 } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
+
+import CloseIcon from '@mui/icons-material/Close'
 import { useEffect, useState } from 'react'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
 
@@ -50,29 +52,42 @@ export default function SearchHistory({
 
   return (
     <>
-      <List>
+      <List sx={{ my: '2rem' }}>
         <Typography padding={1} fontSize={'small'} color={'grey'}>
           최근 검색어
         </Typography>
-
-        {searchKeywords.map((keyword, index) => (
-          <ListItem
-            key={index}
-            secondaryAction={
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={() => deleteKeyword(keyword)}
+        <Stack mx={'1rem'}>
+          {searchKeywords.length &&
+            searchKeywords.map((keyword, index) => (
+              <ListItem
+                sx={{
+                  m: 0,
+                  p: 0,
+                }}
+                key={index}
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => deleteKeyword(keyword)}
+                  >
+                    <CloseIcon color="inherit" />
+                  </IconButton>
+                }
               >
-                <DeleteIcon />
-              </IconButton>
-            }
-          >
-            <IconButton onClick={() => searchwordSet('searchWord', keyword)}>
-              <ListItemText primary={keyword} />
-            </IconButton>
-          </ListItem>
-        ))}
+                <IconButton
+                  onClick={() => searchwordSet('searchWord', keyword)}
+                >
+                  <ListItemText primary={keyword} />
+                </IconButton>
+              </ListItem>
+            ))}
+          {searchKeywords.length === 0 && (
+            <Typography padding={1} fontSize={'small'} color={'grey'}>
+              최근 검색어가 없습니다.
+            </Typography>
+          )}
+        </Stack>
       </List>
     </>
   )

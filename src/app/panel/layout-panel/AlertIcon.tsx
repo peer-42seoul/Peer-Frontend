@@ -2,14 +2,17 @@
 
 import { Badge, Drawer, Tab, Tabs } from '@mui/material'
 import { IconButton } from '@mui/material'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import { SyntheticEvent, useCallback, useState } from 'react'
 import { Box } from '@mui/system'
+import NotificationIcon from '@/icons/NotificationIcon'
+import useMedia from '@/hook/useMedia'
 
 const AlertIcon = () => {
   const [tabvalue, setTabValue] = useState(0)
   const [isAlertComing, setIsAlertComing] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  const { isPc } = useMedia()
 
   const openAlertTab = useCallback(() => {
     setIsAlertComing(true)
@@ -39,7 +42,13 @@ const AlertIcon = () => {
     <>
       <IconButton color="inherit" aria-label="alert_tab" onClick={openAlertTab}>
         <Badge color="secondary" variant="dot" invisible={isAlertComing}>
-          <NotificationsIcon color="primary" />
+          <NotificationIcon
+            sx={{
+              color: isPc ? 'text.alternative' : 'text.normal',
+              width: '1.25rem',
+              height: '1.25rem',
+            }}
+          />
         </Badge>
       </IconButton>
       <Drawer

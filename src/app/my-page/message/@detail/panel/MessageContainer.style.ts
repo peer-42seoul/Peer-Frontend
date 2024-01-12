@@ -1,10 +1,7 @@
 import { Theme } from '@mui/material'
 
 export const pcBox = {
-  // 최상위 박스
-  width: '52.8rem',
   height: '57.1rem',
-  padding: '2rem',
   backgroundColor: (theme: Theme) => theme.palette.background.primary,
 }
 

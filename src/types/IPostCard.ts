@@ -10,6 +10,10 @@ export interface IPostCard {
   tagList: ITag[]
   image: string // 글 대표 이미지 (썸네일)
   sx?: SxProps
+  cardWidth: number
+  onClick?: (e: React.MouseEvent) => void
+  onTouchEnd?: (e: React.TouchEvent) => void
+  onMouseUp?: (e: React.MouseEvent) => void
 }
 
 export interface IPostCardShowcase {

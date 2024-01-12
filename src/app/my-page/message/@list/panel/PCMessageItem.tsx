@@ -1,7 +1,8 @@
-import { Checkbox, ListItem, ListItemButton, ListItemIcon } from '@mui/material'
+import { Checkbox, ListItem, ListItemButton, Stack } from '@mui/material'
 import useMessagePageState from '@/states/useMessagePageState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
+import * as style from './PCMessageListItem.style'
 
 interface IPCMessageListItemProps {
   message: IMessageListData
@@ -21,20 +22,26 @@ export const PCMessageListItem = ({
   const { targetId, conversationId } = message
 
   return (
-    <ListItem>
+    <ListItem disablePadding sx={style.listItem}>
       <ListItemButton
+        disableGutters
         onClick={
           isManageMode
-            ? () => toggleSelectUser(targetId)
+            ? () => toggleSelectUser(conversationId)
             : () => setDetailPage(conversationId, targetId)
         }
       >
-        {isManageMode && (
-          <ListItemIcon>
-            <Checkbox {...label} checked={isChecked} />
-          </ListItemIcon>
-        )}
-        <MessageItemBase message={message} />
+        <Stack
+          direction={'row'}
+          alignItems={'center'}
+          spacing={'0.5rem'}
+          width={'100%'}
+        >
+          {isManageMode && (
+            <Checkbox {...label} sx={style.checkbox} checked={isChecked} />
+          )}
+          <MessageItemBase message={message} />
+        </Stack>
       </ListItemButton>
     </ListItem>
   )

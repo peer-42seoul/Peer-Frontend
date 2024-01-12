@@ -1,30 +1,39 @@
-import { Chip, Grid, Typography } from '@mui/material'
+import { Chip, Stack, Typography } from '@mui/material'
 import React from 'react'
 import ProfileSection from './ProfileSection'
 
 const Skills = ({ setModalType }: { setModalType: (type: string) => void }) => {
-  const skills = ['test', 'test2', 'test3']
+  const skills = [
+    'test',
+    'test2',
+    'test3',
+    'test4',
+    'test5',
+    'test6',
+    'test7',
+    'test8',
+    'test9',
+  ]
   return (
-    <Grid
-      container
-      columnSpacing={1}
-      rowSpacing={1}
-      p={0}
-      justifyContent={'flex-start'}
-    >
-      <Grid item xs={12}>
-        <ProfileSection
-          sectionTitle="skills"
-          setModalType={setModalType}
-          titleTypographyProps={{
-            color: 'text.strong',
-            variant: 'CaptionEmphasis',
-          }}
-        />
-      </Grid>
-      {skills.map((skill) => (
-        <Grid item xs={0} key={skill}>
+    <Stack direction={'column'} spacing={'0.5rem'}>
+      <ProfileSection
+        sectionTitle="skills"
+        setModalType={setModalType}
+        titleTypographyProps={{
+          color: 'text.strong',
+          variant: 'CaptionEmphasis',
+        }}
+      />
+      <Stack
+        justifyContent={'flex-start'}
+        direction={'row'}
+        alignItems={'baseline'}
+        gap={1}
+        flexWrap={'wrap'}
+      >
+        {skills.map((skill) => (
           <Chip
+            key={skill}
             label={
               <Typography variant={'Tag'} color={'purple.strong'}>
                 {skill}
@@ -34,15 +43,15 @@ const Skills = ({ setModalType }: { setModalType: (type: string) => void }) => {
               padding: '0px 6px',
               backgroundColor: 'purple.tinted',
               borderRadius: '2px',
-              height: '20px',
+              height: '1.25rem',
               '& .MuiChip-label': {
                 padding: '0px',
               },
             }}
           />
-        </Grid>
-      ))}
-    </Grid>
+        ))}
+      </Stack>
+    </Stack>
   )
 }
 

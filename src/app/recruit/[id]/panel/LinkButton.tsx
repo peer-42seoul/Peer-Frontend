@@ -1,6 +1,19 @@
 import React from 'react'
-import { Button, Popover, Typography } from '@mui/material'
+import {
+  Button,
+  Tooltip,
+  TooltipProps,
+  styled,
+  tooltipClasses,
+} from '@mui/material'
 import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined'
+import * as style from './LinkButton.style'
+
+const LinkTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(() => ({
+  [`& .${tooltipClasses.tooltip}`]: style.tooltip,
+}))
 
 const LinkButton = ({
   href,
@@ -9,56 +22,12 @@ const LinkButton = ({
   href: string
   variant: 'text' | 'outlined' | 'contained'
 }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-
-  const open = Boolean(anchorEl)
-  const id = open ? 'link-popover' : undefined
-
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null)
-  }
-
   return (
-    <div>
-      <Button
-        aria-describedby={id}
-        variant={variant}
-        size="large"
-        href={href}
-        onMouseEnter={handlePopoverOpen}
-        sx={{
-          // zIndex: 1304, // TODO : zIndex 문제 해결되면 주석 삭제할 것.
-          borderRadius: '50%',
-          width: 40,
-          height: 40,
-          backgroundColor: 'purple.tinted',
-        }}
-      >
+    <LinkTooltip placement="bottom-start" title={href}>
+      <Button variant={variant} href={href} sx={style.button} disabled={!href}>
         <InsertLinkOutlinedIcon />
       </Button>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handlePopoverClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        // sx={{ zIndex: 1303 }} // TODO : zIndex 문제 해결되면 주석 삭제할 것.
-        container={() => document.getElementById('modal-root')}
-      >
-        <Typography sx={{ padding: 2 }}>{href}</Typography>
-      </Popover>
-    </div>
+    </LinkTooltip>
   )
 }
 
