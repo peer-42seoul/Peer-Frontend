@@ -67,7 +67,7 @@ const CuModal = ({
   mobileFullSize,
   open,
   onClose,
-  sx,
+  // sx,
   keepMounted,
   children,
 }: ICuModalProps) => {
@@ -76,7 +76,7 @@ const CuModal = ({
     <Modal open={open} onClose={onClose} keepMounted={!!keepMounted}>
       <Stack
         spacing={'1.5rem'}
-        sx={{ ...getModalWrapperStyle(isPc, mobileFullSize), ...sx }}
+        sx={{ ...getModalWrapperStyle(isPc, mobileFullSize) }}
       >
         <Stack
           direction={'row'}
