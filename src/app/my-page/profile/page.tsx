@@ -112,6 +112,7 @@ const MyProfile = () => {
         email={userInfo.email}
         introduction={userInfo.introduction}
         setModalType={setModalType}
+        isEditable={true}
       />
 
       {/* profile my info */}
@@ -119,6 +120,7 @@ const MyProfile = () => {
         linkList={userInfo?.linkList}
         setModalType={setModalType}
         handleLogout={handleLogout}
+        isEditable={true}
       />
 
       {/* modals */}

@@ -2,7 +2,13 @@ import { Chip, Stack, Typography } from '@mui/material'
 import React from 'react'
 import ProfileSection from './ProfileSection'
 
-const Skills = ({ setModalType }: { setModalType: (type: string) => void }) => {
+const Skills = ({
+  setModalType,
+  isEditable,
+}: {
+  setModalType: (type: string) => void
+  isEditable: boolean
+}) => {
   const skills = [
     'test',
     'test2',
@@ -23,6 +29,7 @@ const Skills = ({ setModalType }: { setModalType: (type: string) => void }) => {
           color: 'text.strong',
           variant: 'CaptionEmphasis',
         }}
+        isEditable={isEditable}
       />
       <Stack
         justifyContent={'flex-start'}

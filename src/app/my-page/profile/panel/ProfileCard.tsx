@@ -44,13 +44,15 @@ const ProfileCard = ({
   introduction,
   email,
   setModalType,
+  isEditable,
 }: {
   profileImageUrl: string | null
   nickname: string
   association: string | null
   introduction: string | null
   email: string
-  setModalType: (type: string) => void
+  setModalType: (type: string) => void | null
+  isEditable: boolean
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleModalClose = () => {
@@ -73,12 +75,13 @@ const ProfileCard = ({
           component: 'h3',
         }}
         sx={{ height: '2.5rem' }}
+        isEditable={isEditable}
       />
       <Stack direction="row" spacing={0.75} alignItems={'center'}>
         {/* image component */}
         <CuAvatar
           src={profileImageUrl ? profileImageUrl : ''}
-          onClick={() => setOpen(true)}
+          onClick={isEditable ? () => setOpen(true) : () => {}}
           sx={style.profileImageStyle}
         />
 

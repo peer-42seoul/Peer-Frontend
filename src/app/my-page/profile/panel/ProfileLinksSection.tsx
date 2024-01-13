@@ -39,9 +39,11 @@ const ProfileLink = (props: IUserProfileLink) => {
 const ProfileLinksSection = ({
   linkList,
   setModalType,
+  isEditable,
 }: {
   linkList: Array<IUserProfileLink>
   setModalType: (type: string) => void
+  isEditable: boolean
 }) => {
   return (
     <Stack spacing={1}>
@@ -52,6 +54,7 @@ const ProfileLinksSection = ({
           color: 'text.strong',
           variant: 'CaptionEmphasis',
         }}
+        isEditable={isEditable}
       />
       <Stack spacing={0.25}>
         {linkList?.length ? (
