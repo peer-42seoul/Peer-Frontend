@@ -39,7 +39,12 @@ export const CommentContainer = ({
       }}
       spacing={'1rem'}
     >
-      <Typography variant={'Title1'}>댓글</Typography>
+      <Typography
+        color={'text.strong'}
+        variant={isPc ? 'Title1' : 'CaptionEmphasis'}
+      >
+        댓글
+      </Typography>
       <Stack spacing={'1rem'}>{children}</Stack>
     </Stack>
   )
