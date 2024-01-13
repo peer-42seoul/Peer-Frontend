@@ -116,7 +116,7 @@ const MyProfile = () => {
         handleLogout={handleLogout}
       />
 
-      <MyPortfolio setToastMessage={setToastMessage} />
+      <MyPortfolio setToastMessage={setToastMessage} setToastOpen={openToast} />
       {/* modals */}
       <ProfileBioEditor
         data={{
