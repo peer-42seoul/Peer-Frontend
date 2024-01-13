@@ -159,14 +159,29 @@ export const CommentItem = ({
       <Stack sx={style.CommentContentWrapper}>
         <Stack
           sx={{ marginBottom: '0.25rem' }}
-          spacing={'0.38rem'}
+          spacing={'1rem'}
           direction={'row'}
           alignItems={'center'}
         >
-          <CuAvatar sx={style.Avatar} src={comment.authorImage} />
-          <Typography color={'text.alternative'} variant={'Caption'}>
-            {comment.authorNickname}
-          </Typography>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            spacing={'0.25rem'}
+            sx={{ flex: '1 0 0' }}
+          >
+            <CuAvatar sx={style.Avatar} src={comment.authorImage} />
+            <Typography color={'text.alternative'} variant={'Caption'}>
+              {comment.authorNickname}
+            </Typography>
+          </Stack>
+          {!isEditMode && canEdit ? (
+            <CommentMoreDropdownMenu
+              handleDelete={() => handleDelete(comment.answerId)}
+              setEditMode={() => setEditMode(true)}
+            />
+          ) : (
+            <Box sx={style.Icon} />
+          )}
         </Stack>
         {isEditMode ? (
           <form onSubmit={handleEdit}>
@@ -194,42 +209,14 @@ export const CommentItem = ({
             </Stack>
           </form>
         ) : (
-          <>
+          <Box sx={{ paddingRight: '2.5rem' }}>
             <Typography variant={'Body2'}>{comment.content}</Typography>
             <Typography variant={'Tag'} color={'text.assistive'}>
               {dayjs(comment.createdAt).format('YYYY년 M월 D일 h:m A')}
             </Typography>
-          </>
+          </Box>
         )}
       </Stack>
-      {/* icon button */}
-      {!isEditMode && canEdit ? (
-        <CommentMoreDropdownMenu
-          handleDelete={() => handleDelete(comment.answerId)}
-          setEditMode={() => setEditMode(true)}
-        />
-      ) : (
-        <Box sx={style.Icon} />
-      )}
-      {/* <Stack direction={'row'} spacing={'1rem'} alignItems={'flex-start'}>
-        {!isEditMode && canEdit ? (
-          <IconButton sx={style.IconButton} onClick={() => setEditMode(true)}>
-            <EditIcon sx={style.Icon} />
-          </IconButton>
-        ) : (
-          <Box sx={style.Icon} />
-        )}
-        {!isEditMode && canEdit ? (
-          <IconButton
-            sx={style.IconButton}
-            onClick={() => handleDelete(comment.answerId)}
-          >
-            <TrashIcon sx={style.Icon} />
-          </IconButton>
-        ) : (
-          <Box sx={style.Icon} />
-        )}
-      </Stack> */}
     </Stack>
   )
 }
