@@ -1,6 +1,6 @@
 'use client'
 import CuToggle from '@/components/CuToggle'
-import PostCard from '@/components/PostCard'
+import PostCard from './PostCard'
 import TitleBox from '@/components/TitleBox'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import { IPagination } from '@/types/IPagination'
