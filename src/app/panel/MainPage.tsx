@@ -21,7 +21,7 @@ import MainShowcase from './main-page/MainShowcase'
 import MainCarousel from './main-page/MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
-import { IPost } from '@/types/IPostDetail'
+import { IPost, ProjectType } from '@/types/IPostDetail'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
@@ -40,7 +40,6 @@ export interface BeforeInstallPromptEvent extends Event {
 }
 
 export type ProjectSort = 'latest' | 'hit'
-export type ProjectType = 'STUDY' | 'PROJECT'
 export interface IDetailOption {
   isInit?: boolean
   due1: number
