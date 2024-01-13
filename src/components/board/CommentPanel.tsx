@@ -21,9 +21,18 @@ interface ICommentProps {
   handleEdit: (e: FormEvent<HTMLFormElement>) => void
 }
 
-export const CommentContainer = ({ children }: IChildrenProps) => {
+export const CommentContainer = ({
+  isPc,
+  children,
+}: IChildrenProps & { isPc: boolean }) => {
   return (
-    <Stack sx={style.CommentContainer} spacing={'1rem'}>
+    <Stack
+      sx={{
+        ...style.CommentContainer,
+        padding: isPc ? '1.5rem 2rem' : '1.5rem 1rem',
+      }}
+      spacing={'1rem'}
+    >
       <Typography variant={'Title1'}>댓글</Typography>
       <Stack spacing={'1rem'}>{children}</Stack>
     </Stack>
@@ -125,16 +134,21 @@ export const CommentItem = ({
 }
 
 export const CommentFormContainer = ({
+  isPc,
   handleSubmit,
   isLoading,
 }: {
+  isPc: boolean
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void
   isLoading: boolean
 }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack
-        sx={style.CommentForm}
+        sx={{
+          ...style.CommentForm,
+          padding: isPc ? '1rem 2rem' : '1.5rem 1rem',
+        }}
         direction={'row'}
         spacing={'1rem'}
         alignItems={'center'}

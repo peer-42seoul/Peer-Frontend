@@ -102,7 +102,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
           </Stack>
         )}
       </DetailContentCotainer>
-      <CommentList postId={postId} teamId={parseInt(teamId)} />
+      <CommentList isPc={isPc} postId={postId} teamId={parseInt(teamId)} />
     </DetailPage>
   )
 }
