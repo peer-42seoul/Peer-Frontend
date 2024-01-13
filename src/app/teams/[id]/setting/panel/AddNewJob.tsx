@@ -9,7 +9,6 @@ import useAxiosWithAuth from '@/api/config'
 
 interface NewJob {
   name: string
-  current: number
   max: number
 }
 
@@ -22,7 +21,6 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [newJob, setNewJob] = useState<NewJob>({
     name: '',
-    current: 0,
     max: 1,
   })
 
@@ -44,6 +42,7 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
       .then((res) => {
         console.log(res)
         if (res.status === 200) {
+          console.log(res.data)
           onNewJob(res.data)
         }
       })
@@ -57,10 +56,12 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
       direction={'row'}
       alignItems={'center'}
       justifyContent={'space-between'}
-      px={'4rem'}
+      px={'2rem'}
       paddingTop={'1rem'}
     >
       <TextField
+        value={newJob.name}
+        onChange={(e) => setNewJob({ ...newJob, name: e.target.value })}
         placeholder="추가할 직업군을 입력하세요."
         sx={{ width: '20rem' }}
       />

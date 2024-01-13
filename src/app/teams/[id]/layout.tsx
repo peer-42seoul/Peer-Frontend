@@ -26,7 +26,7 @@ const TeamLayout = ({
   return (
     <Stack display="flex" padding={1} spacing={2} px={isPc ? 10 : 1}>
       <Stack
-        spacing={isPc ? '4rem' : '0'}
+        spacing={'0.5rem'} // spacing={isPc ? '4rem' : '0'}
         direction={isPc ? 'row' : 'column'}
         justifyContent={'center'}
       >
