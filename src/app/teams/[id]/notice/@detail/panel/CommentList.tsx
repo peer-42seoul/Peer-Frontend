@@ -10,7 +10,6 @@ import {
   CommentFormContainer,
 } from '@/components/board/CommentPanel'
 import { ITeamComment } from '@/types/TeamBoardTypes'
-import axios from 'axios'
 
 interface ICommentFormProps {
   isPc: boolean
@@ -96,7 +95,7 @@ const CommentList = ({ postId, teamId, isPc }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
     `/api/v1/team/notice/answer/${postId}`,
-    (url: string) => axios.get(url).then((res) => res.data),
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   if (error || !data) {

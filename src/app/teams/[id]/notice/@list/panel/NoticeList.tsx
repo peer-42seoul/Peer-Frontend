@@ -1,7 +1,6 @@
 import { Fragment, useEffect } from 'react'
 import { Box } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import axios from 'axios'
 import {
   ListStack,
   StatusMessage,
@@ -19,12 +18,12 @@ const NoticeList = ({
   teamId: number
   keyword: string
 }) => {
-  // const axiosWithAuth = useAxiosWithAuth()
+  const axiosWithAuth = useAxiosWithAuth()
   const { setNotice } = useTeamPageState()
   const { data, error, isLoading, size, setSize, targetRef } =
     useInfiniteSWRScroll(
       `/api/v1/team/notice/${teamId}?pageSize=${10}&keyword=${keyword}`,
-      (url: string) => axios.get(url).then((res) => res.data),
+      (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     )
   useEffect(() => {
     // keyword가 바뀔 때마다 size를 0으로 초기화 (size의 초깃값은 0입니다.)

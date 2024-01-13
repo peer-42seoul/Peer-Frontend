@@ -9,11 +9,10 @@ import {
   DetailContent,
 } from '@/components/board/DetailPanel'
 import CuButton from '@/components/CuButton'
+import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
-import axios from 'axios'
-import useMedia from '@/hook/useMedia'
 
 const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
@@ -21,7 +20,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const { postId, setNotice } = useTeamPageState()
   const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
     `/api/v1/team/notice/${postId}`,
-    (url: string) => axios.get(url).then((res) => res.data),
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const { isPc } = useMedia()
 
