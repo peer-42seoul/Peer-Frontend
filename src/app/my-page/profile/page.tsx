@@ -1,5 +1,5 @@
 'use client'
-import { AlertColor, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ProfileCard from './panel/ProfileCard'
 import { IUserProfile } from '@/types/IUserProfile'
@@ -15,17 +15,13 @@ import MyInfoCard from './panel/MyInfoCard'
 import useMedia from '@/hook/useMedia'
 import * as style from '../panel/my-page.style'
 import MyPortfolio from './panel/MyPortfolio'
+import IToast from '@/types/IToastProps'
 
 interface IModals {
   introduction: boolean
   achievements: boolean
   skills: boolean
   links: boolean
-}
-
-interface IToastProps {
-  severity?: AlertColor
-  message: string
 }
 
 const MyProfile = () => {
@@ -49,9 +45,7 @@ const MyProfile = () => {
     skills: false,
     links: false,
   })
-  const [toastMessage, setToastMessage] = useState<IToastProps>(
-    {} as IToastProps,
-  )
+  const [toastMessage, setToastMessage] = useState<IToast>({} as IToast)
 
   useEffect(() => {
     const newModalOpen: IModals = {
@@ -122,7 +116,7 @@ const MyProfile = () => {
         handleLogout={handleLogout}
       />
 
-      <MyPortfolio />
+      <MyPortfolio setToastMessage={setToastMessage} />
       {/* modals */}
       <ProfileBioEditor
         data={{

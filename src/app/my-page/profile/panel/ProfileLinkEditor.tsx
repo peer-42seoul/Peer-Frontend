@@ -5,14 +5,10 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
-import { AlertColor, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
-
-interface IToastProps {
-  severity?: AlertColor
-  message: string
-}
+import IToast from '@/types/IToastProps'
 
 const ProfileLinkEditor = ({
   closeModal,
@@ -24,7 +20,7 @@ const ProfileLinkEditor = ({
 }: {
   closeModal: () => void
   links?: Array<IUserProfileLink>
-  setToastMessage: (toastProps: IToastProps) => void
+  setToastMessage: (toastProps: IToast) => void
   setToastOpen: (open: boolean) => void
   mutate: () => void
   open: boolean

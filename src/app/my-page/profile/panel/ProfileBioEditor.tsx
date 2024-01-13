@@ -1,7 +1,6 @@
 'use client'
 import React, { useCallback, useRef, useState } from 'react'
 import {
-  AlertColor,
   Avatar,
   Box,
   Button,
@@ -24,16 +23,12 @@ import { PlusIcon } from '@/icons'
 import TrashIcon from '@/icons/TrashIcon'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
+import IToast from '@/types/IToastProps'
 
 interface IFormInput {
   nickname: string
   introduction: string
   profileImage: File[] | null
-}
-
-interface IToastProps {
-  severity?: AlertColor
-  message: string
 }
 
 const ProfileBioEditor = ({
@@ -46,7 +41,7 @@ const ProfileBioEditor = ({
 }: {
   data: IProfileCard
   closeModal: () => void
-  setToastMessage: (toastProps: IToastProps) => void
+  setToastMessage: (toastProps: IToast) => void
   setToastOpen: (isOpen: boolean) => void
   mutate: () => void
   open: boolean
