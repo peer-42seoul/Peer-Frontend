@@ -121,7 +121,7 @@ function TransitionLeft(props: SlideProps) {
 
 const CuToast = ({
   open,
-  autoHideDuration = 60000,
+  autoHideDuration = 10000,
   onClose,
   severity,
   message,
@@ -152,6 +152,7 @@ const CuToast = ({
       autoHideDuration={autoHideDuration}
       sx={isPc ? style.snackbarPcStyle : style.snackbarMobileStyle}
       TransitionComponent={TransitionLeft}
+      onClose={onClose}
     >
       <Alert
         onClose={onClose}
