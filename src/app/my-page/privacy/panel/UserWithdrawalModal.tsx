@@ -3,7 +3,7 @@
 import CuModal from '@/components/CuModal'
 
 import { useState, Dispatch, SetStateAction } from 'react'
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Button, Stack, TextField, Typography } from '@mui/material'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import IToastProps from '@/types/IToastProps'
@@ -71,7 +71,20 @@ const UserWithdrawalModal = ({
 
   return (
     <>
-      <Button onClick={handleOpen}>계정삭제</Button>
+      <Button
+        variant={'contained'}
+        onClick={handleOpen}
+        sx={{
+          backgroundColor: 'red.strong',
+          width: '4rem',
+          height: '1.75rem',
+          wordBreak: 'keep-all',
+        }}
+      >
+        <Typography variant={'CaptionEmphasis'} color={'white'}>
+          계정삭제
+        </Typography>
+      </Button>
       <CuModal
         open={open}
         onClose={handleClose}
@@ -85,7 +98,20 @@ const UserWithdrawalModal = ({
           onClick: handleClose,
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Stack
+          justifyContent={'center'}
+          alignItems={'center'}
+          flexDirection={'column'}
+          spacing={2}
+        >
+          <Typography
+            id="modal-description"
+            variant="Body2"
+            color={'text.normal'}
+          >
+            계정을 삭제하시겠습니까? 모든 작업물과 데이터가 영구적으로
+            삭제됩니다.
+          </Typography>
           <TextField
             placeholder="계정 삭제를 위해 비밀번호를 입력하세요"
             onChange={(e) => setPassword(e.target.value)}
@@ -93,12 +119,9 @@ const UserWithdrawalModal = ({
             type="password"
             autoComplete="off"
             onKeyDown={handlekeyDown}
+            fullWidth
           />
-          <Typography id="modal-description">
-            계정을 삭제하시겠습니까? <br />
-            모든 작업물과 데이터가 영구적으로 삭제됩니다
-          </Typography>
-        </Box>
+        </Stack>
       </CuModal>
     </>
   )
