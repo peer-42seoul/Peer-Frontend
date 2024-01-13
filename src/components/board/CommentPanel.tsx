@@ -28,6 +28,22 @@ interface ICommentProps {
   handleEdit: (e: FormEvent<HTMLFormElement>) => void
 }
 
+interface IIconMenuItemProps {
+  icon: React.ReactNode
+  text: string
+  onClick: () => void
+}
+
+interface ICommentMoreDropdownMenuProps {
+  handleDelete: () => void
+  setEditMode: () => void
+}
+
+interface ICommentFormContainerProps {
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
+  isLoading: boolean
+}
+
 export const CommentContainer = ({ children }: IChildrenProps) => {
   const { isPc } = useMedia()
   return (
@@ -63,15 +79,7 @@ export const StatusMessage = ({ message }: { message: string }) => {
   )
 }
 
-const IconMenuItem = ({
-  icon,
-  text,
-  onClick,
-}: {
-  icon: React.ReactNode
-  text: string
-  onClick: () => void
-}) => {
+const IconMenuItem = ({ icon, text, onClick }: IIconMenuItemProps) => {
   return (
     <MenuItem onClick={onClick} sx={style.IconMenuItem}>
       <Stack direction={'row'} spacing={'0.38rem'} alignItems={'center'}>
@@ -92,10 +100,7 @@ const MENU_POSITION = {
 export const CommentMoreDropdownMenu = ({
   handleDelete,
   setEditMode,
-}: {
-  handleDelete: () => void
-  setEditMode: () => void
-}) => {
+}: ICommentMoreDropdownMenuProps) => {
   // TODO : DropdownMenu 컴포넌트를 활용할 수 있을지 확인해보기
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -228,10 +233,7 @@ export const CommentItem = ({
 export const CommentFormContainer = ({
   handleSubmit,
   isLoading,
-}: {
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
-  isLoading: boolean
-}) => {
+}: ICommentFormContainerProps) => {
   const { isPc } = useMedia()
   return (
     <form onSubmit={handleSubmit}>

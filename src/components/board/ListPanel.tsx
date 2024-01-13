@@ -18,6 +18,11 @@ interface IChildrenProps {
   children: React.ReactNode
 }
 
+interface IIconButtonContainer {
+  setKeyword: (keyword: string) => void
+  onClickPlus: () => void
+}
+
 interface IListItemProps {
   title: string
   authorNickname: string
@@ -124,10 +129,7 @@ const SearchPopover = ({
 export const IconButtonContainer = ({
   setKeyword,
   onClickPlus,
-}: {
-  setKeyword: (keyword: string) => void
-  onClickPlus: () => void
-}) => {
+}: IIconButtonContainer) => {
   const { isPc } = useMedia()
   if (isPc) return <SearchPopover setKeyword={setKeyword} />
   return (
