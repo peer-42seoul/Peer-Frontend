@@ -71,7 +71,7 @@ jobs:
           host: ${{ secrets.DEV_TEST_HOST }}
           port: 22
           username: ${{ secrets.DEV_TEST_USERNAME }}
-          key: ${{ secrets.DEV_TEST_KEY }}
+          password: ${{ secrets.DEV_TEST_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_TEST_IMAGE }}
             docker rm -f $(docker ps -qa)
