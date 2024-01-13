@@ -1,19 +1,19 @@
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { SizeType, WidgetType } from '@/types/ITeamDnDLayout'
-import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TmpTextWidget'
+import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
 import { useCallback, useState } from 'react'
 import { sizeRatio } from '@/app/teams/[id]/panel/TeamDnD'
 import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
 import CalenderWidget from '@/app/teams/[id]/panel/widgets/CalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
-import TmpImageWidget from '@/app/teams/[id]/panel/widgets/TmpImageWidget'
+import TmpImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import useMedia from '@/hook/useMedia'
-import { SizeButton } from '@/app/teams/[id]/panel/widgets/TeamDnD.style'
+import { SizeButton } from '@/app/teams/[id]/panel/TeamDnD.style'
 
 interface ITeamDnDWidgetListProps {
   setIsDropping: (isDropping: boolean) => void

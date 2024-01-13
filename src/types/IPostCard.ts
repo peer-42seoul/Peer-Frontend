@@ -9,8 +9,7 @@ export interface IPostCard {
   postId: number // 글 id
   tagList: ITag[]
   image: string // 글 대표 이미지 (썸네일)
-  sx?: SxProps
-  cardWidth: number
+  sx?: SxProps // 카드 전체 스타일
   onClick?: (e: React.MouseEvent) => void
   onTouchEnd?: (e: React.TouchEvent) => void
   onMouseUp?: (e: React.MouseEvent) => void
