@@ -81,7 +81,7 @@ const UserWithdrawalModal = ({
           wordBreak: 'keep-all',
         }}
       >
-        <Typography variant={'CaptionEmphasis'} color={'white'}>
+        <Typography variant={'CaptionEmphasis'} color={'text.normal'}>
           계정삭제
         </Typography>
       </Button>
