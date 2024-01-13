@@ -27,10 +27,8 @@ const TitleBox = ({
 
   return (
     <Stack
-      spacing={titleBoxSpacing || (isPc ? '1.5rem' : '1rem')}
-      sx={
-        titleBoxSx || (isPc ? style.titleBoxPcStyle : style.titleBoxMobileStyle)
-      }
+      spacing={titleBoxSpacing || ['1rem', '1.5rem']}
+      sx={titleBoxSx || style.titleBosStyle}
     >
       {titleComponent ? (
         titleComponent
