@@ -108,8 +108,7 @@ const MyPortfolio = () => {
             {postList.map((post) => (
               <Grid xs={12} sm={6} key={post.recruit_id}>
                 <PostCard
-                  authorImage={post.user_thumbnail}
-                  title={post.title}
+                  teamLogo={post.user_thumbnail}
                   tagList={post.tagList}
                   image={post.image}
                   teamName={post.user_nickname}
