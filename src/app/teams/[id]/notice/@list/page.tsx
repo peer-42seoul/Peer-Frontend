@@ -2,7 +2,6 @@
 import { useState, MouseEvent, useRef } from 'react'
 import {
   Typography,
-  Button,
   Stack,
   IconButton,
   Popover,
@@ -11,6 +10,10 @@ import {
 import AddIcon from '@mui/icons-material/Add'
 import CuTextField from '@/components/CuTextField'
 import CuButton from '@/components/CuButton'
+import {
+  ListPageContainer,
+  ListBoxContainer,
+} from '@/components/board/ListPanel'
 import useMedia from '@/hook/useMedia'
 import SearchIcon from '@/icons/SearchIcon'
 import useTeamPageState from '@/states/useTeamPageState'
@@ -83,37 +86,47 @@ const SearchPopover = ({
 }
 
 const TeamNotice = ({ params }: { params: { id: string } }) => {
-  const { id } = params
+  const { id: teamId } = params
   const { isPc } = useMedia()
   const { setNotice } = useTeamPageState()
   const [keyword, setKeyword] = useState<string>('')
+
   return (
-    <Stack width={'100%'}>
+    <ListPageContainer>
       {isPc ? (
         <Stack direction={'row'} justifyContent={'flex-end'}>
-          <SearchPopover setKeyword={setKeyword} />
-          <Button
-            onClick={() => setNotice('EDIT')}
-            variant="contained"
-            startIcon={<AddIcon />}
-          >
-            새 글쓰기
-          </Button>
+          <CuButton
+            message={'새 글쓰기'}
+            startIcon={<AddIcon sx={{ color: 'text.normal' }} />}
+            action={() => setNotice('EDIT')}
+            style={{
+              backgroundColor: 'purple.strong',
+              padding: '0.75rem 1rem 0.75rem 0.625rem',
+            }}
+          />
         </Stack>
       ) : null}
-      <Stack direction={'row'} justifyContent={'space-between'}>
-        <Typography>공지사항</Typography>
-        {isPc ? null : (
-          <Stack direction={'row'}>
+      <ListBoxContainer>
+        <Stack
+          direction={'row'}
+          alignItems={'center'}
+          justifyContent={'space-between'}
+        >
+          <Typography variant="Title3Emphasis">공지사항</Typography>
+          {isPc ? (
             <SearchPopover setKeyword={setKeyword} />
-            <IconButton onClick={() => setNotice('EDIT')}>
-              <AddIcon />
-            </IconButton>
-          </Stack>
-        )}
-      </Stack>
-      <NoticeList teamId={parseInt(id)} keyword={keyword} />
-    </Stack>
+          ) : (
+            <Stack direction={'row'}>
+              <SearchPopover setKeyword={setKeyword} />
+              <IconButton onClick={() => setNotice('EDIT')}>
+                <AddIcon />
+              </IconButton>
+            </Stack>
+          )}
+        </Stack>
+        <NoticeList teamId={parseInt(teamId)} keyword={keyword} />
+      </ListBoxContainer>
+    </ListPageContainer>
   )
 }
 

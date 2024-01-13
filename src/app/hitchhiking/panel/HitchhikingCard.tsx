@@ -289,9 +289,9 @@ const HitchhikingCard = ({
           ...sx,
           backfaceVisibility: 'hidden',
           transform: 'translate(-50%, 0)',
+          width: isPc ? '90%' : '90vw',
         }}
         onClick={handleMouseUp}
-        cardWidth={cardWidth}
       />
       <HitchhikingCardBack
         postId={postId}
