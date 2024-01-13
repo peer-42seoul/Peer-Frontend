@@ -74,8 +74,8 @@ const UserWithdrawalModal = ({
       <Button
         variant={'contained'}
         onClick={handleOpen}
+        color="red"
         sx={{
-          backgroundColor: 'red.strong',
           width: '4rem',
           height: '1.75rem',
           wordBreak: 'keep-all',
