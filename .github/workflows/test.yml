@@ -62,19 +62,19 @@ jobs:
           touch /home/runner/work/Peer-Frontend/Peer-Frontend/.env.production
           echo "${{ secrets.ENV_FILE }}" >> /home/runner/work/Peer-Frontend/Peer-Frontend/.env.production
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin 
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_IMAGE }} .
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_IMAGE }}
+          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_TEST_IMAGE }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_TEST_IMAGE }}
 
       - name: Deploy
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.DEV_HOST }}
+          host: ${{ secrets.DEV_TEST_HOST }}
           port: 22
-          username: ${{ secrets.DEV_USERNAME }}
-          key: ${{ secrets.DEV_KEY }}
+          username: ${{ secrets.DEV_TEST_USERNAME }}
+          key: ${{ secrets.DEV_TEST_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_IMAGE }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_TEST_IMAGE }}
             docker rm -f $(docker ps -qa)
-            docker run -d -p 80:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_IMAGE }}
+            docker run -d -p 80:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_TEST_IMAGE }}
             docker container prune -f
             docker image prune -f
