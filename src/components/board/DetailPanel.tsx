@@ -57,7 +57,7 @@ export const DetailPage = ({
       mobileFullSize
     >
       <Stack
-        sx={{ ...style.DetailPage, height: '100%', overflowY: 'scrollㄷ' }}
+        sx={{ ...style.DetailPage, height: '100%', overflowY: 'scroll' }}
         spacing={'1.5rem'}
       >
         {children}
