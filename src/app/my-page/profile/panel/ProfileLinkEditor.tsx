@@ -134,7 +134,7 @@ const ProfileLinkEditor = ({
       }}
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCloseModal,
       }}
       mobileFullSize
     >

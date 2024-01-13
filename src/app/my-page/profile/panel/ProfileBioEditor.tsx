@@ -285,10 +285,17 @@ const ProfileBioEditor = ({
         closeModal()
       })
       .catch((e) => {
-        setToastMessage({
-          severity: 'error',
-          message: e.response.data.message,
-        })
+        if (e.response.status === 500) {
+          setToastMessage({
+            severity: 'error',
+            message: '프로필 변경에 실패하였습니다.',
+          })
+        } else {
+          setToastMessage({
+            severity: 'error',
+            message: e.response.data.message,
+          })
+        }
         setToastOpen(true)
       })
   }
@@ -311,7 +318,7 @@ const ProfileBioEditor = ({
       }}
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCloseModal,
       }}
       mobileFullSize
     >
