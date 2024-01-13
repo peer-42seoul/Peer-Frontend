@@ -14,14 +14,12 @@ const ProfileLinkEditor = ({
   closeModal,
   links,
   setToastMessage,
-  setToastOpen,
   mutate,
   open,
 }: {
   closeModal: () => void
   links?: Array<IUserProfileLink>
   setToastMessage: (toastProps: IToast) => void
-  setToastOpen: (open: boolean) => void
   mutate: () => void
   open: boolean
 }) => {
@@ -108,7 +106,6 @@ const ProfileLinkEditor = ({
           severity: 'success',
           message: '링크 변경에 성공하였습니다.',
         })
-        setToastOpen(true)
         reset(defaultValues)
         closeModal()
         mutate()
@@ -118,7 +115,6 @@ const ProfileLinkEditor = ({
           severity: 'error',
           message: '링크 변경에 실패하였습니다.',
         })
-        setToastOpen(true)
       })
   }
 

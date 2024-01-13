@@ -20,10 +20,8 @@ import IToast from '@/types/IToastProps'
 
 const MyPortfolio = ({
   setToastMessage,
-  setToastOpen,
 }: {
   setToastMessage: React.Dispatch<React.SetStateAction<IToast>>
-  setToastOpen: () => void
 }) => {
   const [isVisible, setIsVisible] = useState<boolean>(true)
 
@@ -68,7 +66,6 @@ const MyPortfolio = ({
         message: '내 작업물이 다른 사람들에게 비공개되었습니다.',
       })
     }
-    setToastOpen()
   }
 
   const DisclosureToggle = ({

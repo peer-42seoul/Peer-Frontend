@@ -35,14 +35,12 @@ const ProfileBioEditor = ({
   data,
   closeModal,
   setToastMessage,
-  setToastOpen,
   mutate,
   open,
 }: {
   data: IProfileCard
   closeModal: () => void
   setToastMessage: (toastProps: IToast) => void
-  setToastOpen: (isOpen: boolean) => void
   mutate: () => void
   open: boolean
 }) => {
@@ -194,7 +192,6 @@ const ProfileBioEditor = ({
             if (errors.nickname?.type === 'notUnique') {
               clearErrors('nickname')
             }
-            setToastOpen(true)
             setIsLoading(false)
           })
           .catch((error) => {
@@ -204,7 +201,6 @@ const ProfileBioEditor = ({
               severity: 'error',
               message: '중복된 닉네임 입니다.',
             })
-            setToastOpen(true)
             setError('nickname', {
               type: 'notUnique',
               message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
@@ -280,7 +276,6 @@ const ProfileBioEditor = ({
           severity: 'success',
           message: '프로필 변경에 성공하였습니다.',
         })
-        setToastOpen(true)
         mutate()
         closeModal()
       })
@@ -296,7 +291,6 @@ const ProfileBioEditor = ({
             message: e.response.data.message,
           })
         }
-        setToastOpen(true)
       })
   }
 
