@@ -9,7 +9,7 @@ on:
 
 jobs:
   CI:
-    name: Are You Ready? 😃
+    name: Test CI!! 😃
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -49,7 +49,7 @@ jobs:
         run: npm run build
 
   CD:
-    name: Deployment
+    name: Test CD 👻
     if: github.ref == 'refs/heads/develop' && (github.event.pull_request.merged == true || github.event_name == 'push')
     runs-on: ubuntu-latest
     needs: CI
