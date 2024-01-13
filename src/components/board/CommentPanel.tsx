@@ -235,7 +235,7 @@ export const CommentFormContainer = ({
       <Stack
         sx={{
           ...style.CommentForm,
-          padding: isPc ? '1rem 2rem' : '1.5rem 1rem',
+          padding: isPc ? '1rem 2rem' : '1rem',
         }}
         direction={'row'}
         spacing={'1rem'}
