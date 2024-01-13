@@ -1,4 +1,5 @@
 'use client'
+import { useRef, useState, MouseEvent } from 'react'
 import dayjs from 'dayjs'
 import {
   IconButton,
@@ -7,32 +8,25 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import useMedia from '@/hook/useMedia'
 import { PlusIcon, SearchIcon } from '@/icons'
 import * as style from './ListPanel.style'
 import CuButton from '../CuButton'
-import { useRef, useState, MouseEvent } from 'react'
 import CuTextField from '../CuTextField'
 
 interface IChildrenProps {
   children: React.ReactNode
 }
 
-interface IIsPcProps {
-  isPc: boolean
-}
-
 interface IListItemProps {
-  isPc: boolean
   title: string
   authorNickname: string
   createdAt: Date
   onClick: () => void
 }
 
-export const ListPageContainer = ({
-  children,
-  isPc,
-}: IChildrenProps & IIsPcProps) => {
+export const ListPageContainer = ({ children }: IChildrenProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       sx={{ ...style.ListPageContainer, padding: isPc ? '2rem' : '0' }}
@@ -43,12 +37,8 @@ export const ListPageContainer = ({
   )
 }
 
-export const NewPostButton = ({
-  onClick,
-  isPc,
-}: IIsPcProps & {
-  onClick: () => void
-}) => {
+export const NewPostButton = ({ onClick }: { onClick: () => void }) => {
+  const { isPc } = useMedia()
   if (!isPc) return null
   return (
     <Stack direction={'row'} justifyContent={'flex-end'}>
@@ -132,13 +122,13 @@ const SearchPopover = ({
 }
 
 export const IconButtonContainer = ({
-  isPc,
   setKeyword,
   onClickPlus,
-}: IIsPcProps & {
+}: {
   setKeyword: (keyword: string) => void
   onClickPlus: () => void
 }) => {
+  const { isPc } = useMedia()
   if (isPc) return <SearchPopover setKeyword={setKeyword} />
   return (
     <Stack direction={'row'}>
@@ -150,10 +140,8 @@ export const IconButtonContainer = ({
   )
 }
 
-export const ListBoxContainer = ({
-  children,
-  isPc,
-}: IChildrenProps & { isPc?: boolean }) => {
+export const ListBoxContainer = ({ children }: IChildrenProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       sx={{
@@ -167,10 +155,8 @@ export const ListBoxContainer = ({
   )
 }
 
-export const ListStack = ({
-  children,
-  isPc,
-}: IChildrenProps & { isPc?: boolean }) => {
+export const ListStack = ({ children }: IChildrenProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack sx={isPc ? style.PcListStack : undefined} spacing={'1rem'}>
       {children}
@@ -193,12 +179,12 @@ export const StatusMessage = ({ message }: { message: string }) => {
 }
 
 export const ListItem = ({
-  isPc,
   title,
   authorNickname,
   createdAt,
   onClick,
 }: IListItemProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       sx={{ ...style.ListItem, padding: isPc ? '0.625rem 1rem' : '0' }}

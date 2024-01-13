@@ -1,8 +1,9 @@
 import { Stack, Typography } from '@mui/material'
-import DynamicToastViewer from '../DynamicToastViewer'
 import dayjs from 'dayjs'
+import useMedia from '@/hook/useMedia'
 import CuButton from '../CuButton'
 import CuModal from '../CuModal'
+import DynamicToastViewer from '../DynamicToastViewer'
 import * as style from './DetailPanel.style'
 
 interface IChildrenProps {
@@ -13,12 +14,10 @@ interface IDetailContentContainerProps {
   children: React.ReactNode
   containerTitle: string
   author: boolean
-  isPc?: boolean
   onClickEditButton?: () => void
 }
 
 interface IDetailPageProps extends IChildrenProps {
-  isPc: boolean
   handleGoBack: () => void
 }
 
@@ -26,22 +25,17 @@ interface IStatusMessageProps {
   message: string
   onClickEditButton?: () => void
   author: boolean
-  isPc?: boolean
 }
 
 interface IDetailContentProps {
-  isPc?: boolean
   title: string
   createdAt: Date
   authorNickname: string
   content: string
 }
 
-export const DetailPage = ({
-  children,
-  isPc,
-  handleGoBack,
-}: IDetailPageProps) => {
+export const DetailPage = ({ children, handleGoBack }: IDetailPageProps) => {
+  const { isPc } = useMedia()
   if (isPc) {
     return (
       <Stack sx={style.DetailPage} spacing={'1.5rem'}>
@@ -70,9 +64,9 @@ export const DetailContentCotainer = ({
   containerTitle,
   children,
   author,
-  isPc,
   onClickEditButton,
 }: IDetailContentContainerProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack sx={isPc ? style.DetailContent : undefined} spacing={'2rem'}>
       <Stack direction={'row'} justifyContent={'space-between'}>
@@ -98,14 +92,12 @@ export const StatusMessage = ({
   message,
   onClickEditButton,
   author,
-  isPc,
 }: IStatusMessageProps) => {
   return (
     <DetailContentCotainer
       containerTitle={'공지사항'}
       onClickEditButton={onClickEditButton}
       author={author}
-      isPc={isPc}
     >
       <Typography
         textAlign={'center'}
@@ -135,12 +127,12 @@ const Content = ({ content }: { content: string }) => {
 }
 
 export const DetailContent = ({
-  isPc,
   title,
   createdAt,
   authorNickname,
   content,
 }: IDetailContentProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack spacing={isPc ? '1.5rem' : '1rem'}>
       <Stack spacing={'0.5rem'}>

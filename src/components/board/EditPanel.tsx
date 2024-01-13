@@ -25,7 +25,6 @@ interface IEditButtonProps {
 
 interface IEditPageProps extends IChildrenProps {
   title: string
-  isPc: boolean
   type: 'new' | 'edit'
   handleGoBack: () => void
 }
@@ -33,10 +32,10 @@ interface IEditPageProps extends IChildrenProps {
 export const EditPage = ({
   title,
   children,
-  isPc,
   type,
   handleGoBack,
 }: IEditPageProps) => {
+  const { isPc } = useMedia()
   if (isPc)
     return (
       <Stack spacing={'1.5rem'}>

@@ -19,7 +19,6 @@ const NoticeEdit = ({ params }: { params: { id: string } }) => {
   }
   return (
     <EditPage
-      isPc={isPc}
       type={postId ? 'edit' : 'new'}
       handleGoBack={handleGoBack}
       title={postId ? '공지사항 수정' : '공지사항 작성'}

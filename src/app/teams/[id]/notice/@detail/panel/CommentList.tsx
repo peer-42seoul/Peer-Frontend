@@ -12,7 +12,6 @@ import {
 import { ITeamComment } from '@/types/TeamBoardTypes'
 
 interface ICommentFormProps {
-  isPc: boolean
   postId: number
   teamId: number
 }
@@ -61,9 +60,10 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
   )
 }
 
-const CommentForm = ({ postId, teamId, isPc }: ICommentFormProps) => {
+const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setIsLoading] = useState(false)
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
@@ -83,15 +83,11 @@ const CommentForm = ({ postId, teamId, isPc }: ICommentFormProps) => {
   }
 
   return (
-    <CommentFormContainer
-      isPc={isPc}
-      handleSubmit={handleSubmit}
-      isLoading={isLoading}
-    />
+    <CommentFormContainer handleSubmit={handleSubmit} isLoading={isLoading} />
   )
 }
 
-const CommentList = ({ postId, teamId, isPc }: ICommentFormProps) => {
+const CommentList = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
     `/api/v1/team/notice/answer/${postId}`,
@@ -111,12 +107,12 @@ const CommentList = ({ postId, teamId, isPc }: ICommentFormProps) => {
   }
   return (
     <Stack>
-      <CommentContainer isPc={isPc}>
+      <CommentContainer>
         {data.map((comment: ITeamComment) => (
           <Comment key={comment.answerId} comment={comment} />
         ))}
       </CommentContainer>
-      <CommentForm isPc={isPc} postId={postId} teamId={teamId} />
+      <CommentForm postId={postId} teamId={teamId} />
     </Stack>
   )
 }

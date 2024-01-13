@@ -9,7 +9,6 @@ import {
 import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
-import useMedia from '@/hook/useMedia'
 
 const NoticeList = ({
   teamId,
@@ -29,7 +28,6 @@ const NoticeList = ({
     // keyword가 바뀔 때마다 size를 0으로 초기화 (size의 초깃값은 0입니다.)
     if (!isLoading && size !== 0) setSize(0)
   }, [keyword])
-  const { isPc } = useMedia()
 
   if (!data || error) return <StatusMessage message="문제가 발생했습니다." />
   if (!data && isLoading)
@@ -37,7 +35,7 @@ const NoticeList = ({
   if (data.length === 0 || data[0].content.length === 0)
     return <StatusMessage message="등록된 글이 없습니다." />
   return (
-    <ListStack isPc={isPc}>
+    <ListStack>
       {data.map((page, index) => {
         return (
           <Fragment key={index}>
@@ -45,7 +43,6 @@ const NoticeList = ({
               return (
                 <ListItem
                   key={notice.postId}
-                  isPc={isPc}
                   title={notice.title}
                   authorNickname={notice.authorNickname}
                   createdAt={notice.createdAt}

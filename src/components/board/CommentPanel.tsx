@@ -9,6 +9,7 @@ import {
   Typography,
 } from '@mui/material'
 import { TrashIcon, EditIcon, SendIcon, MoreHorizontalIcon } from '@/icons'
+import useMedia from '@/hook/useMedia'
 import { ITeamComment } from '@/types/TeamBoardTypes'
 import CuAvatar from '../CuAvatar'
 import CuTextField from '../CuTextField'
@@ -27,10 +28,8 @@ interface ICommentProps {
   handleEdit: (e: FormEvent<HTMLFormElement>) => void
 }
 
-export const CommentContainer = ({
-  isPc,
-  children,
-}: IChildrenProps & { isPc?: boolean }) => {
+export const CommentContainer = ({ children }: IChildrenProps) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       sx={{
@@ -227,14 +226,13 @@ export const CommentItem = ({
 }
 
 export const CommentFormContainer = ({
-  isPc,
   handleSubmit,
   isLoading,
 }: {
-  isPc: boolean
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void
   isLoading: boolean
 }) => {
+  const { isPc } = useMedia()
   return (
     <form onSubmit={handleSubmit}>
       <Stack

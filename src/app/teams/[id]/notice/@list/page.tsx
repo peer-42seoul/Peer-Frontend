@@ -18,14 +18,13 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
   const [keyword, setKeyword] = useState<string>('')
 
   return (
-    <ListPageContainer isPc={isPc}>
+    <ListPageContainer>
       <NewPostButton
-        isPc={isPc}
         onClick={() => {
           setNotice('EDIT')
         }}
       />
-      <ListBoxContainer isPc={isPc}>
+      <ListBoxContainer>
         <Stack
           direction={'row'}
           alignItems={'center'}
@@ -35,7 +34,6 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
             공지사항
           </Typography>
           <IconButtonContainer
-            isPc={isPc}
             setKeyword={setKeyword}
             onClickPlus={() => {
               setNotice('EDIT')

@@ -60,7 +60,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       />
     )
   return (
-    <DetailPage isPc={isPc} handleGoBack={handleGoBack}>
+    <DetailPage handleGoBack={handleGoBack}>
       {isPc && (
         <CuButton
           message={'이전 페이지'}
@@ -75,12 +75,10 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       )}
       <DetailContentCotainer
         containerTitle={'공지사항'}
-        isPc={isPc}
         onClickEditButton={() => setNotice('EDIT', postId)}
         author={data.isAuthor}
       >
         <DetailContent
-          isPc={isPc}
           title={data.title}
           createdAt={data.createdAt}
           authorNickname={data.authorNickname}
@@ -101,7 +99,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
           </Stack>
         )}
       </DetailContentCotainer>
-      <CommentList isPc={isPc} postId={postId} teamId={parseInt(teamId)} />
+      <CommentList postId={postId} teamId={parseInt(teamId)} />
     </DetailPage>
   )
 }
