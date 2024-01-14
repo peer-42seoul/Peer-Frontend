@@ -25,18 +25,29 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 
 export const MobileNav = () => {
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState<
+    'home' | 'hitchhiking' | 'team-list' | 'showcase' | 'my-page'
+  >('home')
   const pathname = usePathname()
   const router = useRouter()
   const { isLogin } = useAuthStore()
 
+  const bottomNavStyle = {
+    minWidth: 'auto',
+    padding: '6px 0',
+  }
+
   useEffect(() => {
     if (pathname === '/') {
-      setValue(0)
+      setValue('home')
     } else if (pathname === '/team-list') {
-      setValue(3)
+      setValue('team-list')
+    } else if (pathname === '/hitchhiking') {
+      setValue('hitchhiking')
     } else if (pathname === '/my-page') {
-      setValue(4)
+      setValue('my-page')
+    } else if (pathname === '/showcase') {
+      setValue('showcase')
     }
   }, [pathname])
 
@@ -49,7 +60,7 @@ export const MobileNav = () => {
         left: 0,
         right: 0,
         overflow: 'hidden',
-        zIndex: 1300, // NOTE : 추후 모집글 버튼 z-index 조정 작업시에 함께 조정 필요함.
+        zIndex: 1300, // NOTE : 가능한 가장 높은 값으로 설정한 것이므로 이 값은 높이지 말아주세요. (낮추는건 괜찮습니다.)
       }}
     >
       <BottomNavigation
@@ -59,35 +70,45 @@ export const MobileNav = () => {
         }}
       >
         <BottomNavigationAction
+          sx={bottomNavStyle}
           icon={<HomeOutlinedIcon />}
           label="홈"
+          value={'home'}
           onClick={() => {
             router.push('/')
           }}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           icon={<ThumbUpAltOutlinedIcon />}
           label="히치하이킹"
+          value={'hitchhiking'}
           onClick={() => {
-            router.push('/')
+            router.push('/hitchhiking')
           }}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           label="쇼케이스"
+          value={'showcase'}
           onClick={() => {
             router.push('/showcase')
           }}
           icon={<GroupOutlinedIcon />}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           label="팀페이지"
+          value={'team-list'}
           onClick={() => {
             router.push('/team-list')
           }}
           icon={<TabletMacOutlinedIcon />}
         />
         <BottomNavigationAction
+          sx={bottomNavStyle}
           label="내 프로필"
+          value={'my-page'}
           onClick={() => {
             router.push(isLogin ? '/my-page' : '/login?redirect=/my-page')
           }}
@@ -99,7 +120,9 @@ export const MobileNav = () => {
 }
 
 export const PcNav = () => {
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState<
+    'home' | 'hitchhiking' | 'team-list' | 'showcase'
+  >('home')
   const { isTablet } = useMedia()
   const pathname = usePathname()
   const router = useRouter()
@@ -107,58 +130,67 @@ export const PcNav = () => {
 
   useEffect(() => {
     if (pathname === '/') {
-      setValue(0)
+      setValue('home')
     } else if (pathname === '/team-list') {
-      setValue(2)
+      setValue('team-list')
+    } else if (pathname === '/hitchhiking') {
+      setValue('hitchhiking')
+    } else if (pathname === '/showcase') {
+      setValue('showcase')
     }
   }, [pathname])
+
   return (
     <Stack
       direction={'row'}
       justifyContent={'space-between'}
       alignItems={'center'}
+      width={'100%'}
       sx={{
         position: 'fixed',
         left: 0,
         right: 0,
         top: 0,
         overflow: 'hidden',
-        zIndex: 1300, // NOTE : 추후 모집글 버튼 z-index 조정 작업시에 함께 조정 필요함.
+        zIndex: 1300, // NOTE : 가능한 가장 높은 값으로 설정한 것이므로 이 값은 높이지 말아주세요. (낮추는건 괜찮습니다.)
         backgroundColor: 'background.primary',
-        paddingX: 3,
       }}
     >
       <Stack direction={'row'}>
         <Stack alignItems={'center'} justifyContent={'center'}>
-          <PeerLogo sx={{ width: 50, height: 50 }} />
+          <PeerLogo sx={{ width: 50, height: 50, color: 'text.normal' }} />
         </Stack>
         <BottomNavigation
-          showLabels
+          showLabels={true}
           value={value}
           onChange={(event, newValue) => {
             setValue(newValue)
           }}
         >
           <BottomNavigationAction
+            value={'home'}
             label="홈"
             onClick={() => {
               router.push('/')
             }}
           />
           <BottomNavigationAction
+            value={'hitchhiking'}
             label="히치하이킹"
             onClick={() => {
-              router.push('/')
+              router.push('/hitchhiking')
             }}
           />
 
           <BottomNavigationAction
+            value={'team-list'}
             label="팀페이지"
             onClick={() => {
               router.push('/team-list')
             }}
           />
           <BottomNavigationAction
+            value={'showcase'}
             label="쇼케이스"
             onClick={() => {
               router.push('/showcase')

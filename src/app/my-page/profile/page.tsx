@@ -12,6 +12,9 @@ import useAuthStore from '@/states/useAuthStore'
 import CuButton from '@/components/CuButton'
 import { useRouter } from 'next/navigation'
 import MyInfoCard from './panel/MyInfoCard'
+import useMedia from '@/hook/useMedia'
+import * as style from '../panel/my-page.style'
+import MyPortfolio from './panel/MyPortfolio'
 
 interface IModals {
   introduction: boolean
@@ -25,7 +28,6 @@ interface IToastProps {
   message: string
 }
 
-// TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
 const MyProfile = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const {
@@ -37,6 +39,8 @@ const MyProfile = () => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
+
+  const { isPc } = useMedia()
 
   const [modalType, setModalType] = useState<string>('' as string)
   const [modalOpen, setModalOpen] = useState<IModals>({
@@ -95,7 +99,12 @@ const MyProfile = () => {
   }
 
   return (
-    <Stack width={1} spacing={4}>
+    <Stack
+      width={1}
+      spacing={isPc ? '2rem' : '1.5rem'}
+      sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
+      justifyContent={'center'}
+    >
       {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
       <ProfileCard
         profileImageUrl={userInfo.profileImageUrl}
@@ -113,6 +122,7 @@ const MyProfile = () => {
         handleLogout={handleLogout}
       />
 
+      <MyPortfolio />
       {/* modals */}
       <ProfileBioEditor
         data={{
@@ -136,14 +146,14 @@ const MyProfile = () => {
         mutate={mutate}
         open={modalOpen.links}
       />
+
       {/* toast */}
       <CuToast
         open={isToastOpen}
         onClose={closeToast}
         severity={toastMessage.severity}
-      >
-        <Typography>{toastMessage.message}</Typography>
-      </CuToast>
+        message={toastMessage.message}
+      />
     </Stack>
   )
 }

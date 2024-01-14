@@ -15,15 +15,13 @@ import Image from 'next/image'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import RowRadioButtonsGroup from '../[id]/edit/panel/radioGroup'
 import SetTeamRole from '../[id]/edit/panel/SetTeamRole/SetTeamRole'
-import TagAutoComplete from '../[id]/edit/panel/SetTeamTag/TagAutoComplete'
 import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
 import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import SelectRegion from '../[id]/edit/panel/SelectRegion'
-import { IFormInterview, IRoleData, ITag } from '@/types/IPostDetail'
+import { IFormInterview, IRoleWrite, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
-import axios from 'axios'
 import ImageIcon from '@mui/icons-material/Image'
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
@@ -37,12 +35,46 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
 import CuButton from '@/components/CuButton'
+import TagAutoComplete from '@/components/TagAutoComplete'
+import axios from 'axios'
+import useMedia from '@/hook/useMedia'
 
 const componentName = {
-  // flex: 'row',
-  // paddingTop: '24px',
-  // paddingBottom: '8px',
   alignItems: 'center',
+}
+
+const interviewButtonMobileStyle = {
+  alignItems: 'center',
+  with: '100%',
+}
+
+const Pc_Container = {
+  paddingTop: '64px',
+}
+
+const Pc_Style = {
+  width: '1216px',
+  border: '1px solid #000',
+  borderRadius: '12px',
+  paddingTop: '24px',
+  paddingBottom: '24px',
+  paddingLeft: '16px',
+  paddingRight: '16px',
+  backgroundColor: '#18182B',
+}
+
+const Mobile_Container = {}
+
+const Mobile_Style = {
+  width: '100%',
+  borderRadius: '12px',
+  paddingTop: '24px',
+  paddingBottom: '24px',
+  paddingLeft: '16px',
+  paddingRight: '16px',
+  overflowY: 'scroll',
+  border: '2px solid #000',
+  backgroundColor: '#18182B',
 }
 
 const CreateTeam = () => {
@@ -60,7 +92,7 @@ const CreateTeam = () => {
   const [teamsize, setTeamsize] = useState<string>('')
   const [link, setCommunicationTool] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const [roleList, setRoleList] = useState<IRoleData[]>([])
+  const [roleList, setRoleList] = useState<IRoleWrite[]>([])
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [allTagList, setAllTagList] = useState<ITag[]>()
   const [openBasicModal, setOpenBasicModal] = useState(false)
@@ -68,9 +100,10 @@ const CreateTeam = () => {
   const [toastMessage, setToastMessage] = useState<string>('')
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
+  const { isPc } = useMedia()
 
   const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/allTags`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
     (url: string) => axios.get(url).then((res) => res.data),
   )
 
@@ -83,21 +116,42 @@ const CreateTeam = () => {
     }
   }, [data])
 
-  const onHandlerFinish = async () => {
-    if (type === 'project') {
-      setRoleList([{ name: null, number: parseInt(teamsize) }])
-    }
+  const doNeedMoreConditionAtProject = () => {
     if (
       !image ||
       !title ||
       !name ||
       !due ||
-      !region ||
       !place ||
       !tagList ||
       !roleList ||
-      !interviewList ||
-      !content
+      !content ||
+      (place !== 'ONLINE' && !region)
+    )
+      return true
+    else return false
+  }
+
+  const doNeedMoreConditionAtStudy = () => {
+    if (
+      !image ||
+      !title ||
+      !name ||
+      !due ||
+      !place ||
+      !tagList ||
+      !teamsize ||
+      !content ||
+      (place !== 'ONLINE' && !region)
+    )
+      return true
+    else return false
+  }
+
+  const onHandlerFinish = async () => {
+    if (
+      (type === 'PROJECT' && doNeedMoreConditionAtProject()) ||
+      (type === 'STUDY' && doNeedMoreConditionAtStudy())
     ) {
       alert('빈칸을 모두 채워주세요')
       return
@@ -113,44 +167,36 @@ const CreateTeam = () => {
           due: due,
           type: type,
           content: content,
-          region: region,
+          region: place === 'ONLINE' ? null : region,
           link: link,
-          tagList: tagList,
+          tagList: tagList.map((tag) => tag.tagId),
           roleList: roleList,
           interviewList: interviewList,
+          max: type === 'STUDY' ? parseInt(teamsize) : null,
         },
       )
       router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
-    } catch (error) {
-      console.log(error)
-      setToastMessage('모집글 작성 실패, 다시 시도해주세요')
+    } catch (error: any) {
+      console.log('error : ', error)
+      setToastMessage(error.response.data)
       openToast()
     }
   }
 
   return (
     <>
-      <Container sx={{ paddingTop: '64px' }}>
-        <Box sx={{ paddingBottom: '24px' }}>
-          <Typography fontSize={'13px'}>모집 글 쓰기</Typography>
-        </Box>
-        <Container
-          sx={{
-            width: '1216px',
-            border: '1px solid #000',
-            borderRadius: '12px',
-            paddingTop: '24px',
-            paddingBottom: '24px',
-            paddingLeft: '16px',
-            paddingRight: '16px',
-            backgroundColor: '#18182B',
-          }}
-        >
+      <Container sx={isPc ? Pc_Container : Mobile_Container}>
+        {isPc ? (
+          <Box sx={{ paddingBottom: '24px' }}>
+            <Typography fontSize={'13px'}>모집 글 쓰기</Typography>
+          </Box>
+        ) : null}
+        <Container sx={isPc ? Pc_Style : Mobile_Style}>
           <Stack gap={3}>
             {/* 대표이미지 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <ImageIcon />
+                <ImageIcon sx={{ color: 'white' }} />
                 <Typography>대표 이미지</Typography>
               </Stack>
               <ImageUploadButton
@@ -170,7 +216,7 @@ const CreateTeam = () => {
             {/* 스터디 or 프로젝트 선택 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <ContentPasteOutlinedIcon />
+                <ContentPasteOutlinedIcon sx={{ color: 'white' }} />
                 <Typography variant="h6">팀 분류</Typography>
               </Stack>
               <RowRadioButtonsGroup setValue={setType} />
@@ -178,11 +224,11 @@ const CreateTeam = () => {
             {/* 모집글 제목 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <EditOutlinedIcon />
+                <EditOutlinedIcon sx={{ color: 'white' }} />
                 <Typography variant="h6">모집글 제목</Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px' }}
+                sx={isPc ? { width: '26rem' } : { width: '100%' }}
                 variant="outlined"
                 value={title}
                 onChange={(e) => {
@@ -190,18 +236,19 @@ const CreateTeam = () => {
                     setTitle(e.target.value.slice(0, 20) as string)
                   else setTitle(e.target.value as string)
                 }}
+                placeholder="모집글 제목을 입력해주세요."
               />
             </Box>
             {/* 스터디 명 / 프로젝트 명 */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <FormatListBulletedOutlinedIcon />
+                <FormatListBulletedOutlinedIcon sx={{ color: 'white' }} />
                 <Typography variant="h6">
                   {type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
                 </Typography>
               </Stack>
               <TextField
-                sx={{ width: '416px' }}
+                sx={isPc ? { width: '26rem' } : { width: '100%' }}
                 variant="outlined"
                 value={name}
                 onChange={(e) => {
@@ -209,13 +256,14 @@ const CreateTeam = () => {
                     setName(e.target.value.slice(0, 20) as string)
                   else setName(e.target.value as string)
                 }}
+                placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
               />
             </Box>
             {/* (프로젝트인 경우만) 역할 추가 */}
             {type === 'STUDY' ? null : (
               <Box>
                 <Stack direction={'row'} gap={1} sx={componentName}>
-                  <HowToRegOutlinedIcon />
+                  <HowToRegOutlinedIcon sx={{ color: 'white' }} />
                   <Typography variant="h6">역할</Typography>
                 </Stack>
                 <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
@@ -224,7 +272,7 @@ const CreateTeam = () => {
             {type === 'STUDY' && (
               <Box>
                 <Stack direction={'row'} gap={1} sx={componentName}>
-                  <HowToRegOutlinedIcon />
+                  <HowToRegOutlinedIcon sx={{ color: 'white' }} />
                   <Typography variant="h6">인원</Typography>
                 </Stack>
                 <BasicSelect
@@ -237,7 +285,7 @@ const CreateTeam = () => {
             {/* 온/오프라인 활동방식 선택 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <WifiOutlinedIcon />
+                <WifiOutlinedIcon sx={{ color: 'white' }} />
                 <Typography variant="h6">활동방식</Typography>
               </Stack>
               <BasicSelect
@@ -249,7 +297,7 @@ const CreateTeam = () => {
             {/* 목표기간 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <AccessTimeOutlinedIcon />
+                <AccessTimeOutlinedIcon sx={{ color: 'white' }} />
                 <Typography variant="h6">목표기간</Typography>
               </Stack>
               <BasicSelect
@@ -259,17 +307,19 @@ const CreateTeam = () => {
               />
             </Box>
             {/* 지역 선택 */}
-            <Box>
-              <Stack direction={'row'} gap={1} sx={componentName}>
-                <LocationOnOutlinedIcon />
-                <Typography variant="h6">지역</Typography>
-              </Stack>
-              <SelectRegion setValue={setRegion} />
-            </Box>
+            {place === 'ONLINE' ? null : (
+              <Box>
+                <Stack direction={'row'} gap={1} sx={componentName}>
+                  <LocationOnOutlinedIcon sx={{ color: 'white' }} />
+                  <Typography variant="h6">지역</Typography>
+                </Stack>
+                <SelectRegion setValue={setRegion} />
+              </Box>
+            )}
             {/* 커뮤니케이션 링크 등록 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <InsertLinkOutlinedIcon />
+                <InsertLinkOutlinedIcon sx={{ color: 'white' }} />
                 <Typography variant="h6">소통 링크</Typography>
               </Stack>
               <SetCommunicationToolLink setValue={setCommunicationTool} />
@@ -277,27 +327,36 @@ const CreateTeam = () => {
             {/* 태그 추가 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <LocalOfferOutlinedIcon />
+                <LocalOfferOutlinedIcon sx={{ color: 'white' }} />
                 <Typography variant="h6">태그</Typography>
               </Stack>
               {allTagList ? (
                 <TagAutoComplete
+                  tagList={allTagList}
                   datas={tagList}
                   setData={setTagList}
-                  allTagList={allTagList}
+                  style={
+                    isPc
+                      ? { width: '26rem', height: '2rem' }
+                      : { width: '100%', height: '2rem' }
+                  }
                 />
               ) : null}
             </Box>
             {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>
-                <DescriptionOutlinedIcon />
+                <DescriptionOutlinedIcon sx={{ color: 'white' }} />
                 <Typography variant="h6">팀 소개</Typography>
               </Stack>
               <TextField
                 variant="outlined"
                 value={content}
-                sx={{ width: '1150px', height: 'auto' }}
+                sx={
+                  isPc
+                    ? { width: '1150px', height: 'auto' }
+                    : { width: '100%', height: 'auto' }
+                }
                 onChange={(e) => {
                   if (e.target.value.length > 1000)
                     setContent(e.target.value.slice(0, 1000) as string)
@@ -308,8 +367,12 @@ const CreateTeam = () => {
             </Box>
             {/* 모집 인터뷰 */}
             <Stack>
-              <Stack direction={'row'} gap={1} sx={componentName}>
-                <CreateNewFolderOutlinedIcon />
+              <Stack
+                direction={'row'}
+                gap={1}
+                sx={isPc ? componentName : interviewButtonMobileStyle}
+              >
+                <CreateNewFolderOutlinedIcon sx={{ color: 'white' }} />
                 <Typography
                   variant="h6"
                   sx={{ paddingRight: '5px', width: '70%' }}
@@ -318,7 +381,7 @@ const CreateTeam = () => {
                 </Typography>
               </Stack>
               <Button
-                sx={{ width: '416px' }}
+                sx={isPc ? { width: '26rem' } : { width: '100%' }}
                 variant="outlined"
                 onClick={() => setOpenBasicModal(true)}
               >
@@ -326,7 +389,7 @@ const CreateTeam = () => {
               </Button>
               <SetInterview
                 openBasicModal={openBasicModal}
-                handleCloseBasicModal={() => setOpenBasicModal(false)}
+                handleCloseBasicModal={setOpenBasicModal}
                 interviewData={interviewList}
                 setInterviewData={setInterviewList}
               />
@@ -335,7 +398,7 @@ const CreateTeam = () => {
             <Stack
               direction={'row'}
               gap={2}
-              sx={componentName}
+              sx={isPc ? componentName : interviewButtonMobileStyle}
               justifyContent={'flex-end'}
             >
               <CuButton

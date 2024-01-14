@@ -3,9 +3,13 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 
 interface CommunicationToolLinkProps {
   setValue: Dispatch<SetStateAction<string>>
+  value?: string
 }
 
-const SetCommunicationToolLink = ({ setValue }: CommunicationToolLinkProps) => {
+const SetCommunicationToolLink = ({
+  setValue,
+  value,
+}: CommunicationToolLinkProps) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value as string)
   }
@@ -14,8 +18,9 @@ const SetCommunicationToolLink = ({ setValue }: CommunicationToolLinkProps) => {
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <TextField
         variant="outlined"
-        placeholder="link to communication tool"
-        sx={{ width: '416px'}}
+        placeholder={'팀 커뮤니케이션 툴 링크를 입력해주세요.'}
+        sx={{ width: '26rem' }}
+        value={value}
         onChange={handleChange}
       />
     </Box>

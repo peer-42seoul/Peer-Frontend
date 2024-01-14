@@ -17,6 +17,8 @@ import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
 import TagChip from './TagChip'
 import CuTextModal from '@/components/CuTextModal'
+import TitleBox from '@/components/TitleBox'
+import useMedia from '@/hook/useMedia'
 
 interface IChip {
   key: number
@@ -25,7 +27,7 @@ interface IChip {
 
 interface IToastProps {
   severity: AlertColor | undefined
-  message: string
+  message: React.ReactNode
 }
 
 const KeywordAddingField = ({
@@ -66,7 +68,11 @@ const KeywordAddingField = ({
       .then(() => {
         setToastMessage({
           severity: 'success',
-          message: `'${trimmed}'를 알림 키워드 목록에 추가하였습니다.`,
+          message: (
+            <>
+              <b>{trimmed}</b>(이)가 키워드로 등록되었습니다.
+            </>
+          ),
         })
         mutate()
       })
@@ -79,7 +85,11 @@ const KeywordAddingField = ({
         } else {
           setToastMessage({
             severity: 'error',
-            message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
+            message: (
+              <>
+                <b>{trimmed}</b>(을)를 알림 키워드 목록에 추가하지 못했습니다.
+              </>
+            ),
           })
         }
       })
@@ -246,6 +256,8 @@ const KeywordSetting = ({
 }: {
   setToastMessage: (message: IToastProps) => void
 }) => {
+  const { isPc } = useMedia()
+
   const axiosWithAuth = useAxiosWithAuth()
 
   const getKeywords = async (url: string) =>
@@ -267,18 +279,27 @@ const KeywordSetting = ({
   )
 
   return (
-    <Stack
-      p={3}
-      spacing={3}
-      alignSelf={'stretch'}
-      bgcolor={'background.secondary'}
-      borderRadius={2}
+    <TitleBox
+      title="알림 설정"
+      titleComponent={
+        <Stack
+          direction={'row'}
+          justifyContent={'flex-start'}
+          alignItems={'center'}
+          height={'2.5rem'}
+        >
+          <CuTextFieldLabel htmlFor="keyword-field">
+            <Typography
+              variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}
+              component={'h3'}
+              color={'text.normal'}
+            >
+              키워드 설정
+            </Typography>
+          </CuTextFieldLabel>
+        </Stack>
+      }
     >
-      <CuTextFieldLabel style={{ margin: '8px 0px' }} htmlFor="keyword-field">
-        <Typography variant="Title3Emphasis" color={'text.normal'}>
-          키워드 설정
-        </Typography>
-      </CuTextFieldLabel>
       <KeywordAddingField
         setToastMessage={setToastMessage}
         mutate={mutate}
@@ -291,7 +312,7 @@ const KeywordSetting = ({
         isLoading={isLoading}
         error={error}
       />
-    </Stack>
+    </TitleBox>
   )
 }
 

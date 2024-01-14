@@ -1,10 +1,9 @@
-import { IconButton, Stack } from '@mui/material'
+import { IconButton, Stack, Tooltip } from '@mui/material'
 import FavoriteButton from '@/components/FavoriteButton'
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
 import React from 'react'
-import SharingIcon from '@/app/recruit/[id]/panel/SharingIcon'
 import SirenIcon from '@/app/recruit/[id]/panel/SirenIcon'
-import ReportModal from '@/components/ReportModal'
-import useModal from '@/hook/useModal'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 const RecruitQuickMenu = ({
   favorite,
@@ -13,26 +12,27 @@ const RecruitQuickMenu = ({
   favorite: boolean | undefined
   recruit_id: number
 }) => {
-  const { isOpen, openModal, closeModal } = useModal()
+  const path = usePathname()
+  const type = useSearchParams().get('type')
 
   return (
-    <>
-      <Stack alignItems={'center'}>
-        <FavoriteButton recruit_id={recruit_id} favorite={favorite} />
+    <Stack alignItems={'center'}>
+      <FavoriteButton
+        recruit_id={recruit_id}
+        favorite={favorite}
+        redirect_url={`${path}?type=${type}`}
+      />
+      <Tooltip title={'공유'}>
         <IconButton onClick={() => {}}>
-          <SharingIcon />
+          <ShareOutlinedIcon sx={{ color: 'purple.strong' }} />
         </IconButton>
-        <IconButton onClick={openModal}>
+      </Tooltip>
+      <Tooltip title={'신고'}>
+        <IconButton onClick={() => {}}>
           <SirenIcon />
         </IconButton>
-      </Stack>
-      <ReportModal
-        isModalOpen={isOpen}
-        handleClose={closeModal}
-        reportType={'recruit'}
-        targetId={recruit_id.toString()}
-      />
-    </>
+      </Tooltip>
+    </Stack>
   )
 }
 

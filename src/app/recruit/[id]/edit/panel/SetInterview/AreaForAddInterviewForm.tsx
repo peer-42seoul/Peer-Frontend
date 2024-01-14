@@ -1,8 +1,36 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Button, Stack, TextField, Typography } from '@mui/material'
 import { SelectInterviewType } from './SelectInterviewType'
 import WriteAnswers from './WriteAnswers'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { IFormInterview } from '@/types/IPostDetail'
+import AddIcon from '@mui/icons-material/Add'
+import useMedia from '@/hook/useMedia'
+
+const QuestionCard = {
+  border: 1,
+  borderRadius: '0.75rem',
+  boxShadow: 1,
+  backgroundColor: 'background.secondary',
+  padding: '1rem 1.25rem 1rem 1.25rem',
+}
+
+const AddQuestionButtonPc = {
+  width: '6.8rem',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingLeft: '1rem',
+  paddingRight: '1.38rem',
+}
+
+const AddQuestionButtonMobile = {
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingLeft: '1rem',
+  paddingRight: '1.38rem',
+}
 
 const AreaForAddInterviewForm = ({
   question,
@@ -22,9 +50,10 @@ const AreaForAddInterviewForm = ({
   setInterviewData: Dispatch<SetStateAction<IFormInterview[]>>
 }) => {
   const [option, setOption] = useState<string[]>([])
-  const [max, setMax] = useState<string>('')
+  const [max, setMax] = useState<string>('5')
   const [valueOfMin, setvalueOfMin] = useState<string>('')
   const [valueOfMax, setvalueOfMax] = useState<string>('')
+  const { isPc } = useMedia()
 
   const onHandlerEditQuestion = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -34,14 +63,13 @@ const AreaForAddInterviewForm = ({
 
   const onHandlerAddQuestion = () => {
     switch (formType) {
-      case 'ratio': {
+      case 'RATIO': {
         if (
           question === '' ||
           max === '' ||
           valueOfMin === '' ||
           valueOfMax === ''
         ) {
-          console.log('모든 값을 입력해주세요')
           alert('모든 값을 입력해주세요')
           return
         }
@@ -55,16 +83,15 @@ const AreaForAddInterviewForm = ({
           },
         ])
         setQuestion('')
-        setFormType('open')
+        setFormType('OPEN')
         setOption([])
-        setMax('')
+        setMax('5')
         setvalueOfMin('')
         setvalueOfMax('')
         return
       }
-      case 'open': {
+      case 'OPEN': {
         if (question === '') {
-          console.log('모든 값을 입력해주세요')
           alert('모든 값을 입력해주세요')
           return
         }
@@ -83,43 +110,53 @@ const AreaForAddInterviewForm = ({
       },
     ])
     setQuestion('')
-    setFormType('open')
+    setFormType('OPEN')
     setOption([])
   }
 
   return (
-    <Box sx={{ border: 1, borderRadius: 2, boxShadow: 1 }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <Typography>질문</Typography>
-          <TextField
-            variant="outlined"
-            value={question}
-            onChange={onHandlerEditQuestion}
+    <Stack sx={QuestionCard} gap={'1rem'}>
+      {/* 질문 분류 선택 */}
+      <SelectInterviewType formType={formType} setFormType={setFormType} />
+      {/* 질문란 작성 */}
+      <TextField
+        variant="standard"
+        value={question}
+        onChange={onHandlerEditQuestion}
+        placeholder="질문을 입력해주세요."
+        sx={{ width: '70%' }}
+      />
+      {/* 답변란 작성 */}
+      <Stack gap={'0.5rem'}>
+        {/* 질문 분류에 따른 답변 종류 */}
+        <WriteAnswers
+          answer={answer}
+          setAnswer={setAnswer}
+          formType={formType}
+          option={option}
+          setOption={setOption}
+          max={max}
+          setMax={setMax}
+          valueOfMin={valueOfMin}
+          setvalueOfMin={setvalueOfMin}
+          valueOfMax={valueOfMax}
+          setvalueOfMax={setvalueOfMax}
+        />
+        {/* 질문 추가 버튼 */}
+        <Button
+          sx={isPc ? AddQuestionButtonPc : AddQuestionButtonMobile}
+          variant="outlined"
+          onClick={onHandlerAddQuestion}
+        >
+          <AddIcon
+            sx={{ color: 'primary', width: '1.25rem', height: '1.25rem' }}
           />
-          <SelectInterviewType formType={formType} setFormType={setFormType} />
-        </Box>
-        <Box>
-          <Typography>답변</Typography>
-          <WriteAnswers
-            answer={answer}
-            setAnswer={setAnswer}
-            formType={formType}
-            option={option}
-            setOption={setOption}
-            max={max}
-            setMax={setMax}
-            valueOfMin={valueOfMin}
-            setvalueOfMin={setvalueOfMin}
-            valueOfMax={valueOfMax}
-            setvalueOfMax={setvalueOfMax}
-          />
-        </Box>
-      </Box>
-      <Button variant="outlined" onClick={onHandlerAddQuestion}>
-        인터뷰 질문 추가하기
-      </Button>
-    </Box>
+          <Typography fontSize={'0.75rem'} color={'primary'}>
+            질문 추가
+          </Typography>
+        </Button>
+      </Stack>
+    </Stack>
   )
 }
 
