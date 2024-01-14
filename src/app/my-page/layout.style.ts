@@ -19,4 +19,13 @@ export const pcContentBox: SxProps = {
   padding: '2rem',
 }
 
+export const pcOtherContentBox: SxProps = {
+  maxWidth: '76rem',
+  flexGrow: 1,
+  padding: '2rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}
+
 export const mobileContentBox: SxProps = {}

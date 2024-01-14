@@ -2,6 +2,7 @@
 
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { MouseEvent, ReactNode, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface IOthersProfile {
   name: string
@@ -10,6 +11,7 @@ interface IOthersProfile {
 }
 
 const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
+  const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -22,6 +24,10 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
 
   const open = Boolean(anchorEl)
   const id = open ? 'simple-popover' : undefined
+
+  const goOthersProfile = () => {
+    router.push(`/profile/${userId}`)
+  }
 
   return (
     <div>
@@ -53,7 +59,7 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
         <Box sx={{ p: 2 }}>
           <Typography>이름: {name}</Typography>
           <Typography>아이디: {userId}</Typography>
-          <Button>프로필 보기</Button>
+          <Button onClick={goOthersProfile}>프로필 보기</Button>
           <Button>쪽지 보내기</Button>
           <Button>신고하기</Button>
         </Box>

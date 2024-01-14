@@ -11,7 +11,7 @@ const MyInfoCard = ({
   isEditable,
 }: {
   linkList: Array<IUserProfileLink>
-  setModalType: (type: string) => void | null
+  setModalType: (type: string) => void
   handleLogout: () => void
   isEditable: boolean
 }) => {

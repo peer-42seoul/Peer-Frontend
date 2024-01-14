@@ -51,7 +51,7 @@ const ProfileCard = ({
   association: string | null
   introduction: string | null
   email: string
-  setModalType: (type: string) => void | null
+  setModalType: (type: string) => void
   isEditable: boolean
 }) => {
   const [open, setOpen] = useState<boolean>(false)
@@ -79,12 +79,12 @@ const ProfileCard = ({
       />
       <Stack direction="row" spacing={0.75} alignItems={'center'}>
         {/* image component */}
+
         <CuAvatar
           src={profileImageUrl ? profileImageUrl : ''}
           onClick={isEditable ? () => setOpen(true) : () => {}}
           sx={style.profileImageStyle}
         />
-
         {/* 유저 이름, 소속, 유저 아이디, 유저 이메일 */}
         <Stack spacing={0.5}>
           <Typography variant="Body2" color={'text.normal'}>

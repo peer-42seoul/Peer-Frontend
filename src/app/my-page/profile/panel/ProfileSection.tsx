@@ -23,7 +23,7 @@ const ProfileSection = ({
   isEditable,
 }: {
   sectionTitle: 'introduction' | 'achievements' | 'skills' | 'links'
-  setModalType: (type: string) => void | null
+  setModalType: (type: string) => void
   sx?: SxProps
   titleTypographyProps?: TypographyProps
   isEditable: boolean
