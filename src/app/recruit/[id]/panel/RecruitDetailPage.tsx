@@ -3,16 +3,19 @@
 import { Typography, Stack, Container, Divider } from '@mui/material'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
 import React, { useMemo } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
 import RecruitQuickMenu from '@/app/recruit/[id]/panel/RecruitQuickMenu'
 import RecruitInfo from './RecruitInfo'
 import ApplyFormButton from '@/app/recruit/[id]/panel/ApplyFormButton'
 import RecruitDetailContent from '@/app/recruit/[id]/panel/RecruitDetailContent'
+import DropdownMenu from '@/components/DropdownMenu'
+import FavoriteButton from '@/components/FavoriteButton'
 
 const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
   const { isPc } = useMedia()
+  const path = usePathname()
 
   const roleList = useMemo(() => {
     if (!data) return []
@@ -57,7 +60,19 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   return (
     <Container>
       <Stack height={'100%'} padding={'1.5rem'}>
-        <Stack gap={'1.5rem'} sx={{ overflowY: 'auto' }}>
+        <Stack flexDirection={'row'} justifyContent={'flex-end'}>
+          <FavoriteButton
+            favorite={data?.favorite}
+            recruit_id={parseInt(id)}
+            redirect_url={`${path}?type=${type}`}
+          />
+          <DropdownMenu
+            title={data?.title}
+            url={`${path}?type=${type}`}
+            content={data?.content}
+          />
+        </Stack>
+        <Stack gap={'1.5rem'} >
           <RecruitInfo data={data} type={type} />
           <Divider />
           <RecruitDetailContent data={data} type={type} roleList={roleList} />

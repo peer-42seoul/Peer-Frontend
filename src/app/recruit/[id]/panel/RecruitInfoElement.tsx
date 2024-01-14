@@ -13,17 +13,16 @@ export const RecruitTitle = ({
     <Stack
       flexDirection={'row'}
       alignItems={'center'}
-      gap={'1.5rem'}
-      flexWrap={'nowrap'}
+      gap={'1rem'}
     >
-      <Typography variant={'Title3'}>{title}</Typography>
-      <Typography color={'yellow.strong'} variant={'caption'}>
-        {status === 'ONGOING'
-          ? '모집중'
-          : status === 'BEFORE'
-            ? '모집전'
-            : '모집완료'}
-      </Typography>
+        <Typography variant={'Title3'}>{title}</Typography>
+        <Typography color={'yellow.strong'} variant={'caption'}>
+          {status === 'ONGOING'
+            ? '모집중'
+            : status === 'BEFORE'
+              ? '모집전'
+              : '모집완료'}
+        </Typography>
     </Stack>
   )
 }
