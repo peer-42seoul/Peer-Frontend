@@ -23,13 +23,11 @@ const RecruitFormModal = ({
   setOpen,
   recruit_id,
   role,
-  setRoleOpen,
 }: {
   open: boolean
   setOpen: any
   recruit_id: string
   role: string | null
-  setRoleOpen: any
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setLoading] = useState(false)
@@ -65,22 +63,25 @@ const RecruitFormModal = ({
   }
 
   const onSubmit = async (values: any) => {
-    const array = Object.values(values)
-    const answerList = array?.map((res: any) => {
-      if (typeof res !== 'string') {
-        const idxArr = res?.map((item: any, idx: number) =>
-          item === true ? idx : undefined,
-        )
-        const trueArr = idxArr?.filter((item: any) => item !== undefined)
-        return trueArr.join('^&%') //정해놓은 구분자로 넣기
-      } else return res
-    })
+    let value
 
-    const value = {
-      role,
-      answerList,
+    if (!data?.length) value = { role, answerList: [] }
+    else {
+      const array = Object.values(values)
+      const answerList = array?.map((res: any) => {
+        if (typeof res !== 'string') {
+          const idxArr = res?.map((item: any, idx: number) =>
+            item === true ? idx : undefined,
+          )
+          const trueArr = idxArr?.filter((item: any) => item !== undefined)
+          return trueArr.join('^&%') //정해놓은 구분자로 넣기
+        } else return res
+      })
+      value = {
+        role,
+        answerList,
+      }
     }
-    console.log('value', value)
 
     try {
       setLoading(true)
@@ -88,20 +89,20 @@ const RecruitFormModal = ({
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`,
         value,
       )
-      setLoading(false)
       setOpenConfirm(false)
       openSuccessToast()
       router.push(`/recruit/${recruit_id}`)
       setOpen(false)
-      setRoleOpen(false)
     } catch (e) {
       setOpenConfirm(false)
       openFailedToast()
       console.log('e', e)
+    } finally {
+      setLoading(false)
     }
   }
 
-  return (
+  return (data?.length ?? 0) > 0 ? (
     <>
       <CuSuccessToast
         open={isSuccessOpen}
@@ -128,7 +129,7 @@ const RecruitFormModal = ({
           open={open}
           onClose={() => setOpen(false)}
           sx={{
-            zIndex: 1400,
+            zIndex: 1300,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -223,6 +224,13 @@ const RecruitFormModal = ({
         </Modal>
       </form>
     </>
+  ) : (
+    <ConfirmModal
+      isLoading={isLoading}
+      open={open}
+      setOpen={setOpen}
+      submitForm={submitForm}
+    />
   )
 }
 
