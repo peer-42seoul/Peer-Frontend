@@ -1,4 +1,4 @@
-import { Avatar, Box, Chip, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Stack, Typography } from '@mui/material'
 import LinkButton from '@/app/recruit/[id]/panel/LinkButton'
 import React from 'react'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
