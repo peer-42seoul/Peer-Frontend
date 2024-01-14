@@ -347,6 +347,19 @@ declare module '@mui/material/Chip' {
   }
 }
 
+declare module '@mui/material/Chip' {
+  interface ChipPropsColorOverrides {
+    red: true
+    blue: true
+    purple: true
+    green: true
+    yellow: true
+    pink: true
+    line: true
+    custom: true
+  }
+}
+
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
   let theme = createTheme()
 
@@ -358,450 +371,314 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   theme = createTheme(theme, colorTheme)
 
-  theme = createTheme(theme, {
-    breakpoints: {
-      values: {
-        xs: 0,
-        sm: 480, // mobile과 pc를 구분하기 위해 테마 설정을 하였습니다.
-        md: 900,
-        lg: 1200,
-        xl: 1536,
+  if (theme.palette) {
+    theme.palette.red = theme.palette.augmentColor({
+      color: {
+        main: '#FF5833',
+        strong: '#FF5833',
+        normal: '#FF6D4D',
+        alternative: '#FF7D61',
+        tinted: '#FF6D4D33',
       },
-    },
-    components: {
-      MuiContainer: {
-        styleOverrides: {
-          root: {
-            '@media (min-width: 1200px)': {
-              maxWidth: '1280px',
-            },
-          },
-        },
+      name: 'red',
+    })
+    theme.palette.blue = theme.palette.augmentColor({
+      color: {
+        main: '#3A5DCF',
+        strong: '#3A5DCF',
+        normal: '#4E6ED4',
+        alternative: '#6681DB',
+        tinted: '#4E6ED433',
       },
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            minWidth: '20px',
-            minHeight: '20px',
-          },
-        },
-      },
-      MuiBox: {
-        styleOverrides: {
-          root: {
-            minWidth: '40px',
-          },
-        },
-      },
-      MuiSnackbar: {
-        styleOverrides: {
-          root: {
-            left: 0,
-            right: 0,
-          },
-        },
-      },
-      MuiTypography: {
-        defaultProps: {
-          variantMapping: {
-            HeadlineEmphasis: 'h1',
-            Headline: 'h1',
-            Title1Emphasis: 'h2',
-            Title1: 'h2',
-            Title2Emphasis: 'h3',
-            Title2: 'h3',
-            Title3Emphasis: 'h4',
-            Title3: 'h4',
-            Body1Emphasis: 'p',
-            Body1: 'p',
-            Body2Emphasis: 'p',
-            Body2: 'p',
-            CaptionEmphasis: 'span',
-            Caption: 'span',
-            Tag: 'span',
-          },
-        },
-      },
-    },
-    typography: {
-      fontFamily: 'Pretendard Variable, sans-serif',
-      HeadlineEmphasis: {
-        fontSize: '32px',
-        fontStyle: 'normal',
-        fontWeight: 600,
-        lineHeight: '150%',
-      },
-      Headline: {
-        fontSize: '32px',
-        fontStyle: 'normal',
-        fontWeight: 400,
-        lineHeight: '150%',
-      },
-      Title1Emphasis: {
-        fontSize: '24px',
-        fontStyle: 'normal',
-        fontWeight: 600,
-        lineHeight: '150%',
-      },
-      Title1: {
-        fontSize: '24px',
-        fontStyle: 'normal',
-        fontWeight: 400,
-        lineHeight: '150%',
-      },
-      Title2Emphasis: {
-        fontSize: '20px',
-        fontStyle: 'normal',
-        fontWeight: 600,
-        lineHeight: '150%',
-      },
-      Title2: {
-        fontSize: '20px',
-        fontStyle: 'normal',
-        fontWeight: 400,
-        lineHeight: '150%',
-      },
-      Title3Emphasis: {
-        fontSize: '18px',
-        fontStyle: 'normal',
-        fontWeight: 600,
-        lineHeight: '150%',
-      },
-      Title3: {
-        fontSize: '18px',
-        fontStyle: 'normal',
-        fontWeight: 400,
-        lineHeight: '150%',
-      },
-      Body1Emphasis: {
-        fontSize: '15px',
-        fontStyle: 'normal',
-        fontWeight: 600,
-        lineHeight: '150%',
-      },
-      Body1: {
-        fontSize: '15px',
-        fontStyle: 'normal',
-        fontWeight: 400,
-        lineHeight: '150%',
-      },
-      Body2Emphasis: {
-        fontSize: '14px',
-        fontStyle: 'normal',
-        fontWeight: 600,
-        lineHeight: '150%',
-      },
-      Body2: {
-        fontSize: '14px',
-        fontStyle: 'normal',
-        fontWeight: 400,
-        lineHeight: '150%',
-      },
-      CaptionEmphasis: {
-        fontSize: '12px',
-        fontStyle: 'normal',
-        fontWeight: 600,
-        lineHeight: 'normal',
-      },
-      Caption: {
-        fontSize: '12px',
-        fontStyle: 'normal',
-        fontWeight: 400,
-        lineHeight: 'normal',
-      },
-      Tag: {
-        fontSize: '11px',
-        fontStyle: 'normal',
-        fontWeight: 400,
-        lineHeight: '150%',
-      },
-    },
-    palette: {
-      red: theme.palette.augmentColor({
-        color: {
-          main: '#FF5833',
-          strong: '#FF5833',
-          normal: '#FF6D4D',
-          alternative: '#FF7D61',
-          tinted: '#FF6D4D33',
-        },
-        name: 'red',
-      }),
-      blue: theme.palette.augmentColor({
-        color: {
-          main: '#3A5DCF',
-          strong: '#3A5DCF',
-          normal: '#4E6ED4',
-          alternative: '#6681DB',
-          tinted: '#4E6ED433',
-        },
-        name: 'blue',
-      }),
-      purple: theme.palette.augmentColor({
-        color: {
-          main: '#6F62FE',
-          strong: '#6F62FE',
-          normal: '#877CFE',
-          alternative: '#A39BFD',
-          tinted: '#877CFE33',
-        },
-        name: 'purple',
-      }),
-      green: theme.palette.augmentColor({
-        color: {
-          main: '#489B08',
-          strong: '#489B08',
-          normal: '#53B309',
-          alternative: '#61CD0E',
-          tinted: '#53B30933',
-        },
-        name: 'green',
-      }),
-      yellow: theme.palette.augmentColor({
-        color: {
-          main: '#FFA805',
-          strong: '#FFA805',
-          normal: '#FFB01F',
-          alternative: '#FDBC44',
-          tinted: '#FFB01F33',
-        },
-        name: 'yellow',
-      }),
-      pink: theme.palette.augmentColor({
-        color: {
-          main: '#C44ECA',
-          strong: '#C44ECA',
-          normal: '#CB62D0',
-          alternative: '#D581D9',
-          tinted: '#CB62D033',
-        },
-        name: 'pink',
-      }),
-      primary: {
+      name: 'blue',
+    })
+    theme.palette.purple = theme.palette.augmentColor({
+      color: {
         main: '#6F62FE',
-        light: '#A39BFD',
-        dark: '#877CFE',
+        strong: '#6F62FE',
+        normal: '#877CFE',
+        alternative: '#A39BFD',
+        tinted: '#877CFE33',
       },
-    },
-  })
+      name: 'purple',
+    })
+    theme.palette.green = theme.palette.augmentColor({
+      color: {
+        main: '#489B08',
+        strong: '#489B08',
+        normal: '#53B309',
+        alternative: '#61CD0E',
+        tinted: '#53B30933',
+      },
+      name: 'green',
+    })
+    theme.palette.yellow = theme.palette.augmentColor({
+      color: {
+        main: '#FFA805',
+        strong: '#FFA805',
+        normal: '#FFB01F',
+        alternative: '#FDBC44',
+        tinted: '#FFB01F33',
+      },
+      name: 'yellow',
+    })
+    theme.palette.pink = theme.palette.augmentColor({
+      color: {
+        main: '#C44ECA',
+        strong: '#C44ECA',
+        normal: '#CB62D0',
+        alternative: '#D581D9',
+        tinted: '#CB62D033',
+      },
+      name: 'pink',
+    })
 
-  theme = createTheme(theme, {
-    components: {
-      MuiContainer: {
-        styleOverrides: {
-          root: {
-            '@media (min-width: 1200px)': {
-              maxWidth: '1280px',
-            },
+    theme.palette.primary = theme.palette.purple
+  }
+
+  if (theme.components) {
+    theme.components.MuiContainer = {
+      styleOverrides: {
+        root: {
+          '@media (min-width: 1200px)': {
+            maxWidth: '1280px',
           },
         },
       },
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            minWidth: '40px',
-          },
+    }
+
+    theme.components.MuiButton = {
+      styleOverrides: {
+        root: {
+          minWidth: '20px',
+          minHeight: '20px',
         },
       },
-      MuiBox: {
-        styleOverrides: {
-          root: {
-            minWidth: '40px',
-          },
+    }
+
+    theme.components.MuiSnackbar = {
+      styleOverrides: {
+        root: {
+          left: 0,
+          right: 0,
         },
       },
-      MuiTypography: {
-        defaultProps: {
-          variantMapping: {
-            HeadlineEmphasis: 'h1',
-            Headline: 'h1',
-            Title1Emphasis: 'h2',
-            Title1: 'h2',
-            Title2Emphasis: 'h3',
-            Title2: 'h3',
-            Title3Emphasis: 'h4',
-            Title3: 'h4',
-            Body1Emphasis: 'p',
-            Body1: 'p',
-            Body2Emphasis: 'p',
-            Body2: 'p',
-            CaptionEmphasis: 'span',
-            Caption: 'span',
-            Tag: 'span',
-          },
+    }
+
+    theme.components.MuiTypography = {
+      defaultProps: {
+        variantMapping: {
+          HeadlineEmphasis: 'h1',
+          Headline: 'h1',
+          Title1Emphasis: 'h2',
+          Title1: 'h2',
+          Title2Emphasis: 'h3',
+          Title2: 'h3',
+          Title3Emphasis: 'h4',
+          Title3: 'h4',
+          Body1Emphasis: 'p',
+          Body1: 'p',
+          Body2Emphasis: 'p',
+          Body2: 'p',
+          CaptionEmphasis: 'span',
+          Caption: 'span',
+          Tag: 'span',
         },
       },
-      MuiTextField: {
-        styleOverrides: {
-          root: {
-            '& textarea': {
-              rows: '1',
-            },
-            '& input': {
-              height: '32px',
-              padding: '0px 12px',
-              '&::placeholder': {
-                color: theme.palette.text.alternative,
-                fontSize: '12px',
-                fontWeight: 400,
-                lineHeight: '150%',
-              },
-              ':-webkit-autofill': {
-                WebkitBoxShadow: `0 0 0 50px ${theme.palette.background.tertiary} inset`,
-              },
-            },
-            '& .MuiOutlinedInput-root': {
-              padding: '0px',
-              borderRadius: '4px',
-              height: 'auto',
-              backgroundColor: theme.palette.background.tertiary,
+    }
+
+    theme.components.MuiTextField = {
+      styleOverrides: {
+        root: {
+          '& textarea': {
+            rows: '1',
+          },
+          '& input': {
+            height: '32px',
+            padding: '0px 12px',
+            '&::placeholder': {
+              color: theme.palette.text.alternative,
               fontSize: '12px',
               fontWeight: 400,
-              color: theme.palette.text.normal,
               lineHeight: '150%',
-              '& fieldset': {
-                height: '100%',
-                borderColor: 'transparent',
-              },
-              '&:hover fieldset': {
-                borderColor: theme.palette.purple.normal,
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: theme.palette.purple.normal,
-              },
-              '&.Mui-disabled': {
-                backgroundColor: theme.palette.background.tertiary,
-                opacity: 0.5,
-              },
-              '&.Mui-error fieldset': {
-                borderColor: theme.palette.red.strong,
-              },
             },
-            '& .MuiInputBase-inputMultiline': {
-              height: 'auto',
-              padding: '12px',
+            ':-webkit-autofill': {
+              WebkitBoxShadow: `0 0 0 50px ${theme.palette.background.tertiary} inset`,
             },
-            '.MuiFormHelperText-filled': {
-              margin: 0,
-              marginTop: '0.5rem',
+          },
+          '& .MuiOutlinedInput-root': {
+            padding: '0px',
+            borderRadius: '4px',
+            height: 'auto',
+            backgroundColor: theme.palette.background.tertiary,
+            fontSize: '12px',
+            fontWeight: 400,
+            color: theme.palette.text.normal,
+            lineHeight: '150%',
+            '& fieldset': {
+              height: '100%',
+              borderColor: 'transparent',
             },
-            '.MuiFormHelperText-root': {
-              margin: 0,
-              marginTop: '0.5rem',
+            '&:hover fieldset': {
+              borderColor: theme.palette.purple.normal,
             },
-            '.MuiInputBase-inputMultiline': {
-              padding: '1rem',
+            '&.Mui-focused fieldset': {
+              borderColor: theme.palette.purple.normal,
             },
+            '&.Mui-disabled': {
+              backgroundColor: theme.palette.background.tertiary,
+              opacity: 0.5,
+            },
+            '&.Mui-error fieldset': {
+              borderColor: theme.palette.red.strong,
+            },
+          },
+          '& .MuiInputBase-inputMultiline': {
+            height: 'auto',
+            padding: '12px',
+          },
+          '.MuiFormHelperText-filled': {
+            margin: 0,
+            marginTop: '0.5rem',
+          },
+          '.MuiFormHelperText-root': {
+            margin: 0,
+            marginTop: '0.5rem',
+          },
+          '.MuiInputBase-inputMultiline': {
+            padding: '1rem',
           },
         },
       },
-      MuiAutocomplete: {
-        styleOverrides: {
-          root: {
-            '& .MuiFormControl-root': {
-              '& .MuiInputBase-root': {
-                '& input': {
-                  height: '100%',
-                  width: '100%',
-                  padding: '0 ',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+    }
 
-  theme = createTheme(theme, {
-    typography: {
-      fontFamily: 'Pretendard Variable, sans-serif',
-      HeadlineEmphasis: {
-        color: theme.palette.text.normal,
+    theme.components.MuiAutocomplete = {
+      styleOverrides: {
+        root: {
+          '& .MuiFormControl-root': {
+            '& .MuiInputBase-root': {
+              '& input': {
+                height: '100%',
+                width: '100%',
+                padding: '0 ',
+              },
+            },
+          },
+        },
       },
-      Headline: {
-        color: theme.palette.text.normal,
-      },
-      Title1Emphasis: {
-        color: theme.palette.text.normal,
-      },
-      Title1: {
-        color: theme.palette.text.normal,
-      },
-      Title2Emphasis: {
-        color: theme.palette.text.normal,
-      },
-      Title2: {
-        color: theme.palette.text.normal,
-      },
-      Title3Emphasis: {
-        color: theme.palette.text.normal,
-      },
-      Title3: {
-        color: theme.palette.text.normal,
-      },
-      Body1Emphasis: {
-        color: theme.palette.text.normal,
-      },
-      Body1: {
-        color: theme.palette.text.normal,
-      },
-      Body2Emphasis: {
-        color: theme.palette.text.normal,
-      },
-      Body2: {
-        color: theme.palette.text.normal,
-      },
-      CaptionEmphasis: {
-        color: theme.palette.text.normal,
-      },
-      Caption: {
-        color: theme.palette.text.normal,
-      },
-      Tag: {
-        color: theme.palette.text.normal,
-      },
-      h1: {
-        color: theme.palette.text.normal,
-      },
-      h2: {
-        color: theme.palette.text.normal,
-      },
-      h3: {
-        color: theme.palette.text.normal,
-      },
-      h4: {
-        color: theme.palette.text.normal,
-      },
-      h5: {
-        color: theme.palette.text.normal,
-      },
-      h6: {
-        color: theme.palette.text.normal,
-      },
-      subtitle1: {
-        color: theme.palette.text.normal,
-      },
-      subtitle2: {
-        color: theme.palette.text.normal,
-      },
-      body1: {
-        color: theme.palette.text.normal,
-      },
-      body2: {
-        color: theme.palette.text.normal,
-      },
-      button: {
-        color: theme.palette.text.normal,
-      },
-      caption: {
-        color: theme.palette.text.normal,
-      },
-      overline: {
-        color: theme.palette.text.normal,
-      },
-    },
-  })
+    }
+  }
+
+  if (theme.typography) {
+    theme.typography.fontFamily = 'Pretendard Variable, sans-serif'
+    theme.typography.HeadlineEmphasis = {
+      fontSize: '32px',
+      fontStyle: 'normal',
+      fontWeight: 600,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+
+    theme.typography.Headline = {
+      fontSize: '32px',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Title1Emphasis = {
+      fontSize: '24px',
+      fontStyle: 'normal',
+      fontWeight: 600,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Title1Emphasis = {
+      fontSize: '24px',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+
+    theme.typography.Title2Emphasis = {
+      fontSize: '20px',
+      fontStyle: 'normal',
+      fontWeight: 600,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Title2 = {
+      fontSize: '20px',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Title3Emphasis = {
+      fontSize: '18px',
+      fontStyle: 'normal',
+      fontWeight: 600,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Title3 = {
+      fontSize: '18px',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Body1Emphasis = {
+      fontSize: '15px',
+      fontStyle: 'normal',
+      fontWeight: 600,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Body1 = {
+      fontSize: '15px',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Body2Emphasis = {
+      fontSize: '14px',
+      fontStyle: 'normal',
+      fontWeight: 600,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Body2 = {
+      fontSize: '14px',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.CaptionEmphasis = {
+      fontSize: '12px',
+      fontStyle: 'normal',
+      fontWeight: 600,
+      lineHeight: 'normal',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Caption = {
+      fontSize: '12px',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      lineHeight: 'normal',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.Tag = {
+      fontSize: '12px',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+  }
 
   return (
     <StyledEngineProvider injectFirst>
