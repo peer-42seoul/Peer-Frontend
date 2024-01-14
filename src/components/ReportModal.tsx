@@ -52,8 +52,7 @@ const ReportModal = ({
     setIsSubmitting(true)
     axiosInstance
       .post(`api/v1/report`, data)
-      .then((res) => {
-        console.log(res)
+      .then(() => {
         setToastProps({
           severity: 'success',
           message: '신고가 접수되었습니다.',
@@ -62,12 +61,13 @@ const ReportModal = ({
         openToast()
       })
       .catch((error) => {
-        console.log(error.message)
-        setToastProps({
-          severity: 'error',
-          message: '신고 접수 중 오류가 발생했습니다.',
-        })
-        openToast()
+        if (error.response.status !== 401) {
+          setToastProps({
+            severity: 'error',
+            message: '신고 접수 중 오류가 발생했습니다.',
+          })
+          openToast()
+        }
       })
     setIsSubmitting(false)
   }
