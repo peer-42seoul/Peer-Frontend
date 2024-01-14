@@ -64,7 +64,6 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
       <ReportModal
         isModalOpen={isOpen}
         handleClose={closeModal}
-        reportType="user"
         targetId={userId}
       />
     </div>

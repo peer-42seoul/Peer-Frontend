@@ -12,7 +12,6 @@ import IToastProps from '@/types/IToastProps'
 interface IReportModalProps {
   isModalOpen: boolean
   handleClose: () => void
-  reportType: 'user' | 'showcase' | 'recruit'
   targetId: string
 }
 
