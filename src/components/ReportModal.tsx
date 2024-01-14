@@ -7,6 +7,7 @@ import useAxiosWithAuth from '@/api/config'
 import { Box, Typography } from '@mui/material'
 import ReportTypeSelect from '@/components/ReportTypeSelect'
 import useToast from '@/hook/useToast'
+import IToastProps from '@/types/IToastProps'
 
 interface IReportModalProps {
   isModalOpen: boolean
@@ -24,22 +25,14 @@ interface IReportFormInput {
 const ReportModal = ({
   isModalOpen,
   handleClose,
-  reportType,
   targetId,
 }: IReportModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const {
-    CuToast: SuccessToast,
-    isOpen: isSuccessOpen,
-    openToast: successOpenToast,
-    closeToast: successCloseToast,
-  } = useToast()
-  const {
-    CuToast: FailedToast,
-    isOpen: isFailedOpen,
-    openToast: failedOpenToast,
-    closeToast: failedCloseToast,
-  } = useToast()
+  const [toastProps, setToastProps] = useState<IToastProps>({
+    severity: 'info',
+    message: '',
+  })
+  const { CuToast, isOpen, openToast, closeToast } = useToast()
 
   const axiosInstance = useAxiosWithAuth()
   const {
@@ -61,28 +54,22 @@ const ReportModal = ({
       .post(`api/v1/report`, data)
       .then((res) => {
         console.log(res)
-        successOpenToast()
+        setToastProps({
+          severity: 'success',
+          message: '신고가 접수되었습니다.',
+        })
         handleClose()
+        openToast()
       })
       .catch((error) => {
         console.log(error.message)
-        failedOpenToast()
+        setToastProps({
+          severity: 'error',
+          message: '신고 접수 중 오류가 발생했습니다.',
+        })
+        openToast()
       })
     setIsSubmitting(false)
-  }
-
-  let typeName: string
-
-  switch (reportType) {
-    case 'user':
-      typeName = '유저를'
-      break
-    case 'showcase':
-      typeName = '쇼케이스를'
-      break
-    case 'recruit':
-      typeName = '모집글을'
-      break
   }
 
   return (
@@ -132,7 +119,7 @@ const ReportModal = ({
                     style={{ marginBottom: '10px' }}
                   >
                     <Typography variant="Body2">
-                      이 {typeName} 신고하시겠습니까?
+                      이 유저를 신고하시겠습니까?
                     </Typography>
                   </CuTextFieldLabel>
                   <CuTextField
@@ -152,20 +139,12 @@ const ReportModal = ({
           </form>
         </Box>
       </CuModal>
-      <SuccessToast
-        open={isSuccessOpen}
-        severity="success"
-        onClose={successCloseToast}
-      >
-        <Typography>신고가 접수되었습니다.</Typography>
-      </SuccessToast>
-      <FailedToast
-        open={isFailedOpen}
-        severity="error"
-        onClose={failedCloseToast}
-      >
-        <Typography>신고 접수 중 오류가 발생했습니다.</Typography>
-      </FailedToast>
+      <CuToast
+        open={isOpen}
+        message={toastProps.message}
+        severity={toastProps.severity}
+        onClose={closeToast}
+      />
     </>
   )
 }
