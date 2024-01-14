@@ -1,43 +1,31 @@
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
-import { IconButton, Stack } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import React from 'react'
-import {
-  Control,
-  Controller,
-  FieldArrayWithId,
-  UseFieldArrayAppend,
-  UseFieldArrayRemove,
-} from 'react-hook-form'
 import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
-import CuTextField from '@/components/CuTextField'
 import * as Style from '../ShowcaseEditor.style'
-import PlusIcon from '@/icons/PlusIcon'
+import Link from 'next/link'
 
-const LinkForm = ({
-  fields,
-  append,
-  // remove,
-  control,
-}: {
-  fields: FieldArrayWithId<IShowcaseEditorFields, 'links', 'id'>[]
-  append: UseFieldArrayAppend<IShowcaseEditorFields, 'links'>
-  remove: UseFieldArrayRemove
-  control: Control<IShowcaseEditorFields, any>
-}) => {
+interface IlinksProps {
+  links: []
+}
+
+const LinkForm = ({ links }: IlinksProps) => {
   return (
     <Stack width={'26rem'} spacing={'0.5rem'}>
-      <Stack
-        direction={'row'}
-        spacing={'0.5rem'}
-        justifyContent={'space-between'}
-        alignItems={'center'}
-      >
+      <Stack direction={'column'} spacing={'0.5rem'}>
         <LabelWithIcon
           svgIcon={<LinkIcon sx={Style.IconStyle} />}
           message={'링크'}
         />
-        <IconButton
+        <Stack direction={'column'} spacing={'0.5rem'}>
+          {links.map((link, index) => (
+            <Link href={link} key={index}>
+              {link}
+            </Link>
+          ))}
+        </Stack>
+        {/* <IconButton
           onClick={() => {
             if (fields.length >= 5) return
             append({
@@ -48,7 +36,7 @@ const LinkForm = ({
           }}
         >
           <PlusIcon sx={Style.IconStyle} />
-        </IconButton>
+        </IconButton> */}
       </Stack>
       {/* {fields.map((field, index) => (
         <Stack key={field.id} direction={'row'} spacing={'0.5rem'}>

@@ -9,21 +9,21 @@ import SkillInput from './formPanel/SkillInput'
 import LinkForm from './formPanel/LinkForm'
 import FormUIEditor from '../panel/formPanel/FormUIEditor'
 import useShowCaseState from '@/states/useShowCaseState'
-import axios, { AxiosError } from 'axios'
 import useToast from '@/hook/useToast'
 import { redirect } from 'next/navigation'
-import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
-import { AlertModal } from '@/app/my-page/interests/page'
 import useModal from '@/hook/useModal'
 import CuTextModal from '@/components/CuTextModal'
+import useAxiosWithAuth from '@/api/config'
+import StartEndDateViewer from './formPanel/StartEndDateViewer'
+import TeamMembers from './formPanel/TeamMembers'
 
-const teamId = 42
-const ShowcaseEditor = () => {
-  const { data, isLoading, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${teamId}`,
-    defaultGetFetcher,
-  )
+interface IShowcaseEditorProps {
+  data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
+}
+
+const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
+  const axiosWithAuth = useAxiosWithAuth()
+  console.log('넘어온 데이터', data)
 
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>('')
@@ -36,22 +36,23 @@ const ShowcaseEditor = () => {
 
   // 1. 아무것도 안 보내면 기본 이미지 적용. 그러나 저장 이전에 한 번 더 물음
 
-  const defaultValues: IShowcaseEditorFields = {
-    image: null,
-    tags: data?.skills ? data.skills : [],
-    startDate: data?.start ? data.start : '',
-    endDate: data?.end ? data.end : '',
-    links: [{ id: 0, linkName: '', linkUrl: '' }],
-    content: '',
-  }
-  const { control, setValue, watch } = useForm({
-    defaultValues: defaultValues,
-  })
+  // const defaultValues: IShowcaseEditorFields = {
+  //   image: null,
+  //   tags: data?.skills ? data.skills : [],
+  //   startDate: data?.start ? data.start : '',
+  //   endDate: data?.end ? data.end : '',
+  //   links: [{ id: 0, linkName: '', linkUrl: '' }],
+  //   content: '',
+  //   members: data?.member,
+  // }
+  // const { control, setValue, watch } = useForm({
+  //   defaultValues: defaultValues,
+  // })
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'links',
-  })
+  // const { fields, append, remove } = useFieldArray({
+  //   control,
+  //   name: 'links',
+  // })
 
   const submitHandler = async () => {
     // if (!previewImage) {
@@ -59,7 +60,7 @@ const ShowcaseEditor = () => {
     //   return
     // }
     try {
-      const response = await axios.post(
+      const response = await axiosWithAuth.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
         {
           image: 'previewImage',
@@ -72,7 +73,6 @@ const ShowcaseEditor = () => {
     } catch (error: any) {
       console.log(`/api/showcase error ${error}`)
       if (error.response) {
-        // 서버에서 응답을 받은 경우
         switch (error.response.status) {
           case 400:
             setErrorMessages('요청이 올바르지 않습니다. (BAD_REQUEST)')
@@ -110,14 +110,11 @@ const ShowcaseEditor = () => {
           setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
-        <TeamName />
-        <SkillInput watch={watch} setValue={setValue} />
-        <LinkForm
-          fields={fields}
-          append={append}
-          remove={remove}
-          control={control}
-        />
+        <TeamName teamName={data.title} />
+        <StartEndDateViewer start={data.start} end={data.end} />
+        <SkillInput tags={data?.skills} />
+        <TeamMembers members={data?.memberList} />
+        <LinkForm links={data.links} />
         <FormUIEditor initialValue={text} setText={setText} />
         <Button onClick={openModal}>저장</Button>
         <CuToast

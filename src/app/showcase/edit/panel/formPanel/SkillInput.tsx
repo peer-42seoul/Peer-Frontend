@@ -1,53 +1,42 @@
 import React from 'react'
-import {
-  Stack,
-  InputAdornment,
-  Autocomplete,
-  Typography,
-  Box,
-} from '@mui/material'
+import { Stack } from '@mui/material'
 import TagIcon from '@/icons/TagIcon'
 import LabelWithIcon from '../LabelWithIcon'
-import CuTextField from '@/components/CuTextField'
 import * as Style from '../ShowcaseEditor.style'
 import TagChip from '@/components/TagChip'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import { ITag } from '@/types/IPostDetail'
-import { Button } from '@mui/material'
-import TagAutoComplete from '@/components/TagAutoComplete'
+import { purple, red } from '@mui/material/colors'
 
-const SkillInput = ({
-  setValue,
-  watch,
-}: {
-  setValue: UseFormSetValue<IShowcaseEditorFields>
-  watch: UseFormWatch<IShowcaseEditorFields>
-}) => {
-  const tags = watch('tags')
-  const setData = (data: string[]) => {
-    setValue('tags', data)
-  }
+interface ItagsProps {
+  tags: string
+}
+const SkillInput = ({ tags }: ItagsProps) => {
+  // const tags = watch('tags')
+  // const setData = (data: string[]) => {
+  //   setValue('tags', data)
+  // }
 
-  const tagList: ITag[] = [
-    { name: 'React', color: '#FF5833', tagId: 1, createdAt: '', updatedAt: '' },
-    { name: 'vue', color: '#FF5833', tagId: 2, createdAt: '', updatedAt: '' },
-    { name: 'js', color: '#FF5833', tagId: 3, createdAt: '', updatedAt: '' },
-  ]
+  // const tagList: ITag[] = [
+  //   { name: 'React', color: '#FF5833', tagId: 1, createdAt: '', updatedAt: '' },
+  //   { name: 'vue', color: '#FF5833', tagId: 2, createdAt: '', updatedAt: '' },
+  //   { name: 'js', color: '#FF5833', tagId: 3, createdAt: '', updatedAt: '' },
+  // ]
 
-  const nameList = tagList?.map(({ name }) => name)
+  // const nameList = tagList?.map(({ name }) => name)
 
-  const handleInput = (
-    event: React.SyntheticEvent,
-    value: readonly string[],
-  ) => {
-    setData([...value])
-  }
+  // const handleInput = (
+  //   event: React.SyntheticEvent,
+  //   value: readonly string[],
+  // ) => {
+  //   setData([...value])
+  // }
 
   /* 태그를 지웁니다 */
-  const handleDelete = (index: number) => {
-    setData(tags.filter((tag, cIndex) => cIndex !== index))
-  }
+  // const handleDelete = (index: number) => {
+  //   setData(tags.filter((tag, cIndex) => cIndex !== index))
+  // }
 
   return (
     <Stack direction={'column'} spacing={'0.5rem'} width={'26rem'}>
@@ -105,7 +94,7 @@ const SkillInput = ({
         direction={'row'}
         useFlexGap
       >
-        {tags?.map((tag: string, idx: number) => {
+        {/* {tags?.map((tag: string, idx: number) => {
           const selectTag = tagList?.find((item) => item.name === tag)
           return (
             <TagChip
@@ -118,7 +107,12 @@ const SkillInput = ({
               }}
             />
           )
-        })}
+        })} */}
+        {tags?.map((tag: string, index: number) => (
+          <TagChip key={index} name={tag} color={'#FF5833'} />
+        ))}
+        {/* <TagChip name={'Vue'} color={'#FF5833'} />
+        <TagChip name={'JS'} color={'#FF5833'} /> */}
       </Stack>
     </Stack>
   )

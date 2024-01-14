@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react'
 import '@toast-ui/editor/dist/toastui-editor.css'
 import { Editor, IEditorOptions } from '@toast-ui/editor'
-import { Button, Card } from '@mui/material'
+import { Card } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import useShowCaseState from '@/states/useShowCaseState'
 
@@ -16,7 +16,6 @@ const ToastEditor = ({
   initialEditType = 'wysiwyg',
   previewStyle = 'vertical',
   height = '30rem',
-  setText,
 }: IEditorOptions & { setText: (value: string) => void }) => {
   const { setContent } = useShowCaseState()
   const themed = useTheme()
