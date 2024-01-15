@@ -63,6 +63,7 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
 const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setIsLoading] = useState(false)
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
