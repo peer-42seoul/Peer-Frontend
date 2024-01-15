@@ -88,7 +88,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                   color="primary"
                   fullWidth
                 >
-                  신청 대기자 보기
+                  <Typography>신청 대기자 보기</Typography>
                 </Button>
               </Stack>
               <SetupMember
