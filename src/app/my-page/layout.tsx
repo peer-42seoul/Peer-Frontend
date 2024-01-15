@@ -14,7 +14,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Stack
         justifyContent={'space-between'}
         direction={isPc ? 'row' : 'column'}
-        spacing={0}
         sx={isPc ? style.pcStack : style.mobileStack}
       >
         <NavBar />
