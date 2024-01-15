@@ -3,11 +3,7 @@
 import { Stack } from '@mui/material'
 import React from 'react'
 import ShowcaseEditor from './panel/ShowcaseEditor'
-import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
-import useAxiosWithAuth from '@/api/config'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
-import { mock } from 'node:test'
 
 /*
   계획
@@ -32,8 +28,13 @@ const mockData: IShowcaseEditorFields = {
   start: '2024-01-01',
   end: '2024-12-31',
   memberList: [
-    { nickname: '홍길동', role: '프론트엔드 개발자' },
-    { nickname: '이순신', role: '백엔드 개발자' },
+    {
+      nickname: '홍길동',
+      role: '프론트엔드 개발자',
+      image: '',
+      isLeader: false,
+    },
+    { nickname: '이순신', role: '백엔드 개발자', image: '', isLeader: false },
   ],
   links: ['www.example1.com', 'www.example2.com'],
 }

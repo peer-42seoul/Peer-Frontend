@@ -1,7 +1,6 @@
 'use client'
 import { Button, Stack } from '@mui/material'
 import React, { useState } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from './formPanel/ImageInput'
 import TeamName from './formPanel/TeamName'
@@ -97,7 +96,9 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
         setErrorMessages('요청을 설정하는 중에 에러가 발생했습니다.')
       }
     }
-    alert(`image : ${previewImage}, content : ${text}, teamId : ${content}`)
+    alert(
+      `Image ${image}, Coverimage : ${previewImage}, content : ${text}, teamId : ${content},`,
+    )
   }
 
   // if (isLoading) return <div>로딩중</div>
@@ -111,8 +112,8 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
           setPreviewImage={setPreviewImage}
         />
         <TeamName teamName={data.title} />
-        <StartEndDateViewer start={data.start} end={data.end} />
         <SkillInput tags={data?.skills} />
+        <StartEndDateViewer start={data.start} end={data.end} />
         <TeamMembers members={data?.memberList} />
         <LinkForm links={data.links} />
         <FormUIEditor initialValue={text} setText={setText} />
@@ -126,7 +127,7 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
         <CuTextModal
           open={alertOpen}
           onClose={closeModal}
-          title={'삭제'}
+          title={'경고'}
           content={'대표 이미지를 등록하지 않으면 기본 이미지로 저장됩니다.'}
           containedButton={{
             text: '전송',

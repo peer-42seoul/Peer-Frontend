@@ -1,5 +1,4 @@
-import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
-import { Stack, Typography } from '@mui/material'
+import { Stack } from '@mui/material'
 import React from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
@@ -7,7 +6,7 @@ import * as Style from '../ShowcaseEditor.style'
 import Link from 'next/link'
 
 interface IlinksProps {
-  links: []
+  links: string[]
 }
 
 const LinkForm = ({ links }: IlinksProps) => {

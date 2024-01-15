@@ -3,15 +3,9 @@ import React from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import ListIcon from '@/icons/ListIcon'
 import * as Style from '../ShowcaseEditor.style'
+import { IMember } from '@/types/IShowcaseEdit'
 
-interface IMemberValue {
-  nickname: string
-  isLeader: boolean
-  role: string
-  image: string
-}
-
-const MemberInformation = ({ member }: { member: IMemberValue }) => {
+const MemberInformation = ({ member }: { member: IMember }) => {
   return (
     <Stack direction={'row'} sx={{ alignItems: 'center' }}>
       <Avatar src={member.image} sx={{ width: '2rem', height: '2rem' }} />
@@ -21,7 +15,7 @@ const MemberInformation = ({ member }: { member: IMemberValue }) => {
   )
 }
 
-const TeamMembers = ({ members }: { members: IMemberValue[] }) => {
+const TeamMembers = ({ members }: { members: IMember[] }) => {
   return (
     <Stack direction={'column'} spacing={'0.5rem'}>
       <LabelWithIcon

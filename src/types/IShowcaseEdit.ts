@@ -1,4 +1,4 @@
-import { IUserProfileLink } from './IUserProfile'
+// import { IUserProfileLink } from './IUserProfile'
 
 // export interface IShowcaseEditorFields {
 //   image: File[] | null
@@ -8,11 +8,18 @@ import { IUserProfileLink } from './IUserProfile'
 //   links: IUserProfileLink[]
 //   content: string
 // }
+export interface IMember {
+  nickname: string
+  isLeader: boolean
+  role: string
+  image: string
+}
+
 export interface IShowcaseEditorFields {
   title: string
   skills: string[]
   start: string
   end: string
-  memberList: []
+  memberList: IMember[]
   links: string[]
 }

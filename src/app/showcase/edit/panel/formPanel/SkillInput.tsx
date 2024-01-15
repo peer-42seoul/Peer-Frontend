@@ -4,13 +4,13 @@ import TagIcon from '@/icons/TagIcon'
 import LabelWithIcon from '../LabelWithIcon'
 import * as Style from '../ShowcaseEditor.style'
 import TagChip from '@/components/TagChip'
-import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
-import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
-import { ITag } from '@/types/IPostDetail'
-import { purple, red } from '@mui/material/colors'
+// import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
+// import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
+// import { ITag } from '@/types/IPostDetail'
+// import { purple, red } from '@mui/material/colors'
 
 interface ItagsProps {
-  tags: string
+  tags: string[]
 }
 const SkillInput = ({ tags }: ItagsProps) => {
   // const tags = watch('tags')
