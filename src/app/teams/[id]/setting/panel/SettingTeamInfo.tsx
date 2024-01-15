@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { validation, validationNumber } from './utils'
-import { dueList } from './SetupSelect'
+import { dueList } from './SettingSelect'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import useModal from '@/hook/useModal'
 import {
@@ -51,7 +51,7 @@ interface ISetupTeam {
   // job: Job[] | null
 }
 
-const SetupInfo = ({ team }: { team: ISetupTeam }) => {
+const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
   const { isPc } = useMedia()
   const [message, setMessage] = useState<string>('')
   const [toastSeverity, setToastSeverity] = useState<AlertColor>('info')
@@ -145,6 +145,8 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
 
   useEffect(() => {
     window.history.pushState(null, '', location.href)
+
+    console.log('status', team.status)
 
     window.onpopstate = () => {
       if (isEdit === true) {
@@ -476,7 +478,10 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
             alignItems={'center'}
           >
             <Typography>팀을 나가겠습니까?</Typography>
-            <Button variant="contained">
+            <Button
+              disabled={team.status === TeamStatus.RECRUITING ? true : false}
+              variant="contained"
+            >
               <Typography>팀 나가기</Typography>
             </Button>
           </Stack>
@@ -486,7 +491,10 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
             alignItems={'center'}
           >
             <Typography>팀을 터뜨리겠습니까?</Typography>
-            <Button variant="contained">
+            <Button
+              disabled={team.status === TeamStatus.RECRUITING ? true : false}
+              variant="contained"
+            >
               <Typography>팀 자폭</Typography>
             </Button>
           </Stack>
@@ -496,7 +504,10 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
             alignItems={'center'}
           >
             <Typography>팀 활동을 완료하시겠습니까??</Typography>
-            <Button variant="contained">
+            <Button
+              disabled={team.status === TeamStatus.RECRUITING ? true : false}
+              variant="contained"
+            >
               <Typography>팀 완료</Typography>
             </Button>
           </Stack>
@@ -540,4 +551,4 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
   )
 }
 
-export default SetupInfo
+export default SettingTeamJobs

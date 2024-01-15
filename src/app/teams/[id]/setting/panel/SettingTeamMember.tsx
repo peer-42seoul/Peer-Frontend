@@ -51,7 +51,7 @@ interface ISetupMember {
 //   )
 // }
 
-const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
+const SettingTeamMember = ({ team, teamId, jobs }: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   // const {
@@ -310,4 +310,4 @@ const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
   )
 }
 
-export default SetupMember
+export default SettingTeamMember

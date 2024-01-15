@@ -11,7 +11,7 @@ import RatioQuestionForm from '@/app/recruit/[id]/panel/form/RatioQuestionForm'
 import CheckQuestionForm from '@/app/recruit/[id]/panel/form/CheckQuestionForm'
 import { useForm } from 'react-hook-form'
 
-const FormAnswer = ({
+const InterviewAnswerForm = ({
   interview,
   index,
 }: {
@@ -55,4 +55,4 @@ const FormAnswer = ({
   )
 }
 
-export default FormAnswer
+export default InterviewAnswerForm
