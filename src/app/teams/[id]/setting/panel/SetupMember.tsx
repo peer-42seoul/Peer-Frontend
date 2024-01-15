@@ -21,11 +21,13 @@ import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
 import { comfirmModalStyle } from './styles'
+import { IMyInfo } from '../page'
 
 interface ISetupMember {
   team: IMember[]
   teamId: string
   jobs: Job[]
+  myInfo: IMyInfo
 }
 
 interface ICurrentJobCard {
@@ -51,7 +53,7 @@ const CurrentJobCard = ({ job, deleteJob }: ICurrentJobCard) => {
   )
 }
 
-const SetupMember = ({ team, teamId, jobs }: ISetupMember) => {
+const SetupMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   const {

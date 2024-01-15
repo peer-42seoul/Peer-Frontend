@@ -55,11 +55,11 @@ export interface IDetailOption {
 }
 
 export const socket = io('ws://back.peer-test.co.kr:8081', {
-  path: '/',
-  transports: ['websocket'],
+  transports: ['socket.io', 'polling'],
   query: {
     token: getCookie('accessToken') ? getCookie('accessToken') : '',
   },
+  reconnection: true,
 })
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
@@ -129,10 +129,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     })
     socket.on('connect_error', (err) => {
       console.log(err)
-    })
-    socket.on('whoAmI', () => {
-      console.log('whoAmI')
-      console.log(socket)
     })
   }, [])
 

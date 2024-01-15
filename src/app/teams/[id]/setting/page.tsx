@@ -1,7 +1,6 @@
 'use client'
 
 import { Button, Card, Stack, Typography } from '@mui/material'
-// import SetupPage from './panel/SetupTeam'
 import { useEffect, useState } from 'react'
 import SetupMember from './panel/SetupMember'
 import ApplicantList from './panel/ApplicantList'
@@ -13,9 +12,17 @@ import TeamJobAdd from './panel/TeamJobAdd'
 import SetupInfo from './panel/SetupInfo'
 import { socket } from '@/app/panel/MainPage'
 
+export interface IMyInfo {
+  userId: string
+  teamId: string
+  teamName: string
+  yourRole: string
+}
+
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
+  const [myInfo, setMyInfo] = useState<IMyInfo | null>(null)
   const { data, isLoading } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
@@ -32,7 +39,9 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         teamName: data?.team.name,
       },
       (data: any) => {
+        console.log('whoAmI receive')
         console.log(data)
+        setMyInfo(data)
       },
     )
   }, [])
@@ -86,6 +95,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 team={data.member}
                 teamId={data.team.id}
                 jobs={data.job}
+                myInfo={myInfo}
               />
             </Card>
           ) : (
