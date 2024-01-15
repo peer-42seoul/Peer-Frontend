@@ -1,11 +1,11 @@
 import {
+  AlertColor,
   Avatar,
   Box,
   Button,
   Card,
   IconButton,
   MenuItem,
-  Modal,
   Select,
   Stack,
   TextField,
@@ -15,7 +15,6 @@ import { validation, validationNumber } from './utils'
 import { dueList } from './SetupSelect'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import useModal from '@/hook/useModal'
-import CuButton from '@/components/CuButton'
 import {
   TeamOperationForm,
   TeamStatus,
@@ -36,6 +35,8 @@ import {
   WifiClearIcon,
 } from './Icons'
 import useMedia from '@/hook/useMedia'
+import useToast from '@/hook/useToast'
+import CuTextModal from '@/components/CuTextModal'
 
 interface ISetupTeam {
   id: string
@@ -52,6 +53,9 @@ interface ISetupTeam {
 
 const SetupInfo = ({ team }: { team: ISetupTeam }) => {
   const { isPc } = useMedia()
+  const [message, setMessage] = useState<string>('')
+  const [toastSeverity, setToastSeverity] = useState<AlertColor>('info')
+  const { CuToast, isOpen: isOpenToast, openToast, closeToast } = useToast()
   const [preview, setPreview] = useState<string>(
     team.teamImage ? team.teamImage : '/images/teamLogo.png',
   )
@@ -86,8 +90,9 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
       validation(getValues('name')) ||
       validationNumber(getValues('maxMember') as string)
     )
-      return alert('한글, 영문, 숫자만 입력 가능합니다.')
-    if (isEdit === false) return alert('변경된 사항이 없습니다.')
+      return handleOpenToast('입력값을 확인해주세요.', 'error')
+    if (isEdit === false)
+      return handleOpenToast('변경된 사항이 없습니다.', 'error')
 
     axiosWithAuth
       .post(
@@ -128,6 +133,12 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
     closeModal()
   }
 
+  const handleOpenToast = (message: string, severity: AlertColor) => {
+    setMessage(message)
+    setToastSeverity(severity)
+    openToast()
+  }
+
   useEffect(() => {
     if (watchAllFields) setIsEdit(true)
   }, [watchAllFields])
@@ -142,10 +153,6 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
 
         alert('팀 정보 수정을 완료해주세요.')
       }
-    }
-
-    return () => {
-      window.onpopstate = () => {}
     }
   }, [isEdit])
 
@@ -210,6 +217,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                     direction={'row'}
                     alignItems={'center'}
                     spacing={'0.5rem'}
+                    height={'4.5rem'}
                   >
                     {team.type === TeamType.PROJECT && (
                       <Typography>프로젝트명</Typography>
@@ -217,7 +225,10 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                     {team.type === TeamType.STUDY && (
                       <Typography>스터디명</Typography>
                     )}
+
                     <TextField
+                      error={errors.name?.message ? true : false}
+                      helperText={errors.name?.message}
                       maxRows={1}
                       inputProps={{
                         style: {
@@ -237,14 +248,15 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                         },
                       })}
                       type="text"
+                      variant="outlined"
                     />
-                    <Typography>{errors.name?.message}</Typography>
                   </Stack>
                 </Stack>
                 <Stack
                   direction={'row'}
                   alignItems={'center'}
-                  m={'0.5rem'}
+                  mx={'0.5rem'}
+                  mb={'1.2rem'}
                   spacing={'0.25rem'}
                 >
                   <TargetClearIcon />
@@ -263,6 +275,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                           size="small"
                           sx={{ m: 0 }}
                           defaultValue={team.status}
+                          variant="outlined"
                           {...field}
                         >
                           {[
@@ -286,7 +299,8 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                 <Stack
                   direction={'row'}
                   alignItems={'center'}
-                  m={'0.5rem'}
+                  mb={'1.2rem'}
+                  mx={'0.5rem'}
                   spacing={'0.5rem'}
                 >
                   <Stack
@@ -306,6 +320,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                       <Select
                         size="small"
                         defaultValue={team.dueTo}
+                        variant="outlined"
                         sx={{
                           m: 0,
                           minWidth: '8rem',
@@ -324,7 +339,8 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                 <Stack
                   direction={'row'}
                   alignItems={'center'}
-                  m={'0.35rem'}
+                  mb={'1.2rem'}
+                  mx={'0.5rem'}
                   spacing={'0.5rem'}
                 >
                   <Stack
@@ -342,6 +358,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                     render={({ field }) => (
                       <Select
                         size="small"
+                        variant="outlined"
                         defaultValue={team.operationForm}
                         sx={{
                           m: 0,
@@ -370,7 +387,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                   direction={'row'}
                   alignItems={'center'}
                   spacing={'0.5rem'}
-                  m={'0.35rem'}
+                  mx={'0.5rem'}
                 >
                   <Stack
                     direction={'row'}
@@ -388,6 +405,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                       render={({ field }) => (
                         <Select
                           size="small"
+                          variant="outlined"
                           defaultValue={team.region[0]}
                           sx={{
                             m: 0,
@@ -410,6 +428,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
                       render={({ field }) => (
                         <Select
                           size="small"
+                          variant="outlined"
                           defaultValue={team.region[1]}
                           sx={{
                             m: 0,
@@ -448,7 +467,7 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
               type="button"
               onClick={openConfirmModel}
             >
-              저장
+              <Typography>저장</Typography>
             </Button>
           </Stack>
           <Stack
@@ -457,7 +476,9 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
             alignItems={'center'}
           >
             <Typography>팀을 나가겠습니까?</Typography>
-            <Button variant="contained">팀 나가기</Button>
+            <Button variant="contained">
+              <Typography>팀 나가기</Typography>
+            </Button>
           </Stack>
           <Stack
             direction={'row'}
@@ -465,7 +486,9 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
             alignItems={'center'}
           >
             <Typography>팀을 터뜨리겠습니까?</Typography>
-            <Button variant="contained">팀 자폭</Button>
+            <Button variant="contained">
+              <Typography>팀 자폭</Typography>
+            </Button>
           </Stack>
           <Stack
             direction={'row'}
@@ -473,57 +496,46 @@ const SetupInfo = ({ team }: { team: ISetupTeam }) => {
             alignItems={'center'}
           >
             <Typography>팀 활동을 완료하시겠습니까??</Typography>
-            <Button variant="contained">팀 완료</Button>
+            <Button variant="contained">
+              <Typography>팀 완료</Typography>
+            </Button>
           </Stack>
         </Stack>
       </Card>
 
-      <Modal
-        title="팀 정보 수정"
+      <CuTextModal
         open={isConfirmOpen}
         onClose={closeConfirmModel}
-        sx={styles.comfirmModalStyle}
-      >
-        <Box>
-          <Typography id="alert-modal-title">팀 정보 수정 확인</Typography>
-          <Typography id="alert-modal-description">
-            팀 정보를 수정하시겠습니다.
-          </Typography>
-          <CuButton
-            variant="contained"
-            action={closeConfirmModel}
-            message="취소"
-            style={{ width: '50%' }}
-          />
-          <CuButton
-            variant="contained"
-            action={onSubmit}
-            message="수정"
-            style={{ width: '50%' }}
-          />
-        </Box>
-      </Modal>
+        title={'팀 정보 수정'}
+        content={'팀 정보 수정하시겠습니까?'}
+        containedButton={{
+          text: '수정',
+          onClick: onSubmit,
+        }}
+        textButton={{
+          text: '취소',
+          onClick: closeConfirmModel,
+        }}
+      />
 
-      <Modal open={isOpen} onClose={closeModal} sx={styles.deleteModalStyle}>
-        <Box>
-          <Typography id="alert-modal-title">팀 로고 삭제</Typography>
-          <Typography id="alert-modal-description">
-            사진을 삭제하시겠습니까?
-          </Typography>
-          <CuButton
-            variant="contained"
-            action={closeModal}
-            message="취소"
-            style={{ width: '50%' }}
-          />
-          <CuButton
-            variant="contained"
-            action={deleteImage}
-            message="삭제"
-            style={{ width: '50%' }}
-          />
-        </Box>
-      </Modal>
+      <CuTextModal
+        open={isOpen}
+        onClose={closeModal}
+        title={'팀 로고 삭제'}
+        content={'로고을 삭제하시겠습니까?'}
+        containedButton={{
+          text: '삭제',
+          onClick: deleteImage,
+        }}
+        textButton={{
+          text: '취소',
+          onClick: closeModal,
+        }}
+      />
+
+      <CuToast open={isOpenToast} onClose={closeToast} severity={toastSeverity}>
+        {message}
+      </CuToast>
     </>
   )
 }
