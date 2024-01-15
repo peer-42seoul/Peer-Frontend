@@ -6,7 +6,7 @@ import ImageInput from './formPanel/ImageInput'
 import TeamName from './formPanel/TeamName'
 import SkillInput from './formPanel/SkillInput'
 import LinkForm from './formPanel/LinkForm'
-import FormUIEditor from '../panel/formPanel/FormUIEditor'
+// import FormUIEditor from '../panel/formPanel/FormUIEditor'
 import useShowCaseState from '@/states/useShowCaseState'
 import useToast from '@/hook/useToast'
 import { redirect } from 'next/navigation'
@@ -15,6 +15,10 @@ import CuTextModal from '@/components/CuTextModal'
 import useAxiosWithAuth from '@/api/config'
 import StartEndDateViewer from './formPanel/StartEndDateViewer'
 import TeamMembers from './formPanel/TeamMembers'
+import dynamic from 'next/dynamic'
+const DynamicEditor = dynamic(() => import('../panel/formPanel/FormUIEditor'), {
+  ssr: false,
+})
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
@@ -22,8 +26,6 @@ interface IShowcaseEditorProps {
 
 const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
-  console.log('넘어온 데이터', data)
-
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>('')
   const [text, setText] = useState<string>('')
@@ -116,7 +118,7 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
         <StartEndDateViewer start={data.start} end={data.end} />
         <TeamMembers members={data?.memberList} />
         <LinkForm links={data.links} />
-        <FormUIEditor initialValue={text} setText={setText} />
+        <DynamicEditor initialValue={text} setText={setText} />
         <Button onClick={openModal}>저장</Button>
         <CuToast
           open={isOpen}

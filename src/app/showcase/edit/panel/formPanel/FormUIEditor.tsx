@@ -11,7 +11,7 @@ import useShowCaseState from '@/states/useShowCaseState'
  * WARNING: SSR 환경에서 사용할 경우 충돌이 나기 때문에 실제 사용하기 위해서는 dynamic import로 불러오는 DynamicToastEditor를 사용해야 합니다.
  */
 
-const ToastEditor = ({
+const FormUIEditor = ({
   initialValue,
   initialEditType = 'wysiwyg',
   previewStyle = 'vertical',
@@ -76,4 +76,4 @@ const ToastEditor = ({
   )
 }
 
-export default ToastEditor
+export default FormUIEditor
