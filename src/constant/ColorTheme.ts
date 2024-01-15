@@ -1,7 +1,18 @@
 import { EDisplayMode } from '@/types/DisplayTypes'
 import { alpha, createTheme } from '@mui/material'
 
+const customBreakpoints = {
+  xs: 0,
+  sm: 480,
+  md: 960,
+  lg: 1280,
+  xl: 1920,
+}
+
 export const darkTheme = createTheme({
+  breakpoints: {
+    values: customBreakpoints,
+  },
   palette: {
     mode: EDisplayMode.dark,
     background: {
@@ -34,6 +45,9 @@ export const darkTheme = createTheme({
 })
 
 export const lightTheme = createTheme({
+  breakpoints: {
+    values: customBreakpoints,
+  },
   palette: {
     mode: EDisplayMode.light,
     background: {

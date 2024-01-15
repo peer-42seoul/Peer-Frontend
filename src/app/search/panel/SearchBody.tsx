@@ -34,11 +34,11 @@ const ToggleButtonStyle = {
   padding: 0,
   '&.Mui-selected': {
     backgroundColor: 'transparent',
-    color: '#fff',
+    color: 'text.normal',
   },
   '&:hover': {
     border: 'none',
-    color: '#fff',
+    color: 'text.normal',
   },
 }
 
@@ -120,10 +120,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
               padding: 0,
             }}
           >
-            <Button
-              style={{ border: 'none', color: 'normal' }}
-              onClick={onClose}
-            >
+            <Button sx={{ border: 'none', color: 'normal' }} onClick={onClose}>
               <ArrowBackIosNewIcon />
             </Button>
             <Typography>검색</Typography>
