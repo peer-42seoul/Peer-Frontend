@@ -5,7 +5,6 @@ import {
   Card,
   // FormControl,
   Grid,
-  IconButton,
   Modal,
   // NativeSelect,
   Stack,
@@ -27,7 +26,7 @@ interface ISetupMember {
   team: IMember[]
   teamId: string
   jobs: Job[]
-  myInfo: IMyInfo
+  myInfo?: IMyInfo
 }
 
 // interface ICurrentJobCard {
@@ -62,7 +61,7 @@ const SetupMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
   //   openModal: openChangeModal,
   // } = useModal()
   const [members, setMembers] = useState<IMember[]>(team)
-  const [member, setMember] = useState<IMember | null>(null)
+  const [member, setMember] = useState<IMember>()
   const [job, setJob] = useState<Job[]>(jobs)
   // const [selectedJobs, setSelectedJobs] = useState<Job[]>([])
   const axiosWithAuth = useAxiosWithAuth()
@@ -77,10 +76,12 @@ const SetupMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
   useEffect(() => {
     setJob(jobs)
     console.log(job)
+    console.log(myInfo)
+    console.log(member?.id)
     // if (selectedJobs.length > 0) {
     //   changeJob()
     // }
-  }, [setJob, jobs])
+  }, [setJob, jobs, myInfo])
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
@@ -211,19 +212,18 @@ const SetupMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
                 borderRadius={'0.5rem'}
               >
                 {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
-                <IconButton
-                  size="small"
-                  sx={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    padding: 0,
-                    minWidth: 0.2,
-                  }}
-                  onClick={() => handleOpenDelete(member)}
-                >
-                  <CloseButton />
-                </IconButton>
+                {myInfo && member.id.toString() !== myInfo.userId && (
+                  <CloseButton
+                    action={() => handleOpenDelete(member)}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      padding: 0,
+                      minWidth: 0.2,
+                    }}
+                  />
+                )}
                 <OthersProfile name={member.name} userId={member.id}>
                   <Avatar sx={{ margin: 'auto' }}>A</Avatar>
                 </OthersProfile>

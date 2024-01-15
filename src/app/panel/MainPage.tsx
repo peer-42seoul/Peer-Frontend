@@ -31,6 +31,7 @@ import PushAlertBanner from './PushAlertBanner'
 import MainBanner from '@/app/panel/main-page/MainBanner'
 import io from 'socket.io-client'
 import { getCookie } from 'cookies-next'
+import useSocket from '@/states/useSocket'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -59,7 +60,6 @@ export const socket = io('ws://back.peer-test.co.kr:8081', {
   query: {
     token: getCookie('accessToken') ? getCookie('accessToken') : '',
   },
-  reconnection: true,
 })
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
@@ -68,6 +68,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
+  const { setSocket } = useSocket()
   /* 추후 디자인 추가되면 schedule 추가하기 */
   const [detailOption, setDetailOption] = useState<IDetailOption>({
     isInit: true,
@@ -130,6 +131,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     socket.on('connect_error', (err) => {
       console.log(err)
     })
+    socket.on('reconnect', (attemptNumber) => {
+      console.log('reconnect', attemptNumber)
+    })
+    socket.on('reconnect_attempt', (attemptNumber) => {
+      console.log('reconnect_attempt', attemptNumber)
+    })
+    setSocket(socket)
   }, [])
 
   useEffect(() => {

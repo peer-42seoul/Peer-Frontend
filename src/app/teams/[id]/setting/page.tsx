@@ -10,7 +10,7 @@ import { ITeam, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectionRecruit'
 import TeamJobAdd from './panel/TeamJobAdd'
 import SetupInfo from './panel/SetupInfo'
-import { socket } from '@/app/panel/MainPage'
+import useSocket from '@/states/useSocket'
 
 export interface IMyInfo {
   userId: string
@@ -20,9 +20,10 @@ export interface IMyInfo {
 }
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
+  const { socket } = useSocket()
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
-  const [myInfo, setMyInfo] = useState<IMyInfo | null>(null)
+  const [myInfo, setMyInfo] = useState<IMyInfo>()
   const { data, isLoading } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
@@ -32,6 +33,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const closeApplicant = () => setShowApplicant(false)
 
   useEffect(() => {
+    if (!socket) return
     socket.emit(
       'whoAmI',
       {
