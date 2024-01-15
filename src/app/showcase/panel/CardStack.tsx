@@ -3,8 +3,8 @@
 import { Box } from '@mui/material'
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import HitchhikingCard from './HitchhikingCard'
-import * as style from './HitchhikingCard.style'
+import HitchhikingCard from './ShowcaseCard'
+import * as style from './ShowcaseCard.style'
 import useMedia from '@/hook/useMedia'
 import { ICardData } from '@/app/showcase_ref/panel/types'
 
