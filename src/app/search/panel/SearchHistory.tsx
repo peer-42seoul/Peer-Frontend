@@ -6,8 +6,7 @@ import {
   Typography,
   Stack,
 } from '@mui/material'
-
-import CloseIcon from '@mui/icons-material/Close'
+import { CloseIcon } from '@/icons'
 import { useEffect, useState } from 'react'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
 
