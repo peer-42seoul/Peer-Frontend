@@ -1,6 +1,6 @@
 'use client'
+
 import { defaultGetFetcher } from '@/api/fetchers'
-import { IMainCard } from '@/types/IPostDetail'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
@@ -73,7 +73,7 @@ const Hitchhiking = () => {
 
   let message: string = ''
 
-  if (!isLoading && !cardList.length) message = '히치하이킹 끝!'
+  if (!isLoading && !cardList.length) message = '쇼케이스 끝!'
   else if (isLoading && !cardList.length) message = '로딩중'
   else if (error) message = '에러 발생'
 

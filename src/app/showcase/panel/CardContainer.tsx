@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import useMedia from '@/hook/useMedia'
-import { IMainCard } from '@/types/IPostDetail'
 import { FormControlLabel, Stack, Typography } from '@mui/material'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import Interest from './Interest'
@@ -41,7 +40,7 @@ const CardContainer = ({
         sx={containerStyle.gnbContainerStyle}
       >
         <Typography component={'h4'} sx={containerStyle.gnbTypographyStyle}>
-          히치하이킹
+          쇼케이스
         </Typography>
       </Stack>
       <Stack
@@ -51,24 +50,10 @@ const CardContainer = ({
         direction={'row'}
         spacing={'0.5rem'}
       >
-        <Typography
-          variant="Caption"
-          color={!isProject ? 'purple.normal' : 'text.assistive'}
-          sx={{ transition: 'color 0.5s ease' }}
-        >
-          스터디
-        </Typography>
         <FormControlLabel
           control={<CuTypeToggle checked={isProject} onChange={handleChange} />}
           label={''}
         />
-        <Typography
-          variant="Caption"
-          color={isProject ? 'purple.normal' : 'text.assistive'}
-          sx={{ transition: 'color 0.5s ease' }}
-        >
-          프로젝트
-        </Typography>
       </Stack>
       <Stack
         justifyContent={'center'}

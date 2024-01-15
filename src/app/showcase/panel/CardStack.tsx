@@ -1,6 +1,5 @@
 'use client'
 
-import { IMainCard } from '@/types/IPostDetail'
 import { Box } from '@mui/material'
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
