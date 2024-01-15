@@ -2,6 +2,27 @@ import { IPagination } from './IPagination'
 
 // Board
 
+export interface ITeamBoardInfo {
+  boardId: number
+  boardName: string
+}
+
+export interface ITeamBoardPost {
+  postId: number
+  title: string
+  nickname: string
+  hit: number
+  date: Date
+}
+
+export interface ITeamBoard {
+  boardId: number
+  boardName: string
+  posts: ITeamBoardPost[]
+}
+
+export interface ITeamBoardListData extends IPagination<ITeamBoard[]> {}
+
 // Notice
 
 export interface ITeamNoticeBase {

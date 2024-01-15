@@ -21,14 +21,15 @@ interface ITeamPageState {
   postId: number | undefined
   resetState: () => void
   setNotice: (boardType: TboardType, postId?: number) => void
-  setBoard: (boardId: number, postId?: number) => void
+  setBoard: (boardType: TboardType, boardId: number, postId?: number) => void
 }
 
 const useTeamPageState = create<ITeamPageState>((set) => ({
   layout: 'SIDEBAR',
   // boardType: 'NOTICE',
   boardType: 'LIST',
-  boardId: undefined,
+  // boardId: undefined,
+  boardId: 1,
   postId: undefined,
   resetState: () =>
     set({
@@ -44,9 +45,9 @@ const useTeamPageState = create<ITeamPageState>((set) => ({
       boardId: undefined,
       postId,
     }),
-  setBoard: (boardId, postId) =>
+  setBoard: (boardType, boardId, postId) =>
     set({
-      layout: 'FULLPAGE',
+      layout: boardType === 'LIST' ? 'SIDEBAR' : 'FULLPAGE',
       boardType: 'LIST',
       boardId,
       postId,
