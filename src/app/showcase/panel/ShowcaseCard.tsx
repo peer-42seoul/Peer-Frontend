@@ -1,7 +1,6 @@
 'use client'
-// import useAxiosWithAuth from '@/api/config' // 백엔드 api 완성 이후 주석 해제
+
 import PostCard from '@/components/PostCard'
-import { ITag } from '@/types/IPostDetail'
 import {
   Button,
   CardContent,
@@ -61,15 +60,6 @@ const HitchhikingCardBack = ({
     const fetchData = async () => {
       console.log(`fetchData ${postId}`)
       setIsLoading(true)
-      // backend api 완성 이후 주석 해제
-      // await axiosInstance
-      //   .get(`/api/v1/hitch/${postId}`)
-      //   .then((res) => {
-      //     setData(res.data)
-      //   })
-      //   .catch((e) => {
-      //     console.log(e)
-      //   })
       setData({
         content:
           '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
@@ -83,7 +73,7 @@ const HitchhikingCardBack = ({
 
   const handleSeeAll = (e: React.MouseEvent) => {
     e.stopPropagation()
-    router.push(`/recruit/${postId}`)
+    router.push(`/showcase/${postId}`)
   }
 
   return (
