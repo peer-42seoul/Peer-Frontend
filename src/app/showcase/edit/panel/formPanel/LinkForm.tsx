@@ -1,72 +1,70 @@
-import { Stack } from '@mui/material'
+import { IconButton, Stack, TextField } from '@mui/material'
 import React from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
 import * as Style from '../ShowcaseEditor.style'
-import Link from 'next/link'
-
-interface IlinksProps {
-  links: string[]
+import PlusIcon from '@/icons/PlusIcon'
+interface ILinkInputValues {
+  linkName: string
+  linkUrl: string
+  id: number
 }
 
-const LinkForm = ({ links }: IlinksProps) => {
+interface ILinkFormProps {
+  links: ILinkInputValues[]
+  addLink: (linkName: string, linkUrl: string) => void
+  changeLinkName: (id: number, content: string) => void
+  changeUrl: (id: number, content: string) => void
+}
+
+const LinkForm = ({
+  links,
+  addLink,
+  changeLinkName,
+  changeUrl,
+}: ILinkFormProps) => {
   return (
     <Stack width={'26rem'} spacing={'0.5rem'}>
-      <Stack direction={'column'} spacing={'0.5rem'}>
+      <Stack
+        direction={'row'}
+        spacing={'0.5rem'}
+        justifyContent={'space-between'}
+        alignItems={'center'}
+      >
         <LabelWithIcon
           svgIcon={<LinkIcon sx={Style.IconStyle} />}
           message={'링크'}
         />
-        <Stack direction={'column'} spacing={'0.5rem'}>
-          {links.map((link, index) => (
-            <Link href={link} key={index}>
-              {link}
-            </Link>
-          ))}
-        </Stack>
-        {/* <IconButton
+        <IconButton
           onClick={() => {
-            if (fields.length >= 5) return
-            append({
-              id: 0,
-              linkName: '',
-              linkUrl: '',
-            })
+            if (links.length >= 5) return
+            addLink('', '')
+            console.log('links', links)
           }}
         >
           <PlusIcon sx={Style.IconStyle} />
-        </IconButton> */}
+        </IconButton>
       </Stack>
-      {/* {fields.map((field, index) => (
-        <Stack key={field.id} direction={'row'} spacing={'0.5rem'}>
-          <Controller
-            name={`links.${index}.linkName`}
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <CuTextField
-                onChange={onChange}
-                value={value}
-                placeholder={'링크 이름'}
-                sx={{ width: '12.8rem', height: '2rem' }}
-                autoComplete="off"
-              />
-            )}
+      {links.map((link) => (
+        <Stack key={link.id} direction={'row'} spacing={'0.5rem'}>
+          <TextField
+            key={link.id}
+            name="linkName"
+            placeholder={'링크 이름'}
+            sx={{ width: '12.8rem', height: '2rem' }}
+            value={link.linkName}
+            onChange={(e) => changeLinkName(link.id, e.target.value)}
           />
-          <Controller
-            name={`links.${index}.linkUrl`}
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <CuTextField
-                onChange={onChange}
-                value={value}
-                placeholder={'링크 주소'}
-                sx={{ width: '12.8rem', height: '2rem' }}
-                autoComplete="off"
-              />
-            )}
+          <TextField
+            name="linkUrl"
+            placeholder={'링크 주소'}
+            sx={{ width: '12.8rem', height: '2rem' }}
+            autoComplete="off"
+            value={link.linkUrl}
+            onChange={(e) => changeUrl(link.id, e.target.value)}
           />
         </Stack>
-      ))} */}
+      ))}
     </Stack>
   )
 }

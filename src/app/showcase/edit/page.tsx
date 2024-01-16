@@ -35,8 +35,9 @@ const mockData: IShowcaseEditorFields = {
       isLeader: false,
     },
     { nickname: '이순신', role: '백엔드 개발자', image: '', isLeader: false },
+    { nickname: '이순신', role: '리더', image: '', isLeader: false },
   ],
-  links: ['www.example1.com', 'www.example2.com'],
+  links: [{ linkName: '깃허브', linkUrl: '이름없음', id: 0 }],
 }
 
 const ShowCaseEditPage = () => {
@@ -52,7 +53,7 @@ const ShowCaseEditPage = () => {
   // if (error) return <div>에러가 발생했습니다.</div>
 
   return (
-    <Stack direction={'column'}>
+    <Stack direction={'column'} sx={{ overflow: 'auto' }}>
       <ShowcaseEditor data={mockData} />
     </Stack>
   )

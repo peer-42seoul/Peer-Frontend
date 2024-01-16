@@ -1,4 +1,4 @@
-// import { IUserProfileLink } from './IUserProfile'
+import { IUserProfileLink } from './IUserProfile'
 
 // export interface IShowcaseEditorFields {
 //   image: File[] | null
@@ -21,5 +21,5 @@ export interface IShowcaseEditorFields {
   start: string
   end: string
   memberList: IMember[]
-  links: string[]
+  links: IUserProfileLink[]
 }

@@ -72,7 +72,15 @@ const FormUIEditor = ({
   }
 
   return (
-    <Card sx={{ backgroundColor: 'white', color: 'black' }} ref={editorRef} />
+    <Card
+      sx={{
+        backgroundColor: 'white',
+        color: 'black',
+        position: 'sticky',
+        top: '0',
+      }}
+      ref={editorRef}
+    />
   )
 }
 
