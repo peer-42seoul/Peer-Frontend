@@ -439,12 +439,11 @@ const SignUp = () => {
         </Box>
       </BoxBase>
       <CuToast
+        message={toastProps.message}
         open={isOpen}
         onClose={closeToast}
         severity={toastProps.severity}
-      >
-        <Typography>{toastProps.message}</Typography>
-      </CuToast>
+      />
     </>
   )
 }

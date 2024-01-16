@@ -1,30 +1,28 @@
-import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
-import { IconButton, Stack } from '@mui/material'
+import { IconButton, Stack, TextField } from '@mui/material'
 import React from 'react'
-import {
-  Control,
-  Controller,
-  FieldArrayWithId,
-  UseFieldArrayAppend,
-  UseFieldArrayRemove,
-} from 'react-hook-form'
 import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
-import CuTextField from '@/components/CuTextField'
-import * as Style from '../ShowcaseEditor.style'
+import * as Style from '../SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
+interface ILinkInputValues {
+  linkName: string
+  linkUrl: string
+  id: number
+}
+
+interface ILinkFormProps {
+  links: ILinkInputValues[]
+  addLink: (linkName: string, linkUrl: string) => void
+  changeLinkName: (id: number, content: string) => void
+  changeUrl: (id: number, content: string) => void
+}
 
 const LinkForm = ({
-  fields,
-  append,
-  // remove,
-  control,
-}: {
-  fields: FieldArrayWithId<IShowcaseEditorFields, 'links', 'id'>[]
-  append: UseFieldArrayAppend<IShowcaseEditorFields, 'links'>
-  remove: UseFieldArrayRemove
-  control: Control<IShowcaseEditorFields, any>
-}) => {
+  links,
+  addLink,
+  changeLinkName,
+  changeUrl,
+}: ILinkFormProps) => {
   return (
     <Stack width={'26rem'} spacing={'0.5rem'}>
       <Stack
@@ -39,44 +37,30 @@ const LinkForm = ({
         />
         <IconButton
           onClick={() => {
-            if (fields.length >= 5) return
-            append({
-              id: 0,
-              linkName: '',
-              linkUrl: '',
-            })
+            if (links.length >= 5) return
+            addLink('', '')
           }}
         >
           <PlusIcon sx={Style.IconStyle} />
         </IconButton>
       </Stack>
-      {fields.map((field, index) => (
-        <Stack key={field.id} direction={'row'} spacing={'0.5rem'}>
-          <Controller
-            name={`links.${index}.linkName`}
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <CuTextField
-                onChange={onChange}
-                value={value}
-                placeholder={'링크 이름'}
-                sx={{ width: '12.8rem', height: '2rem' }}
-                autoComplete="off"
-              />
-            )}
+      {links.map((link) => (
+        <Stack key={link.id} direction={'row'} spacing={'0.5rem'}>
+          <TextField
+            key={link.id}
+            name="linkName"
+            placeholder={'링크 이름'}
+            sx={{ width: '12.8rem', height: '2rem' }}
+            value={link.linkName}
+            onChange={(e) => changeLinkName(link.id, e.target.value)}
           />
-          <Controller
-            name={`links.${index}.linkUrl`}
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <CuTextField
-                onChange={onChange}
-                value={value}
-                placeholder={'링크 주소'}
-                sx={{ width: '12.8rem', height: '2rem' }}
-                autoComplete="off"
-              />
-            )}
+          <TextField
+            name="linkUrl"
+            placeholder={'링크 주소'}
+            sx={{ width: '12.8rem', height: '2rem' }}
+            autoComplete="off"
+            value={link.linkUrl}
+            onChange={(e) => changeUrl(link.id, e.target.value)}
           />
         </Stack>
       ))}
