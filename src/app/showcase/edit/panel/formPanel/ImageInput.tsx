@@ -4,7 +4,7 @@ import React from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import ImageIcon from '@/icons/ImageIcon'
 import ImageUploadButton from '@/components/ImageUploadButton'
-import * as Style from '../ShowcaseEditor.style'
+import * as Style from '../SkillInput.style'
 
 /* eslint-disable no-unused-vars */
 const ImageInput = ({

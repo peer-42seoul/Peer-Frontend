@@ -14,17 +14,25 @@ import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
       2. 버튼 배치
 */
 
-// interface IShowcase {
-//   title: string
-//   skills: string[]
-//   start: string
-//   end: string
-//   memberList: IMember[]
-//   links: string[]
-// }
 const mockData: IShowcaseEditorFields = {
   title: '42peer',
-  skills: ['React', 'TypeScript', 'Node.js'],
+  skills: [
+    {
+      name: 'Javascript',
+      Id: 1,
+      color: '#F0DB4F',
+    },
+    {
+      name: 'React',
+      Id: 2,
+      color: '#61DBFB',
+    },
+    {
+      name: 'Python',
+      Id: 3,
+      color: '#3776AB',
+    },
+  ],
   start: '2024-01-01',
   end: '2024-12-31',
   memberList: [

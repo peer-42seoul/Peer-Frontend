@@ -14,8 +14,9 @@ import useAxiosWithAuth from '@/api/config'
 import StartEndDateViewer from './formPanel/StartEndDateViewer'
 import TeamMembers from './formPanel/TeamMembers'
 import dynamic from 'next/dynamic'
-import * as style from './test.style'
-import { IUserProfileLink } from '@/types/IUserProfile'
+import * as style from './ShowcaseEditor.style'
+import { useLinks } from '@/hook/useLinks'
+import useShowCaseState from '@/states/useShowCaseState'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
@@ -29,39 +30,11 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>('')
-  const [text, setText] = useState<string>('')
   const [errorMessages, setErrorMessages] = useState<string>('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
-
-  const useLinks = (initValue: IUserProfileLink[]) => {
-    const [links, setLinks] = useState<IUserProfileLink[]>(initValue)
-
-    const addLink = (linkName: string, linkUrl: string) => {
-      const newLink = { linkName, linkUrl, id: links.length }
-      setLinks([...links, newLink])
-    }
-
-    const changeLinkName = (id: number, content: string) => {
-      // links[id].linkName = content
-      setLinks(
-        links.map((link) =>
-          link.id === id ? { ...link, linkName: content } : link,
-        ),
-      )
-    }
-
-    const changeUrl = (id: number, content: string) => {
-      setLinks(
-        links.map((link) =>
-          link.id === id ? { ...link, linkUrl: content } : link,
-        ),
-      )
-    }
-
-    return { links, addLink, changeLinkName, changeUrl }
-  }
   const { links, addLink, changeLinkName, changeUrl } = useLinks([])
+  const { content } = useShowCaseState()
 
   const submitHandler = async () => {
     try {
@@ -100,6 +73,9 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
       } else {
         setErrorMessages('요청을 설정하는 중에 에러가 발생했습니다.')
       }
+      console.log(
+        `content : ${content} links : ${links[0].linkName} ${links[0].linkUrl} image : ${previewImage}`,
+      )
     }
   }
 
@@ -115,7 +91,7 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
           setPreviewImage={setPreviewImage}
         />
         <TeamName teamName={data.title} />
-        <SkillInput tags={data?.skills} />
+        <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
         <TeamMembers members={data?.memberList} />
         <LinkForm
@@ -124,7 +100,7 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        <DynamicEditor initialValue={text} setText={setText} />
+        <DynamicEditor />
         <Button onClick={openModal} sx={style.saveButton}>
           저장
         </Button>

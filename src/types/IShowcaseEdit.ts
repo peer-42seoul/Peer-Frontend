@@ -15,9 +15,15 @@ export interface IMember {
   image: string
 }
 
+export interface ISkill {
+  name: string
+  Id: number
+  color: string
+}
+
 export interface IShowcaseEditorFields {
   title: string
-  skills: string[]
+  skills: ISkill[]
   start: string
   end: string
   memberList: IMember[]

@@ -16,7 +16,7 @@ const FormUIEditor = ({
   initialEditType = 'wysiwyg',
   previewStyle = 'vertical',
   height = '30rem',
-}: IEditorOptions & { setText: (value: string) => void }) => {
+}: IEditorOptions) => {
   const { setContent } = useShowCaseState()
   const themed = useTheme()
   const editorRef = useRef<HTMLDivElement>(null)

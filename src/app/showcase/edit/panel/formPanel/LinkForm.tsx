@@ -2,7 +2,7 @@ import { IconButton, Stack, TextField } from '@mui/material'
 import React from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
-import * as Style from '../ShowcaseEditor.style'
+import * as Style from '../SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
 interface ILinkInputValues {
   linkName: string
