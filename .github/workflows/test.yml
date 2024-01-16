@@ -74,7 +74,7 @@ jobs:
           password: ${{ secrets.DEV_TEST_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_TEST_IMAGE }}
-            docker rm -f $(docker ps -qa)
-            docker run -d -p 80:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_TEST_IMAGE }}
+            docker rm -f ${{ secrets.DOCKER_DEV_TEST_IMAGE }}
+            docker run -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_TEST_IMAGE }}
             docker container prune -f
             docker image prune -f
