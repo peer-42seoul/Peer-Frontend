@@ -6,19 +6,15 @@ import {
   Button,
   Stack,
   Chip,
-  Drawer,
-  ListItem,
-  ListItemButton,
-  List,
   Container,
   Avatar,
 } from '@mui/material'
-import { IPostDetail, ITag } from '@/types/IPostDetail'
-import React from 'react'
+import { IPostDetail, IRole, ITag } from '@/types/IPostDetail'
+import React, { useMemo } from 'react'
 import RecruitFormModal from './panel/form/RecruitFormModal'
 import { useRouter, useSearchParams } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
-import ApplyButton from './panel/ApplyButton'
+import ApplyMenuButton from './panel/ApplyMenuButton'
 import LinkButton from './panel/LinkButton'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
@@ -36,14 +32,14 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import TagChip from '@/components/TagChip'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import Link from 'next/link'
+import ApplyDrawerButton from '@/app/recruit/[id]/panel/ApplyDrawerButton'
+import ApplyButton from '@/app/recruit/[id]/panel/ApplyButton'
 
 const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
   const [open, setOpen] = React.useState(false)
-  const [roleOpen, setRoleOpen] = React.useState(false)
   const [role, setRole] = React.useState<string | null>(null)
-
   const { isPc } = useMedia()
   const { isLogin } = useAuthStore()
   const axiosInstance = useAxiosWithAuth()
@@ -55,27 +51,29 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
       : defaultGetFetcher,
   )
 
-  // const total = useMemo(() => {
-  //   if (!data) return 0
-  //   return data?.roleList?.reduce((acc, cur) => {
-  //     return acc + cur.number
-  //   }, 0)
-  // }, [data])
+  const roleList = useMemo(() => {
+    if (!data) return []
+    return data.roleList.filter((role) => role.name !== 'Leader')
+  }, [data])
 
   const handleApply = (selectedRole: string | null) => {
     if (!isLogin) router.push(currentUrl)
     else {
       setRole(selectedRole)
-      setRoleOpen(false)
       setOpen(true)
     }
   }
+
+  const checkIsFull = useMemo(
+    () => roleList?.some((role: IRole) => role?.current >= role?.number),
+    [roleList],
+  )
 
   if (isLoading) return <Typography>로딩중...</Typography>
   if (error) return <Typography>에러 발생</Typography>
   if (!data) return <Typography>데이터가 없습니다</Typography>
 
-  // pc뷰
+  /** PC 뷰 **/
   if (isPc) {
     return (
       <>
@@ -84,7 +82,6 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           setOpen={setOpen}
           recruit_id={params.id}
           role={role}
-          setRoleOpen={setRoleOpen}
         />
         <Container sx={{ display: 'flex', flexDirection: 'column' }}>
           {/*돌아가기 버튼*/}
@@ -126,7 +123,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                       }}
                     />
                     <Typography variant={'Title3'}>{data?.title}</Typography>
-                    <Typography color={'yellow.strong'} variant={'caption'}>
+                    <Typography color={'yellow.strong'} variant={'Caption'}>
                       {data?.status === 'ONGOING'
                         ? '모집중'
                         : data?.status === 'BEFORE'
@@ -143,21 +140,18 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                     <Typography variant={'Body2'}>{data?.teamName}</Typography>
                     <LinkButton href={data?.link} variant={'contained'} />
                   </Stack>
-                  {data?.roleList?.length ? (
-                    <ApplyButton
-                      role={data?.roleList?.map((item) => item.name)}
+                  {type === 'PROJECT' && roleList?.length ? (
+                    <ApplyMenuButton
+                      roleList={roleList}
                       onApply={handleApply}
+                      disabled={checkIsFull}
                     />
                   ) : (
-                    <Button
-                      id="apply-button"
-                      variant="contained"
-                      size="large"
-                      onClick={() => handleApply(null)}
+                    <ApplyButton
+                      handleApply={handleApply}
+                      disabled={checkIsFull}
                       sx={{ width: '6.785rem', marginTop: '2rem' }}
-                    >
-                      지원하기
-                    </Button>
+                    />
                   )}
                 </Box>
               </Stack>
@@ -176,25 +170,29 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                   label={type === 'PROJECT' ? '역할' : '인원'}
                   icon={<HowToRegOutlinedIcon />}
                 >
-                  <Box>
-                    {type === 'PROJECT' ? (
-                      data?.roleList.length ? (
-                        data?.roleList?.map(({ name, number }, idx: number) => (
+                  <div>
+                    {roleList.length ? (
+                      roleList?.map(({ name, number, current }, idx: number) =>
+                        type === 'PROJECT' ? (
                           <Typography
                             variant={'Body2'}
                             color={'text.alternative'}
                             key={idx}
-                          >{`${name} ${number} 명`}</Typography>
-                        ))
-                      ) : (
-                        <Typography>-</Typography>
+                          >{`${name} ${current}/${number} 명`}</Typography>
+                        ) : (
+                          name === 'STUDY' && (
+                            <Typography
+                              variant={'Body2'}
+                              color={'text.alternative'}
+                              key={idx}
+                            >{`${current}/${number} 명`}</Typography>
+                          )
+                        ),
                       )
                     ) : (
-                      <Typography variant={'Body2'} color={'text.alternative'}>
-                        {(data?.totalNumber ?? 0) + '명'}
-                      </Typography>
+                      <Typography>-</Typography>
                     )}
-                  </Box>
+                  </div>
                 </RecruitContentText>
                 <RecruitContentText
                   label="활동방식"
@@ -248,7 +246,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
     )
   }
 
-  // 모바일 뷰
+  /** 모바일 뷰 **/
   return (
     <>
       <RecruitFormModal
@@ -256,24 +254,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
         setOpen={setOpen}
         recruit_id={params.id}
         role={role}
-        setRoleOpen={setRoleOpen}
       />
-      <Drawer
-        anchor={'bottom'}
-        open={roleOpen}
-        onClose={() => setRoleOpen(false)}
-        sx={{ zIndex: 1500 }}
-      >
-        <List>
-          {data?.roleList.map(({ name }) => (
-            <ListItem key={name}>
-              <ListItemButton onClick={() => handleApply(name)}>
-                {name}
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
       <Container>
         <Stack gap={1}>
           <Box>
@@ -306,7 +287,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
           </RecruitContentText>
           <RecruitContentText label="역할">
             <Box>
-              {data?.roleList?.map(({ name, number }, idx: number) => (
+              {roleList?.map(({ name, number }, idx: number) => (
                 <Chip label={`${name} ${number} 명`} size="small" key={idx} />
               ))}
             </Box>
@@ -322,27 +303,15 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
               ))}
             </Stack>
           </RecruitContentText>
-          {data?.roleList?.length ? (
-            <Button
-              fullWidth
-              variant="contained"
-              size="large"
-              onClick={() => {
-                if (!isLogin) router.push(currentUrl)
-                else setRoleOpen(true)
-              }}
-            >
-              지원하기
-            </Button>
+          {/*역할이 없을 경우 처리*/}
+          {type === 'PROJECT' && roleList?.length ? (
+            <ApplyDrawerButton
+              handleApply={handleApply}
+              roleList={roleList}
+              disabled={checkIsFull}
+            />
           ) : (
-            <Button
-              id="apply-button"
-              variant="contained"
-              size="large"
-              onClick={() => handleApply(null)}
-            >
-              지원하기
-            </Button>
+            <ApplyButton handleApply={handleApply} disabled={checkIsFull} />
           )}
         </Stack>
       </Container>

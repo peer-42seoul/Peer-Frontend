@@ -1,6 +1,6 @@
 'use client'
-import { Stack, Button } from '@mui/material'
 import useTeamPageState from '@/states/useTeamPageState'
+import { EditButton } from '@/components/board/EditPanel'
 
 // NOTE : postId가 있으면 수정, 없으면 새로 작성
 const NoticeEditButton = ({ postId }: { postId?: string }) => {
@@ -10,14 +10,7 @@ const NoticeEditButton = ({ postId }: { postId?: string }) => {
     else setNotice('LIST') // 공지사항 작성
   }
   return (
-    <Stack direction={'row'} justifyContent={'flex-end'}>
-      <Button onClick={handleGoBack} variant={'text'}>
-        취소
-      </Button>
-      <Button type={'submit'} form={'notice-form'} variant={'contained'}>
-        {postId ? '완료' : '등록'}
-      </Button>
-    </Stack>
+    <EditButton type={postId ? 'edit' : 'new'} handleGoBack={handleGoBack} />
   )
 }
 

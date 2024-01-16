@@ -1,52 +1,23 @@
 'use client'
-import { ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
-import dayjs from 'dayjs'
 import useSWR from 'swr'
-import { Button, Stack, Typography } from '@mui/material'
+import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import DynamicToastViewer from '@/components/DynamicToastViewer'
+import {
+  DetailPage,
+  DetailContentCotainer,
+  StatusMessage,
+  DetailContent,
+} from '@/components/board/DetailPanel'
+import CuButton from '@/components/CuButton'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
-import * as style from './page.style'
-
-interface NoticeContentContainerProps {
-  children: ReactNode
-  isAuthor: boolean
-}
-
-const NoticeContentContainer = ({
-  children,
-  isAuthor,
-}: NoticeContentContainerProps) => {
-  const { setNotice, postId } = useTeamPageState()
-  return (
-    <Stack spacing={2} width={'100%'}>
-      <Button onClick={() => setNotice('LIST')} variant={'text'}>
-        이전 페이지
-      </Button>
-      <Stack
-        direction={'row'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-      >
-        <Typography variant="body2">공지사항</Typography>
-        {isAuthor ? (
-          <Button onClick={() => setNotice('EDIT', postId)} variant="text">
-            수정
-          </Button>
-        ) : null}
-      </Stack>
-      {children}
-    </Stack>
-  )
-}
 
 const TeamNoticeView = ({ params }: { params: { id: string } }) => {
-  const { id } = params
+  const { id: teamId } = params
   const axiosWithAuth = useAxiosWithAuth()
-  const { postId } = useTeamPageState()
+  const { postId, setNotice } = useTeamPageState()
   const router = useRouter()
   const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
     `/api/v1/team/notice/${postId}`,
@@ -60,59 +31,70 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       .delete(`/api/v1/team/notice/${postId}`)
       .then(() => {
         alert('공지사항을 삭제했습니다.')
-        router.push(`/teams/${id}/notice`)
+        router.push(`/teams/${teamId}/notice`)
       })
       .catch(() => {
         alert('공지사항 삭제에 실패했습니다.')
       })
   }
 
-  if (error || !data)
-    return (
-      <NoticeContentContainer isAuthor={!!data?.isAuthor}>
-        <Typography>문제가 발생했습니다.</Typography>
-      </NoticeContentContainer>
-    )
-
   if (postId === undefined) return null
-
+  if (!data || error)
+    return (
+      <StatusMessage
+        message={'문제가 발생했습니다.'}
+        onClickEditButton={() => setNotice('EDIT', postId)}
+        author={!!data?.isAuthor}
+      />
+    )
+  if (isLoading)
+    return (
+      <StatusMessage
+        message={'공지사항을 불러오는 중입니다...'}
+        onClickEditButton={() => setNotice('EDIT', postId)}
+        author={!!data?.isAuthor}
+      />
+    )
   return (
-    <Stack>
-      <NoticeContentContainer isAuthor={data.isAuthor}>
-        {isLoading ? (
-          <Typography>로딩중...</Typography>
-        ) : (
-          <>
-            <Stack spacing={1}>
-              <Typography>제목</Typography>
-              <Typography>{data.title}</Typography>
-            </Stack>
-            <Stack spacing={1}>
-              <Typography>작성자</Typography>
-              <Typography>{data.authorNickname}</Typography>
-            </Stack>
-            <Stack spacing={1}>
-              <Typography>작성일</Typography>
-              <Typography>
-                {dayjs(data.createdAt).format('YYYY-MM-DD')}
-              </Typography>
-            </Stack>
-            <Stack spacing={1}>
-              <Typography>설명</Typography>
-            </Stack>
-            <DynamicToastViewer sx={style.viewer} initialValue={data.content} />
-            <Stack alignItems={'flex-end'}>
-              {data.isAuthor ? (
-                <Button variant={'text'} color="warning" onClick={handleDelete}>
-                  삭제
-                </Button>
-              ) : null}
-            </Stack>
-          </>
+    <DetailPage>
+      <CuButton
+        message={'이전 페이지'}
+        action={() => setNotice('LIST')}
+        variant={'text'}
+        TypographyProps={{
+          color: 'text.strong',
+          variant: 'Body2Emphasis',
+        }}
+        style={{ width: 'fit-content' }}
+      />
+      <DetailContentCotainer
+        containerTitle={'공지사항'}
+        onClickEditButton={() => setNotice('EDIT', postId)}
+        author={data.isAuthor}
+      >
+        <DetailContent
+          title={data.title}
+          createdAt={data.createdAt}
+          authorNickname={data.authorNickname}
+          content={data.content}
+        />
+        {data.isAuthor && (
+          <Stack alignItems={'flex-end'}>
+            <CuButton
+              message={'삭제'}
+              action={handleDelete}
+              variant={'text'}
+              TypographyProps={{
+                color: 'red.normal',
+                variant: 'Caption',
+              }}
+              style={{ width: 'fit-content' }}
+            />
+          </Stack>
         )}
-      </NoticeContentContainer>
-      <CommentList postId={postId} teamId={parseInt(id)} />
-    </Stack>
+      </DetailContentCotainer>
+      <CommentList postId={postId} teamId={parseInt(teamId)} />
+    </DetailPage>
   )
 }
 

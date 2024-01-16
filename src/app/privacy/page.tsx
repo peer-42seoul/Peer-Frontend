@@ -110,7 +110,7 @@ const Privacy = () => {
               }}
               checked={checkAll}
             />
-            <Typography variant="caption">
+            <Typography variant="Caption">
               실명 인증된 아이디로 가입,이벤트 혜택 정보 수신(선택) 동의를
               포함합니다.
             </Typography>

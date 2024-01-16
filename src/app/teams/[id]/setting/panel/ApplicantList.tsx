@@ -1,12 +1,21 @@
 'use client'
 
-import { Avatar, Button, Card, Stack, Typography } from '@mui/material'
+import {
+  Avatar,
+  Button,
+  Card,
+  IconButton,
+  Stack,
+  Typography,
+} from '@mui/material'
 import { IApplicant } from '../../../types/types'
 import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import useMedia from '@/hook/useMedia'
 import FormAnswer from './RecuitFormAnswer'
 import useAxiosWithAuth from '@/api/config'
+import { CloseIcon } from '@/icons'
+import { NextButton, PrevButton } from './Icons'
 
 const ApplicantList = ({
   close,
@@ -121,9 +130,9 @@ const ApplicantList = ({
           mb={3}
         >
           <Typography fontWeight="bold">신청 대기자</Typography>
-          <Button onClick={close} size="small">
-            X
-          </Button>
+          <IconButton onClick={close} size="small">
+            <CloseIcon />
+          </IconButton>
         </Stack>
         <Typography>신청한 대기자가 없습니다.</Typography>
       </Card>
@@ -153,21 +162,21 @@ const ApplicantList = ({
         width="80%"
         p={2}
       >
-        <Button disabled={index === 0 ? true : false} onClick={handlePrev}>
-          ◀︎
-        </Button>
+        <IconButton disabled={index === 0 ? true : false} onClick={handlePrev}>
+          <PrevButton />
+        </IconButton>
         <Stack alignItems="center" spacing={1}>
           <Avatar>A</Avatar>
           {member && <Typography>{member.name}</Typography>}
           {member?.jobName && <Typography>{member.jobName}</Typography>}
         </Stack>
 
-        <Button
+        <IconButton
           disabled={index + 1 === members.length ? true : false}
           onClick={handleNext}
         >
-          ▶︎
-        </Button>
+          <NextButton />
+        </IconButton>
       </Stack>
 
       <Stack direction="row" spacing={1} justifyContent={'center'}>
