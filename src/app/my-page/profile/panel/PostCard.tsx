@@ -1,9 +1,10 @@
+'use client'
 import {
+  Button,
   Card,
   CardContent,
   CardHeader,
   CardMedia,
-  IconButton,
   Stack,
   SxProps,
   Typography,
@@ -15,7 +16,6 @@ import { Chip } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
 import * as style from './PostCard.style'
 import { useRouter } from 'next/navigation'
-import { EditIcon } from '@/icons'
 
 interface IPostCard {
   teamLogo: string // 팀 로고
@@ -25,6 +25,37 @@ interface IPostCard {
   image: string // 글 대표 이미지 (썸네일)
   sx?: SxProps // 카드 전체 스타일
 }
+
+const RoutingButton = ({
+  onClick,
+  disabled,
+  buttonText,
+}: {
+  onClick: () => void
+  disabled: boolean
+  buttonText: string
+}) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onClick()
+  }
+  return (
+    <Button
+      disabled={disabled}
+      onClick={handleClick}
+      variant="contained"
+      sx={{ width: '4.75rem', height: '2rem' }}
+    >
+      <Typography
+        variant="Caption"
+        color={disabled ? 'text.assistive' : 'text.normal'}
+      >
+        {buttonText}
+      </Typography>
+    </Button>
+  )
+}
+
 function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
   const teamId: undefined | number = 1
   const showCaseId: undefined | number = undefined
@@ -54,8 +85,11 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
     <Card
       sx={{
         backgroundColor: 'background.primary',
+        position: 'relative',
+        '& .MuiCardContent-root:last-child ': {
+          paddingBottom: '0',
+        },
       }}
-      // ref={ref}
       onClick={gotoTeamPage}
     >
       <CardMedia
@@ -64,7 +98,7 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
         alt="post thumbnail"
         sx={{
           ...style.cardMediaStyleBase,
-          height: '160px',
+          height: '10rem',
         }}
       />
       <Stack
@@ -72,10 +106,12 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
           p: '1rem',
           pt: '0.75rem',
           boxSizing: 'border-box',
-          height: '190px',
+          minHeight: '12.5rem',
+          position: 'relative',
         }}
+        direction={'column'}
+        justifyContent={'space-between'}
         spacing={'15px'}
-        maxHeight={'11.875rem'}
       >
         <CardHeader
           avatar={
@@ -97,7 +133,14 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
             gap={1}
             direction={'row'}
             justifyContent={'center'}
-            sx={{ boxSizing: 'border-box', width: '100%', flexWrap: 'wrap' }}
+            alignItems={'center'}
+            sx={{
+              boxSizing: 'border-box',
+              width: '100%',
+              flexWrap: 'wrap',
+              height: '3rem',
+              overflow: 'hidden',
+            }}
           >
             {tagList?.map(({ name, color }: ITag, idx: number) => {
               return (
@@ -119,23 +162,34 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
             })}
           </Stack>
         </CardContent>
-        <CardContent sx={{ p: 0 }}>
-          <Stack direction={'row'} justifyContent={'space-between'}>
-            <IconButton disabled={!postId} onClick={goToRecruitPage}>
-              <EditIcon
-                sx={{ color: postId ? 'text.alternative' : 'text.disable' }}
-              />
-            </IconButton>
-            <IconButton disabled={!showCaseId} onClick={gotoShowCasePage}>
-              <EditIcon
-                sx={{ color: showCaseId ? 'text.alternative' : 'text.disable' }}
-              />
-            </IconButton>
-            <IconButton disabled={!peerLogId} onClick={gotoPeerLogPage}>
-              <EditIcon
-                sx={{ color: peerLogId ? 'text.alternative' : 'text.disable' }}
-              />
-            </IconButton>
+        <CardContent
+          sx={{
+            p: 0,
+            pb: 0,
+          }}
+        >
+          <Stack
+            direction={'row'}
+            justifyContent={'center'}
+            flexWrap={'wrap'}
+            gap={'0.5rem'}
+            sx={{ boxSizing: 'border-box', width: '100%' }}
+          >
+            <RoutingButton
+              onClick={goToRecruitPage}
+              buttonText={'모집글'}
+              disabled={!postId}
+            />
+            <RoutingButton
+              onClick={gotoShowCasePage}
+              buttonText={'쇼케이스'}
+              disabled={!showCaseId}
+            />
+            <RoutingButton
+              onClick={gotoPeerLogPage}
+              buttonText={'피어로그'}
+              disabled={!peerLogId}
+            />
           </Stack>
         </CardContent>
       </Stack>

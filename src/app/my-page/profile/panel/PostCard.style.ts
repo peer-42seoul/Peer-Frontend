@@ -1,14 +1,5 @@
 import { SxProps } from '@mui/material'
 
-export const cardTitleStyleBase: SxProps = {
-  width: '100%',
-  overflow: 'hidden',
-  lineHeight: '22.5px',
-  textOverflow: 'ellipsis',
-  display: '-webkit-box',
-  WebkitBoxOrient: 'vertical',
-}
-
 export const cardMediaStyleBase: SxProps = {
   flexGrow: 1,
   objectFit: 'cover',

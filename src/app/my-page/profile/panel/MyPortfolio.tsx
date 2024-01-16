@@ -46,7 +46,7 @@ const MyPortfolio = ({
     }
   }, [isLoading, data])
 
-  const { target, spinner } = useInfiniteScroll({
+  const { target } = useInfiniteScroll({
     setPage,
     mutate: () => {},
     pageLimit,
@@ -128,7 +128,7 @@ const MyPortfolio = ({
         ))}
         <Grid xs={12} sm={6}>
           <Box position={'relative'} ref={target} height={1}>
-            {spinner && <CircularProgress />}
+            {isLoading && <CircularProgress />}
           </Box>
         </Grid>
       </Grid>
