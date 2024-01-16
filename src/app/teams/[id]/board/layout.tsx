@@ -6,9 +6,10 @@ interface ITeamLayoutProps {
   list: ReactNode
   detail: ReactNode
   edit: ReactNode
+  setting: ReactNode
 }
 
-const TeamNoticeMain = ({ list, detail, edit }: ITeamLayoutProps) => {
+const TeamNoticeMain = ({ list, detail, edit, setting }: ITeamLayoutProps) => {
   const { boardType, resetState } = useTeamPageState()
   useEffect(() => {
     return () => {
@@ -20,6 +21,9 @@ const TeamNoticeMain = ({ list, detail, edit }: ITeamLayoutProps) => {
   }
   if (boardType === 'DETAIL') {
     return detail
+  }
+  if (boardType === 'SETTING') {
+    return setting
   }
   return list
 }

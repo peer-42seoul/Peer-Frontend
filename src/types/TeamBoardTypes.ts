@@ -2,12 +2,12 @@ import { IPagination } from './IPagination'
 
 // Board
 
-export interface ITeamBoardInfo {
+export interface ITeamBoard {
   boardId: number
   boardName: string
 }
 
-export interface ITeamBoardPost {
+export interface ITeamPostBase {
   postId: number
   title: string
   nickname: string
@@ -15,13 +15,18 @@ export interface ITeamBoardPost {
   date: Date
 }
 
-export interface ITeamBoard {
+export interface ITeamPost extends ITeamPostBase {}
+export interface ITeamBoardList {
   boardId: number
   boardName: string
-  posts: ITeamBoardPost[]
+  posts: ITeamPost[]
 }
 
-export interface ITeamBoardListData extends IPagination<ITeamBoard[]> {}
+export interface ITeamBoardListData extends IPagination<ITeamBoardList[]> {}
+
+export interface ITeamPostDetail extends ITeamPostBase {
+  content: string
+}
 
 // Notice
 
