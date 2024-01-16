@@ -72,7 +72,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
             content={data?.content}
           />
         </Stack>
-        <Stack gap={'1.5rem'} >
+        <Stack gap={'1.5rem'}>
           <RecruitInfo data={data} type={type} />
           <Divider />
           <RecruitDetailContent data={data} type={type} roleList={roleList} />
