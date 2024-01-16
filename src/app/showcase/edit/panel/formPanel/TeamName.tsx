@@ -2,9 +2,12 @@ import React from 'react'
 import { Avatar, Stack, Typography } from '@mui/material'
 import LabelWithIcon from '../LabelWithIcon'
 import ListIcon from '@/icons/ListIcon'
-import * as Style from '../ShowcaseEditor.style'
+import * as Style from '../SkillInput.style'
 
-const TeamName = () => {
+interface IteamNameProps {
+  teamName: string
+}
+const TeamName = ({ teamName }: IteamNameProps) => {
   return (
     <Stack direction={'column'} spacing={'0.5rem'}>
       <LabelWithIcon
@@ -13,7 +16,7 @@ const TeamName = () => {
       />
       <Stack direction={'row'} spacing={'6px'} alignItems={'center'}>
         <Avatar src={''} sx={{ width: '2rem', height: '2rem' }} />
-        <Typography variant={'Body2'}>프로젝트명 피어</Typography>
+        <Typography variant={'Body2'}>{teamName}</Typography>
       </Stack>
     </Stack>
   )
