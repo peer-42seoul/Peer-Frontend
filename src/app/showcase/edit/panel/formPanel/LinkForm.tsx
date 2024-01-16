@@ -39,7 +39,6 @@ const LinkForm = ({
           onClick={() => {
             if (links.length >= 5) return
             addLink('', '')
-            console.log('links', links)
           }}
         >
           <PlusIcon sx={Style.IconStyle} />

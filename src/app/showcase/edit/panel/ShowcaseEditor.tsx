@@ -76,7 +76,6 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
           links: links,
         },
       )
-      console.log(`/api/showcase response : ${response}`)
       redirect(`/showcase/${response.data.get('id')}`) // next 13에서 redirect 하는 법
     } catch (error: any) {
       if (error.response) {
@@ -104,10 +103,6 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
         setErrorMessages('요청을 설정하는 중에 에러가 발생했습니다.')
       }
     }
-    console.log('링크', links[0].linkName, links[0].linkUrl)
-    alert(
-      `links : ${links} ${image} Coverimage : ${previewImage}, content : ${text}, teamId : ${content},`,
-    )
   }
 
   // if (isLoading) return <div>로딩중</div>
