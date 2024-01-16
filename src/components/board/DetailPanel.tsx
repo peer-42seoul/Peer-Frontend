@@ -1,7 +1,9 @@
 import { Stack, Typography } from '@mui/material'
-import DynamicToastViewer from '../DynamicToastViewer'
 import dayjs from 'dayjs'
+import useMedia from '@/hook/useMedia'
 import CuButton from '../CuButton'
+import CuModal from '../CuModal'
+import DynamicToastViewer from '../DynamicToastViewer'
 import * as style from './DetailPanel.style'
 
 interface IChildrenProps {
@@ -13,6 +15,10 @@ interface IDetailContentContainerProps {
   containerTitle: string
   author: boolean
   onClickEditButton?: () => void
+}
+
+interface IDetailPageProps extends IChildrenProps {
+  handleGoBack: () => void
 }
 
 interface IStatusMessageProps {
@@ -28,11 +34,29 @@ interface IDetailContentProps {
   content: string
 }
 
-export const DetailPage = ({ children }: IChildrenProps) => {
+export const DetailPage = ({ children, handleGoBack }: IDetailPageProps) => {
+  const { isPc } = useMedia()
+  if (isPc) {
+    return (
+      <Stack sx={style.DetailPage} spacing={'1.5rem'}>
+        {children}
+      </Stack>
+    )
+  }
   return (
-    <Stack sx={style.DetailPage} spacing={'1.5rem'}>
-      {children}
-    </Stack>
+    <CuModal
+      open={true}
+      title={'공지사항'}
+      onClose={handleGoBack}
+      mobileFullSize
+    >
+      <Stack
+        sx={{ ...style.DetailPage, height: '100%', overflowY: 'scroll' }}
+        spacing={'1.5rem'}
+      >
+        {children}
+      </Stack>
+    </CuModal>
   )
 }
 
@@ -42,10 +66,11 @@ export const DetailContentCotainer = ({
   author,
   onClickEditButton,
 }: IDetailContentContainerProps) => {
+  const { isPc } = useMedia()
   return (
-    <Stack sx={style.DetailContent} spacing={'2rem'}>
+    <Stack sx={isPc ? style.DetailContent : undefined} spacing={'2rem'}>
       <Stack direction={'row'} justifyContent={'space-between'}>
-        <Typography>{containerTitle}</Typography>
+        <Typography>{isPc ? containerTitle : ''}</Typography>
         {author && (
           <CuButton
             message={'수정'}
@@ -107,8 +132,9 @@ export const DetailContent = ({
   authorNickname,
   content,
 }: IDetailContentProps) => {
+  const { isPc } = useMedia()
   return (
-    <Stack spacing={'1.5rem'}>
+    <Stack spacing={isPc ? '1.5rem' : '1rem'}>
       <Stack spacing={'0.5rem'}>
         <ContentTitle title={'제목'} />
         <Content content={title} />

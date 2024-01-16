@@ -1,13 +1,20 @@
-import { Box, IconButton, Stack } from '@mui/material'
-import Typography from '@mui/material/Typography'
-import { TrashIcon, EditIcon, SendIcon } from '@/icons'
-import { ITeamComment } from '@/types/TeamBoardTypes'
-import * as style from './CommentPanel.style'
-import { FormEvent } from 'react'
-import CuAvatar from '../CuAvatar'
+import { FormEvent, useState, MouseEvent } from 'react'
 import dayjs from 'dayjs'
+import {
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+} from '@mui/material'
+import { TrashIcon, EditIcon, SendIcon, MoreHorizontalIcon } from '@/icons'
+import useMedia from '@/hook/useMedia'
+import { ITeamComment } from '@/types/TeamBoardTypes'
+import CuAvatar from '../CuAvatar'
 import CuTextField from '../CuTextField'
 import CuButton from '../CuButton'
+import * as style from './CommentPanel.style'
 
 interface IChildrenProps {
   children: React.ReactNode
@@ -21,10 +28,38 @@ interface ICommentProps {
   handleEdit: (e: FormEvent<HTMLFormElement>) => void
 }
 
+interface IIconMenuItemProps {
+  icon: React.ReactNode
+  text: string
+  onClick: () => void
+}
+
+interface ICommentMoreDropdownMenuProps {
+  handleDelete: () => void
+  setEditMode: () => void
+}
+
+interface ICommentFormContainerProps {
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
+  isLoading: boolean
+}
+
 export const CommentContainer = ({ children }: IChildrenProps) => {
+  const { isPc } = useMedia()
   return (
-    <Stack sx={style.CommentContainer} spacing={'1rem'}>
-      <Typography variant={'Title1'}>댓글</Typography>
+    <Stack
+      sx={{
+        ...style.CommentContainer,
+        padding: isPc ? '1.5rem 2rem' : '1.5rem 1rem',
+      }}
+      spacing={'1rem'}
+    >
+      <Typography
+        color={'text.strong'}
+        variant={isPc ? 'Title1' : 'CaptionEmphasis'}
+      >
+        댓글
+      </Typography>
       <Stack spacing={'1rem'}>{children}</Stack>
     </Stack>
   )
@@ -44,6 +79,80 @@ export const StatusMessage = ({ message }: { message: string }) => {
   )
 }
 
+const IconMenuItem = ({ icon, text, onClick }: IIconMenuItemProps) => {
+  return (
+    <MenuItem onClick={onClick} sx={style.IconMenuItem}>
+      <Stack direction={'row'} spacing={'0.38rem'} alignItems={'center'}>
+        {icon}
+        <Typography variant="Caption" color="text.alternative">
+          {text}
+        </Typography>
+      </Stack>
+    </MenuItem>
+  )
+}
+
+const MENU_POSITION = {
+  top: -0.5 * 16, // 0.5rem (padding)
+  left: (1.5 + 1) * 16, // 1.5rem + 1rem (icon size + padding)
+}
+
+export const CommentMoreDropdownMenu = ({
+  handleDelete,
+  setEditMode,
+}: ICommentMoreDropdownMenuProps) => {
+  // TODO : DropdownMenu 컴포넌트를 활용할 수 있을지 확인해보기
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
+  const handleOpen = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+  return (
+    <>
+      <IconButton sx={style.IconButton} onClick={handleOpen}>
+        <MoreHorizontalIcon sx={style.Icon} />
+      </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: MENU_POSITION.top,
+          horizontal: MENU_POSITION.left,
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        sx={style.Menu}
+      >
+        <MenuItem onClick={handleClose} sx={style.CloseMenuItem}>
+          <MoreHorizontalIcon sx={style.MenuIcon} />
+        </MenuItem>
+        <IconMenuItem
+          icon={<EditIcon sx={style.MenuIcon} />}
+          text={'수정'}
+          onClick={() => {
+            setEditMode()
+            handleClose()
+          }}
+        />
+        <IconMenuItem
+          icon={<TrashIcon sx={style.MenuIcon} />}
+          text={'삭제'}
+          onClick={() => {
+            handleDelete()
+            handleClose()
+          }}
+        />
+      </Menu>
+    </>
+  )
+}
+
 export const CommentItem = ({
   comment,
   isEditMode,
@@ -51,20 +160,37 @@ export const CommentItem = ({
   setEditMode,
   handleEdit,
 }: ICommentProps) => {
+  // TODO : 편집 권한 조건 추가할 것 (issue #485)
+  const canEdit = comment.isAuthor
   return (
-    <Stack direction={'row'} spacing={'1rem'}>
+    <Stack direction={'row'} spacing={'1rem'} alignItems={'flex-start'}>
       {/* content */}
       <Stack sx={style.CommentContentWrapper}>
         <Stack
           sx={{ marginBottom: '0.25rem' }}
-          spacing={'0.38rem'}
+          spacing={'1rem'}
           direction={'row'}
           alignItems={'center'}
         >
-          <CuAvatar sx={style.Avatar} src={comment.authorImage} />
-          <Typography color={'text.alternative'} variant={'Caption'}>
-            {comment.authorNickname}
-          </Typography>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            spacing={'0.25rem'}
+            sx={{ flex: '1 0 0' }}
+          >
+            <CuAvatar sx={style.Avatar} src={comment.authorImage} />
+            <Typography color={'text.alternative'} variant={'Caption'}>
+              {comment.authorNickname}
+            </Typography>
+          </Stack>
+          {!isEditMode && canEdit ? (
+            <CommentMoreDropdownMenu
+              handleDelete={() => handleDelete(comment.answerId)}
+              setEditMode={() => setEditMode(true)}
+            />
+          ) : (
+            <Box sx={style.Icon} />
+          )}
         </Stack>
         {isEditMode ? (
           <form onSubmit={handleEdit}>
@@ -92,32 +218,12 @@ export const CommentItem = ({
             </Stack>
           </form>
         ) : (
-          <>
+          <Box sx={{ paddingRight: '2.5rem' }}>
             <Typography variant={'Body2'}>{comment.content}</Typography>
             <Typography variant={'Tag'} color={'text.assistive'}>
               {dayjs(comment.createdAt).format('YYYY년 M월 D일 h:m A')}
             </Typography>
-          </>
-        )}
-      </Stack>
-      {/* icon button */}
-      <Stack direction={'row'} spacing={'1rem'} alignItems={'flex-start'}>
-        {!isEditMode && comment.isAuthor ? (
-          <IconButton sx={style.IconButton} onClick={() => setEditMode(true)}>
-            <EditIcon sx={style.Icon} />
-          </IconButton>
-        ) : (
-          <Box sx={style.Icon} />
-        )}
-        {!isEditMode && comment.isAuthor ? (
-          <IconButton
-            sx={style.IconButton}
-            onClick={() => handleDelete(comment.answerId)}
-          >
-            <TrashIcon sx={style.Icon} />
-          </IconButton>
-        ) : (
-          <Box sx={style.Icon} />
+          </Box>
         )}
       </Stack>
     </Stack>
@@ -127,14 +233,15 @@ export const CommentItem = ({
 export const CommentFormContainer = ({
   handleSubmit,
   isLoading,
-}: {
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
-  isLoading: boolean
-}) => {
+}: ICommentFormContainerProps) => {
+  const { isPc } = useMedia()
   return (
     <form onSubmit={handleSubmit}>
       <Stack
-        sx={style.CommentForm}
+        sx={{
+          ...style.CommentForm,
+          padding: isPc ? '1rem 2rem' : '1rem',
+        }}
         direction={'row'}
         spacing={'1rem'}
         alignItems={'center'}
