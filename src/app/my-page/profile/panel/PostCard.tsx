@@ -9,7 +9,7 @@ import {
   Typography,
   alpha,
 } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ITag } from '@/types/IPostDetail'
 import { Chip } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
@@ -25,14 +25,7 @@ interface IPostCard {
   image: string // 글 대표 이미지 (썸네일)
   sx?: SxProps // 카드 전체 스타일
 }
-function PostCard({
-  teamLogo,
-  teamName,
-  tagList,
-  image,
-  sx,
-  postId,
-}: IPostCard) {
+function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
   const teamId: undefined | number = 1
   const showCaseId: undefined | number = undefined
   const peerLogId: undefined | number = undefined
@@ -57,31 +50,12 @@ function PostCard({
     // router.push(`/peer-log/${peerLogId}`)
   }
 
-  const ref = React.useRef<HTMLDivElement>(null)
-  const [currentCardWidth, setCurrentCardWidth] = useState<number>(0)
-
-  useEffect(() => {
-    if (ref.current) {
-      setCurrentCardWidth(ref.current.clientWidth)
-    }
-  }, [ref, ref.current?.clientWidth])
-
-  const getLineCount = (originHeight: number, lineHeight: number) => {
-    const lineCount = Math.floor(
-      (currentCardWidth || 328 * originHeight) / 328 / lineHeight,
-    )
-    return lineCount ? lineCount : 1
-  }
-
   return (
     <Card
       sx={{
-        ...sx,
-        display: 'flex',
-        flexDirection: 'column',
-        backfaceVisibility: 'hidden',
+        backgroundColor: 'background.primary',
       }}
-      ref={ref}
+      // ref={ref}
       onClick={gotoTeamPage}
     >
       <CardMedia
@@ -90,7 +64,7 @@ function PostCard({
         alt="post thumbnail"
         sx={{
           ...style.cardMediaStyleBase,
-          height: (currentCardWidth * 251) / 328,
+          height: '160px',
         }}
       />
       <Stack
@@ -98,6 +72,7 @@ function PostCard({
           p: '1rem',
           pt: '0.75rem',
           boxSizing: 'border-box',
+          height: '190px',
         }}
         spacing={'15px'}
         maxHeight={'11.875rem'}
@@ -107,11 +82,7 @@ function PostCard({
             <CuAvatar
               aria-label="profile"
               src={teamLogo}
-              sx={{
-                ...style.cardAuthorAvatarStyleBase,
-                height: (currentCardWidth * 32) / 328,
-                width: (currentCardWidth * 32) / 328,
-              }}
+              sx={style.cardAuthorAvatarStyleBase}
             />
           }
           title={
@@ -121,15 +92,12 @@ function PostCard({
           }
           sx={{ p: 0 }}
         />
-        <CardContent sx={{ p: 0 }}>
+        <CardContent sx={{ boxSizing: 'border-box', width: '100%', p: 0 }}>
           <Stack
             gap={1}
             direction={'row'}
             justifyContent={'center'}
-            sx={{
-              overflow: 'hidden',
-              height: getLineCount(46, 22.5) * 20 + 8,
-            }}
+            sx={{ boxSizing: 'border-box', width: '100%', flexWrap: 'wrap' }}
           >
             {tagList?.map(({ name, color }: ITag, idx: number) => {
               return (
@@ -154,16 +122,18 @@ function PostCard({
         <CardContent sx={{ p: 0 }}>
           <Stack direction={'row'} justifyContent={'space-between'}>
             <IconButton disabled={!postId} onClick={goToRecruitPage}>
-              <EditIcon sx={{ color: 'text.normal' }} />
+              <EditIcon
+                sx={{ color: postId ? 'text.alternative' : 'text.disable' }}
+              />
             </IconButton>
             <IconButton disabled={!showCaseId} onClick={gotoShowCasePage}>
               <EditIcon
-                sx={{ color: showCaseId ? 'text.normal' : 'text.disable' }}
+                sx={{ color: showCaseId ? 'text.alternative' : 'text.disable' }}
               />
             </IconButton>
             <IconButton disabled={!peerLogId} onClick={gotoPeerLogPage}>
               <EditIcon
-                sx={{ color: peerLogId ? 'text.normal' : 'text.disable' }}
+                sx={{ color: peerLogId ? 'text.alternative' : 'text.disable' }}
               />
             </IconButton>
           </Stack>
