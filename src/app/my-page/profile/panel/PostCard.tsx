@@ -132,7 +132,7 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
           <Stack
             gap={1}
             direction={'row'}
-            justifyContent={'center'}
+            justifyContent={'flex-start'}
             alignItems={'center'}
             sx={{
               boxSizing: 'border-box',
