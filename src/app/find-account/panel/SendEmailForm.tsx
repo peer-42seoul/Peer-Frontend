@@ -140,9 +140,12 @@ const SendEmailForm = ({
           </Box>
         )}
       </Container>
-      <CuToast open={isOpen} onClose={closeToast} severity="error">
-        <Typography>{errorMessage}</Typography>
-      </CuToast>
+      <CuToast
+        message={errorMessage}
+        open={isOpen}
+        onClose={closeToast}
+        severity="error"
+      />
     </>
   )
 }
