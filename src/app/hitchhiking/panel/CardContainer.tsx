@@ -1,4 +1,5 @@
 'use client'
+
 import React from 'react'
 import useMedia from '@/hook/useMedia'
 import { IMainCard } from '@/types/IPostDetail'
@@ -8,6 +9,7 @@ import Interest from './Interest'
 import * as cardStyle from './HitchhikingCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
+import BetaBadge from '@/components/BetaBadge'
 
 const CardContainer = ({
   cardList,
@@ -35,6 +37,7 @@ const CardContainer = ({
       direction={'column'}
     >
       <Stack
+        direction={'row'}
         justifyContent={'center'}
         alignItems={'center'}
         sx={containerStyle.gnbContainerStyle}
@@ -42,6 +45,7 @@ const CardContainer = ({
         <Typography component={'h4'} sx={containerStyle.gnbTypographyStyle}>
           히치하이킹
         </Typography>
+        <BetaBadge />
       </Stack>
       <Stack
         sx={containerStyle.toggleContainerStyle}
