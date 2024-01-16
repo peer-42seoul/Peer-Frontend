@@ -5,20 +5,17 @@ import LabelWithIcon from '../LabelWithIcon'
 import ImageIcon from '@/icons/ImageIcon'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import * as Style from '../ShowcaseEditor.style'
-// import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
-// import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 
+/* eslint-disable no-unused-vars */
 const ImageInput = ({
   previewImage,
   setPreviewImage,
-  // register,
-  // setValue,
   setImage,
+  image,
 }: {
   previewImage: string
+  image: File[]
   setPreviewImage: (image: string) => void
-  // register: UseFormRegister<IShowcaseEditorFields>
-  // setValue: UseFormSetValue<IShowcaseEditorFields>
   setImage: (image: File[]) => void
 }) => {
   return (
@@ -37,7 +34,7 @@ const ImageInput = ({
           <Box
             component={'img'}
             alt="쇼캐이스 대표 이미지"
-            src={previewImage ? previewImage : '/images/teamLogo.png'}
+            src={image ? previewImage : '/images/teamLogo.png'}
             sx={Style.ShowcaseImageStyle}
           />
         ) : (

@@ -6,7 +6,6 @@ import ImageInput from './formPanel/ImageInput'
 import TeamName from './formPanel/TeamName'
 import SkillInput from './formPanel/SkillInput'
 import LinkForm from './formPanel/LinkForm'
-import useShowCaseState from '@/states/useShowCaseState'
 import useToast from '@/hook/useToast'
 import { redirect } from 'next/navigation'
 import useModal from '@/hook/useModal'
@@ -31,7 +30,6 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>('')
   const [text, setText] = useState<string>('')
-  const { content } = useShowCaseState()
   const [errorMessages, setErrorMessages] = useState<string>('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
@@ -112,6 +110,7 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
       <Stack direction={'column'} spacing={'2.5rem'} sx={{ width: '26rem' }}>
         <ImageInput
           previewImage={previewImage}
+          image={image}
           setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
