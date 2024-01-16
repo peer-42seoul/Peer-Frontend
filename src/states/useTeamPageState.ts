@@ -27,7 +27,7 @@ interface ITeamPageState {
 const useTeamPageState = create<ITeamPageState>((set) => ({
   layout: 'SIDEBAR',
   // boardType: 'NOTICE',
-  boardType: 'SETTING',
+  boardType: 'LIST',
   // boardId: undefined,
   boardId: 1,
   postId: undefined,
