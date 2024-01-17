@@ -16,19 +16,17 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import * as style from './Profile.style'
 import useAxiosWithAuth from '@/api/config'
-import IToast from '@/types/IToastProps'
+import useToast from '@/states/useToast'
 
-const MyPortfolio = ({
-  setToastMessage,
-}: {
-  setToastMessage: React.Dispatch<React.SetStateAction<IToast>>
-}) => {
+const MyPortfolio = () => {
   const [isVisible, setIsVisible] = useState<boolean>(true)
 
   // 무한 스크롤
   const [page, setPage] = useState<number>(1)
   const [postList, setPostList] = useState<Array<IMainCard>>([])
   const [pageLimit, setPageLimit] = useState(1)
+
+  const { setToastMessage, openToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -60,11 +58,13 @@ const MyPortfolio = ({
         severity: 'success',
         message: '내 작업물이 다른 사람들에게 공개되었습니다.',
       })
+      openToast()
     } else {
       setToastMessage({
         severity: 'success',
         message: '내 작업물이 다른 사람들에게 비공개되었습니다.',
       })
+      openToast()
     }
   }
 

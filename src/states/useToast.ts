@@ -65,7 +65,14 @@ const useToast = create<IToastState>((set, get) => {
   }
 
   return {
-    toastProps: defaultToastProps,
+    toastProps: {
+      open: false,
+      autoHideDuration: 10000,
+      onClose: closeToast,
+      severity: undefined,
+      message: '',
+      subButton: undefined,
+    },
     setToastMessage,
     openToast,
     closeToast,

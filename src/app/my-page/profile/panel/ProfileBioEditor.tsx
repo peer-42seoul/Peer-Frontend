@@ -23,7 +23,7 @@ import { PlusIcon } from '@/icons'
 import TrashIcon from '@/icons/TrashIcon'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
-import IToast from '@/types/IToastProps'
+import useToast from '@/states/useToast'
 
 interface IFormInput {
   nickname: string
@@ -34,13 +34,11 @@ interface IFormInput {
 const ProfileBioEditor = ({
   data,
   closeModal,
-  setToastMessage,
   mutate,
   open,
 }: {
   data: IProfileCard
   closeModal: () => void
-  setToastMessage: (toastProps: IToast) => void
   mutate: () => void
   open: boolean
 }) => {
@@ -54,6 +52,8 @@ const ProfileBioEditor = ({
   const [cropper, setCropper] = useState<Cropper | null>(null)
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
   const { isPc } = useMedia()
+
+  const { setToastMessage, openToast } = useToast()
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
@@ -189,6 +189,7 @@ const ProfileBioEditor = ({
               severity: 'success',
               message: '사용할 수 있는 닉네임 입니다.',
             })
+            openToast()
             if (errors.nickname?.type === 'notUnique') {
               clearErrors('nickname')
             }
@@ -201,6 +202,7 @@ const ProfileBioEditor = ({
               severity: 'error',
               message: '중복된 닉네임 입니다.',
             })
+            openToast()
             setError('nickname', {
               type: 'notUnique',
               message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
@@ -276,6 +278,7 @@ const ProfileBioEditor = ({
           severity: 'success',
           message: '프로필 변경에 성공하였습니다.',
         })
+        openToast()
         mutate()
         closeModal()
       })
@@ -285,11 +288,13 @@ const ProfileBioEditor = ({
             severity: 'error',
             message: '프로필 변경에 실패하였습니다.',
           })
+          openToast()
         } else {
           setToastMessage({
             severity: 'error',
             message: e.response.data.message,
           })
+          openToast()
         }
       })
   }

@@ -8,18 +8,16 @@ import CuModal from '@/components/CuModal'
 import { Stack, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
-import IToast from '@/types/IToastProps'
+import useToast from '@/states/useToast'
 
 const ProfileLinkEditor = ({
   closeModal,
   links,
-  setToastMessage,
   mutate,
   open,
 }: {
   closeModal: () => void
   links?: Array<IUserProfileLink>
-  setToastMessage: (toastProps: IToast) => void
   mutate: () => void
   open: boolean
 }) => {
@@ -32,6 +30,8 @@ const ProfileLinkEditor = ({
       }))
     : ([] as Array<IUserProfileLink>)
   const { isPc } = useMedia()
+
+  const { setToastMessage, openToast } = useToast()
 
   const emptyLinksLength: number = 3 - (links ? links.length : 0)
 
@@ -68,22 +68,12 @@ const ProfileLinkEditor = ({
     }
     for (let i = 0; i < 3; i++) {
       if (data[i].linkUrl && !data[i].linkName) {
-        // setToastMessage({
-        //   severity: 'error',
-        //   message: `${i + 1}번째 링크의 제목이 없습니다. 확인해주세요!`,
-        // })
-        // setToastOpen(true)
         setError(`${i}.linkName`, {
           type: 'required',
           message: '아래 링크에 제목이 없습니다.',
         })
         return
       } else if (data[i].linkName && !data[i].linkUrl) {
-        // setToastMessage({
-        //   severity: 'error',
-        //   message: `${data[i].linkName}의 링크 주소가 없습니다. 확인해주세요!`,
-        // })
-        // setToastOpen(true)
         setError(`${i}.linkUrl`, {
           type: 'required',
           message: '위 링크 제목에 링크가 없습니다.',
@@ -106,15 +96,24 @@ const ProfileLinkEditor = ({
           severity: 'success',
           message: '링크 변경에 성공하였습니다.',
         })
+        openToast()
         reset(defaultValues)
         closeModal()
         mutate()
       })
-      .catch(() => {
-        setToastMessage({
-          severity: 'error',
-          message: '링크 변경에 실패하였습니다.',
-        })
+      .catch((e) => {
+        if (e.response.status === 500) {
+          setToastMessage({
+            severity: 'error',
+            message: '링크 변경에 실패하였습니다.',
+          })
+        } else {
+          setToastMessage({
+            severity: 'error',
+            message: e.response.data.message,
+          })
+        }
+        openToast()
       })
   }
 
