@@ -60,13 +60,15 @@ const PrivacyPage = () => {
         />
       </TitleBox>
       <TitleBox title={'계정 관리'}>
-        <Typography variant="Body2" color="text.alternative">
-          계정을 삭제하시면....
-        </Typography>
-        <UserWithdrawalModal
-          setToastProps={setToastProps}
-          openToast={openToast}
-        />
+        <Stack spacing={1} direction={'row'} justifyContent={'space-between'}>
+          <Typography variant="Body2" color="text.alternative">
+            계정을 삭제하시면....
+          </Typography>
+          <UserWithdrawalModal
+            setToastProps={setToastProps}
+            openToast={openToast}
+          />
+        </Stack>
       </TitleBox>
       <CuToast
         open={isOpen}

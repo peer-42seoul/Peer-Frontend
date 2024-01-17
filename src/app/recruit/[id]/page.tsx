@@ -123,7 +123,7 @@ const RecruitDetailPage = ({ params }: { params: { id: string } }) => {
                       }}
                     />
                     <Typography variant={'Title3'}>{data?.title}</Typography>
-                    <Typography color={'yellow.strong'} variant={'caption'}>
+                    <Typography color={'yellow.strong'} variant={'Caption'}>
                       {data?.status === 'ONGOING'
                         ? '모집중'
                         : data?.status === 'BEFORE'

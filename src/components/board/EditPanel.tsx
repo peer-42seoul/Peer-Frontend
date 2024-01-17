@@ -1,9 +1,11 @@
 import { Stack, Typography } from '@mui/material'
+import useMedia from '@/hook/useMedia'
 import BackgroundBox from '../BackgroundBox'
-import * as style from './EditPanel.style'
-import DynamicToastEditor from '../DynamicToastEditor'
-import CuTextField from '../CuTextField'
 import CuButton from '../CuButton'
+import CuModal from '../CuModal'
+import CuTextField from '../CuTextField'
+import DynamicToastEditor from '../DynamicToastEditor'
+import * as style from './EditPanel.style'
 
 interface IChildrenProps {
   children: React.ReactNode
@@ -21,26 +23,57 @@ interface IEditButtonProps {
   handleGoBack: () => void
 }
 
+interface IEditPageProps extends IChildrenProps {
+  title: string
+  type: 'new' | 'edit'
+  handleGoBack: () => void
+}
+
 export const EditPage = ({
   title,
   children,
-}: IChildrenProps & { title: string }) => {
+  type,
+  handleGoBack,
+}: IEditPageProps) => {
+  const { isPc } = useMedia()
+  if (isPc)
+    return (
+      <Stack spacing={'1.5rem'}>
+        <Typography variant="Body2Emphasis" color="text.strong">
+          {title}
+        </Typography>
+        {children}
+      </Stack>
+    )
   return (
-    <Stack spacing={'1.5rem'}>
-      <Typography variant="Body2Emphasis" color="text.strong">
-        {title}
-      </Typography>
-      {children}
-    </Stack>
+    <CuModal
+      open={true}
+      title={title}
+      onClose={handleGoBack}
+      mobileFullSize
+      textButton={{ text: '취소', onClick: handleGoBack }}
+      containedButton={{
+        text: type === 'new' ? '등록' : '완료',
+        type: 'submit',
+        form: 'notice-form',
+      }}
+    >
+      <Stack sx={{ height: '100%', overflowY: 'scroll' }} spacing={'1.5rem'}>
+        {children}
+      </Stack>
+    </CuModal>
   )
 }
 
 export const EditBox = ({ children }: IChildrenProps) => {
-  return (
-    <BackgroundBox pcSx={style.pcEditBox}>
-      <Stack spacing={'2.5rem'}>{children}</Stack>
-    </BackgroundBox>
-  )
+  const { isPc } = useMedia()
+  if (isPc)
+    return (
+      <BackgroundBox pcSx={style.pcEditBox}>
+        <Stack spacing={'2.5rem'}>{children}</Stack>
+      </BackgroundBox>
+    )
+  return <Stack spacing={'2.5rem'}>{children}</Stack>
 }
 
 export const EditForm = ({
@@ -62,7 +95,7 @@ export const EditForm = ({
             sx={{ maxWidth: '26rem' }}
           />
         </Stack>
-        <Stack spacing={'0.5rem'}>
+        <Stack spacing={'0.5rem'} height={'100%'}>
           <Typography variant={'CaptionEmphasis'}>내용</Typography>
           <DynamicToastEditor initialValue={initialContent} />
         </Stack>

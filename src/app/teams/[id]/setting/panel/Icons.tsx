@@ -1,3 +1,5 @@
+import { createSvgIcon } from '@mui/material'
+
 const PencilClearIcon = () => {
   return (
     <svg
@@ -25,6 +27,44 @@ const PencilClearIcon = () => {
   )
 }
 
+const PrevButton = createSvgIcon(
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    <path
+      d="M12.5 15L7.5 10L12.5 5"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>,
+  'PrevButton',
+)
+
+const NextButton = createSvgIcon(
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    <path
+      d="M7.5 15L12.5 10L7.5 5"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>,
+  'NextButton',
+)
+
 const TargetClearIcon = () => {
   return (
     <svg
@@ -36,14 +76,14 @@ const TargetClearIcon = () => {
     >
       <path
         d="M8.49992 14.6663C12.1818 14.6663 15.1666 11.6816 15.1666 7.99967C15.1666 4.31778 12.1818 1.33301 8.49992 1.33301C4.81802 1.33301 1.83325 4.31778 1.83325 7.99967C1.83325 11.6816 4.81802 14.6663 8.49992 14.6663Z"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M15.1667 8H12.5"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -130,4 +170,6 @@ export {
   PieClearIcon,
   WifiClearIcon,
   GeoClearIcon,
+  PrevButton,
+  NextButton,
 }

@@ -9,21 +9,19 @@ export const ListPageContainer = {
 export const ListBoxContainer = {
   boxSizing: 'border-box',
   width: '100%',
+  maxHeight: '53.625rem',
   padding: '1.5rem',
   borderRadius: '1rem',
   background: (theme: Theme) => theme.palette.background.secondary,
 }
 
-export const ListStack = {
-  width: '100%',
-  // TODO : 무한 스크롤 구현 OR 페이지네이션 구현
-  // 임시 스타일
-  height: '300px',
+export const PcListStack = {
+  // 페이징 방식이 페이지네이션이 될 경우 수정될 수 있음
+  height: '100%',
   overflowY: 'scroll',
 }
 
 export const ListItem = {
-  padding: '0.625rem 1rem',
   '&:hover': {
     cursor: 'pointer',
   },

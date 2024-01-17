@@ -2,7 +2,7 @@ import { AlertColor } from '@mui/material/Alert'
 
 interface IToast {
   severity: AlertColor | undefined
-  message: string
+  message: React.ReactNode
 }
 
 export default IToast
