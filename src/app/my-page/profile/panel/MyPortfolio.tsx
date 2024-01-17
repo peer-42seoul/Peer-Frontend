@@ -26,7 +26,7 @@ const MyPortfolio = () => {
   const [postList, setPostList] = useState<Array<IMainCard>>([])
   const [pageLimit, setPageLimit] = useState(1)
 
-  const { openToast } = useToast()
+  const { openToast, closeToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -52,6 +52,7 @@ const MyPortfolio = () => {
   })
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    closeToast()
     setIsVisible(event.target.checked)
     if (event.target.checked) {
       openToast({

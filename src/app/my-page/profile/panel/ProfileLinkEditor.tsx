@@ -31,7 +31,7 @@ const ProfileLinkEditor = ({
     : ([] as Array<IUserProfileLink>)
   const { isPc } = useMedia()
 
-  const { openToast } = useToast()
+  const { openToast, closeToast } = useToast()
 
   const emptyLinksLength: number = 3 - (links ? links.length : 0)
 
@@ -86,6 +86,7 @@ const ProfileLinkEditor = ({
       })
     }
     console.log('제출중!', isSubmitting)
+    closeToast()
     await axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/link`,

@@ -53,7 +53,7 @@ const ProfileBioEditor = ({
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
   const { isPc } = useMedia()
 
-  const { openToast } = useToast()
+  const { openToast, closeToast } = useToast()
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
@@ -177,6 +177,7 @@ const ProfileBioEditor = ({
   }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const onClick = useCallback(() => {
+      closeToast()
       setIsLoading(true)
       const checkIsNicknameUnique = async () => {
         axiosWithAuth
@@ -260,7 +261,7 @@ const ProfileBioEditor = ({
       })
       return
     }
-
+    closeToast()
     await axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/introduction/edit`,
