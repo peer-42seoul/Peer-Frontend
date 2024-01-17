@@ -1,4 +1,4 @@
-import MuiAlert, { AlertColor, AlertProps } from '@mui/material/Alert'
+import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import {
   SlideProps,
   Snackbar,
@@ -16,6 +16,7 @@ import useMedia from '@/hook/useMedia'
 import * as style from './CuToast.style'
 import { useDarkMode } from '@/states/useDarkMode'
 import { EDisplayMode } from '@/types/DisplayTypes'
+import { IToastProps } from '@/types/IToastProps'
 
 const hexToDecimalArray = (hex: string | undefined) => {
   if (!hex) {
@@ -126,19 +127,7 @@ const CuToast = ({
   severity,
   message,
   subButton,
-}: {
-  open: boolean
-  autoHideDuration?: number
-  onClose: (
-    event?: React.SyntheticEvent | Event,
-    reason?: string,
-  ) => void | undefined
-  severity?: AlertColor | undefined
-  sx?: SxProps
-  children?: React.ReactNode
-  message?: React.ReactNode
-  subButton?: React.ReactNode
-}) => {
+}: IToastProps) => {
   const { isPc } = useMedia()
   const { darkMode } = useDarkMode()
   return (
