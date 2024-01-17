@@ -6,7 +6,6 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import HitchhikingCard from './HitchhikingCard'
 import * as style from './HitchhikingCard.style'
-import useMedia from '@/hook/useMedia'
 
 enum ESwipeDirection {
   left = 'left',
@@ -25,7 +24,6 @@ const CardStack = ({
   isProject: boolean
 }) => {
   const [dragged, setDragged] = useState(false)
-  const { isPc } = useMedia()
 
   const checkDragDirection = (x: number, y: number) => {
     if (Math.abs(x) > Math.abs(y)) {
@@ -59,10 +57,7 @@ const CardStack = ({
 
   return (
     <>
-      <Box
-        position={'relative'}
-        sx={isPc ? style.cardPcSize : style.cardMobileSize}
-      >
+      <Box position={'relative'} sx={style.cardSize}>
         <motion.div
           animate={{
             opacity: cardList.length > 1 ? 1 : 0,
@@ -73,7 +68,7 @@ const CardStack = ({
         >
           <Box
             sx={{
-              ...(isPc ? style.cardPcSize : style.cardMobileSize),
+              ...style.cardSize,
               backgroundColor: 'text.assistive',
             }}
           />
@@ -88,7 +83,7 @@ const CardStack = ({
         >
           <Box
             sx={{
-              ...(isPc ? style.cardPcSize : style.cardMobileSize),
+              ...style.cardSize,
               backgroundColor: 'text.assistive',
             }}
           />
@@ -131,7 +126,6 @@ const CardStack = ({
                   tagList={card.tagList}
                   image={card.image}
                   postId={card.recruit_id}
-                  sx={isPc ? style.cardPcStyleBase : style.cardMobileStyleBase}
                   dragged={dragged}
                   setDragged={setDragged}
                   isProject={isProject}

@@ -73,7 +73,8 @@ const CardContainer = ({
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          ...(isPc ? cardStyle.cardPcSize : cardStyle.cardMobileSize),
+          ...cardStyle.cardSize,
+          mb: '0.875rem',
           position: 'relative',
         }}
       >
