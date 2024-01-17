@@ -139,7 +139,7 @@ const CuToast = ({
           : { vertical: 'bottom', horizontal: 'left' }
       }
       autoHideDuration={autoHideDuration}
-      sx={isPc ? style.snackbarPcStyle : style.snackbarMobileStyle}
+      sx={style.snackbarStyle}
       TransitionComponent={TransitionLeft}
       onClose={onClose}
     >
