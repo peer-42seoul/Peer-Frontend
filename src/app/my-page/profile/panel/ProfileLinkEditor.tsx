@@ -31,7 +31,7 @@ const ProfileLinkEditor = ({
     : ([] as Array<IUserProfileLink>)
   const { isPc } = useMedia()
 
-  const { setToastMessage, openToast } = useToast()
+  const { openToast } = useToast()
 
   const emptyLinksLength: number = 3 - (links ? links.length : 0)
 
@@ -92,28 +92,26 @@ const ProfileLinkEditor = ({
         requestBody,
       )
       .then(() => {
-        setToastMessage({
+        openToast({
           severity: 'success',
           message: '링크 변경에 성공하였습니다.',
         })
-        openToast()
         reset(defaultValues)
         closeModal()
         mutate()
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          setToastMessage({
+          openToast({
             severity: 'error',
             message: '링크 변경에 실패하였습니다.',
           })
         } else {
-          setToastMessage({
+          openToast({
             severity: 'error',
             message: e.response.data.message,
           })
         }
-        openToast()
       })
   }
 

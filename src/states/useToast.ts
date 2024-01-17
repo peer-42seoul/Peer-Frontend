@@ -4,14 +4,13 @@ import { create } from 'zustand'
 
 interface IToastState {
   toastProps: IToastProps
-  setToastMessage: ({
-    message,
+  openToast: ({
     severity,
+    message,
   }: {
-    message: string
     severity: AlertColor
+    message: React.ReactNode
   }) => void
-  openToast: () => void
   closeToast: (event?: React.SyntheticEvent | Event, reason?: string) => void
   setAutoHideDuration: (duration: number) => void
   setSubButton: (subButton: React.ReactNode) => void
@@ -19,18 +18,14 @@ interface IToastState {
 }
 
 const useToast = create<IToastState>((set, get) => {
-  const setToastMessage = ({
-    message,
+  const openToast = ({
     severity,
+    message,
   }: {
-    message: string
     severity: AlertColor
+    message: React.ReactNode
   }) => {
-    set({ toastProps: { ...get().toastProps, message, severity } })
-  }
-
-  const openToast = () => {
-    set({ toastProps: { ...get().toastProps, open: true } })
+    set({ toastProps: { ...get().toastProps, open: true, message, severity } })
   }
 
   const closeToast = (
@@ -73,7 +68,6 @@ const useToast = create<IToastState>((set, get) => {
       message: '',
       subButton: undefined,
     },
-    setToastMessage,
     openToast,
     closeToast,
     setAutoHideDuration,

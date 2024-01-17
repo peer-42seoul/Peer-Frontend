@@ -26,7 +26,7 @@ const MyPortfolio = () => {
   const [postList, setPostList] = useState<Array<IMainCard>>([])
   const [pageLimit, setPageLimit] = useState(1)
 
-  const { setToastMessage, openToast } = useToast()
+  const { openToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -54,17 +54,15 @@ const MyPortfolio = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsVisible(event.target.checked)
     if (event.target.checked) {
-      setToastMessage({
+      openToast({
         severity: 'success',
         message: '내 작업물이 다른 사람들에게 공개되었습니다.',
       })
-      openToast()
     } else {
-      setToastMessage({
+      openToast({
         severity: 'success',
         message: '내 작업물이 다른 사람들에게 비공개되었습니다.',
       })
-      openToast()
     }
   }
 
