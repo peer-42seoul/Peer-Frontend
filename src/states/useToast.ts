@@ -54,9 +54,9 @@ const useToast = create<IToastState>((set, get) => {
     message: '',
     subButton: undefined,
   }
-
+  // NOTE : 각각의 페이지에서 토스트를 커스텀 하였을 경우 useEffect의 return에서 setDefaultToastProps를 실행해주세요.
   const setDefaultToastProps = () => {
-    set({ toastProps: defaultToastProps })
+    set({ toastProps: { ...defaultToastProps, open: get().toastProps.open } })
   }
 
   return {
