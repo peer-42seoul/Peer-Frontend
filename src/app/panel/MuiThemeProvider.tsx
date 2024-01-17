@@ -593,14 +593,13 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       lineHeight: '150%',
       color: theme.palette.text.normal,
     }
-    theme.typography.Title1Emphasis = {
+    theme.typography.Title1 = {
       fontSize: '24px',
       fontStyle: 'normal',
       fontWeight: 400,
       lineHeight: '150%',
       color: theme.palette.text.normal,
     }
-
     theme.typography.Title2Emphasis = {
       fontSize: '20px',
       fontStyle: 'normal',
@@ -676,6 +675,58 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       fontStyle: 'normal',
       fontWeight: 400,
       lineHeight: '150%',
+      color: theme.palette.text.normal,
+    }
+    theme.typography.h1 = {
+      ...theme.typography.h1,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.h2 = {
+      ...theme.typography.h2,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.h3 = {
+      ...theme.typography.h3,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.h4 = {
+      ...theme.typography.h4,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.h5 = {
+      ...theme.typography.h5,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.h6 = {
+      ...theme.typography.h6,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.subtitle1 = {
+      ...theme.typography.subtitle1,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.subtitle2 = {
+      ...theme.typography.subtitle2,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.body1 = {
+      ...theme.typography.body1,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.body2 = {
+      ...theme.typography.body2,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.button = {
+      ...theme.typography.button,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.caption = {
+      ...theme.typography.caption,
+      color: theme.palette.text.normal,
+    }
+    theme.typography.overline = {
+      ...theme.typography.overline,
       color: theme.palette.text.normal,
     }
   }
