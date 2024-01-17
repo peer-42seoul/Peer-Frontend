@@ -1,5 +1,5 @@
 import { IconButton, Stack, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
 import * as Style from './SkillInput.style'
@@ -27,6 +27,7 @@ const LinkForm = ({
   changeLinkName,
   changeUrl,
 }: ILinkFormProps) => {
+  const [checker, setChecker] = useState<boolean>(true)
   const validateUrl = (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -34,8 +35,8 @@ const LinkForm = ({
     const regex =
       // eslint-disable-next-line no-useless-escape
       /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/ // eslint-disable-next-line no-useless-escape
-    isValid = regex.test(completedUrl)
-    setIsValid(isValid)
+    setChecker(regex.test(completedUrl))
+    setIsValid(checker)
   }
 
   return (
