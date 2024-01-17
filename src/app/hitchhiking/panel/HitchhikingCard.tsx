@@ -271,7 +271,7 @@ const HitchhikingCard = ({
   return (
     <div
       style={{
-        transform: ` rotateY(${isFlipped ? '180deg' : '0deg'})`,
+        transform: `rotateY(${isFlipped ? '180deg' : '0deg'})`,
         transformStyle: 'preserve-3d',
         width: '100%',
         height: '100%',
