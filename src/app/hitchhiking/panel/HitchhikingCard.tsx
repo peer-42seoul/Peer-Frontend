@@ -1,5 +1,5 @@
 'use client'
-// import useAxiosWithAuth from '@/api/config' // 백엔드 api 완성 이후 주석 해제
+import useAxiosWithAuth from '@/api/config' // 백엔드 api 완성 이후 주석 해제
 import PostCard from './PostCard'
 import { ITag } from '@/types/IPostDetail'
 import {
@@ -23,7 +23,7 @@ import * as style from './HitchhikingCard.style'
 
 interface IHitchhikingCardBack {
   content: string
-  memberImage: Array<{ url: string }>
+  memberImage: Array<string | null>
   recruitmentQuota: number
 }
 
@@ -60,26 +60,27 @@ const HitchhikingCardBack = ({
     else if (lineCount < 1) return 1
     else return lineCount
   }
+  const axiosInstance = useAxiosWithAuth()
 
   useEffect(() => {
     const fetchData = async () => {
       console.log(`fetchData ${postId}`)
       setIsLoading(true)
       // backend api 완성 이후 주석 해제
-      // await axiosInstance
-      //   .get(`/api/v1/hitch/${postId}`)
-      //   .then((res) => {
-      //     setData(res.data)
-      //   })
-      //   .catch((e) => {
-      //     console.log(e)
-      //   })
-      setData({
-        content:
-          '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
-        memberImage: [{ url: 'https://picsum.photos/200' }],
-        recruitmentQuota: 10,
-      })
+      await axiosInstance
+        .get(`/api/v1/hitch/${postId}`)
+        .then((res) => {
+          setData(res.data)
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+      // setData({
+      //   content:
+      //     '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
+      //   memberImage: [{ url: 'https://picsum.photos/200' }],
+      //   recruitmentQuota: 10,
+      // })
       setIsLoading(false)
     }
     if (!isLoading && !data && flipped) fetchData()
@@ -144,10 +145,7 @@ const HitchhikingCardBack = ({
                   WebkitLineClamp: getLineCount(46, 22.5, 2) /* 라인수 */,
                 }}
               >
-                {/* {title} */}
-                제목이 들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이
-                들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이 들어오는
-                자리입니다.
+                {title}
               </Typography>
             }
             sx={{ padding: 0, maxHeight: '3rem' }}

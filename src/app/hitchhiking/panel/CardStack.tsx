@@ -1,11 +1,11 @@
 'use client'
 
-import { IMainCard } from '@/types/IPostDetail'
 import { Box } from '@mui/material'
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import HitchhikingCard from './HitchhikingCard'
 import * as style from './HitchhikingCard.style'
+import { IPostCardHitchhiking } from '@/types/IPostCard'
 
 enum ESwipeDirection {
   left = 'left',
@@ -19,7 +19,7 @@ const CardStack = ({
   removeCard,
   isProject,
 }: {
-  cardList: Array<IMainCard>
+  cardList: Array<IPostCardHitchhiking>
   removeCard: (recruit_id: number) => void
   isProject: boolean
 }) => {
@@ -93,7 +93,7 @@ const CardStack = ({
             if (cardList.length > 2 && cardList.length - i > 2) return null
             return (
               <motion.div
-                key={card.recruit_id}
+                key={card.recruitId}
                 initial={{
                   scale: 0.8,
                   opacity: 0,
@@ -115,17 +115,17 @@ const CardStack = ({
                 dragTransition={{ bounceStiffness: 300, bounceDamping: 50 }}
                 onDragStart={() => setDragged(true)}
                 onDragEnd={(e: any, info: any) =>
-                  handleDragEnd(e, info, card.recruit_id, card.title)
+                  handleDragEnd(e, info, card.recruitId, card.title)
                 }
                 transition={{ duration: 0.3 }}
               >
                 <HitchhikingCard
-                  authorImage={card.user_thumbnail}
-                  teamName={card.user_nickname}
+                  authorImage={''}
+                  teamName={card.teamName}
                   title={card.title}
                   tagList={card.tagList}
                   image={card.image}
-                  postId={card.recruit_id}
+                  postId={card.recruitId}
                   dragged={dragged}
                   setDragged={setDragged}
                   isProject={isProject}
