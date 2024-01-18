@@ -28,7 +28,7 @@ const Skills = ({
         gap={1}
         flexWrap={'wrap'}
       >
-        {skillList !== undefined && skillList.length ? (
+        {skillList?.length ? (
           skillList.map((skill) => (
             <Chip
               key={skill.tagId}
