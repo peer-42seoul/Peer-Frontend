@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import {
   Button,
@@ -22,6 +24,7 @@ const LinkButton = ({
   href: string
   variant: 'text' | 'outlined' | 'contained'
 }) => {
+  //@todo 이동불가능한 url 처리
   return (
     <LinkTooltip placement="bottom-start" title={href}>
       <Button variant={variant} href={href} sx={style.button} disabled={!href}>

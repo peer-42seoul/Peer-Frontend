@@ -3,6 +3,7 @@ import { useState } from 'react'
 
 export const useLinks = (initValue: IUserProfileLink[]) => {
   const [links, setLinks] = useState<IUserProfileLink[]>(initValue)
+  const [isValid, setIsValid] = useState<boolean>(true)
 
   const addLink = (linkName: string, linkUrl: string) => {
     const newLink = { linkName, linkUrl, id: links.length }
@@ -10,7 +11,6 @@ export const useLinks = (initValue: IUserProfileLink[]) => {
   }
 
   const changeLinkName = (id: number, content: string) => {
-    // links[id].linkName = content
     setLinks(
       links.map((link) =>
         link.id === id ? { ...link, linkName: content } : link,
@@ -26,5 +26,5 @@ export const useLinks = (initValue: IUserProfileLink[]) => {
     )
   }
 
-  return { links, addLink, changeLinkName, changeUrl }
+  return { links, addLink, isValid, setIsValid, changeLinkName, changeUrl }
 }

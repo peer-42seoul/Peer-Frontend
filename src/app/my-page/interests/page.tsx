@@ -1,18 +1,26 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
-import { ProjectType } from '@/app/panel/MainPage'
-import CuButton from '@/components/CuButton'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
-import { IMainCard } from '@/types/IPostDetail'
-import { AlertColor, Stack, Tab, Tabs, Typography } from '@mui/material'
+import { IMainCard, ProjectType } from '@/types/IPostDetail'
+import {
+  AlertColor,
+  Box,
+  CircularProgress,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
 import CuTextModal from '@/components/CuTextModal'
-import * as style from '../panel/my-page.style'
+import * as pageStyle from '../panel/my-page.style'
+import * as style from './interests.style'
+import { centeredPosition } from '@/constant/centerdPosition.style'
 
 interface IInterestResponse {
   postList: IMainCard[]
@@ -26,7 +34,16 @@ const TypeTabs = ({
   type: string
   handleChange: (e: React.SyntheticEvent, newValue: string) => void
 }) => {
-  console.log('tab', type)
+  const { isPc } = useMedia()
+
+  const getColor = (value: string) => {
+    if (value === type) {
+      return 'text.normal'
+    } else if (isPc) {
+      return 'text.alternative'
+    }
+    return 'text.assistive'
+  }
 
   return (
     <Tabs
@@ -34,10 +51,45 @@ const TypeTabs = ({
       onChange={handleChange}
       aria-label="menu tabs"
       variant="fullWidth"
+      sx={{
+        '& .MuiTabs-indicator': {
+          display: 'none',
+        },
+        '& .MuiTabs-indicatorSpan': {
+          display: 'none',
+        },
+      }}
     >
-      <Tab label="프로젝트" value={'PROJECT'} />
-      <Tab label="스터디" value={'STUDY'} />
-      {/* <Tab label="쇼케이스" value={'showcase'} /> */}
+      <Tab
+        label={
+          <Typography variant="Body2" color={getColor('PROJECT')}>
+            프로젝트
+          </Typography>
+        }
+        value={'PROJECT'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      />
+      <Tab
+        label={
+          <Typography variant="Body2" color={getColor('STUDY')}>
+            스터디
+          </Typography>
+        }
+        value={'STUDY'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      />
+      {/* <Tab
+        label={
+          <Typography
+            variant="Body2"
+            color={getColor('SHOWCASE')}
+          >
+            쇼케이스
+          </Typography>
+        }
+        value={'SHOWCASE'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      /> */}
     </Tabs>
   )
 }
@@ -161,26 +213,12 @@ const MyInterests = () => {
       <Stack
         direction={'column'}
         spacing={3}
-        sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
+        sx={isPc ? pageStyle.pagePcStyle : pageStyle.pageMobileStyle}
+        justifyContent={'center'}
+        alignItems={'space-evenly'}
+        height={1}
       >
         <TypeTabs type={type} handleChange={handleTabChange} />
-        <Stack
-          direction={'row'}
-          justifyContent={'flex-end'}
-          sx={{ paddingRight: '0.5rem' }}
-        >
-          <CuButton
-            variant="text"
-            message="관심 모두 해제"
-            action={openModal}
-            disabled={isDeleting}
-            TypographyProps={{
-              variant: 'CaptionEmphasis',
-              color: 'text.alternative',
-            }}
-            style={{ height: '2rem' }}
-          />
-        </Stack>
 
         {postList.length ? (
           <InterestsContents
@@ -188,11 +226,27 @@ const MyInterests = () => {
             spinner={spinner}
             target={target}
             type={type as ProjectType}
+            removeAll={openModal}
+            isDeleting={isDeleting}
           />
-        ) : isLoading ? (
-          <Typography>로딩 중</Typography>
         ) : (
-          <Typography>관심있다고 표시한 페이지가 없습니다.</Typography>
+          <Box
+            width={1}
+            height={1}
+            sx={{
+              backgroundColor: isPc ? 'background.secondary' : 'transparent',
+              borderRadius: '1rem',
+            }}
+            position={'relative'}
+          >
+            {isLoading ? (
+              <CircularProgress sx={centeredPosition} />
+            ) : (
+              <Typography sx={centeredPosition} variant="Caption">
+                관심있다고 표시한 페이지가 없습니다.
+              </Typography>
+            )}
+          </Box>
         )}
       </Stack>
     </>

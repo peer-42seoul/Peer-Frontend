@@ -1,8 +1,8 @@
-import { IconButton, Stack, TextField } from '@mui/material'
-import React from 'react'
+import { IconButton, Stack, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
-import * as Style from '../SkillInput.style'
+import * as Style from './SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
 interface ILinkInputValues {
   linkName: string
@@ -13,6 +13,8 @@ interface ILinkInputValues {
 interface ILinkFormProps {
   links: ILinkInputValues[]
   addLink: (linkName: string, linkUrl: string) => void
+  isValid: boolean
+  setIsValid: (isValid: boolean) => void
   changeLinkName: (id: number, content: string) => void
   changeUrl: (id: number, content: string) => void
 }
@@ -20,9 +22,23 @@ interface ILinkFormProps {
 const LinkForm = ({
   links,
   addLink,
+  isValid,
+  setIsValid,
   changeLinkName,
   changeUrl,
 }: ILinkFormProps) => {
+  const [checker, setChecker] = useState<boolean>(true)
+  const validateUrl = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const completedUrl = e.target.value
+    const regex =
+      // eslint-disable-next-line no-useless-escape
+      /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/ // eslint-disable-next-line no-useless-escape
+    setChecker(regex.test(completedUrl))
+    setIsValid(checker)
+  }
+
   return (
     <Stack width={'26rem'} spacing={'0.5rem'}>
       <Stack
@@ -61,9 +77,15 @@ const LinkForm = ({
             autoComplete="off"
             value={link.linkUrl}
             onChange={(e) => changeUrl(link.id, e.target.value)}
+            onBlur={(e) => validateUrl(e)}
           />
         </Stack>
       ))}
+      {!isValid && (
+        <Typography color="error">
+          유효하지 않는 URL이 포함되어 있습니다.
+        </Typography>
+      )}
     </Stack>
   )
 }
