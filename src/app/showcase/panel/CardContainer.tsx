@@ -7,7 +7,7 @@ import Interest from './Interest'
 import * as cardStyle from './ShowcaseCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
-import { ICardData } from '@/app/showcase_ref/panel/types'
+import { ICardData } from '@/app/showcase/panel/types'
 
 const CardContainer = ({
   cardList,

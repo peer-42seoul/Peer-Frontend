@@ -19,7 +19,7 @@ import Members from './Members'
 import DropdownMenu from '@/components/DropdownMenu'
 import useMedia from '@/hook/useMedia'
 import * as style from './ShowcaseCard.style'
-import { IShowcaseTag } from '@/app/showcase_ref/panel/types'
+import { IShowcaseTag } from '@/app/showcase/panel/types'
 
 interface IHitchhikingCardBack {
   content: string
