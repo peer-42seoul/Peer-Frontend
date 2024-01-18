@@ -57,7 +57,7 @@ const ShowCaseEditPage = () => {
   // (url: ?string) => axiosWithAuth.get(url).then((res) => res.data),
   // )
 
-  // if (isLoading) return <div>로딩 중입니다...</div>
+  // if (isLoading) return <CuCircularProgress color={'secondary'} />
   // if (error) return <div>에러가 발생했습니다.</div>
 
   return (
