@@ -11,20 +11,44 @@ import useMedia from '@/hook/useMedia'
 
 interface IToast {
   severity: AlertColor | undefined
-  message: string
+  message: React.ReactNode
 }
 
 const HomepageSetting = () => {
   const [toastMessage, setToastMessage] = useState({} as IToast)
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const {
+    CuToast,
+    isOpen: isInfoOpen,
+    openToast: openInfoToast,
+    closeToast: closeInfoToast,
+  } = useToast()
+  const {
+    isOpen: isErrorOpen,
+    openToast: openErrorToast,
+    closeToast: closeErrorToast,
+  } = useToast()
+
+  const closeToast = () => {
+    if (isInfoOpen) closeInfoToast()
+    if (isErrorOpen) closeErrorToast()
+  }
+
   const { isPc } = useMedia()
 
   useEffect(() => {
     if (toastMessage.message) {
-      if (isOpen) closeToast()
-      openToast()
+      if (
+        toastMessage.severity === 'info' ||
+        toastMessage.severity === 'success'
+      ) {
+        closeToast()
+        openInfoToast()
+      } else {
+        closeToast()
+        openErrorToast()
+      }
     }
-  }, [toastMessage, openToast, isOpen, closeToast])
+  }, [toastMessage])
 
   const clearToast = () => {
     closeToast()
@@ -41,8 +65,14 @@ const HomepageSetting = () => {
       <KeywordSetting setToastMessage={setToastMessage} />
       <DisplaySetting />
       <CuToast
-        severity={toastMessage.severity}
-        open={isOpen}
+        severity={'info'}
+        open={isInfoOpen}
+        onClose={clearToast}
+        message={toastMessage.message}
+      />
+      <CuToast
+        severity={'error'}
+        open={isErrorOpen}
         onClose={clearToast}
         message={toastMessage.message}
       />

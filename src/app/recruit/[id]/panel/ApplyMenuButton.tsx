@@ -1,13 +1,16 @@
 import React from 'react'
-import { Button, Menu, MenuItem } from '@mui/material'
+import { Button, Menu, MenuItem, Typography } from '@mui/material'
 import { KeyboardArrowDown } from '@mui/icons-material'
+import { IRole } from '@/types/IPostDetail'
 
-const ApplyButton = ({
-  role,
+const ApplyMenuButton = ({
+  roleList,
   onApply,
+  disabled,
 }: {
-  role: string[]
+  roleList: IRole[]
   onApply: (selectedRole: string) => void
+  disabled: boolean
 }) => {
   const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(
     null,
@@ -28,24 +31,28 @@ const ApplyButton = ({
   return (
     <div>
       <Button
+        disabled={disabled}
         id="apply-option-button"
         variant="contained"
         size="large"
-        sx={{ width: '6.785rem' }}
         disableElevation
         onClick={handleMenuClick}
         endIcon={<KeyboardArrowDown />}
       >
-        지원하기
+        <Typography>지원하기</Typography>
       </Button>
       <Menu
         anchorEl={menuAnchorEl}
         open={Boolean(menuAnchorEl)}
         onClose={handleClose}
       >
-        {role.map((name: string) => (
-          <MenuItem key={name} onClick={() => onApply(name)}>
-            {name}
+        {roleList?.map((role, index) => (
+          <MenuItem
+            key={index}
+            onClick={() => onApply(role?.name)}
+            disabled={role?.current >= role?.number}
+          >
+            {role?.name}
           </MenuItem>
         ))}
       </Menu>
@@ -53,4 +60,4 @@ const ApplyButton = ({
   )
 }
 
-export default ApplyButton
+export default ApplyMenuButton

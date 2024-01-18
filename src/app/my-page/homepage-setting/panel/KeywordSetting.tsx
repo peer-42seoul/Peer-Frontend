@@ -27,7 +27,7 @@ interface IChip {
 
 interface IToastProps {
   severity: AlertColor | undefined
-  message: string
+  message: React.ReactNode
 }
 
 const KeywordAddingField = ({
@@ -47,7 +47,7 @@ const KeywordAddingField = ({
     if (trimmed.length < 2) {
       setToastMessage({
         severity: 'error',
-        message: '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
+        message: '알림 키워드는 최소 2자 이상이어야 합니다.',
       })
       return false
     } else if (keywordList?.some((keyword) => keyword.label === trimmed)) {
@@ -68,7 +68,11 @@ const KeywordAddingField = ({
       .then(() => {
         setToastMessage({
           severity: 'success',
-          message: `'${trimmed}'를 알림 키워드 목록에 추가하였습니다.`,
+          message: (
+            <>
+              <b>{trimmed}</b>(이)가 키워드로 등록되었습니다.
+            </>
+          ),
         })
         mutate()
       })
@@ -81,7 +85,11 @@ const KeywordAddingField = ({
         } else {
           setToastMessage({
             severity: 'error',
-            message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
+            message: (
+              <>
+                <b>{trimmed}</b>(을)를 알림 키워드 목록에 추가하지 못했습니다.
+              </>
+            ),
           })
         }
       })
@@ -124,8 +132,12 @@ const KeywordAddingField = ({
             <InputAdornment position="end">
               <CuButton
                 action={handleOnClick}
-                variant="contained"
+                variant="text"
                 message="추가"
+                TypographyProps={{
+                  variant: 'CaptionEmphasis',
+                  color: 'text.alternative',
+                }}
               />
             </InputAdornment>
           ),
@@ -200,6 +212,10 @@ const KeywordDisplayBox = ({
       .then(() => {
         closeModal()
         mutate()
+        setToastMessage({
+          severity: 'success',
+          message: '모든 키워드를 삭제하였습니다.',
+        })
       })
   }
 

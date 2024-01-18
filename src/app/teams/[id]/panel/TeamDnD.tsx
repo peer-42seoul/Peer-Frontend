@@ -3,10 +3,10 @@ import useAxiosWithAuth from '@/api/config'
 import 'react-grid-layout/css/styles.css'
 import { ITeamDnDLayout, SizeType, WidgetType } from '@/types/ITeamDnDLayout'
 import { useEffect, useState } from 'react'
-import WidgetList from '@/app/teams/[id]/panel/widgets/WidgetList'
-import WidgetsRender from '@/app/teams/[id]/panel/widgets/WidgetsRender'
 import ReactGridLayout from 'react-grid-layout'
 import useSWRMutation from 'swr/mutation'
+import WidgetsRender from './WidgetsRender'
+import WidgetList from '@/app/teams/[id]/panel/WidgetList'
 
 export const sizeRatio = {
   S: { w: 1, h: 1 },

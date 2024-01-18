@@ -31,6 +31,7 @@ export const mobileFullSizeWrapper = {
   height: '100svh',
   padding: '0.44rem 1rem 1rem 1rem',
   backgroundColor: (theme: Theme) => theme.palette.background.primary,
+  overflowY: 'scroll',
 }
 
 export const modalContent = {

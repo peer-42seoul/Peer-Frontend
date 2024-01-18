@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Card, Stack, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SetupMember from './panel/SettingTeamMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
@@ -10,10 +10,20 @@ import { ITeam, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectRecruitPage'
 import TeamJobAdd from './panel/SettingTeamJobs'
 import SetupInfo from './panel/SettingTeamInfo'
+import useSocket from '@/states/useSocket'
+
+export interface IMyInfo {
+  userId: string
+  teamId: string
+  teamName: string
+  yourRole: string
+}
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
+  const { socket } = useSocket()
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
+  const [myInfo, setMyInfo] = useState<IMyInfo>()
   const { data, isLoading } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
@@ -22,7 +32,22 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
-  console.log(data)
+  useEffect(() => {
+    if (!socket) return
+    socket.emit(
+      'whoAmI',
+      {
+        teamId: params.id,
+        teamName: data?.team.name,
+      },
+      (data: any) => {
+        console.log('whoAmI receive')
+        console.log(data)
+        setMyInfo(data)
+      },
+    )
+  }, [])
+
   if (isLoading) return <Typography>로딩중</Typography>
 
   return (
@@ -72,6 +97,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 team={data.member}
                 teamId={data.team.id}
                 jobs={data.job}
+                myInfo={myInfo}
               />
             </Card>
           ) : (

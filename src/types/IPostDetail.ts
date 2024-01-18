@@ -1,4 +1,4 @@
-import { ProjectType } from '@/app/panel/MainPage'
+export type ProjectType = 'STUDY' | 'PROJECT'
 
 export interface ITag {
   tagId: number
@@ -62,6 +62,7 @@ export interface IFormInterview {
 export interface IRole {
   name: string
   number: number
+  current: number
 }
 
 export interface IRoleWrite {
