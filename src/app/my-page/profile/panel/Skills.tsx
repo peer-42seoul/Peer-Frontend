@@ -1,19 +1,15 @@
 import { Chip, Stack, Typography } from '@mui/material'
 import React from 'react'
 import ProfileSection from './ProfileSection'
+import { ITag } from '@/types/IPostDetail'
 
-const Skills = ({ setModalType }: { setModalType: (type: string) => void }) => {
-  const skills = [
-    'test',
-    'test2',
-    'test3',
-    'test4',
-    'test5',
-    'test6',
-    'test7',
-    'test8',
-    'test9',
-  ]
+const Skills = ({
+  skillList,
+  setModalType,
+}: {
+  skillList: Array<ITag>
+  setModalType: (type: string) => void
+}) => {
   return (
     <Stack direction={'column'} spacing={'0.5rem'}>
       <ProfileSection
@@ -31,12 +27,12 @@ const Skills = ({ setModalType }: { setModalType: (type: string) => void }) => {
         gap={1}
         flexWrap={'wrap'}
       >
-        {skills.map((skill) => (
+        {skillList.map((skill) => (
           <Chip
-            key={skill}
+            key={skill.tagId}
             label={
               <Typography variant={'Tag'} color={'purple.strong'}>
-                {skill}
+                {skill.name}
               </Typography>
             }
             sx={{

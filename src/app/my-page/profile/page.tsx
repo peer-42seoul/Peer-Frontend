@@ -145,6 +145,7 @@ const MyProfile = () => {
       {/* profile my info */}
       <MyInfoCard
         linkList={userInfo?.linkList}
+        skillList={userInfo?.skillList}
         setModalType={setModalType}
         handleLogout={handleLogout}
       />
@@ -173,6 +174,7 @@ const MyProfile = () => {
       />
       <SkillsEditor
         open={modalOpen.skills}
+        skillList={userInfo?.skillList}
         mutate={mutate}
         closeModal={() => setModalType('')}
       />

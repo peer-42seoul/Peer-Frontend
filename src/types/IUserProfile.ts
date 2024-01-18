@@ -1,3 +1,5 @@
+import { ITag } from './IPostDetail'
+
 export interface IUserProfile {
   id: number
   nickname: string
@@ -8,6 +10,7 @@ export interface IUserProfile {
   achievements: Array<string>
   association: string | null // 해당 없을 시 null
   email: string
+  skillList: Array<ITag>
 }
 
 export interface IUserProfileLink {

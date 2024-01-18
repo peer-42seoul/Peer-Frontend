@@ -20,20 +20,26 @@ const TIMEOUT = 0.5
 
 const SkillsEditor = ({
   open,
+  skillList,
   mutate,
   closeModal,
 }: {
   open: boolean
+  skillList: Array<ITag>
   mutate: () => void
   closeModal: () => void
 }) => {
-  const [selected, setSelected] = useState([] as Array<string>) // 선택 된 데이터
+  const [selected, setSelected] = useState(
+    skillList.map((skill) => skill.name) as Array<string>,
+  ) // 선택 된 데이터
   const [tagList, setTagList] = useState([] as ITag[]) // 검색 된 데이터
 
   const [text, setText] = useState('') // 검색 텍스트
 
   const [timeOut, setTimeOut] = useState(TIMEOUT)
   const [isLoading, setIsLoading] = useState(false)
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -82,6 +88,25 @@ const SkillsEditor = ({
     setSelected(value)
   }
 
+  const handleModalClose = async () => {
+    setIsSubmitting(true)
+    // TODO : API 수정되면 selected를 보내도록 수정
+    await axiosWithAuth
+      .put(
+        '/api/v1/skill/regist',
+        tagList.map((tag) => tag.tagId),
+      )
+      .then(() => {
+        mutate()
+        setIsSubmitting(false)
+        closeModal()
+      })
+      .catch(() => {
+        // TODO : 전역 토스트 메시지 추가
+        setIsSubmitting(false)
+      })
+  }
+
   return (
     <CuModal
       open={open}
@@ -90,10 +115,8 @@ const SkillsEditor = ({
       mobileFullSize
       containedButton={{
         text: '완료',
-        onClick: () => {
-          mutate()
-          closeModal()
-        },
+        onClick: handleModalClose,
+        isLoading: isSubmitting,
       }}
       textButton={{
         text: '취소',
