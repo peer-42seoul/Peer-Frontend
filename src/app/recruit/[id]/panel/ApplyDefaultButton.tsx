@@ -2,7 +2,7 @@ import { Button } from '@mui/material'
 import React from 'react'
 import { SxProps } from '@mui/system'
 import { Theme } from '@mui/material/styles'
-const ApplyButton = ({
+const ApplyDefaultButton = ({
   handleApply,
   disabled,
   sx,
@@ -25,4 +25,4 @@ const ApplyButton = ({
   )
 }
 
-export default ApplyButton
+export default ApplyDefaultButton

@@ -2,7 +2,7 @@ import React from 'react'
 import { Avatar, Stack, Typography } from '@mui/material'
 import LabelWithIcon from '../LabelWithIcon'
 import ListIcon from '@/icons/ListIcon'
-import * as Style from '../SkillInput.style'
+import * as Style from './SkillInput.style'
 
 interface IteamNameProps {
   teamName: string

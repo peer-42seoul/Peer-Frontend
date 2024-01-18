@@ -1,11 +1,10 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
-import { ProjectType } from '@/app/panel/MainPage'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
-import { IMainCard } from '@/types/IPostDetail'
+import { IMainCard, ProjectType } from '@/types/IPostDetail'
 import {
   AlertColor,
   Box,
