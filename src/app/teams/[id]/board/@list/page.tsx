@@ -81,7 +81,7 @@ const TeamBoard = ({ params }: { params: { id: string } }) => {
                 />
               </Stack>
             </Stack>
-            <BoardPostList keyword={keyword} />
+            <BoardPostList boardId={boardId} keyword={keyword} />
           </ListBoxContainer>
         </>
       )}

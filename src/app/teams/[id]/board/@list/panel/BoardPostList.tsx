@@ -10,7 +10,13 @@ import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamPost } from '@/types/TeamBoardTypes'
 
-const BoardPostList = ({ keyword }: { keyword: string }) => {
+const BoardPostList = ({
+  boardId,
+  keyword,
+}: {
+  boardId: number
+  keyword: string
+}) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { setBoard } = useTeamPageState()
   const { data, error, isLoading, size, setSize, targetRef } =
@@ -41,7 +47,7 @@ const BoardPostList = ({ keyword }: { keyword: string }) => {
                 authorNickname={post.nickname}
                 createdAt={post.date}
                 onClick={() => {
-                  setBoard('DETAIL', post.postId)
+                  setBoard('DETAIL', boardId, post.postId)
                 }}
               />
             ))}

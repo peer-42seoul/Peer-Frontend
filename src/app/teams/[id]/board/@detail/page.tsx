@@ -14,24 +14,24 @@ import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
 
-const TeamNoticeView = ({ params }: { params: { id: string } }) => {
+const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
   const axiosWithAuth = useAxiosWithAuth()
-  const { postId, setNotice } = useTeamPageState()
+  const { boardId, postId, setBoard } = useTeamPageState()
   const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
-    `/api/v1/team/notice/${postId}`,
+    `/api/v1/team-page/post/${postId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const { isPc } = useMedia()
 
   const handleDelete = () => {
     const confirm = window.confirm('공지사항을 삭제하시겠습니까?')
-    if (!confirm) return
+    if (!confirm || !boardId) return
     axiosWithAuth
       .delete(`/api/v1/team/notice/${postId}`)
       .then(() => {
         alert('공지사항을 삭제했습니다.')
-        setNotice('LIST')
+        setBoard('LIST', boardId)
       })
       .catch(() => {
         alert('공지사항 삭제에 실패했습니다.')
@@ -39,15 +39,17 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   }
 
   const handleGoBack = () => {
-    setNotice('LIST')
+    if (boardId) setBoard('LIST', boardId)
   }
+
+  if (!boardId) return null
 
   if (postId === undefined) return null
   if (!data || error)
     return (
       <StatusMessage
         message={'문제가 발생했습니다.'}
-        onClickEditButton={() => setNotice('EDIT', postId)}
+        onClickEditButton={() => setBoard('LIST', boardId, postId)}
         author={!!data?.isAuthor}
       />
     )
@@ -55,7 +57,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
     return (
       <StatusMessage
         message={'공지사항을 불러오는 중입니다...'}
-        onClickEditButton={() => setNotice('EDIT', postId)}
+        onClickEditButton={() => setBoard('LIST', boardId, postId)}
         author={!!data?.isAuthor}
       />
     )
@@ -75,7 +77,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       )}
       <DetailContentCotainer
         containerTitle={'공지사항'}
-        onClickEditButton={() => setNotice('EDIT', postId)}
+        onClickEditButton={() => setBoard('EDIT', boardId, postId)}
         author={data.isAuthor}
       >
         <DetailContent
@@ -104,4 +106,4 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   )
 }
 
-export default TeamNoticeView
+export default TeamBoardPostView
