@@ -1,3 +1,5 @@
+'use client'
+
 import useToast from '@/hook/useToast'
 import { Box, Button, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
@@ -141,15 +143,14 @@ const RecruitFormModal = ({
             sx={{
               overflowY: 'auto',
               width: '70vw',
-              height: '70vh',
+              maxHeight: '70vh',
               maxWidth: '800px',
               backgroundColor: 'background.primary',
             }}
           >
             <Typography color={'text.strong'} fontWeight={600}>
-              인터뷰
+              인터뷰 작성
             </Typography>
-            <Typography>인터뷰에 답변하고 지원을 완료하세요.</Typography>
             <Stack gap={'1rem'}>
               {data?.map((quest, idx) => (
                 <Box

@@ -1,5 +1,5 @@
 'use client'
-import { AlertColor, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ProfileCard from './panel/ProfileCard'
 import { IUserProfile } from '@/types/IUserProfile'
@@ -15,17 +15,13 @@ import MyInfoCard from './panel/MyInfoCard'
 import useMedia from '@/hook/useMedia'
 import * as style from '../panel/my-page.style'
 import MyPortfolio from './panel/MyPortfolio'
+import IToast from '@/types/IToastProps'
 
 interface IModals {
   introduction: boolean
   achievements: boolean
   skills: boolean
   links: boolean
-}
-
-interface IToastProps {
-  severity?: AlertColor
-  message: string
 }
 
 const MyProfile = () => {
@@ -49,9 +45,7 @@ const MyProfile = () => {
     skills: false,
     links: false,
   })
-  const [toastMessage, setToastMessage] = useState<IToastProps>(
-    {} as IToastProps,
-  )
+  const [toastMessage, setToastMessage] = useState<IToast>({} as IToast)
 
   useEffect(() => {
     const newModalOpen: IModals = {
@@ -74,7 +68,39 @@ const MyProfile = () => {
     setModalOpen(newModalOpen)
   }, [modalType])
 
-  const { CuToast, isOpen: isToastOpen, openToast, closeToast } = useToast()
+  const {
+    CuToast,
+    isOpen: isInfoToastOpen,
+    openToast: openInfoToast,
+    closeToast: closeInfoToast,
+  } = useToast()
+
+  const {
+    isOpen: isErrorToastOpen,
+    openToast: openErrorToast,
+    closeToast: closeErrorToast,
+  } = useToast()
+
+  const closeToast = () => {
+    if (isInfoToastOpen) closeInfoToast()
+    if (isErrorToastOpen) closeErrorToast()
+    setToastMessage({} as IToast)
+  }
+
+  useEffect(() => {
+    if (toastMessage.message) {
+      if (
+        toastMessage.severity === 'info' ||
+        toastMessage.severity === 'success'
+      ) {
+        closeToast()
+        openInfoToast()
+      } else {
+        closeToast()
+        openErrorToast()
+      }
+    }
+  }, [toastMessage])
 
   const router = useRouter()
   const { logout } = useAuthStore.getState()
@@ -122,7 +148,7 @@ const MyProfile = () => {
         handleLogout={handleLogout}
       />
 
-      <MyPortfolio />
+      <MyPortfolio setToastMessage={setToastMessage} />
       {/* modals */}
       <ProfileBioEditor
         data={{
@@ -133,7 +159,6 @@ const MyProfile = () => {
           introduction: userInfo.introduction,
         }}
         setToastMessage={setToastMessage}
-        setToastOpen={openToast}
         closeModal={() => setModalType('')}
         mutate={mutate}
         open={modalOpen.introduction}
@@ -142,16 +167,21 @@ const MyProfile = () => {
         links={userInfo?.linkList}
         closeModal={() => setModalType('')}
         setToastMessage={setToastMessage}
-        setToastOpen={openToast}
         mutate={mutate}
         open={modalOpen.links}
       />
 
       {/* toast */}
       <CuToast
-        open={isToastOpen}
+        open={isInfoToastOpen}
         onClose={closeToast}
-        severity={toastMessage.severity}
+        severity={'info'}
+        message={toastMessage.message}
+      />
+      <CuToast
+        open={isErrorToastOpen}
+        onClose={closeToast}
+        severity={'error'}
         message={toastMessage.message}
       />
     </Stack>
