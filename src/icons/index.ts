@@ -1,5 +1,6 @@
 export { default as ChevronLeft } from './ChevronLeft'
 export { default as ChevronRight } from './ChevronRight'
+export { default as ChevronDown } from './ChevronDown'
 export { default as CloseIcon } from './CloseIcon'
 export { default as PlusIcon } from './PlusIcon'
 export { default as SearchIcon } from './SearchIcon'

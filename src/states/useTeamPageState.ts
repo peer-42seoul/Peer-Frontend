@@ -54,7 +54,7 @@ const useTeamPageState = create<ITeamPageState>((set) => ({
         boardType === 'LIST' || boardType === 'SETTING'
           ? 'SIDEBAR'
           : 'FULLPAGE',
-      boardType: 'LIST',
+      boardType: boardType,
       boardId,
       postId,
     }),

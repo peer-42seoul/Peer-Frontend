@@ -1,19 +1,27 @@
-import { Select } from '@mui/material'
+import { MenuItem, Select } from '@mui/material'
 import useTeamPageState from '@/states/useTeamPageState'
-import { ITeamBoardInfo } from '@/types/TeamBoardTypes'
+import { ChevronDown } from '@/icons'
+import { ITeamBoard } from '@/types/TeamBoardTypes'
+import * as style from './BoardDropdown.style'
 
-const BoardDropdown = ({ boardData }: { boardData: ITeamBoardInfo[] }) => {
-  const { setBoard } = useTeamPageState()
+const BoardDropdown = ({ boardData }: { boardData: ITeamBoard[] }) => {
+  const { boardId, setBoard } = useTeamPageState()
   if (!boardData || boardData.length == 0) return null
   return (
     <Select
-      value={boardData[0].boardId}
+      value={boardId}
       onChange={(e) => setBoard('LIST', Number(e.target.value))}
+      IconComponent={ChevronDown}
+      sx={style.boardSelect}
     >
       {boardData.map((board) => (
-        <option key={board.boardId} value={board.boardId}>
+        <MenuItem
+          key={board.boardId}
+          value={board.boardId}
+          sx={style.boardSelectMenu}
+        >
           {board.boardName}
-        </option>
+        </MenuItem>
       ))}
     </Select>
   )
