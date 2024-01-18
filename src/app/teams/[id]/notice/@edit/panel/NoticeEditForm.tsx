@@ -77,6 +77,7 @@ const NoticeEditForm = ({
 
   return (
     <EditForm
+      formId={'notice-form'}
       isLoading={isLoading}
       onSubmit={handleSubmit}
       initialTitle={previousData.title || ''}

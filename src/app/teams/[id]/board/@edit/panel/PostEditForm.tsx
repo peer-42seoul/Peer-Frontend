@@ -5,15 +5,15 @@ import useTeamPageState from '@/states/useTeamPageState'
 import useEditorState from '@/states/useEditorState'
 import { EditForm } from '@/components/board/EditPanel'
 
-const NoticeEditForm = ({
-  teamId,
-  postId,
-}: {
+interface IPostEditFormProps {
+  boardId: number
   teamId: string
   postId?: string
-}) => {
+}
+
+const PostEditForm = ({ teamId, postId, boardId }: IPostEditFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
-  const { setNotice } = useTeamPageState()
+  const { setBoard } = useTeamPageState()
   const [previousData, setPreviousData] = useState({
     title: '',
     content: '',
@@ -24,7 +24,7 @@ const NoticeEditForm = ({
     if (postId) {
       setIsLoading(true)
       axiosWithAuth
-        .get(`/api/v1/team/notice/${postId}`)
+        .get(`/api/v1/team-page/post/${postId}`)
         .then((res) => {
           if (!res || !res.data) throw new Error()
           setPreviousData({
@@ -34,7 +34,7 @@ const NoticeEditForm = ({
         })
         .catch(() => {
           alert('게시글을 불러오는데 실패했습니다.')
-          setNotice('LIST')
+          setBoard('LIST', boardId)
         })
         .finally(() => {
           setIsLoading(false)
@@ -45,38 +45,46 @@ const NoticeEditForm = ({
     event.preventDefault()
     if (!editor) return
     const formData = new FormData(event.currentTarget)
+    console.log(formData.keys())
     const form = {
-      title: formData.get('title') as string,
+      title: formData.get('post-title') as string,
       content: editor.getMarkdown(),
+    }
+    if (!form.title) {
+      alert('제목을 입력해주세요.')
+      return
     }
     if (postId) {
       // 글 수정
       axiosWithAuth
-        .put(`/api/v1/team/notice/${postId}`, form)
+        .put(`/api/v1/team/board/post/${postId}`, form)
         .then(() => {
-          alert('공지사항을 수정했습니다.')
+          alert('게시글을 수정했습니다.')
+          setBoard('DETAIL', boardId, parseInt(postId))
         })
         .catch(() => {
-          alert('공지사항 수정에 실패했습니다.')
+          alert('게시글 수정에 실패했습니다.')
         })
     }
     // 글 작성
     axiosWithAuth
-      .post(`/api/v1/team/notice`, {
+      .post(`/api/v1/team-page/posts/create`, {
         ...form,
-        teamId,
+        boardId,
+        image: null,
       })
       .then((res) => {
-        alert('공지사항이 등록되었습니다.')
-        setNotice('DETAIL', res.data.postId)
+        alert('게시글이 등록되었습니다.')
+        setBoard('DETAIL', boardId, res.data.postId)
       })
       .catch(() => {
-        alert('공지사항 작성에 실패했습니다.')
+        alert('게시글 작성에 실패했습니다.')
       })
   }
 
   return (
     <EditForm
+      formId={'post-edit-form'}
       isLoading={isLoading}
       onSubmit={handleSubmit}
       initialTitle={previousData.title || ''}
@@ -85,4 +93,4 @@ const NoticeEditForm = ({
   )
 }
 
-export default NoticeEditForm
+export default PostEditForm

@@ -29,7 +29,7 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
     const confirm = window.confirm('게시글을 삭제할까요??')
     if (!confirm || !boardId) return
     axiosWithAuth
-      .delete(`/api/v1/team/notice/${postId}`)
+      .delete(`/api/v1/team/board/post/${postId}`)
       .then(() => {
         alert('게시글을 삭제했습니다.')
         setBoard('LIST', boardId)

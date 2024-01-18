@@ -2,30 +2,33 @@
 
 import useTeamPageState from '@/states/useTeamPageState'
 import { EditPage, EditBox } from '@/components/board/EditPanel'
-import NoticeEditForm from './panel/NoticeEditForm'
-import NoticeEditButton from './panel/NoticeEditButton'
+import PostEditForm from './panel/PostEditForm'
+import PostEditButton from './panel/PostEditButton'
 import useMedia from '@/hook/useMedia'
 
 const NoticeEdit = ({ params }: { params: { id: string } }) => {
-  const { postId, setNotice } = useTeamPageState()
+  const { boardId, postId, setBoard } = useTeamPageState()
   const { isPc } = useMedia()
   const { id } = params
   const handleGoBack = () => {
+    if (!boardId) return null
     if (postId) {
-      setNotice('DETAIL', postId)
+      setBoard('DETAIL', boardId, postId)
     } else {
-      setNotice('LIST')
+      setBoard('LIST', boardId)
     }
   }
+  // TODO : 에러처리 구체화
+  if (!boardId) return null
   return (
     <EditPage
       type={postId ? 'edit' : 'new'}
       handleGoBack={handleGoBack}
-      title={postId ? '공지사항 수정' : '공지사항 작성'}
+      title={postId ? '게시글 수정' : '게시글 작성'}
     >
       <EditBox>
-        <NoticeEditForm teamId={id} />
-        {isPc && <NoticeEditButton />}
+        <PostEditForm teamId={id} boardId={boardId} />
+        {isPc && <PostEditButton />}
       </EditBox>
     </EditPage>
   )

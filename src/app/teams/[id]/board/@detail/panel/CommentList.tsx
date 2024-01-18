@@ -18,7 +18,7 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     axiosWithAuth
-      .put(`/api/v1/team/notice/answer/${comment.answerId}`, {
+      .put(`/api/v1/team/board/posts/comment/${comment.answerId}`, {
         content: formData.get('content') as string,
       })
       .then(() => {
@@ -34,7 +34,7 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
     const confirm = window.confirm('댓글을 삭제하시겠습니까?')
     if (!confirm) return
     axiosWithAuth
-      .delete(`/api/v1/team/notice/answer/${comment.answerId}`)
+      .delete(`/api/v1/team/board/posts/comment/${comment.answerId}`)
       .then(() => {
         alert('댓글을 삭제했습니다.')
       })
