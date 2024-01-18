@@ -5,27 +5,21 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
-import { AlertColor, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
-
-interface IToastProps {
-  severity?: AlertColor
-  message: string
-}
+import IToast from '@/types/IToastProps'
 
 const ProfileLinkEditor = ({
   closeModal,
   links,
   setToastMessage,
-  setToastOpen,
   mutate,
   open,
 }: {
   closeModal: () => void
   links?: Array<IUserProfileLink>
-  setToastMessage: (toastProps: IToastProps) => void
-  setToastOpen: (open: boolean) => void
+  setToastMessage: (toastProps: IToast) => void
   mutate: () => void
   open: boolean
 }) => {
@@ -112,7 +106,6 @@ const ProfileLinkEditor = ({
           severity: 'success',
           message: '링크 변경에 성공하였습니다.',
         })
-        setToastOpen(true)
         reset(defaultValues)
         closeModal()
         mutate()
@@ -122,7 +115,6 @@ const ProfileLinkEditor = ({
           severity: 'error',
           message: '링크 변경에 실패하였습니다.',
         })
-        setToastOpen(true)
       })
   }
 
@@ -138,7 +130,7 @@ const ProfileLinkEditor = ({
       }}
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCloseModal,
       }}
       mobileFullSize
     >
