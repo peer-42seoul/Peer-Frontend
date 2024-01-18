@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import HitchhikingCard from './ShowcaseCard'
 import * as style from './ShowcaseCard.style'
 import useMedia from '@/hook/useMedia'
-import { ICardData } from '@/app/showcase_ref/panel/types'
+import { ICardData } from '@/app/showcase/panel/types'
 
 enum ESwipeDirection {
   left = 'left',

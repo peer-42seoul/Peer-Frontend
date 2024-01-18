@@ -12,7 +12,7 @@ import ArrowUp from '@/icons/ArrowUp'
 import * as style from './showcase.style'
 import ArrowDown from '@/icons/ArrowDown'
 import useAxiosWithAuth from '@/api/config'
-import { ICardData } from '../showcase_ref/panel/types'
+import { ICardData } from '../showcase/panel/types'
 import useAuthStore from '@/states/useAuthStore'
 
 const Hitchhiking = () => {
