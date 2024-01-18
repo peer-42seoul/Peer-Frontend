@@ -2,6 +2,7 @@ import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
 import TagChip from '@/components/TagChip'
 import { ITag } from '@/types/IPostDetail'
+import { getUniqueArray } from '@/utils/getUniqueArray'
 import {
   Autocomplete,
   Button,
@@ -12,6 +13,7 @@ import {
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
+// COMMENT :우선 해당 값으로 해두었으나 조정이 필요합니다.
 const TIMEOUT = 0.5
 
 const SkillsEditor = ({
@@ -23,7 +25,7 @@ const SkillsEditor = ({
   mutate: () => void
   closeModal: () => void
 }) => {
-  const [selected, setSelected] = useState([] as ITag[]) // 선택 된 데이터
+  const [selected, setSelected] = useState([] as Array<string>) // 선택 된 데이터
   const [tagList, setTagList] = useState([] as ITag[]) // 검색 된 데이터
 
   const [timeOut, setTimeOut] = useState(TIMEOUT)
@@ -49,7 +51,7 @@ const SkillsEditor = ({
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/skill/search?keyword=${text}`,
         )
         .then((res) => {
-          setTagList((prev) => prev.concat(res.data))
+          setTagList((prev) => getUniqueArray(prev.concat(res.data), 'tagId'))
           setIsLoading(false)
         })
         .catch(() => {
@@ -69,13 +71,8 @@ const SkillsEditor = ({
     setTimeOut(TIMEOUT)
   }
 
-  const handleInput = (_: any, value: readonly string[]) => {
-    const selectedTags = value
-      .map((tagName) => {
-        return tagList.find((tag) => tag.name === tagName)
-      })
-      .filter(Boolean) as ITag[]
-    setSelected(selectedTags)
+  const handleInput = (_: any, value: string[]) => {
+    setSelected(value)
   }
   return (
     <CuModal
@@ -107,6 +104,7 @@ const SkillsEditor = ({
             },
           }}
           loading={isLoading}
+          value={selected}
           options={tagList.map((tag) => tag.name)}
           onChange={handleInput}
           renderTags={() => <></>}
@@ -144,16 +142,16 @@ const SkillsEditor = ({
           </Typography>
           <Button variant={'text'}>전체 삭제</Button>
         </Stack>
-        {selected.map((tag) => {
+        {selected.map((tagName) => {
+          const tag = tagList.find((tag) => tag.name === tagName)
+          if (!tag) return null
           return (
             <TagChip
               key={tag.tagId}
               name={tag.name}
               onDelete={() => {
                 setSelected((prev) => {
-                  const newTags = prev.filter(
-                    (curTag) => curTag.tagId !== tag.tagId,
-                  )
+                  const newTags = prev.filter((curTag) => curTag !== tag.name)
                   console.log(newTags)
                   return newTags
                 })
