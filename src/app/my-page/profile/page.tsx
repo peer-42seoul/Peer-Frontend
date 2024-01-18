@@ -16,6 +16,7 @@ import useMedia from '@/hook/useMedia'
 import * as style from '../panel/my-page.style'
 import MyPortfolio from './panel/MyPortfolio'
 import IToast from '@/types/IToastProps'
+import SkillsEditor from './panel/SkillsEditor'
 
 interface IModals {
   introduction: boolean
@@ -169,6 +170,11 @@ const MyProfile = () => {
         setToastMessage={setToastMessage}
         mutate={mutate}
         open={modalOpen.links}
+      />
+      <SkillsEditor
+        open={modalOpen.skills}
+        mutate={mutate}
+        closeModal={() => setModalType('')}
       />
 
       {/* toast */}
