@@ -27,25 +27,31 @@ const Skills = ({
         gap={1}
         flexWrap={'wrap'}
       >
-        {skillList.map((skill) => (
-          <Chip
-            key={skill.tagId}
-            label={
-              <Typography variant={'Tag'} color={'purple.strong'}>
-                {skill.name}
-              </Typography>
-            }
-            sx={{
-              padding: '0px 6px',
-              backgroundColor: 'purple.tinted',
-              borderRadius: '2px',
-              height: '1.25rem',
-              '& .MuiChip-label': {
-                padding: '0px',
-              },
-            }}
-          />
-        ))}
+        {skillList.length ? (
+          skillList.map((skill) => (
+            <Chip
+              key={skill.tagId}
+              label={
+                <Typography variant={'Tag'} color={'purple.strong'}>
+                  {skill.name}
+                </Typography>
+              }
+              sx={{
+                padding: '0px 6px',
+                backgroundColor: 'purple.tinted',
+                borderRadius: '2px',
+                height: '1.25rem',
+                '& .MuiChip-label': {
+                  padding: '0px',
+                },
+              }}
+            />
+          ))
+        ) : (
+          <Typography variant={'Caption'} color={'text.assistive'}>
+            등록된 스킬이 없습니다.
+          </Typography>
+        )}
       </Stack>
     </Stack>
   )
