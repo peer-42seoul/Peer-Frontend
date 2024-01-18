@@ -3,8 +3,12 @@ import CuModal from '@/components/CuModal'
 import CuTextModal from '@/components/CuTextModal'
 import TagChip from '@/components/TagChip'
 import useModal from '@/hook/useModal'
+<<<<<<< HEAD
 import useToast from '@/states/useToast'
 import { ISkill } from '@/types/IUserProfile'
+=======
+import { ITag } from '@/types/IPostDetail'
+>>>>>>> bb823367 (Design: Enhance visual layout of My Skills Modification component)
 import { getUniqueArray } from '@/utils/getUniqueArray'
 import {
   Autocomplete,
@@ -37,6 +41,7 @@ const SkillsEditor = ({
 
   const [text, setText] = useState('') // 검색 텍스트
 
+<<<<<<< HEAD
   const [timeOut, setTimeOut] = useState(TIMEOUT)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -44,6 +49,13 @@ const SkillsEditor = ({
 
   const { openToast, closeToast } = useToast()
 
+=======
+  const [text, setText] = useState('') // 검색 텍스트
+
+  const [timeOut, setTimeOut] = useState(TIMEOUT)
+  const [isLoading, setIsLoading] = useState(false)
+
+>>>>>>> bb823367 (Design: Enhance visual layout of My Skills Modification component)
   const axiosWithAuth = useAxiosWithAuth()
 
   const {
@@ -52,11 +64,14 @@ const SkillsEditor = ({
     closeModal: closeAlertModal,
   } = useModal()
 
+<<<<<<< HEAD
   const handleCancelClose = () => {
     setSelected(skillList.map((skill) => skill.name) as Array<string>)
     closeModal()
   }
 
+=======
+>>>>>>> bb823367 (Design: Enhance visual layout of My Skills Modification component)
   useEffect(() => {
     const countdown = setInterval(() => {
       setTimeOut((prev) => prev - 0.25)
@@ -96,6 +111,7 @@ const SkillsEditor = ({
     setSelected(value)
   }
 
+<<<<<<< HEAD
   const handleModalClose = () => {
     closeToast()
     setIsSubmitting(true)
@@ -116,6 +132,8 @@ const SkillsEditor = ({
       })
   }
 
+=======
+>>>>>>> bb823367 (Design: Enhance visual layout of My Skills Modification component)
   return (
     <CuModal
       open={open}
