@@ -1,6 +1,5 @@
 import MainCard from '@/app/panel/main-page/MainCard'
-import { ProjectType } from '@/app/panel/MainPage'
-import { IMainCard } from '@/types/IPostDetail'
+import { IMainCard, ProjectType } from '@/types/IPostDetail'
 import { Box, CircularProgress, Grid } from '@mui/material'
 import React from 'react'
 

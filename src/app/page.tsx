@@ -1,10 +1,7 @@
 import MainPage from './panel/MainPage'
 import axios from 'axios'
-import { cookies } from 'next/headers'
-import { getCookie } from 'cookies-next'
 
 export default async function Home() {
-  const accessToken = getCookie('accessToken', { cookies })
   let data
   try {
     const response = await axios.get(
@@ -13,7 +10,6 @@ export default async function Home() {
         withCredentials: true,
         headers: {
           'Cache-Control': 'no-store',
-          Authorization: `Bearer ${accessToken}`,
         },
       },
     )
