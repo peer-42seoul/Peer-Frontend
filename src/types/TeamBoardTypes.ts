@@ -42,6 +42,14 @@ export interface ITeamNoticeDetail extends ITeamNoticeBase {
   isAuthor: boolean
 }
 
+export interface ITeamBoardComment {
+  commentId: number
+  authorImage: string
+  authorNickname: string
+  content: string
+  createdAt: Date
+  isAuthor: boolean
+}
 export interface ITeamComment {
   answerId: number
   authorImage: string

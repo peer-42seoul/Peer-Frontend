@@ -13,6 +13,7 @@ import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
+import { CommentForm } from './panel/CommentForm'
 
 const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
@@ -25,16 +26,16 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   const { isPc } = useMedia()
 
   const handleDelete = () => {
-    const confirm = window.confirm('공지사항을 삭제하시겠습니까?')
+    const confirm = window.confirm('게시글을 삭제할까요??')
     if (!confirm || !boardId) return
     axiosWithAuth
       .delete(`/api/v1/team/notice/${postId}`)
       .then(() => {
-        alert('공지사항을 삭제했습니다.')
+        alert('게시글을 삭제했습니다.')
         setBoard('LIST', boardId)
       })
       .catch(() => {
-        alert('공지사항 삭제에 실패했습니다.')
+        alert('게시글 삭제에 실패했습니다.')
       })
   }
 
@@ -56,7 +57,7 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   if (isLoading)
     return (
       <StatusMessage
-        message={'공지사항을 불러오는 중입니다...'}
+        message={'게시글을 불러오는 중입니다...'}
         onClickEditButton={() => setBoard('LIST', boardId, postId)}
         author={!!data?.isAuthor}
       />
@@ -76,7 +77,7 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
         />
       )}
       <DetailContentCotainer
-        containerTitle={'공지사항'}
+        containerTitle={'게시판'}
         onClickEditButton={() => setBoard('EDIT', boardId, postId)}
         author={data.isAuthor}
       >
@@ -101,7 +102,10 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
           </Stack>
         )}
       </DetailContentCotainer>
-      <CommentList postId={postId} teamId={parseInt(teamId)} />
+      <Stack>
+        <CommentList postId={postId} />
+        <CommentForm postId={postId} teamId={parseInt(teamId)} />
+      </Stack>
     </DetailPage>
   )
 }

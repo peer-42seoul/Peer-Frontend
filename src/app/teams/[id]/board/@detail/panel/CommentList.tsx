@@ -7,14 +7,8 @@ import {
   CommentContainer,
   StatusMessage,
   CommentItem,
-  CommentFormContainer,
 } from '@/components/board/CommentPanel'
-import { ITeamComment } from '@/types/TeamBoardTypes'
-
-interface ICommentFormProps {
-  postId: number
-  teamId: number
-}
+import { ITeamBoardComment, ITeamComment } from '@/types/TeamBoardTypes'
 
 const Comment = ({ comment }: { comment: ITeamComment }) => {
   const [isEditMode, setEditMode] = useState(false)
@@ -60,37 +54,10 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
   )
 }
 
-const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
-  const axiosWithAuth = useAxiosWithAuth()
-  const [isLoading, setIsLoading] = useState(false)
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
-    const formData = new FormData(e.currentTarget)
-    axiosWithAuth
-      .post('/api/v1/team/notice/answer', {
-        teamId: teamId,
-        postId: postId,
-        content: formData.get('new-content') as string,
-      })
-      .then(() => {
-        setIsLoading(false)
-      })
-      .catch(() => {
-        alert('댓글 작성에 실패했습니다.')
-      })
-  }
-
-  return (
-    <CommentFormContainer handleSubmit={handleSubmit} isLoading={isLoading} />
-  )
-}
-
-const CommentList = ({ postId, teamId }: ICommentFormProps) => {
+const CommentList = ({ postId }: { postId: number }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
-    `/api/v1/team/notice/answer/${postId}`,
+    `/api/v1/team/board/posts/comment/${postId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
@@ -108,11 +75,19 @@ const CommentList = ({ postId, teamId }: ICommentFormProps) => {
   return (
     <Stack>
       <CommentContainer>
-        {data.map((comment: ITeamComment) => (
-          <Comment key={comment.answerId} comment={comment} />
-        ))}
+        {data.map((comment: ITeamBoardComment) => {
+          // TODO : notice와 댓글 타입 통일 필요함....
+          const transformComment: ITeamComment = {
+            answerId: comment.commentId,
+            authorImage: comment.authorImage,
+            authorNickname: comment.authorNickname,
+            content: comment.content,
+            createdAt: comment.createdAt,
+            isAuthor: comment.isAuthor,
+          }
+          return <Comment key={comment.commentId} comment={transformComment} />
+        })}
       </CommentContainer>
-      <CommentForm postId={postId} teamId={teamId} />
     </Stack>
   )
 }
