@@ -2,7 +2,7 @@ import { Avatar, Stack, Typography } from '@mui/material'
 import React from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import ListIcon from '@/icons/ListIcon'
-import * as Style from '../SkillInput.style'
+import * as Style from './SkillInput.style'
 import { IMember } from '@/types/IShowcaseEdit'
 
 const MemberInformation = ({ member }: { member: IMember }) => {

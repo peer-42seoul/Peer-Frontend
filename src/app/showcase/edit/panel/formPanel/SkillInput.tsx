@@ -2,7 +2,7 @@ import React from 'react'
 import { Stack } from '@mui/material'
 import TagIcon from '@/icons/TagIcon'
 import LabelWithIcon from '../LabelWithIcon'
-import * as Style from '../SkillInput.style'
+import * as Style from './SkillInput.style'
 import TagChip from '@/components/TagChip'
 import { ISkill } from '@/types/IShowcaseEdit'
 

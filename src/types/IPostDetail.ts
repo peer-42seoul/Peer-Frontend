@@ -1,4 +1,4 @@
-import { ProjectType } from '@/app/panel/MainPage'
+export type ProjectType = 'STUDY' | 'PROJECT'
 
 export interface ITag {
   tagId: number
