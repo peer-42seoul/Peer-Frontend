@@ -16,13 +16,8 @@ export interface ITeamPostBase {
 }
 
 export interface ITeamPost extends ITeamPostBase {}
-export interface ITeamBoardList {
-  boardId: number
-  boardName: string
-  posts: ITeamPost[]
-}
 
-export interface ITeamBoardListData extends IPagination<ITeamBoardList[]> {}
+export interface ITeamBoardListData extends IPagination<ITeamPost[]> {}
 
 export interface ITeamPostDetail extends ITeamPostBase {
   content: string

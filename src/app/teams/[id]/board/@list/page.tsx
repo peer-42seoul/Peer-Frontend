@@ -1,51 +1,34 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Typography, Stack } from '@mui/material'
+import { AxiosResponse } from 'axios'
+import { Stack } from '@mui/material'
+import useAxiosWithAuth from '@/api/config'
 import {
   ListPageContainer,
   ListBoxContainer,
-  NewPostButton,
   IconButtonContainer,
+  TopPageButton,
+  NewPostButton,
 } from '@/components/board/ListPanel'
+import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
-import useAxiosWithAuth from '@/api/config'
 import useTeamPageState from '@/states/useTeamPageState'
-import { ITeamBoardInfo } from '@/types/TeamBoardTypes'
-import NoticeList from './panel/NoticeList'
-import { AxiosResponse } from 'axios'
+import { ITeamBoard } from '@/types/TeamBoardTypes'
+import BoardPostList from './panel/BoardPostList'
 import BoardDropdown from './panel/BoardDropdown'
-
-const mockData = [
-  {
-    boardId: 1,
-    boardName: '공지사항',
-  },
-  {
-    boardId: 2,
-    boardName: '자유게시판',
-  },
-  {
-    boardId: 3,
-    boardName: 'Q&A',
-  },
-  {
-    boardId: 4,
-    boardName: '프로젝트',
-  },
-]
 
 const TeamBoard = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
   const { isPc } = useMedia()
   const { setBoard, boardId } = useTeamPageState()
   const [keyword, setKeyword] = useState<string>('')
-  const [boardList, setBoardList] = useState<ITeamBoardInfo[]>([])
+  const [boardList, setBoardList] = useState<ITeamBoard[]>([])
   const axiosWithAuth = useAxiosWithAuth()
 
   useEffect(() => {
     const getBoardList = async () => {
       try {
-        const res: AxiosResponse<ITeamBoardInfo[]> = await axiosWithAuth.get(
+        const res: AxiosResponse<ITeamBoard[]> = await axiosWithAuth.get(
           `/api/v1/team-page/simple/${teamId}`,
         )
         setBoardList(res.data)
@@ -64,11 +47,19 @@ const TeamBoard = ({ params }: { params: { id: string } }) => {
     <ListPageContainer>
       {boardList && boardList.length > 0 && boardId && (
         <>
-          <NewPostButton
-            onClick={() => {
-              setBoard('EDIT', boardId)
-            }}
-          />
+          <TopPageButton>
+            <CuButton
+              variant={'text'}
+              message={'게시판 관리'}
+              TypographyProps={{
+                variant: 'CaptionEmphasis',
+                color: 'text.alternative',
+              }}
+              action={() => {
+                setBoard('SETTING', boardId)
+              }}
+            />
+          </TopPageButton>
           <ListBoxContainer>
             <Stack
               direction={'row'}
@@ -76,14 +67,21 @@ const TeamBoard = ({ params }: { params: { id: string } }) => {
               justifyContent={'space-between'}
             >
               <BoardDropdown boardData={boardList} />
-              <IconButtonContainer
-                setKeyword={setKeyword}
-                onClickPlus={() => {
-                  setBoard('EDIT', boardId)
-                }}
-              />
+              <Stack direction={'row'} spacing={'0.5rem'}>
+                <IconButtonContainer
+                  setKeyword={setKeyword}
+                  onClickPlus={() => {
+                    setBoard('EDIT', boardId)
+                  }}
+                />
+                <NewPostButton
+                  onClick={() => {
+                    setBoard('EDIT', boardId)
+                  }}
+                />
+              </Stack>
             </Stack>
-            <NoticeList boardId={boardId} keyword={keyword} />
+            <BoardPostList keyword={keyword} />
           </ListBoxContainer>
         </>
       )}
