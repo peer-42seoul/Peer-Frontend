@@ -26,6 +26,17 @@ export interface IShowcaseEditorFields {
   skills: ISkill[]
   start: string
   end: string
-  memberList: IMember[]
+  member: IMember[]
   links: IUserProfileLink[]
+}
+
+export interface IShowcaseViewerFields {
+  title: string
+  skills: ISkill[]
+  start: string
+  end: string
+  member: IMember[]
+  links: IUserProfileLink[]
+  content: string
+  image: string
 }

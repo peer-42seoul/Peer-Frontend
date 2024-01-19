@@ -4,9 +4,10 @@ import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
 import * as Style from './SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
+
 interface ILinkInputValues {
-  linkName: string
-  linkUrl: string
+  name: string
+  link: string
   id: number
 }
 
@@ -22,7 +23,7 @@ interface ILinkFormProps {
 const LinkForm = ({
   links,
   addLink,
-  isValid,
+  // isValid,
   setIsValid,
   changeLinkName,
   changeUrl,
@@ -36,7 +37,9 @@ const LinkForm = ({
       // eslint-disable-next-line no-useless-escape
       /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/ // eslint-disable-next-line no-useless-escape
     setChecker(regex.test(completedUrl))
+    alert(regex.test(completedUrl))
     setIsValid(checker)
+    alert(`체크함  checker : ${checker}}`)
   }
 
   return (
@@ -60,28 +63,28 @@ const LinkForm = ({
           <PlusIcon sx={Style.IconStyle} />
         </IconButton>
       </Stack>
-      {links.map((link) => (
-        <Stack key={link.id} direction={'row'} spacing={'0.5rem'}>
+      {links.map((link, index) => (
+        <Stack key={index} direction={'row'} spacing={'0.5rem'}>
           <TextField
-            key={link.id}
-            name="linkName"
+            key={index}
+            name="name"
             placeholder={'링크 이름'}
             sx={{ width: '12.8rem', height: '2rem' }}
-            value={link.linkName}
+            value={link.name}
             onChange={(e) => changeLinkName(link.id, e.target.value)}
           />
           <TextField
-            name="linkUrl"
+            name="url"
             placeholder={'링크 주소'}
             sx={{ width: '12.8rem', height: '2rem' }}
             autoComplete="off"
-            value={link.linkUrl}
+            value={link.link}
             onChange={(e) => changeUrl(link.id, e.target.value)}
             onBlur={(e) => validateUrl(e)}
           />
         </Stack>
       ))}
-      {!isValid && (
+      {!checker && (
         <Typography color="error">
           유효하지 않는 URL이 포함되어 있습니다.
         </Typography>

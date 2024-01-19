@@ -31,7 +31,7 @@ const ToastViewer = ({
       viewer.destroy()
     }
   }, [initialValue, viewerRef])
-  return <Box sx={sx} ref={viewerRef} />
+  return <Box sx={sx} ref={viewerRef} color={'white'} />
 }
 
 export default ToastViewer

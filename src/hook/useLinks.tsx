@@ -5,24 +5,20 @@ export const useLinks = (initValue: IUserProfileLink[]) => {
   const [links, setLinks] = useState<IUserProfileLink[]>(initValue)
   const [isValid, setIsValid] = useState<boolean>(true)
 
-  const addLink = (linkName: string, linkUrl: string) => {
-    const newLink = { linkName, linkUrl, id: links.length }
+  const addLink = (name: string, url: string) => {
+    const newLink = { name, url, id: links.length }
     setLinks([...links, newLink])
   }
 
   const changeLinkName = (id: number, content: string) => {
     setLinks(
-      links.map((link) =>
-        link.id === id ? { ...link, linkName: content } : link,
-      ),
+      links.map((link) => (link.id === id ? { ...link, name: content } : link)),
     )
   }
 
   const changeUrl = (id: number, content: string) => {
     setLinks(
-      links.map((link) =>
-        link.id === id ? { ...link, linkUrl: content } : link,
-      ),
+      links.map((link) => (link.id === id ? { ...link, link: content } : link)),
     )
   }
 

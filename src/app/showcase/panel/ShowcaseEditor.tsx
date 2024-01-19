@@ -2,17 +2,16 @@
 import { Button, Stack } from '@mui/material'
 import React, { useState } from 'react'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
-import ImageInput from './formPanel/ImageInput'
-import TeamName from './formPanel/TeamName'
-import SkillInput from './formPanel/SkillInput'
-import LinkForm from './formPanel/LinkForm'
+import ImageInput from '../panel/common/ImageInput'
+import TeamName from '../panel/common/TeamName'
+import SkillInput from '../panel/common/SkillInput'
+import LinkForm from '../panel/common/LinkForm'
 import useToast from '@/hook/useToast'
-import { redirect } from 'next/navigation'
 import useModal from '@/hook/useModal'
 import CuTextModal from '@/components/CuTextModal'
 import useAxiosWithAuth from '@/api/config'
-import StartEndDateViewer from './formPanel/StartEndDateViewer'
-import TeamMembers from './formPanel/TeamMembers'
+import StartEndDateViewer from '../panel/common/StartEndDateViewer'
+import TeamMembers from '../panel/common/TeamMembers'
 import dynamic from 'next/dynamic'
 import * as style from './ShowcaseEditor.style'
 import { useLinks } from '@/hook/useLinks'
@@ -20,16 +19,26 @@ import useShowCaseState from '@/states/useShowCaseState'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
+  teamId: number
+  requestMethodType: 'post' | 'put'
+  router: any
 }
 
-const DynamicEditor = dynamic(() => import('../panel/formPanel/FormUIEditor'), {
+const DynamicEditor = dynamic(() => import('../panel/common/FormUIEditor'), {
   ssr: false,
 })
 
-const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
+const ShowcaseEditor = ({
+  data,
+  teamId,
+  requestMethodType,
+  router,
+}: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [image, setImage] = useState<File[]>([])
-  const [previewImage, setPreviewImage] = useState<string>('')
+  const [previewImage, setPreviewImage] = useState<string>(
+    '/images/defaultImage.png',
+  )
   const [errorMessages, setErrorMessages] = useState<string>('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
@@ -38,20 +47,34 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
   const { content } = useShowCaseState()
 
   const submitHandler = async () => {
+    const linksWithoutId = links.map(({ ...rest }) => rest)
     if (!isValid) {
       return
     }
     try {
-      const response = await axiosWithAuth.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
-        {
-          image: 'previewImage',
-          content: 'content',
-          teamId: 'value3',
-          links: links,
-        },
-      )
-      redirect(`/showcase/${response.data.get('id')}`) // next 13에서 redirect 하는 법
+      if (requestMethodType === 'post') {
+        const response = await axiosWithAuth.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
+          {
+            image: previewImage.split(',')[1],
+            content: content,
+            teamId: teamId,
+            links: linksWithoutId,
+          },
+        )
+        router.push(`/showcase/${response.data.get('id')}`) // next 13에서 redirect 하는 법
+      } else if (requestMethodType === 'put') {
+        const response = await axiosWithAuth.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
+          {
+            image: previewImage.split(',')[1],
+            content: content,
+            teamId: teamId,
+            links: linksWithoutId,
+          },
+        )
+        router.push(`/showcase/${response.data.get('id')}`)
+      }
     } catch (error: any) {
       if (error.response) {
         switch (error.response.status) {
@@ -77,14 +100,9 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
       } else {
         setErrorMessages('요청을 설정하는 중에 에러가 발생했습니다.')
       }
-      console.log(
-        `content : ${content} links : ${links[0].linkName} ${links[0].linkUrl} image : ${previewImage}`,
-      )
     }
   }
 
-  // if (isLoading) return <div>로딩중</div>
-  // if (error) return <div>에러</div>
   return (
     <form id="showcase-form">
       <Stack direction={'column'} spacing={'2.5rem'} sx={{ width: '26rem' }}>
