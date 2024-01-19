@@ -20,6 +20,8 @@ import useMedia from '@/hook/useMedia'
 import * as style from './ShowcaseCard.style'
 import { IShowcaseTag } from '@/app/showcase/panel/types'
 import PostCard from './PostCard'
+import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
+import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
 
 interface IShowcaseCardBack {
   content: string
@@ -112,11 +114,15 @@ const ShowcaseCardBack = ({
               />
             </CardContent>
             <CardActionArea sx={{ padding: 0, width: 'auto' }}>
-              <DropdownMenu
-                title={title}
-                url={`${currentDomain}/recruit/${postId}`}
-                content={data.content}
-              />
+              <DropdownMenu>
+                <ShareMenuItem
+                  title={title}
+                  url={`${currentDomain}/recruit/${postId}`}
+                  content={data.content}
+                />
+                {/* TODO : 모집글 작성자 아이디 가져올 수 있는 방법 찾기 */}
+                <ReportMenuItem targetId={postId} />
+              </DropdownMenu>
             </CardActionArea>
           </Stack>
           <CardHeader
