@@ -7,7 +7,7 @@ import { IShowcaseViewerFields } from '@/types/IShowcaseEdit'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
-import useAxiosWithAuth from '@/api/config'
+// import useAxiosWithAuth from '@/api/config'
 
 const ShowcaseDetailPage = () => {
   // const mockData: IShowcaseEditorFields = {
@@ -51,7 +51,7 @@ const ShowcaseDetailPage = () => {
   // const data = 0
 
   const showcaseId = 3
-  const axiosWithAuth = useAxiosWithAuth()
+  // const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseViewerFields>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${showcaseId}`,
     defaultGetFetcher,
