@@ -96,10 +96,10 @@ const SkillsEditor = ({
     setSelected(value)
   }
 
-  const handleModalClose = async () => {
+  const handleModalClose = () => {
     closeToast()
     setIsSubmitting(true)
-    await axiosWithAuth
+    axiosWithAuth
       .put(
         '/api/v1/skill/regist',
         tagList.filter((tag) => selected.includes(tag.name)),
