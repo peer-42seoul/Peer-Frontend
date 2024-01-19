@@ -1,19 +1,8 @@
 'use client'
 import CuToggle from '@/components/CuToggle'
 import TitleBox from '@/components/TitleBox'
-import {
-  AlertColor,
-  Box,
-  FormControlLabel,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, FormControlLabel, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
-
-interface IToastProps {
-  severity: AlertColor | undefined
-  message: string
-}
 
 const Notif = ({
   checked,
@@ -50,17 +39,12 @@ const Notif = ({
   )
 }
 
-const NotifSetting = ({
-  setToastMessage,
-}: {
-  setToastMessage: (message: IToastProps) => void
-}) => {
+const NotifSetting = () => {
   const [keyword, setKeyword] = useState(false)
   const [team, setTeam] = useState(false)
   const [message, setMessage] = useState(false)
   const [night, setNight] = useState(false)
 
-  console.log(setToastMessage)
   return (
     <TitleBox title="알림 설정">
       <Stack spacing={2}>
