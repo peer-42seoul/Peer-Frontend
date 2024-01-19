@@ -5,6 +5,7 @@ import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
 import CuSWRConfig from './panel/CuSWRConfig'
 import MainLayout from './panel/MainLayout'
 import { Pretendard } from './panel/font'
+import ToastNotification from './panel/layout-panel/ToastNotification'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 
 export const metadata: Metadata = {
@@ -56,6 +57,7 @@ export default function RootLayout({
             <MuiThemeProvider>
               <MainLayout>{children}</MainLayout>
               <div id="modal-root"></div>
+              <ToastNotification />
             </MuiThemeProvider>
           </CuSWRConfig>
         </AppRouterCacheProvider>

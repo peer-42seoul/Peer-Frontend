@@ -5,7 +5,6 @@ import ProfileCard from './panel/ProfileCard'
 import { IUserProfile } from '@/types/IUserProfile'
 import ProfileBioEditor from './panel/ProfileBioEditor'
 import ProfileLinkEditor from './panel/ProfileLinkEditor'
-import useToast from '@/hook/useToast'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import useAuthStore from '@/states/useAuthStore'
@@ -15,7 +14,6 @@ import MyInfoCard from './panel/MyInfoCard'
 import useMedia from '@/hook/useMedia'
 import * as style from '../panel/my-page.style'
 import MyPortfolio from './panel/MyPortfolio'
-import IToast from '@/types/IToastProps'
 import SkillsEditor from './panel/SkillsEditor'
 
 interface IModals {
@@ -46,7 +44,6 @@ const MyProfile = () => {
     skills: false,
     links: false,
   })
-  const [toastMessage, setToastMessage] = useState<IToast>({} as IToast)
 
   useEffect(() => {
     const newModalOpen: IModals = {
@@ -68,40 +65,6 @@ const MyProfile = () => {
 
     setModalOpen(newModalOpen)
   }, [modalType])
-
-  const {
-    CuToast,
-    isOpen: isInfoToastOpen,
-    openToast: openInfoToast,
-    closeToast: closeInfoToast,
-  } = useToast()
-
-  const {
-    isOpen: isErrorToastOpen,
-    openToast: openErrorToast,
-    closeToast: closeErrorToast,
-  } = useToast()
-
-  const closeToast = () => {
-    if (isInfoToastOpen) closeInfoToast()
-    if (isErrorToastOpen) closeErrorToast()
-    setToastMessage({} as IToast)
-  }
-
-  useEffect(() => {
-    if (toastMessage.message) {
-      if (
-        toastMessage.severity === 'info' ||
-        toastMessage.severity === 'success'
-      ) {
-        closeToast()
-        openInfoToast()
-      } else {
-        closeToast()
-        openErrorToast()
-      }
-    }
-  }, [toastMessage])
 
   const router = useRouter()
   const { logout } = useAuthStore.getState()
@@ -150,7 +113,7 @@ const MyProfile = () => {
         handleLogout={handleLogout}
       />
 
-      <MyPortfolio setToastMessage={setToastMessage} />
+      <MyPortfolio />
       {/* modals */}
       <ProfileBioEditor
         data={{
@@ -160,7 +123,6 @@ const MyProfile = () => {
           email: userInfo.email,
           introduction: userInfo.introduction,
         }}
-        setToastMessage={setToastMessage}
         closeModal={() => setModalType('')}
         mutate={mutate}
         open={modalOpen.introduction}
@@ -168,7 +130,6 @@ const MyProfile = () => {
       <ProfileLinkEditor
         links={userInfo?.linkList}
         closeModal={() => setModalType('')}
-        setToastMessage={setToastMessage}
         mutate={mutate}
         open={modalOpen.links}
       />
@@ -177,20 +138,6 @@ const MyProfile = () => {
         skillList={userInfo?.skillList}
         mutate={mutate}
         closeModal={() => setModalType('')}
-      />
-
-      {/* toast */}
-      <CuToast
-        open={isInfoToastOpen}
-        onClose={closeToast}
-        severity={'info'}
-        message={toastMessage.message}
-      />
-      <CuToast
-        open={isErrorToastOpen}
-        onClose={closeToast}
-        severity={'error'}
-        message={toastMessage.message}
       />
     </Stack>
   )
