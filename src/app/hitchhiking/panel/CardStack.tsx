@@ -1,12 +1,11 @@
 'use client'
 
-import { IMainCard } from '@/types/IPostDetail'
 import { Box } from '@mui/material'
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import HitchhikingCard from './HitchhikingCard'
 import * as style from './HitchhikingCard.style'
-import useMedia from '@/hook/useMedia'
+import { IPostCardHitchhiking } from '@/types/IPostCard'
 
 enum ESwipeDirection {
   left = 'left',
@@ -20,12 +19,11 @@ const CardStack = ({
   removeCard,
   isProject,
 }: {
-  cardList: Array<IMainCard>
+  cardList: Array<IPostCardHitchhiking>
   removeCard: (recruit_id: number) => void
   isProject: boolean
 }) => {
   const [dragged, setDragged] = useState(false)
-  const { isPc } = useMedia()
 
   const checkDragDirection = (x: number, y: number) => {
     if (Math.abs(x) > Math.abs(y)) {
@@ -59,10 +57,7 @@ const CardStack = ({
 
   return (
     <>
-      <Box
-        position={'relative'}
-        sx={isPc ? style.cardPcSize : style.cardMobileSize}
-      >
+      <Box position={'relative'} sx={style.cardSize}>
         <motion.div
           animate={{
             opacity: cardList.length > 1 ? 1 : 0,
@@ -73,7 +68,7 @@ const CardStack = ({
         >
           <Box
             sx={{
-              ...(isPc ? style.cardPcSize : style.cardMobileSize),
+              ...style.cardSize,
               backgroundColor: 'text.assistive',
             }}
           />
@@ -88,7 +83,7 @@ const CardStack = ({
         >
           <Box
             sx={{
-              ...(isPc ? style.cardPcSize : style.cardMobileSize),
+              ...style.cardSize,
               backgroundColor: 'text.assistive',
             }}
           />
@@ -98,7 +93,7 @@ const CardStack = ({
             if (cardList.length > 2 && cardList.length - i > 2) return null
             return (
               <motion.div
-                key={card.recruit_id}
+                key={card.recruitId}
                 initial={{
                   scale: 0.8,
                   opacity: 0,
@@ -120,18 +115,17 @@ const CardStack = ({
                 dragTransition={{ bounceStiffness: 300, bounceDamping: 50 }}
                 onDragStart={() => setDragged(true)}
                 onDragEnd={(e: any, info: any) =>
-                  handleDragEnd(e, info, card.recruit_id, card.title)
+                  handleDragEnd(e, info, card.recruitId, card.title)
                 }
                 transition={{ duration: 0.3 }}
               >
                 <HitchhikingCard
-                  authorImage={card.user_thumbnail}
-                  teamName={card.user_nickname}
+                  authorImage={''}
+                  teamName={card.teamName}
                   title={card.title}
                   tagList={card.tagList}
                   image={card.image}
-                  postId={card.recruit_id}
-                  sx={isPc ? style.cardPcStyleBase : style.cardMobileStyleBase}
+                  postId={card.recruitId}
                   dragged={dragged}
                   setDragged={setDragged}
                   isProject={isProject}
