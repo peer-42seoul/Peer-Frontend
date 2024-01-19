@@ -24,8 +24,6 @@ function PostCard({
   image,
   sx,
   onClick,
-  onMouseUp,
-  onTouchEnd,
 }: IPostCard) {
   const ref = React.useRef<HTMLDivElement>(null)
   const [currentCardWidth, setCurrentCardWidth] = useState<number>(0)
@@ -53,8 +51,6 @@ function PostCard({
       }}
       ref={ref}
       onClick={onClick}
-      onMouseUp={onMouseUp}
-      onTouchEnd={onTouchEnd}
     >
       <CardMedia
         component="img"
