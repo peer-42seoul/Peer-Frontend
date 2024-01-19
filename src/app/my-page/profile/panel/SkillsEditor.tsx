@@ -30,7 +30,7 @@ const SkillsEditor = ({
   closeModal: () => void
 }) => {
   const [selected, setSelected] = useState<Array<string>>(
-    skillList ? (skillList.map((skill) => skill.name) as Array<string>) : [],
+    skillList.map((skill) => skill.name) as Array<string>,
   ) // 선택 된 데이터
   const [tagList, setTagList] = useState([] as ISkill[]) // 검색 된 데이터
 
@@ -48,6 +48,11 @@ const SkillsEditor = ({
     openModal: openAlertModal,
     closeModal: closeAlertModal,
   } = useModal()
+
+  const handleCancelClose = () => {
+    setSelected(skillList.map((skill) => skill.name) as Array<string>)
+    closeModal()
+  }
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -111,7 +116,7 @@ const SkillsEditor = ({
   return (
     <CuModal
       open={open}
-      onClose={closeModal}
+      onClose={handleCancelClose}
       title={'스킬 수정'}
       mobileFullSize
       containedButton={{
@@ -121,7 +126,7 @@ const SkillsEditor = ({
       }}
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCancelClose,
       }}
     >
       <>
@@ -200,26 +205,34 @@ const SkillsEditor = ({
                 </Typography>
               </Button>
             </Stack>
-            {selected.map((tagName) => {
-              const tag = tagList.find((tag) => tag.name === tagName)
-              if (!tag) return null
-              return (
-                <TagChip
-                  key={tag.tagId}
-                  name={tag.name}
-                  onDelete={() => {
-                    setSelected((prev) => {
-                      const newTags = prev.filter(
-                        (curTag) => curTag !== tag.name,
-                      )
-                      console.log(newTags)
-                      return newTags
-                    })
-                  }}
-                  color={tag.color}
-                />
-              )
-            })}
+            {selected.length ? (
+              selected.map((tagName) => {
+                const tag =
+                  tagList.find((tag) => tag.name === tagName) ??
+                  skillList.find((tag) => tag.name === tagName)
+                if (!tag) return null
+                return (
+                  <TagChip
+                    key={tag.tagId}
+                    name={tag.name}
+                    onDelete={() => {
+                      setSelected((prev) => {
+                        const newTags = prev.filter(
+                          (curTag) => curTag !== tag.name,
+                        )
+                        console.log(newTags)
+                        return newTags
+                      })
+                    }}
+                    color={tag.color}
+                  />
+                )
+              })
+            ) : (
+              <Typography variant={'Caption'} color={'text.alternative'}>
+                선택된 스킬이 없습니다.
+              </Typography>
+            )}
           </Stack>
         </Stack>
         <CuTextModal
