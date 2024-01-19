@@ -18,14 +18,10 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
 import CuTextModal from '@/components/CuTextModal'
-import * as pageStyle from '../panel/my-page.style'
 import * as style from './interests.style'
 import { centeredPosition } from '@/constant/centerdPosition.style'
-
-interface IInterestResponse {
-  postList: IMainCard[]
-  isLast: boolean
-}
+import { IPagination } from '@/types/IPagination'
+import MainCard from '@/app/panel/main-page/MainCard'
 
 const TypeTabs = ({
   type,
@@ -126,9 +122,7 @@ const MyInterests = () => {
   const [type, setType] = useState('PROJECT')
   const [page, setPage] = useState<number>(1)
   const [pageLimit, setPageLimit] = useState<number>(1)
-  const [postList, setPostList] = useState<Array<IMainCard>>(
-    [] as Array<IMainCard>,
-  )
+  const [postList, setPostList] = useState<Array<React.ReactNode>>([])
   const axiosWithAuth = useAxiosWithAuth()
   const { CuToast, isOpen: isToastOpen, closeToast, openToast } = useToast()
   const { isOpen: isModalOpen, closeModal, openModal } = useModal()
@@ -147,7 +141,9 @@ const MyInterests = () => {
 
   const axiosInstance = useAxiosWithAuth()
   const pagesize = 10
-  const { data, isLoading, mutate, error } = useSWR<IInterestResponse>(
+  const { data, isLoading, mutate, error } = useSWR<
+    IPagination<Array<IMainCard>>
+  >(
     `/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=${pagesize}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
@@ -157,7 +153,7 @@ const MyInterests = () => {
     setIsDeleting(true)
     return await axiosWithAuth
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/mypage/favorite?type=${type}`,
       )
       .then(() => {
         setToastMessage({
@@ -172,13 +168,23 @@ const MyInterests = () => {
   }
 
   useEffect(() => {
-    if (!isLoading && data && !data.isLast) {
-      setPostList((prev) => prev.concat(data.postList))
-      if (data?.postList.length === pagesize) {
+    if (!isLoading && data) {
+      setPostList((prev) =>
+        prev.concat(
+          data.content.map((post) => (
+            <MainCard
+              {...post}
+              type={type as ProjectType}
+              key={post.recruit_id}
+            />
+          )),
+        ),
+      )
+      if (data.last === false) {
         setPageLimit((prev) => prev + 1)
       }
     }
-  }, [isLoading, data])
+  }, [data])
 
   useEffect(() => {
     if (error && error?.response?.data?.message) {
@@ -213,7 +219,6 @@ const MyInterests = () => {
       <Stack
         direction={'column'}
         spacing={3}
-        sx={isPc ? pageStyle.pagePcStyle : pageStyle.pageMobileStyle}
         justifyContent={'center'}
         alignItems={'space-evenly'}
         height={1}
@@ -225,7 +230,6 @@ const MyInterests = () => {
             postList={postList}
             spinner={spinner}
             target={target}
-            type={type as ProjectType}
             removeAll={openModal}
             isDeleting={isDeleting}
           />

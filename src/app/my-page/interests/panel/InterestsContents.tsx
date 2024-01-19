@@ -1,7 +1,5 @@
-import MainCard from '@/app/panel/main-page/MainCard'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
-import { IMainCard, ProjectType } from '@/types/IPostDetail'
 import { Box, CircularProgress, Stack } from '@mui/material'
 import React from 'react'
 import Grid from '@mui/material/Unstable_Grid2'
@@ -10,14 +8,12 @@ import { centeredPosition } from '@/constant/centerdPosition.style'
 const InterestsContents = ({
   postList,
   target,
-  type,
   spinner,
   removeAll,
   isDeleting,
 }: {
-  postList: Array<IMainCard>
+  postList: Array<React.ReactNode>
   target: React.MutableRefObject<null>
-  type: ProjectType
   spinner: boolean
   removeAll: () => void
   isDeleting: boolean
@@ -59,11 +55,13 @@ const InterestsContents = ({
           />
         </Stack>
       </Grid>
-      {postList.map((item) => (
-        <Grid key={item.recruit_id} xs={11} sm={6} md={4}>
-          <MainCard {...item} type={type as ProjectType} />
-        </Grid>
-      ))}
+      {postList.map((post, idx) => {
+        return (
+          <Grid key={idx} xs={12} sm={6} md={4} lg={3}>
+            {post}
+          </Grid>
+        )
+      })}
       <Grid xs={10} sm={4}>
         <Box ref={target} position={'relative'}>
           {spinner && <CircularProgress sx={centeredPosition} />}
