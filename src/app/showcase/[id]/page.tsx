@@ -7,6 +7,7 @@ import { IShowcaseViewerFields } from '@/types/IShowcaseEdit'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
+import useAxiosWithAuth from '@/api/config'
 
 const ShowcaseDetailPage = () => {
   // const mockData: IShowcaseEditorFields = {
@@ -30,7 +31,7 @@ const ShowcaseDetailPage = () => {
   //   ],
   //   start: '2024-01-01',
   //   end: '2024-12-31',
-  //   memberList: [
+  //   member: [
   //     {
   //       nickname: '홍길동',
   //       role: '프론트엔드 개발자',
@@ -44,17 +45,18 @@ const ShowcaseDetailPage = () => {
   //     { linkName: '네이버', linkUrl: 'http://www.naver.com', id: 0 },
   //     { linkName: '깃허브', linkUrl: 'http://www.github.com', id: 1 },
   //   ],
+  //   content: '안녕하세요 **42서울** ##1기입니다. ```json id : 42``` ',
   // }
 
   // const data = 0
 
-  const showcaseId = 16
-  // const axiosWithAuth = useAxiosWithAuth()
+  const showcaseId = 3
+  const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseViewerFields>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${showcaseId}`,
     defaultGetFetcher,
-    // (url: string) => axiosWithAuth.get(url).then((res) => res.data),
-    // { shouldRetryOnError: false },
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    { shouldRetryOnError: false },
   )
 
   if (!data) return <CuCircularProgress color={'secondary'} />
