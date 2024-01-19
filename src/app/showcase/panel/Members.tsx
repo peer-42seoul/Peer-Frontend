@@ -36,7 +36,7 @@ const Members = ({
   members,
   recruitmentQuota,
 }: {
-  members: Array<string | null>
+  members: Array<{ url: string }>
   recruitmentQuota: number
 }) => {
   const vacancies = []
@@ -58,10 +58,12 @@ const Members = ({
             return (
               <CuAvatar
                 key={idx}
-                src={member ?? undefined}
+                src={member.url}
                 sx={{
                   width: '1.5rem',
                   height: '1.5rem',
+                  backgroundColor: 'text.assistive',
+                  color: 'text.alternative',
                   borderWidth: '0.125rem',
                   borderColor: 'line.base',
                   borderStyle: 'solid',

@@ -1,16 +1,24 @@
 import { SxProps } from '@mui/material'
 
-export const cardSize: SxProps = {
-  boxSizing: 'border-box',
+export const cardSizeBase: SxProps = {
   maxHeight: '441px',
   maxWidth: '20.5rem',
   borderRadius: '0.75rem',
-  width: ['90vw', 'calc(80svh * 328 /800)'],
-  height: ['calc(90vw * 441 / 328)', 'calc(80svh * 441 /800)'],
+}
+
+export const cardPcSize: SxProps = {
+  ...cardSizeBase,
+  width: 'calc(80svh * 328 /800)',
+  height: 'calc(80svh * 441 /800)',
+}
+
+export const cardMobileSize: SxProps = {
+  ...cardSizeBase,
+  width: '90vw',
+  height: 'calc(90vw * 441 / 328)',
 }
 
 export const cardStyleBase: SxProps = {
-  ...cardSize,
   backgroundColor: 'background.primary',
   borderWidth: '2px',
   borderColor: 'line.base',
@@ -18,6 +26,17 @@ export const cardStyleBase: SxProps = {
   position: 'absolute',
   top: '50%',
   left: '50%',
+  boxSizing: 'border-box',
+}
+
+export const cardPcStyleBase: SxProps = {
+  ...cardStyleBase,
+  ...cardPcSize,
+}
+
+export const cardMobileStyleBase: SxProps = {
+  ...cardStyleBase,
+  ...cardMobileSize,
 }
 
 export const cardTitleStyleBase: SxProps = {

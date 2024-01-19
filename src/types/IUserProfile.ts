@@ -21,8 +21,8 @@ export interface IUserProfile {
 
 export interface IUserProfileLink {
   id: number
-  linkUrl: string
   linkName: string
+  linkUrl: string
 }
 
 export interface IProfileCard {
