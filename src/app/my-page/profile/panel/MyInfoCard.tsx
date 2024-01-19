@@ -3,7 +3,6 @@ import ProfileLinksSection from './ProfileLinksSection'
 import CuButton from '@/components/CuButton'
 import { ISkill, IUserProfileLink } from '@/types/IUserProfile'
 import TitleBox from '@/components/TitleBox'
-import { ITag } from '@/types/IPostDetail'
 
 const MyInfoCard = ({
   linkList,
