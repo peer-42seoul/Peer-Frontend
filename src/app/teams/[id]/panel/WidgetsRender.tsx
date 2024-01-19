@@ -130,7 +130,6 @@ const WidgetsRender = ({
     }
   }, [])
 
-  console.log('i', index)
   /* 드롭 시 호출 */
   const onDrop = useCallback(
     (layout: Layout[], layoutItem: Layout) => {
@@ -156,7 +155,6 @@ const WidgetsRender = ({
     [edit, isValidLayout, index, type, size, layouts],
   )
 
-  console.log('layouts', layouts)
   /* 레이아웃이 변경될때마다 호출 */
   const onLayoutChange = useCallback(
     (currentLayout: Layout[]) => {
@@ -175,7 +173,7 @@ const WidgetsRender = ({
       )
       setLayouts(updatedCurrentWidget)
     },
-    [isDropping, layouts],
+    [isDropping, isValidLayout, layouts],
   )
 
   const removeWidget = useCallback(
@@ -191,7 +189,7 @@ const WidgetsRender = ({
     const width = layoutRef?.current?.clientWidth
     if (!width) return 0
     return isFourRow ? width / 4 : width / 2
-  }, [isFourRow, layoutRef?.current?.clientWidth])
+  }, [isFourRow])
 
   return (
     <Box>

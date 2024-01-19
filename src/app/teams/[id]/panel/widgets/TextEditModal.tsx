@@ -18,10 +18,12 @@ const TextEditModal = ({
   setData: (data: string) => void
 }) => {
   const [text, setText] = useState<string>(data)
-  const { setStoreWidgetData } = useDnDStore()
   const [charCount, setCharCount] = useState(0)
+  //추가한 코드
+  const { setStoreWidgetData } = useDnDStore()
   const searchParams = useSearchParams()
   const key = searchParams.get('key')
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputText = event.target.value
     const inputCharCount = inputText.length
@@ -34,6 +36,7 @@ const TextEditModal = ({
 
   const handleSubmit = () => {
     setData(text)
+    // 추가한 코드
     setStoreWidgetData(key, text)
     handleClose()
   }

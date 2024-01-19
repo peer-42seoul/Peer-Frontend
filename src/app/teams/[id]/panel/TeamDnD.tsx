@@ -16,6 +16,7 @@ export const sizeRatio = {
 }
 
 const TeamDnD = ({ id }: { id: string }) => {
+  const { setStoredWidgets, setTeamId } = useDnDStore()
   const [edit, setEdit] = useState(false)
   const [type, setType] = useState<WidgetType>('text')
   const [droppingItem, setDroppingItem] = useState<
@@ -35,12 +36,12 @@ const TeamDnD = ({ id }: { id: string }) => {
         .post(url, { teamId: id, type: 'team' })
         .then((res) => res.data),
   )
-  const { dndData, setDndData } = useDnDStore()
 
   useEffect(() => {
-    trigger().then((res) => {
-      console.log('res', res)
-      setDndData(res)
+    trigger().then(() => {
+      if (!data) return
+      setTeamId(data?.teamId)
+      setStoredWidgets(data?.widgets)
     })
   }, [])
 
@@ -61,7 +62,7 @@ const TeamDnD = ({ id }: { id: string }) => {
         trigger={trigger}
         id={id}
         // key={data}
-        data={dndData}
+        data={data}
         type={type}
         size={size}
         isDropping={isDropping}

@@ -1,44 +1,58 @@
 import { create } from 'zustand'
-import { ITeamDnDLayout, IWidget } from '@/types/ITeamDnDLayout'
+import { IWidget } from '@/types/ITeamDnDLayout'
 import axios from 'axios'
 import useAuthStore from '@/states/useAuthStore'
 
 interface IStoreDnDState {
-  dndData: ITeamDnDLayout
-  setDndData: (updatedData: ITeamDnDLayout) => void
+  teamId: number | undefined
+  setTeamId: (teamId: number | undefined) => void
+  storedWidgets: IWidget[] | undefined
+  setStoredWidgets: (updatedData: IWidget[]) => void
   setStoreWidgetData: (key: number | string | null, data: any) => any
 }
 
 /**
- * @param storeWidgets: 레이아웃에 포함된 위젯들
- * @param setDndData: 레이아웃에 포함된 위젯들을 업데이트하는 함수 (레이아웃 용)
- * @param setStoreWidgetData: 레이아웃에 포함된 특정 위젯을 업데이트하는 함수 (위젯 용)
+ * @param {string} teamId: 팀 아이디
+ * @param {function} setTeamId: 팀 아이디 변경 함수
+ * @param {IWidget[]} storedWidgets: 팀 아이디에 해당하는 위젯 데이터 (위젯 변경 리퀘스트 시 사용)
+ * @param {function} setStoredWidgets: 팀 아이디에 해당하는 위젯 데이터 변경 함수 (위젯 변경 리퀘스트 시 사용)
+ * @param {function} setStoreWidgetData: 팀 아이디에 해당하는 위젯 데이터 변경 함수 (위젯 변경 리퀘스트 시 사용)
  */
 const useDnDStore = create<IStoreDnDState>((set) => {
+  const accessToken = useAuthStore.getState().accessToken
+
   return {
-    dndData: {} as ITeamDnDLayout,
-    setDndData: (updatedData: ITeamDnDLayout) =>
-      set(() => ({ dndData: updatedData })),
+    teamId: undefined,
+    setTeamId: (teamId: number | undefined) => set(() => ({ teamId })),
+    storedWidgets: [],
+    setStoredWidgets: (updatedData: IWidget[]) =>
+      set(() => ({ storedWidgets: updatedData })),
     setStoreWidgetData: (key: number | string | null, data: any) => {
       set((state) => {
+        if (!state.teamId || !key || !state.storedWidgets) return state
+
         //dndData에서 key값이 동일한 widgets 찾기
-        if (!key) return state
-        const index = state.dndData?.widgets.findIndex(
+        const index = state.storedWidgets.findIndex(
           (widget: IWidget) => widget.key == key,
         )
-        if (index === -1 || !state?.dndData) return state
-        let updatedLayouts = { ...state.dndData }
-        updatedLayouts.widgets[index].data = data
 
-        const accessToken = useAuthStore.getState().accessToken
+        //못찾으면 리턴
+        if (index === -1) return state
+        let updatedWidgets = [...state.storedWidgets]
+        updatedWidgets[index].data = JSON.stringify(data)
+
         axios
           .post(
             `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/update`,
-            updatedLayouts,
+            {
+              teamId: state.teamId,
+              type: 'team',
+              widgets: updatedWidgets,
+            },
             { headers: { Authorization: `Bearer ${accessToken}` } },
           )
-          .then((res) => {
-            return { dndData: res.data }
+          .then(() => {
+            return { storedWidgets: updatedWidgets }
           })
           .catch((err) => {
             console.log(err)
