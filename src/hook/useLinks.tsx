@@ -1,12 +1,12 @@
-import { IUserProfileLink } from '@/types/IUserProfile'
+import { ILinkInformation } from '@/types/IShowcaseEdit'
 import { useState } from 'react'
 
-export const useLinks = (initValue: IUserProfileLink[]) => {
-  const [links, setLinks] = useState<IUserProfileLink[]>(initValue)
+export const useLinks = (initValue: ILinkInformation[]) => {
+  const [links, setLinks] = useState<ILinkInformation[]>(initValue)
   const [isValid, setIsValid] = useState<boolean>(true)
 
-  const addLink = (name: string, url: string) => {
-    const newLink = { name, url, id: links.length }
+  const addLink = (name: string, link: string) => {
+    const newLink = { name, link, id: links.length }
     setLinks([...links, newLink])
   }
 

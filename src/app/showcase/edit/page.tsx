@@ -67,7 +67,14 @@ const ShowCaseEditPage = () => {
 
   return (
     <Stack direction={'column'} sx={{ overflow: 'auto' }}>
-      {data && <ShowcaseEditor data={data} teamId={teamId} />}
+      {data && (
+        <ShowcaseEditor
+          data={data}
+          teamId={teamId}
+          requestMethodType={'put'}
+          router={null}
+        />
+      )}
       {/* <ShowcaseEditor data={mockData} teamId={teamId} /> */}
     </Stack>
   )

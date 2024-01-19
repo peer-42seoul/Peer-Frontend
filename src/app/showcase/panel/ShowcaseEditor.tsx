@@ -16,12 +16,13 @@ import dynamic from 'next/dynamic'
 import * as style from './ShowcaseEditor.style'
 import { useLinks } from '@/hook/useLinks'
 import useShowCaseState from '@/states/useShowCaseState'
+import { useRouter } from 'next/navigation'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
   teamId: number
   requestMethodType: 'post' | 'put'
-  router: any
+  router: any | undefined
 }
 
 const DynamicEditor = dynamic(() => import('../panel/common/FormUIEditor'), {
@@ -32,7 +33,6 @@ const ShowcaseEditor = ({
   data,
   teamId,
   requestMethodType,
-  router,
 }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [image, setImage] = useState<File[]>([])
@@ -45,7 +45,7 @@ const ShowcaseEditor = ({
   const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
     useLinks([])
   const { content } = useShowCaseState()
-
+  const router = useRouter()
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
     if (!isValid) {
@@ -115,7 +115,7 @@ const ShowcaseEditor = ({
         <TeamName teamName={data.title} />
         <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
-        <TeamMembers members={data?.memberList} />
+        <TeamMembers members={data?.member} />
         <LinkForm
           links={links}
           addLink={addLink}

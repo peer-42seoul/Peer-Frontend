@@ -4,15 +4,10 @@ import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
 import * as Style from './SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
-
-interface ILinkInputValues {
-  name: string
-  link: string
-  id: number
-}
+import { ILinkInformation } from '@/types/IShowcaseEdit'
 
 interface ILinkFormProps {
-  links: ILinkInputValues[]
+  links: ILinkInformation[]
   addLink: (linkName: string, linkUrl: string) => void
   isValid: boolean
   setIsValid: (isValid: boolean) => void
