@@ -20,6 +20,8 @@ import Members from './Members'
 import DropdownMenu from '@/components/DropdownMenu'
 import useMedia from '@/hook/useMedia'
 import * as style from './HitchhikingCard.style'
+import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
+import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
 
 interface IHitchhikingCardBack {
   content: string
@@ -127,11 +129,15 @@ const HitchhikingCardBack = ({
               />
             </CardContent>
             <CardActionArea sx={{ padding: 0, width: 'auto' }}>
-              <DropdownMenu
-                title={title}
-                url={`${currentDomain}/recruit/${postId}`}
-                content={data.content}
-              />
+              <DropdownMenu>
+                <ShareMenuItem
+                  url={`${currentDomain}/recruit/${postId}`}
+                  title={title}
+                  content="피어에서 동료를 구해보새요!"
+                  message={`피어에서 동료를 구해보세요! 이런 프로젝트가 있어요! ${currentDomain}/recruit/${postId}`}
+                />
+                <ReportMenuItem targetId={postId} />
+              </DropdownMenu>
             </CardActionArea>
           </Stack>
           <CardHeader
