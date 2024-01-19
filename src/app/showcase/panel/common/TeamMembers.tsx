@@ -10,6 +10,7 @@ const MemberInformation = ({ member }: { member: IMember }) => {
     <Stack direction={'row'} sx={{ alignItems: 'center' }}>
       <Avatar src={member.image} sx={{ width: '2rem', height: '2rem' }} />
       <Typography variant={'Body2'}>{member.nickname}</Typography>
+      {member.isLeader && <Typography variant={'Body2'}>리더</Typography>}
       <Typography variant={'Body2'}>{member.role}</Typography>
     </Stack>
   )

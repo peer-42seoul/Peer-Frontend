@@ -22,7 +22,7 @@ const StartEndDateViewer = ({ start, end }: Idate) => {
           message="시작일"
         />
         <Typography variant={'Body2'} sx={{ color: 'text.normal' }}>
-          {start} (모집글 게시일)
+          {start.split('T')[0]} (모집글 게시일)
         </Typography>
       </Stack>
       <Stack>
@@ -31,7 +31,7 @@ const StartEndDateViewer = ({ start, end }: Idate) => {
           message="종료일"
         />
         <Typography variant={'Body2'} sx={{ color: 'text.normal' }}>
-          {end} (진행 완료일)
+          {end.split('T')[0]} (진행 완료일)
         </Typography>
       </Stack>
     </Stack>

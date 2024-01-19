@@ -11,6 +11,8 @@ import ApplyFormButton from '@/app/recruit/[id]/panel/ApplyFormButton'
 import RecruitDetailContent from '@/app/recruit/[id]/panel/RecruitDetailContent'
 import DropdownMenu from '@/components/DropdownMenu'
 import FavoriteButton from '@/components/FavoriteButton'
+import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
+import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
 
 const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
@@ -66,11 +68,15 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
             recruit_id={parseInt(id)}
             redirect_url={`${path}?type=${type}`}
           />
-          <DropdownMenu
-            title={data?.title}
-            url={`${path}?type=${type}`}
-            content={data?.content}
-          />
+          <DropdownMenu>
+            <ShareMenuItem
+              title={data?.title}
+              url={`${path}?type=${type}`}
+              content={data?.content}
+              message={`피어에서 동료를 구해보세요! 이런 프로젝트가 있어요!`}
+            />
+            <ReportMenuItem targetId={parseInt(data.leader_id)} />
+          </DropdownMenu>
         </Stack>
         <Stack gap={'1.5rem'}>
           <RecruitInfo data={data} type={type} />

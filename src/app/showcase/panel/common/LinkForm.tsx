@@ -4,14 +4,10 @@ import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
 import * as Style from './SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
-interface ILinkInputValues {
-  linkName: string
-  linkUrl: string
-  id: number
-}
+import { ILinkInformation } from '@/types/IShowcaseEdit'
 
 interface ILinkFormProps {
-  links: ILinkInputValues[]
+  links: ILinkInformation[]
   addLink: (linkName: string, linkUrl: string) => void
   isValid: boolean
   setIsValid: (isValid: boolean) => void
@@ -22,7 +18,7 @@ interface ILinkFormProps {
 const LinkForm = ({
   links,
   addLink,
-  isValid,
+  // isValid,
   setIsValid,
   changeLinkName,
   changeUrl,
@@ -60,28 +56,28 @@ const LinkForm = ({
           <PlusIcon sx={Style.IconStyle} />
         </IconButton>
       </Stack>
-      {links.map((link) => (
-        <Stack key={link.id} direction={'row'} spacing={'0.5rem'}>
+      {links.map((link, index) => (
+        <Stack key={index} direction={'row'} spacing={'0.5rem'}>
           <TextField
-            key={link.id}
-            name="linkName"
+            key={index}
+            name="name"
             placeholder={'링크 이름'}
             sx={{ width: '12.8rem', height: '2rem' }}
-            value={link.linkName}
+            value={link.name}
             onChange={(e) => changeLinkName(link.id, e.target.value)}
           />
           <TextField
-            name="linkUrl"
+            name="url"
             placeholder={'링크 주소'}
             sx={{ width: '12.8rem', height: '2rem' }}
             autoComplete="off"
-            value={link.linkUrl}
+            value={link.link}
             onChange={(e) => changeUrl(link.id, e.target.value)}
             onBlur={(e) => validateUrl(e)}
           />
         </Stack>
       ))}
-      {!isValid && (
+      {!checker && (
         <Typography color="error">
           유효하지 않는 URL이 포함되어 있습니다.
         </Typography>

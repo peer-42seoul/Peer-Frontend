@@ -7,6 +7,7 @@ import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import { useRouter } from 'next/navigation'
 
 /*
   계획
@@ -51,8 +52,9 @@ import CuCircularProgress from '@/components/CuCircularProgress'
 //   links: [{ linkName: '깃허브', linkUrl: '이름없음', id: 0 }],
 // }
 
-const ShowCaseEditPage = () => {
-  const teamId = 2
+const ShowCaseWritePage = () => {
+  const router = useRouter()
+  const teamId = 100
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseEditorFields>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write/${teamId}`,
@@ -71,13 +73,17 @@ const ShowCaseEditPage = () => {
         <ShowcaseEditor
           data={data}
           teamId={teamId}
-          requestMethodType={'put'}
-          router={null}
+          requestMethodType={'post'}
+          router={router}
         />
       )}
-      {/* <ShowcaseEditor data={mockData} teamId={teamId} /> */}
+      {/* <ShowcaseEditor
+        data={mockData}
+        teamId={teamId}
+        requestMethodType="post"
+      /> */}
     </Stack>
   )
 }
 
-export default ShowCaseEditPage
+export default ShowCaseWritePage
