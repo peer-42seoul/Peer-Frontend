@@ -17,11 +17,10 @@ export interface ITeamInfo {
   dueTo: string
   type: TeamType
   status: TeamStatus
-  myRole: boolean
   region: string
   operationFormat: TeamOperationForm
-  // isApproved: boolean
-  // roles: string[]
+  isApproved: boolean
+  role: string[]
 }
 
 const TeamsListPage = () => {
@@ -31,6 +30,8 @@ const TeamsListPage = () => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/list?teamStatus=${showTeams}`,
     (url: string) => axiosInstance(url).then((res) => res.data),
   )
+
+  console.log(data)
 
   if (isLoading)
     return (

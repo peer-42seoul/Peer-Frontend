@@ -20,6 +20,22 @@ const TeamType = (type: string) => {
   )
 }
 
+const ApproveChip = ({ isApproved }: { isApproved: boolean }) => {
+  return (
+    <Box
+      width={80}
+      sx={{
+        margin: 0,
+        backgroundColor: isApproved ? 'green.strong' : 'red.strong',
+      }}
+    >
+      <Typography textAlign={'center'} color={'white'} fontWeight={'bold'}>
+        {isApproved ? '승인됨' : '승인대기중'}
+      </Typography>
+    </Box>
+  )
+}
+
 const TeamCard = ({ team }: { team: ITeamInfo }) => {
   const { isPc } = useMedia()
   const router = useRouter()
@@ -36,6 +52,7 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
       }}
     >
       <CardActionArea
+        disabled={!team.isApproved}
         sx={{
           '.MuiCardActionArea-focusHighlight': {
             background: 'transparent',
@@ -54,6 +71,7 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
           >
             {team.name}
           </Typography>
+          <ApproveChip isApproved={team.isApproved} />
         </Stack>
         <Stack direction={isPc ? 'row' : 'column'} spacing={'0.5rem'}>
           <Stack direction={'row'} spacing={isPc ? '0.5rem' : '1.5rem'}>
