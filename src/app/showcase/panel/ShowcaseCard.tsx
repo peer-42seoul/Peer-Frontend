@@ -1,6 +1,5 @@
 'use client'
 
-import PostCard from '@/components/PostCard'
 import {
   Button,
   CardContent,
@@ -20,6 +19,7 @@ import DropdownMenu from '@/components/DropdownMenu'
 import useMedia from '@/hook/useMedia'
 import * as style from './ShowcaseCard.style'
 import { IShowcaseTag } from '@/app/showcase/panel/types'
+import PostCard from './PostCard'
 
 interface IHitchhikingCardBack {
   content: string
