@@ -55,7 +55,7 @@ const ShowcaseDetailPage = () => {
   const { data, isLoading, error } = useSWR<IShowcaseViewerFields>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${showcaseId}`,
     defaultGetFetcher,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    // (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )
 
