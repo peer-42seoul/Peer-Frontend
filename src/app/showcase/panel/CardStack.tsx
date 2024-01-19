@@ -3,10 +3,10 @@
 import { Box } from '@mui/material'
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import HitchhikingCard from './ShowcaseCard'
 import * as style from './ShowcaseCard.style'
 import useMedia from '@/hook/useMedia'
 import { ICardData } from '@/app/showcase/panel/types'
+import ShowcaseCard from './ShowcaseCard'
 
 enum ESwipeDirection {
   left = 'left',
@@ -124,8 +124,10 @@ const CardStack = ({
                 }
                 transition={{ duration: 0.3 }}
               >
-                <HitchhikingCard
-                  authorImage={card.teamLogo}
+                <ShowcaseCard
+                  authorImage={
+                    card.teamLogo ? card.teamLogo : '/image/logo.png'
+                  }
                   teamName={card.name}
                   title={card.description}
                   tagList={card.skill}

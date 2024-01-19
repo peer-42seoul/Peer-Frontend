@@ -21,13 +21,13 @@ import * as style from './ShowcaseCard.style'
 import { IShowcaseTag } from '@/app/showcase/panel/types'
 import PostCard from './PostCard'
 
-interface IHitchhikingCardBack {
+interface IShowcaseCardBack {
   content: string
   memberImage: Array<{ url: string }>
   recruitmentQuota: number
 }
 
-const HitchhikingCardBack = ({
+const ShowcaseCardBack = ({
   postId,
   sx,
   onClick,
@@ -46,7 +46,7 @@ const HitchhikingCardBack = ({
   cardWidth: number
   currentDomain: string
 }) => {
-  const [data, setData] = useState<IHitchhikingCardBack | null>(null)
+  const [data, setData] = useState<IShowcaseCardBack | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
   const { isPc } = useMedia()
@@ -201,7 +201,7 @@ const HitchhikingCardBack = ({
   )
 }
 
-const HitchhikingCard = ({
+const ShowcaseCard = ({
   authorImage,
   teamName,
   title,
@@ -283,7 +283,7 @@ const HitchhikingCard = ({
           width: isPc ? '90%' : '90vw',
         }}
       />
-      <HitchhikingCardBack
+      <ShowcaseCardBack
         postId={postId}
         sx={sx}
         onClick={handleMouseUp}
@@ -297,4 +297,4 @@ const HitchhikingCard = ({
   )
 }
 
-export default HitchhikingCard
+export default ShowcaseCard
