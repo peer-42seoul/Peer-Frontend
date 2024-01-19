@@ -32,9 +32,7 @@ const LinkForm = ({
       // eslint-disable-next-line no-useless-escape
       /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/ // eslint-disable-next-line no-useless-escape
     setChecker(regex.test(completedUrl))
-    alert(regex.test(completedUrl))
     setIsValid(checker)
-    alert(`체크함  checker : ${checker}}`)
   }
 
   return (

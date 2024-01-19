@@ -7,7 +7,7 @@ import TeamMembers from '../../panel/common/TeamMembers'
 import { IShowcaseViewerFields } from '@/types/IShowcaseEdit'
 import ToastViewer from '@/components/ToastUIViewer'
 import LinksViewer from '../../panel/common/LinksViewer'
-
+import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 interface IShowcaseViewerProps {
   data: IShowcaseViewerFields // IShowcase 타입을 import 해야 합니다.
 }
