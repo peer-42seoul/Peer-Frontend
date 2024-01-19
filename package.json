@@ -16,7 +16,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.8",
     "@mui/material": "^5.14.8",
-    "@mui/material-nextjs": "^5.15.3",
+    "@mui/material-nextjs": "^5.15.5",
     "@next/eslint-plugin-next": "^13.4.19",
     "@toast-ui/editor": "^3.2.2",
     "@types/lodash": "^4.14.199",
