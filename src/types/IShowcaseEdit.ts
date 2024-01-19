@@ -26,6 +26,29 @@ export interface IShowcaseEditorFields {
   skills: ISkill[]
   start: string
   end: string
-  memberList: IMember[]
+  member: IMember[]
   links: IUserProfileLink[]
+}
+
+export interface IShowcaseEditorProps {
+  data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
+  teamId: number
+  requestMethodType: 'post' | 'put'
+  router: any | undefined
+}
+
+export interface IShowcaseViewerFields {
+  title: string
+  skills: ISkill[]
+  start: string
+  end: string
+  member: IMember[]
+  links: IUserProfileLink[]
+  content: string
+  image: string
+}
+export interface ILinkInformation {
+  id: number
+  name: string
+  link: string
 }

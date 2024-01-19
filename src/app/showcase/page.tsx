@@ -1,37 +1,33 @@
 'use client'
-import { IPostCardHitchhiking } from '@/types/IPostCard'
+
+import { defaultGetFetcher } from '@/api/fetchers'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
 import useMedia from '@/hook/useMedia'
 import { Box, IconButton, Stack } from '@mui/material'
-import CardContainer from './panel/CardContainer'
 import ArrowUp from '@/icons/ArrowUp'
 // import CuButton from '@/components/CuButton'
-import * as style from './hitchhiking.style'
+import * as style from './showcase.style'
 import ArrowDown from '@/icons/ArrowDown'
 import useAxiosWithAuth from '@/api/config'
+import { ICardData } from './panel/types'
+import useAuthStore from '@/states/useAuthStore'
+import CardContainer from './panel/CardContainer'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(false)
-  const [cardList, setCardList] = useState<Array<IPostCardHitchhiking>>([])
-  const [draggedCardList, setDraggedCardList] = useState<
-    IPostCardHitchhiking[]
-  >([])
-
-  const axiosWithAuth = useAxiosWithAuth()
-
+  const [cardList, setCardList] = useState<Array<ICardData>>([])
+  const [draggedCardList, setDraggedCardList] = useState<ICardData[]>([])
   const { isPc } = useMedia()
-  const { data, isLoading, error } = useSWR<
-    IPagination<Array<IPostCardHitchhiking>>
-  >(
-    `${
-      process.env.NEXT_PUBLIC_API_URL
-    }/api/v1/hitch?page=${page}&pageSize=5&type=${
-      isProject ? 'PROJECT' : 'STUDY'
-    }`,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  const { isLogin } = useAuthStore()
+  const axiosWithAuth = useAxiosWithAuth()
+  const { data, isLoading, error } = useSWR<IPagination<ICardData[]>>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=${page}&pageSize=10`,
+    isLogin
+      ? (url: string) => axiosWithAuth.get(url).then((res) => res.data)
+      : defaultGetFetcher,
   )
 
   const handleChange = () => {
@@ -50,13 +46,13 @@ const Hitchhiking = () => {
     }
   }, [isLoading, data?.content])
 
-  const removeCard = (recruitId: number) => {
-    setDraggedCardList((prev: IPostCardHitchhiking[]) => {
+  const removeCard = (recruit_id: number) => {
+    setDraggedCardList((prev: ICardData[]) => {
       prev.push(cardList[cardList.length - 1])
       return prev
     })
-    setCardList((prev: IPostCardHitchhiking[]) => {
-      return prev.filter((card) => card.recruitId !== recruitId)
+    setCardList((prev: ICardData[]) => {
+      return prev.filter((card) => card.id !== recruit_id)
     })
     if (cardList.length === 2) {
       setPage((prev) => (!data?.last ? prev + 1 : prev))
@@ -64,22 +60,20 @@ const Hitchhiking = () => {
   }
 
   const addCard = () => {
-    setCardList((prev: IPostCardHitchhiking[]) => {
+    setCardList((prev: ICardData[]) => {
       prev.push(draggedCardList[draggedCardList.length - 1])
       return prev
     })
-    setDraggedCardList((prev: IPostCardHitchhiking[]) => {
+    setDraggedCardList((prev: ICardData[]) => {
       return prev.filter(
-        (card) =>
-          card.recruitId !==
-          draggedCardList[draggedCardList.length - 1].recruitId,
+        (card) => card.id !== draggedCardList[draggedCardList.length - 1].id,
       )
     })
   }
 
   let message: string = ''
 
-  if (!isLoading && !cardList.length) message = '히치하이킹 끝!'
+  if (!isLoading && !cardList.length) message = '쇼케이스 끝!'
   else if (isLoading && !cardList.length) message = '로딩중'
   else if (error) message = '에러 발생'
 
@@ -119,7 +113,7 @@ const Hitchhiking = () => {
           </IconButton>
           <IconButton
             sx={style.buttonStyle}
-            onClick={() => removeCard(cardList[cardList.length - 1]?.recruitId)}
+            onClick={() => removeCard(cardList[cardList.length - 1]?.id)}
             disabled={cardList.length === 0}
           >
             <ArrowDown

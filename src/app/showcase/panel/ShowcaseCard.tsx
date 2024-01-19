@@ -1,7 +1,6 @@
 'use client'
-import useAxiosWithAuth from '@/api/config' // 백엔드 api 완성 이후 주석 해제
-import PostCard from './PostCard'
-import { ITag } from '@/types/IPostDetail'
+
+import PostCard from '@/components/PostCard'
 import {
   Button,
   CardContent,
@@ -19,11 +18,12 @@ import React, { useEffect, useState } from 'react'
 import Members from './Members'
 import DropdownMenu from '@/components/DropdownMenu'
 import useMedia from '@/hook/useMedia'
-import * as style from './HitchhikingCard.style'
+import * as style from './ShowcaseCard.style'
+import { IShowcaseTag } from '@/app/showcase/panel/types'
 
 interface IHitchhikingCardBack {
   content: string
-  memberImage: Array<string | null>
+  memberImage: Array<{ url: string }>
   recruitmentQuota: number
 }
 
@@ -49,38 +49,23 @@ const HitchhikingCardBack = ({
   const [data, setData] = useState<IHitchhikingCardBack | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
+  const { isPc } = useMedia()
 
-  const getLineCount = (
-    originHeight: number,
-    lineHeight: number,
-    maxLine: number,
-  ) => {
+  const getLineCount = (originHeight: number, lineHeight: number) => {
     const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
-    if (lineCount > maxLine) return maxLine
-    else if (lineCount < 1) return 1
-    else return lineCount
+    return lineCount ? lineCount : 1
   }
-  const axiosInstance = useAxiosWithAuth()
 
   useEffect(() => {
     const fetchData = async () => {
       console.log(`fetchData ${postId}`)
       setIsLoading(true)
-      // backend api 완성 이후 주석 해제
-      await axiosInstance
-        .get(`/api/v1/hitch/${postId}`)
-        .then((res) => {
-          setData(res.data)
-        })
-        .catch((e) => {
-          console.log(e)
-        })
-      // setData({
-      //   content:
-      //     '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
-      //   memberImage: [{ url: 'https://picsum.photos/200' }],
-      //   recruitmentQuota: 10,
-      // })
+      setData({
+        content:
+          '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
+        memberImage: [{ url: 'https://picsum.photos/200' }],
+        recruitmentQuota: 10,
+      })
       setIsLoading(false)
     }
     if (!isLoading && !data && flipped) fetchData()
@@ -88,7 +73,7 @@ const HitchhikingCardBack = ({
 
   const handleSeeAll = (e: React.MouseEvent) => {
     e.stopPropagation()
-    router.push(`/recruit/${postId}`)
+    router.push(`/showcase/${postId}`)
   }
 
   return (
@@ -141,14 +126,19 @@ const HitchhikingCardBack = ({
                 color={'text.normal'}
                 sx={{
                   ...style.cardTitleStyleBase,
-                  height: getLineCount(46, 22.5, 2) * 22.5,
-                  WebkitLineClamp: getLineCount(46, 22.5, 2) /* 라인수 */,
+                  height: isPc ? '46px' : getLineCount(46, 22.5) * 22.5,
+                  WebkitLineClamp: isPc
+                    ? 2
+                    : getLineCount(46, 22.5) /* 라인수 */,
                 }}
               >
-                {title}
+                {/* {title} */}
+                제목이 들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이
+                들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이 들어오는
+                자리입니다.
               </Typography>
             }
-            sx={{ padding: 0, maxHeight: '3rem' }}
+            sx={{ padding: 0, maxHeight: '3rem', flexGrow: 1 }}
             onClick={onClick}
           ></CardHeader>
           <CardContent
@@ -164,8 +154,8 @@ const HitchhikingCardBack = ({
               // ref={containerRef}
               sx={{
                 ...style.cardContentStyleBase,
-                height: getLineCount(180, 18, 10) * 18,
-                WebkitLineClamp: getLineCount(180, 18, 10) /* 라인수 */,
+                height: isPc ? '11.25rem' : getLineCount(180, 18) * 18,
+                WebkitLineClamp: isPc ? 10 : getLineCount(180, 18) /* 라인수 */,
               }}
             >
               {data.content.split('\n').map((line) => {
@@ -220,14 +210,16 @@ const HitchhikingCard = ({
   postId,
   dragged,
   setDragged,
+  sx,
   isProject,
 }: {
-  authorImage: string
+  authorImage: string | null
   teamName: string
   title: string
-  tagList: Array<ITag>
-  image: string
+  tagList: Array<IShowcaseTag>
+  image: string | null
   postId: number
+  sx?: SxProps
   dragged: boolean
   setDragged: React.Dispatch<React.SetStateAction<boolean>>
   isProject?: boolean
@@ -270,7 +262,7 @@ const HitchhikingCard = ({
   return (
     <div
       style={{
-        transform: `rotateY(${isFlipped ? '180deg' : '0deg'})`,
+        transform: ` rotateY(${isFlipped ? '180deg' : '0deg'})`,
         transformStyle: 'preserve-3d',
         width: '100%',
         height: '100%',
@@ -285,15 +277,16 @@ const HitchhikingCard = ({
         tagList={tagList}
         image={image}
         sx={{
-          ...style.cardStyleBase,
+          ...sx,
           backfaceVisibility: 'hidden',
           transform: 'translate(-50%, 0)',
+          width: isPc ? '90%' : '90vw',
         }}
         onClick={handleMouseUp}
       />
       <HitchhikingCardBack
         postId={postId}
-        sx={style.cardStyleBase}
+        sx={sx}
         onClick={handleMouseUp}
         flipped={isFlipped}
         isProject={isProject}

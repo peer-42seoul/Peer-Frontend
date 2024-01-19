@@ -38,5 +38,4 @@ export const toggleContainerStyle: SxProps = {
   height: '1.75rem',
   width: '100%',
   py: '0.5rem',
-  mb: '0.875rem',
 }
