@@ -5,6 +5,8 @@ import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
 import CuSWRConfig from './panel/CuSWRConfig'
 import MainLayout from './panel/MainLayout'
 import { Pretendard } from './panel/font'
+import ToastNotification from './panel/layout-panel/ToastNotification'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -50,12 +52,15 @@ export default function RootLayout({
         <meta name="theme-color" content="#010456" />
       </head>
       <body className={Pretendard.className}>
-        <CuSWRConfig>
-          <MuiThemeProvider>
-            <MainLayout>{children}</MainLayout>
-            <div id="modal-root"></div>
-          </MuiThemeProvider>
-        </CuSWRConfig>
+        <AppRouterCacheProvider>
+          <CuSWRConfig>
+            <MuiThemeProvider>
+              <MainLayout>{children}</MainLayout>
+              <div id="modal-root"></div>
+              <ToastNotification />
+            </MuiThemeProvider>
+          </CuSWRConfig>
+        </AppRouterCacheProvider>
       </body>
     </html>
   )

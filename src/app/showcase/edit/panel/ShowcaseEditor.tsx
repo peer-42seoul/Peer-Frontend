@@ -33,10 +33,14 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
   const [errorMessages, setErrorMessages] = useState<string>('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
-  const { links, addLink, changeLinkName, changeUrl } = useLinks([])
+  const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
+    useLinks([])
   const { content } = useShowCaseState()
 
   const submitHandler = async () => {
+    if (!isValid) {
+      return
+    }
     try {
       const response = await axiosWithAuth.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
@@ -97,6 +101,8 @@ const ShowcaseEditor = ({ data }: IShowcaseEditorProps) => {
         <LinkForm
           links={links}
           addLink={addLink}
+          isValid={isValid}
+          setIsValid={setIsValid}
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />

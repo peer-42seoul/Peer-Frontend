@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'

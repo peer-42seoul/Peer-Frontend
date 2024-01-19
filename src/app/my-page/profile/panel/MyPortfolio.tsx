@@ -1,6 +1,6 @@
 'use client'
 import CuToggle from '@/components/CuToggle'
-import PostCard from '@/components/PostCard'
+import PostCard from './PostCard'
 import TitleBox from '@/components/TitleBox'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import { IPagination } from '@/types/IPagination'
@@ -16,19 +16,17 @@ import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import * as style from './Profile.style'
 import useAxiosWithAuth from '@/api/config'
-import IToast from '@/types/IToastProps'
+import useToast from '@/states/useToast'
 
-const MyPortfolio = ({
-  setToastMessage,
-}: {
-  setToastMessage: React.Dispatch<React.SetStateAction<IToast>>
-}) => {
+const MyPortfolio = () => {
   const [isVisible, setIsVisible] = useState<boolean>(true)
 
   // 무한 스크롤
   const [page, setPage] = useState<number>(1)
   const [postList, setPostList] = useState<Array<IMainCard>>([])
   const [pageLimit, setPageLimit] = useState(1)
+
+  const { openToast, closeToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -46,7 +44,7 @@ const MyPortfolio = ({
     }
   }, [isLoading, data])
 
-  const { target, spinner } = useInfiniteScroll({
+  const { target } = useInfiniteScroll({
     setPage,
     mutate: () => {},
     pageLimit,
@@ -54,14 +52,15 @@ const MyPortfolio = ({
   })
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    closeToast()
     setIsVisible(event.target.checked)
     if (event.target.checked) {
-      setToastMessage({
+      openToast({
         severity: 'success',
         message: '내 작업물이 다른 사람들에게 공개되었습니다.',
       })
     } else {
-      setToastMessage({
+      openToast({
         severity: 'success',
         message: '내 작업물이 다른 사람들에게 비공개되었습니다.',
       })
@@ -116,10 +115,9 @@ const MyPortfolio = ({
         columns={12}
       >
         {postList.map((post) => (
-          <Grid xs={12} sm={6} md={4} key={post.recruit_id}>
+          <Grid xs={12} sm={6} lg={4} key={post.recruit_id}>
             <PostCard
-              authorImage={post.user_thumbnail}
-              title={post.title}
+              teamLogo={post.user_thumbnail}
               tagList={post.tagList}
               image={post.image}
               teamName={post.user_nickname}
@@ -129,7 +127,7 @@ const MyPortfolio = ({
         ))}
         <Grid xs={12} sm={6}>
           <Box position={'relative'} ref={target} height={1}>
-            {spinner && <CircularProgress />}
+            {isLoading && <CircularProgress />}
           </Box>
         </Grid>
       </Grid>

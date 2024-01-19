@@ -11,8 +11,6 @@ export interface IPostCard {
   image: string // 글 대표 이미지 (썸네일)
   sx?: SxProps // 카드 전체 스타일
   onClick?: (e: React.MouseEvent) => void
-  onTouchEnd?: (e: React.TouchEvent) => void
-  onMouseUp?: (e: React.MouseEvent) => void
 }
 
 export interface IPostCardShowcase {
