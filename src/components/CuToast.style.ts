@@ -60,23 +60,15 @@ export const toastMobileStyle: SxProps = {
   },
 }
 
-export const snackbarStyleBase: SxProps = {
+export const snackbarStyle: SxProps = {
   boxSizing: 'border-box',
   width: '100%',
   '.MuiSnackbar-anchorOriginBottomLeft': {
     bottom: '3.25rem',
   },
-}
-
-export const snackbarPcStyle: SxProps = {
-  ...snackbarStyleBase,
-  px: '1.5rem',
-}
-
-export const snackbarMobileStyle: SxProps = {
-  ...snackbarStyleBase,
-  paddingLeft: '0.75rem',
-  paddingRight: '1rem',
+  mt: [undefined, '2.125rem'],
+  pl: ['0.75rem', '1.5rem'],
+  pr: ['1rem', '1.5rem'],
 }
 
 export const actionButtonStyle: SxProps = {
