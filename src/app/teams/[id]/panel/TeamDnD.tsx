@@ -7,6 +7,7 @@ import ReactGridLayout from 'react-grid-layout'
 import useSWRMutation from 'swr/mutation'
 import WidgetsRender from './WidgetsRender'
 import WidgetList from '@/app/teams/[id]/panel/WidgetList'
+import useDnDStore from '@/states/useDnDStore'
 
 export const sizeRatio = {
   S: { w: 1, h: 1 },
@@ -34,8 +35,13 @@ const TeamDnD = ({ id }: { id: string }) => {
         .post(url, { teamId: id, type: 'team' })
         .then((res) => res.data),
   )
+  const { dndData, setDndData } = useDnDStore()
+
   useEffect(() => {
-    trigger()
+    trigger().then((res) => {
+      console.log('res', res)
+      setDndData(res)
+    })
   }, [])
 
   // api 에러 생길 시 주석 처리 필요
@@ -52,9 +58,10 @@ const TeamDnD = ({ id }: { id: string }) => {
     >
       {/*dnd 렌더링*/}
       <WidgetsRender
+        trigger={trigger}
         id={id}
         // key={data}
-        data={data}
+        data={dndData}
         type={type}
         size={size}
         isDropping={isDropping}

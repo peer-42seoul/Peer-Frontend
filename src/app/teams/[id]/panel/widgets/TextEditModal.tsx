@@ -1,6 +1,8 @@
 import CuModal from '@/components/CuModal'
 import React, { useState } from 'react'
 import { FormHelperText, TextField, Typography } from '@mui/material'
+import useDnDStore from '@/states/useDnDStore'
+import { useSearchParams } from 'next/navigation'
 
 const MAX_CHARS = 500
 
@@ -16,9 +18,10 @@ const TextEditModal = ({
   setData: (data: string) => void
 }) => {
   const [text, setText] = useState<string>(data)
-
+  const { setStoreWidgetData } = useDnDStore()
   const [charCount, setCharCount] = useState(0)
-
+  const searchParams = useSearchParams()
+  const key = searchParams.get('key')
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputText = event.target.value
     const inputCharCount = inputText.length
@@ -31,6 +34,7 @@ const TextEditModal = ({
 
   const handleSubmit = () => {
     setData(text)
+    setStoreWidgetData(key, text)
     handleClose()
   }
   return (
