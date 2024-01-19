@@ -3,6 +3,7 @@ import CuModal from '@/components/CuModal'
 import CuTextModal from '@/components/CuTextModal'
 import TagChip from '@/components/TagChip'
 import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 import { ISkill } from '@/types/IUserProfile'
 import { getUniqueArray } from '@/utils/getUniqueArray'
 import {
@@ -40,6 +41,8 @@ const SkillsEditor = ({
   const [isLoading, setIsLoading] = useState(false)
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { openToast, closeToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -94,21 +97,21 @@ const SkillsEditor = ({
   }
 
   const handleModalClose = async () => {
+    closeToast()
     setIsSubmitting(true)
-    // TODO : API 수정되면 selected를 보내도록 수정
     await axiosWithAuth
       .put(
         '/api/v1/skill/regist',
         tagList.filter((tag) => selected.includes(tag.name)),
-        // .map((tag) => tag.tagId),
       )
       .then(() => {
+        openToast({ severity: 'success', message: '스킬이 수정되었습니다.' })
         mutate()
         setIsSubmitting(false)
         closeModal()
       })
       .catch(() => {
-        // TODO : 전역 토스트 메시지 추가
+        openToast({ severity: 'error', message: '스킬 수정에 실패했습니다.' })
         setIsSubmitting(false)
       })
   }
