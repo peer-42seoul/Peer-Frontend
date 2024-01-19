@@ -15,7 +15,7 @@ import { ICardData } from './panel/types'
 import useAuthStore from '@/states/useAuthStore'
 import CardContainer from './panel/CardContainer'
 
-const Hitchhiking = () => {
+const Showcase = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(false)
   const [cardList, setCardList] = useState<Array<ICardData>>([])
@@ -135,4 +135,4 @@ const Hitchhiking = () => {
   )
 }
 
-export default Hitchhiking
+export default Showcase
