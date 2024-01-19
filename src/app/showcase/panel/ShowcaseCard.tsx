@@ -213,7 +213,7 @@ const HitchhikingCard = ({
   sx,
   isProject,
 }: {
-  authorImage: string | null
+  authorImage: string
   teamName: string
   title: string
   tagList: Array<IShowcaseTag>
@@ -275,14 +275,13 @@ const HitchhikingCard = ({
         teamName={teamName}
         title={title}
         tagList={tagList}
-        image={image}
+        image={image ? image : '/image/logo.png'}
         sx={{
           ...sx,
           backfaceVisibility: 'hidden',
           transform: 'translate(-50%, 0)',
           width: isPc ? '90%' : '90vw',
         }}
-        onClick={handleMouseUp}
       />
       <HitchhikingCardBack
         postId={postId}

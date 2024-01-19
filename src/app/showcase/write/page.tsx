@@ -54,7 +54,7 @@ import { useRouter } from 'next/navigation'
 
 const ShowCaseWritePage = () => {
   const router = useRouter()
-  const teamId = 2
+  const teamId = 78
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseEditorFields>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write/${teamId}`,

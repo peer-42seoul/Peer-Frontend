@@ -6,7 +6,7 @@ import {
   CardMedia,
   Stack,
   Typography,
-  // alpha,
+  alpha,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { IPostCard } from '@/types/IPostCard'
@@ -53,7 +53,7 @@ function PostCard({
     >
       <CardMedia
         component="img"
-        image={image!}
+        image={image}
         alt="post thumbnail"
         sx={{
           ...style.cardMediaStyleBase,
@@ -69,7 +69,7 @@ function PostCard({
           avatar={
             <CuAvatar
               aria-label="profile"
-              src={authorImage!}
+              src={authorImage}
               sx={{
                 ...style.cardAuthorAvatarStyleBase,
                 height: (currentCardWidth * 32) / 328,
@@ -113,14 +113,18 @@ function PostCard({
                 height: getLineCount(46, 22.5) * 20 + 8,
               }}
             >
-              {tagList?.map(({ name }: ITag, idx: number) => {
+              {tagList?.map(({ name, color }: ITag, idx: number) => {
                 return (
                   <Chip
-                    label={<Typography variant="Tag">{name}</Typography>}
+                    label={
+                      <Typography variant="Tag" color={color}>
+                        {name}
+                      </Typography>
+                    }
                     size="small"
                     key={idx}
                     style={{
-                      // backgroundColor: alpha(color, 0.3),
+                      backgroundColor: alpha(color, 0.3),
                       borderRadius: 2,
                       height: '1.25rem',
                     }}
