@@ -1,15 +1,16 @@
 import { Chip, Stack, Typography } from '@mui/material'
 import React from 'react'
 import ProfileSection from './ProfileSection'
-import { ITag } from '@/types/IPostDetail'
+import { ISkill } from '@/types/IUserProfile'
 
 const Skills = ({
   skillList,
   setModalType,
 }: {
-  skillList: Array<ITag>
+  skillList: Array<ISkill>
   setModalType: (type: string) => void
 }) => {
+  console.log(skillList)
   return (
     <Stack direction={'column'} spacing={'0.5rem'}>
       <ProfileSection
@@ -27,7 +28,7 @@ const Skills = ({
         gap={1}
         flexWrap={'wrap'}
       >
-        {skillList.length ? (
+        {skillList !== undefined && skillList.length ? (
           skillList.map((skill) => (
             <Chip
               key={skill.tagId}
@@ -48,7 +49,7 @@ const Skills = ({
             />
           ))
         ) : (
-          <Typography variant={'Caption'} color={'text.assistive'}>
+          <Typography variant={'Caption'} color={'text.alternative'}>
             등록된 스킬이 없습니다.
           </Typography>
         )}

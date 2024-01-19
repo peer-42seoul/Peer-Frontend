@@ -3,7 +3,7 @@ import CuModal from '@/components/CuModal'
 import CuTextModal from '@/components/CuTextModal'
 import TagChip from '@/components/TagChip'
 import useModal from '@/hook/useModal'
-import { ITag } from '@/types/IPostDetail'
+import { ISkill } from '@/types/IUserProfile'
 import { getUniqueArray } from '@/utils/getUniqueArray'
 import {
   Autocomplete,
@@ -25,14 +25,14 @@ const SkillsEditor = ({
   closeModal,
 }: {
   open: boolean
-  skillList: Array<ITag>
+  skillList: Array<ISkill>
   mutate: () => void
   closeModal: () => void
 }) => {
-  const [selected, setSelected] = useState(
-    skillList.map((skill) => skill.name) as Array<string>,
+  const [selected, setSelected] = useState<Array<string>>(
+    skillList ? (skillList.map((skill) => skill.name) as Array<string>) : [],
   ) // 선택 된 데이터
-  const [tagList, setTagList] = useState([] as ITag[]) // 검색 된 데이터
+  const [tagList, setTagList] = useState([] as ISkill[]) // 검색 된 데이터
 
   const [text, setText] = useState('') // 검색 텍스트
 
@@ -94,7 +94,8 @@ const SkillsEditor = ({
     await axiosWithAuth
       .put(
         '/api/v1/skill/regist',
-        tagList.map((tag) => tag.tagId),
+        tagList.filter((tag) => selected.includes(tag.name)),
+        // .map((tag) => tag.tagId),
       )
       .then(() => {
         mutate()
