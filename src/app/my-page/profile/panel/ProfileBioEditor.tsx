@@ -1,7 +1,6 @@
 'use client'
 import React, { useCallback, useRef, useState } from 'react'
 import {
-  AlertColor,
   Avatar,
   Box,
   Button,
@@ -24,6 +23,7 @@ import { PlusIcon } from '@/icons'
 import TrashIcon from '@/icons/TrashIcon'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
+import IToast from '@/types/IToastProps'
 
 interface IFormInput {
   nickname: string
@@ -31,23 +31,16 @@ interface IFormInput {
   profileImage: File[] | null
 }
 
-interface IToastProps {
-  severity?: AlertColor
-  message: string
-}
-
 const ProfileBioEditor = ({
   data,
   closeModal,
   setToastMessage,
-  setToastOpen,
   mutate,
   open,
 }: {
   data: IProfileCard
   closeModal: () => void
-  setToastMessage: (toastProps: IToastProps) => void
-  setToastOpen: (isOpen: boolean) => void
+  setToastMessage: (toastProps: IToast) => void
   mutate: () => void
   open: boolean
 }) => {
@@ -199,7 +192,6 @@ const ProfileBioEditor = ({
             if (errors.nickname?.type === 'notUnique') {
               clearErrors('nickname')
             }
-            setToastOpen(true)
             setIsLoading(false)
           })
           .catch((error) => {
@@ -209,7 +201,6 @@ const ProfileBioEditor = ({
               severity: 'error',
               message: '중복된 닉네임 입니다.',
             })
-            setToastOpen(true)
             setError('nickname', {
               type: 'notUnique',
               message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
@@ -285,16 +276,21 @@ const ProfileBioEditor = ({
           severity: 'success',
           message: '프로필 변경에 성공하였습니다.',
         })
-        setToastOpen(true)
         mutate()
         closeModal()
       })
       .catch((e) => {
-        setToastMessage({
-          severity: 'error',
-          message: e.response.data.message,
-        })
-        setToastOpen(true)
+        if (e.response.status === 500) {
+          setToastMessage({
+            severity: 'error',
+            message: '프로필 변경에 실패하였습니다.',
+          })
+        } else {
+          setToastMessage({
+            severity: 'error',
+            message: e.response.data.message,
+          })
+        }
       })
   }
 
@@ -316,7 +312,7 @@ const ProfileBioEditor = ({
       }}
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCloseModal,
       }}
       mobileFullSize
     >

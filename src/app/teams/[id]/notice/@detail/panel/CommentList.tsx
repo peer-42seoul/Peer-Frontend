@@ -1,47 +1,30 @@
 'use client'
-import { ReactNode, FormEvent, useState } from 'react'
-import dayjs from 'dayjs'
+import { FormEvent, useState } from 'react'
 import useSWR from 'swr'
-import { Avatar, Divider, IconButton, Stack, Typography } from '@mui/material'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlined'
-import EditIcon from '@mui/icons-material/Edit'
+import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import CuTextField from '@/components/CuTextField'
-import CuButton from '@/components/CuButton'
+import {
+  CommentContainer,
+  StatusMessage,
+  CommentItem,
+  CommentFormContainer,
+} from '@/components/board/CommentPanel'
 import { ITeamComment } from '@/types/TeamBoardTypes'
 
-interface ICommentProps {
+interface ICommentFormProps {
   postId: number
   teamId: number
 }
 
-const CommentCotainer = ({ children }: { children: ReactNode }) => {
-  return (
-    <Stack width={'100%'}>
-      <Typography>댓글</Typography>
-      {children}
-    </Stack>
-  )
-}
-
-interface CommentEditFormProps {
-  commentId: number
-  initialComment: string
-  setEditMode: (isEditMode: boolean) => void
-}
-
-const CommentEditForm = ({
-  commentId,
-  initialComment,
-  setEditMode,
-}: CommentEditFormProps) => {
+const Comment = ({ comment }: { comment: ITeamComment }) => {
+  const [isEditMode, setEditMode] = useState(false)
   const axiosWithAuth = useAxiosWithAuth()
+
   const handleEdit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     axiosWithAuth
-      .put(`/api/v1/team/notice/answer/${commentId}`, {
+      .put(`/api/v1/team/notice/answer/${comment.answerId}`, {
         content: formData.get('content') as string,
       })
       .then(() => {
@@ -53,45 +36,11 @@ const CommentEditForm = ({
       })
   }
 
-  return (
-    <form onSubmit={handleEdit}>
-      <Stack spacing={1} alignItems={'flex-end'}>
-        <CuTextField
-          placeholder={'댓글을 작성해주세요.'}
-          fullWidth
-          name={'content'}
-          id={'content'}
-          defaultValue={initialComment}
-          multiline
-        />
-        <Stack direction={'row'} spacing={1}>
-          <CuButton
-            message={'취소'}
-            action={() => setEditMode(false)}
-            variant={'outlined'}
-          />
-          <CuButton message={'수정'} type={'submit'} variant={'contained'} />
-        </Stack>
-      </Stack>
-    </form>
-  )
-}
-
-const Comment = ({
-  answerId,
-  authorImage,
-  authorNickname,
-  content,
-  createdAt,
-  isAuthor,
-}: ITeamComment & { postId: number }) => {
-  const [isEditMode, setEditMode] = useState(false)
-  const axiosWithAuth = useAxiosWithAuth()
   const handleDelete = () => {
     const confirm = window.confirm('댓글을 삭제하시겠습니까?')
     if (!confirm) return
     axiosWithAuth
-      .delete(`/api/v1/team/notice/answer/${answerId}`)
+      .delete(`/api/v1/team/notice/answer/${comment.answerId}`)
       .then(() => {
         alert('댓글을 삭제했습니다.')
       })
@@ -101,58 +50,20 @@ const Comment = ({
   }
 
   return (
-    <Stack>
-      <Stack
-        direction={'row'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-      >
-        <Stack
-          direction={'row'}
-          alignItems={'center'}
-          justifyContent={'flex-start'}
-        >
-          <Avatar alt="comment profile" src={authorImage} />
-          <Typography>{authorNickname}</Typography>
-        </Stack>
-        {isAuthor && !isEditMode ? (
-          <Stack
-            direction={'row'}
-            alignItems={'center'}
-            divider={
-              <Divider orientation="vertical" variant="middle" flexItem />
-            }
-          >
-            <IconButton onClick={() => setEditMode(true)}>
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={handleDelete}>
-              <DeleteOutlinedIcon />
-            </IconButton>
-          </Stack>
-        ) : null}
-      </Stack>
-      {isEditMode ? (
-        <CommentEditForm
-          commentId={answerId}
-          initialComment={content}
-          setEditMode={setEditMode}
-        />
-      ) : (
-        <>
-          <Typography>{content}</Typography>
-          <Typography>
-            {dayjs(createdAt).format('YYYY년 MM월 DD일 hh:mm A')}
-          </Typography>
-        </>
-      )}
-    </Stack>
+    <CommentItem
+      comment={comment}
+      isEditMode={isEditMode}
+      handleDelete={handleDelete}
+      setEditMode={setEditMode}
+      handleEdit={handleEdit}
+    />
   )
 }
 
-const CommentForm = ({ postId, teamId }: ICommentProps) => {
+const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setIsLoading] = useState(false)
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
@@ -172,23 +83,11 @@ const CommentForm = ({ postId, teamId }: ICommentProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack direction={'row'}>
-        <CuTextField
-          placeholder={'댓글을 작성해주세요.'}
-          fullWidth
-          name={'new-content'}
-          id={'new-content'}
-        />
-        <IconButton disabled={isLoading} type={'submit'}>
-          <InsertEmoticonOutlinedIcon />
-        </IconButton>
-      </Stack>
-    </form>
+    <CommentFormContainer handleSubmit={handleSubmit} isLoading={isLoading} />
   )
 }
 
-const CommentList = ({ postId, teamId }: ICommentProps) => {
+const CommentList = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
     `/api/v1/team/notice/answer/${postId}`,
@@ -196,38 +95,25 @@ const CommentList = ({ postId, teamId }: ICommentProps) => {
   )
 
   if (error || !data) {
-    return (
-      <CommentCotainer>
-        <Typography>문제가 발생했습니다.</Typography>
-      </CommentCotainer>
-    )
+    return <StatusMessage message={'댓글을 불러오는데 실패했습니다.'} />
   }
-
   if (isLoading) {
-    return (
-      <CommentCotainer>
-        <Typography>로딩중...</Typography>
-      </CommentCotainer>
-    )
+    return <StatusMessage message={'댓글을 불러오는 중입니다...'} />
   }
-
   if (data.length === 0) {
     return (
-      <CommentCotainer>
-        <Typography>댓글이 없습니다.</Typography>
-      </CommentCotainer>
+      <StatusMessage message={'댓글이 없습니다. 첫 댓글을 작성해보세요!'} />
     )
   }
-
   return (
-    <CommentCotainer>
-      <Stack>
+    <Stack>
+      <CommentContainer>
         {data.map((comment: ITeamComment) => (
-          <Comment key={comment.answerId} postId={postId} {...comment} />
+          <Comment key={comment.answerId} comment={comment} />
         ))}
-      </Stack>
+      </CommentContainer>
       <CommentForm postId={postId} teamId={teamId} />
-    </CommentCotainer>
+    </Stack>
   )
 }
 

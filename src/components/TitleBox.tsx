@@ -1,48 +1,53 @@
 'use client'
 import useMedia from '@/hook/useMedia'
-import { Stack, StackProps, Typography, TypographyProps } from '@mui/material'
+import { Stack, SxProps, Typography } from '@mui/material'
 import React from 'react'
 import * as style from './TitleBox.style'
 
-const MessageWidget = ({
+const TitleBox = ({
   title,
+  titleEndAdornment, // titleEndAdornment는 titleComponent가 없을 때만 작동합니다.
   titleComponent, // titleComponent가 있으면 title을 무시합니다.
   children,
-  StackProps,
-  TitleTypographyProps,
+  titleBoxSx,
+  titleSx,
+  titleContainerSx,
+  titleBoxSpacing,
 }: {
   title: string
   titleComponent?: React.ReactNode
+  titleEndAdornment?: React.ReactNode
   children: React.ReactNode
-  StackProps?: StackProps
-  TitleTypographyProps?: TypographyProps
+  titleBoxSx?: SxProps
+  titleSx?: SxProps
+  titleContainerSx?: SxProps
+  titleBoxSpacing?: number | string | Array<number | string>
 }) => {
   const { isPc } = useMedia()
 
   return (
     <Stack
-      spacing={isPc ? '1.5rem' : '1rem'}
-      sx={{
-        ...(isPc ? style.messageWidgetPcStyle : style.messageWidgetMobileStyle),
-      }}
-      {...StackProps}
+      spacing={titleBoxSpacing || ['1rem', '1.5rem']}
+      sx={titleBoxSx || style.titleBoxStyle}
     >
       {titleComponent ? (
         titleComponent
       ) : (
         <Stack
           direction={'row'}
-          justifyContent={'flex-start'}
+          justifyContent={'space-between'}
           alignItems={'center'}
           height={'2.5rem'}
+          sx={titleContainerSx}
         >
           <Typography
             variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}
             component={'h3'}
-            {...TitleTypographyProps}
+            sx={titleSx}
           >
             {title}
           </Typography>
+          {titleEndAdornment}
         </Stack>
       )}
       {children}
@@ -50,4 +55,4 @@ const MessageWidget = ({
   )
 }
 
-export default MessageWidget
+export default TitleBox

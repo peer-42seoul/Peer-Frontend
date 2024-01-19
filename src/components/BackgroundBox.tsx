@@ -3,8 +3,8 @@ import useMedia from '@/hook/useMedia'
 import * as style from './BackgroundBox.style'
 
 interface IBackgroundBoxProps {
-  pcSx: SxProps<Theme> | undefined
-  mobileSx: SxProps<Theme> | undefined
+  pcSx?: SxProps<Theme>
+  mobileSx?: SxProps<Theme>
   children: React.ReactNode
 }
 

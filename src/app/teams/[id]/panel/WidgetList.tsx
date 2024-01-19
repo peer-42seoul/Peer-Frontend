@@ -13,7 +13,7 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import useMedia from '@/hook/useMedia'
-import { SizeButton } from '@/app/teams/[id]/panel/widgets/TeamDnD.style'
+import { SizeButton } from '@/app/teams/[id]/panel/TeamDnD.style'
 
 interface ITeamDnDWidgetListProps {
   setIsDropping: (isDropping: boolean) => void

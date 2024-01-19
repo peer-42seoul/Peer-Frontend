@@ -1,30 +1,44 @@
-import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
-import { IconButton, Stack } from '@mui/material'
-import React from 'react'
-import {
-  Control,
-  Controller,
-  FieldArrayWithId,
-  UseFieldArrayAppend,
-  UseFieldArrayRemove,
-} from 'react-hook-form'
+import { IconButton, Stack, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
-import CuTextField from '@/components/CuTextField'
-import * as Style from '../ShowcaseEditor.style'
+import * as Style from './SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
+interface ILinkInputValues {
+  linkName: string
+  linkUrl: string
+  id: number
+}
+
+interface ILinkFormProps {
+  links: ILinkInputValues[]
+  addLink: (linkName: string, linkUrl: string) => void
+  isValid: boolean
+  setIsValid: (isValid: boolean) => void
+  changeLinkName: (id: number, content: string) => void
+  changeUrl: (id: number, content: string) => void
+}
 
 const LinkForm = ({
-  fields,
-  append,
-  // remove,
-  control,
-}: {
-  fields: FieldArrayWithId<IShowcaseEditorFields, 'links', 'id'>[]
-  append: UseFieldArrayAppend<IShowcaseEditorFields, 'links'>
-  remove: UseFieldArrayRemove
-  control: Control<IShowcaseEditorFields, any>
-}) => {
+  links,
+  addLink,
+  isValid,
+  setIsValid,
+  changeLinkName,
+  changeUrl,
+}: ILinkFormProps) => {
+  const [checker, setChecker] = useState<boolean>(true)
+  const validateUrl = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const completedUrl = e.target.value
+    const regex =
+      // eslint-disable-next-line no-useless-escape
+      /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/ // eslint-disable-next-line no-useless-escape
+    setChecker(regex.test(completedUrl))
+    setIsValid(checker)
+  }
+
   return (
     <Stack width={'26rem'} spacing={'0.5rem'}>
       <Stack
@@ -39,47 +53,39 @@ const LinkForm = ({
         />
         <IconButton
           onClick={() => {
-            if (fields.length >= 5) return
-            append({
-              id: 0,
-              linkName: '',
-              linkUrl: '',
-            })
+            if (links.length >= 5) return
+            addLink('', '')
           }}
         >
           <PlusIcon sx={Style.IconStyle} />
         </IconButton>
       </Stack>
-      {fields.map((field, index) => (
-        <Stack key={field.id} direction={'row'} spacing={'0.5rem'}>
-          <Controller
-            name={`links.${index}.linkName`}
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <CuTextField
-                onChange={onChange}
-                value={value}
-                placeholder={'링크 이름'}
-                sx={{ width: '12.8rem', height: '2rem' }}
-                autoComplete="off"
-              />
-            )}
+      {links.map((link) => (
+        <Stack key={link.id} direction={'row'} spacing={'0.5rem'}>
+          <TextField
+            key={link.id}
+            name="linkName"
+            placeholder={'링크 이름'}
+            sx={{ width: '12.8rem', height: '2rem' }}
+            value={link.linkName}
+            onChange={(e) => changeLinkName(link.id, e.target.value)}
           />
-          <Controller
-            name={`links.${index}.linkUrl`}
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <CuTextField
-                onChange={onChange}
-                value={value}
-                placeholder={'링크 주소'}
-                sx={{ width: '12.8rem', height: '2rem' }}
-                autoComplete="off"
-              />
-            )}
+          <TextField
+            name="linkUrl"
+            placeholder={'링크 주소'}
+            sx={{ width: '12.8rem', height: '2rem' }}
+            autoComplete="off"
+            value={link.linkUrl}
+            onChange={(e) => changeUrl(link.id, e.target.value)}
+            onBlur={(e) => validateUrl(e)}
           />
         </Stack>
       ))}
+      {!isValid && (
+        <Typography color="error">
+          유효하지 않는 URL이 포함되어 있습니다.
+        </Typography>
+      )}
     </Stack>
   )
 }
