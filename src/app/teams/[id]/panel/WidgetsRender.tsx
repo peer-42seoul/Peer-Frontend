@@ -8,12 +8,7 @@ import ImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import GridLayout, { Layout } from 'react-grid-layout'
-import {
-  ITeamDnDLayout,
-  IWidget,
-  SizeType,
-  WidgetType,
-} from '@/types/ITeamDnDLayout'
+import { ITeamDnDLayout, IWidget, SizeType, WidgetType } from '@/types/ITeamDnDLayout'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import WidgetUpdate from '@/app/teams/[id]/panel/WidgetUpdate'
 import { useRouter } from 'next/navigation'
@@ -28,7 +23,6 @@ interface IWidgetsRenderProps {
   edit: boolean
   setEdit: (edit: boolean) => void
   children?: React.ReactNode
-  trigger: any
 }
 
 /** @todo 나중에 위젯 데이터 받는 방식 결정나면 저장버튼-툴박스-렌더 컴포넌트가 형제컴포넌트가 되도록 리팩토링 **/
@@ -42,7 +36,6 @@ const WidgetsRender = ({
   edit,
   setEdit,
   children,
-  trigger,
 }: IWidgetsRenderProps) => {
   const router = useRouter()
   const [index, setIndex] = useState(0)
@@ -51,7 +44,7 @@ const WidgetsRender = ({
   /* 초기 layout값을 만드는 함수 */
   const setInitLayouts: IWidget[] = useMemo(() => {
     if (!data) return []
-    const initLayouts = data?.widgets?.map((widget, index) => {
+    return data?.widgets?.map((widget, index) => {
       const res = {
         ...widget,
         grid: {
@@ -62,7 +55,6 @@ const WidgetsRender = ({
       if (index === data?.widgets?.length - 1) setIndex(index + 1)
       return res
     })
-    return initLayouts
   }, [data])
 
   const [layouts, setLayouts] = useState<IWidget[]>(setInitLayouts)
@@ -191,7 +183,6 @@ const WidgetsRender = ({
   return (
     <Box>
       <WidgetUpdate
-        trigger={trigger}
         layouts={layouts}
         setEdit={setEdit}
         edit={edit}
