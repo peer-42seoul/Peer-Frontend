@@ -53,11 +53,16 @@ const HitchhikingCardBack = ({
   const router = useRouter()
 
   const getLineCount = (
-    originHeight: number,
+    otherOriginHeight: number,
     lineHeight: number,
     maxLine: number,
   ) => {
-    const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
+    const lineCount = Math.floor(
+      ((cardWidth * 441) / 328 - (otherOriginHeight + 204)) / lineHeight,
+    )
+    console.log(cardWidth)
+    console.log((cardWidth * 441) / 328 - (otherOriginHeight + 132))
+    console.log(lineCount)
     if (lineCount > maxLine) return maxLine
     else if (lineCount < 1) return 1
     else return lineCount
@@ -68,7 +73,6 @@ const HitchhikingCardBack = ({
     const fetchData = async () => {
       console.log(`fetchData ${postId}`)
       setIsLoading(true)
-      // backend api 완성 이후 주석 해제
       await axiosInstance
         .get(`/api/v1/hitch/${postId}`)
         .then((res) => {
@@ -77,12 +81,6 @@ const HitchhikingCardBack = ({
         .catch((e) => {
           console.log(e)
         })
-      // setData({
-      //   content:
-      //     '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
-      //   memberImage: [{ url: 'https://picsum.photos/200' }],
-      //   recruitmentQuota: 10,
-      // })
       setIsLoading(false)
     }
     if (!isLoading && !data && flipped) fetchData()
@@ -114,11 +112,10 @@ const HitchhikingCardBack = ({
           <Stack
             direction="row"
             justifyContent={'space-between'}
-            height={'2.5rem'}
             alignItems={'center'}
-            sx={{ width: '100%' }}
+            sx={style.cardHeaderStyleBase}
           >
-            <CardContent sx={{ padding: 0, flexGrow: 1 }} onClick={onClick}>
+            <CardContent sx={{ padding: 0 }} onClick={onClick}>
               <Chip
                 label={
                   <Typography variant="Tag" color={'green.normal'}>
@@ -148,7 +145,7 @@ const HitchhikingCardBack = ({
                 sx={{
                   ...style.cardTitleStyleBase,
                   height: getLineCount(46, 22.5, 2) * 22.5,
-                  WebkitLineClamp: getLineCount(46, 22.5, 2) /* 라인수 */,
+                  WebkitLineClamp: getLineCount(191, 22.5, 2) /* 라인수 */,
                 }}
               >
                 {title}
@@ -171,7 +168,7 @@ const HitchhikingCardBack = ({
               sx={{
                 ...style.cardContentStyleBase,
                 height: getLineCount(180, 18, 10) * 18,
-                WebkitLineClamp: getLineCount(180, 18, 10) /* 라인수 */,
+                WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
               }}
             >
               {data.content.split('\n').map((line) => {
@@ -191,7 +188,13 @@ const HitchhikingCardBack = ({
             />
           </CardContent>
           <CardContent
-            sx={{ position: 'relative', bottom: 0, height: '2.75rem' }}
+            sx={{
+              position: 'relative',
+              bottom: 0,
+              height: '2.75rem',
+              padding: 0,
+              pb: 0,
+            }}
             onClick={onClick}
           >
             <Button
@@ -249,12 +252,12 @@ const HitchhikingCard = ({
 
     // 카드 너비 설정
     setCardWidth(
-      isPc ? window.innerWidth * 0.9 : (window.innerHeight * 0.8 * 328) / 800,
+      isPc ? (window.innerHeight * 0.8 * 328) / 800 : window.innerWidth * 0.9,
     )
     const handleResize = () => {
       const newCardWidth = isPc
-        ? window.innerWidth * 0.9
-        : (window.innerHeight * 0.8 * 328) / 800
+        ? (window.innerHeight * 0.8 * 328) / 800
+        : window.innerWidth * 0.9
       setCardWidth(newCardWidth)
     }
 
