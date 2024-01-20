@@ -11,7 +11,6 @@ import {
   NewPostButton,
 } from '@/components/board/ListPanel'
 import CuButton from '@/components/CuButton'
-import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamBoard } from '@/types/TeamBoardTypes'
 import BoardPostList from './panel/BoardPostList'
@@ -19,7 +18,6 @@ import BoardDropdown from './panel/BoardDropdown'
 
 const TeamBoard = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
-  const { isPc } = useMedia()
   const { setBoard, boardId } = useTeamPageState()
   const [keyword, setKeyword] = useState<string>('')
   const [boardList, setBoardList] = useState<ITeamBoard[]>([])
