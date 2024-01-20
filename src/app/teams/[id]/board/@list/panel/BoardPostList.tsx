@@ -49,6 +49,7 @@ const BoardPostList = ({
                 onClick={() => {
                   setBoard('DETAIL', boardId, post.postId)
                 }}
+                hit={post.hit}
               />
             ))}
           </Fragment>

@@ -28,6 +28,7 @@ interface IListItemProps {
   authorNickname: string
   createdAt: Date
   onClick: () => void
+  hit?: number
 }
 
 export const ListPageContainer = ({ children }: IChildrenProps) => {
@@ -194,6 +195,7 @@ export const ListItem = ({
   authorNickname,
   createdAt,
   onClick,
+  hit,
 }: IListItemProps) => {
   const { isPc } = useMedia()
   return (
@@ -212,6 +214,11 @@ export const ListItem = ({
         <Typography variant={'Caption'} color={'text.alternative'}>
           {dayjs(createdAt).format('MM월 DD일')}
         </Typography>
+        {hit && (
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            조회수 {hit}
+          </Typography>
+        )}
       </Stack>
     </Stack>
   )
