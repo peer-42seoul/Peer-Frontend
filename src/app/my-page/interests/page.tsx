@@ -4,7 +4,7 @@ import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/hook/useToast'
-import { IMainCard, ProjectType } from '@/types/IPostDetail'
+import { ITag, ProjectType } from '@/types/IPostDetail'
 import {
   AlertColor,
   Box,
@@ -22,6 +22,22 @@ import * as style from './interests.style'
 import { centeredPosition } from '@/constant/centerdPosition.style'
 import { IPagination } from '@/types/IPagination'
 import MainCard from '@/app/panel/main-page/MainCard'
+
+interface IDefaultPostCard {
+  recruit_id: number
+  title: string
+  image: string
+  userId: number
+  userNickname: string
+  userImage: string
+  status: string
+  skillList: Array<{
+    tagId: number
+    name: string
+    color: string
+  }>
+  isFavorite: boolean
+}
 
 const TypeTabs = ({
   type,
@@ -142,7 +158,7 @@ const MyInterests = () => {
   const axiosInstance = useAxiosWithAuth()
   const pagesize = 10
   const { data, isLoading, mutate, error } = useSWR<
-    IPagination<Array<IMainCard>>
+    IPagination<Array<IDefaultPostCard>>
   >(
     `/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=${pagesize}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
@@ -173,9 +189,17 @@ const MyInterests = () => {
         prev.concat(
           data.content.map((post) => (
             <MainCard
-              {...post}
-              type={type as ProjectType}
               key={post.recruit_id}
+              title={post.title}
+              image={post.image}
+              user_id={`${post.userId}`}
+              user_nickname={post.userNickname}
+              user_thumbnail={post.userImage}
+              status={post.status}
+              tagList={post.skillList as ITag[]}
+              favorite={post.isFavorite}
+              type={type as ProjectType}
+              recruit_id={post.recruit_id}
             />
           )),
         ),
