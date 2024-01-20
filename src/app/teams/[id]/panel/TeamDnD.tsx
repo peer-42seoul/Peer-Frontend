@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import 'react-grid-layout/css/styles.css'
 import { ITeamDnDLayout, SizeType, WidgetType } from '@/types/ITeamDnDLayout'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReactGridLayout from 'react-grid-layout'
 import useSWRMutation from 'swr/mutation'
 import WidgetsRender from './WidgetsRender'
@@ -78,7 +78,6 @@ const TeamDnD = ({ id }: { id: string }) => {
       </CuToast>
       {/*dnd 렌더링*/}
       <WidgetsRender
-        trigger={trigger}
         id={id}
         key={data?.updatedAt.toLocaleString()}
         data={data}

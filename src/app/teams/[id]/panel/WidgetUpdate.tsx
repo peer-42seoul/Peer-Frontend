@@ -4,8 +4,6 @@ import { BrowserView } from 'react-device-detect'
 import CuButton from '@/components/CuButton'
 import React, { useCallback, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
-import useToast from '@/hook/useToast'
-import IToastProps from '@/types/IToastProps'
 import { IWidget } from '@/types/ITeamDnDLayout'
 import useDnDStore from '@/states/useDnDStore'
 
@@ -16,7 +14,6 @@ interface IWidgetUpdateProps {
   teamId: number | string
   isCreate: boolean
   cancelAction: () => void
-  trigger: any
 }
 
 const WidgetUpdate = ({
@@ -26,9 +23,8 @@ const WidgetUpdate = ({
   layouts,
   isCreate,
   cancelAction,
-  trigger,
 }: IWidgetUpdateProps) => {
-  const [isOpen, setOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
   const { setToastMessage } = useDnDStore()
 
@@ -61,9 +57,8 @@ const WidgetUpdate = ({
         severity: 'success',
         message: '수정에 성공하였습니다.',
       })
-      setOpen(false)
+      setModalOpen(false)
       setEdit(false)
-      trigger()
     } catch (e) {
       console.log('e', e)
       setToastMessage({
@@ -71,22 +66,14 @@ const WidgetUpdate = ({
         message: '수정에 실패하였습니다.',
       })
     }
-  }, [
-    teamId,
-    layouts,
-    isCreate,
-    axiosInstance,
-    setToastMessage,
-    setEdit,
-    trigger,
-  ])
+  }, [teamId, layouts, isCreate, axiosInstance, setToastMessage, setEdit])
 
   return (
     <Box mb={2}>
       {/*확인 모달*/}
       <CuTextModal
-        open={isOpen}
-        onClose={() => setOpen(false)}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
         title={'팀페이지 저장'}
         containedButton={{
           text: '확인',
@@ -94,7 +81,7 @@ const WidgetUpdate = ({
         }}
         textButton={{
           text: '취소',
-          onClick: () => setOpen(false),
+          onClick: () => setModalOpen(false),
         }}
         content={'팀 페이지를 저장하시겠습니까?'}
       />
@@ -126,7 +113,7 @@ const WidgetUpdate = ({
               variant: 'Body2Emphasis',
             }}
             action={() => {
-              if (edit) return setOpen(true)
+              if (edit) return setModalOpen(true)
               setEdit(!edit)
             }}
             variant={edit ? 'contained' : 'text'}
