@@ -30,11 +30,9 @@ const FavoriteButton = ({
       if (onFavorite) {
         onFavorite()
       } else {
-        await axiosInstance
-          .post(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
-          )
-          .then(() => {})
+        await axiosInstance.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
+        )
       }
     } catch (e) {
       console.log('error', e)
