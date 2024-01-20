@@ -3,10 +3,15 @@ import React, { useEffect, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import Favorite from '@mui/icons-material/Favorite'
 import { motion, useAnimationControls } from 'framer-motion'
+import useToast from '@/states/useToast'
 
 const Interest = ({ id }: { id?: number }) => {
   const [favorite, setFavorite] = useState(false)
+
+  const { openToast, closeToast } = useToast()
+
   const axiosInstance = useAxiosWithAuth()
+
   const control = useAnimationControls()
 
   const variants = {
@@ -20,6 +25,7 @@ const Interest = ({ id }: { id?: number }) => {
 
   const changeFavorite = async () => {
     if (!id) return
+    closeToast()
     try {
       await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${id}`,
@@ -30,8 +36,10 @@ const Interest = ({ id }: { id?: number }) => {
         return !prev
       })
     } catch (e) {
-      console.log('error', e)
-      // TODO: error handling
+      openToast({
+        severity: 'error',
+        message: '로그인이 필요한 서비스입니다.',
+      })
     }
   }
 
