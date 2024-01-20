@@ -32,7 +32,7 @@ const FavoriteButton = ({
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
         )
         .then(() => {
-          if (!isFavorite && onFavorite) onFavorite()
+          if (onFavorite) onFavorite()
         })
     } catch (e) {
       console.log('error', e)

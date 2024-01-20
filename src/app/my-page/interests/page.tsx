@@ -4,7 +4,6 @@ import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
 import useToast from '@/states/useToast'
-import { ITag, ProjectType } from '@/types/IPostDetail'
 import {
   Box,
   CircularProgress,
@@ -20,9 +19,8 @@ import CuTextModal from '@/components/CuTextModal'
 import * as style from './interests.style'
 import { centeredPosition } from '@/constant/centerdPosition.style'
 import { IPagination } from '@/types/IPagination'
-import MainCard from '@/app/panel/main-page/MainCard'
 
-interface IDefaultPostCard {
+export interface IDefaultPostCard {
   recruit_id: number
   title: string
   image: string
@@ -36,6 +34,18 @@ interface IDefaultPostCard {
     color: string
   }>
   isFavorite: boolean
+}
+
+export interface IShowcasePostCard {
+  showcaseId: number
+  image: string
+  teamLogo: string
+  teamName: string
+  content: string
+  tags: Array<{
+    name: string
+    color: string
+  }>
 }
 
 const TypeTabs = ({
@@ -73,20 +83,20 @@ const TypeTabs = ({
     >
       <Tab
         label={
-          <Typography variant="Body2" color={getColor('PROJECT')}>
-            프로젝트
-          </Typography>
-        }
-        value={'PROJECT'}
-        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
-      />
-      <Tab
-        label={
           <Typography variant="Body2" color={getColor('STUDY')}>
             스터디
           </Typography>
         }
         value={'STUDY'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      />
+      <Tab
+        label={
+          <Typography variant="Body2" color={getColor('PROJECT')}>
+            프로젝트
+          </Typography>
+        }
+        value={'PROJECT'}
         sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
       />
       <Tab
@@ -131,11 +141,16 @@ const AlertModal = ({
 
 const MyInterests = () => {
   const { isPc } = useMedia()
-  const [type, setType] = useState('PROJECT')
+
+  const [type, setType] = useState('STUDY')
   const [page, setPage] = useState<number>(1)
   const [pageLimit, setPageLimit] = useState<number>(1)
-  const [postList, setPostList] = useState<Array<React.ReactNode>>([])
+
+  const [postList, setPostList] = useState<Array<IDefaultPostCard>>([])
+  const [showcaseList, setShowcaseList] = useState<Array<IShowcasePostCard>>([])
+
   const axiosWithAuth = useAxiosWithAuth()
+
   const { isOpen: isModalOpen, closeModal, openModal } = useModal()
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -151,7 +166,7 @@ const MyInterests = () => {
   const axiosInstance = useAxiosWithAuth()
   const pagesize = 10
   const { data, isLoading, mutate, error } = useSWR<
-    IPagination<Array<IDefaultPostCard>>
+    IPagination<Array<IDefaultPostCard> | Array<IShowcasePostCard>>
   >(
     `/api/v1/${
       type === 'SHOWCASE'
@@ -195,44 +210,20 @@ const MyInterests = () => {
   useEffect(() => {
     if (!isLoading && data) {
       if (type === 'SHOWCASE') {
-        setPostList((prev) =>
-          prev.concat(
-            data.content.map((post) => (
-              <Box key={post.userId}>
-                <Typography variant="Caption">
-                  쇼케이스는 준비중입니다.
-                </Typography>
-              </Box>
-            )),
-          ),
-        )
+        setShowcaseList((prev) => {
+          return prev.concat(data.content as Array<IShowcasePostCard>)
+        })
       } else {
-        setPostList((prev) =>
-          prev.concat(
-            data.content.map((post) => (
-              <MainCard
-                key={post.recruit_id}
-                title={post.title}
-                image={post.image}
-                user_id={`${post.userId}`}
-                user_nickname={post.userNickname}
-                user_thumbnail={post.userImage}
-                status={post.status}
-                tagList={post.skillList as ITag[]}
-                favorite={post.isFavorite}
-                type={type as ProjectType}
-                recruit_id={post.recruit_id}
-              />
-            )),
-          ),
-        )
+        setPostList((prev) => {
+          return prev.concat(data.content as Array<IDefaultPostCard>)
+        })
       }
 
       if (data.last === false) {
         setPageLimit((prev) => prev + 1)
       }
     }
-  }, [data])
+  }, [data?.number])
 
   useEffect(() => {
     if (error && error?.response?.data?.message) {
@@ -269,10 +260,14 @@ const MyInterests = () => {
         {postList.length ? (
           <InterestsContents
             postList={postList}
+            showcaseList={showcaseList}
             spinner={spinner}
             target={target}
             removeAll={openModal}
             isDeleting={isDeleting}
+            type={type}
+            setPostList={setPostList}
+            setShowcaseList={setShowcaseList}
           />
         ) : (
           <Box
