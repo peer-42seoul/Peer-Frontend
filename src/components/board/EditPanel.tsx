@@ -85,10 +85,10 @@ export const EditForm = ({
   initialContent,
 }: IEditFormProps) => {
   return (
-    <Stack sx={style.EditForm} spacing={'1.5rem'}>
-      <Stack spacing={'0.5rem'}>
-        <Typography variant={'CaptionEmphasis'}>제목</Typography>
-        <form onSubmit={onSubmit} id={formId}>
+    <form onSubmit={onSubmit} id={formId}>
+      <Stack sx={style.EditForm} spacing={'1.5rem'}>
+        <Stack spacing={'0.5rem'}>
+          <Typography variant={'CaptionEmphasis'}>제목</Typography>
           <TextField
             name={'title'}
             id={'title'}
@@ -97,13 +97,13 @@ export const EditForm = ({
             defaultValue={initialTitle}
             sx={{ maxWidth: '26rem' }}
           />
-        </form>
+        </Stack>
+        <Stack spacing={'0.5rem'} height={'100%'}>
+          <Typography variant={'CaptionEmphasis'}>내용</Typography>
+          <DynamicToastEditor initialValue={initialContent} />
+        </Stack>
       </Stack>
-      <Stack spacing={'0.5rem'} height={'100%'}>
-        <Typography variant={'CaptionEmphasis'}>내용</Typography>
-        <DynamicToastEditor initialValue={initialContent} />
-      </Stack>
-    </Stack>
+    </form>
   )
 }
 
