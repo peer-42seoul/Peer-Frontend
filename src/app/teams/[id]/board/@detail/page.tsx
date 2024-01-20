@@ -14,6 +14,8 @@ import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
 import { CommentForm } from './panel/CommentForm'
+import CuTextModal from '@/components/CuTextModal'
+import useModal from '@/hook/useModal'
 
 const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
@@ -24,10 +26,10 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const { isPc } = useMedia()
+  const { openModal, isOpen, closeModal } = useModal()
 
   const handleDelete = () => {
-    const confirm = window.confirm('게시글을 삭제할까요??')
-    if (!confirm || !boardId) return
+    if (!boardId) return
     axiosWithAuth
       .delete(`/api/v1/team/board/post/${postId}`)
       .then(() => {
@@ -63,50 +65,66 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
       />
     )
   return (
-    <DetailPage handleGoBack={handleGoBack}>
-      {isPc && (
-        <CuButton
-          message={'이전 페이지'}
-          action={handleGoBack}
-          variant={'text'}
-          TypographyProps={{
-            color: 'text.strong',
-            variant: 'Body2Emphasis',
-          }}
-          style={{ width: 'fit-content' }}
-        />
-      )}
-      <DetailContentCotainer
-        containerTitle={'게시판'}
-        onClickEditButton={() => setBoard('EDIT', boardId, postId)}
-        author={data.isAuthor}
-      >
-        <DetailContent
-          title={data.title}
-          createdAt={data.createdAt}
-          authorNickname={data.authorNickname}
-          content={data.content}
-        />
-        {data.isAuthor && (
-          <Stack alignItems={'flex-end'}>
-            <CuButton
-              message={'삭제'}
-              action={handleDelete}
-              variant={'text'}
-              TypographyProps={{
-                color: 'red.normal',
-                variant: 'Caption',
-              }}
-              style={{ width: 'fit-content' }}
-            />
-          </Stack>
+    <>
+      <DetailPage handleGoBack={handleGoBack}>
+        {isPc && (
+          <CuButton
+            message={'이전 페이지'}
+            action={handleGoBack}
+            variant={'text'}
+            TypographyProps={{
+              color: 'text.strong',
+              variant: 'Body2Emphasis',
+            }}
+            style={{ width: 'fit-content' }}
+          />
         )}
-      </DetailContentCotainer>
-      <Stack>
-        <CommentList postId={postId} />
-        <CommentForm postId={postId} teamId={parseInt(teamId)} />
-      </Stack>
-    </DetailPage>
+        <DetailContentCotainer
+          containerTitle={'게시판'}
+          onClickEditButton={() => setBoard('EDIT', boardId, postId)}
+          author={data.isAuthor}
+        >
+          <DetailContent
+            title={data.title}
+            createdAt={data.createdAt}
+            authorNickname={data.authorNickname}
+            content={data.content}
+          />
+          {data.isAuthor && (
+            <Stack alignItems={'flex-end'}>
+              <CuButton
+                message={'삭제'}
+                action={openModal}
+                variant={'text'}
+                TypographyProps={{
+                  color: 'red.normal',
+                  variant: 'Caption',
+                }}
+                style={{ width: 'fit-content' }}
+              />
+            </Stack>
+          )}
+        </DetailContentCotainer>
+        <Stack>
+          <CommentList postId={postId} />
+          <CommentForm postId={postId} teamId={parseInt(teamId)} />
+        </Stack>
+      </DetailPage>
+      <CuTextModal
+        open={isOpen}
+        title={'게시글을 삭제할까요?'}
+        onClose={closeModal}
+        content={'게시글을 삭제하면 복구할 수 없어요.'}
+        containedButton={{
+          text: '삭제',
+          onClick: handleDelete,
+        }}
+        textButton={{
+          text: '취소',
+          onClick: closeModal,
+        }}
+      />
+    </>
   )
 }
 
