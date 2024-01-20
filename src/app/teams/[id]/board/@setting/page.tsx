@@ -6,9 +6,7 @@ import { Stack, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import BackgroundBox from '@/components/BackgroundBox'
 import CuButton from '@/components/CuButton'
-import CuToast from '@/components/CuToast'
 import useMedia from '@/hook/useMedia'
-import useToast from '@/hook/useToast'
 import { ITeamBoard } from '@/types/TeamBoardTypes'
 import BoardItem from './panel/BoardItem'
 import * as style from './page.style'
@@ -42,12 +40,6 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
   const textFieldRef = useRef<HTMLInputElement>(null)
   const { isPc } = useMedia()
   const axiosWithAuth = useAxiosWithAuth()
-  const {
-    isOpen: isToastOpen,
-    toastData,
-    openToastWithCustomData,
-    closeToast,
-  } = useToast()
 
   // FIXME : 업데이트가 바로 되지 않음. (새로고침 필요)
   const { data, isLoading, error } = useSWR<ITeamBoard[]>(
@@ -59,10 +51,7 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
     if (!textFieldRef.current) return
     const name = textFieldRef.current.value
     if (!name) {
-      openToastWithCustomData({
-        severity: 'error',
-        message: '게시판 이름을 입력해주세요.',
-      })
+      alert('게시판 이름을 입력해주세요.')
       return
     }
     axiosWithAuth
@@ -73,25 +62,16 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
       })
       .then(() => {
         textFieldRef.current!.value = ''
-        openToastWithCustomData({
-          severity: 'success',
-          message: '게시판을 추가했습니다.',
-        })
+        alert('게시판을 추가했습니다.')
       })
       .catch((e: unknown) => {
         if (isAxiosError(e)) {
           if (e.response?.status === 409) {
-            openToastWithCustomData({
-              severity: 'error',
-              message: '이미 존재하는 게시판 이름입니다.',
-            })
+            alert('이미 존재하는 게시판 이름입니다.')
             return
           }
         }
-        openToastWithCustomData({
-          severity: 'error',
-          message: '게시판 추가에 실패했습니다.',
-        })
+        alert('게시판 추가에 실패했습니다.')
       })
   }
 
@@ -135,22 +115,12 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
           >
             <Stack>
               {data.map((board: ITeamBoard) => (
-                <BoardItem
-                  key={crypto.randomUUID()}
-                  board={board}
-                  openToastWithCustomData={openToastWithCustomData}
-                />
+                <BoardItem key={crypto.randomUUID()} board={board} />
               ))}
             </Stack>
           </TitleStack>
         </Stack>
       </BackgroundBox>
-      <CuToast
-        open={isToastOpen}
-        onClose={closeToast}
-        severity={toastData.severity}
-        message={toastData.message}
-      />
     </>
   )
 }
