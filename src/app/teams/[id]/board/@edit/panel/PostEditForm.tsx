@@ -7,11 +7,11 @@ import { EditForm } from '@/components/board/EditPanel'
 
 interface IPostEditFormProps {
   boardId: number
-  teamId: string
+  // teamId: string
   postId?: string
 }
 
-const PostEditForm = ({ teamId, postId, boardId }: IPostEditFormProps) => {
+const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { setBoard } = useTeamPageState()
   const [previousData, setPreviousData] = useState({

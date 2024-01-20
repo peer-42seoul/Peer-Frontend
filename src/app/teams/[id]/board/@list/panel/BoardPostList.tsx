@@ -1,5 +1,5 @@
 import { Fragment, useEffect } from 'react'
-// import { Box } from '@mui/material'
+import { Box } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import {
   ListStack,
@@ -54,7 +54,7 @@ const BoardPostList = ({
           </Fragment>
         )
       })}
-      {/* <Box ref={targetRef}>{isLoading && '로딩중입니다...'}</Box> */}
+      <Box ref={targetRef}>{isLoading && '로딩중입니다...'}</Box>
     </ListStack>
   )
 }
