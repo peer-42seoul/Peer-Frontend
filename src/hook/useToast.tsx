@@ -3,7 +3,7 @@ import CuToast from '@/components/CuToast'
 
 const useToast = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [toastMessage, setToastMessage] = useState('')
+  const [toastMessage, setToastMessage] = useState('') // 토스트 알림에 표시할 메시지
   const openToast = () => setIsOpen(true)
   const closeToast = (
     event?: React.SyntheticEvent | Event,
