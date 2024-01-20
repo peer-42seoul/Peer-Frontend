@@ -88,40 +88,38 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
   if (!data || isLoading || error) return null
 
   return (
-    <>
-      <BackgroundBox pcSx={{ padding: '1.5rem' }}>
-        <Stack spacing={'2rem'}>
-          <TitleStack title="게시판 추가">
-            <Stack
-              direction={'row'}
-              spacing={'0.38rem'}
-              sx={style.inputContainer}
-            >
-              <TextField
-                inputRef={textFieldRef}
-                name={'new-board-name'}
-                sx={{ flexGrow: 1 }}
-              />
-              <CuButton
-                variant={'text'}
-                action={handleCreateBoard}
-                message="추가"
-              />
-            </Stack>
-          </TitleStack>
-          <TitleStack
-            title={'게시판 목록'}
-            warning={'게시판 삭제시 내부 모든 글이 삭제되고 복구할 수 없어요.'}
+    <BackgroundBox pcSx={{ padding: '1.5rem' }}>
+      <Stack spacing={'2rem'}>
+        <TitleStack title="게시판 추가">
+          <Stack
+            direction={'row'}
+            spacing={'0.38rem'}
+            sx={style.inputContainer}
           >
-            <Stack>
-              {data.map((board: ITeamBoard) => (
-                <BoardItem key={crypto.randomUUID()} board={board} />
-              ))}
-            </Stack>
-          </TitleStack>
-        </Stack>
-      </BackgroundBox>
-    </>
+            <TextField
+              inputRef={textFieldRef}
+              name={'new-board-name'}
+              sx={{ flexGrow: 1 }}
+            />
+            <CuButton
+              variant={'text'}
+              action={handleCreateBoard}
+              message="추가"
+            />
+          </Stack>
+        </TitleStack>
+        <TitleStack
+          title={'게시판 목록'}
+          warning={'게시판 삭제시 내부 모든 글이 삭제되고 복구할 수 없어요.'}
+        >
+          <Stack>
+            {data.map((board: ITeamBoard) => (
+              <BoardItem key={crypto.randomUUID()} board={board} />
+            ))}
+          </Stack>
+        </TitleStack>
+      </Stack>
+    </BackgroundBox>
   )
 }
 
