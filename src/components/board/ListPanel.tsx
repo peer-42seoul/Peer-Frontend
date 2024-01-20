@@ -60,6 +60,7 @@ export const NewPostButton = ({ onClick }: { onClick: () => void }) => {
       message={'새 글쓰기'}
       startIcon={<PlusIcon sx={{ color: 'text.normal' }} />}
       action={onClick}
+      TypographyProps={{ variant: 'Body1Emphasis', color: 'text.normal' }}
       style={{
         backgroundColor: 'purple.strong',
         padding: '0.75rem 1rem 0.75rem 0.625rem',
