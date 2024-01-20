@@ -76,6 +76,7 @@ const CardContainer = ({
           ...cardStyle.cardSize,
           mb: '0.875rem',
           position: 'relative',
+          zIndex: 100,
         }}
       >
         {!message ? (
