@@ -89,18 +89,15 @@ const TypeTabs = ({
         value={'STUDY'}
         sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
       />
-      {/* <Tab
+      <Tab
         label={
-          <Typography
-            variant="Body2"
-            color={getColor('SHOWCASE')}
-          >
+          <Typography variant="Body2" color={getColor('SHOWCASE')}>
             쇼케이스
           </Typography>
         }
         value={'SHOWCASE'}
         sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
-      /> */}
+      />
     </Tabs>
   )
 }
@@ -156,7 +153,11 @@ const MyInterests = () => {
   const { data, isLoading, mutate, error } = useSWR<
     IPagination<Array<IDefaultPostCard>>
   >(
-    `/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=${pagesize}`,
+    `/api/v1/${
+      type === 'SHOWCASE'
+        ? 'mypage/favorite/showcase?'
+        : `recruit/favorite?type=${type}&`
+    }page=${page}&pagesize=${pagesize}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
@@ -193,25 +194,40 @@ const MyInterests = () => {
 
   useEffect(() => {
     if (!isLoading && data) {
-      setPostList((prev) =>
-        prev.concat(
-          data.content.map((post) => (
-            <MainCard
-              key={post.recruit_id}
-              title={post.title}
-              image={post.image}
-              user_id={`${post.userId}`}
-              user_nickname={post.userNickname}
-              user_thumbnail={post.userImage}
-              status={post.status}
-              tagList={post.skillList as ITag[]}
-              favorite={post.isFavorite}
-              type={type as ProjectType}
-              recruit_id={post.recruit_id}
-            />
-          )),
-        ),
-      )
+      if (type === 'SHOWCASE') {
+        setPostList((prev) =>
+          prev.concat(
+            data.content.map((post) => (
+              <Box key={post.userId}>
+                <Typography variant="Caption">
+                  쇼케이스는 준비중입니다.
+                </Typography>
+              </Box>
+            )),
+          ),
+        )
+      } else {
+        setPostList((prev) =>
+          prev.concat(
+            data.content.map((post) => (
+              <MainCard
+                key={post.recruit_id}
+                title={post.title}
+                image={post.image}
+                user_id={`${post.userId}`}
+                user_nickname={post.userNickname}
+                user_thumbnail={post.userImage}
+                status={post.status}
+                tagList={post.skillList as ITag[]}
+                favorite={post.isFavorite}
+                type={type as ProjectType}
+                recruit_id={post.recruit_id}
+              />
+            )),
+          ),
+        )
+      }
+
       if (data.last === false) {
         setPageLimit((prev) => prev + 1)
       }
