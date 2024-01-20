@@ -6,10 +6,9 @@ import PostEditForm from './panel/PostEditForm'
 import PostEditButton from './panel/PostEditButton'
 import useMedia from '@/hook/useMedia'
 
-const BoardEdit = ({ params }: { params: { id: string } }) => {
+const BoardEdit = () => {
   const { boardId, postId, setBoard } = useTeamPageState()
   const { isPc } = useMedia()
-  const { id } = params
   const handleGoBack = () => {
     if (!boardId) return null
     if (postId) {
