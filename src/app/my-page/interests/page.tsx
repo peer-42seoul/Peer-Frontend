@@ -3,10 +3,9 @@ import useAxiosWithAuth from '@/api/config'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
-import useToast from '@/hook/useToast'
+import useToast from '@/states/useToast'
 import { ITag, ProjectType } from '@/types/IPostDetail'
 import {
-  AlertColor,
   Box,
   CircularProgress,
   Stack,
@@ -140,13 +139,10 @@ const MyInterests = () => {
   const [pageLimit, setPageLimit] = useState<number>(1)
   const [postList, setPostList] = useState<Array<React.ReactNode>>([])
   const axiosWithAuth = useAxiosWithAuth()
-  const { CuToast, isOpen: isToastOpen, closeToast, openToast } = useToast()
   const { isOpen: isModalOpen, closeModal, openModal } = useModal()
   const [isDeleting, setIsDeleting] = useState(false)
-  const [toastMessage, setToastMessage] = useState({
-    message: '',
-    severity: '' as AlertColor,
-  })
+
+  const { openToast, closeToast } = useToast()
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     console.log('newValue: ', newValue)
@@ -166,21 +162,33 @@ const MyInterests = () => {
 
   const deleteAll = async () => {
     closeModal()
+    closeToast()
     setIsDeleting(true)
     return await axiosWithAuth
       .delete(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/mypage/favorite?type=${type}`,
       )
       .then(() => {
-        setToastMessage({
+        openToast({
           message: '전체 삭제 되었습니다.',
           severity: 'success',
         })
-        openToast()
-        mutate()
-        setIsDeleting(false)
+        setPostList([])
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        if (error.response.status === 500) {
+          openToast({
+            message: '알 수 없는 오류가 발생했습니다. 다시 시도해주세요.',
+            severity: 'error',
+          })
+        } else {
+          openToast({
+            message: error.response.data.message,
+            severity: 'error',
+          })
+        }
+      })
+      .finally(() => setIsDeleting(false))
   }
 
   useEffect(() => {
@@ -212,13 +220,12 @@ const MyInterests = () => {
 
   useEffect(() => {
     if (error && error?.response?.data?.message) {
-      setToastMessage({
+      openToast({
         severity: 'error',
         message: `${error.response.data.message}`,
       })
-      openToast()
     }
-  }, [error, openToast])
+  }, [error])
 
   const { target, spinner } = useInfiniteScroll({
     setPage,
@@ -229,12 +236,6 @@ const MyInterests = () => {
 
   return (
     <>
-      <CuToast
-        open={isToastOpen}
-        onClose={closeToast}
-        severity={toastMessage.severity}
-        message={toastMessage.message}
-      />
       <AlertModal
         isOpen={isModalOpen}
         closeModal={closeModal}
