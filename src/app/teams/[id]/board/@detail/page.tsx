@@ -86,8 +86,8 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
         >
           <DetailContent
             title={data.title}
-            createdAt={data.createdAt}
-            authorNickname={data.authorNickname}
+            createdAt={data.date}
+            authorNickname={data.nickname}
             content={data.content}
           />
           {data.isAuthor && (

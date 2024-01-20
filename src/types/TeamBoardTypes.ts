@@ -21,6 +21,7 @@ export interface ITeamBoardListData extends IPagination<ITeamPost[]> {}
 
 export interface ITeamPostDetail extends ITeamPostBase {
   content: string
+  isAuthor: boolean // TODO : 아직 구현 안됨.
 }
 
 // Notice
