@@ -5,18 +5,20 @@ import React from 'react'
 import Grid from '@mui/material/Unstable_Grid2'
 import { centeredPosition } from '@/constant/centerdPosition.style'
 import { IDefaultPostCard, IShowcasePostCard } from '../page'
-import { ProjectType } from '@/types/IPostDetail'
+import { ITag, ProjectType } from '@/types/IPostDetail'
 import MainCard from '@/app/panel/main-page/MainCard'
+import useAxiosWithAuth from '@/api/config'
 
 const InterestsContents = ({
   postList,
-  // showcaseList,
+  showcaseList,
   target,
   spinner,
   removeAll,
   isDeleting,
   type,
   setPostList,
+  setShowcaseList,
 }: {
   postList: Array<IDefaultPostCard>
   showcaseList: Array<IShowcasePostCard>
@@ -30,8 +32,26 @@ const InterestsContents = ({
 }) => {
   const { isPc } = useMedia()
 
-  const handleUnfavorite = (recruit_id: number) => () => {
-    setPostList((prev) => prev.filter((post) => post.recruit_id !== recruit_id))
+  const axiosInstance = useAxiosWithAuth()
+
+  const handleDefaultUnfavorite = (recruit_id: number) => () => {
+    axiosInstance
+      .post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
+      )
+      .then(() => {
+        setPostList((prev) =>
+          prev.filter((post) => post.recruit_id !== recruit_id),
+        )
+      })
+  }
+
+  const handleShowcaseUnfavorite = (id: number) => () => {
+    axiosInstance
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${id}`)
+      .then(() => {
+        setShowcaseList((prev) => prev.filter((post) => post.showcaseId !== id))
+      })
   }
 
   return (
@@ -69,30 +89,48 @@ const InterestsContents = ({
           />
         </Stack>
       </Grid>
-      {type === 'SHOWCASE' ? (
-        <Box></Box>
-      ) : (
-        postList.map((post) => {
-          return (
-            <Grid key={post.recruit_id} xs={12} sm={6} md={4} lg={3}>
-              <MainCard
-                key={post.recruit_id}
-                title={post.title}
-                image={post.image}
-                user_id={`${post.userId}`}
-                user_nickname={post.userNickname}
-                user_thumbnail={post.userImage}
-                status={post.status}
-                tagList={post.skillList}
-                recruit_id={post.recruit_id}
-                favorite={post.isFavorite}
-                type={type as ProjectType}
-                onFavorite={handleUnfavorite(post.recruit_id)}
-              />
-            </Grid>
-          )
-        })
-      )}
+      {type === 'SHOWCASE'
+        ? showcaseList.map((post) => {
+            return (
+              <Grid key={post.showcaseId} xs={12} sm={6} md={4} lg={3}>
+                <MainCard
+                  key={post.showcaseId}
+                  title={post.content}
+                  image={post.image}
+                  user_id={`${post.showcaseId}`}
+                  user_nickname={post.teamName}
+                  user_thumbnail={post.teamLogo}
+                  status={''}
+                  tagList={post.tags as ITag[]}
+                  recruit_id={post.showcaseId}
+                  favorite={true}
+                  type={type as ProjectType}
+                  onFavorite={handleShowcaseUnfavorite(post.showcaseId)}
+                  href={`/showcase/${post.showcaseId}`}
+                />
+              </Grid>
+            )
+          })
+        : postList.map((post) => {
+            return (
+              <Grid key={post.recruit_id} xs={12} sm={6} md={4} lg={3}>
+                <MainCard
+                  key={post.recruit_id}
+                  title={post.title}
+                  image={post.image}
+                  user_id={`${post.userId}`}
+                  user_nickname={post.userNickname}
+                  user_thumbnail={post.userImage}
+                  status={post.status}
+                  tagList={post.skillList}
+                  recruit_id={post.recruit_id}
+                  favorite={post.isFavorite}
+                  type={type as ProjectType}
+                  onFavorite={handleDefaultUnfavorite(post.recruit_id)}
+                />
+              </Grid>
+            )
+          })}
       <Grid xs={10} sm={4}>
         <Box ref={target} position={'relative'}>
           {spinner && <CircularProgress sx={centeredPosition} />}
