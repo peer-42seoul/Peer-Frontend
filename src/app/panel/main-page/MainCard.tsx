@@ -26,12 +26,13 @@ const MainCard = ({
   favorite,
   recruit_id,
   type,
+  href,
   onFavorite,
 }: IMainCard) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <Link
-        href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
+        href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}
       >
         <Box sx={{ position: 'relative' }}>
@@ -41,30 +42,32 @@ const MainCard = ({
             image={image}
             alt="userImage"
           />
-          <Chip
-            label={
-              <Typography variant="Tag">
-                {status === 'ONGOING'
-                  ? '모집중'
-                  : status === 'BEFORE'
-                    ? '모집전'
-                    : '모집완료'}
-              </Typography>
-            }
-            sx={{
-              position: 'absolute',
-              top: 16,
-              left: 16,
-              borderRadius: 1,
-              backgroundColor: 'background.tertiary',
-              color: 'white',
-              height: '1.25rem',
-              '.MuiChip-label': {
-                paddingX: '0.375rem',
-              },
-            }}
-            size="medium"
-          />
+          {status && (
+            <Chip
+              label={
+                <Typography variant="Tag">
+                  {status === 'ONGOING'
+                    ? '모집중'
+                    : status === 'BEFORE'
+                      ? '모집전'
+                      : '모집완료'}
+                </Typography>
+              }
+              sx={{
+                position: 'absolute',
+                top: 16,
+                left: 16,
+                borderRadius: 1,
+                backgroundColor: 'background.tertiary',
+                color: 'white',
+                height: '1.25rem',
+                '.MuiChip-label': {
+                  paddingX: '0.375rem',
+                },
+              }}
+              size="medium"
+            />
+          )}
         </Box>
       </Link>
       <CardHeader
@@ -91,7 +94,7 @@ const MainCard = ({
         title={user_nickname}
       />
       <Link
-        href={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
+        href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}
       >
         <CardContent>
