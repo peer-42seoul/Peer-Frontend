@@ -26,7 +26,7 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
       axiosWithAuth
         .get(`/api/v1/team-page/post/${postId}`)
         .then((res) => {
-          if (!res || !res.data) throw new Error()
+          if (!res?.data) throw new Error()
           setPreviousData({
             title: res.data.title,
             content: res.data.content,
