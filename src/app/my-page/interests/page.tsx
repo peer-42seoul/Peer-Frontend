@@ -161,6 +161,7 @@ const MyInterests = () => {
     console.log('11', event.currentTarget, event.target)
     setType(newValue as string)
     setPostList([])
+    setShowcaseList([])
   }
 
   const axiosInstance = useAxiosWithAuth()
@@ -223,7 +224,11 @@ const MyInterests = () => {
         setPageLimit((prev) => prev + 1)
       }
     }
-  }, [data?.number])
+    if (!data) {
+      setPostList([])
+      setShowcaseList([])
+    }
+  }, [data?.content])
 
   useEffect(() => {
     if (error && error?.response?.data?.message) {
