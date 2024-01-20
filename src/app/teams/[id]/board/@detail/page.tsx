@@ -11,7 +11,7 @@ import {
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
-import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
+import { ITeamPostDetail } from '@/types/TeamBoardTypes'
 import CommentList from './panel/CommentList'
 import { CommentForm } from './panel/CommentForm'
 import CuTextModal from '@/components/CuTextModal'
@@ -21,7 +21,7 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
   const axiosWithAuth = useAxiosWithAuth()
   const { boardId, postId, setBoard } = useTeamPageState()
-  const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
+  const { data, error, isLoading } = useSWR<ITeamPostDetail>(
     `/api/v1/team-page/post/${postId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )

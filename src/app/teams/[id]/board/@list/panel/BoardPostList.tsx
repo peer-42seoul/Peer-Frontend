@@ -32,7 +32,7 @@ const BoardPostList = ({
 
   if (!data || error) return <StatusMessage message="문제가 발생했습니다." />
   if (!data && isLoading)
-    return <StatusMessage message="공지사항을 불러오는 중입니다..." />
+    return <StatusMessage message="게시글을 불러오는 중입니다..." />
   if (data.length === 0 || data[0].content.length === 0)
     return <StatusMessage message="등록된 글이 없습니다." />
   return (

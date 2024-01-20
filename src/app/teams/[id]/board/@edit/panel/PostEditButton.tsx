@@ -4,10 +4,11 @@ import { EditButton } from '@/components/board/EditPanel'
 
 // NOTE : postId가 있으면 수정, 없으면 새로 작성
 const PostEditButton = ({ postId }: { postId?: string }) => {
-  const { setNotice } = useTeamPageState()
+  const { boardId, setBoard } = useTeamPageState()
   const handleGoBack = () => {
-    if (postId) setNotice('DETAIL', parseInt(postId)) // 공지사항 수정
-    else setNotice('LIST') // 공지사항 작성
+    if (!boardId) return null
+    if (postId) setBoard('DETAIL', boardId, parseInt(postId)) // 게시글 수정
+    else setBoard('LIST', boardId) // 게시글 작성
   }
   return (
     <EditButton

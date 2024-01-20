@@ -6,7 +6,7 @@ import PostEditForm from './panel/PostEditForm'
 import PostEditButton from './panel/PostEditButton'
 import useMedia from '@/hook/useMedia'
 
-const NoticeEdit = ({ params }: { params: { id: string } }) => {
+const BoardEdit = ({ params }: { params: { id: string } }) => {
   const { boardId, postId, setBoard } = useTeamPageState()
   const { isPc } = useMedia()
   const { id } = params
@@ -34,4 +34,4 @@ const NoticeEdit = ({ params }: { params: { id: string } }) => {
   )
 }
 
-export default NoticeEdit
+export default BoardEdit

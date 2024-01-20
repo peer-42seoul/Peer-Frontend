@@ -9,7 +9,7 @@ interface ITeamLayoutProps {
   setting: ReactNode
 }
 
-const TeamNoticeMain = ({ list, detail, edit, setting }: ITeamLayoutProps) => {
+const TeamBoardMain = ({ list, detail, edit, setting }: ITeamLayoutProps) => {
   const { boardType, resetState } = useTeamPageState()
   useEffect(() => {
     return () => {
@@ -28,4 +28,4 @@ const TeamNoticeMain = ({ list, detail, edit, setting }: ITeamLayoutProps) => {
   return list
 }
 
-export default TeamNoticeMain
+export default TeamBoardMain
