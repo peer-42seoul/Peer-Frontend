@@ -35,7 +35,6 @@ const TextEditModal = ({
   }
 
   const handleSubmit = () => {
-    console.log('handleSubmit')
     setData(text)
     // 추가한 코드
     setStoreWidgetData(key, text)

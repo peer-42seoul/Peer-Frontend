@@ -51,8 +51,6 @@ const useDnDStore = create<IStoreDnDState>((set) => {
           (widget: IWidget) => widget.key == key,
         )
 
-        console.log('index', index)
-
         //못찾으면 리턴
         if (index === -1) return state
 
