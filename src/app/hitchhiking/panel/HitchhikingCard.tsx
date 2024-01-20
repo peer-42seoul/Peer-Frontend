@@ -22,6 +22,7 @@ import useMedia from '@/hook/useMedia'
 import * as style from './HitchhikingCard.style'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
+import useToast from '@/states/useToast'
 
 interface IHitchhikingCardBack {
   content: string
@@ -52,6 +53,8 @@ const HitchhikingCardBack = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
 
+  const { openToast, closeToast } = useToast()
+
   const getLineCount = (
     otherOriginHeight: number,
     lineHeight: number,
@@ -60,9 +63,6 @@ const HitchhikingCardBack = ({
     const lineCount = Math.floor(
       ((cardWidth * 441) / 328 - (otherOriginHeight + 204)) / lineHeight,
     )
-    console.log(cardWidth)
-    console.log((cardWidth * 441) / 328 - (otherOriginHeight + 132))
-    console.log(lineCount)
     if (lineCount > maxLine) return maxLine
     else if (lineCount < 1) return 1
     else return lineCount
@@ -71,7 +71,7 @@ const HitchhikingCardBack = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(`fetchData ${postId}`)
+      closeToast()
       setIsLoading(true)
       await axiosInstance
         .get(`/api/v1/hitch/${postId}`)
@@ -79,7 +79,17 @@ const HitchhikingCardBack = ({
           setData(res.data)
         })
         .catch((e) => {
-          console.log(e)
+          if (e.response?.status === 500 || !e.response?.message) {
+            openToast({
+              severity: 'error',
+              message: '로그인이 필요한 서비스입니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: e.response?.message,
+            })
+          }
         })
       setIsLoading(false)
     }
@@ -125,6 +135,7 @@ const HitchhikingCardBack = ({
                 sx={style.cardChipStyleBase}
               />
             </CardContent>
+            {/* TODO : 작성자 id 가져오기 */}
             <CardActionArea sx={{ padding: 0, width: 'auto' }}>
               <DropdownMenu>
                 <ShareMenuItem
@@ -144,7 +155,6 @@ const HitchhikingCardBack = ({
                 color={'text.normal'}
                 sx={{
                   ...style.cardTitleStyleBase,
-                  height: getLineCount(46, 22.5, 2) * 22.5,
                   WebkitLineClamp: getLineCount(191, 22.5, 2) /* 라인수 */,
                 }}
               >
@@ -164,10 +174,8 @@ const HitchhikingCardBack = ({
             <Typography
               variant="Caption"
               color={'text.alternative'}
-              // ref={containerRef}
               sx={{
                 ...style.cardContentStyleBase,
-                height: getLineCount(180, 18, 10) * 18,
                 WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
               }}
             >

@@ -4,6 +4,7 @@ import useAxiosWithAuth from '@/api/config'
 import Favorite from '@mui/icons-material/Favorite'
 import { motion, useAnimationControls } from 'framer-motion'
 import useToast from '@/states/useToast'
+import * as style from './Interest.style'
 
 const Interest = ({ id }: { id?: number }) => {
   const [favorite, setFavorite] = useState(false)
@@ -59,14 +60,7 @@ const Interest = ({ id }: { id?: number }) => {
         aria-label="add to favorites"
         onClick={changeFavorite}
         disableRipple
-        sx={{
-          backgroundColor: 'background.tertiary',
-          borderRadius: '20px',
-          padding: '8px',
-          width: '40px',
-          height: '40px',
-          position: 'relative',
-        }}
+        sx={style.iconButtonStyle}
       >
         <motion.div
           animate={control}
@@ -78,12 +72,8 @@ const Interest = ({ id }: { id?: number }) => {
         >
           <Favorite
             sx={{
+              ...style.iconStyleBase,
               color: favorite ? 'purple.strong' : 'purple.tinted',
-              transition: 'color 0.1s linear',
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
             }}
           />
         </motion.div>

@@ -65,31 +65,32 @@ function PostCard({
         spacing={'15px'}
         maxHeight={'11.875rem'}
       >
-        <CardHeader
-          avatar={
-            <CuAvatar
-              aria-label="profile"
-              src={authorImage}
-              sx={{
-                ...style.cardAuthorAvatarStyleBase,
-                height: (currentCardWidth * 32) / 328,
-                width: (currentCardWidth * 32) / 328,
-              }}
-            />
-          }
-          title={
-            <Typography variant="Body2" color="text.alternative">
-              {teamName}
-            </Typography>
-          }
-          sx={{ p: 0 }}
-        />
         <Box
           sx={{
             height: (currentCardWidth * 190) / 328,
             boxSizing: 'border-box',
           }}
         >
+          <CardHeader
+            avatar={
+              <CuAvatar
+                aria-label="profile"
+                src={authorImage}
+                sx={{
+                  ...style.cardAuthorAvatarStyleBase,
+                  height: (currentCardWidth * 32) / 328,
+                  width: (currentCardWidth * 32) / 328,
+                }}
+              />
+            }
+            title={
+              <Typography variant="Body2" color="text.alternative">
+                {teamName}
+              </Typography>
+            }
+            sx={{ p: 0 }}
+          />
+
           <CardContent sx={{ p: 0 }}>
             <Typography
               variant="Body1"
@@ -123,10 +124,9 @@ function PostCard({
                     }
                     size="small"
                     key={idx}
-                    style={{
+                    sx={{
+                      ...style.chipStyleBase,
                       backgroundColor: alpha(color, 0.3),
-                      borderRadius: 2,
-                      height: '1.25rem',
                     }}
                   />
                 )

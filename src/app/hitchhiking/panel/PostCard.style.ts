@@ -20,3 +20,8 @@ export const cardAuthorAvatarStyleBase: SxProps = {
   maxHeight: '2rem',
   boxSizing: 'border-box',
 }
+
+export const chipStyleBase: SxProps = {
+  borderRadius: '2px',
+  height: '1.25rem',
+}
