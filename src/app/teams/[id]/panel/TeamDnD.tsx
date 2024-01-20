@@ -2,12 +2,13 @@ import { Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import 'react-grid-layout/css/styles.css'
 import { ITeamDnDLayout, SizeType, WidgetType } from '@/types/ITeamDnDLayout'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactGridLayout from 'react-grid-layout'
 import useSWRMutation from 'swr/mutation'
 import WidgetsRender from './WidgetsRender'
 import WidgetList from '@/app/teams/[id]/panel/WidgetList'
 import useDnDStore from '@/states/useDnDStore'
+import useToast from '@/hook/useToast'
 
 export const sizeRatio = {
   S: { w: 1, h: 1 },
@@ -16,7 +17,8 @@ export const sizeRatio = {
 }
 
 const TeamDnD = ({ id }: { id: string }) => {
-  const { setStoredWidgets, setTeamId } = useDnDStore()
+  const { setStoredWidgets, setTeamId, toastMessage } = useDnDStore()
+  const { CuToast, isOpen: toastOpen, openToast, closeToast } = useToast()
   const [edit, setEdit] = useState(false)
   const [type, setType] = useState<WidgetType>('text')
   const [droppingItem, setDroppingItem] = useState<
@@ -38,12 +40,20 @@ const TeamDnD = ({ id }: { id: string }) => {
   )
 
   useEffect(() => {
-    trigger().then(() => {
-      if (!data) return
-      setTeamId(data?.teamId)
-      setStoredWidgets(data?.widgets)
-    })
+    trigger()
   }, [])
+
+  useEffect(() => {
+    if (!data) return
+    setTeamId(data.teamId)
+    setStoredWidgets(data.widgets)
+  }, [data])
+
+  useEffect(() => {
+    if (toastMessage?.message !== '') {
+      openToast()
+    }
+  }, [toastMessage])
 
   // api 에러 생길 시 주석 처리 필요
   if (!data && isMutating) return <Typography>로딩중입니다...</Typography>
@@ -57,11 +67,20 @@ const TeamDnD = ({ id }: { id: string }) => {
       }}
       spacing={4}
     >
+      {/*request와 관련된 toast*/}
+      <CuToast
+        autoHideDuration={2000}
+        severity={toastMessage?.severity}
+        open={toastOpen}
+        onClose={closeToast}
+      >
+        {toastMessage?.message}
+      </CuToast>
       {/*dnd 렌더링*/}
       <WidgetsRender
         trigger={trigger}
         id={id}
-        // key={data}
+        key={data?.updatedAt.toLocaleString()}
         data={data}
         type={type}
         size={size}

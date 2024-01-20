@@ -7,6 +7,7 @@ import useAxiosWithAuth from '@/api/config'
 import useToast from '@/hook/useToast'
 import IToastProps from '@/types/IToastProps'
 import { IWidget } from '@/types/ITeamDnDLayout'
+import useDnDStore from '@/states/useDnDStore'
 
 interface IWidgetUpdateProps {
   edit: boolean
@@ -29,10 +30,7 @@ const WidgetUpdate = ({
 }: IWidgetUpdateProps) => {
   const [isOpen, setOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
-  const { CuToast, isOpen: toastOpen, openToast, closeToast } = useToast()
-  const [toastMessage, setToastMessage] = useState<IToastProps>(
-    {} as IToastProps,
-  )
+  const { setToastMessage } = useDnDStore()
 
   /* 변경된 팀페이지 위젯 request */
   const handleSave = useCallback(async () => {
@@ -41,7 +39,12 @@ const WidgetUpdate = ({
         teamId,
         type: 'team',
         widgets: layouts?.map((layout) => {
-          return { ...layout, key: layout?.grid?.i }
+          //@todo 백엔드와 논의 후 JSON.stringify 지우기
+          return {
+            ...layout,
+            key: layout?.grid?.i,
+            data: layout.data ? JSON.stringify(layout?.data) : null,
+          }
         }),
       }
       if (isCreate) {
@@ -58,7 +61,6 @@ const WidgetUpdate = ({
         severity: 'success',
         message: '수정에 성공하였습니다.',
       })
-      openToast()
       setOpen(false)
       setEdit(false)
       trigger()
@@ -68,20 +70,19 @@ const WidgetUpdate = ({
         severity: 'error',
         message: '수정에 실패하였습니다.',
       })
-      openToast()
     }
-  }, [axiosInstance, isCreate, teamId, openToast, setEdit, layouts])
+  }, [
+    teamId,
+    layouts,
+    isCreate,
+    axiosInstance,
+    setToastMessage,
+    setEdit,
+    trigger,
+  ])
 
   return (
     <Box mb={2}>
-      {/*request와 관련된 toast*/}
-      <CuToast
-        severity={toastMessage?.severity}
-        open={toastOpen}
-        onClose={closeToast}
-      >
-        {toastMessage?.message}
-      </CuToast>
       {/*확인 모달*/}
       <CuTextModal
         open={isOpen}

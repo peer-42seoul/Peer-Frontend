@@ -62,8 +62,6 @@ const WidgetsRender = ({
       if (index === data?.widgets?.length - 1) setIndex(index + 1)
       return res
     })
-    console.log('initLayouts', initLayouts)
-    // setDndData({ ...data, widgets: initLayouts })
     return initLayouts
   }, [data])
 
@@ -135,21 +133,20 @@ const WidgetsRender = ({
     (layout: Layout[], layoutItem: Layout) => {
       if (!edit) return
       if (!isValidLayout(layout)) return
-      setLayouts([
-        {
-          key: 'drop' + index, //@todo 이후 삭제
-          grid: {
-            ...layoutItem,
-            i: index.toString(),
-          },
-          type,
-          size,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          data: null,
+      const res = {
+        key: 'drop' + index, //@todo 이후 삭제
+        grid: {
+          ...layoutItem,
+          i: index.toString(),
         },
-        ...layouts,
-      ])
+        type,
+        size,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        data: null,
+      }
+
+      setLayouts(layouts ? [...layouts, res] : [res])
       setIndex(index + 1)
     },
     [edit, isValidLayout, index, type, size, layouts],
@@ -189,7 +186,7 @@ const WidgetsRender = ({
     const width = layoutRef?.current?.clientWidth
     if (!width) return 0
     return isFourRow ? width / 4 : width / 2
-  }, [isFourRow])
+  }, [isFourRow, layoutRef?.current?.clientWidth])
 
   return (
     <Box>
