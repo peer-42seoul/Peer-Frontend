@@ -19,6 +19,7 @@ export interface IMainCard {
   favorite?: boolean
   recruit_id: number
   type: ProjectType | undefined
+  onFavorite?: () => void
 }
 
 export interface IPost {
