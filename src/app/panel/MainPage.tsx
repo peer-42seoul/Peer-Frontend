@@ -264,6 +264,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* pc view */}
       <div className="pc-layout">
         <Container
+          disableGutters
           sx={{
             backgroundColor: 'Background.primary',
             border: '1px solid black',

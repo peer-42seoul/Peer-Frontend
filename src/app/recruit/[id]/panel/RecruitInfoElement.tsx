@@ -10,7 +10,12 @@ export const RecruitTitle = ({
   status: TPostStatus | undefined
 }) => {
   return (
-    <Stack flexDirection={'row'} alignItems={'center'} gap={'1rem'}>
+    <Stack
+      flexDirection={'row'}
+      alignItems={'center'}
+      gap={'1rem'}
+      padding={'0.25rem'}
+    >
       <Typography variant={'Title3'}>{title}</Typography>
       <Typography color={'yellow.strong'} variant={'Caption'}>
         {status === 'ONGOING'

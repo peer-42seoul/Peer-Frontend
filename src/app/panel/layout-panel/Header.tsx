@@ -1,10 +1,23 @@
 'use client'
 
-import { AppBar, Box, Stack, Toolbar, alpha, useTheme } from '@mui/material'
+import {
+  AppBar,
+  Box,
+  Stack,
+  Toolbar,
+  alpha,
+  useTheme,
+  IconButton,
+  Typography,
+} from '@mui/material'
 import SearchButton from '../main-page/SearchButton'
 import AlertIcon from './AlertIcon'
 import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 import * as style from './Header.style'
+import { useRouter } from 'next/navigation'
+import CloseIcon from '../../../icons/CloseIcon'
+import BackIcon from '@/icons/Nav/BackIcon'
+import useHeaderStore from '@/states/useHeaderStore'
 
 /**
  * TODO : 상황에 따라 다른 헤더를 보여 줄 수 있어야 할 것 같습니다.
@@ -13,30 +26,62 @@ import * as style from './Header.style'
  * - 오른쪽 아이콘 (있을 수도 있고 없을 수도 있음)
  */
 
-const Header = () => {
+const Header = ({
+  title,
+  onlyTitle,
+}: {
+  title?: string
+  onlyTitle?: boolean
+}) => {
   const theme = useTheme()
   const mobileHeader = {
     ...style.mobileHeader,
     backgroundColor: alpha(theme.palette.background.primary, 0.8),
   }
+  const { headerTitle } = useHeaderStore()
+  const router = useRouter()
   return (
     <AppBar position="fixed" sx={mobileHeader}>
       <Toolbar disableGutters sx={style.mobileHeaderToolbar}>
-        <Stack
-          direction={'row'}
-          alignItems={'center'}
-          justifyContent={'space-between'}
-          width={'100%'}
-        >
-          <AlertIcon />
-          <Box sx={style.mobileHeaderTitle}>
-            {/* 페이지별로 다른 제목이 들어갈 수 있어야 함. */}
-            <PeerLogo
-              sx={{ width: '3.375rem', height: '2.5rem', color: 'text.normal' }}
-            />
-          </Box>
-          <SearchButton />
-        </Stack>
+        {title === '메인' ? (
+          <Stack sx={style.mobileHeaderStack}>
+            <AlertIcon />
+            <Box sx={style.mobileHeaderTitle}>
+              <PeerLogo
+                sx={{
+                  width: '3.375rem',
+                  height: '2.5rem',
+                  color: 'text.normal',
+                }}
+              />
+            </Box>
+            <SearchButton />
+          </Stack>
+        ) : (
+          <Stack sx={style.mobileHeaderStack}>
+            <IconButton
+              onClick={() => router.back()}
+              sx={{
+                visibility: onlyTitle ? 'hidden' : 'visible',
+              }}
+            >
+              <BackIcon />
+            </IconButton>
+            <Box sx={style.mobileHeaderTitle}>
+              {/* 페이지별로 다른 제목이 들어갈 수 있어야 함. */}
+              <Typography fontSize={'0.8125rem'} fontWeight={700}>
+                {title ?? headerTitle}
+              </Typography>
+            </Box>
+            <IconButton
+              sx={{
+                visibility: 'hidden',
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Stack>
+        )}
       </Toolbar>
     </AppBar>
   )
