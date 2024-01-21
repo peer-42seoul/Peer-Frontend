@@ -112,10 +112,10 @@ const ShowcaseEditor = ({
           setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
-        <TeamName teamName={data.title} />
+        <TeamName teamName={data.name} />
         <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
-        <TeamMembers members={data?.member} />
+        <TeamMembers members={data?.memberList} />
         <LinkForm
           links={links}
           addLink={addLink}

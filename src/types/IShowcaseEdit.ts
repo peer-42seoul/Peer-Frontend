@@ -21,24 +21,19 @@ export interface ISkill {
   color: string
 }
 
+// /write 디렉토리 interface
 export interface IShowcaseEditorFields {
-  title: string
+  name: string
   skills: ISkill[]
   start: string
   end: string
-  member: IMember[]
+  memberList: IMember[]
   links: IUserProfileLink[]
 }
 
-export interface IShowcaseEditorProps {
-  data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
-  teamId: number
-  requestMethodType: 'post' | 'put'
-  router: any | undefined
-}
-
+// /[id] 디렉토리 interface
 export interface IShowcaseViewerFields {
-  title: string
+  name: string
   skills: ISkill[]
   start: string
   end: string
@@ -47,6 +42,13 @@ export interface IShowcaseViewerFields {
   content: string
   image: string
 }
+export interface IShowcaseEditorProps {
+  data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
+  teamId: number
+  requestMethodType: 'post' | 'put'
+  router: any | undefined
+}
+
 export interface ILinkInformation {
   id: number
   name: string
