@@ -1,7 +1,7 @@
 import CuButton from '@/components/CuButton'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import { EditIcon } from '@/icons'
-import { FormControlLabel, Stack } from '@mui/material'
+import { FormControlLabel } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
