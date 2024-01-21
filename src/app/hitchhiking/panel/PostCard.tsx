@@ -1,5 +1,4 @@
 import {
-  Box,
   Card,
   CardContent,
   CardHeader,
@@ -55,85 +54,76 @@ function PostCard({
         component="img"
         image={image}
         alt="post thumbnail"
-        sx={{
-          ...style.cardMediaStyleBase,
-          height: (currentCardWidth * 251) / 328,
-        }}
+        sx={style.cardMediaStyleBase}
       />
       <Stack
         sx={{ p: '1rem', pt: '0.75rem' }}
         spacing={'15px'}
         maxHeight={'11.875rem'}
       >
-        <Box
-          sx={{
-            height: (currentCardWidth * 190) / 328,
-            boxSizing: 'border-box',
-          }}
-        >
-          <CardHeader
-            avatar={
-              <CuAvatar
-                aria-label="profile"
-                src={authorImage}
-                sx={{
-                  ...style.cardAuthorAvatarStyleBase,
-                  height: (currentCardWidth * 32) / 328,
-                  width: (currentCardWidth * 32) / 328,
-                }}
-              />
-            }
-            title={
-              <Typography variant="Body2" color="text.alternative">
-                {teamName}
-              </Typography>
-            }
-            sx={{ p: 0 }}
-          />
-
-          <CardContent sx={{ p: 0 }}>
+        <CardHeader
+          avatar={
+            <CuAvatar
+              aria-label="profile"
+              src={authorImage}
+              sx={style.cardAuthorAvatarStyleBase}
+            />
+          }
+          title={
             <Typography
-              variant="Body1"
-              color="text.normal"
-              sx={{
-                ...style.cardTitleStyleBase,
-                height: getLineCount(46, 22.5) * 22.5,
-                WebkitLineClamp: getLineCount(46, 22.5),
-              }}
+              variant="Body2"
+              color="text.alternative"
+              sx={style.cardSubtitleStyleBase}
             >
-              {title}
+              {teamName}
             </Typography>
-          </CardContent>
-          <CardContent sx={{ p: 0 }}>
-            <Stack
-              gap={1}
-              direction={'row'}
-              justifyContent={'center'}
-              sx={{
-                overflow: 'hidden',
-                height: getLineCount(46, 22.5) * 20 + 8,
-              }}
-            >
-              {tagList?.map(({ name, color }: ITag, idx: number) => {
-                return (
-                  <Chip
-                    label={
-                      <Typography variant="Tag" color={color}>
-                        {name}
-                      </Typography>
-                    }
-                    size="small"
-                    key={idx}
-                    sx={{
-                      ...style.chipStyleBase,
-                      backgroundColor: alpha(color, 0.3),
-                    }}
-                  />
-                )
-              })}
-            </Stack>
-          </CardContent>
-        </Box>
+          }
+          sx={{ p: 0 }}
+        />
+
+        <CardContent sx={{ p: 0 }}>
+          <Typography
+            variant="Body1"
+            color="text.normal"
+            sx={{
+              ...style.cardTitleStyleBase,
+              maxHeight: getLineCount(46, 22.5) * 22.5,
+              WebkitLineClamp: getLineCount(46, 22.5),
+            }}
+          >
+            {title}
+          </Typography>
+        </CardContent>
+        <CardContent sx={{ p: 0 }}>
+          <Stack
+            gap={1}
+            direction={'row'}
+            justifyContent={'center'}
+            sx={{
+              overflow: 'hidden',
+              maxHeight: getLineCount(46, 22.5) * 20 + 8,
+              flexWrap: 'wrap',
+            }}
+          >
+            {tagList?.map(({ name, color }: ITag, idx: number) => {
+              return (
+                <Chip
+                  label={
+                    <Typography variant="Tag" color={color}>
+                      {name}
+                    </Typography>
+                  }
+                  size="small"
+                  key={idx}
+                  sx={{
+                    ...style.chipStyleBase,
+                    backgroundColor: alpha(color, 0.3),
+                  }}
+                />
+              )
+            })}
+          </Stack>
+        </CardContent>
       </Stack>
     </Card>
   )
