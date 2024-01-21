@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Menu, MenuItem } from '@mui/material'
+import { Button, Menu, MenuItem, Typography } from '@mui/material'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { IRole } from '@/types/IPostDetail'
 
@@ -35,12 +35,11 @@ const ApplyMenuButton = ({
         id="apply-option-button"
         variant="contained"
         size="large"
-        sx={{ width: '6.785rem' }}
         disableElevation
         onClick={handleMenuClick}
         endIcon={<KeyboardArrowDown />}
       >
-        지원하기
+        <Typography>지원하기</Typography>
       </Button>
       <Menu
         anchorEl={menuAnchorEl}

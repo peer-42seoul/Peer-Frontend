@@ -1,7 +1,6 @@
 'use client'
 import React, { useCallback, useRef, useState } from 'react'
 import {
-  AlertColor,
   Avatar,
   Box,
   Button,
@@ -24,6 +23,7 @@ import { PlusIcon } from '@/icons'
 import TrashIcon from '@/icons/TrashIcon'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
+import useToast from '@/states/useToast'
 
 interface IFormInput {
   nickname: string
@@ -31,23 +31,14 @@ interface IFormInput {
   profileImage: File[] | null
 }
 
-interface IToastProps {
-  severity?: AlertColor
-  message: string
-}
-
 const ProfileBioEditor = ({
   data,
   closeModal,
-  setToastMessage,
-  setToastOpen,
   mutate,
   open,
 }: {
   data: IProfileCard
   closeModal: () => void
-  setToastMessage: (toastProps: IToastProps) => void
-  setToastOpen: (isOpen: boolean) => void
   mutate: () => void
   open: boolean
 }) => {
@@ -61,6 +52,8 @@ const ProfileBioEditor = ({
   const [cropper, setCropper] = useState<Cropper | null>(null)
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
   const { isPc } = useMedia()
+
+  const { openToast, closeToast } = useToast()
 
   const defaultValues: IFormInput = {
     nickname: data.nickname,
@@ -184,6 +177,7 @@ const ProfileBioEditor = ({
   }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const onClick = useCallback(() => {
+      closeToast()
       setIsLoading(true)
       const checkIsNicknameUnique = async () => {
         axiosWithAuth
@@ -192,24 +186,22 @@ const ProfileBioEditor = ({
           })
           .then(() => {
             setIsNicknameUnique(true)
-            setToastMessage({
+            openToast({
               severity: 'success',
               message: '사용할 수 있는 닉네임 입니다.',
             })
             if (errors.nickname?.type === 'notUnique') {
               clearErrors('nickname')
             }
-            setToastOpen(true)
             setIsLoading(false)
           })
           .catch((error) => {
             setIsNicknameUnique(false)
             console.log(error)
-            setToastMessage({
+            openToast({
               severity: 'error',
               message: '중복된 닉네임 입니다.',
             })
-            setToastOpen(true)
             setError('nickname', {
               type: 'notUnique',
               message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
@@ -269,7 +261,7 @@ const ProfileBioEditor = ({
       })
       return
     }
-
+    closeToast()
     await axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/introduction/edit`,
@@ -281,20 +273,25 @@ const ProfileBioEditor = ({
         },
       )
       .then(() => {
-        setToastMessage({
+        openToast({
           severity: 'success',
           message: '프로필 변경에 성공하였습니다.',
         })
-        setToastOpen(true)
         mutate()
         closeModal()
       })
       .catch((e) => {
-        setToastMessage({
-          severity: 'error',
-          message: e.response.data.message,
-        })
-        setToastOpen(true)
+        if (e.response.status === 500) {
+          openToast({
+            severity: 'error',
+            message: '프로필 변경에 실패하였습니다.',
+          })
+        } else {
+          openToast({
+            severity: 'error',
+            message: e.response.data.message,
+          })
+        }
       })
   }
 
@@ -316,7 +313,7 @@ const ProfileBioEditor = ({
       }}
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCloseModal,
       }}
       mobileFullSize
     >

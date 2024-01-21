@@ -5,27 +5,19 @@ import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
-import { AlertColor, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
-
-interface IToastProps {
-  severity?: AlertColor
-  message: string
-}
+import useToast from '@/states/useToast'
 
 const ProfileLinkEditor = ({
   closeModal,
   links,
-  setToastMessage,
-  setToastOpen,
   mutate,
   open,
 }: {
   closeModal: () => void
   links?: Array<IUserProfileLink>
-  setToastMessage: (toastProps: IToastProps) => void
-  setToastOpen: (open: boolean) => void
   mutate: () => void
   open: boolean
 }) => {
@@ -38,6 +30,8 @@ const ProfileLinkEditor = ({
       }))
     : ([] as Array<IUserProfileLink>)
   const { isPc } = useMedia()
+
+  const { openToast, closeToast } = useToast()
 
   const emptyLinksLength: number = 3 - (links ? links.length : 0)
 
@@ -74,22 +68,12 @@ const ProfileLinkEditor = ({
     }
     for (let i = 0; i < 3; i++) {
       if (data[i].linkUrl && !data[i].linkName) {
-        // setToastMessage({
-        //   severity: 'error',
-        //   message: `${i + 1}번째 링크의 제목이 없습니다. 확인해주세요!`,
-        // })
-        // setToastOpen(true)
         setError(`${i}.linkName`, {
           type: 'required',
           message: '아래 링크에 제목이 없습니다.',
         })
         return
       } else if (data[i].linkName && !data[i].linkUrl) {
-        // setToastMessage({
-        //   severity: 'error',
-        //   message: `${data[i].linkName}의 링크 주소가 없습니다. 확인해주세요!`,
-        // })
-        // setToastOpen(true)
         setError(`${i}.linkUrl`, {
           type: 'required',
           message: '위 링크 제목에 링크가 없습니다.',
@@ -102,27 +86,33 @@ const ProfileLinkEditor = ({
       })
     }
     console.log('제출중!', isSubmitting)
+    closeToast()
     await axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/link`,
         requestBody,
       )
       .then(() => {
-        setToastMessage({
+        openToast({
           severity: 'success',
           message: '링크 변경에 성공하였습니다.',
         })
-        setToastOpen(true)
         reset(defaultValues)
         closeModal()
         mutate()
       })
-      .catch(() => {
-        setToastMessage({
-          severity: 'error',
-          message: '링크 변경에 실패하였습니다.',
-        })
-        setToastOpen(true)
+      .catch((e) => {
+        if (e.response.status === 500) {
+          openToast({
+            severity: 'error',
+            message: '링크 변경에 실패하였습니다.',
+          })
+        } else {
+          openToast({
+            severity: 'error',
+            message: e.response.data.message,
+          })
+        }
       })
   }
 
@@ -138,7 +128,7 @@ const ProfileLinkEditor = ({
       }}
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCloseModal,
       }}
       mobileFullSize
     >

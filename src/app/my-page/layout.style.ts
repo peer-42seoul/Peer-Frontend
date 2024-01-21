@@ -1,12 +1,16 @@
 import { SxProps } from '@mui/material'
 
-export const pcContainer: SxProps = { maxWidth: '124rem', padding: 0 }
+export const pcContainer: SxProps = {
+  width: '100vw',
+  maxWidth: '124rem',
+  padding: 0,
+}
 export const mobileContainer: SxProps = {}
 
 export const pcStack: SxProps = {
   width: '100%',
   maxWidth: 1280, // 픽셀로 변환?
-  flex: '3, 4',
+  boxSizing: 'border-box',
 }
 
 export const mobileStack: SxProps = {
@@ -15,8 +19,10 @@ export const mobileStack: SxProps = {
 
 export const pcContentBox: SxProps = {
   maxWidth: '52.8rem',
-  flexGrow: 1,
+  flexGrow: 4,
+  width: '70%',
   padding: '2rem',
+  boxSizing: 'border-box',
 }
 
 export const pcOtherContentBox: SxProps = {

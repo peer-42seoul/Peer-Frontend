@@ -1,8 +1,10 @@
 'use client'
 
+import ReportModal from '@/components/ReportModal'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { MouseEvent, ReactNode, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import useModal from '@/hook/useModal'
 
 interface IOthersProfile {
   name: string
@@ -13,6 +15,7 @@ interface IOthersProfile {
 const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
   const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+  const { isOpen, openModal, closeModal } = useModal()
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -61,9 +64,14 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
           <Typography>아이디: {userId}</Typography>
           <Button onClick={goOthersProfile}>프로필 보기</Button>
           <Button>쪽지 보내기</Button>
-          <Button>신고하기</Button>
+          <Button onClick={openModal}>신고하기</Button>
         </Box>
       </Popover>
+      <ReportModal
+        isModalOpen={isOpen}
+        handleClose={closeModal}
+        targetId={userId}
+      />
     </div>
   )
 }

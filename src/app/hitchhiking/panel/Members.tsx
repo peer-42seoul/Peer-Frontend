@@ -1,30 +1,16 @@
 import CuAvatar from '@/components/CuAvatar'
 import { Avatar, Stack, Typography } from '@mui/material'
 import React from 'react'
+import * as style from './Members.style'
+import { centeredPosition } from '@/constant/centerdPosition.style'
 
 const VacancyProfile = () => {
   return (
-    <Avatar
-      sx={{
-        width: '1.5rem',
-        height: '1.5rem',
-        backgroundColor: 'text.assistive',
-        color: 'text.alternative',
-        borderWidth: '0.125rem',
-        borderColor: 'line.base',
-        borderStyle: 'solid',
-        position: 'relative',
-      }}
-    >
+    <Avatar sx={style.vacancyAvatarStyle}>
       <Typography
         variant="Tag"
         color={'text.alternative'}
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
+        sx={centeredPosition}
       >
         ?
       </Typography>
@@ -36,7 +22,7 @@ const Members = ({
   members,
   recruitmentQuota,
 }: {
-  members: Array<{ url: string }>
+  members: Array<string | null>
   recruitmentQuota: number
 }) => {
   const vacancies = []
@@ -58,17 +44,8 @@ const Members = ({
             return (
               <CuAvatar
                 key={idx}
-                src={member.url}
-                sx={{
-                  width: '1.5rem',
-                  height: '1.5rem',
-                  backgroundColor: 'text.assistive',
-                  color: 'text.alternative',
-                  borderWidth: '0.125rem',
-                  borderColor: 'line.base',
-                  borderStyle: 'solid',
-                  position: 'relative',
-                }}
+                src={member ?? undefined}
+                sx={style.avatarStyle}
               />
             )
           })}

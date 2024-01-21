@@ -27,7 +27,7 @@ const OauthLoginBox = () => {
             }}
           />
         </IconButton>
-        <Typography variant="caption">42서울</Typography>
+        <Typography variant="Caption">42서울</Typography>
       </Stack>
       <Stack alignItems={'center'} spacing={1}>
         <IconButton href={`${API_URL}/oauth2/authorization/google`} sx={Icons}>
@@ -41,7 +41,7 @@ const OauthLoginBox = () => {
             }}
           />
         </IconButton>
-        <Typography variant="caption">구글</Typography>
+        <Typography variant="Caption">구글</Typography>
       </Stack>
     </Box>
   )

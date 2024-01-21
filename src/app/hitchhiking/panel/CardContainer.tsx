@@ -1,13 +1,11 @@
-'use client'
 import React from 'react'
-import useMedia from '@/hook/useMedia'
-import { IMainCard } from '@/types/IPostDetail'
 import { FormControlLabel, Stack, Typography } from '@mui/material'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import Interest from './Interest'
 import * as cardStyle from './HitchhikingCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
+import { IPostCardHitchhiking } from '@/types/IPostCard'
 
 const CardContainer = ({
   cardList,
@@ -16,22 +14,17 @@ const CardContainer = ({
   message,
   handleChange,
 }: {
-  cardList: Array<IMainCard>
+  cardList: Array<IPostCardHitchhiking>
   removeCard: (recruit_id: number) => void
   isProject: boolean
   message: string
   handleChange: any
 }) => {
-  const { isPc } = useMedia()
   return (
     <Stack
       justifyContent={'flex-start'}
       alignItems={'center'}
-      sx={
-        isPc
-          ? containerStyle.cardContainerPCStyle
-          : containerStyle.cardContainerMobileStyle
-      }
+      sx={containerStyle.cardContainerStyle}
       direction={'column'}
     >
       <Stack
@@ -73,8 +66,10 @@ const CardContainer = ({
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          ...(isPc ? cardStyle.cardPcSize : cardStyle.cardMobileSize),
+          ...cardStyle.cardSize,
+          mb: '0.875rem',
           position: 'relative',
+          zIndex: 100,
         }}
       >
         {!message ? (
@@ -87,7 +82,7 @@ const CardContainer = ({
           <Typography variant="CaptionEmphasis">{message}</Typography>
         )}
       </Stack>
-      <Interest id={cardList[cardList.length - 1]?.recruit_id} />
+      <Interest id={cardList[cardList.length - 1]?.recruitId} />
     </Stack>
   )
 }
