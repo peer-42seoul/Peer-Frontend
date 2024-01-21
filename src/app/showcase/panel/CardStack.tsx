@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import * as style from './ShowcaseCard.style'
 import useMedia from '@/hook/useMedia'
 import { ICardData } from '@/app/showcase/panel/types'
-import ShowcaseCard from './ShowcaseCard'
+import { ShowcaseCard } from './ShowcaseCard'
 
 enum ESwipeDirection {
   left = 'left',
@@ -18,11 +18,9 @@ enum ESwipeDirection {
 const CardStack = ({
   cardList,
   removeCard,
-  isProject,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
-  isProject: boolean
 }) => {
   const [dragged, setDragged] = useState(false)
   const { isPc } = useMedia()
@@ -136,7 +134,6 @@ const CardStack = ({
                   sx={isPc ? style.cardPcStyleBase : style.cardMobileStyleBase}
                   dragged={dragged}
                   setDragged={setDragged}
-                  isProject={isProject}
                 />
               </motion.div>
             )
