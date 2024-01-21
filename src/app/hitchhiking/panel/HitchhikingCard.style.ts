@@ -40,6 +40,11 @@ export const cardChipStyleBase: SxProps = {
   },
 }
 
+export const cardHeaderStyleBase: SxProps = {
+  height: '2.5rem',
+  width: '100%',
+}
+
 export const cardContentStyleBase: SxProps = {
   width: '100%',
   overflow: 'hidden',
@@ -48,6 +53,7 @@ export const cardContentStyleBase: SxProps = {
   textOverflow: 'ellipsis',
   WebkitBoxOrient: 'vertical',
   display: '-webkit-box',
+  flex: '1 0 auto',
 }
 
 export const cardMoreButtonStyle: SxProps = {
