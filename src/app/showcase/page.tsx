@@ -27,6 +27,7 @@ const Showcase = () => {
   )
 
   useEffect(() => {
+    console.log('draggedCardList', draggedCardList)
     if (!isLoading && data?.content) {
       setCardList((prev) => {
         const newArray = [...data.content].reverse().concat(prev)
