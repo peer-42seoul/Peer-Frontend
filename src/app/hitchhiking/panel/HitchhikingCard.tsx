@@ -82,7 +82,7 @@ const HitchhikingCardBack = ({
           if (e.response?.status === 500 || !e.response?.message) {
             openToast({
               severity: 'error',
-              message: '로그인이 필요한 서비스입니다.',
+              message: '알 수 없는 오류가 발생하였습니다.',
             })
           } else {
             openToast({
