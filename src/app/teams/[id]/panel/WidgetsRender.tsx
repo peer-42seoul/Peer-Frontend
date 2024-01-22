@@ -8,13 +8,16 @@ import ImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import GridLayout, { Layout } from 'react-grid-layout'
-import { ITeamDnDLayout, IWidget, SizeType, WidgetType } from '@/types/ITeamDnDLayout'
+import {
+  ITeamDnDLayout,
+  IWidget,
+  SizeType,
+  WidgetType,
+} from '@/types/ITeamDnDLayout'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import WidgetUpdate from '@/app/teams/[id]/panel/WidgetUpdate'
-import { useRouter } from 'next/navigation'
 
 interface IWidgetsRenderProps {
-  id: number | string
   data: ITeamDnDLayout | undefined
   type: WidgetType
   size: SizeType
@@ -27,7 +30,6 @@ interface IWidgetsRenderProps {
 
 /** @todo 나중에 위젯 데이터 받는 방식 결정나면 저장버튼-툴박스-렌더 컴포넌트가 형제컴포넌트가 되도록 리팩토링 **/
 const WidgetsRender = ({
-  id,
   data,
   type,
   size,
@@ -37,7 +39,6 @@ const WidgetsRender = ({
   setEdit,
   children,
 }: IWidgetsRenderProps) => {
-  const router = useRouter()
   const [index, setIndex] = useState(0)
   const layoutRef = useRef<HTMLInputElement | null>(null)
 
@@ -47,6 +48,7 @@ const WidgetsRender = ({
     return data?.widgets?.map((widget, index) => {
       const res = {
         ...widget,
+        key: index,
         grid: {
           ...widget.grid,
           i: index.toString(),
@@ -64,29 +66,37 @@ const WidgetsRender = ({
   const isFourRow = useMediaQuery('(min-width:900px)')
 
   /* widget 가져오기 */
-  const getWidget = useCallback(
-    (type: WidgetType, wgData: any, wgSize: SizeType) => {
-      switch (type) {
-        case 'notice':
-          return <TmpNoticeWidget data={wgData} size={wgSize} />
-        case 'board':
-          return <TmpBoardWidget data={wgData} size={wgSize} />
-        case 'calender':
-          return <CalenderWidget data={wgData} size={wgSize} />
-        case 'attendance':
-          return <TmpAttendWidget data={wgData} size={wgSize} />
-        case 'text':
-          return <TextWidget data={wgData} size={wgSize} />
-        case 'image':
-          return <ImageWidget data={wgData} size={wgSize} />
-        case 'linkTable':
-          return <TmpLinkWidget data={wgData} size={wgSize} />
-        default:
-          return null
-      }
-    },
-    [],
-  )
+  const getWidget = (
+    type: WidgetType,
+    wgData: any,
+    wgSize: SizeType,
+    key: number,
+  ) => {
+    const props = {
+      data: wgData,
+      size: wgSize,
+      key,
+    }
+
+    switch (type) {
+      case 'notice':
+        return <TmpNoticeWidget {...props} />
+      case 'board':
+        return <TmpBoardWidget {...props} />
+      case 'calender':
+        return <CalenderWidget {...props} />
+      case 'attendance':
+        return <TmpAttendWidget {...props} />
+      case 'text':
+        return <TextWidget {...props} />
+      case 'image':
+        return <ImageWidget {...props} />
+      case 'linkTable':
+        return <TmpLinkWidget {...props} />
+      default:
+        return null
+    }
+  }
 
   /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
   const isValidLayout = useCallback((newLayout: Layout[]) => {
@@ -126,7 +136,7 @@ const WidgetsRender = ({
       if (!edit) return
       if (!isValidLayout(layout)) return
       const res = {
-        key: 'drop' + index, //@todo 이후 삭제
+        key: index,
         grid: {
           ...layoutItem,
           i: index.toString(),
@@ -188,7 +198,6 @@ const WidgetsRender = ({
         edit={edit}
         isCreate={!data}
         cancelAction={() => setLayouts(setInitLayouts)}
-        teamId={id}
       />
       {/*toolbox 영역*/}
       {children}
@@ -215,7 +224,6 @@ const WidgetsRender = ({
           }}
           draggableCancel=".MuiButtonBase-root, .MuiModal-root"
         >
-          {/*dnd 편집시 layouts, 위젯편집시 dndData*/}
           {layouts?.map(({ grid, type, size: wgSize, data: wgData, key }) => {
             return (
               <Box
@@ -224,9 +232,6 @@ const WidgetsRender = ({
                 data-grid={{ ...grid, isDraggable: edit }} //isDraggable 전체로 하는 방식있는데 안먹혀서 하나씩...
                 width={'100%'}
                 height={'100%'}
-                onClick={() =>
-                  !edit && router.replace(`/teams/${id}?key=${key}`)
-                }
               >
                 {/*위젯 삭제 버튼*/}
                 {edit ? (
@@ -250,7 +255,7 @@ const WidgetsRender = ({
                   <></>
                 )}
                 {/*위젯 type에 따라 렌더링*/}
-                {getWidget(type, wgData, wgSize)}
+                {getWidget(type, wgData, wgSize, key)}
               </Box>
             )
           })}

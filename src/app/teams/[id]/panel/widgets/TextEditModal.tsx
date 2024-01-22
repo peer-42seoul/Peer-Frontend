@@ -2,7 +2,6 @@ import CuModal from '@/components/CuModal'
 import React, { useState } from 'react'
 import { FormHelperText, TextField, Typography } from '@mui/material'
 import useDnDStore from '@/states/useDnDStore'
-import { useSearchParams } from 'next/navigation'
 
 const MAX_CHARS = 500
 
@@ -11,18 +10,18 @@ const TextEditModal = ({
   handleClose,
   data,
   setData,
+  key,
 }: {
   open: boolean
   handleClose: () => void
   data: string
   setData: (data: string) => void
+  key: number
 }) => {
   const [text, setText] = useState<string>(data)
   const [charCount, setCharCount] = useState(0)
   //추가한 코드
-  const { setStoreWidgetData } = useDnDStore()
-  const searchParams = useSearchParams()
-  const key = searchParams.get('key')
+  const { setStoredWidgetData } = useDnDStore()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputText = event.target.value
@@ -37,7 +36,7 @@ const TextEditModal = ({
   const handleSubmit = () => {
     setData(text)
     // 추가한 코드
-    setStoreWidgetData(key, text)
+    setStoredWidgetData(key, text)
     handleClose()
   }
   return (

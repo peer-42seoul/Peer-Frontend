@@ -1,17 +1,19 @@
 import React, { useState, useRef } from 'react'
 import { IconButton } from '@mui/material'
-import { SizeType } from '@/types/ITeamDnDLayout'
+import { IWidgetProps } from '@/types/ITeamDnDLayout'
 import Image from 'next/image'
 import EditIcon from '@/icons/EditIcon'
 import PictureIcon from '@/icons/PictureIcon'
 import * as style from './ImageWidget.style'
 import WidgetCard from './WidgetCard'
 
-const ImageWidget = ({ data, size }: { data: any; size: SizeType }) => {
+const ImageWidget = ({ data, size, key }: IWidgetProps) => {
   const [iconHidden, setIconHidden] = useState<boolean>(true)
   const [uploadedImage, setUploadedImage] = useState<
     string | ArrayBuffer | null
   >(null)
+  //@todo key 변수 사용시 삭제
+  if (!key) return
   const inputRef = useRef<HTMLInputElement>(null)
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0 && size) {

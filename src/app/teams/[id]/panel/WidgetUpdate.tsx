@@ -11,7 +11,6 @@ interface IWidgetUpdateProps {
   edit: boolean
   setEdit: (edit: boolean) => void
   layouts: IWidget[]
-  teamId: number | string
   isCreate: boolean
   cancelAction: () => void
 }
@@ -19,14 +18,13 @@ interface IWidgetUpdateProps {
 const WidgetUpdate = ({
   edit,
   setEdit,
-  teamId,
   layouts,
   isCreate,
   cancelAction,
 }: IWidgetUpdateProps) => {
   const [modalOpen, setModalOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
-  const { setToastMessage } = useDnDStore()
+  const { teamId } = useDnDStore()
 
   /* 변경된 팀페이지 위젯 request */
   const handleSave = useCallback(async () => {
@@ -53,20 +51,14 @@ const WidgetUpdate = ({
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/update`,
           teamWidgetInfo,
         )
-      setToastMessage({
-        severity: 'success',
-        message: '수정에 성공하였습니다.',
-      })
+      alert('저장되었습니다.')
       setModalOpen(false)
       setEdit(false)
     } catch (e) {
       console.log('e', e)
-      setToastMessage({
-        severity: 'error',
-        message: '수정에 실패하였습니다.',
-      })
+      alert('저장에 실패하였습니다.')
     }
-  }, [teamId, layouts, isCreate, axiosInstance, setToastMessage, setEdit])
+  }, [teamId, layouts, isCreate, axiosInstance, setEdit])
 
   return (
     <Box mb={2}>
