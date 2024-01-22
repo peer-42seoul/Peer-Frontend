@@ -1,19 +1,16 @@
 import { Chip, Stack, Typography } from '@mui/material'
 import React from 'react'
 import ProfileSection from './ProfileSection'
+import { ISkill } from '@/types/IUserProfile'
 
-const Skills = ({ setModalType }: { setModalType: (type: string) => void }) => {
-  const skills = [
-    'test',
-    'test2',
-    'test3',
-    'test4',
-    'test5',
-    'test6',
-    'test7',
-    'test8',
-    'test9',
-  ]
+const Skills = ({
+  skillList,
+  setModalType,
+}: {
+  skillList: Array<ISkill>
+  setModalType: (type: string) => void
+}) => {
+  console.log(skillList)
   return (
     <Stack direction={'column'} spacing={'0.5rem'}>
       <ProfileSection
@@ -31,25 +28,31 @@ const Skills = ({ setModalType }: { setModalType: (type: string) => void }) => {
         gap={1}
         flexWrap={'wrap'}
       >
-        {skills.map((skill) => (
-          <Chip
-            key={skill}
-            label={
-              <Typography variant={'Tag'} color={'purple.strong'}>
-                {skill}
-              </Typography>
-            }
-            sx={{
-              padding: '0px 6px',
-              backgroundColor: 'purple.tinted',
-              borderRadius: '2px',
-              height: '1.25rem',
-              '& .MuiChip-label': {
-                padding: '0px',
-              },
-            }}
-          />
-        ))}
+        {skillList?.length ? (
+          skillList.map((skill) => (
+            <Chip
+              key={skill.tagId}
+              label={
+                <Typography variant={'Tag'} color={'purple.strong'}>
+                  {skill.name}
+                </Typography>
+              }
+              sx={{
+                padding: '0px 6px',
+                backgroundColor: 'purple.tinted',
+                borderRadius: '2px',
+                height: '1.25rem',
+                '& .MuiChip-label': {
+                  padding: '0px',
+                },
+              }}
+            />
+          ))
+        ) : (
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            등록된 스킬이 없습니다.
+          </Typography>
+        )}
       </Stack>
     </Stack>
   )
