@@ -26,6 +26,7 @@ const MainCard = ({
   favorite,
   recruit_id,
   type,
+  onFavorite,
 }: IMainCard) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -84,6 +85,7 @@ const MainCard = ({
             favorite={favorite}
             recruit_id={recruit_id}
             redirect_url={'/'}
+            onFavorite={onFavorite}
           />
         }
         title={user_nickname}

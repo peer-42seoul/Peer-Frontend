@@ -1,3 +1,11 @@
+// import { ITag } from './IPostDetail'
+
+export interface ISkill {
+  tagId: number
+  name: string
+  color: string
+}
+
 export interface IUserProfile {
   id: number
   nickname: string
@@ -8,6 +16,7 @@ export interface IUserProfile {
   achievements: Array<string>
   association: string | null // 해당 없을 시 null
   email: string
+  skillList: Array<ISkill>
 }
 
 export interface IUserProfileLink {
