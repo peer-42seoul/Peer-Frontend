@@ -34,7 +34,6 @@ const ShowcaseCardBack = ({
   sx,
   onClick,
   flipped,
-  isProject,
   cardWidth,
   title,
   currentDomain,
@@ -43,7 +42,6 @@ const ShowcaseCardBack = ({
   sx?: SxProps
   onClick?: (e: React.MouseEvent) => void
   flipped?: boolean
-  isProject?: boolean
   title: string
   cardWidth: number
   currentDomain: string
@@ -107,7 +105,7 @@ const ShowcaseCardBack = ({
               <Chip
                 label={
                   <Typography variant="Tag" color={'green.normal'}>
-                    {isProject ? '프로젝트' : '스터디'}
+                    {'프로젝트'}
                   </Typography>
                 }
                 sx={style.cardChipStyleBase}
@@ -217,7 +215,6 @@ const ShowcaseCard = ({
   dragged,
   setDragged,
   sx,
-  isProject,
 }: {
   authorImage: string
   teamName: string
@@ -228,7 +225,6 @@ const ShowcaseCard = ({
   sx?: SxProps
   dragged: boolean
   setDragged: React.Dispatch<React.SetStateAction<boolean>>
-  isProject?: boolean
 }) => {
   const [isFlipped, setIsFlipped] = useState(false)
   const [cardWidth, setCardWidth] = useState(0)
@@ -294,7 +290,6 @@ const ShowcaseCard = ({
         sx={sx}
         onClick={handleMouseUp}
         flipped={isFlipped}
-        isProject={isProject}
         title={title}
         cardWidth={cardWidth}
         currentDomain={currentDomain}
@@ -303,4 +298,4 @@ const ShowcaseCard = ({
   )
 }
 
-export default ShowcaseCard
+export { ShowcaseCard, ShowcaseCardBack }
