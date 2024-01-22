@@ -9,34 +9,19 @@ import MyInfoCard from '../../my-page/profile/panel/MyInfoCard'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft, CloseIcon } from '@/icons'
 import useSWR from 'swr'
-import axios from 'axios'
-
-const profile = {
-  profileImageUrl:
-    'https://kr1-api-object-storage.nhncloudservice.com/v1/AUTH_ad016d3302b840af94a1946c5784d85a/PeerStorage/profile/image/06ea9b15-4f48-4055-a62a-e3cbde530473.png',
-  nickname: 'woorim',
-  email: 'wrkimlimi@gmail.com',
-  association: null,
-  introduction: '안녕하세요 woorikim입니다!',
-  linkList: [
-    {
-      id: 4,
-      linkUrl: 'https://github.com/KRimwoo',
-      linkName: 'Github',
-    },
-  ],
-}
+import { IUserProfile } from '@/types/IUserProfile'
+import useAxiosWithAuth from '@/api/config'
 
 const Profile = ({ params }: { params: { id: string } }) => {
-  const [userInfo, setUserInfo] = React.useState(profile)
-  // const {
-  //   data: userInfo,
-  //   error,
-  //   isLoading,
-  // } = useSWR<IUserProfile>(
-  //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/other/?userId=${params.id}`,
-  //   (url: string) => axios.get(url).then((res) => res.data),
-  // )
+  const axiosWithAuth = useAxiosWithAuth()
+  const {
+    data: userInfo,
+    error,
+    isLoading,
+  } = useSWR<IUserProfile>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/otherUser?userId=${params.id}`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  )
   const { isPc } = useMedia()
   const router = useRouter()
 
@@ -44,15 +29,15 @@ const Profile = ({ params }: { params: { id: string } }) => {
     router.back()
   }
 
-  // if (error) {
-  //   return <Typography>데이터 조회에 실패했습니다.</Typography>
-  // }
-  // if (isLoading) {
-  //   return <Typography>로딩중 입니다.</Typography>
-  // }
-  // if (!userInfo) {
-  //   return <Typography>데이터가 없습니다.</Typography>
-  // }
+  if (error) {
+    return <Typography>데이터 조회에 실패했습니다.</Typography>
+  }
+  if (isLoading) {
+    return <Typography>로딩중 입니다.</Typography>
+  }
+  if (!userInfo) {
+    return <Typography>데이터가 없습니다.</Typography>
+  }
 
   return (
     <>
@@ -62,6 +47,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
           direction="row"
           justifyContent="space-between"
           alignItems={'center'}
+          marginBottom={'1.5rem'}
         >
           <Stack direction="row" spacing={0.5}>
             <Typography variant="Body2" color={'purple.alternative'}>
@@ -135,6 +121,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
           handleLogout={() => {}}
           isEditable={false}
         />
+        
       </Stack>
     </>
   )
