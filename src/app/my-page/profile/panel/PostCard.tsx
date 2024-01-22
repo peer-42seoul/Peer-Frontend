@@ -1,6 +1,6 @@
 'use client'
 import {
-  Button,
+  // Button,
   Card,
   CardContent,
   CardHeader,
@@ -10,12 +10,13 @@ import {
   Typography,
   alpha,
 } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { ITag } from '@/types/IPostDetail'
 import { Chip } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
 import * as style from './PostCard.style'
 import { useRouter } from 'next/navigation'
+import SplitButton, { SplitButtonMenuItem } from '@/components/SplitButton'
 
 interface IPostCard {
   teamLogo: string // 팀 로고
@@ -26,42 +27,46 @@ interface IPostCard {
   sx?: SxProps // 카드 전체 스타일
 }
 
-const RoutingButton = ({
-  onClick,
-  disabled,
-  buttonText,
-}: {
-  onClick: () => void
-  disabled: boolean
-  buttonText: string
-}) => {
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onClick()
-  }
-  return (
-    <Button
-      disabled={disabled}
-      onClick={handleClick}
-      variant="contained"
-      sx={{ width: '4.75rem', height: '2rem' }}
-    >
-      <Typography
-        variant="Caption"
-        color={disabled ? 'text.assistive' : 'text.normal'}
-      >
-        {buttonText}
-      </Typography>
-    </Button>
-  )
-}
+// const RoutingButton = ({
+//   onClick,
+//   disabled,
+//   buttonText,
+// }: {
+//   onClick: () => void
+//   disabled: boolean
+//   buttonText: string
+// }) => {
+//   const handleClick = (e: React.MouseEvent) => {
+//     e.stopPropagation()
+//     onClick()
+//   }
+//   return (
+//     <Button
+//       disabled={disabled}
+//       onClick={handleClick}
+//       variant="contained"
+//       sx={{ width: '4.75rem', height: '2rem' }}
+//     >
+//       <Typography
+//         variant="Caption"
+//         color={disabled ? 'text.assistive' : 'text.normal'}
+//       >
+//         {buttonText}
+//       </Typography>
+//     </Button>
+//   )
+// }
 
 function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
   const teamId: undefined | number = 1
   const showCaseId: undefined | number = undefined
   const peerLogId: undefined | number = undefined
 
+  // 버튼
+  const [open, setOpen] = useState(false)
   const router = useRouter()
+  const options = ['모집글', '쇼케이스', '피어로그']
+  const [selectedOption, setSelectedOption] = useState('')
 
   const gotoTeamPage = () => {
     router.push(`/teams/${teamId}`)
@@ -79,6 +84,16 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
   const gotoPeerLogPage = () => {
     console.log('gotoPeerLogPage')
     // router.push(`/peer-log/${peerLogId}`)
+  }
+
+  const onClick = () => {
+    if (selectedOption === '모집글') {
+      goToRecruitPage()
+    } else if (selectedOption === '쇼케이스') {
+      gotoShowCasePage()
+    } else if (selectedOption === '피어로그') {
+      gotoPeerLogPage()
+    }
   }
 
   return (
@@ -168,7 +183,36 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
             pb: 0,
           }}
         >
-          <Stack
+          <SplitButton
+            selectedOption={selectedOption}
+            buttonText={`${selectedOption} 보러가기`}
+            onClick={onClick}
+            open={open}
+            setOpen={setOpen}
+          >
+            <SplitButtonMenuItem
+              disabled={!postId}
+              option={options[0]}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+              setOpen={setOpen}
+            />
+            <SplitButtonMenuItem
+              disabled={!showCaseId}
+              option={options[1]}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+              setOpen={setOpen}
+            />
+            <SplitButtonMenuItem
+              disabled={!peerLogId}
+              option={options[2]}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+              setOpen={setOpen}
+            />
+          </SplitButton>
+          {/* <Stack
             direction={'row'}
             justifyContent={'center'}
             flexWrap={'wrap'}
@@ -190,7 +234,7 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
               buttonText={'피어로그'}
               disabled={!peerLogId}
             />
-          </Stack>
+          </Stack> */}
         </CardContent>
       </Stack>
     </Card>

@@ -23,6 +23,7 @@ const MyPortfolio = () => {
   const [postList, setPostList] = useState<Array<IMainCard>>([])
   const [pageLimit, setPageLimit] = useState(1)
 
+  // 토스트
   const { openToast, closeToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
@@ -34,6 +35,7 @@ const MyPortfolio = () => {
 
   useEffect(() => {
     if (data?.content) {
+      // COMMENT : 임시 해결책. useSWR 도큐먼트 뒤적거리기
       setPostList((prev) =>
         getUniqueArray(prev.concat(data.content), 'recruit_id'),
       )
@@ -41,7 +43,7 @@ const MyPortfolio = () => {
         setPageLimit((prev) => prev + 1)
       }
     }
-  }, [data?.content, data?.last]) // 일단 이렇게 테스트 해보기
+  }, [data?.content, data?.last])
 
   const { target } = useInfiniteScroll({
     setPage,
