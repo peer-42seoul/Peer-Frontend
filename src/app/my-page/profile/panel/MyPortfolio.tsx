@@ -5,18 +5,15 @@ import TitleBox from '@/components/TitleBox'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import { IPagination } from '@/types/IPagination'
 import { IMainCard } from '@/types/IPostDetail'
-import {
-  Box,
-  CircularProgress,
-  FormControlLabel,
-  Typography,
-} from '@mui/material'
+import { Box, FormControlLabel, Typography } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import * as style from './Profile.style'
 import useAxiosWithAuth from '@/api/config'
 import useToast from '@/states/useToast'
+import CuCircularProgress from '@/components/CuCircularProgress'
+import { getUniqueArray } from '@/utils/getUniqueArray'
 
 const MyPortfolio = () => {
   const [isVisible, setIsVisible] = useState<boolean>(true)
@@ -31,18 +28,20 @@ const MyPortfolio = () => {
   const axiosWithAuth = useAxiosWithAuth()
 
   const { data, isLoading } = useSWR<IPagination<Array<IMainCard>>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=PROJECT&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=PROJECT&sort=latest&page=${page}&pageSize=5`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   useEffect(() => {
-    if (!isLoading && data && !data.last) {
-      setPostList((prev) => prev.concat(data.content))
+    if (data?.content) {
+      setPostList((prev) =>
+        getUniqueArray(prev.concat(data.content), 'recruit_id'),
+      )
       if (!data.last) {
         setPageLimit((prev) => prev + 1)
       }
     }
-  }, [isLoading, data])
+  }, [data?.content, data?.last]) // 일단 이렇게 테스트 해보기
 
   const { target } = useInfiniteScroll({
     setPage,
@@ -125,9 +124,9 @@ const MyPortfolio = () => {
             />
           </Grid>
         ))}
-        <Grid xs={12} sm={6}>
-          <Box position={'relative'} ref={target} height={1}>
-            {isLoading && <CircularProgress />}
+        <Grid xs={12} sm={6} lg={4}>
+          <Box ref={target} height={1}>
+            {isLoading && <CuCircularProgress color="primary" />}
           </Box>
         </Grid>
       </Grid>
