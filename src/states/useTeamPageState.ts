@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 type TTeamPageLayout = 'SIDEBAR' | 'FULLPAGE'
-type TboardType = 'LIST' | 'DETAIL' | 'EDIT'
+type TboardType = 'LIST' | 'DETAIL' | 'EDIT' | 'SETTING'
 
 /**
  * Team page state
@@ -21,14 +21,15 @@ interface ITeamPageState {
   postId: number | undefined
   resetState: () => void
   setNotice: (boardType: TboardType, postId?: number) => void
-  setBoard: (boardId: number, postId?: number) => void
+  setBoard: (boardType: TboardType, boardId: number, postId?: number) => void
 }
 
 const useTeamPageState = create<ITeamPageState>((set) => ({
   layout: 'SIDEBAR',
   // boardType: 'NOTICE',
   boardType: 'LIST',
-  boardId: undefined,
+  // boardId: undefined,
+  boardId: 1,
   postId: undefined,
   resetState: () =>
     set({
@@ -39,15 +40,21 @@ const useTeamPageState = create<ITeamPageState>((set) => ({
     }),
   setNotice: (boardType, postId) =>
     set({
-      layout: boardType === 'LIST' ? 'SIDEBAR' : 'FULLPAGE',
+      layout:
+        boardType === 'LIST' || boardType === 'SETTING'
+          ? 'SIDEBAR'
+          : 'FULLPAGE',
       boardType,
       boardId: undefined,
       postId,
     }),
-  setBoard: (boardId, postId) =>
+  setBoard: (boardType, boardId, postId) =>
     set({
-      layout: 'FULLPAGE',
-      boardType: 'LIST',
+      layout:
+        boardType === 'LIST' || boardType === 'SETTING'
+          ? 'SIDEBAR'
+          : 'FULLPAGE',
+      boardType: boardType,
       boardId,
       postId,
     }),
