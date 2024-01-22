@@ -8,16 +8,14 @@ import * as style from '../../my-page/layout.style'
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { isPc } = useMedia()
   return (
-    <Container>
+    <Container sx={style.container}>
       <Stack
         justifyContent={'center'}
         direction={isPc ? 'row' : 'column'}
         spacing={'2rem'}
-        sx={isPc ? style.pcStack : style.mobileStack}
+        sx={style.stack}
       >
-        <Box sx={isPc ? style.pcOtherContentBox : style.mobileContentBox}>
-          {children}
-        </Box>
+        <Box sx={style.contentBox}>{children}</Box>
       </Stack>
     </Container>
   )

@@ -116,12 +116,12 @@ const Profile = ({ params }: { params: { id: string } }) => {
 
         {/* profile my info */}
         <MyInfoCard
+          skillList={userInfo?.skillList}
           linkList={userInfo?.linkList}
           setModalType={() => {}}
           handleLogout={() => {}}
           isEditable={false}
         />
-        
       </Stack>
     </>
   )

@@ -1,23 +1,29 @@
 import Skills from './Skills'
 import ProfileLinksSection from './ProfileLinksSection'
 import CuButton from '@/components/CuButton'
-import { IUserProfileLink } from '@/types/IUserProfile'
+import { ISkill, IUserProfileLink } from '@/types/IUserProfile'
 import TitleBox from '@/components/TitleBox'
 
 const MyInfoCard = ({
   linkList,
+  skillList,
   setModalType,
   handleLogout,
   isEditable,
 }: {
   linkList: Array<IUserProfileLink>
+  skillList: Array<ISkill>
   setModalType: (type: string) => void
   handleLogout: () => void
   isEditable: boolean
 }) => {
   return (
     <TitleBox title={isEditable ? '내 정보' : '정보'}>
-      <Skills setModalType={setModalType} isEditable={isEditable} />
+      <Skills
+        skillList={skillList}
+        setModalType={setModalType}
+        isEditable={isEditable}
+      />
       <ProfileLinksSection
         linkList={linkList}
         setModalType={setModalType}

@@ -11,6 +11,10 @@ interface IlinksProps {
 const LinksViewer = ({ links }: IlinksProps) => {
   return (
     <Stack>
+      <LabelWithIcon
+        svgIcon={<TagIcon sx={Style.IconStyle} />}
+        message="링크모음"
+      />
       {links?.map((link: any) => {
         return (
           <Stack
@@ -19,10 +23,6 @@ const LinksViewer = ({ links }: IlinksProps) => {
             width={'26rem'}
             key={link.id}
           >
-            <LabelWithIcon
-              svgIcon={<TagIcon sx={Style.IconStyle} />}
-              message="링크모음"
-            />
             <Stack
               spacing={0.75}
               py={1}
