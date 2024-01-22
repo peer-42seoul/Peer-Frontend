@@ -64,8 +64,8 @@ const ShowcaseEditor = ({
         )
         router.push(`/showcase/${response.data.get('id')}`) // next 13에서 redirect 하는 법
       } else if (requestMethodType === 'put') {
-        const response = await axiosWithAuth.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
+        const response = await axiosWithAuth.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${teamId}}`,
           {
             image: previewImage.split(',')[1],
             content: content,
@@ -76,6 +76,7 @@ const ShowcaseEditor = ({
         router.push(`/showcase/${response.data.get('id')}`)
       }
     } catch (error: any) {
+      closeModal()
       if (error.response) {
         switch (error.response.status) {
           case 400:
@@ -88,6 +89,10 @@ const ShowcaseEditor = ({
             break
           case 404:
             setErrorMessages('페이지를 찾을 수 없습니다. (NOT_FOUND)')
+            openToast()
+            break
+          case 409:
+            setErrorMessages('이미 쇼케이스가 존재합니다.')
             openToast()
             break
           default:
@@ -112,10 +117,14 @@ const ShowcaseEditor = ({
           setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
-        <TeamName teamName={data.title} />
+        <TeamName teamName={data.name} />
         <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
-        <TeamMembers members={data?.member} />
+        <TeamMembers
+          members={
+            'memberList' in data ? data.memberList || [] : data.member || []
+          }
+        />
         <LinkForm
           links={links}
           addLink={addLink}
@@ -124,7 +133,7 @@ const ShowcaseEditor = ({
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        <DynamicEditor />
+        <DynamicEditor content={data.content} />
         <Button onClick={openModal} sx={style.saveButton}>
           저장
         </Button>

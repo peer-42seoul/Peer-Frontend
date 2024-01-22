@@ -3,7 +3,7 @@
 import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import ShowcaseEditor from '../panel/ShowcaseEditor'
-import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
+import { IShowcaseData } from '@/types/IShowcaseEdit'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import CuCircularProgress from '@/components/CuCircularProgress'
@@ -52,15 +52,19 @@ import CuCircularProgress from '@/components/CuCircularProgress'
 // }
 
 const ShowCaseEditPage = () => {
-  const teamId = 2
+  // TODO: API 콜하면 Request method 'GET' not supported 발생. 백엔드한테 get 열어돌라 해야함
+  const showcaseId = 3
   const axiosWithAuth = useAxiosWithAuth()
-  const { data, isLoading, error } = useSWR<IShowcaseEditorFields>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write/${teamId}`,
+  const { data, isLoading, error } = useSWR<IShowcaseData>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${showcaseId}`,
     // defaultGetFetcher,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )
 
+  if (!data?.author) {
+    return <Typography color={'error'}>잘못된 접근입니다.</Typography>
+  }
   if (isLoading) return <CuCircularProgress color={'secondary'} />
   if (error)
     return <Typography color={'error'}>에러가 발생했습니다.</Typography>
@@ -70,7 +74,7 @@ const ShowCaseEditPage = () => {
       {data && (
         <ShowcaseEditor
           data={data}
-          teamId={teamId}
+          teamId={showcaseId}
           requestMethodType={'put'}
           router={null}
         />

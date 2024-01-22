@@ -11,12 +11,17 @@ import useShowCaseState from '@/states/useShowCaseState'
  * WARNING: SSR 환경에서 사용할 경우 충돌이 나기 때문에 실제 사용하기 위해서는 dynamic import로 불러오는 DynamicToastEditor를 사용해야 합니다.
  */
 
+interface FormUIEditorProps extends IEditorOptions {
+  content?: string
+}
 const FormUIEditor = ({
+  content,
   initialValue,
   initialEditType = 'wysiwyg',
   previewStyle = 'vertical',
   height = '30rem',
-}: IEditorOptions) => {
+}: FormUIEditorProps) => {
+  console.log(`initialValue: ${content}`)
   const { setContent } = useShowCaseState()
   const themed = useTheme()
   const editorRef = useRef<HTMLDivElement>(null)
@@ -46,7 +51,7 @@ const FormUIEditor = ({
       initialEditType: initialEditType,
       previewStyle: previewStyle,
       height: height,
-      initialValue,
+      initialValue: content,
     })
     toggleDark()
 

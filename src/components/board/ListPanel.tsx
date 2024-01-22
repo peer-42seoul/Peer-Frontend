@@ -28,6 +28,7 @@ interface IListItemProps {
   authorNickname: string
   createdAt: Date
   onClick: () => void
+  hit?: number
 }
 
 export const ListPageContainer = ({ children }: IChildrenProps) => {
@@ -42,21 +43,30 @@ export const ListPageContainer = ({ children }: IChildrenProps) => {
   )
 }
 
-export const NewPostButton = ({ onClick }: { onClick: () => void }) => {
+export const TopPageButton = ({ children }: IChildrenProps) => {
   const { isPc } = useMedia()
   if (!isPc) return null
   return (
     <Stack direction={'row'} justifyContent={'flex-end'}>
-      <CuButton
-        message={'새 글쓰기'}
-        startIcon={<PlusIcon sx={{ color: 'text.normal' }} />}
-        action={onClick}
-        style={{
-          backgroundColor: 'purple.strong',
-          padding: '0.75rem 1rem 0.75rem 0.625rem',
-        }}
-      />
+      {children}
     </Stack>
+  )
+}
+
+export const NewPostButton = ({ onClick }: { onClick: () => void }) => {
+  const { isPc } = useMedia()
+  if (!isPc) return null
+  return (
+    <CuButton
+      message={'새 글쓰기'}
+      startIcon={<PlusIcon sx={{ color: 'text.normal' }} />}
+      action={onClick}
+      TypographyProps={{ variant: 'Body1Emphasis', color: 'text.normal' }}
+      style={{
+        backgroundColor: 'purple.strong',
+        padding: '0.75rem 1rem 0.75rem 0.625rem',
+      }}
+    />
   )
 }
 
@@ -185,6 +195,7 @@ export const ListItem = ({
   authorNickname,
   createdAt,
   onClick,
+  hit,
 }: IListItemProps) => {
   const { isPc } = useMedia()
   return (
@@ -203,6 +214,11 @@ export const ListItem = ({
         <Typography variant={'Caption'} color={'text.alternative'}>
           {dayjs(createdAt).format('MM월 DD일')}
         </Typography>
+        {hit && (
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            조회수 {hit}
+          </Typography>
+        )}
       </Stack>
     </Stack>
   )
