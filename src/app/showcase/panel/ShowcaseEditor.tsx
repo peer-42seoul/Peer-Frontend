@@ -76,6 +76,7 @@ const ShowcaseEditor = ({
         router.push(`/showcase/${response.data.get('id')}`)
       }
     } catch (error: any) {
+      closeModal()
       if (error.response) {
         switch (error.response.status) {
           case 400:
@@ -88,6 +89,10 @@ const ShowcaseEditor = ({
             break
           case 404:
             setErrorMessages('페이지를 찾을 수 없습니다. (NOT_FOUND)')
+            openToast()
+            break
+          case 409:
+            setErrorMessages('이미 쇼케이스가 존재합니다.')
             openToast()
             break
           default:
@@ -112,10 +117,10 @@ const ShowcaseEditor = ({
           setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
-        <TeamName teamName={data.title} />
+        <TeamName teamName={data.name} />
         <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
-        <TeamMembers members={data?.member} />
+        <TeamMembers members={data?.memberList} />
         <LinkForm
           links={links}
           addLink={addLink}

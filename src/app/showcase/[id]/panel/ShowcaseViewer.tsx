@@ -14,14 +14,16 @@ interface IShowcaseViewerProps {
 const ShowcaseViewer = ({ data }: IShowcaseViewerProps) => {
   return (
     <Stack direction={'column'} spacing={'2.5rem'} sx={{ width: '26rem' }}>
+      ## TODO hoslim이 만든 컴포넌트로교체하기
       {/* <InteractiveButtonGroup /> */}
       <Box component="img" src={data?.image} alt="쇼케이스 이미지" />
-      <TeamName teamName={data?.title} />
+      <TeamName teamName={data?.name} />
       <StartEndDateViewer start={data?.start} end={data?.end} />
       <SkillInput skills={data?.skills} />
       <TeamMembers members={data?.member} />
       <LinksViewer links={data?.links} />
       <ToastViewer initialValue={data?.content} height="30rem" />
+      ## TODO 댓글 추가하기
       {/* <CommentPage /> */}
     </Stack>
   )
