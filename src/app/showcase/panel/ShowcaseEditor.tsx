@@ -64,8 +64,8 @@ const ShowcaseEditor = ({
         )
         router.push(`/showcase/${response.data.get('id')}`) // next 13에서 redirect 하는 법
       } else if (requestMethodType === 'put') {
-        const response = await axiosWithAuth.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
+        const response = await axiosWithAuth.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${teamId}}`,
           {
             image: previewImage.split(',')[1],
             content: content,
@@ -120,7 +120,11 @@ const ShowcaseEditor = ({
         <TeamName teamName={data.name} />
         <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
-        <TeamMembers members={data?.memberList} />
+        <TeamMembers
+          members={
+            'memberList' in data ? data.memberList || [] : data.member || []
+          }
+        />
         <LinkForm
           links={links}
           addLink={addLink}
@@ -129,7 +133,7 @@ const ShowcaseEditor = ({
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        <DynamicEditor />
+        <DynamicEditor content={data.content} />
         <Button onClick={openModal} sx={style.saveButton}>
           저장
         </Button>
