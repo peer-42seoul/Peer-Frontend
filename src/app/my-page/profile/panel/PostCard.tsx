@@ -25,55 +25,29 @@ interface IPostCard {
   tagList: ITag[]
   image: string // 글 대표 이미지 (썸네일)
   sx?: SxProps // 카드 전체 스타일
+  redirectionIds: Array<number | null> // 0이면 null로 처리한다, 이유는 공개 여부로 지정한다, [0] : recruitId, [1] : showcaseId, [2] : peerLogId
 }
 
-// const RoutingButton = ({
-//   onClick,
-//   disabled,
-//   buttonText,
-// }: {
-//   onClick: () => void
-//   disabled: boolean
-//   buttonText: string
-// }) => {
-//   const handleClick = (e: React.MouseEvent) => {
-//     e.stopPropagation()
-//     onClick()
-//   }
-//   return (
-//     <Button
-//       disabled={disabled}
-//       onClick={handleClick}
-//       variant="contained"
-//       sx={{ width: '4.75rem', height: '2rem' }}
-//     >
-//       <Typography
-//         variant="Caption"
-//         color={disabled ? 'text.assistive' : 'text.normal'}
-//       >
-//         {buttonText}
-//       </Typography>
-//     </Button>
-//   )
-// }
-
-function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
-  const teamId: undefined | number = 1
-  const showCaseId: undefined | number = undefined
-  const peerLogId: undefined | number = undefined
-
+function PostCard({
+  teamLogo,
+  teamName,
+  tagList,
+  image,
+  postId,
+  redirectionIds,
+}: IPostCard) {
   // 버튼
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const options = ['모집글', '쇼케이스', '피어로그']
-  const [selectedOption, setSelectedOption] = useState('')
+  const [selectedOption, setSelectedOption] = useState<string>('')
 
   const gotoTeamPage = () => {
-    router.push(`/teams/${teamId}`)
+    router.push(`/teams/${postId}`)
   }
 
   const goToRecruitPage = () => {
-    router.push(`/recruit/${postId}`)
+    router.push(`/recruit/${redirectionIds[0]}`)
   }
 
   const gotoShowCasePage = () => {
@@ -125,8 +99,8 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
           position: 'relative',
         }}
         direction={'column'}
-        justifyContent={'space-between'}
-        spacing={'15px'}
+        justifyContent={'flex-start'}
+        spacing={'1rem'}
       >
         <CardHeader
           avatar={
@@ -181,60 +155,33 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
           sx={{
             p: 0,
             pb: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <SplitButton
             selectedOption={selectedOption}
-            buttonText={`${selectedOption} 보러가기`}
+            buttonText={
+              selectedOption !== '' ? `${selectedOption} 보러가기` : '더보기'
+            }
             onClick={onClick}
             open={open}
             setOpen={setOpen}
           >
-            <SplitButtonMenuItem
-              disabled={!postId}
-              option={options[0]}
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-              setOpen={setOpen}
-            />
-            <SplitButtonMenuItem
-              disabled={!showCaseId}
-              option={options[1]}
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-              setOpen={setOpen}
-            />
-            <SplitButtonMenuItem
-              disabled={!peerLogId}
-              option={options[2]}
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-              setOpen={setOpen}
-            />
+            {redirectionIds.map((id, idx) => {
+              return (
+                <SplitButtonMenuItem
+                  key={idx}
+                  disabled={!id}
+                  option={options[idx]}
+                  selectedOption={selectedOption}
+                  setSelectedOption={setSelectedOption}
+                  setOpen={setOpen}
+                />
+              )
+            })}
           </SplitButton>
-          {/* <Stack
-            direction={'row'}
-            justifyContent={'center'}
-            flexWrap={'wrap'}
-            gap={'0.5rem'}
-            sx={{ boxSizing: 'border-box', width: '100%' }}
-          >
-            <RoutingButton
-              onClick={goToRecruitPage}
-              buttonText={'모집글'}
-              disabled={!postId}
-            />
-            <RoutingButton
-              onClick={gotoShowCasePage}
-              buttonText={'쇼케이스'}
-              disabled={!showCaseId}
-            />
-            <RoutingButton
-              onClick={gotoPeerLogPage}
-              buttonText={'피어로그'}
-              disabled={!peerLogId}
-            />
-          </Stack> */}
         </CardContent>
       </Stack>
     </Card>

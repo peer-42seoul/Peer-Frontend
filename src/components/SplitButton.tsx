@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper'
 import Popper from '@mui/material/Popper'
 import MenuItem from '@mui/material/MenuItem'
 import MenuList from '@mui/material/MenuList'
+import { SxProps, Typography } from '@mui/material'
 
 export const SplitButtonMenuItem = ({
   option,
@@ -26,6 +27,7 @@ export const SplitButtonMenuItem = ({
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     option: string,
   ) => {
+    event.stopPropagation()
     setSelectedOption(option)
     setOpen(false)
   }
@@ -34,7 +36,9 @@ export const SplitButtonMenuItem = ({
       selected={option === selectedOption}
       onClick={(event) => handleMenuItemClick(event, option)}
       disabled={disabled}
-    ></MenuItem>
+    >
+      <Typography variant="body2">{option}</Typography>
+    </MenuItem>
   )
 }
 
@@ -45,6 +49,7 @@ const SplitButton = ({
   children,
   onClick,
   buttonText,
+  sx,
 }: {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -52,11 +57,21 @@ const SplitButton = ({
   children: React.ReactNode
   onClick?: () => void
   buttonText?: string
+  sx?: SxProps
 }) => {
   const anchorRef = React.useRef<HTMLDivElement>(null)
 
-  const handleToggle = () => {
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation()
     setOpen((prevOpen) => !prevOpen)
+  }
+
+  const handleOnClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (onClick) {
+      onClick()
+    }
+    setOpen(false)
   }
 
   const handleClose = (event: Event) => {
@@ -76,8 +91,22 @@ const SplitButton = ({
         variant="contained"
         ref={anchorRef}
         aria-label="split button"
+        sx={sx}
       >
-        <Button onClick={onClick}>{buttonText ?? selectedOption}</Button>
+        <Button onClick={handleOnClick}>
+          {/* 라이트모드에서도 글자가 흰색으로 보이도록 우선 white로 설정 */}
+          <Typography
+            variant="CaptionEmphasis"
+            color="white"
+            sx={{
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {buttonText ?? selectedOption}
+          </Typography>
+        </Button>
         <Button
           size="small"
           aria-controls={open ? 'split-button-menu' : undefined}
@@ -98,13 +127,13 @@ const SplitButton = ({
         role={undefined}
         transition
         disablePortal
+        placement="bottom"
       >
-        {({ TransitionProps, placement }) => (
+        {({ TransitionProps }) => (
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin:
-                placement === 'bottom' ? 'center top' : 'center bottom',
+              transformOrigin: 'center bottom',
             }}
           >
             <Paper>

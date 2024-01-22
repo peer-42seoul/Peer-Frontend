@@ -3,8 +3,6 @@ import CuToggle from '@/components/CuToggle'
 import PostCard from './PostCard'
 import TitleBox from '@/components/TitleBox'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
-import { IPagination } from '@/types/IPagination'
-import { IMainCard } from '@/types/IPostDetail'
 import { Box, FormControlLabel, Typography } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
 import React, { useEffect, useState } from 'react'
@@ -14,13 +12,51 @@ import useAxiosWithAuth from '@/api/config'
 import useToast from '@/states/useToast'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import { getUniqueArray } from '@/utils/getUniqueArray'
+import { ISkill } from '@/types/IUserProfile'
+
+interface IMyPortfolio {
+  teamId: number // 팀 Id
+  tagList: ISkill[] // 지정된 태그 리스트
+  teamName: string
+  teamLogo: string
+  recruitImage: string // 대표 이미지용
+  redirectionIds: [number | null, number | null, number | null] // 0이면 null로 처리한다, 이유는 공개 여부로 지정한다, [0] : recruitId, [1] : showcaseId, [2] : peerLogId
+  isEnd: boolean // 추가 요청 가능 여부를 전달한다.
+}
+
+// const mockData: IMyPortfolio[] = [
+//   {
+//     teamId: 1,
+//     tagList: [
+//       { tagId: 101, name: 'React', color: '#61dafb' },
+//       { tagId: 102, name: 'JavaScript', color: '#f0db4f' },
+//     ],
+//     teamName: 'Tech Wizards',
+//     teamLogo: 'tech_wizards_logo.png',
+//     recruitImage: 'recruit_event_image.jpg',
+//     redirectionIds: [78, null, null],
+//     isEnd: false,
+//   },
+//   {
+//     teamId: 2,
+//     tagList: [
+//       { tagId: 103, name: 'Vue.js', color: '#42b883' },
+//       { tagId: 104, name: 'HTML', color: '#e44d26' },
+//     ],
+//     teamName: 'Code Masters',
+//     teamLogo: 'code_masters_logo.png',
+//     recruitImage: 'recruit_event_image_2.jpg',
+//     redirectionIds: [0, null, null],
+//     isEnd: true,
+//   },
+// ]
 
 const MyPortfolio = () => {
   const [isVisible, setIsVisible] = useState<boolean>(true)
 
   // 무한 스크롤
   const [page, setPage] = useState<number>(1)
-  const [postList, setPostList] = useState<Array<IMainCard>>([])
+  const [postList, setPostList] = useState<Array<IMyPortfolio>>([])
   const [pageLimit, setPageLimit] = useState(1)
 
   // 토스트
@@ -28,22 +64,20 @@ const MyPortfolio = () => {
 
   const axiosWithAuth = useAxiosWithAuth()
 
-  const { data, isLoading } = useSWR<IPagination<Array<IMainCard>>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=PROJECT&sort=latest&page=${page}&pageSize=5`,
+  const { data, isLoading } = useSWR<Array<IMyPortfolio>>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/myPortfolio/list?page=${page}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   useEffect(() => {
-    if (data?.content) {
+    if (data) {
       // COMMENT : 임시 해결책. useSWR 도큐먼트 뒤적거리기
-      setPostList((prev) =>
-        getUniqueArray(prev.concat(data.content), 'recruit_id'),
-      )
-      if (!data.last) {
+      setPostList((prev) => getUniqueArray(prev.concat(data), 'teamId'))
+      if (!data[data.length - 1]?.isEnd) {
         setPageLimit((prev) => prev + 1)
       }
     }
-  }, [data?.content, data?.last])
+  }, [data])
 
   const { target } = useInfiniteScroll({
     setPage,
@@ -116,13 +150,14 @@ const MyPortfolio = () => {
         columns={12}
       >
         {postList.map((post) => (
-          <Grid xs={12} sm={6} lg={4} key={post.recruit_id}>
+          <Grid xs={12} sm={6} lg={4} key={post.teamId}>
             <PostCard
-              teamLogo={post.user_thumbnail}
+              teamLogo={post.teamLogo}
               tagList={post.tagList}
-              image={post.image}
-              teamName={post.user_nickname}
-              postId={post.recruit_id}
+              image={post.recruitImage}
+              teamName={post.teamName}
+              postId={post.teamId}
+              redirectionIds={post.redirectionIds}
             />
           </Grid>
         ))}
