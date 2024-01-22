@@ -3,7 +3,7 @@
 import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import ShowcaseEditor from '../panel/ShowcaseEditor'
-import { IShowcaseData, IShowcaseEditorFields } from '@/types/IShowcaseEdit'
+import { IShowcaseData } from '@/types/IShowcaseEdit'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import CuCircularProgress from '@/components/CuCircularProgress'
