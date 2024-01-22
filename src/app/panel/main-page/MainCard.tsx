@@ -28,9 +28,10 @@ const MainCard = ({
   type,
   href,
   onFavorite,
+  sx,
 }: IMainCard) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, ...sx }}>
       <Link
         href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}

@@ -1,13 +1,12 @@
 import CuButton from '@/components/CuButton'
-import useMedia from '@/hook/useMedia'
-import { Box, CircularProgress, Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import React from 'react'
 import Grid from '@mui/material/Unstable_Grid2'
-import { centeredPosition } from '@/constant/centerdPosition.style'
 import { IDefaultPostCard, IShowcasePostCard } from '../page'
 import { ITag, ProjectType } from '@/types/IPostDetail'
 import MainCard from '@/app/panel/main-page/MainCard'
 import useAxiosWithAuth from '@/api/config'
+import CuCircularProgress from '@/components/CuCircularProgress'
 
 const InterestsContents = ({
   postList,
@@ -30,8 +29,6 @@ const InterestsContents = ({
   setPostList: React.Dispatch<React.SetStateAction<IDefaultPostCard[]>>
   setShowcaseList: React.Dispatch<React.SetStateAction<IShowcasePostCard[]>>
 }) => {
-  const { isPc } = useMedia()
-
   const axiosInstance = useAxiosWithAuth()
 
   const handleDefaultUnfavorite = (recruit_id: number) => () => {
@@ -57,16 +54,16 @@ const InterestsContents = ({
   return (
     <Grid
       container
-      rowSpacing={isPc ? 3 : 2}
-      columnSpacing={isPc ? 2 : 0}
+      rowSpacing={[2, 3]}
+      columnSpacing={[0, 2]}
       alignItems="center"
-      justifyContent={isPc ? 'flex-start' : 'space-evenly'}
+      justifyContent={['center', 'flex-start']}
       direction="row"
       columns={12}
-      py={isPc ? 3 : 0}
-      px={isPc ? 2 : 0}
+      py={[0, 3]}
+      px={[0, 2]}
       sx={{
-        backgroundColor: isPc ? 'background.secondary' : 'transparent',
+        backgroundColor: ['transparent', 'background.secondary'],
         borderRadius: '1rem',
       }}
     >
@@ -107,13 +104,14 @@ const InterestsContents = ({
                   type={type as ProjectType}
                   onFavorite={handleShowcaseUnfavorite(post.showcaseId)}
                   href={`/showcase/${post.showcaseId}`}
+                  sx={{ maxWidth: undefined }}
                 />
               </Grid>
             )
           })
         : postList.map((post) => {
             return (
-              <Grid key={post.recruit_id} xs={12} sm={6} md={4} lg={3}>
+              <Grid key={post.recruit_id} xs={12} sm={6} md={4}>
                 <MainCard
                   key={post.recruit_id}
                   title={post.title}
@@ -127,13 +125,14 @@ const InterestsContents = ({
                   favorite={post.isFavorite}
                   type={type as ProjectType}
                   onFavorite={handleDefaultUnfavorite(post.recruit_id)}
+                  sx={{ maxWidth: undefined }}
                 />
               </Grid>
             )
           })}
-      <Grid xs={10} sm={4}>
+      <Grid xs={12} sm={6} md={4}>
         <Box ref={target} position={'relative'}>
-          {spinner && <CircularProgress sx={centeredPosition} />}
+          {spinner && <CuCircularProgress color="primary" />}
         </Box>
       </Grid>
     </Grid>
