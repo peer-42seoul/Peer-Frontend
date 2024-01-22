@@ -1,9 +1,8 @@
-import { Stack, Typography } from '@mui/material'
+import { Stack, TextField, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import BackgroundBox from '../BackgroundBox'
 import CuButton from '../CuButton'
 import CuModal from '../CuModal'
-import CuTextField from '../CuTextField'
 import DynamicToastEditor from '../DynamicToastEditor'
 import * as style from './EditPanel.style'
 
@@ -12,6 +11,7 @@ interface IChildrenProps {
 }
 
 interface IEditFormProps {
+  formId: string
   isLoading: boolean
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
   initialTitle: string
@@ -20,6 +20,7 @@ interface IEditFormProps {
 
 interface IEditButtonProps {
   type: 'new' | 'edit'
+  formId: string
   handleGoBack: () => void
 }
 
@@ -77,18 +78,20 @@ export const EditBox = ({ children }: IChildrenProps) => {
 }
 
 export const EditForm = ({
+  formId,
   isLoading,
   onSubmit,
   initialTitle,
   initialContent,
 }: IEditFormProps) => {
   return (
-    <form onSubmit={onSubmit} id={'notice-form'}>
+    <form onSubmit={onSubmit} id={formId}>
       <Stack sx={style.EditForm} spacing={'1.5rem'}>
         <Stack spacing={'0.5rem'}>
           <Typography variant={'CaptionEmphasis'}>제목</Typography>
-          <CuTextField
+          <TextField
             name={'title'}
+            id={'title'}
             placeholder={'제목을 입력해주세요.'}
             disabled={isLoading}
             defaultValue={initialTitle}
@@ -104,7 +107,11 @@ export const EditForm = ({
   )
 }
 
-export const EditButton = ({ type, handleGoBack }: IEditButtonProps) => {
+export const EditButton = ({
+  type,
+  formId,
+  handleGoBack,
+}: IEditButtonProps) => {
   return (
     <Stack direction={'row'} justifyContent={'flex-end'}>
       <Stack width={'18.5rem'} direction={'row'} spacing={'1rem'}>
@@ -118,7 +125,7 @@ export const EditButton = ({ type, handleGoBack }: IEditButtonProps) => {
         />
         <CuButton
           type={'submit'}
-          form={'notice-form'}
+          form={formId}
           variant={'contained'}
           message={type === 'new' ? '등록' : '완료'}
           style={style.EditButton}
