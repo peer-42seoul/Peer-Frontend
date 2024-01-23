@@ -2,13 +2,12 @@ import { Box, Card, CardActionArea, Stack, Typography } from '@mui/material'
 import { ITeamInfo } from '../page'
 import { useRouter } from 'next/navigation'
 import { TeamOperationForm } from '@/app/teams/types/types'
-import { grey } from '@mui/material/colors'
 import useMedia from '@/hook/useMedia'
 import { GeoIcon, TargetIcon, WifiIcon } from './Icons'
 
 const TeamType = (type: string) => {
   return (
-    <Box width={60} sx={{ margin: 0, backgroundColor: grey[900] }}>
+    <Box width={60} sx={{ margin: 0, backgroundColor: 'background.tertiary' }}>
       <Typography
         textAlign={'center'}
         color={type === 'STUDY' ? 'yellow.strong' : 'green.strong'}
@@ -49,6 +48,7 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
         px: '1.5rem',
         boxShadow: 'none',
         borderRadius: '1.5rem',
+        backgroundColor: 'background.secondary',
       }}
     >
       <CardActionArea
@@ -64,13 +64,16 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
           direction={isPc ? 'row' : 'column'}
           spacing={'0.5rem'}
           my={'0.5rem'}
+          justifyContent={'space-between'}
         >
-          {TeamType(team.type)}
-          <Typography
-            sx={isPc ? undefined : { height: '4rem', overflow: 'hidden' }}
-          >
-            {team.name}
-          </Typography>
+          <Stack direction={'row'} spacing={'0.5rem'}>
+            {TeamType(team.type)}
+            <Typography
+              sx={isPc ? undefined : { height: '4rem', overflow: 'hidden' }}
+            >
+              {team.name}
+            </Typography>
+          </Stack>
           <ApproveChip isApproved={team.isApproved} />
         </Stack>
         <Stack direction={isPc ? 'row' : 'column'} spacing={'0.5rem'}>
