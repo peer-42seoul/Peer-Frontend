@@ -7,7 +7,6 @@ import Interest from './Interest'
 import * as cardStyle from './HitchhikingCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
-import BetaBadge from '@/components/BetaBadge'
 import { IPostCardHitchhiking } from '@/types/IPostCard'
 
 const CardContainer = ({
@@ -39,7 +38,6 @@ const CardContainer = ({
         <Typography component={'h4'} sx={containerStyle.gnbTypographyStyle}>
           히치하이킹
         </Typography>
-        <BetaBadge />
       </Stack>
       <Stack
         sx={containerStyle.toggleContainerStyle}
