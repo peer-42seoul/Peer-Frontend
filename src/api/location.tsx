@@ -297,7 +297,7 @@ export const locationData: ILocation[] = [
     ],
   },
   {
-    name: '제주도',
+    name: '제주특별자치도',
     subArea: ['서귀포시', '제주시'],
   },
   {

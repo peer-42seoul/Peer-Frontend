@@ -1,6 +1,7 @@
 export interface IShowcaseTag {
   id: number
   name: string
+  color: string
 }
 
 export interface ICardData {

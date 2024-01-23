@@ -1,47 +1,44 @@
-import { SvgIcon } from '@mui/material'
+import { SvgIcon, createSvgIcon } from '@mui/material'
 
-const CalendarIcon = () => {
-  return (
-    <SvgIcon>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-      >
-        <path
-          d="M12.6667 2.67188H3.33333C2.59695 2.67188 2 3.26883 2 4.00521V13.3385C2 14.0749 2.59695 14.6719 3.33333 14.6719H12.6667C13.403 14.6719 14 14.0749 14 13.3385V4.00521C14 3.26883 13.403 2.67188 12.6667 2.67188Z"
-          stroke="#9B9B9B"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M10.6641 1.32812V3.99479"
-          stroke="#9B9B9B"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M5.33594 1.32812V3.99479"
-          stroke="#9B9B9B"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M2 6.67188H14"
-          stroke="#9B9B9B"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </SvgIcon>
-  )
-}
+const CalendarIcon = createSvgIcon(
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+  >
+    <path
+      d="M12.6667 2.67188H3.33333C2.59695 2.67188 2 3.26883 2 4.00521V13.3385C2 14.0749 2.59695 14.6719 3.33333 14.6719H12.6667C13.403 14.6719 14 14.0749 14 13.3385V4.00521C14 3.26883 13.403 2.67188 12.6667 2.67188Z"
+      stroke="#9B9B9B"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10.6641 1.32812V3.99479"
+      stroke="#9B9B9B"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5.33594 1.32812V3.99479"
+      stroke="#9B9B9B"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M2 6.67188H14"
+      stroke="#9B9B9B"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>,
+  'CalendarIcon',
+)
 
 const TagIcon = () => {
   return (

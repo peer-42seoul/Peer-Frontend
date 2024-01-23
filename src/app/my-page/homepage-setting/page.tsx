@@ -1,45 +1,18 @@
-'use client'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import NotifSetting from './panel/NotifSetting'
 import DisplaySetting from './panel/DisplaySetting'
 import KeywordSetting from './panel/KeywordSetting'
-import useToast from '@/hook/useToast'
-import { AlertColor } from '@mui/material/Alert'
 import { Stack } from '@mui/material'
 
-interface IToast {
-  severity: AlertColor | undefined
-  message: string
-}
-
 const HomepageSetting = () => {
-  const [toastMessage, setToastMessage] = useState({} as IToast)
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
-
-  useEffect(() => {
-    if (toastMessage.message) {
-      if (isOpen) closeToast()
-      openToast()
-    }
-  }, [toastMessage, openToast, isOpen, closeToast])
-
-  const clearToast = () => {
-    closeToast()
-    setToastMessage((prev) => ({ ...prev, message: '' }))
-  }
-
   return (
-    <Stack sx={{ whiteSpace: 'pre-line', wordBreak: 'keep-all' }} spacing={4}>
-      <NotifSetting setToastMessage={setToastMessage} />
-      <KeywordSetting setToastMessage={setToastMessage} />
+    <Stack
+      sx={{ whiteSpace: 'pre-line', wordBreak: 'keep-all' }}
+      spacing={['1.5rem', '2rem']}
+    >
+      <NotifSetting />
+      <KeywordSetting />
       <DisplaySetting />
-      <CuToast
-        severity={toastMessage.severity}
-        open={isOpen}
-        onClose={clearToast}
-      >
-        {toastMessage.message}
-      </CuToast>
     </Stack>
   )
 }

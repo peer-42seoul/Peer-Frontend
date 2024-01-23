@@ -1,29 +1,23 @@
 import React from 'react'
 import { IUserProfileLink } from '@/types/IUserProfile'
-import { AlertColor, Grid } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
-
-interface IToastProps {
-  severity?: AlertColor
-  message: string
-}
+import { Stack, Typography } from '@mui/material'
+import useMedia from '@/hook/useMedia'
+import * as style from './Profile.style'
+import useToast from '@/states/useToast'
 
 const ProfileLinkEditor = ({
   closeModal,
   links,
-  setToastMessage,
-  setToastOpen,
   mutate,
   open,
 }: {
   closeModal: () => void
   links?: Array<IUserProfileLink>
-  setToastMessage: (toastProps: IToastProps) => void
-  setToastOpen: (open: boolean) => void
   mutate: () => void
   open: boolean
 }) => {
@@ -35,12 +29,15 @@ const ProfileLinkEditor = ({
         linkUrl: link.linkUrl,
       }))
     : ([] as Array<IUserProfileLink>)
+  const { isPc } = useMedia()
+
+  const { openToast, closeToast } = useToast()
 
   const emptyLinksLength: number = 3 - (links ? links.length : 0)
 
   for (let i = 0; i < emptyLinksLength; i++)
     defaultValues.push({
-      id: links ? links.length + i + 1 : i,
+      id: -1 * (i + 1),
       linkName: '',
       linkUrl: '',
     })
@@ -52,10 +49,16 @@ const ProfileLinkEditor = ({
     control,
     setError,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<Array<IUserProfileLink>>({
     defaultValues: { ...defaultValues },
     mode: 'onChange',
   })
+
+  const handleCloseModal = () => {
+    reset(defaultValues)
+    closeModal()
+  }
 
   const onSubmit = async (data: Array<IUserProfileLink>) => {
     const requestBody: {
@@ -65,22 +68,12 @@ const ProfileLinkEditor = ({
     }
     for (let i = 0; i < 3; i++) {
       if (data[i].linkUrl && !data[i].linkName) {
-        // setToastMessage({
-        //   severity: 'error',
-        //   message: `${i + 1}번째 링크의 제목이 없습니다. 확인해주세요!`,
-        // })
-        // setToastOpen(true)
         setError(`${i}.linkName`, {
           type: 'required',
           message: '아래 링크에 제목이 없습니다.',
         })
         return
       } else if (data[i].linkName && !data[i].linkUrl) {
-        // setToastMessage({
-        //   severity: 'error',
-        //   message: `${data[i].linkName}의 링크 주소가 없습니다. 확인해주세요!`,
-        // })
-        // setToastOpen(true)
         setError(`${i}.linkUrl`, {
           type: 'required',
           message: '위 링크 제목에 링크가 없습니다.',
@@ -93,33 +86,40 @@ const ProfileLinkEditor = ({
       })
     }
     console.log('제출중!', isSubmitting)
+    closeToast()
     await axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/link`,
         requestBody,
       )
       .then(() => {
-        setToastMessage({
+        openToast({
           severity: 'success',
           message: '링크 변경에 성공하였습니다.',
         })
-        setToastOpen(true)
+        reset(defaultValues)
         closeModal()
         mutate()
       })
-      .catch(() => {
-        setToastMessage({
-          severity: 'error',
-          message: '링크 변경에 실패하였습니다.',
-        })
-        setToastOpen(true)
+      .catch((e) => {
+        if (e.response.status === 500) {
+          openToast({
+            severity: 'error',
+            message: '링크 변경에 실패하였습니다.',
+          })
+        } else {
+          openToast({
+            severity: 'error',
+            message: e.response.data.message,
+          })
+        }
       })
   }
 
   return (
     <CuModal
       open={open}
-      onClose={closeModal}
+      onClose={handleCloseModal}
       title="링크 수정"
       containedButton={{
         text: isSubmitting ? '제출 중' : '완료',
@@ -128,20 +128,25 @@ const ProfileLinkEditor = ({
       }}
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCloseModal,
       }}
+      mobileFullSize
     >
-      <form onSubmit={handleSubmit(onSubmit)} id={'profile-link-editor-form'}>
-        <Grid container rowSpacing={2}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        id={'profile-link-editor-form'}
+        style={isPc ? style.formPcStyle : style.formMobileStyle}
+      >
+        <Stack direction={'column'} spacing={'1rem'}>
           {defaultValues.map((link, i) => {
             return (
-              <Grid item container xs={12} key={link.id} rowSpacing={1}>
-                <Grid item xs={3}>
-                  <CuTextFieldLabel htmlFor={`${i}.linkName`}>
-                    제목
-                  </CuTextFieldLabel>
-                </Grid>
-                <Grid item xs={9}>
+              <Stack direction={'column'} spacing={'1rem'} key={link.id}>
+                <CuTextFieldLabel htmlFor={`${i}.linkName`}>
+                  <Typography variant="CaptionEmphasis">
+                    {`링크 ${i + 1}`}
+                  </Typography>
+                </CuTextFieldLabel>
+                <Stack direction={'column'} spacing={'0.5rem'}>
                   <Controller
                     render={({ field }) => (
                       <CuTextField
@@ -152,7 +157,12 @@ const ProfileLinkEditor = ({
                         error={errors[i]?.linkName ? true : false}
                         fullWidth
                         inputProps={{ maxLength: 20 }}
-                        helperText={errors[i]?.linkName?.message}
+                        helperText={
+                          <Typography variant="Caption" color="red.strong">
+                            {errors[i]?.linkName?.message}
+                          </Typography>
+                        }
+                        placeholder="링크 제목을 입력해주세요."
                       />
                     )}
                     name={`${i}.linkName`}
@@ -165,42 +175,38 @@ const ProfileLinkEditor = ({
                       },
                     }}
                   />
-                </Grid>
-                <Grid item container xs={12}>
-                  <Grid item xs={3}>
-                    <CuTextFieldLabel htmlFor={`${i}.linkUrl`}>
-                      링크
-                    </CuTextFieldLabel>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Controller
-                      render={({ field }) => (
-                        <CuTextField
-                          variant="outlined"
-                          id={`${i}.linkUrl`}
-                          {...field}
-                          autoComplete="off"
-                          error={errors[i]?.linkUrl ? true : false}
-                          fullWidth
-                          helperText={errors[i]?.linkUrl?.message}
-                          inputProps={{ maxLength: 300 }}
-                        />
-                      )}
-                      name={`${i}.linkUrl`}
-                      control={control}
-                      rules={{
-                        maxLength: {
-                          value: 300,
-                          message: '링크는 최대 300글자까지만 적용 가능합니다.',
-                        },
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
+                  <Controller
+                    render={({ field }) => (
+                      <CuTextField
+                        variant="outlined"
+                        id={`${i}.linkUrl`}
+                        {...field}
+                        autoComplete="off"
+                        error={errors[i]?.linkUrl ? true : false}
+                        fullWidth
+                        helperText={
+                          <Typography variant="Caption" color="red.strong">
+                            {errors[i]?.linkUrl?.message}
+                          </Typography>
+                        }
+                        inputProps={{ maxLength: 300 }}
+                        placeholder="링크 주소(URL)를 입력해주세요."
+                      />
+                    )}
+                    name={`${i}.linkUrl`}
+                    control={control}
+                    rules={{
+                      maxLength: {
+                        value: 300,
+                        message: '링크는 최대 300글자까지만 적용 가능합니다.',
+                      },
+                    }}
+                  />
+                </Stack>
+              </Stack>
             )
           })}
-        </Grid>
+        </Stack>
       </form>
     </CuModal>
   )

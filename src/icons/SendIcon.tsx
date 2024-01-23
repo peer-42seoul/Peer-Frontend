@@ -1,3 +1,4 @@
+'use client'
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
 const SendIcon = (props: SvgIconProps) => {
@@ -12,14 +13,14 @@ const SendIcon = (props: SvgIconProps) => {
       >
         <path
           d="M18.3346 1.66406L9.16797 10.8307"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="1.25"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
           d="M18.3346 1.66406L12.5013 18.3307L9.16797 10.8307L1.66797 7.4974L18.3346 1.66406Z"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="1.25"
           strokeLinecap="round"
           strokeLinejoin="round"

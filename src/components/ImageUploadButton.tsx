@@ -1,5 +1,6 @@
 import { Button } from '@mui/material'
 import React from 'react'
+import { UseFormRegisterReturn } from 'react-hook-form'
 // import { UseFormRegisterReturn } from 'react-hook-form'
 
 // setImage를 react-hook-form의 setValue 사용시 setImage를 다음과 같이 넣어주세요
@@ -42,7 +43,7 @@ const ImageUploadButton = ({
   setImage?: (image: File[]) => void
   setPreviewImage: (imageUrl: string) => void
   onChange?: () => void
-  register?: any
+  register?: UseFormRegisterReturn
 }) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]

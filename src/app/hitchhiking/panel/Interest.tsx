@@ -3,10 +3,16 @@ import React, { useEffect, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import Favorite from '@mui/icons-material/Favorite'
 import { motion, useAnimationControls } from 'framer-motion'
+import useToast from '@/states/useToast'
+import * as style from './Interest.style'
 
 const Interest = ({ id }: { id?: number }) => {
   const [favorite, setFavorite] = useState(false)
+
+  const { openToast, closeToast } = useToast()
+
   const axiosInstance = useAxiosWithAuth()
+
   const control = useAnimationControls()
 
   const variants = {
@@ -20,6 +26,7 @@ const Interest = ({ id }: { id?: number }) => {
 
   const changeFavorite = async () => {
     if (!id) return
+    closeToast()
     try {
       await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${id}`,
@@ -30,7 +37,10 @@ const Interest = ({ id }: { id?: number }) => {
         return !prev
       })
     } catch (e) {
-      console.log('error', e)
+      openToast({
+        severity: 'error',
+        message: '로그인이 필요한 서비스입니다.',
+      })
     }
   }
 
@@ -44,19 +54,13 @@ const Interest = ({ id }: { id?: number }) => {
       justifyContent={'center'}
       alignItems={'center'}
       spacing={1}
+      sx={{ p: '1rem 0 1.5rem 0', width: '100%' }}
     >
       <IconButton
         aria-label="add to favorites"
         onClick={changeFavorite}
         disableRipple
-        sx={{
-          backgroundColor: 'background.tertiary',
-          borderRadius: '20px',
-          padding: '8px',
-          width: '40px',
-          height: '40px',
-          position: 'relative',
-        }}
+        sx={style.iconButtonStyle}
       >
         <motion.div
           animate={control}
@@ -68,12 +72,8 @@ const Interest = ({ id }: { id?: number }) => {
         >
           <Favorite
             sx={{
+              ...style.iconStyleBase,
               color: favorite ? 'purple.strong' : 'purple.tinted',
-              transition: 'color 0.1s linear',
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
             }}
           />
         </motion.div>

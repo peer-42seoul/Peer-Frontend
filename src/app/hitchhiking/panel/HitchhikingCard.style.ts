@@ -1,11 +1,17 @@
 import { SxProps } from '@mui/material'
 
-const cardStyle: SxProps = {
-  backgroundColor: 'background.primary',
-  width: ['90vw', '20.5rem'], // xs이 모바일, sm이 pc이므로 가능한 방식인데, theme이 적용이 안된 상태여서 고민이 다시 필요함
-  height: '27rem',
+export const cardSize: SxProps = {
+  boxSizing: 'border-box',
+  maxHeight: '441px',
   maxWidth: '20.5rem',
   borderRadius: '0.75rem',
+  width: ['90vw', 'calc(80svh * 328 /800)'],
+  height: ['calc(90vw * 441 / 328)', 'calc(80svh * 441 /800)'],
+}
+
+export const cardStyleBase: SxProps = {
+  ...cardSize,
+  backgroundColor: 'background.primary',
   borderWidth: '2px',
   borderColor: 'line.base',
   borderStyle: 'solid',
@@ -14,4 +20,48 @@ const cardStyle: SxProps = {
   left: '50%',
 }
 
-export { cardStyle }
+export const cardTitleStyleBase: SxProps = {
+  width: '100%',
+  overflow: 'hidden',
+  lineHeight: '22.5px',
+  textOverflow: 'ellipsis',
+  display: '-webkit-box',
+  WebkitBoxOrient: 'vertical',
+}
+
+export const cardChipStyleBase: SxProps = {
+  padding: '0 6px',
+  backgroundColor: 'background.tertiary',
+  borderRadius: '2px',
+  height: 'calc(90vw * 24 / 328)',
+  maxHeight: '1.5rem',
+  '& .MuiChip-label': {
+    padding: '0px',
+  },
+}
+
+export const cardHeaderStyleBase: SxProps = {
+  height: '2.5rem',
+  width: '100%',
+}
+
+export const cardContentStyleBase: SxProps = {
+  width: '100%',
+  overflow: 'hidden',
+  maxHeight: '11.25rem',
+  lineHeight: '1.125rem',
+  textOverflow: 'ellipsis',
+  WebkitBoxOrient: 'vertical',
+  display: '-webkit-box',
+  flex: '1 0 auto',
+}
+
+export const cardMoreButtonStyle: SxProps = {
+  position: 'absolute',
+  top: 0,
+  left: '50%',
+  transform: 'translateX(-50%)',
+  marginBottom: '0.75rem',
+  padding: '0.75rem 1rem',
+  height: '2.25rem',
+}

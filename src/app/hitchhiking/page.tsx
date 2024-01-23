@@ -1,27 +1,45 @@
 'use client'
-import { defaultGetFetcher } from '@/api/fetchers'
-import { IMainCard } from '@/types/IPostDetail'
-import { FormControlLabel, Stack, Typography } from '@mui/material'
+import { IPostCardHitchhiking } from '@/types/IPostCard'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
-import CardContainer from './panel/CardContainer'
-import CuToggle from '@/components/CuToggle'
 import useMedia from '@/hook/useMedia'
-import Interest from './panel/Interest'
+import { Box, IconButton, Stack } from '@mui/material'
+import CardContainer from './panel/CardContainer'
+import ArrowUp from '@/icons/ArrowUp'
+// import CuButton from '@/components/CuButton'
+import * as style from './hitchhiking.style'
+import ArrowDown from '@/icons/ArrowDown'
+import useAxiosWithAuth from '@/api/config'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(false)
-  const [cardList, setCardList] = useState<Array<IMainCard>>([])
+  const [cardList, setCardList] = useState<Array<IPostCardHitchhiking>>([])
+  const [draggedCardList, setDraggedCardList] = useState<
+    IPostCardHitchhiking[]
+  >([])
+
+  const axiosWithAuth = useAxiosWithAuth()
 
   const { isPc } = useMedia()
-  const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
+  const { data, isLoading, error } = useSWR<
+    IPagination<Array<IPostCardHitchhiking>>
+  >(
+    `${
+      process.env.NEXT_PUBLIC_API_URL
+    }/api/v1/hitch?page=${page}&pageSize=5&type=${
       isProject ? 'PROJECT' : 'STUDY'
-    }&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
-    defaultGetFetcher,
+    }`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
+
+  const handleChange = () => {
+    setCardList([])
+    setDraggedCardList([])
+    setPage(1)
+    setIsProject((prev) => !prev)
+  }
 
   useEffect(() => {
     if (!isLoading && data?.content) {
@@ -32,52 +50,94 @@ const Hitchhiking = () => {
     }
   }, [isLoading, data?.content])
 
+  const removeCard = (recruitId: number) => {
+    setDraggedCardList((prev: IPostCardHitchhiking[]) => {
+      prev.push(cardList[cardList.length - 1])
+      return prev
+    })
+    setCardList((prev: IPostCardHitchhiking[]) => {
+      return prev.filter((card) => card.recruitId !== recruitId)
+    })
+    if (cardList.length === 2) {
+      setPage((prev) => (!data?.last ? prev + 1 : prev))
+    }
+  }
+
+  const addCard = () => {
+    setCardList((prev: IPostCardHitchhiking[]) => {
+      prev.push(draggedCardList[draggedCardList.length - 1])
+      return prev
+    })
+    setDraggedCardList((prev: IPostCardHitchhiking[]) => {
+      return prev.filter(
+        (card) =>
+          card.recruitId !==
+          draggedCardList[draggedCardList.length - 1].recruitId,
+      )
+    })
+  }
+
   let message: string = ''
 
-  if (isLoading && !cardList.length) message = '로딩중'
+  if (!isLoading && !cardList.length) message = '히치하이킹 끝!'
+  else if (isLoading && !cardList.length) message = '로딩중'
   else if (error) message = '에러 발생'
 
-  return (
-    <Stack
-      justifyContent={'space-between'}
-      alignItems={'center'}
-      sx={{ width: '100%', height: '80svh', overflow: 'hidden' }}
-      direction={'column'}
-    >
-      <FormControlLabel
-        control={
-          <CuToggle
-            checked={isProject}
-            onChange={() => setIsProject((prev) => !prev)}
-          />
-        }
-        label="Label"
-      />
+  if (isPc) {
+    return (
       <Stack
+        direction={'row'}
         justifyContent={'center'}
-        alignItems={'center'}
-        sx={{
-          width: isPc ? '20.5rem' : '93vw',
-          height: '27rem',
-          maxWidth: '20.5rem',
-          position: 'relative',
-        }}
+        alignItems={'end'}
+        spacing={'1.5rem'}
       >
-        {!message ? (
+        <Box sx={style.buttonContainerStyle}></Box>
+        <Box sx={style.phoneStyle}>
+          <Box sx={style.phoneStatusBarStyle} />
           <CardContainer
             cardList={cardList}
-            update={() => setPage((prev) => (!data?.last ? prev + 1 : prev))}
-            setCardList={setCardList}
+            removeCard={removeCard}
             isProject={isProject}
+            message={message}
+            handleChange={handleChange}
           />
-        ) : (
-          <Typography>{message}</Typography>
-        )}
+        </Box>
+        <Stack
+          sx={style.buttonContainerStyle}
+          direction={'column'}
+          justifyContent={'flex-end'}
+          spacing={'1rem'}
+        >
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={addCard}
+            disabled={draggedCardList.length === 0}
+          >
+            <ArrowUp
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={() => removeCard(cardList[cardList.length - 1]?.recruitId)}
+            disabled={cardList.length === 0}
+          >
+            <ArrowDown
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
+        </Stack>
       </Stack>
-      {/* {cardList.length && ( */}
-      <Interest id={cardList[cardList.length - 1]?.recruit_id} />
-      {/* )} */}
-    </Stack>
+    )
+  }
+  return (
+    <CardContainer
+      cardList={cardList}
+      removeCard={removeCard}
+      isProject={isProject}
+      message={message}
+      handleChange={handleChange}
+    />
   )
 }
 

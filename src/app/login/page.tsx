@@ -220,9 +220,12 @@ const Login = () => {
         </Box>
       </BoxBase>
 
-      <CuToast open={isOpen} onClose={closeToast} severity="error">
-        <Typography>{errorMessage}</Typography>
-      </CuToast>
+      <CuToast
+        open={isOpen}
+        message={errorMessage}
+        onClose={closeToast}
+        severity="error"
+      />
     </>
   )
 }

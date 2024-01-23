@@ -3,14 +3,13 @@ import {
   Box,
   Button,
   Card,
-  FormControl,
   // FormControl,
   Grid,
   Modal,
-  NativeSelect,
   // NativeSelect,
   Stack,
   Switch,
+  Theme,
   Typography,
 } from '@mui/material'
 import { IMember, Job, TeamGrant } from '../../../types/types'
@@ -20,52 +19,51 @@ import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
 import { comfirmModalStyle } from './styles'
-
-const mockJobsData: Job[] = [
-  {
-    id: 1,
-    name: '프론트엔드',
-    current: 3,
-    max: 5,
-  },
-  {
-    id: 2,
-    name: '백엔드',
-    current: 2,
-    max: 5,
-  },
-  {
-    id: 3,
-    name: '디자인',
-    current: 1,
-    max: 5,
-  },
-  {
-    id: 4,
-    name: '기획',
-    current: 1,
-    max: 5,
-  },
-]
+import { IMyInfo } from '../page'
+import CloseButton from '@/components/CloseButton'
 
 interface ISetupMember {
   team: IMember[]
   teamId: string
-  jobs?: Job[]
+  jobs: Job[]
+  myInfo?: IMyInfo
 }
 
-const SetupMember = ({ team, teamId }: ISetupMember) => {
+// interface ICurrentJobCard {
+//   job: Job
+//   deleteJob: () => void
+// }
+
+// const CurrentJobCard = ({ job, deleteJob }: ICurrentJobCard) => {
+//   return (
+//     <Card
+//       sx={{
+//         p: '0.25rem',
+//         width: 'fit-content',
+//         backgroundColor: 'background.tertiary',
+//         borderRadius: '1rem',
+//       }}
+//     >
+//       <Stack alignItems={'center'} direction={'row'}>
+//         <Typography>{job.name}</Typography>
+//         <Button onClick={deleteJob}>X</Button>
+//       </Stack>
+//     </Card>
+//   )
+// }
+
+const SetupMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
-  const {
-    isOpen: isChangeOpen,
-    closeModal: closeChangeModal,
-    openModal: openChangeModal,
-  } = useModal()
+  // const {
+  //   isOpen: isChangeOpen,
+  //   closeModal: closeChangeModal,
+  //   openModal: openChangeModal,
+  // } = useModal()
   const [members, setMembers] = useState<IMember[]>(team)
-  const [member, setMember] = useState<IMember | null>(null)
-  const [job, setJob] = useState<Job[]>(mockJobsData)
-  const [selectedJobs, setSelectedJobs] = useState<Job[]>([])
+  const [member, setMember] = useState<IMember>()
+  const [job, setJob] = useState<Job[]>(jobs)
+  // const [selectedJobs, setSelectedJobs] = useState<Job[]>([])
   const axiosWithAuth = useAxiosWithAuth()
 
   // const changeJob = () => {
@@ -76,15 +74,18 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
   // }
 
   useEffect(() => {
-    setJob(mockJobsData)
+    setJob(jobs)
+    console.log(job)
+    console.log(myInfo)
+    console.log(member?.id)
     // if (selectedJobs.length > 0) {
     //   changeJob()
     // }
-  }, [selectedJobs])
+  }, [setJob, jobs, myInfo])
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
-    if (member.grant === TeamGrant.LEADER) {
+    if (member.role === TeamGrant.LEADER) {
       axiosWithAuth
         .post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
@@ -151,110 +152,142 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
       })
   }
 
-  const handleChangeModal = (selectedMember: IMember) => {
-    console.log('팀원 역할 변경 모달 오픈', selectedMember)
-    setMember(selectedMember)
-    openChangeModal()
-  }
+  // const handleChangeModal = (selectedMember: IMember) => {
+  //   setMember(selectedMember)
+  //   const selectedJobs = job.filter((jobItem) =>
+  //     selectedMember.job.includes(jobItem.name),
+  //   )
+  //   setSelectedJobs(selectedJobs)
+  //   openChangeModal()
+  // }
 
-  const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedJobId = e.target.value as number
+  // const handleChangeJob = (e: React.ChangeEvent<{ value: unknown }>) => {
+  //   const selectedJobId = e.target.value as string
 
-    // mockJobsData에서 선택한 직무 ID에 해당하는 직무 객체를 찾습니다.
-    const selectedJob = job.find((job) => job.id === selectedJobId)
+  //   const selectJob = job.find((job) => job.name === selectedJobId)
 
-    if (selectedJob) {
-      // 찾은 직무 객체로 상태를 업데이트합니다.
-      setSelectedJobs([...selectedJobs, selectedJob])
-    } else {
-      console.log('선택한 역할을 찾을 수 없습니다.')
-    }
-  }
+  //   if (selectedJobs.includes(selectJob as Job)) {
+  //     // TODO: 토스트 알림으로 변경
+  //     console.log('이미 선택한 역할입니다.')
+  //     return
+  //   }
+
+  //   if (selectJob) {
+  //     setSelectedJobs([...selectedJobs, selectJob])
+  //   } else {
+  //     // TODO: 토스트 알림으로 변경
+  //     console.log('선택한 역할을 찾을 수 없습니다.')
+  //   }
+  // }
+
+  // const handleDeleteButton = (job: Job) => {
+  //   if (selectedJobs.length === 1) {
+  //     //TODO: 토스트 알림으로 변경
+  //     console.log('최소 한 개의 역할이 필요합니다.')
+  //     return
+  //   }
+  //   setSelectedJobs(selectedJobs.filter((selectedJob) => selectedJob !== job))
+  // }
 
   return (
     <>
-      <Grid container spacing={'1rem'} m={'0.5rem'} overflow={'hidden'}>
-        {members.map((member, index) => (
-          <Grid
-            component="div"
-            key={index}
-            item
-            xs={isPc ? 2 : 6}
-            textAlign="center"
-          >
-            <Box component="div" p={1} sx={{ position: 'relative' }}>
-              <Button
-                size="small"
+      <Stack height={'16rem'} overflow={'auto'}>
+        <Grid container spacing={'1rem'} height={'16rem'}>
+          {members.map((member, index) => (
+            <Grid
+              component="div"
+              key={index}
+              item
+              xs={isPc ? 3 : 6}
+              textAlign="center"
+            >
+              <Box
+                component="div"
+                p={'1rem'}
                 sx={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  padding: 0,
-                  minWidth: 0.2,
+                  position: 'relative',
+                  backgroundColor: (theme: Theme) =>
+                    theme.palette.background.tertiary,
                 }}
-                onClick={() => handleOpenDelete(member)}
+                borderRadius={'0.5rem'}
               >
-                X
-              </Button>
-              <OthersProfile name={member.name} userId={member.id}>
-                <Avatar sx={{ margin: 'auto' }}>A</Avatar>
-              </OthersProfile>
-              <Typography fontWeight="bold">{member.name}</Typography>
-              <Stack direction="row" sx={{ justifyContent: 'center' }}>
-                <Typography fontSize="small">리더 권한</Typography>
-                <Switch
-                  size="small"
-                  onChange={() => handleGrant(member)}
-                  checked={member.grant === TeamGrant.LEADER ? true : false}
-                />
-              </Stack>
-              {/* 역할이 있을 때만 버튼이 보이게끔 */}
-              {member.job && (
-                <Button
-                  variant="contained"
-                  onClick={() => handleChangeModal(member)}
-                >
-                  <Typography fontSize="small">역할 변경</Typography>
-                </Button>
-              )}
-            </Box>
-          </Grid>
-        ))}
-      </Grid>
+                {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
+                {myInfo && member.id.toString() !== myInfo.userId && (
+                  <CloseButton
+                    action={() => handleOpenDelete(member)}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      padding: 0,
+                      minWidth: 0.2,
+                    }}
+                  />
+                )}
+                <OthersProfile name={member.name} userId={member.id}>
+                  <Avatar sx={{ margin: 'auto' }}>A</Avatar>
+                </OthersProfile>
+                <Typography fontWeight="bold">{member.name}</Typography>
+                <Stack direction="row" sx={{ justifyContent: 'center' }}>
+                  <Typography variant="Body2">리더 권한</Typography>
+                  <Switch
+                    size="small"
+                    onChange={() => handleGrant(member)}
+                    checked={member.role === TeamGrant.LEADER ? true : false}
+                  />
+                </Stack>
+                {/* 역할이 있을 때만 버튼이 보이게끔 */}
+                {/* {member.job && (
+                  <Button
+                    variant="contained"
+                    onClick={() => handleChangeModal(member)}
+                  >
+                    <Typography fontSize="small">역할 변경</Typography>
+                  </Button>
+                )} */}
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+      </Stack>
 
-      <Modal open={isChangeOpen} onClose={handleChangeModal}>
+      {/* <Modal open={isChangeOpen} onClose={closeChangeModal}>
         <Box sx={comfirmModalStyle}>
           <Stack>
-            <Typography>역할 변경</Typography>
+            <Typography fontWeight={'bold'} fontSize={'large'}>
+              역할 변경
+            </Typography>
           </Stack>
           <Stack padding={'1rem'}>
             <Typography>팀원이 변경할 역할을 선택해주세요.</Typography>
-            <Stack direction={'row'} padding={1}>
+            <Stack my={'1rem'}>
               <Typography>현재 역할</Typography>
-              {/* {member?.job.map((job, index) => (
-                <Typography key={index}>{job.name}</Typography>
-              ))} */}
+
+              <Stack direction={'row'} spacing={'0.25rem'} minWidth={'10rem'}>
+                {selectedJobs.map((job) => (
+                  <CurrentJobCard
+                    key={job.name}
+                    job={job}
+                    deleteJob={() => handleDeleteButton(job)}
+                  />
+                ))}
+              </Stack>
             </Stack>
             <Stack alignItems={'center'} padding={1}>
               <Card sx={{ width: 'fit-content' }}>
                 <FormControl>
                   <NativeSelect
-                    value={member?.job}
+                    value={selectedJobs[0]?.name}
                     onChange={handleChangeJob}
                     inputProps={{ 'aria-label': 'role' }}
                   >
                     {job.map((job, index) => (
-                      <option key={index} value={job.id}>
+                      <option key={index} value={job.name}>
                         {job.name}
                       </option>
                     ))}
                   </NativeSelect>
                 </FormControl>
-                <Stack direction={'row'} justifyContent={'space-between'}>
-                  {selectedJobs.map((job, index) => (
-                    <Typography key={index}>{job.name}</Typography>
-                  ))}
-                </Stack>
               </Card>
 
               <Stack direction={'row'}>
@@ -264,9 +297,9 @@ const SetupMember = ({ team, teamId }: ISetupMember) => {
             </Stack>
           </Stack>
         </Box>
-      </Modal>
+      </Modal> */}
 
-      <Modal open={isOpen} onClose={closeChangeModal}>
+      <Modal open={isOpen} onClose={closeModal}>
         <Box sx={comfirmModalStyle}>
           <Card>
             <Typography>정말 팀원을 내보내시겠습니까?</Typography>
