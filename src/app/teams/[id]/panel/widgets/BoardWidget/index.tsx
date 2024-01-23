@@ -139,7 +139,14 @@ const BoardWidgetSingle = ({ postId }: IBoardWidgetRenderProps) => {
   if (isLoading) return <CuCircularProgress color={'secondary'} />
   if (!data || error)
     return <StatusMessage message="글을 불러오는 중 문제가 발생했습니다." />
-  return <div>{data?.title}</div>
+  return (
+    <BoardWidgetItem
+      title={data.title}
+      authorNickname={data.authorNickname}
+      createdAt={data.createdAt}
+      content={data.content}
+    />
+  )
 }
 
 const StatusMessage = ({ message }: { message: string }) => {
