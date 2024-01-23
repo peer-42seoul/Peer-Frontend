@@ -106,20 +106,20 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
     if (watchAllFields) setIsEdit(true)
   }, [watchAllFields])
 
-  useEffect(() => {
-    window.history.pushState(null, '', location.href)
+  // useEffect(() => {
+  //   window.history.pushState(null, '', location.href)
 
-    console.log('status', team.status)
+  //   console.log('status', team.status)
 
-    window.onpopstate = () => {
-      if (isEdit === true) {
-        console.log("You can't go back")
-        history.go(1)
+  //   window.onpopstate = () => {
+  //     if (isEdit === true) {
+  //       console.log("You can't go back")
+  //       history.go(1)
 
-        alert('팀 정보 수정을 완료해주세요.')
-      }
-    }
-  }, [isEdit])
+  //       alert('팀 정보 수정을 완료해주세요.')
+  //     }
+  //   }
+  // }, [isEdit])
 
   return (
     <>
