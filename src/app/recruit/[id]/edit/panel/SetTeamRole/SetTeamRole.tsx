@@ -1,5 +1,3 @@
-'use client'
-
 import { Box, Button, FormControl, Stack, TextField } from '@mui/material'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import BasicSelectMember from './BasicSelectMember'
