@@ -54,7 +54,7 @@ export interface IDetailOption {
   tag: string
 }
 
-export const socket = io('ws://back.peer-test.co.kr:8081', {
+export const socket = io('ws://back.peer-test.co.kr:8084', {
   transports: ['socket.io', 'polling'],
   query: {
     token: getCookie('accessToken') ? getCookie('accessToken') : '',
