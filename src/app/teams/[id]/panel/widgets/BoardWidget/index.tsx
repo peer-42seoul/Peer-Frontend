@@ -1,6 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
+import dayjs from 'dayjs'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import CuCircularProgress from '@/components/CuCircularProgress'
@@ -26,25 +27,23 @@ interface IBoardWidgetContainerProps {
   children: React.ReactNode
 }
 
+interface IBoardWidgetItemProps {
+  title: string
+  authorNickname: string
+  createdAt: Date
+  content?: string
+}
+
 const BoardWidget = ({ size }: { size: SizeType }) => {
   const { isOpen, openModal, closeModal } = useModal()
   const { isPc } = useMedia()
   const { id } = useParams()
-
   const axiosWithAuth = useAxiosWithAuth()
-  const mockData: ITeamNotice[] = [
-    {
-      postId: 1,
-      title:
-        '11월 첫째주 주간회의 기록입니다. 11월 첫째주 주간회의 기록입니다.',
-      authorNickname: '김팀장',
-      createdAt: new Date(),
-    },
-  ]
   const { data, isLoading, error } = useSWR(
     `/api/v1/team/notice/${id}?pageSize=${8}page=${1}keyword=`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
+
   if (isLoading)
     return (
       <BoardWidgetContainer openModal={openModal} isPc={isPc}>
@@ -103,7 +102,9 @@ const BoardWidgetList = ({ isPc, listData }: IBoardWidgetRenderProps) => {
   // size l
   return (
     <Stack spacing={isPc ? '1rem' : '0,5rem'}>
-      {listData?.map((item) => <div key={item.postId}>{item.title}</div>)}
+      {listData
+        ?.slice(0, 4)
+        .map((item) => <BoardWidgetItem key={item.postId} {...item} />)}
     </Stack>
   )
 }
@@ -126,6 +127,38 @@ const StatusMessage = ({ message }: { message: string }) => {
     <Typography variant={'Body2'} color={'text.alternative'}>
       {message}
     </Typography>
+  )
+}
+
+const BoardWidgetItem = ({
+  title,
+  authorNickname,
+  content,
+  createdAt,
+}: IBoardWidgetItemProps) => {
+  return (
+    <Stack spacing={'0.25rem'}>
+      <Typography variant={'Body1'} color={'text.normal'}>
+        {title}
+      </Typography>
+      {content && (
+        <Typography
+          variant={'Body2'}
+          color={'text.alternative'}
+          sx={{ marginBottom: '0.75rem' }}
+        >
+          {content}
+        </Typography>
+      )}
+      <Stack direction={'row'} spacing={'0.5rem'}>
+        <Typography variant={'Body2'} color={'text.alternative'}>
+          {authorNickname}
+        </Typography>
+        <Typography variant={'Body2'} color={'text.alternative'}>
+          {dayjs(createdAt).format('MM월 DD일')}
+        </Typography>
+      </Stack>
+    </Stack>
   )
 }
 
