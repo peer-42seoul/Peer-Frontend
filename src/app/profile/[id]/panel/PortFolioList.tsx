@@ -9,7 +9,7 @@ import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import { Box, CircularProgress, Typography } from '@mui/material'
 
-const PortFolioList = ({ userId }: { userId: string }) => {
+const PortfolioList = ({ userId }: { userId: string }) => {
   const [page, setPage] = useState<number>(1)
   const [postList, setPostList] = useState<Array<IMainCard>>([])
   const [pageLimit, setPageLimit] = useState(1)
@@ -70,4 +70,4 @@ const PortFolioList = ({ userId }: { userId: string }) => {
   )
 }
 
-export default PortFolioList
+export default PortfolioList
