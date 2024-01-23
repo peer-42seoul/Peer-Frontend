@@ -24,33 +24,6 @@ interface IMyPortfolio {
   isEnd: boolean // 추가 요청 가능 여부를 전달한다.
 }
 
-// const mockData: IMyPortfolio[] = [
-//   {
-//     teamId: 1,
-//     tagList: [
-//       { tagId: 101, name: 'React', color: '#61dafb' },
-//       { tagId: 102, name: 'JavaScript', color: '#f0db4f' },
-//     ],
-//     teamName: 'Tech Wizards',
-//     teamLogo: 'tech_wizards_logo.png',
-//     recruitImage: 'recruit_event_image.jpg',
-//     redirectionIds: [78, null, null],
-//     isEnd: false,
-//   },
-//   {
-//     teamId: 2,
-//     tagList: [
-//       { tagId: 103, name: 'Vue.js', color: '#42b883' },
-//       { tagId: 104, name: 'HTML', color: '#e44d26' },
-//     ],
-//     teamName: 'Code Masters',
-//     teamLogo: 'code_masters_logo.png',
-//     recruitImage: 'recruit_event_image_2.jpg',
-//     redirectionIds: [0, null, null],
-//     isEnd: true,
-//   },
-// ]
-
 const MyPortfolio = () => {
   const [isVisible, setIsVisible] = useState<boolean>(true)
 
@@ -73,7 +46,8 @@ const MyPortfolio = () => {
     if (data) {
       // COMMENT : 임시 해결책. useSWR 도큐먼트 뒤적거리기
       setPostList((prev) => getUniqueArray(prev.concat(data), 'teamId'))
-      if (!data[data.length - 1]?.isEnd) {
+      console.log(data)
+      if (data.length && !data[data.length - 1]?.isEnd) {
         setPageLimit((prev) => prev + 1)
       }
     }
