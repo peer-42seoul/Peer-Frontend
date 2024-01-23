@@ -40,7 +40,7 @@ const ImageUploadButton = ({
   children?: React.ReactNode
   accept?: string
   id?: string
-  setImage: (image: File[]) => void
+  setImage?: (image: File[]) => void
   setPreviewImage: (imageUrl: string) => void
   onChange?: () => void
   register?: UseFormRegisterReturn
@@ -56,7 +56,9 @@ const ImageUploadButton = ({
 
     if (e.target.files && e.target.files?.length && e.target.files[0]) {
       const reader = new FileReader()
-      setImage([e.target.files[0]])
+      if (setImage) {
+        setImage([e.target.files[0]])
+      }
       reader.onload = (e) => {
         setPreviewImage(e.target?.result as string)
         onChange && onChange()

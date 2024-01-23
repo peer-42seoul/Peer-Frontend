@@ -21,7 +21,6 @@ const FormUIEditor = ({
   previewStyle = 'vertical',
   height = '30rem',
 }: FormUIEditorProps) => {
-  console.log(`initialValue: ${content}`)
   const { setContent } = useShowCaseState()
   const themed = useTheme()
   const editorRef = useRef<HTMLDivElement>(null)

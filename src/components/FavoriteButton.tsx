@@ -16,7 +16,7 @@ const FavoriteButton = ({
   favorite: boolean | undefined
   recruit_id: number
   redirect_url: string
-  onFavorite?: () => void
+  onFavorite?: () => void // 기존의 로직과 다른 것을 원할 때 사용
 }) => {
   const [isFavorite, setIsFavorite] = useState(favorite)
   const { isLogin } = useAuthStore()
@@ -27,13 +27,13 @@ const FavoriteButton = ({
     if (!isLogin) return router.push('/login?redirect=' + redirect_url)
     try {
       setIsFavorite(!isFavorite)
-      await axiosInstance
-        .post(
+      if (onFavorite) {
+        onFavorite()
+      } else {
+        await axiosInstance.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
         )
-        .then(() => {
-          if (onFavorite) onFavorite()
-        })
+      }
     } catch (e) {
       console.log('error', e)
       setIsFavorite(!isFavorite)
