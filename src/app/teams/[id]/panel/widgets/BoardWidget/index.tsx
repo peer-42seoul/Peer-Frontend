@@ -15,12 +15,12 @@ import PreviewModal from './PreviewModal'
 import WidgetCard from '../WidgetCard'
 import * as style from './index.style'
 
-interface IBoardWidgetRenderProps {
-  isPc?: boolean
-  teamId?: string | string[]
-  postId?: number
-  listData?: ITeamNotice[]
-}
+type TBoardWidgetRenderProps = Partial<{
+  isPc: boolean
+  teamId: string | string[]
+  postId: number
+  listData: ITeamNotice[]
+}>
 
 interface IBoardWidgetContainerProps {
   modalData?: ITeamNotice[]
@@ -109,7 +109,7 @@ const BoardWidgetContainer = ({
   )
 }
 
-const BoardWidgetList = ({ isPc, listData }: IBoardWidgetRenderProps) => {
+const BoardWidgetList = ({ isPc, listData }: TBoardWidgetRenderProps) => {
   // size l
   return (
     <Stack spacing={isPc ? '1rem' : '0,5rem'}>
@@ -127,7 +127,7 @@ const BoardWidgetList = ({ isPc, listData }: IBoardWidgetRenderProps) => {
   )
 }
 
-const BoardWidgetSingle = ({ postId }: IBoardWidgetRenderProps) => {
+const BoardWidgetSingle = ({ postId }: TBoardWidgetRenderProps) => {
   // size m
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
