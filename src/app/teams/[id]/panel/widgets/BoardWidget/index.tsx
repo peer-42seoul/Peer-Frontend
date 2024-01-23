@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import { Stack, Typography } from '@mui/material'
 import useModal from '@/hook/useModal'
 import useMedia from '@/hook/useMedia'
 import { NoticeIcon } from '@/icons/TeamPage'
@@ -12,7 +13,7 @@ import { SizeType } from '@/types/ITeamDnDLayout'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
 import WidgetCard from '../WidgetCard'
 import * as style from './index.style'
-import { Stack, Typography } from '@mui/material'
+import PreviewModal from './PreviewModal'
 
 interface IBoardWidgetRenderProps {
   isPc?: boolean
@@ -72,7 +73,7 @@ const BoardWidget = ({ size }: { size: SizeType }) => {
           <BoardWidgetSingle postId={data.content[0].postId} />
         )}
       </BoardWidgetContainer>
-      {/* 모달 */}
+      <PreviewModal open={isOpen} onClose={closeModal} data={data.content} />
     </>
   )
 }
