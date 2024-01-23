@@ -1,6 +1,5 @@
 'use client'
-import { defaultGetFetcher } from '@/api/fetchers'
-import { IMainCard } from '@/types/IPostDetail'
+import { IPostCardHitchhiking } from '@/types/IPostCard'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { IPagination } from '@/types/IPagination'
@@ -11,19 +10,28 @@ import ArrowUp from '@/icons/ArrowUp'
 // import CuButton from '@/components/CuButton'
 import * as style from './hitchhiking.style'
 import ArrowDown from '@/icons/ArrowDown'
+import useAxiosWithAuth from '@/api/config'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
   const [isProject, setIsProject] = useState(false)
-  const [cardList, setCardList] = useState<Array<IMainCard>>([])
-  const [draggedCardList, setDraggedCardList] = useState<IMainCard[]>([])
+  const [cardList, setCardList] = useState<Array<IPostCardHitchhiking>>([])
+  const [draggedCardList, setDraggedCardList] = useState<
+    IPostCardHitchhiking[]
+  >([])
+
+  const axiosWithAuth = useAxiosWithAuth()
 
   const { isPc } = useMedia()
-  const { data, isLoading, error } = useSWR<IPagination<Array<IMainCard>>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
+  const { data, isLoading, error } = useSWR<
+    IPagination<Array<IPostCardHitchhiking>>
+  >(
+    `${
+      process.env.NEXT_PUBLIC_API_URL
+    }/api/v1/hitch?page=${page}&pageSize=5&type=${
       isProject ? 'PROJECT' : 'STUDY'
-    }&sort=latest&page=${page}&pageSize=5&keyword=&due=1개월&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
-    defaultGetFetcher,
+    }`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
   const handleChange = () => {
@@ -42,13 +50,13 @@ const Hitchhiking = () => {
     }
   }, [isLoading, data?.content])
 
-  const removeCard = (recruit_id: number) => {
-    setDraggedCardList((prev: IMainCard[]) => {
+  const removeCard = (recruitId: number) => {
+    setDraggedCardList((prev: IPostCardHitchhiking[]) => {
       prev.push(cardList[cardList.length - 1])
       return prev
     })
-    setCardList((prev: IMainCard[]) => {
-      return prev.filter((card) => card.recruit_id !== recruit_id)
+    setCardList((prev: IPostCardHitchhiking[]) => {
+      return prev.filter((card) => card.recruitId !== recruitId)
     })
     if (cardList.length === 2) {
       setPage((prev) => (!data?.last ? prev + 1 : prev))
@@ -56,15 +64,15 @@ const Hitchhiking = () => {
   }
 
   const addCard = () => {
-    setCardList((prev: IMainCard[]) => {
+    setCardList((prev: IPostCardHitchhiking[]) => {
       prev.push(draggedCardList[draggedCardList.length - 1])
       return prev
     })
-    setDraggedCardList((prev: IMainCard[]) => {
+    setDraggedCardList((prev: IPostCardHitchhiking[]) => {
       return prev.filter(
         (card) =>
-          card.recruit_id !==
-          draggedCardList[draggedCardList.length - 1].recruit_id,
+          card.recruitId !==
+          draggedCardList[draggedCardList.length - 1].recruitId,
       )
     })
   }
@@ -111,9 +119,7 @@ const Hitchhiking = () => {
           </IconButton>
           <IconButton
             sx={style.buttonStyle}
-            onClick={() =>
-              removeCard(cardList[cardList.length - 1]?.recruit_id)
-            }
+            onClick={() => removeCard(cardList[cardList.length - 1]?.recruitId)}
             disabled={cardList.length === 0}
           >
             <ArrowDown

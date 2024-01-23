@@ -5,6 +5,7 @@ import {
   ListPageContainer,
   ListBoxContainer,
   NewPostButton,
+  TopPageButton,
   IconButtonContainer,
 } from '@/components/board/ListPanel'
 import useMedia from '@/hook/useMedia'
@@ -19,11 +20,9 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
 
   return (
     <ListPageContainer>
-      <NewPostButton
-        onClick={() => {
-          setNotice('EDIT')
-        }}
-      />
+      <TopPageButton>
+        <NewPostButton onClick={() => setNotice('EDIT')} />
+      </TopPageButton>
       <ListBoxContainer>
         <Stack
           direction={'row'}

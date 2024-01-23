@@ -10,7 +10,11 @@ const NoticeEditButton = ({ postId }: { postId?: string }) => {
     else setNotice('LIST') // 공지사항 작성
   }
   return (
-    <EditButton type={postId ? 'edit' : 'new'} handleGoBack={handleGoBack} />
+    <EditButton
+      type={postId ? 'edit' : 'new'}
+      formId={'notice-form'}
+      handleGoBack={handleGoBack}
+    />
   )
 }
 
