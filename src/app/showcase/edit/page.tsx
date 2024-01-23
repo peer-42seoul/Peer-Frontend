@@ -53,7 +53,7 @@ import CuCircularProgress from '@/components/CuCircularProgress'
 
 const ShowCaseEditPage = () => {
   // TODO: API 콜하면 Request method 'GET' not supported 발생. 백엔드한테 get 열어돌라 해야함
-  const showcaseId = 3
+  const showcaseId = 16
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseData>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${showcaseId}`,

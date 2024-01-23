@@ -1,5 +1,3 @@
-import { IUserProfileLink } from './IUserProfile'
-
 // export interface IShowcaseEditorFields {
 //   image: File[] | null
 //   tags: string[]
@@ -40,7 +38,7 @@ export interface IShowcaseEditorFields {
   end: string
   memberList?: IMember[]
   member?: IMember[] // edit api에서 사용
-  links: IUserProfileLink[]
+  links: ILinkInformation[]
   content?: string
 }
 
@@ -51,7 +49,7 @@ export interface IShowcaseViewerFields {
   start: string
   end: string
   member: IMember[]
-  links: IUserProfileLink[]
+  links: ILinkInformation[]
   content: string
   image: string
 }
@@ -67,6 +65,6 @@ export interface IShowcaseData {
   end: string
   skills: ISkill[]
   member: IMember[]
-  links: any[]
+  links: ILinkInformation[]
   content: string
 }
