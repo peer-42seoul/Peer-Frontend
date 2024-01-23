@@ -5,6 +5,8 @@ import MuiThemeProvider from '@/app/panel/MuiThemeProvider'
 import CuSWRConfig from './panel/CuSWRConfig'
 import MainLayout from './panel/MainLayout'
 import { Pretendard } from './panel/font'
+import ToastNotification from './panel/layout-panel/ToastNotification'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -27,22 +29,22 @@ export default function RootLayout({
         <link
           rel="apple-touch-icon"
           sizes="72x72"
-          href="/images/icons/icon-72x72.png"
+          href="/images/icons/ios/72.png"
         />
         <link
           rel="apple-touch-icon"
           sizes="96x96"
-          href="/images/icons/icon-96x96.png"
+          href="/images/icons/ios/96.png"
         />
         <link
           rel="apple-touch-icon"
           sizes="128x128"
-          href="/images/icons/icon-128x128.png"
+          href="/images/icons/ios/128.png"
         />
         <link
           rel="apple-touch-icon"
           sizes="144x144"
-          href="/images/icons/icon-144x144.png"
+          href="/images/icons/ios/144.png"
         />
         <meta name="apple-mobile-web-app-title" content="peer" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +52,15 @@ export default function RootLayout({
         <meta name="theme-color" content="#010456" />
       </head>
       <body className={Pretendard.className}>
-        <CuSWRConfig>
-          <MuiThemeProvider>
-            <MainLayout>{children}</MainLayout>
-            <div id="modal-root"></div>
-          </MuiThemeProvider>
-        </CuSWRConfig>
+        <AppRouterCacheProvider>
+          <CuSWRConfig>
+            <MuiThemeProvider>
+              <MainLayout>{children}</MainLayout>
+              <div id="modal-root"></div>
+              <ToastNotification />
+            </MuiThemeProvider>
+          </CuSWRConfig>
+        </AppRouterCacheProvider>
       </body>
     </html>
   )

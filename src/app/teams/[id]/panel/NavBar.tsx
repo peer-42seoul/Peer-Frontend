@@ -63,7 +63,7 @@ const TeamSidebar = ({ id }: { id: string }) => {
           value: 'showcase',
           icon: <ShowcaseIcon sx={style.showcase} />,
           new: true,
-          disabled: true,
+          // disabled: true,
         },
       ]}
     />

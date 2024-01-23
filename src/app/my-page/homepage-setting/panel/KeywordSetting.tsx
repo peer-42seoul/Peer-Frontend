@@ -19,24 +19,28 @@ import TagChip from './TagChip'
 import CuTextModal from '@/components/CuTextModal'
 import TitleBox from '@/components/TitleBox'
 import useMedia from '@/hook/useMedia'
+import useToast from '@/states/useToast'
 
 interface IChip {
   key: number
   label: string
 }
 
-interface IToastProps {
-  severity: AlertColor | undefined
-  message: React.ReactNode
-}
-
 const KeywordAddingField = ({
   mutate,
-  setToastMessage,
+  openToast,
+  closeToast,
   keywordList,
 }: {
   mutate: () => void
-  setToastMessage: (message: IToastProps) => void
+  openToast: ({
+    severity,
+    message,
+  }: {
+    severity: AlertColor
+    message: React.ReactNode
+  }) => void
+  closeToast: () => void
   keywordList: Array<IChip> | undefined | null
 }) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
@@ -44,14 +48,15 @@ const KeywordAddingField = ({
   const axiosWithAuth = useAxiosWithAuth()
 
   const validateData = (trimmed: string) => {
+    closeToast()
     if (trimmed.length < 2) {
-      setToastMessage({
+      openToast({
         severity: 'error',
         message: '알림 키워드는 최소 2자 이상이어야 합니다.',
       })
       return false
     } else if (keywordList?.some((keyword) => keyword.label === trimmed)) {
-      setToastMessage({
+      openToast({
         severity: 'error',
         message: '이미 등록된 알림 키워드입니다.',
       })
@@ -61,12 +66,13 @@ const KeywordAddingField = ({
   }
 
   const addKeyword = async (trimmed: string) => {
+    closeToast()
     await axiosWithAuth
       .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/add`, {
         newKeyword: trimmed,
       })
       .then(() => {
-        setToastMessage({
+        openToast({
           severity: 'success',
           message: (
             <>
@@ -78,12 +84,12 @@ const KeywordAddingField = ({
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          setToastMessage({
+          openToast({
             severity: 'error',
             message: `${error.response.data.message}`,
           })
         } else {
-          setToastMessage({
+          openToast({
             severity: 'error',
             message: (
               <>
@@ -151,12 +157,10 @@ const ChipsArray = ({
   data,
   mutate,
   isLoading,
-  setToastMessage,
 }: {
   mutate: () => void
   data: Array<IChip> | undefined | null
   isLoading: boolean
-  setToastMessage: (message: IToastProps) => void
 }) => {
   return (
     <Grid container columnSpacing={0.75} rowSpacing={1} py={1}>
@@ -176,14 +180,7 @@ const ChipsArray = ({
         ))}
       {data &&
         data.map((chip) => {
-          return (
-            <TagChip
-              key={chip.key}
-              mutate={mutate}
-              setToastMessage={setToastMessage}
-              chip={chip}
-            />
-          )
+          return <TagChip key={chip.key} mutate={mutate} chip={chip} />
         })}
     </Grid>
   )
@@ -194,25 +191,33 @@ const KeywordDisplayBox = ({
   data,
   isLoading,
   error,
-  setToastMessage,
+  openToast,
+  closeToast,
 }: {
   mutate: () => void
   data: Array<IChip> | undefined | null
   isLoading: boolean
   error: any
-  setToastMessage: (message: IToastProps) => void
+  openToast: ({
+    severity,
+    message,
+  }: {
+    severity: AlertColor
+    message: React.ReactNode
+  }) => void
+  closeToast: () => void
 }) => {
   const { isOpen, closeModal, openModal } = useModal()
   const axiosWithAuth = useAxiosWithAuth()
 
   const deleteAll = async () => {
-    console.log('전체 삭제')
+    closeToast()
     await axiosWithAuth
       .delete(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete/all`)
       .then(() => {
         closeModal()
         mutate()
-        setToastMessage({
+        openToast({
           severity: 'success',
           message: '모든 키워드를 삭제하였습니다.',
         })
@@ -234,12 +239,7 @@ const KeywordDisplayBox = ({
       {error ? (
         <Typography>데이터를 가져오지 못했습니다.</Typography>
       ) : (
-        <ChipsArray
-          setToastMessage={setToastMessage}
-          mutate={mutate}
-          data={data}
-          isLoading={isLoading}
-        />
+        <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
       )}
       <CuTextModal
         open={isOpen}
@@ -259,12 +259,10 @@ const KeywordDisplayBox = ({
   )
 }
 
-const KeywordSetting = ({
-  setToastMessage,
-}: {
-  setToastMessage: (message: IToastProps) => void
-}) => {
+const KeywordSetting = () => {
   const { isPc } = useMedia()
+
+  const { openToast, closeToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -309,12 +307,14 @@ const KeywordSetting = ({
       }
     >
       <KeywordAddingField
-        setToastMessage={setToastMessage}
+        openToast={openToast}
+        closeToast={closeToast}
         mutate={mutate}
         keywordList={data}
       />
       <KeywordDisplayBox
-        setToastMessage={setToastMessage}
+        openToast={openToast}
+        closeToast={closeToast}
         mutate={mutate}
         data={data}
         isLoading={isLoading}
