@@ -11,9 +11,10 @@ interface IPreviewModalProps {
   open: boolean
   onClose: () => void
   data: ITeamNotice[]
+  teamId?: string | string[]
 }
 
-const PreviewModal = ({ open, onClose, data }: IPreviewModalProps) => {
+const PreviewModal = ({ open, onClose, data, teamId }: IPreviewModalProps) => {
   const router = useRouter()
 
   return (
@@ -30,7 +31,7 @@ const PreviewModal = ({ open, onClose, data }: IPreviewModalProps) => {
           ))}
         </>
         <CuButton
-          action={() => router.push(`/teams/[id]/board`)}
+          action={() => router.push(`/teams/${teamId}/board`)}
           message={'모든 공지사항 보기'}
           variant={'text'}
         />

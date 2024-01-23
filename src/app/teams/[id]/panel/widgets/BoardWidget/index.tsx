@@ -23,9 +23,10 @@ interface IBoardWidgetRenderProps {
 }
 
 interface IBoardWidgetContainerProps {
-  openModal: () => void
+  modalData?: ITeamNotice[]
   isPc: boolean
   children: React.ReactNode
+  teamId?: string | string[]
 }
 
 interface IBoardWidgetItemProps {
@@ -36,7 +37,6 @@ interface IBoardWidgetItemProps {
 }
 
 const BoardWidget = ({ size }: { size: SizeType }) => {
-  const { isOpen, openModal, closeModal } = useModal()
   const { isPc } = useMedia()
   const { id } = useParams()
   const axiosWithAuth = useAxiosWithAuth()
@@ -47,55 +47,67 @@ const BoardWidget = ({ size }: { size: SizeType }) => {
 
   if (isLoading)
     return (
-      <BoardWidgetContainer openModal={openModal} isPc={isPc}>
+      <BoardWidgetContainer isPc={isPc}>
         <CuCircularProgress color={'secondary'} />
       </BoardWidgetContainer>
     )
   if (!data || error)
     return (
-      <BoardWidgetContainer openModal={openModal} isPc={isPc}>
+      <BoardWidgetContainer isPc={isPc}>
         <StatusMessage message={'글을 불러오는 중 문제가 발생했습니다.'} />
       </BoardWidgetContainer>
     )
-  if (data.content.length === 0)
+  if (!data?.content.length)
     return (
-      <BoardWidgetContainer openModal={openModal} isPc={isPc}>
+      <BoardWidgetContainer isPc={isPc} modalData={data?.content} teamId={id}>
         <StatusMessage message={'등록된 글이 없습니다.'} />
       </BoardWidgetContainer>
     )
 
   return (
     <>
-      <BoardWidgetContainer openModal={openModal} isPc={isPc}>
+      <BoardWidgetContainer isPc={isPc} modalData={data.content} teamId={id}>
         {size === 'L' ? (
           <BoardWidgetList isPc={isPc} listData={data.content} />
         ) : (
           <BoardWidgetSingle postId={data.content[0].postId} />
         )}
       </BoardWidgetContainer>
-      <PreviewModal open={isOpen} onClose={closeModal} data={data.content} />
     </>
   )
 }
 
 const BoardWidgetContainer = ({
-  openModal,
+  teamId,
+  modalData,
   isPc,
   children,
 }: IBoardWidgetContainerProps) => {
+  const { isOpen, openModal, closeModal } = useModal()
+
   return (
-    <WidgetCard
-      onClick={openModal}
-      contentSx={isPc ? style.widgetContent : style.mobileWidgetContent}
-    >
-      <Stack spacing={isPc ? '1.5rem' : '0.5rem'}>
-        <Stack direction={'row'} spacing={'0.25rem'}>
-          <NoticeIcon sx={style.titleIcon} />
-          <Typography variant={'Title3Emphasis'}>공지사항</Typography>
+    <>
+      <WidgetCard
+        onClick={modalData ? openModal : undefined}
+        contentSx={isPc ? style.widgetContent : style.mobileWidgetContent}
+      >
+        <Stack spacing={isPc ? '1.5rem' : '0.5rem'}>
+          <Stack direction={'row'} spacing={'0.25rem'}>
+            <NoticeIcon sx={style.titleIcon} />
+            <Typography variant={'Title3Emphasis'}>공지사항</Typography>
+          </Stack>
+          {children}
         </Stack>
-        {children}
-      </Stack>
-    </WidgetCard>
+      </WidgetCard>
+      {modalData && (
+        <PreviewModal
+          open={isOpen}
+          onClose={closeModal}
+          data={modalData}
+          teamId={teamId}
+        />
+      )}
+    </>
   )
 }
 
@@ -105,7 +117,14 @@ const BoardWidgetList = ({ isPc, listData }: IBoardWidgetRenderProps) => {
     <Stack spacing={isPc ? '1rem' : '0,5rem'}>
       {listData
         ?.slice(0, 4)
-        .map((item) => <BoardWidgetItem key={item.postId} {...item} />)}
+        .map((item) => (
+          <BoardWidgetItem
+            key={item.postId}
+            title={item.title}
+            authorNickname={item.authorNickname}
+            createdAt={item.createdAt}
+          />
+        ))}
     </Stack>
   )
 }
