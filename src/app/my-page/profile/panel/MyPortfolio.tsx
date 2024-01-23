@@ -24,8 +24,12 @@ interface IMyPortfolio {
   isEnd: boolean // 추가 요청 가능 여부를 전달한다.
 }
 
-const MyPortfolio = () => {
-  const [isVisible, setIsVisible] = useState<boolean>(true)
+const MyPortfolio = ({
+  portfolioVisibility,
+}: {
+  portfolioVisibility: boolean
+}) => {
+  const [isVisible, setIsVisible] = useState<boolean>(portfolioVisibility)
 
   // 무한 스크롤
   const [page, setPage] = useState<number>(1)
@@ -63,17 +67,33 @@ const MyPortfolio = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     closeToast()
     setIsVisible(event.target.checked)
-    if (event.target.checked) {
-      openToast({
-        severity: 'success',
-        message: '내 작업물이 다른 사람들에게 공개되었습니다.',
+
+    axiosWithAuth
+      .get(
+        `/api/v1/myPortfolio?visibility=${String(
+          event.target.checked,
+        ).toUpperCase()}`,
+      )
+      .then(() => {
+        if (event.target.checked) {
+          openToast({
+            severity: 'success',
+            message: '내 작업물이 다른 사람들에게 공개되었습니다.',
+          })
+        } else {
+          openToast({
+            severity: 'success',
+            message: '내 작업물이 다른 사람들에게 비공개되었습니다.',
+          })
+        }
       })
-    } else {
-      openToast({
-        severity: 'success',
-        message: '내 작업물이 다른 사람들에게 비공개되었습니다.',
+      .catch(() => {
+        openToast({
+          severity: 'error',
+          message: '내 작업물 공개 여부를 변경하지 못했습니다.',
+        })
+        setIsVisible(!event.target.checked)
       })
-    }
   }
 
   const DisclosureToggle = ({
