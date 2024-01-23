@@ -1,5 +1,8 @@
 'use client'
 
+import { useParams } from 'next/navigation'
+import useSWR from 'swr'
+import useAxiosWithAuth from '@/api/config'
 import useModal from '@/hook/useModal'
 import useMedia from '@/hook/useMedia'
 import { NoticeIcon } from '@/icons/TeamPage'
@@ -18,6 +21,7 @@ interface IBoardWidgetRenderProps {
 const BoardWidget = ({ size }: { size: SizeType }) => {
   const { isOpen, openModal, closeModal } = useModal()
   const { isPc } = useMedia()
+  const { id: teamId } = useParams()
   // TODO 데이터 받아서 렌더링
   const mockData: ITeamNotice[] = [
     {
@@ -28,9 +32,21 @@ const BoardWidget = ({ size }: { size: SizeType }) => {
       createdAt: new Date(),
     },
   ]
+  const axiosWithAuth = useAxiosWithAuth()
+  const { data, isLoading, error } = useSWR(
+    `/api/v1/team/notice/${teamId}?pageSize=${8}page=${1}keyword=`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  )
+  // if (isLoading) return <div>로딩중</div>
+  // if (!data || error) return <div>에러</div>
+
   return (
     <>
-      <WidgetCard contentSx={style.widgetContent} onClick={openModal}>
+      const {isPc} = useMedia()
+      <WidgetCard
+        onClick={openModal}
+        contentSx={isPc ? style.widgetContent : style.mobileWidgetContent}
+      >
         <Stack spacing={isPc ? '1.5rem' : '0.5rem'}>
           <Stack direction={'row'} spacing={'0.25rem'}>
             <NoticeIcon sx={style.titleIcon} />
