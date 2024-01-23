@@ -29,7 +29,7 @@ const SetTeamRole = ({
     setMember('')
   }
 
-  const onHandlerRemove = (index: number) => () => {
+  const onHandlerRemove = (index: number) => {
     setRoleData(roleData.filter((_, i) => i !== index))
   }
 
@@ -93,10 +93,11 @@ const SetTeamRole = ({
                   disabled={true}
                 />
                 <Button
-                  sx={{ width: '4%' }}
                   onClick={() => {
+                    console.log('on remove', index)
                     onHandlerRemove(index)
                   }}
+                  sx={{ width: '4%' }}
                 >
                   <CloseIcon color="primary" />
                 </Button>

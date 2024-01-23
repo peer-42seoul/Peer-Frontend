@@ -36,7 +36,7 @@ const Sidebar = ({ handleSidebar }: SidebarProps) => {
 interface AboutPageProps {
   contact: ReactNode
   personal: ReactNode
-  notice: ReactNode
+  announce: ReactNode
   mind: ReactNode
   dictionary: ReactNode
   service: ReactNode
@@ -61,7 +61,7 @@ const AboutPage = (props: AboutPageProps) => {
           <Stack flex={3}>
             {active === 0 && props.peer}
             {active === 1 && props.mind}
-            {active === 2 && props.notice}
+            {active === 2 && props.announce}
             {active === 3 && props.dictionary}
             {active === 4 && props.contact}
             {active === 5 && props.personal}
