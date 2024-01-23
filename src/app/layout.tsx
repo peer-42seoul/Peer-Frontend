@@ -29,22 +29,22 @@ export default function RootLayout({
         <link
           rel="apple-touch-icon"
           sizes="72x72"
-          href="/images/icons/icon-72x72.png"
+          href="/images/icons/ios/72.png"
         />
         <link
           rel="apple-touch-icon"
           sizes="96x96"
-          href="/images/icons/icon-96x96.png"
+          href="/images/icons/ios/96.png"
         />
         <link
           rel="apple-touch-icon"
           sizes="128x128"
-          href="/images/icons/icon-128x128.png"
+          href="/images/icons/ios/128.png"
         />
         <link
           rel="apple-touch-icon"
           sizes="144x144"
-          href="/images/icons/icon-144x144.png"
+          href="/images/icons/ios/144.png"
         />
         <meta name="apple-mobile-web-app-title" content="peer" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
