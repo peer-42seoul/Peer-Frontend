@@ -124,7 +124,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
           isEditable={false}
         />
         {/* portfolio list */}
-        {userInfo?.portfolioVisbility && <PortFolioList userId={params.id} />}
+        {userInfo?.portfolioVisibility && <PortFolioList userId={params.id} />}
       </Stack>
     </>
   )
