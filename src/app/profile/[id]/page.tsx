@@ -11,6 +11,7 @@ import { ChevronLeft, CloseIcon } from '@/icons'
 import useSWR from 'swr'
 import { IUserProfile } from '@/types/IUserProfile'
 import useAxiosWithAuth from '@/api/config'
+import PortFolioList from './panel/PortFolioList'
 
 const Profile = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
@@ -122,6 +123,8 @@ const Profile = ({ params }: { params: { id: string } }) => {
           handleLogout={() => {}}
           isEditable={false}
         />
+        {/* portfolio list */}
+        {userInfo?.portfolioVisbility && <PortFolioList userId={params.id} />}
       </Stack>
     </>
   )
