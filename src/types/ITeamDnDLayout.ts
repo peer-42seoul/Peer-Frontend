@@ -11,9 +11,9 @@ export type DateTimeArray = [
 ]
 
 export interface IWidgetProps {
-  data: any;
-  size: SizeType;
-  key: number
+  data: any
+  size: SizeType
+  wgKey?: number //@todo optional 빼기
 }
 
 export interface ITeamDnDLayout {
@@ -46,4 +46,3 @@ export type WidgetType =
   | 'linkTable'
 
 export type SizeType = 'S' | 'M' | 'L'
-

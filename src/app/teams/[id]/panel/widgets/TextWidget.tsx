@@ -10,19 +10,16 @@ import TextIcon from '@/icons/TextIcon'
 const TextWidget = ({
   data,
   size,
-  key,
+  wgKey,
 }: {
   data: any
   size: SizeType
-  key: number
+  wgKey: number
 }) => {
   const sizeHeight = { S: '5.75rem', M: '5.75rem', L: '20rem' }
-
   const { isOpen, openModal, closeModal } = useModal()
   const [text, setText] = useState(data)
 
-  //@todo key 변수 사용시 삭제
-  if (!key) return
   const handleOpenModal = () => {
     openModal()
   }
@@ -67,7 +64,7 @@ const TextWidget = ({
         </Stack>
       </WidgetCard>
       <TextEditModal
-        key={key}
+        wgKey={wgKey}
         open={isOpen}
         handleClose={closeModal}
         data={text}

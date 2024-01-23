@@ -10,13 +10,13 @@ const TextEditModal = ({
   handleClose,
   data,
   setData,
-  key,
+  wgKey,
 }: {
   open: boolean
   handleClose: () => void
   data: string
   setData: (data: string) => void
-  key: number
+  wgKey: number
 }) => {
   const [text, setText] = useState<string>(data)
   const [charCount, setCharCount] = useState(0)
@@ -36,7 +36,7 @@ const TextEditModal = ({
   const handleSubmit = () => {
     setData(text)
     // 추가한 코드
-    setStoredWidgetData(key, text)
+    setStoredWidgetData(wgKey, text)
     handleClose()
   }
   return (

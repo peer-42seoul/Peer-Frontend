@@ -1,11 +1,4 @@
 import { Box, IconButton, useMediaQuery } from '@mui/material'
-import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
-import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
-import CalenderWidget from '@/app/teams/[id]/panel/widgets/CalenderWidget'
-import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
-import TextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
-import ImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
-import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import GridLayout, { Layout } from 'react-grid-layout'
 import {
@@ -16,6 +9,7 @@ import {
 } from '@/types/ITeamDnDLayout'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import WidgetUpdate from '@/app/teams/[id]/panel/WidgetUpdate'
+import SelectedWidget from './SelectedWidget'
 
 interface IWidgetsRenderProps {
   data: ITeamDnDLayout | undefined
@@ -66,37 +60,6 @@ const WidgetsRender = ({
   const isFourRow = useMediaQuery('(min-width:900px)')
 
   /* widget 가져오기 */
-  const getWidget = (
-    type: WidgetType,
-    wgData: any,
-    wgSize: SizeType,
-    key: number,
-  ) => {
-    const props = {
-      data: wgData,
-      size: wgSize,
-      key,
-    }
-
-    switch (type) {
-      case 'notice':
-        return <TmpNoticeWidget {...props} />
-      case 'board':
-        return <TmpBoardWidget {...props} />
-      case 'calender':
-        return <CalenderWidget {...props} />
-      case 'attendance':
-        return <TmpAttendWidget {...props} />
-      case 'text':
-        return <TextWidget {...props} />
-      case 'image':
-        return <ImageWidget {...props} />
-      case 'linkTable':
-        return <TmpLinkWidget {...props} />
-      default:
-        return null
-    }
-  }
 
   /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
   const isValidLayout = useCallback((newLayout: Layout[]) => {
@@ -228,7 +191,7 @@ const WidgetsRender = ({
             return (
               <Box
                 className={'layout-element'}
-                key={grid?.i}
+                key={key}
                 data-grid={{ ...grid, isDraggable: edit }} //isDraggable 전체로 하는 방식있는데 안먹혀서 하나씩...
                 width={'100%'}
                 height={'100%'}
@@ -255,7 +218,12 @@ const WidgetsRender = ({
                   <></>
                 )}
                 {/*위젯 type에 따라 렌더링*/}
-                {getWidget(type, wgData, wgSize, key)}
+                <SelectedWidget
+                  type={type}
+                  wgData={wgData}
+                  wgSize={wgSize}
+                  wgKey={key}
+                />
               </Box>
             )
           })}

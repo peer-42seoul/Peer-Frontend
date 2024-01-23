@@ -3,10 +3,10 @@ import { IWidgetProps } from '@/types/ITeamDnDLayout'
 import WidgetCard from '@/app/teams/[id]/panel/widgets/WidgetCard'
 
 /* 임시 위젯 */
-const TmpNoticeWidget = ({ data, size, key }: IWidgetProps) => {
+const TmpNoticeWidget = ({ data, size, wgKey }: IWidgetProps) => {
   return (
     <WidgetCard>
-      <Typography>{'Notice: ' + size + ' ' + key}</Typography>
+      <Typography>{'Notice: ' + size + ' ' + wgKey}</Typography>
       <Typography>{data}</Typography>
       <TextField label="Multiline" multiline maxRows={4} />
     </WidgetCard>

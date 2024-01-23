@@ -36,7 +36,6 @@ const WidgetUpdate = ({
           //@todo 백엔드와 논의 후 JSON.stringify 지우기
           return {
             ...layout,
-            key: layout?.grid?.i,
             data: layout.data ? JSON.stringify(layout?.data) : null,
           }
         }),

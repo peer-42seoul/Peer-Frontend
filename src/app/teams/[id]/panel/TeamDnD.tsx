@@ -8,6 +8,7 @@ import useSWRMutation from 'swr/mutation'
 import WidgetsRender from './WidgetsRender'
 import WidgetList from '@/app/teams/[id]/panel/WidgetList'
 import useDnDStore from '@/states/useDnDStore'
+import { useParams } from 'next/navigation'
 
 export const sizeRatio = {
   S: { w: 1, h: 1 },
@@ -36,14 +37,15 @@ const TeamDnD = ({ id }: { id: string }) => {
         .post(url, { teamId: id, type: 'team' })
         .then((res) => res.data),
   )
+  const params = useParams<{ id: string }>()
 
   useEffect(() => {
     trigger()
+    setTeamId(Number(params?.id))
   }, [])
 
   useEffect(() => {
     if (!data) return
-    setTeamId(data.teamId)
     setStoredWidgets(data.widgets)
   }, [data])
 
@@ -61,7 +63,7 @@ const TeamDnD = ({ id }: { id: string }) => {
     >
       {/*dnd 렌더링*/}
       <WidgetsRender
-        key={data?.updatedAt.toLocaleString()}
+        key={data?.updatedAt ? data?.updatedAt.toString() : null}
         data={data}
         type={type}
         size={size}
