@@ -54,7 +54,7 @@ const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
 const AnnouncePage = () => {
   const [page, setPage] = useState<number>(1)
   const { data, isLoading, error } = useSWR<IPagination<AnnounceCardProps[]>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=${page}&pageSize=5`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/about/announcement?page=${page}&size=5`,
     defaultGetFetcher,
   )
 
@@ -67,7 +67,7 @@ const AnnouncePage = () => {
   if (error) return <div>에러 발생</div>
 
   return (
-    <Card sx={{ padding: '2rem' }}>
+    <Card sx={{ padding: '2rem', backgroundColor: 'background.secondary' }}>
       <Stack>
         <Typography variant="Title2">공지사항</Typography>
       </Stack>
@@ -88,6 +88,7 @@ const AnnouncePage = () => {
           </Stack>
         </Stack>
         <Pagination
+          color="primary"
           count={data?.totalPages}
           page={page}
           onChange={handlePageChange}
