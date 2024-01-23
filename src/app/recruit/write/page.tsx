@@ -170,7 +170,7 @@ const CreateTeam = () => {
           region: place === 'ONLINE' ? null : region,
           link: link,
           tagList: tagList.map((tag) => tag.tagId),
-          roleList: roleList,
+          roleList: type === 'PROJECT' ? roleList : null,
           interviewList: interviewList,
           max: type === 'STUDY' ? parseInt(teamsize) : null,
         },
