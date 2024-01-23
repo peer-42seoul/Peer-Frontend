@@ -31,8 +31,8 @@ const LinksViewer = ({ links }: IlinksProps) => {
               direction={'row'}
               useFlexGap
             >
-              <a href={link.linkUrl} target="_blank" rel="noreferrer">
-                {link.linkName}
+              <a href={link.link} target="_blank" rel="noreferrer">
+                {link.name}
               </a>
             </Stack>
           </Stack>
