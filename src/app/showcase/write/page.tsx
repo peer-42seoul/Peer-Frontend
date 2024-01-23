@@ -77,11 +77,6 @@ const ShowCaseWritePage = () => {
           router={router}
         />
       )}
-      {/* <ShowcaseEditor
-        data={mockData}
-        teamId={teamId}
-        requestMethodType="post"
-      /> */}
     </Stack>
   )
 }

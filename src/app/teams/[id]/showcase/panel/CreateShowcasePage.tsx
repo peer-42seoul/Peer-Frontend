@@ -3,14 +3,16 @@ import ContentSection from './ContentSection'
 import IntersectionSection from './IntersectionSection'
 
 const CreateShowcasePage = ({
-  isShowcaseComplete,
+  isPublished,
+  showcaseId,
 }: {
-  isShowcaseComplete: boolean
+  isPublished: boolean
+  showcaseId: number
 }) => {
   return (
     <>
-      <ContentSection isShowcaseComplete={isShowcaseComplete} />
-      <IntersectionSection isShowcaseComplete={isShowcaseComplete} />
+      <ContentSection isPublished={isPublished} />
+      <IntersectionSection isPublished={isPublished} showcaseId={showcaseId} />
     </>
   )
 }
