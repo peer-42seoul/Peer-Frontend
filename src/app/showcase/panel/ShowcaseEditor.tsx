@@ -35,17 +35,17 @@ const ShowcaseEditor = ({
   requestMethodType,
 }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
-  const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
-    '/images/defaultImage.png',
+    data.image ?? '/images/defaultImage.png',
   )
   const [errorMessages, setErrorMessages] = useState<string>('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
-    useLinks([])
+    useLinks(data.links ? data.links : [])
   const { content } = useShowCaseState()
   const router = useRouter()
+
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
     if (!isValid) {
@@ -62,20 +62,22 @@ const ShowcaseEditor = ({
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${response.data.get('id')}`) // next 13에서 redirect 하는 법
+        console.log(response)
+        router.push(`/showcase/$${teamId}}`) // next 13에서 redirect 하는 법
       } else if (requestMethodType === 'put') {
-        const response = await axiosWithAuth.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
+        const response = await axiosWithAuth.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${teamId}`,
           {
             image: previewImage.split(',')[1],
             content: content,
-            teamId: teamId,
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${response.data.get('id')}`)
+        console.log(response)
+        router.push(`/showcase/$${teamId}}`) // next 13에서 redirect 하는 법
       }
     } catch (error: any) {
+      closeModal()
       if (error.response) {
         switch (error.response.status) {
           case 400:
@@ -88,6 +90,10 @@ const ShowcaseEditor = ({
             break
           case 404:
             setErrorMessages('페이지를 찾을 수 없습니다. (NOT_FOUND)')
+            openToast()
+            break
+          case 409:
+            setErrorMessages('이미 쇼케이스가 존재합니다.')
             openToast()
             break
           default:
@@ -108,14 +114,18 @@ const ShowcaseEditor = ({
       <Stack direction={'column'} spacing={'2.5rem'} sx={{ width: '26rem' }}>
         <ImageInput
           previewImage={previewImage}
-          image={image}
-          setImage={setImage}
+          // image={image}
+          // setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
-        <TeamName teamName={data.title} />
+        <TeamName teamName={data.name} />
         <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
-        <TeamMembers members={data?.member} />
+        <TeamMembers
+          members={
+            'memberList' in data ? data.memberList || [] : data.member || []
+          }
+        />
         <LinkForm
           links={links}
           addLink={addLink}
@@ -124,7 +134,7 @@ const ShowcaseEditor = ({
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        <DynamicEditor />
+        <DynamicEditor content={data.content} />
         <Button onClick={openModal} sx={style.saveButton}>
           저장
         </Button>

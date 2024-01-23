@@ -9,14 +9,10 @@ import * as Style from './SkillInput.style'
 /* eslint-disable no-unused-vars */
 const ImageInput = ({
   previewImage,
-  setPreviewImage,
-  setImage,
-  image,
+  setPreviewImage, // setImage,
 }: {
   previewImage: string
-  image: File[]
   setPreviewImage: (image: string) => void
-  setImage: (image: File[]) => void
 }) => {
   return (
     <Stack direction={'column'} spacing={'0.5rem'} alignItems={'flex-start'}>
@@ -24,17 +20,13 @@ const ImageInput = ({
         svgIcon={<ImageIcon sx={Style.IconStyle} />}
         message={'쇼케이스 대표 이미지'}
       />
-      <ImageUploadButton
-        setImage={(image: File[]) => {
-          setImage(image)
-        }}
-        setPreviewImage={setPreviewImage}
-      >
+      <ImageUploadButton setPreviewImage={setPreviewImage}>
         {previewImage ? (
           <Box
             component={'img'}
             alt="쇼캐이스 대표 이미지"
-            src={image ? previewImage : '/images/teamLogo.png'}
+            src={previewImage} // 기존
+            // src={previewImage ? previewImage : '/images/teamLogo.png'}
             sx={Style.ShowcaseImageStyle}
           />
         ) : (
