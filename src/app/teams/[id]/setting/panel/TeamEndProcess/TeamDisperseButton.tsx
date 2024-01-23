@@ -2,7 +2,9 @@ import useAxiosWithAuth from '@/api/config'
 import { TeamStatus } from '@/app/teams/types/types'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 import { Button, Stack, Typography } from '@mui/material'
+import { useRouter } from 'next/navigation'
 
 interface ITeamDisperseButton {
   teamStatus: TeamStatus
@@ -10,6 +12,8 @@ interface ITeamDisperseButton {
 }
 
 const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
+  const router = useRouter()
+  const { openToast } = useToast()
   const { isOpen, openModal, closeModal } = useModal()
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -22,18 +26,51 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
       .then((res) => {
         if (res.status === 200) {
           console.log(res)
+          router.push('/team-list')
+          openToast({
+            severity: 'success',
+            message: '팀이 해산되었습니다.',
+          })
         } else if (res.status === 401) {
           console.log(res)
+          router.push('/login')
+          openToast({
+            severity: 'error',
+            message: '잘못된 접근입니다.',
+          })
+        } else if (res.status === 403) {
+          console.log(res)
+          router.push('/login')
+          openToast({
+            severity: 'error',
+            message: '권한이 없습니다.',
+          })
         } else if (res.status === 404) {
           console.log(res)
+          openToast({
+            severity: 'error',
+            message: '팀이 존재하지 않습니다.',
+          })
         } else if (res.status === 409) {
           console.log(res)
+          openToast({
+            severity: 'error',
+            message: '모집을 완료 후 팀을 해산하셔야 합니다.',
+          })
         } else {
           console.log(res)
+          openToast({
+            severity: 'error',
+            message: '팀 해산에 실패하였습니다.',
+          })
         }
       })
       .catch((err) => {
         console.log(err)
+        openToast({
+          severity: 'error',
+          message: '팀 해산에 실패하였습니다.',
+        })
       })
   }
 
