@@ -16,7 +16,7 @@ import { Chip } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
 import * as style from './PostCard.style'
 import { useRouter } from 'next/navigation'
-import SplitButton, { SplitButtonMenuItem } from '@/components/SplitButton'
+import SplitButton from '@/components/SplitButton'
 
 interface IPostCard {
   teamLogo: string // 팀 로고
@@ -37,9 +37,7 @@ function PostCard({
   redirectionIds,
 }: IPostCard) {
   // 버튼
-  const [open, setOpen] = useState(false)
   const router = useRouter()
-  const options = ['모집글', '쇼케이스', '피어로그']
   const [selectedOption, setSelectedOption] = useState<string>('')
 
   const gotoTeamPage = () => {
@@ -162,26 +160,26 @@ function PostCard({
         >
           <SplitButton
             selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
             buttonText={
               selectedOption !== '' ? `${selectedOption} 보러가기` : '더보기'
             }
             onClick={onClick}
-            open={open}
-            setOpen={setOpen}
-          >
-            {redirectionIds.map((id, idx) => {
-              return (
-                <SplitButtonMenuItem
-                  key={idx}
-                  disabled={!id}
-                  option={options[idx]}
-                  selectedOption={selectedOption}
-                  setSelectedOption={setSelectedOption}
-                  setOpen={setOpen}
-                />
-              )
-            })}
-          </SplitButton>
+            optionButtonProps={[
+              {
+                option: '모집글',
+                disabled: redirectionIds[0] === null,
+              },
+              {
+                option: '쇼케이스',
+                disabled: redirectionIds[1] === null,
+              },
+              {
+                option: '피어로그',
+                disabled: redirectionIds[2] === null,
+              },
+            ]}
+          />
         </CardContent>
       </Stack>
     </Card>

@@ -10,6 +10,11 @@ import MenuItem from '@mui/material/MenuItem'
 import MenuList from '@mui/material/MenuList'
 import { SxProps, Typography } from '@mui/material'
 
+interface ISplitButtonItemProps {
+  option: string
+  disabled?: boolean
+}
+
 export const SplitButtonMenuItem = ({
   option,
   selectedOption,
@@ -28,7 +33,11 @@ export const SplitButtonMenuItem = ({
     option: string,
   ) => {
     event.stopPropagation()
-    setSelectedOption(option)
+    if (selectedOption === option) {
+      setSelectedOption('')
+    } else {
+      setSelectedOption(option)
+    }
     setOpen(false)
   }
   return (
@@ -37,28 +46,28 @@ export const SplitButtonMenuItem = ({
       onClick={(event) => handleMenuItemClick(event, option)}
       disabled={disabled}
     >
-      <Typography variant="body2">{option}</Typography>
+      <Typography variant="Caption">{option}</Typography>
     </MenuItem>
   )
 }
 
 const SplitButton = ({
   selectedOption,
-  open,
-  setOpen,
-  children,
+  setSelectedOption,
   onClick,
   buttonText,
   sx,
+  optionButtonProps,
 }: {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   selectedOption: string
-  children: React.ReactNode
   onClick?: () => void
   buttonText?: string
   sx?: SxProps
+  optionButtonProps: Array<ISplitButtonItemProps>
+  setSelectedOption: React.Dispatch<React.SetStateAction<string>>
 }) => {
+  const [open, setOpen] = React.useState(false)
+
   const anchorRef = React.useRef<HTMLDivElement>(null)
 
   const handleToggle = (e: React.MouseEvent) => {
@@ -126,20 +135,33 @@ const SplitButton = ({
         anchorEl={anchorRef.current}
         role={undefined}
         transition
-        disablePortal
+        // disablePortal
         placement="bottom"
       >
         {({ TransitionProps }) => (
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin: 'center bottom',
+              transformOrigin: 'center top',
             }}
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id="split-button-menu" autoFocusItem>
-                  {children}
+                <MenuList
+                  id="split-button-menu"
+                  autoFocusItem
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {optionButtonProps.map((optionButtonProp) => (
+                    <SplitButtonMenuItem
+                      key={optionButtonProp.option}
+                      {...optionButtonProp}
+                      disabled={optionButtonProp.disabled}
+                      setOpen={setOpen}
+                      selectedOption={selectedOption}
+                      setSelectedOption={setSelectedOption}
+                    />
+                  ))}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
