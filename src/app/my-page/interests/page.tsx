@@ -1,22 +1,51 @@
 'use client'
 import useAxiosWithAuth from '@/api/config'
-import { ProjectType } from '@/app/panel/MainPage'
-import CuButton from '@/components/CuButton'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
 import useMedia from '@/hook/useMedia'
 import useModal from '@/hook/useModal'
-import useToast from '@/hook/useToast'
-import { IMainCard } from '@/types/IPostDetail'
-import { AlertColor, Stack, Tab, Tabs, Typography } from '@mui/material'
+import useToast from '@/states/useToast'
+import {
+  Box,
+  CircularProgress,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import InterestsContents from './panel/InterestsContents'
 import CuTextModal from '@/components/CuTextModal'
-import * as style from '../panel/my-page.style'
+import * as style from './interests.style'
+import { centeredPosition } from '@/constant/centerdPosition.style'
+import { IPagination } from '@/types/IPagination'
 
-interface IInterestResponse {
-  postList: IMainCard[]
-  isLast: boolean
+export interface IDefaultPostCard {
+  recruit_id: number
+  title: string
+  image: string
+  userId: number
+  userNickname: string
+  userImage: string
+  status: string
+  skillList: Array<{
+    tagId: number
+    name: string
+    color: string
+  }>
+  isFavorite: boolean
+}
+
+export interface IShowcasePostCard {
+  showcaseId: number
+  image: string
+  teamLogo: string
+  teamName: string
+  content: string
+  tags: Array<{
+    name: string
+    color: string
+  }>
 }
 
 const TypeTabs = ({
@@ -26,7 +55,16 @@ const TypeTabs = ({
   type: string
   handleChange: (e: React.SyntheticEvent, newValue: string) => void
 }) => {
-  console.log('tab', type)
+  const { isPc } = useMedia()
+
+  const getColor = (value: string) => {
+    if (value === type) {
+      return 'text.normal'
+    } else if (isPc) {
+      return 'text.alternative'
+    }
+    return 'text.assistive'
+  }
 
   return (
     <Tabs
@@ -34,10 +72,42 @@ const TypeTabs = ({
       onChange={handleChange}
       aria-label="menu tabs"
       variant="fullWidth"
+      sx={{
+        '& .MuiTabs-indicator': {
+          display: 'none',
+        },
+        '& .MuiTabs-indicatorSpan': {
+          display: 'none',
+        },
+      }}
     >
-      <Tab label="프로젝트" value={'PROJECT'} />
-      <Tab label="스터디" value={'STUDY'} />
-      {/* <Tab label="쇼케이스" value={'showcase'} /> */}
+      <Tab
+        label={
+          <Typography variant="Body2" color={getColor('STUDY')}>
+            스터디
+          </Typography>
+        }
+        value={'STUDY'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      />
+      <Tab
+        label={
+          <Typography variant="Body2" color={getColor('PROJECT')}>
+            프로젝트
+          </Typography>
+        }
+        value={'PROJECT'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      />
+      <Tab
+        label={
+          <Typography variant="Body2" color={getColor('SHOWCASE')}>
+            쇼케이스
+          </Typography>
+        }
+        value={'SHOWCASE'}
+        sx={isPc ? style.tabPcStyle : style.tabMobileStyle}
+      />
     </Tabs>
   )
 }
@@ -71,72 +141,103 @@ const AlertModal = ({
 
 const MyInterests = () => {
   const { isPc } = useMedia()
-  const [type, setType] = useState('PROJECT')
+
+  const [type, setType] = useState('STUDY')
   const [page, setPage] = useState<number>(1)
   const [pageLimit, setPageLimit] = useState<number>(1)
-  const [postList, setPostList] = useState<Array<IMainCard>>(
-    [] as Array<IMainCard>,
-  )
+
+  const [postList, setPostList] = useState<Array<IDefaultPostCard>>([])
+  const [showcaseList, setShowcaseList] = useState<Array<IShowcasePostCard>>([])
+
   const axiosWithAuth = useAxiosWithAuth()
-  const { CuToast, isOpen: isToastOpen, closeToast, openToast } = useToast()
+
   const { isOpen: isModalOpen, closeModal, openModal } = useModal()
   const [isDeleting, setIsDeleting] = useState(false)
-  const [toastMessage, setToastMessage] = useState({
-    message: '',
-    severity: '' as AlertColor,
-  })
+
+  const { openToast, closeToast } = useToast()
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     console.log('newValue: ', newValue)
     console.log('11', event.currentTarget, event.target)
     setType(newValue as string)
     setPostList([])
+    setShowcaseList([])
   }
 
   const axiosInstance = useAxiosWithAuth()
   const pagesize = 10
-  const { data, isLoading, mutate, error } = useSWR<IInterestResponse>(
-    `/api/v1/recruit/favorite?type=${type}&page=${page}&pagesize=${pagesize}`,
+  const { data, isLoading, mutate, error } = useSWR<
+    IPagination<Array<IDefaultPostCard> | Array<IShowcasePostCard>>
+  >(
+    `/api/v1/${
+      type === 'SHOWCASE'
+        ? 'mypage/favorite/showcase?'
+        : `recruit/favorite?type=${type}&`
+    }page=${page}&pagesize=${pagesize}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
   const deleteAll = async () => {
     closeModal()
+    closeToast()
     setIsDeleting(true)
     return await axiosWithAuth
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite?type=${type}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/mypage/favorite?type=${type}`,
       )
       .then(() => {
-        setToastMessage({
+        openToast({
           message: '전체 삭제 되었습니다.',
           severity: 'success',
         })
-        openToast()
-        mutate()
-        setIsDeleting(false)
+        setPostList([])
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        if (error.response.status === 500) {
+          openToast({
+            message: '알 수 없는 오류가 발생했습니다. 다시 시도해주세요.',
+            severity: 'error',
+          })
+        } else {
+          openToast({
+            message: error.response.data.message,
+            severity: 'error',
+          })
+        }
+      })
+      .finally(() => setIsDeleting(false))
   }
 
   useEffect(() => {
-    if (!isLoading && data && !data.isLast) {
-      setPostList((prev) => prev.concat(data.postList))
-      if (data?.postList.length === pagesize) {
+    if (!isLoading && data) {
+      if (type === 'SHOWCASE') {
+        setShowcaseList((prev) => {
+          return prev.concat(data.content as Array<IShowcasePostCard>)
+        })
+      } else {
+        setPostList((prev) => {
+          return prev.concat(data.content as Array<IDefaultPostCard>)
+        })
+      }
+
+      if (data.last === false) {
         setPageLimit((prev) => prev + 1)
       }
     }
-  }, [isLoading, data])
+    if (!data) {
+      setPostList([])
+      setShowcaseList([])
+    }
+  }, [data?.content])
 
   useEffect(() => {
     if (error && error?.response?.data?.message) {
-      setToastMessage({
+      openToast({
         severity: 'error',
         message: `${error.response.data.message}`,
       })
-      openToast()
     }
-  }, [error, openToast])
+  }, [error])
 
   const { target, spinner } = useInfiniteScroll({
     setPage,
@@ -147,12 +248,6 @@ const MyInterests = () => {
 
   return (
     <>
-      <CuToast
-        open={isToastOpen}
-        onClose={closeToast}
-        severity={toastMessage.severity}
-        message={toastMessage.message}
-      />
       <AlertModal
         isOpen={isModalOpen}
         closeModal={closeModal}
@@ -161,38 +256,42 @@ const MyInterests = () => {
       <Stack
         direction={'column'}
         spacing={3}
-        sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
+        justifyContent={'center'}
+        alignItems={'space-evenly'}
+        height={1}
       >
         <TypeTabs type={type} handleChange={handleTabChange} />
-        <Stack
-          direction={'row'}
-          justifyContent={'flex-end'}
-          sx={{ paddingRight: '0.5rem' }}
-        >
-          <CuButton
-            variant="text"
-            message="관심 모두 해제"
-            action={openModal}
-            disabled={isDeleting}
-            TypographyProps={{
-              variant: 'CaptionEmphasis',
-              color: 'text.alternative',
-            }}
-            style={{ height: '2rem' }}
-          />
-        </Stack>
 
         {postList.length ? (
           <InterestsContents
             postList={postList}
+            showcaseList={showcaseList}
             spinner={spinner}
             target={target}
-            type={type as ProjectType}
+            removeAll={openModal}
+            isDeleting={isDeleting}
+            type={type}
+            setPostList={setPostList}
+            setShowcaseList={setShowcaseList}
           />
-        ) : isLoading ? (
-          <Typography>로딩 중</Typography>
         ) : (
-          <Typography>관심있다고 표시한 페이지가 없습니다.</Typography>
+          <Box
+            width={1}
+            height={1}
+            sx={{
+              backgroundColor: isPc ? 'background.secondary' : 'transparent',
+              borderRadius: '1rem',
+            }}
+            position={'relative'}
+          >
+            {isLoading ? (
+              <CircularProgress sx={centeredPosition} />
+            ) : (
+              <Typography sx={centeredPosition} variant="Caption">
+                관심있다고 표시한 페이지가 없습니다.
+              </Typography>
+            )}
+          </Box>
         )}
       </Stack>
     </>

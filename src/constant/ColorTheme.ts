@@ -4,9 +4,9 @@ import { alpha, createTheme } from '@mui/material'
 const customBreakpoints = {
   xs: 0,
   sm: 480,
-  md: 960,
-  lg: 1280,
-  xl: 1920,
+  md: 900,
+  lg: 1200,
+  xl: 1536,
 }
 
 export const darkTheme = createTheme({

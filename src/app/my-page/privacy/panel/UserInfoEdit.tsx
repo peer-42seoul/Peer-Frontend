@@ -1,25 +1,28 @@
 'use client'
 
-import { Dispatch, SetStateAction } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Button, Typography, Stack } from '@mui/material'
+import { Button, Typography, Stack, SxProps } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import IToastProps from '@/types/IToastProps'
 import IChangePassword from '../types/IChangePassword'
 import PasswordField from './PasswordField'
+import useToast from '@/states/useToast'
+
+const buttonStyleBase: SxProps = {
+  py: 0,
+  px: '0.5rem',
+  borderRadius: '0.25rem',
+  width: '4rem',
+  height: '1.75rem',
+  wordBreak: 'keep-all',
+}
 
 export default function UserInfoEdit({
-  local,
   authenticationFt,
   authenticationGoogle,
-  setToastProps,
-  openToast,
 }: {
   local?: string
   authenticationFt?: string
   authenticationGoogle?: string
-  setToastProps: Dispatch<SetStateAction<IToastProps>>
-  openToast: () => void
 }) {
   const {
     handleSubmit,
@@ -36,6 +39,8 @@ export default function UserInfoEdit({
     mode: 'onChange',
   })
   const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+  const { openToast, closeToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -61,9 +66,10 @@ export default function UserInfoEdit({
   // }
 
   const changePassword: SubmitHandler<IChangePassword> = async (data) => {
+    closeToast()
     try {
       await axiosWithAuth.put(`/api/v1/info/password`, data)
-      setToastProps({
+      openToast({
         severity: 'success',
         message: '비밀번호가 변경되었습니다',
       })
@@ -74,19 +80,18 @@ export default function UserInfoEdit({
         error.response?.status === 400 || // 변경할 비밀번호와 확인 비밀번호가 일치하지 않음
         error.response?.status === 403 // 현재 비밀번호가 올바르지 않음
       ) {
-        setToastProps({
+        openToast({
           severity: 'error',
           message: error.response.data.message,
         })
       } else {
-        setToastProps({
+        openToast({
           severity: 'error',
           message: '비밀번호 변경에 실패했습니다',
         })
       }
       console.log(error)
     }
-    openToast()
   }
 
   return (
@@ -103,6 +108,7 @@ export default function UserInfoEdit({
           <Button
             variant="contained"
             href={`${API_URL}/oauth2/authorization/ft`}
+            sx={buttonStyleBase}
           >
             <Typography variant="CaptionEmphasis" color="text.strong">
               인증하기
@@ -122,6 +128,7 @@ export default function UserInfoEdit({
           <Button
             variant="contained"
             href={`${API_URL}/oauth2/authorization/google`}
+            sx={buttonStyleBase}
           >
             <Typography variant="CaptionEmphasis" color="text.strong">
               인증하기
@@ -129,7 +136,8 @@ export default function UserInfoEdit({
           </Button>
         )}
       </Stack>
-      <Stack spacing={2} direction="row" alignItems={'center'}>
+      {/* 현재 지역인증이 기획에서 빠졌으므로 주석처리 하였습니다 */}
+      {/* <Stack spacing={2} direction="row" alignItems={'center'}>
         <Typography variant="CaptionEmphasis" color="text.strong">
           지역
         </Typography>
@@ -144,7 +152,7 @@ export default function UserInfoEdit({
             </Typography>
           </Button>
         )}
-      </Stack>
+      </Stack> */}
       <form onSubmit={handleSubmit(changePassword)}>
         <Stack spacing={1}>
           <Typography variant="CaptionEmphasis" color="text.strong">

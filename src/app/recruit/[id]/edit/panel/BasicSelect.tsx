@@ -82,7 +82,11 @@ export default function BasicSelect({
     <Box>
       <FormControl fullWidth>
         <Select
-          sx={ isPc ? { width: '26rem', height: '32px' } : { width: '100%', height: '32px'} }
+          sx={
+            isPc
+              ? { width: '26rem', height: '32px' }
+              : { width: '100%', height: '32px' }
+          }
           value={value}
           onChange={handleChange}
         >

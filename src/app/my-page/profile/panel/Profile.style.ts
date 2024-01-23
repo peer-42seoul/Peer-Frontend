@@ -118,9 +118,9 @@ export const profileIntroductionStyle: SxProps = {
   display: 'block',
 }
 
-export const myPortfolioPcStyle: SxProps = {
-  ...titleBoxStyle.titleBoxPcStyle,
-  px: '1rem',
-  pb: '1rem',
-  position: 'relative',
+export const myPortfolioStyle: SxProps = {
+  ...titleBoxStyle.titleBoxStyle,
+  px: [undefined, '1rem'],
+  pb: [undefined, '1rem'],
+  position: [undefined, 'relative'],
 }

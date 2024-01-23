@@ -1,6 +1,6 @@
 'use client'
-// import useAxiosWithAuth from '@/api/config' // 백엔드 api 완성 이후 주석 해제
-import PostCard from '@/components/PostCard'
+import useAxiosWithAuth from '@/api/config' // 백엔드 api 완성 이후 주석 해제
+import PostCard from './PostCard'
 import { ITag } from '@/types/IPostDetail'
 import {
   Button,
@@ -20,10 +20,13 @@ import Members from './Members'
 import DropdownMenu from '@/components/DropdownMenu'
 import useMedia from '@/hook/useMedia'
 import * as style from './HitchhikingCard.style'
+import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
+import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
+import useToast from '@/states/useToast'
 
 interface IHitchhikingCardBack {
   content: string
-  memberImage: Array<{ url: string }>
+  memberImage: Array<string | null>
   recruitmentQuota: number
 }
 
@@ -49,32 +52,45 @@ const HitchhikingCardBack = ({
   const [data, setData] = useState<IHitchhikingCardBack | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
-  const { isPc } = useMedia()
 
-  const getLineCount = (originHeight: number, lineHeight: number) => {
-    const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
-    return lineCount ? lineCount : 1
+  const { openToast, closeToast } = useToast()
+
+  const getLineCount = (
+    otherOriginHeight: number,
+    lineHeight: number,
+    maxLine: number,
+  ) => {
+    const lineCount = Math.floor(
+      ((cardWidth * 441) / 328 - (otherOriginHeight + 204)) / lineHeight,
+    )
+    if (lineCount > maxLine) return maxLine
+    else if (lineCount < 1) return 1
+    else return lineCount
   }
+  const axiosInstance = useAxiosWithAuth()
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(`fetchData ${postId}`)
+      closeToast()
       setIsLoading(true)
-      // backend api 완성 이후 주석 해제
-      // await axiosInstance
-      //   .get(`/api/v1/hitch/${postId}`)
-      //   .then((res) => {
-      //     setData(res.data)
-      //   })
-      //   .catch((e) => {
-      //     console.log(e)
-      //   })
-      setData({
-        content:
-          '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
-        memberImage: [{ url: 'https://picsum.photos/200' }],
-        recruitmentQuota: 10,
-      })
+      await axiosInstance
+        .get(`/api/v1/hitch/${postId}`)
+        .then((res) => {
+          setData(res.data)
+        })
+        .catch((e) => {
+          if (e.response?.status === 500 || !e.response?.message) {
+            openToast({
+              severity: 'error',
+              message: '알 수 없는 오류가 발생하였습니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: e.response?.message,
+            })
+          }
+        })
       setIsLoading(false)
     }
     if (!isLoading && !data && flipped) fetchData()
@@ -106,11 +122,10 @@ const HitchhikingCardBack = ({
           <Stack
             direction="row"
             justifyContent={'space-between'}
-            height={'2.5rem'}
             alignItems={'center'}
-            sx={{ width: '100%' }}
+            sx={style.cardHeaderStyleBase}
           >
-            <CardContent sx={{ padding: 0, flexGrow: 1 }} onClick={onClick}>
+            <CardContent sx={{ padding: 0 }} onClick={onClick}>
               <Chip
                 label={
                   <Typography variant="Tag" color={'green.normal'}>
@@ -120,12 +135,17 @@ const HitchhikingCardBack = ({
                 sx={style.cardChipStyleBase}
               />
             </CardContent>
+            {/* TODO : 작성자 id 가져오기 */}
             <CardActionArea sx={{ padding: 0, width: 'auto' }}>
-              <DropdownMenu
-                title={title}
-                url={`${currentDomain}/recruit/${postId}`}
-                content={data.content}
-              />
+              <DropdownMenu>
+                <ShareMenuItem
+                  url={`${currentDomain}/recruit/${postId}`}
+                  title={title}
+                  content="피어에서 동료를 구해보새요!"
+                  message={`피어에서 동료를 구해보세요! 이런 프로젝트가 있어요! ${currentDomain}/recruit/${postId}`}
+                />
+                <ReportMenuItem targetId={postId} />
+              </DropdownMenu>
             </CardActionArea>
           </Stack>
           <CardHeader
@@ -135,19 +155,13 @@ const HitchhikingCardBack = ({
                 color={'text.normal'}
                 sx={{
                   ...style.cardTitleStyleBase,
-                  height: isPc ? '46px' : getLineCount(46, 22.5) * 22.5,
-                  WebkitLineClamp: isPc
-                    ? 2
-                    : getLineCount(46, 22.5) /* 라인수 */,
+                  WebkitLineClamp: getLineCount(191, 22.5, 2) /* 라인수 */,
                 }}
               >
-                {/* {title} */}
-                제목이 들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이
-                들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이 들어오는
-                자리입니다.
+                {title}
               </Typography>
             }
-            sx={{ padding: 0, maxHeight: '3rem', flexGrow: 1 }}
+            sx={{ padding: 0, maxHeight: '3rem' }}
             onClick={onClick}
           ></CardHeader>
           <CardContent
@@ -160,11 +174,9 @@ const HitchhikingCardBack = ({
             <Typography
               variant="Caption"
               color={'text.alternative'}
-              // ref={containerRef}
               sx={{
                 ...style.cardContentStyleBase,
-                height: isPc ? '11.25rem' : getLineCount(180, 18) * 18,
-                WebkitLineClamp: isPc ? 10 : getLineCount(180, 18) /* 라인수 */,
+                WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
               }}
             >
               {data.content.split('\n').map((line) => {
@@ -184,7 +196,13 @@ const HitchhikingCardBack = ({
             />
           </CardContent>
           <CardContent
-            sx={{ position: 'relative', bottom: 0, height: '2.75rem' }}
+            sx={{
+              position: 'relative',
+              bottom: 0,
+              height: '2.75rem',
+              padding: 0,
+              pb: 0,
+            }}
             onClick={onClick}
           >
             <Button
@@ -219,7 +237,6 @@ const HitchhikingCard = ({
   postId,
   dragged,
   setDragged,
-  sx,
   isProject,
 }: {
   authorImage: string
@@ -228,7 +245,6 @@ const HitchhikingCard = ({
   tagList: Array<ITag>
   image: string
   postId: number
-  sx?: SxProps
   dragged: boolean
   setDragged: React.Dispatch<React.SetStateAction<boolean>>
   isProject?: boolean
@@ -244,12 +260,12 @@ const HitchhikingCard = ({
 
     // 카드 너비 설정
     setCardWidth(
-      isPc ? window.innerWidth * 0.9 : (window.innerHeight * 0.8 * 328) / 800,
+      isPc ? (window.innerHeight * 0.8 * 328) / 800 : window.innerWidth * 0.9,
     )
     const handleResize = () => {
       const newCardWidth = isPc
-        ? window.innerWidth * 0.9
-        : (window.innerHeight * 0.8 * 328) / 800
+        ? (window.innerHeight * 0.8 * 328) / 800
+        : window.innerWidth * 0.9
       setCardWidth(newCardWidth)
     }
 
@@ -271,7 +287,7 @@ const HitchhikingCard = ({
   return (
     <div
       style={{
-        transform: ` rotateY(${isFlipped ? '180deg' : '0deg'})`,
+        transform: `rotateY(${isFlipped ? '180deg' : '0deg'})`,
         transformStyle: 'preserve-3d',
         width: '100%',
         height: '100%',
@@ -286,16 +302,15 @@ const HitchhikingCard = ({
         tagList={tagList}
         image={image}
         sx={{
-          ...sx,
+          ...style.cardStyleBase,
           backfaceVisibility: 'hidden',
           transform: 'translate(-50%, 0)',
-          width: isPc ? '90%' : '90vw',
         }}
         onClick={handleMouseUp}
       />
       <HitchhikingCardBack
         postId={postId}
-        sx={sx}
+        sx={style.cardStyleBase}
         onClick={handleMouseUp}
         flipped={isFlipped}
         isProject={isProject}

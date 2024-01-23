@@ -43,6 +43,7 @@ import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutl
 import TagAutoComplete from '@/components/TagAutoComplete'
 import axios from 'axios'
 import useMedia from '@/hook/useMedia'
+import useAuthStore from '@/states/useAuthStore'
 
 const componentName = {
   alignItems: 'center',
@@ -109,6 +110,11 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
   const { isPc } = useMedia()
+  const { isLogin } = useAuthStore()
+
+  useEffect(() => {
+    if (!isLogin) router.push(`/recruit/login`)
+  }, [isLogin])
 
   useEffect(() => {
     axios
