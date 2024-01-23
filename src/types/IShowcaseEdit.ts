@@ -40,6 +40,7 @@ export interface IShowcaseEditorFields {
   member?: IMember[] // edit api에서 사용
   links: ILinkInformation[]
   content?: string
+  image?: string
 }
 
 // /[id] 디렉토리 interface

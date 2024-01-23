@@ -35,9 +35,8 @@ const ShowcaseEditor = ({
   requestMethodType,
 }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
-  const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
-    '/images/defaultImage.png',
+    data.image ?? '/images/defaultImage.png',
   )
   const [errorMessages, setErrorMessages] = useState<string>('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
@@ -46,6 +45,7 @@ const ShowcaseEditor = ({
     useLinks(data.links ? data.links : [])
   const { content } = useShowCaseState()
   const router = useRouter()
+
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
     if (!isValid) {
@@ -62,6 +62,7 @@ const ShowcaseEditor = ({
             links: linksWithoutId,
           },
         )
+        console.log(response)
         router.push(`/showcase/$${teamId}}`) // next 13에서 redirect 하는 법
       } else if (requestMethodType === 'put') {
         const response = await axiosWithAuth.put(
@@ -72,6 +73,7 @@ const ShowcaseEditor = ({
             links: linksWithoutId,
           },
         )
+        console.log(response)
         router.push(`/showcase/$${teamId}}`) // next 13에서 redirect 하는 법
       }
     } catch (error: any) {
@@ -112,8 +114,8 @@ const ShowcaseEditor = ({
       <Stack direction={'column'} spacing={'2.5rem'} sx={{ width: '26rem' }}>
         <ImageInput
           previewImage={previewImage}
-          image={image}
-          setImage={setImage}
+          // image={image}
+          // setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
         <TeamName teamName={data.name} />

@@ -17,42 +17,7 @@ import CuCircularProgress from '@/components/CuCircularProgress'
       2. 버튼 배치
 */
 
-// const mockData: IShowcaseEditorFields = {
-//   title: '42peer',
-//   skills: [
-//     {
-//       name: 'Javascript',
-//       Id: 1,
-//       color: '#F0DB4F',
-//     },
-//     {
-//       name: 'React',
-//       Id: 2,
-//       color: '#61DBFB',
-//     },
-//     {
-//       name: 'Python',
-//       Id: 3,
-//       color: '#3776AB',
-//     },
-//   ],
-//   start: '2024-01-01',
-//   end: '2024-12-31',
-//   memberList: [
-//     {
-//       nickname: '홍길동',
-//       role: '프론트엔드 개발자',
-//       image: '',
-//       isLeader: false,
-//     },
-//     { nickname: '이순신', role: '백엔드 개발자', image: '', isLeader: false },
-//     { nickname: '이순신', role: '리더', image: '', isLeader: false },
-//   ],
-//   links: [{ linkName: '깃허브', linkUrl: '이름없음', id: 0 }],
-// }
-
 const ShowCaseEditPage = () => {
-  // TODO: API 콜하면 Request method 'GET' not supported 발생. 백엔드한테 get 열어돌라 해야함
   const showcaseId = 16
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseData>(
@@ -79,7 +44,6 @@ const ShowCaseEditPage = () => {
           router={null}
         />
       )}
-      {/* <ShowcaseEditor data={mockData} teamId={teamId} /> */}
     </Stack>
   )
 }
