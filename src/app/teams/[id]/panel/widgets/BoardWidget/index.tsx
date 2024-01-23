@@ -3,17 +3,17 @@
 import { useParams } from 'next/navigation'
 import dayjs from 'dayjs'
 import useSWR from 'swr'
+import { Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuCircularProgress from '@/components/CuCircularProgress'
-import { Stack, Typography } from '@mui/material'
 import useModal from '@/hook/useModal'
 import useMedia from '@/hook/useMedia'
 import { NoticeIcon } from '@/icons/TeamPage'
 import { SizeType } from '@/types/ITeamDnDLayout'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
+import PreviewModal from './PreviewModal'
 import WidgetCard from '../WidgetCard'
 import * as style from './index.style'
-import PreviewModal from './PreviewModal'
 
 interface IBoardWidgetRenderProps {
   isPc?: boolean
@@ -65,15 +65,13 @@ const BoardWidget = ({ size }: { size: SizeType }) => {
     )
 
   return (
-    <>
-      <BoardWidgetContainer isPc={isPc} modalData={data.content} teamId={id}>
-        {size === 'L' ? (
-          <BoardWidgetList isPc={isPc} listData={data.content} />
-        ) : (
-          <BoardWidgetSingle postId={data.content[0].postId} />
-        )}
-      </BoardWidgetContainer>
-    </>
+    <BoardWidgetContainer isPc={isPc} modalData={data.content} teamId={id}>
+      {size === 'L' ? (
+        <BoardWidgetList isPc={isPc} listData={data.content} />
+      ) : (
+        <BoardWidgetSingle postId={data.content[0].postId} />
+      )}
+    </BoardWidgetContainer>
   )
 }
 
