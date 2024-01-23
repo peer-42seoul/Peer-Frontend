@@ -224,11 +224,7 @@ const MyInterests = () => {
         setPageLimit((prev) => prev + 1)
       }
     }
-    if (!data) {
-      setPostList([])
-      setShowcaseList([])
-    }
-  }, [data?.content])
+  }, [data])
 
   useEffect(() => {
     if (error && error?.response?.data?.message) {
