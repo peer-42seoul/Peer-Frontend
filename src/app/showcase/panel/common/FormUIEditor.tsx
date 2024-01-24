@@ -24,7 +24,6 @@ const FormUIEditor = ({
   const { setContent } = useShowCaseState()
   const themed = useTheme()
   const editorRef = useRef<HTMLDivElement>(null)
-  const CONTENT_MAX = 100000
   const toggleDark = () => {
     const editorEl = editorRef.current?.getElementsByClassName(
       'toastui-editor-defaultUI',
@@ -65,10 +64,10 @@ const FormUIEditor = ({
       editor.current.on('change', () => {
         if (editor.current) {
           const content = editor.current?.getMarkdown()
-          if (content.length > CONTENT_MAX) {
-            alert(`최대 ${CONTENT_MAX}자까지 입력 가능합니다.`)
-            return
-          }
+          // if (content.length > CONTENT_MAX) {
+          //   alert(`최대 ${CONTENT_MAX}자까지 입력 가능합니다.`)
+          //   return
+          // }
           setContent(content)
         }
       })
