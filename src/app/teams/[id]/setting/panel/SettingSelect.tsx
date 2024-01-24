@@ -27,7 +27,7 @@ export const dueList = [
   '12개월 이상',
 ]
 
-export const SetupSelect = ({
+export const SettingSelect = ({
   type,
   value,
   parentLocation,
@@ -139,4 +139,4 @@ export const SetupSelect = ({
   }
 }
 
-export default SetupSelect
+export default SettingSelect
