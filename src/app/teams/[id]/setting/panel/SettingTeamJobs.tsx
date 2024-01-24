@@ -43,7 +43,7 @@ interface Props {
   jobList: Job[]
 }
 
-const TeamJobAdd = ({ teamId, jobList }: Props) => {
+const SettingTeamJobs = ({ teamId, jobList }: Props) => {
   const [jobs, setJobs] = useState<Job[]>(jobList)
   const [isSettingButton, setIsSettingButton] = useState('')
   const axiosWithAuth = useAxiosWithAuth()
@@ -236,4 +236,4 @@ const TeamJobAdd = ({ teamId, jobList }: Props) => {
   )
 }
 
-export default TeamJobAdd
+export default SettingTeamJobs
