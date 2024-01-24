@@ -57,7 +57,7 @@ const PortfolioList = ({ userId }: { userId: string }) => {
           columns={12}
         >
           {postList.length === 0 && (
-            <Typography>작업물이 존재하지않습니다.</Typography>
+            <Typography>작업물이 존재하지 않습니다.</Typography>
           )}
           <Grid xs={12} sm={6}>
             <Box position={'relative'} ref={target} height={1}>
