@@ -10,9 +10,13 @@ import * as Style from './SkillInput.style'
 const ImageInput = ({
   previewImage,
   setPreviewImage, // setImage,
-}: {
+  setImage,
+} // image,
+: {
   previewImage: string
   setPreviewImage: (image: string) => void
+  image: File[]
+  setImage: (image: File[]) => void
 }) => {
   return (
     <Stack direction={'column'} spacing={'0.5rem'} alignItems={'flex-start'}>
@@ -20,7 +24,12 @@ const ImageInput = ({
         svgIcon={<ImageIcon sx={Style.IconStyle} />}
         message={'쇼케이스 대표 이미지'}
       />
-      <ImageUploadButton setPreviewImage={setPreviewImage}>
+      <ImageUploadButton
+        setImage={(image: File[]) => {
+          setImage(image)
+        }}
+        setPreviewImage={setPreviewImage}
+      >
         {previewImage ? (
           <Box
             component={'img'}
