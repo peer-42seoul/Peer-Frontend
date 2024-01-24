@@ -1,6 +1,6 @@
 'use client'
 import { Button, Stack } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
@@ -35,6 +35,7 @@ const ShowcaseEditor = ({
   requestMethodType,
 }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
+  const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
     data.image ?? '/images/defaultImage.png',
   )
@@ -43,8 +44,14 @@ const ShowcaseEditor = ({
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
     useLinks(data.links ? data.links : [])
-  const { content } = useShowCaseState()
+  const { content, setContent } = useShowCaseState()
   const router = useRouter()
+
+  useEffect(() => {
+    if (requestMethodType === 'put') {
+      setContent(data?.content)
+    }
+  }, [requestMethodType, data?.content])
 
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
@@ -53,7 +60,7 @@ const ShowcaseEditor = ({
     }
     try {
       if (requestMethodType === 'post') {
-        const response = await axiosWithAuth.post(
+        await axiosWithAuth.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
           {
             image: previewImage.split(',')[1],
@@ -62,19 +69,17 @@ const ShowcaseEditor = ({
             links: linksWithoutId,
           },
         )
-        console.log(response)
-        router.push(`/showcase/$${teamId}}`) // next 13에서 redirect 하는 법
+        router.push(`/showcase/${teamId}`)
       } else if (requestMethodType === 'put') {
-        const response = await axiosWithAuth.put(
+        await axiosWithAuth.put(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${teamId}`,
           {
-            image: previewImage.split(',')[1],
+            image: image.length ? previewImage.split(',')[1] : null,
             content: content,
             links: linksWithoutId,
           },
         )
-        console.log(response)
-        router.push(`/showcase/$${teamId}}`) // next 13에서 redirect 하는 법
+        router.push(`/showcase/${teamId}`)
       }
     } catch (error: any) {
       closeModal()
@@ -114,8 +119,8 @@ const ShowcaseEditor = ({
       <Stack direction={'column'} spacing={'2.5rem'} sx={{ width: '26rem' }}>
         <ImageInput
           previewImage={previewImage}
-          // image={image}
-          // setImage={setImage}
+          image={image}
+          setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
         <TeamName teamName={data.name} />

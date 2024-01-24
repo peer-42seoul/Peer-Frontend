@@ -3,7 +3,7 @@ import { ITeam } from '@/app/teams/types/types'
 import { Button, Card, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
-const RedirectionRecruit = ({ id, data }: { id: string; data: ITeam }) => {
+const RedirectRecruitPage = ({ id, data }: { id: string; data: ITeam }) => {
   const router = useRouter()
   return (
     <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
@@ -24,4 +24,4 @@ const RedirectionRecruit = ({ id, data }: { id: string; data: ITeam }) => {
   )
 }
 
-export default RedirectionRecruit
+export default RedirectRecruitPage
