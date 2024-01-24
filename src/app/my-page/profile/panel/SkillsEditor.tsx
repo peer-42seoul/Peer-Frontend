@@ -16,8 +16,8 @@ import {
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
-// COMMENT :우선 해당 값으로 해두었으나 조정이 필요합니다.
-const TIMEOUT = 0.5
+// COMMENT :우선 해당 값으로 해두었으나 조정이 필요합니다. 밀리초 단위입니다.
+const TIMEOUT = 500
 
 const SkillsEditor = ({
   open,
@@ -59,14 +59,18 @@ const SkillsEditor = ({
 
   useEffect(() => {
     const countdown = setInterval(() => {
-      setTimeOut((prev) => prev - 0.25)
-    }, 250)
+      setTimeOut((prev) => prev - TIMEOUT / 5)
+    }, TIMEOUT / 5)
 
     return () => clearInterval(countdown)
   }, [timeOut])
 
   useEffect(() => {
     if (timeOut === 0 && text !== '' && isLoading) {
+      if (text.length < 2) {
+        setTimeOut(TIMEOUT)
+        return
+      }
       axiosWithAuth
         .get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/skill/search?keyword=${text}`,
@@ -152,6 +156,7 @@ const SkillsEditor = ({
             renderInput={(params) => (
               <TextField
                 {...params}
+                disabled={selected?.length >= 10}
                 onChange={handleTextFiledChange}
                 size="small"
                 placeholder={'프레임워크 또는 개발언어를 입력해주세요.'}
@@ -192,7 +197,7 @@ const SkillsEditor = ({
               alignItems={'center'}
             >
               <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-                선택한 스킬
+                선택한 스킬 ({selected.length}/10)
               </Typography>
               <Button
                 variant={'text'}

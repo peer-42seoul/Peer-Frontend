@@ -1,6 +1,5 @@
 'use client'
 import {
-  Button,
   Card,
   CardContent,
   CardHeader,
@@ -10,12 +9,13 @@ import {
   Typography,
   alpha,
 } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { ITag } from '@/types/IPostDetail'
 import { Chip } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
 import * as style from './PostCard.style'
 import { useRouter } from 'next/navigation'
+import SplitButton from '@/components/SplitButton'
 
 interface IPostCard {
   teamLogo: string // 팀 로고
@@ -24,51 +24,27 @@ interface IPostCard {
   tagList: ITag[]
   image: string // 글 대표 이미지 (썸네일)
   sx?: SxProps // 카드 전체 스타일
+  redirectionIds: Array<number | null> // 0이면 null로 처리한다, 이유는 공개 여부로 지정한다, [0] : recruitId, [1] : showcaseId, [2] : peerLogId
 }
 
-const RoutingButton = ({
-  onClick,
-  disabled,
-  buttonText,
-}: {
-  onClick: () => void
-  disabled: boolean
-  buttonText: string
-}) => {
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onClick()
-  }
-  return (
-    <Button
-      disabled={disabled}
-      onClick={handleClick}
-      variant="contained"
-      sx={{ width: '4.75rem', height: '2rem' }}
-    >
-      <Typography
-        variant="Caption"
-        color={disabled ? 'text.assistive' : 'text.normal'}
-      >
-        {buttonText}
-      </Typography>
-    </Button>
-  )
-}
-
-function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
-  const teamId: undefined | number = 1
-  const showCaseId: undefined | number = undefined
-  const peerLogId: undefined | number = undefined
-
+function PostCard({
+  teamLogo,
+  teamName,
+  tagList,
+  image,
+  postId,
+  redirectionIds,
+}: IPostCard) {
+  // 버튼
   const router = useRouter()
+  const [selectedOption, setSelectedOption] = useState<string>('')
 
   const gotoTeamPage = () => {
-    router.push(`/teams/${teamId}`)
+    router.push(`/teams/${postId}`)
   }
 
   const goToRecruitPage = () => {
-    router.push(`/recruit/${postId}`)
+    router.push(`/recruit/${redirectionIds[0]}`)
   }
 
   const gotoShowCasePage = () => {
@@ -79,6 +55,16 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
   const gotoPeerLogPage = () => {
     console.log('gotoPeerLogPage')
     // router.push(`/peer-log/${peerLogId}`)
+  }
+
+  const onClick = () => {
+    if (selectedOption === '모집글') {
+      goToRecruitPage()
+    } else if (selectedOption === '쇼케이스') {
+      gotoShowCasePage()
+    } else if (selectedOption === '피어로그') {
+      gotoPeerLogPage()
+    }
   }
 
   return (
@@ -110,8 +96,8 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
           position: 'relative',
         }}
         direction={'column'}
-        justifyContent={'space-between'}
-        spacing={'15px'}
+        justifyContent={'flex-start'}
+        spacing={'1rem'}
       >
         <CardHeader
           avatar={
@@ -166,31 +152,33 @@ function PostCard({ teamLogo, teamName, tagList, image, postId }: IPostCard) {
           sx={{
             p: 0,
             pb: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          <Stack
-            direction={'row'}
-            justifyContent={'center'}
-            flexWrap={'wrap'}
-            gap={'0.5rem'}
-            sx={{ boxSizing: 'border-box', width: '100%' }}
-          >
-            <RoutingButton
-              onClick={goToRecruitPage}
-              buttonText={'모집글'}
-              disabled={!postId}
-            />
-            <RoutingButton
-              onClick={gotoShowCasePage}
-              buttonText={'쇼케이스'}
-              disabled={!showCaseId}
-            />
-            <RoutingButton
-              onClick={gotoPeerLogPage}
-              buttonText={'피어로그'}
-              disabled={!peerLogId}
-            />
-          </Stack>
+          <SplitButton
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            buttonText={
+              selectedOption !== '' ? `${selectedOption} 보러가기` : '더보기'
+            }
+            onClick={onClick}
+            optionButtonProps={[
+              {
+                option: '모집글',
+                disabled: redirectionIds[0] === null,
+              },
+              {
+                option: '쇼케이스',
+                disabled: redirectionIds[1] === null,
+              },
+              {
+                option: '피어로그',
+                disabled: redirectionIds[2] === null,
+              },
+            ]}
+          />
         </CardContent>
       </Stack>
     </Card>

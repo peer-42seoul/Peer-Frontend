@@ -113,7 +113,8 @@ const MyProfile = () => {
         handleLogout={handleLogout}
       />
 
-      <MyPortfolio />
+      <MyPortfolio portfolioVisibility={userInfo.portfolioVisibility} />
+
       {/* modals */}
       <ProfileBioEditor
         data={{
