@@ -20,7 +20,8 @@ import { useRouter } from 'next/navigation'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
-  teamId: number
+  teamId?: number
+  showcaseId?: number
   requestMethodType: 'post' | 'put'
   router: any | undefined
 }
@@ -32,6 +33,7 @@ const DynamicEditor = dynamic(() => import('../panel/common/FormUIEditor'), {
 const ShowcaseEditor = ({
   data,
   teamId,
+  showcaseId,
   requestMethodType,
 }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
@@ -69,17 +71,17 @@ const ShowcaseEditor = ({
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${teamId}`)
+        router.push(`/teams/${teamId}/showcase`)
       } else if (requestMethodType === 'put') {
         await axiosWithAuth.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${teamId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${showcaseId}`,
           {
             image: image.length ? previewImage.split(',')[1] : null,
             content: content,
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${teamId}`)
+        router.push(`/showcase/showcase?showcaseId=${showcaseId}`)
       }
     } catch (error: any) {
       closeModal()

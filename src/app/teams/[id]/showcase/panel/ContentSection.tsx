@@ -14,7 +14,7 @@ const ContentSection = ({ isPublished }: { isPublished: boolean }) => {
       fontSize={'0.75rem'}
       fontWeight={'400'}
     >
-      {isPublished ? notExistenceMessage : existenceMessage}
+      {isPublished ? existenceMessage : notExistenceMessage}
     </Typography>
   )
 }
