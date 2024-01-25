@@ -7,10 +7,13 @@ import { IShowcaseViewerFields } from '@/types/IShowcaseEdit'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
+import { useSearchParams } from 'next/navigation'
 
 const ShowcaseDetailPage = () => {
-  const showcaseId = 16
+  // const showcaseId = 16
   // const axiosWithAuth = useAxiosWithAuth()
+  const params = useSearchParams()
+  const showcaseId = params.get('showcaseId')
   const { data, isLoading, error } = useSWR<IShowcaseViewerFields>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${showcaseId}`,
     defaultGetFetcher,
