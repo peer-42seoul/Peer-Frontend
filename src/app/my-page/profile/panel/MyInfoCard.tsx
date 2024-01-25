@@ -1,43 +1,38 @@
-import { Grid, Typography } from '@mui/material'
-import React from 'react'
 import Skills from './Skills'
 import ProfileLinksSection from './ProfileLinksSection'
 import CuButton from '@/components/CuButton'
-import { IUserProfileLink } from '@/types/IUserProfile'
+import { ISkill, IUserProfileLink } from '@/types/IUserProfile'
+import TitleBox from '@/components/TitleBox'
 
 const MyInfoCard = ({
   linkList,
+  skillList,
   setModalType,
   handleLogout,
+  isEditable,
 }: {
   linkList: Array<IUserProfileLink>
+  skillList: Array<ISkill>
   setModalType: (type: string) => void
   handleLogout: () => void
+  isEditable: boolean
 }) => {
   return (
-    <Grid
-      container
-      p={3}
-      pl={2}
-      pt={0}
-      rowSpacing={3}
-      columnSpacing={1}
-      sx={{ backgroundColor: 'background.secondary', borderRadius: '1rem' }}
-      width={'100%'}
-    >
-      <Grid item xs={12}>
-        <Typography variant={'Title3Emphasis'}>내 정보</Typography>
-      </Grid>
-      <Grid container item xs={12}>
-        <Skills setModalType={setModalType} />
-      </Grid>
-      <Grid item xs={12}>
-        <ProfileLinksSection linkList={linkList} setModalType={setModalType} />
-      </Grid>
-      <Grid item xs={12}>
+    <TitleBox title={isEditable ? '내 정보' : '정보'}>
+      <Skills
+        skillList={skillList}
+        setModalType={setModalType}
+        isEditable={isEditable}
+      />
+      <ProfileLinksSection
+        linkList={linkList}
+        setModalType={setModalType}
+        isEditable={isEditable}
+      />
+      {isEditable && (
         <CuButton variant="text" action={handleLogout} message="로그아웃" />
-      </Grid>
-    </Grid>
+      )}
+    </TitleBox>
   )
 }
 

@@ -6,11 +6,22 @@ const MainBanner = () => {
 
   return (
     <Box
-      height={isPc ? '200px' : '100px'}
-      border="1px solid white"
-      bgcolor={'white'}
+      height={isPc ? '12.5rem' : '100px'}
+      // borderRadius={'0.75rem'}
+      // bgcolor={'white'}
+      p={0}
+      m={0}
     >
-      피어 소개 배너
+      <img
+        src={
+          !isPc
+            ? '/images/banners/default-mobile.svg'
+            : '/images/banners/default-pc.svg'
+        }
+        alt={'main-banner'}
+        width={'100%'}
+        height={'100%'}
+      />
     </Box>
   )
 }

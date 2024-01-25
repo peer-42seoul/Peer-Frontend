@@ -1,27 +1,18 @@
 import { Box, Container, Stack } from '@mui/material'
 import React from 'react'
-import SubNavBar from './panel/SubNavBar'
+import NavBar from './panel/NavBar'
+import * as style from './layout.style'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Container sx={{ maxWidth: '124rem', padding: 0 }}>
+    <Container sx={style.container}>
       <Stack
         justifyContent={'space-between'}
-        width={1}
-        maxWidth={1280}
-        direction={'row'}
-        sx={{ flex: '3, 4' }}
+        direction={['column', 'row']}
+        sx={style.stack}
       >
-        <SubNavBar sx={{ width: '15.3rem' }} />
-        <Box
-          sx={{
-            maxWidth: '57rem',
-          }}
-          flexGrow={1}
-          p={[2, 4]}
-        >
-          {children}
-        </Box>
+        <NavBar />
+        <Box sx={style.contentBox}>{children}</Box>
       </Stack>
     </Container>
   )

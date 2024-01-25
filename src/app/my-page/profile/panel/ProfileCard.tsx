@@ -1,7 +1,10 @@
 'use client'
-import { Avatar, Box, Modal, Stack, Typography } from '@mui/material'
+import { Box, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import ProfileSection from './ProfileSection'
+import * as style from './Profile.style'
+import useMedia from '@/hook/useMedia'
+import CuAvatar from '@/components/CuAvatar'
 
 // TODO css 다른 파일로 빼기
 
@@ -26,17 +29,7 @@ const ProfileImageModal = ({
     >
       <Box
         component={'img'}
-        sx={{
-          width: '80%',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          border: 'none',
-          outline: 'none',
-          transform: 'translate(-50%, -50%)',
-          maxWidth: '20rem',
-          maxHeight: '20rem',
-        }}
+        sx={style.profileImageModalStyle}
         alt="profile image"
         src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
       />
@@ -51,6 +44,7 @@ const ProfileCard = ({
   introduction,
   email,
   setModalType,
+  isEditable,
 }: {
   profileImageUrl: string | null
   nickname: string
@@ -58,41 +52,38 @@ const ProfileCard = ({
   introduction: string | null
   email: string
   setModalType: (type: string) => void
+  isEditable: boolean
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const handleModalClose = () => {
     setOpen(false)
   }
+  const { isPc } = useMedia()
 
   return (
     <Stack
-      spacing={3}
-      p={3}
+      spacing={isPc ? 3 : 2}
       alignSelf={'stretch'}
-      sx={{
-        backgroundColor: 'background.secondary',
-        borderRadius: '1rem',
-        height: '100%',
-      }}
+      sx={isPc ? style.profileCardPcStyle : style.profileCardMobileStyle}
     >
       <ProfileSection
         sectionTitle={'introduction'}
         setModalType={setModalType}
         titleTypographyProps={{
-          variant: 'Title3Emphasis',
+          variant: isPc ? 'Title3Emphasis' : 'Body1Emphasis',
           color: 'text.normal',
+          component: 'h3',
         }}
+        sx={{ height: '2.5rem' }}
+        isEditable={isEditable}
       />
       <Stack direction="row" spacing={0.75} alignItems={'center'}>
         {/* image component */}
 
-        <Avatar
-          src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
-          onClick={() => setOpen(true)}
-          sx={{
-            width: '3rem',
-            height: '3rem',
-          }}
+        <CuAvatar
+          src={profileImageUrl ? profileImageUrl : ''}
+          onClick={isEditable ? () => setOpen(true) : () => {}}
+          sx={style.profileImageStyle}
         />
         {/* 유저 이름, 소속, 유저 아이디, 유저 이메일 */}
         <Stack spacing={0.5}>
@@ -113,11 +104,13 @@ const ProfileCard = ({
           </Typography>
         </Stack>
       </Stack>
-      <Box width={1} sx={{ minHeight: '4.5rem' }}>
-        <Typography variant="Body2" color={'text.normal'}>
-          {introduction}
-        </Typography>
-      </Box>
+      <Typography
+        variant="Body2"
+        color={'text.normal'}
+        sx={style.profileIntroductionStyle}
+      >
+        {introduction}
+      </Typography>
       <ProfileImageModal
         open={open}
         handleModalClose={handleModalClose}

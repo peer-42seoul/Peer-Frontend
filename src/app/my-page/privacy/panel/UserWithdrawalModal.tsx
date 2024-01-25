@@ -2,21 +2,15 @@
 
 import CuModal from '@/components/CuModal'
 
-import { useState, Dispatch, SetStateAction } from 'react'
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { useState } from 'react'
+import { Button, Stack, TextField, Typography } from '@mui/material'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
-import IToastProps from '@/types/IToastProps'
 import LocalStorage from '@/states/localStorage'
 import { useRouter } from 'next/navigation'
+import useToast from '@/states/useToast'
 
-const UserWithdrawalModal = ({
-  setToastProps,
-  openToast,
-}: {
-  setToastProps: Dispatch<SetStateAction<IToastProps>>
-  openToast: () => void
-}) => {
+const UserWithdrawalModal = () => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true) // 다른 버튼이나 요소를 얘를 활용해서 모달 핸들링 가능
   const handleClose = () => setOpen(false)
@@ -30,13 +24,15 @@ const UserWithdrawalModal = ({
     }
   }
 
+  const { openToast, closeToast } = useToast()
+
   const handleDelete = async () => {
+    closeToast()
     if (password === '') {
-      setToastProps({
+      openToast({
         severity: 'error',
         message: '비밀번호를 입력해주세요',
       })
-      openToast()
       return
     }
     try {
@@ -55,23 +51,35 @@ const UserWithdrawalModal = ({
       router.push('/')
     } catch (error: any) {
       if (error.response?.status === 403) {
-        setToastProps({
+        openToast({
           severity: 'error',
           message: '비밀번호가 일치하지 않습니다',
         })
       } else {
-        setToastProps({
+        openToast({
           severity: 'error',
           message: '계정 삭제에 실패했습니다',
         })
       }
-      openToast()
     }
   }
 
   return (
     <>
-      <Button onClick={handleOpen}>계정삭제</Button>
+      <Button
+        variant={'contained'}
+        onClick={handleOpen}
+        color="red"
+        sx={{
+          width: '4rem',
+          height: '1.75rem',
+          wordBreak: 'keep-all',
+        }}
+      >
+        <Typography variant={'CaptionEmphasis'} color={'text.normal'}>
+          계정삭제
+        </Typography>
+      </Button>
       <CuModal
         open={open}
         onClose={handleClose}
@@ -85,7 +93,20 @@ const UserWithdrawalModal = ({
           onClick: handleClose,
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Stack
+          justifyContent={'center'}
+          alignItems={'center'}
+          flexDirection={'column'}
+          spacing={2}
+        >
+          <Typography
+            id="modal-description"
+            variant="Body2"
+            color={'text.normal'}
+          >
+            계정을 삭제하시겠습니까? 모든 작업물과 데이터가 영구적으로
+            삭제됩니다.
+          </Typography>
           <TextField
             placeholder="계정 삭제를 위해 비밀번호를 입력하세요"
             onChange={(e) => setPassword(e.target.value)}
@@ -93,12 +114,9 @@ const UserWithdrawalModal = ({
             type="password"
             autoComplete="off"
             onKeyDown={handlekeyDown}
+            fullWidth
           />
-          <Typography id="modal-description">
-            계정을 삭제하시겠습니까? <br />
-            모든 작업물과 데이터가 영구적으로 삭제됩니다
-          </Typography>
-        </Box>
+        </Stack>
       </CuModal>
     </>
   )

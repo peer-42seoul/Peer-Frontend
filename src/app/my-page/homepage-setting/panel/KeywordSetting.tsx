@@ -17,24 +17,30 @@ import React, { useRef, useState } from 'react'
 import useSWR from 'swr'
 import TagChip from './TagChip'
 import CuTextModal from '@/components/CuTextModal'
+import TitleBox from '@/components/TitleBox'
+import useMedia from '@/hook/useMedia'
+import useToast from '@/states/useToast'
 
 interface IChip {
   key: number
   label: string
 }
 
-interface IToastProps {
-  severity: AlertColor | undefined
-  message: string
-}
-
 const KeywordAddingField = ({
   mutate,
-  setToastMessage,
+  openToast,
+  closeToast,
   keywordList,
 }: {
   mutate: () => void
-  setToastMessage: (message: IToastProps) => void
+  openToast: ({
+    severity,
+    message,
+  }: {
+    severity: AlertColor
+    message: React.ReactNode
+  }) => void
+  closeToast: () => void
   keywordList: Array<IChip> | undefined | null
 }) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
@@ -42,14 +48,15 @@ const KeywordAddingField = ({
   const axiosWithAuth = useAxiosWithAuth()
 
   const validateData = (trimmed: string) => {
+    closeToast()
     if (trimmed.length < 2) {
-      setToastMessage({
+      openToast({
         severity: 'error',
-        message: '알림 키워드는 양 끝 공백은 제외 최소 2자 이상이어야 합니다.',
+        message: '알림 키워드는 최소 2자 이상이어야 합니다.',
       })
       return false
     } else if (keywordList?.some((keyword) => keyword.label === trimmed)) {
-      setToastMessage({
+      openToast({
         severity: 'error',
         message: '이미 등록된 알림 키워드입니다.',
       })
@@ -59,27 +66,36 @@ const KeywordAddingField = ({
   }
 
   const addKeyword = async (trimmed: string) => {
+    closeToast()
     await axiosWithAuth
       .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/add`, {
         newKeyword: trimmed,
       })
       .then(() => {
-        setToastMessage({
+        openToast({
           severity: 'success',
-          message: `'${trimmed}'를 알림 키워드 목록에 추가하였습니다.`,
+          message: (
+            <>
+              <b>{trimmed}</b>(이)가 키워드로 등록되었습니다.
+            </>
+          ),
         })
         mutate()
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          setToastMessage({
+          openToast({
             severity: 'error',
             message: `${error.response.data.message}`,
           })
         } else {
-          setToastMessage({
+          openToast({
             severity: 'error',
-            message: `'${trimmed}'를 알림 키워드 목록에 추가하지 못했습니다.`,
+            message: (
+              <>
+                <b>{trimmed}</b>(을)를 알림 키워드 목록에 추가하지 못했습니다.
+              </>
+            ),
           })
         }
       })
@@ -122,8 +138,12 @@ const KeywordAddingField = ({
             <InputAdornment position="end">
               <CuButton
                 action={handleOnClick}
-                variant="contained"
+                variant="text"
                 message="추가"
+                TypographyProps={{
+                  variant: 'CaptionEmphasis',
+                  color: 'text.alternative',
+                }}
               />
             </InputAdornment>
           ),
@@ -137,12 +157,10 @@ const ChipsArray = ({
   data,
   mutate,
   isLoading,
-  setToastMessage,
 }: {
   mutate: () => void
   data: Array<IChip> | undefined | null
   isLoading: boolean
-  setToastMessage: (message: IToastProps) => void
 }) => {
   return (
     <Grid container columnSpacing={0.75} rowSpacing={1} py={1}>
@@ -162,14 +180,7 @@ const ChipsArray = ({
         ))}
       {data &&
         data.map((chip) => {
-          return (
-            <TagChip
-              key={chip.key}
-              mutate={mutate}
-              setToastMessage={setToastMessage}
-              chip={chip}
-            />
-          )
+          return <TagChip key={chip.key} mutate={mutate} chip={chip} />
         })}
     </Grid>
   )
@@ -180,24 +191,36 @@ const KeywordDisplayBox = ({
   data,
   isLoading,
   error,
-  setToastMessage,
+  openToast,
+  closeToast,
 }: {
   mutate: () => void
   data: Array<IChip> | undefined | null
   isLoading: boolean
   error: any
-  setToastMessage: (message: IToastProps) => void
+  openToast: ({
+    severity,
+    message,
+  }: {
+    severity: AlertColor
+    message: React.ReactNode
+  }) => void
+  closeToast: () => void
 }) => {
   const { isOpen, closeModal, openModal } = useModal()
   const axiosWithAuth = useAxiosWithAuth()
 
   const deleteAll = async () => {
-    console.log('전체 삭제')
+    closeToast()
     await axiosWithAuth
       .delete(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete/all`)
       .then(() => {
         closeModal()
         mutate()
+        openToast({
+          severity: 'success',
+          message: '모든 키워드를 삭제하였습니다.',
+        })
       })
   }
 
@@ -216,12 +239,7 @@ const KeywordDisplayBox = ({
       {error ? (
         <Typography>데이터를 가져오지 못했습니다.</Typography>
       ) : (
-        <ChipsArray
-          setToastMessage={setToastMessage}
-          mutate={mutate}
-          data={data}
-          isLoading={isLoading}
-        />
+        <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
       )}
       <CuTextModal
         open={isOpen}
@@ -241,11 +259,11 @@ const KeywordDisplayBox = ({
   )
 }
 
-const KeywordSetting = ({
-  setToastMessage,
-}: {
-  setToastMessage: (message: IToastProps) => void
-}) => {
+const KeywordSetting = () => {
+  const { isPc } = useMedia()
+
+  const { openToast, closeToast } = useToast()
+
   const axiosWithAuth = useAxiosWithAuth()
 
   const getKeywords = async (url: string) =>
@@ -267,31 +285,42 @@ const KeywordSetting = ({
   )
 
   return (
-    <Stack
-      p={3}
-      spacing={3}
-      alignSelf={'stretch'}
-      bgcolor={'background.secondary'}
-      borderRadius={2}
+    <TitleBox
+      title="알림 설정"
+      titleComponent={
+        <Stack
+          direction={'row'}
+          justifyContent={'flex-start'}
+          alignItems={'center'}
+          height={'2.5rem'}
+        >
+          <CuTextFieldLabel htmlFor="keyword-field">
+            <Typography
+              variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}
+              component={'h3'}
+              color={'text.normal'}
+            >
+              키워드 설정
+            </Typography>
+          </CuTextFieldLabel>
+        </Stack>
+      }
     >
-      <CuTextFieldLabel style={{ margin: '8px 0px' }} htmlFor="keyword-field">
-        <Typography variant="Title3Emphasis" color={'text.normal'}>
-          키워드 설정
-        </Typography>
-      </CuTextFieldLabel>
       <KeywordAddingField
-        setToastMessage={setToastMessage}
+        openToast={openToast}
+        closeToast={closeToast}
         mutate={mutate}
         keywordList={data}
       />
       <KeywordDisplayBox
-        setToastMessage={setToastMessage}
+        openToast={openToast}
+        closeToast={closeToast}
         mutate={mutate}
         data={data}
         isLoading={isLoading}
         error={error}
       />
-    </Stack>
+    </TitleBox>
   )
 }
 

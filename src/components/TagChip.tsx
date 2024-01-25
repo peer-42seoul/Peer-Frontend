@@ -1,4 +1,5 @@
-import { Chip } from '@mui/material'
+import { CloseIcon } from '@/icons'
+import { Chip, Typography, alpha } from '@mui/material'
 import { useMemo } from 'react'
 
 const TagChip = ({
@@ -9,25 +10,50 @@ const TagChip = ({
   name: string
   color: string
   onDelete?: () => void
+  deleteIcon?: boolean
 }) => {
-  const backgroundColor = useMemo(() => {
-    if (!color) return ''
-    const r = parseInt(color.slice(1, 3), 16),
-      g = parseInt(color.slice(3, 5), 16),
-      b = parseInt(color.slice(5, 7), 16)
-    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + '0.3' + ')'
-  }, [color])
+  const backgroundColor = useMemo(() => alpha(color, 0.3), [color])
 
   return (
     <Chip
-      label={name ?? ''}
+      label={
+        (
+          <Typography variant="Tag" color={color} sx={{ padding: 0 }}>
+            {name}
+          </Typography>
+        ) ?? ''
+      }
       size="small"
-      style={{
+      sx={{
         color: color,
         backgroundColor: backgroundColor,
-        borderRadius: 5,
+        borderRadius: '2px',
+        padding: onDelete ? '6px 0px 6px 8px' : '0px 6px',
+        height: onDelete ? '1.5rem' : '1.25rem',
+        '& .MuiChip-label': {
+          padding: '0px',
+        },
+        display: 'inline-flex',
+        flexShrink: 0,
+        alignItems: 'center',
       }}
       onDelete={onDelete}
+      deleteIcon={
+        <CloseIcon
+          sx={{
+            height: '1.5rem',
+            width: '1.5rem',
+            right: 0,
+            display: 'relative',
+            margin: 0,
+            color: color,
+            py: '6px',
+            boxSizing: 'border-box',
+            transform: 'translateX(6px)',
+          }}
+          style={{ color: color }}
+        />
+      }
     />
   )
 }

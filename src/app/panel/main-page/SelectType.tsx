@@ -1,5 +1,5 @@
-import { Button, ButtonGroup } from '@mui/material'
-import { ProjectType } from '../MainPage'
+import { Button, ButtonGroup, Typography } from '@mui/material'
+import { ProjectType } from '@/types/IPostDetail'
 
 const SelectType = ({
   type,
@@ -14,24 +14,30 @@ const SelectType = ({
   return (
     <ButtonGroup>
       <Button
-        variant="text"
-        sx={{
-          color: !type || type === 'STUDY' ? 'primary' : 'text.assistive',
-        }}
         onClick={() => {
           setType('STUDY')
         }}
+        variant={'text'}
       >
-        스터디
+        <Typography
+          color={!type || type === 'STUDY' ? 'primary' : 'text.assistive'}
+          variant={'Title3'}
+        >
+          스터디
+        </Typography>
       </Button>
       <Button
         variant="text"
-        sx={{ color: type === 'PROJECT' ? 'primary' : 'text.assistive' }}
         onClick={() => {
           setType('PROJECT')
         }}
       >
-        프로젝트
+        <Typography
+          color={type === 'PROJECT' ? 'primary' : 'text.assistive'}
+          variant={'Title3'}
+        >
+          프로젝트
+        </Typography>
       </Button>
     </ButtonGroup>
   )

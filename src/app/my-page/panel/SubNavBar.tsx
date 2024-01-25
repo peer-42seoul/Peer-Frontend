@@ -45,7 +45,8 @@ const SubNavBar = ({ sx }: { sx: SxProps }) => {
   return (
     <Box
       sx={{
-        p: '1.5rem 2rem',
+        px: ['1rem', '2rem'],
+        py: ['1.5rem'],
         ...sx,
       }}
     >

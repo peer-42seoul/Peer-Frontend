@@ -1,17 +1,20 @@
 'use client'
-import { AlertColor, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ProfileCard from './panel/ProfileCard'
 import { IUserProfile } from '@/types/IUserProfile'
 import ProfileBioEditor from './panel/ProfileBioEditor'
 import ProfileLinkEditor from './panel/ProfileLinkEditor'
-import useToast from '@/hook/useToast'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import useAuthStore from '@/states/useAuthStore'
 import CuButton from '@/components/CuButton'
 import { useRouter } from 'next/navigation'
 import MyInfoCard from './panel/MyInfoCard'
+import useMedia from '@/hook/useMedia'
+import * as style from '../panel/my-page.style'
+import MyPortfolio from './panel/MyPortfolio'
+import SkillsEditor from './panel/SkillsEditor'
 
 interface IModals {
   introduction: boolean
@@ -20,12 +23,6 @@ interface IModals {
   links: boolean
 }
 
-interface IToastProps {
-  severity?: AlertColor
-  message: string
-}
-
-// TODO 소개 - 수정 이런 ui 다른 공통 컴포넌트로 빼기
 const MyProfile = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const {
@@ -38,6 +35,8 @@ const MyProfile = () => {
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
+  const { isPc } = useMedia()
+
   const [modalType, setModalType] = useState<string>('' as string)
   const [modalOpen, setModalOpen] = useState<IModals>({
     introduction: false,
@@ -45,9 +44,6 @@ const MyProfile = () => {
     skills: false,
     links: false,
   })
-  const [toastMessage, setToastMessage] = useState<IToastProps>(
-    {} as IToastProps,
-  )
 
   useEffect(() => {
     const newModalOpen: IModals = {
@@ -69,8 +65,6 @@ const MyProfile = () => {
 
     setModalOpen(newModalOpen)
   }, [modalType])
-
-  const { CuToast, isOpen: isToastOpen, openToast, closeToast } = useToast()
 
   const router = useRouter()
   const { logout } = useAuthStore.getState()
@@ -95,7 +89,12 @@ const MyProfile = () => {
   }
 
   return (
-    <Stack width={1} spacing={4}>
+    <Stack
+      width={1}
+      spacing={isPc ? '2rem' : '1.5rem'}
+      sx={isPc ? style.pagePcStyle : style.pageMobileStyle}
+      justifyContent={'center'}
+    >
       {/* 프로필 이미지, 유저 이름, 소속(42?), 아이디, 이메일 표시 컴포넌트 */}
       <ProfileCard
         profileImageUrl={userInfo.profileImageUrl}
@@ -104,14 +103,19 @@ const MyProfile = () => {
         email={userInfo.email}
         introduction={userInfo.introduction}
         setModalType={setModalType}
+        isEditable={true}
       />
 
       {/* profile my info */}
       <MyInfoCard
         linkList={userInfo?.linkList}
+        skillList={userInfo?.skillList}
         setModalType={setModalType}
         handleLogout={handleLogout}
+        isEditable={true}
       />
+
+      <MyPortfolio portfolioVisibility={userInfo.portfolioVisibility} />
 
       {/* modals */}
       <ProfileBioEditor
@@ -122,8 +126,6 @@ const MyProfile = () => {
           email: userInfo.email,
           introduction: userInfo.introduction,
         }}
-        setToastMessage={setToastMessage}
-        setToastOpen={openToast}
         closeModal={() => setModalType('')}
         mutate={mutate}
         open={modalOpen.introduction}
@@ -131,19 +133,15 @@ const MyProfile = () => {
       <ProfileLinkEditor
         links={userInfo?.linkList}
         closeModal={() => setModalType('')}
-        setToastMessage={setToastMessage}
-        setToastOpen={openToast}
         mutate={mutate}
         open={modalOpen.links}
       />
-      {/* toast */}
-      <CuToast
-        open={isToastOpen}
-        onClose={closeToast}
-        severity={toastMessage.severity}
-      >
-        <Typography>{toastMessage.message}</Typography>
-      </CuToast>
+      <SkillsEditor
+        open={modalOpen.skills}
+        skillList={userInfo?.skillList}
+        mutate={mutate}
+        closeModal={() => setModalType('')}
+      />
     </Stack>
   )
 }

@@ -8,8 +8,7 @@ import {
   CircularProgress,
 } from '@mui/material'
 import useMedia from '@/hook/useMedia'
-import ChevronLeft from '@/icons/ChevronLeft'
-import CloseIcon from '@/icons/CloseIcon'
+import { ChevronLeft, CloseIcon } from '@/icons'
 import CuButton from './CuButton'
 import * as style from './CuModal.style'
 
@@ -32,7 +31,7 @@ interface IModalButton {
 
 export interface ICuModalProps extends Omit<ModalProps, 'onClose'> {
   title: string
-  containedButton: IModalButton
+  containedButton?: IModalButton
   textButton?: IModalButton
   mobileFullSize?: boolean // 기본적으로 false입니다.
   onClose: () => void
@@ -56,7 +55,7 @@ const getModalWrapperStyle = (isPc: boolean, mobileFullSize?: boolean) => {
  * (디자인 적용을 위해 추가된 props)
  * @param title Modal의 제목입니다. (필수)
  * @param onClose Modal의 닫기 함수입니다. (필수)
- * @param containedButton (IModalButton) Modal의 주 버튼입니다. (필수)
+ * @param containedButton (IModalButton) Modal의 주 버튼입니다. (선택)
  * @param textButton (IModalButton) Modal의 보조 버튼입니다. (선택)
  * @param mobileFullSize 모바일에서 모달이 전체 화면을 차지하도록 합니다. (기본값: false)
  */
@@ -68,14 +67,17 @@ const CuModal = ({
   mobileFullSize,
   open,
   onClose,
-  sx,
+  // sx,
   keepMounted,
   children,
 }: ICuModalProps) => {
   const { isPc } = useMedia()
   return (
-    <Modal open={open} onClose={onClose} sx={sx} keepMounted={!!keepMounted}>
-      <Stack spacing={'1.5rem'} sx={getModalWrapperStyle(isPc, mobileFullSize)}>
+    <Modal open={open} onClose={onClose} keepMounted={!!keepMounted}>
+      <Stack
+        spacing={'1.5rem'}
+        sx={{ ...getModalWrapperStyle(isPc, mobileFullSize) }}
+      >
         <Stack
           direction={'row'}
           justifyContent={'space-between'}
@@ -96,9 +98,13 @@ const CuModal = ({
           >
             {title}
           </Typography>
-          <IconButton onClick={onClose} sx={style.headerCloseButton}>
-            <CloseIcon />
-          </IconButton>
+          {isPc && !mobileFullSize ? (
+            <IconButton onClick={onClose} sx={style.headerCloseButton}>
+              <CloseIcon />
+            </IconButton>
+          ) : (
+            <Box sx={style.headerDummyButton}></Box>
+          )}
         </Stack>
         <Stack sx={style.modalContent} justifyContent={'center'}>
           {children}
@@ -120,20 +126,22 @@ const CuModal = ({
               }
             />
           ) : null}
-          <CuButton
-            variant={'contained'}
-            message={containedButton.isLoading ? '' : containedButton.text}
-            action={containedButton.onClick}
-            fullWidth
-            style={style.containedButton}
-            TypographyProps={style.containedButtonTypo}
-            type={containedButton.type}
-            form={containedButton.form}
-            disabled={containedButton.isLoading}
-            startIcon={
-              containedButton.isLoading ? <CircularProgress /> : undefined
-            }
-          />
+          {containedButton ? (
+            <CuButton
+              variant={'contained'}
+              message={containedButton.isLoading ? '' : containedButton.text}
+              action={containedButton.onClick}
+              fullWidth
+              style={style.containedButton}
+              TypographyProps={style.containedButtonTypo}
+              type={containedButton.type}
+              form={containedButton.form}
+              disabled={containedButton.isLoading}
+              startIcon={
+                containedButton.isLoading ? <CircularProgress /> : undefined
+              }
+            />
+          ) : null}
         </Stack>
       </Stack>
     </Modal>

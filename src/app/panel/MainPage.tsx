@@ -21,7 +21,7 @@ import MainShowcase from './main-page/MainShowcase'
 import MainCarousel from './main-page/MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
-import { IPost } from '@/types/IPostDetail'
+import { IPost, ProjectType } from '@/types/IPostDetail'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
@@ -29,6 +29,9 @@ import { IPagination } from '@/types/IPagination'
 import PwaInstallBanner from './PwaInstallBanner'
 import PushAlertBanner from './PushAlertBanner'
 import MainBanner from '@/app/panel/main-page/MainBanner'
+import io from 'socket.io-client'
+import { getCookie } from 'cookies-next'
+import useSocket from '@/states/useSocket'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -40,7 +43,6 @@ export interface BeforeInstallPromptEvent extends Event {
 }
 
 export type ProjectSort = 'latest' | 'hit'
-export type ProjectType = 'STUDY' | 'PROJECT'
 export interface IDetailOption {
   isInit?: boolean
   due1: number
@@ -52,12 +54,20 @@ export interface IDetailOption {
   tag: string
 }
 
+export const socket = io(`${process.env.NEXT_PUBLIC_API_URL}:8084`, {
+  transports: ['socket.io', 'polling'],
+  query: {
+    token: getCookie('accessToken') ? getCookie('accessToken') : '',
+  },
+})
+
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
+  const { setSocket } = useSocket()
   /* 추후 디자인 추가되면 schedule 추가하기 */
   const [detailOption, setDetailOption] = useState<IDetailOption>({
     isInit: true,
@@ -109,6 +119,25 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('socket connected')
+    })
+    socket.on('disconnect', () => {
+      console.log('socket disconnected')
+    })
+    socket.on('connect_error', (err) => {
+      console.log(err)
+    })
+    socket.on('reconnect', (attemptNumber) => {
+      console.log('reconnect', attemptNumber)
+    })
+    socket.on('reconnect_attempt', (attemptNumber) => {
+      console.log('reconnect_attempt', attemptNumber)
+    })
+    setSocket(socket)
+  }, [])
 
   useEffect(() => {
     if (!newData || !newData?.content) return
@@ -170,11 +199,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           sx={{
             backgroundColor: 'Background.primary',
             border: '1px solid black',
+            maxWidth: '56.75rem',
           }}
         >
           <MainBanner />
           <SelectType type={type} setType={handleType} />
-          <Grid container p={2}>
+          <Grid container>
             <SearchOption
               openOption={openOption}
               setOpenOption={setOpenOption}
@@ -231,7 +261,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           {spinner && <CircularProgress />}
         </Container>
       </div>
-
       {/* pc view */}
       <div className="pc-layout">
         <Container
@@ -241,25 +270,23 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           }}
         >
           <Stack direction={'row'} border="1px solid black" spacing={4}>
-            <Stack flex={1}>
+            <Stack flex={1} gap={'0.5rem'}>
               <MainBanner />
               <SelectType type={type} setType={handleType} />
-              <Grid container p={2} bgcolor={'Background.primary'}>
+              <Grid container bgcolor={'Background.primary'}>
                 <SearchOption
                   openOption={openOption}
                   setOpenOption={setOpenOption}
                   setDetailOption={handleOption}
                 />
-                <Grid item xs={12}>
-                  <Stack
-                    direction="row"
-                    alignItems={'center'}
-                    justifyContent={'flex-end'}
-                  >
-                    <SelectSort sort={sort} setSort={handleSort} />
-                  </Stack>
-                </Grid>
               </Grid>
+              <Stack
+                direction="row"
+                alignItems={'center'}
+                justifyContent={'flex-end'}
+              >
+                <SelectSort sort={sort} setSort={handleSort} />
+              </Stack>
               {/*card list 영역*/}
               {isLoading && page == 1 ? (
                 <Typography>로딩중...</Typography>
@@ -269,7 +296,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 <Typography>데이터가 없습니다</Typography>
               ) : (
                 <>
-                  <Grid container spacing={2}>
+                  <Grid container spacing={'1rem'}>
                     {content?.map((project: IPost, index: number) => (
                       <Grid item key={index} sm={12} md={6} lg={4}>
                         <MainCard {...project} type={type} />
@@ -289,7 +316,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 </>
               )}
             </Stack>
-            <Stack width={'250px'} height={'100%'} gap={4}>
+            <Stack maxWidth={'19.25rem'} height={'100%'} gap={'1rem'}>
               <MainProfile />
               <MainShowcase />
               <MainCarousel />

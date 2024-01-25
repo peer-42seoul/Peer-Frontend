@@ -7,13 +7,11 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography,
 } from '@mui/material'
 
 const Answers = ({ data }: { data: IFormInterview }) => {
-  console.log('data.type', data.type)
   switch (data.type) {
-    case 'close': {
+    case 'CLOSE': {
       return (
         <Box>
           <RadioGroup
@@ -35,29 +33,33 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         </Box>
       )
     }
-    case 'open': {
+    case 'OPEN': {
       return (
         <TextField
           variant="standard"
           value={'주관식 답변입니다.'}
           disabled={true}
+          sx={{ width: '70%' }}
         />
       )
     }
-    case 'check': {
+    case 'CHECK': {
       return (
         <Box>
           <FormGroup sx={{ paddingLeft: '10px' }}>
             {data.optionList?.map((option, index) => {
               return (
                 <Box key={index}>
-                  <Typography>{`${index}번째 옵션`}</Typography>
                   <FormControlLabel
                     control={<Checkbox />}
                     label={``}
                     disabled={true}
                   />
-                  <TextField variant="standard" value={option} />
+                  <TextField
+                    variant="standard"
+                    value={option}
+                    disabled={true}
+                  />
                 </Box>
               )
             })}
@@ -65,7 +67,7 @@ const Answers = ({ data }: { data: IFormInterview }) => {
         </Box>
       )
     }
-    case 'ratio': {
+    case 'RATIO': {
       if (!data?.optionList) return
       const maxNumber = parseInt(data.optionList[0])
 

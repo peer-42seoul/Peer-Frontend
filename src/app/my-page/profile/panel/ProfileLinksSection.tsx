@@ -1,21 +1,21 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Avatar, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { IUserProfileLink } from '@/types/IUserProfile'
 import ProfileSection from './ProfileSection'
 import Link from 'next/link'
+import { useTheme } from '@mui/material'
+import * as style from './Profile.style'
 
 const ProfileLink = (props: IUserProfileLink) => {
   console.log(props.linkUrl)
+  const theme = useTheme()
   return (
     <Stack direction={'row'} spacing={0.5} alignItems={'center'}>
-      <Box
+      <Avatar
         key={props.linkUrl}
-        component="img"
         src={`https://www.google.com/s2/favicons?domain=${props.linkUrl}`}
-        sx={{
-          width: '24px',
-          height: '24px',
-        }}
+        sx={style.faviconStyle}
+        variant="square"
       />
       <Link
         href={
@@ -24,7 +24,9 @@ const ProfileLink = (props: IUserProfileLink) => {
             ? props.linkUrl
             : `//${props.linkUrl}`
         }
-        style={{ textDecorationColor: '#F6F6F6' }}
+        style={{
+          textDecorationColor: theme.palette.text.normal,
+        }}
       >
         <Typography variant={'Caption'} color={'text.strong'}>
           {props.linkName}
@@ -37,9 +39,11 @@ const ProfileLink = (props: IUserProfileLink) => {
 const ProfileLinksSection = ({
   linkList,
   setModalType,
+  isEditable,
 }: {
   linkList: Array<IUserProfileLink>
   setModalType: (type: string) => void
+  isEditable: boolean
 }) => {
   return (
     <Stack spacing={1}>
@@ -50,6 +54,7 @@ const ProfileLinksSection = ({
           color: 'text.strong',
           variant: 'CaptionEmphasis',
         }}
+        isEditable={isEditable}
       />
       <Stack spacing={0.25}>
         {linkList?.length ? (

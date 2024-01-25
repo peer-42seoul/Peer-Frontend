@@ -1,8 +1,13 @@
-import { ProjectType } from '@/app/panel/MainPage'
+import { SxProps } from '@mui/material'
+
+export type ProjectType = 'STUDY' | 'PROJECT'
 
 export interface ITag {
+  tagId: number
   name: string
   color: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface IMainCard {
@@ -16,6 +21,9 @@ export interface IMainCard {
   favorite?: boolean
   recruit_id: number
   type: ProjectType | undefined
+  href?: string
+  onFavorite?: () => void
+  sx?: SxProps
 }
 
 export interface IPost {
@@ -47,6 +55,7 @@ export interface IPostDetail {
   image: string
   totalNumber: number
   favorite: boolean
+  teamName: string
 }
 
 export interface IFormInterview {
@@ -58,6 +67,12 @@ export interface IFormInterview {
 export interface IRole {
   name: string
   number: number
+  current: number
+}
+
+export interface IRoleWrite {
+  name: string | null
+  number: number
 }
 
 export type TPostStatus = 'BEFORE' | 'ONGOING' | 'DONE'
@@ -66,9 +81,4 @@ export enum statusEnum {
   BEFORE,
   ONGOING,
   AFTER,
-}
-
-export interface IRoleData {
-  role: string | null
-  member: number
 }

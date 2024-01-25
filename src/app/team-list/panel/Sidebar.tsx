@@ -37,8 +37,6 @@ const Sidebar = () => {
             exclusive
             onChange={handleChange}
             sx={{
-              border: '1px solid',
-              borderRadius: 2,
               alignItems: 'center',
               flex: isPc ? 1 : 0,
               height: 'fit-content',

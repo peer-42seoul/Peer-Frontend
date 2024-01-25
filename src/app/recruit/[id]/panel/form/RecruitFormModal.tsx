@@ -1,5 +1,7 @@
+'use client'
+
 import useToast from '@/hook/useToast'
-import { Box, Button, Modal, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ConfirmModal from './ConfirmModal'
@@ -10,6 +12,8 @@ import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
+import CuTextField from '@/components/CuTextField'
+
 interface IInterviewData {
   question: string
   type: 'CLOSE' | 'OPEN' | 'RATIO' | 'CHECK'
@@ -21,13 +25,11 @@ const RecruitFormModal = ({
   setOpen,
   recruit_id,
   role,
-  setRoleOpen,
 }: {
   open: boolean
   setOpen: any
   recruit_id: string
   role: string | null
-  setRoleOpen: any
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setLoading] = useState(false)
@@ -63,22 +65,25 @@ const RecruitFormModal = ({
   }
 
   const onSubmit = async (values: any) => {
-    const array = Object.values(values)
-    const answerList = array?.map((res: any) => {
-      if (typeof res !== 'string') {
-        const idxArr = res?.map((item: any, idx: number) =>
-          item === true ? idx : undefined,
-        )
-        const trueArr = idxArr?.filter((item: any) => item !== undefined)
-        return trueArr.join('^&%') //정해놓은 구분자로 넣기
-      } else return res
-    })
+    let value
 
-    const value = {
-      role,
-      answerList,
+    if (!data?.length) value = { role, answerList: [] }
+    else {
+      const array = Object.values(values)
+      const answerList = array?.map((res: any) => {
+        if (typeof res !== 'string') {
+          const idxArr = res?.map((item: any, idx: number) =>
+            item === true ? idx : undefined,
+          )
+          const trueArr = idxArr?.filter((item: any) => item !== undefined)
+          return trueArr.join('^&%') //정해놓은 구분자로 넣기
+        } else return res
+      })
+      value = {
+        role,
+        answerList,
+      }
     }
-    console.log('value', value)
 
     try {
       setLoading(true)
@@ -86,20 +91,20 @@ const RecruitFormModal = ({
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`,
         value,
       )
-      setLoading(false)
       setOpenConfirm(false)
       openSuccessToast()
       router.push(`/recruit/${recruit_id}`)
       setOpen(false)
-      setRoleOpen(false)
     } catch (e) {
       setOpenConfirm(false)
       openFailedToast()
       console.log('e', e)
+    } finally {
+      setLoading(false)
     }
   }
 
-  return (
+  return (data?.length ?? 0) > 0 ? (
     <>
       <CuSuccessToast
         open={isSuccessOpen}
@@ -126,30 +131,37 @@ const RecruitFormModal = ({
           open={open}
           onClose={() => setOpen(false)}
           sx={{
-            zIndex: 1400,
+            zIndex: 1300,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <Box
-            border={'1px solid white'}
-            padding={4}
+          <Stack
+            gap={'1.5rem'}
+            padding={'1.5rem'}
             sx={{
               overflowY: 'auto',
               width: '70vw',
-              height: '70vh',
+              maxHeight: '70vh',
               maxWidth: '800px',
               backgroundColor: 'background.primary',
             }}
           >
-            <Typography variant="h6" fontWeight={'bold'}>
-              {role ? `지원하는 역할: ${role}` : '지원하기'}
+            <Typography color={'text.strong'} fontWeight={600}>
+              인터뷰 작성
             </Typography>
-            <Stack gap={1} marginY={1}>
+            <Stack gap={'1rem'}>
               {data?.map((quest, idx) => (
-                <Box key={idx} sx={{ border: '1px solid black' }}>
-                  <Typography>{quest.question}</Typography>
+                <Box
+                  key={idx}
+                  bgcolor={'background.secondary'}
+                  padding={'1.25rem'}
+                  borderRadius={'0.75rem'}
+                >
+                  <Typography variant={'Body1Emphasis'} marginBottom={'1rem'}>
+                    {quest.question}
+                  </Typography>
                   {quest.type === 'OPEN' && (
                     <Controller
                       rules={{
@@ -159,8 +171,10 @@ const RecruitFormModal = ({
                       control={control}
                       defaultValue=""
                       render={({ field }) => (
-                        <TextField
+                        <CuTextField
                           {...field}
+                          placeholder={'텍스트로 답변을 입력할 수 있습니다.'}
+                          variant="standard"
                           error={!!errors[idx]}
                           helperText={errors[idx]?.message as string}
                         />
@@ -207,10 +221,17 @@ const RecruitFormModal = ({
                 제출하기
               </Button>
             </Stack>
-          </Box>
+          </Stack>
         </Modal>
       </form>
     </>
+  ) : (
+    <ConfirmModal
+      isLoading={isLoading}
+      open={open}
+      setOpen={setOpen}
+      submitForm={submitForm}
+    />
   )
 }
 

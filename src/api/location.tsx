@@ -8,7 +8,7 @@ export const locationData: ILocation[] = [
     name: '선택안함',
   },
   {
-    name: '서울',
+    name: '서울특별시',
     subArea: [
       '강남구',
       '강동구',
@@ -38,7 +38,7 @@ export const locationData: ILocation[] = [
     ],
   },
   {
-    name: '경기',
+    name: '경기도',
     subArea: [
       '고양시',
       '과천시',
@@ -74,7 +74,7 @@ export const locationData: ILocation[] = [
     ],
   },
   {
-    name: '인천',
+    name: '인천광역시',
     subArea: [
       '계양구',
       '미추홀구',
@@ -297,7 +297,7 @@ export const locationData: ILocation[] = [
     ],
   },
   {
-    name: '제주도',
+    name: '제주특별자치도',
     subArea: ['서귀포시', '제주시'],
   },
   {

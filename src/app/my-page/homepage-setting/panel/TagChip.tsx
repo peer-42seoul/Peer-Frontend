@@ -2,23 +2,17 @@ import { Chip, Grid, SxProps, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import './TagChip.css'
 import useAxiosWithAuth from '@/api/config'
-import IToast from '@/types/IToastProps'
+import useToast from '@/states/useToast'
 
 interface IChip {
   key: number
   label: string
 }
 
-const TagChip = ({
-  chip,
-  mutate,
-  setToastMessage,
-}: {
-  chip: IChip
-  mutate: () => void
-  setToastMessage: (toastProps: IToast) => void
-}) => {
+const TagChip = ({ chip, mutate }: { chip: IChip; mutate: () => void }) => {
   const [style, setStyle] = useState<SxProps>({} as SxProps)
+
+  const { openToast, closeToast } = useToast()
 
   useEffect(() => {
     setStyle({
@@ -34,14 +28,15 @@ const TagChip = ({
   }, [])
 
   const axiosWithAuth = useAxiosWithAuth()
-  const handleDelete = async (chip: IChip) =>
+  const handleDelete = async (chip: IChip) => {
+    closeToast()
     await axiosWithAuth
       .delete(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete?keyword=${chip.label}`,
       )
       .then(() => {
         console.log(chip.label)
-        setToastMessage({
+        openToast({
           severity: 'success',
           message: `'${chip.label}'를 알림 키워드 목록에서 삭제했습니다.`,
         })
@@ -51,11 +46,12 @@ const TagChip = ({
       })
       .catch((error) => {
         console.log(error)
-        setToastMessage({
+        openToast({
           severity: 'error',
           message: `'${chip.label}'를 알림 키워드 목록에서 삭제하지 못했습니다`,
         })
       })
+  }
 
   return (
     <Grid item xs={0}>

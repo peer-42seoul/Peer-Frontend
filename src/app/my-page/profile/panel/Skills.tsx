@@ -1,48 +1,63 @@
-import { Chip, Grid, Typography } from '@mui/material'
+import { Chip, Stack, Typography } from '@mui/material'
 import React from 'react'
 import ProfileSection from './ProfileSection'
+import { ISkill } from '@/types/IUserProfile'
 
-const Skills = ({ setModalType }: { setModalType: (type: string) => void }) => {
-  const skills = ['test', 'test2', 'test3']
+const Skills = ({
+  skillList,
+  setModalType,
+  isEditable,
+}: {
+  skillList: Array<ISkill>
+  setModalType: (type: string) => void
+  isEditable: boolean
+}) => {
+  console.log(skillList)
   return (
-    <Grid
-      container
-      columnSpacing={1}
-      rowSpacing={1}
-      p={0}
-      justifyContent={'flex-start'}
-    >
-      <Grid item xs={12}>
-        <ProfileSection
-          sectionTitle="skills"
-          setModalType={setModalType}
-          titleTypographyProps={{
-            color: 'text.strong',
-            variant: 'CaptionEmphasis',
-          }}
-        />
-      </Grid>
-      {skills.map((skill) => (
-        <Grid item xs={0} key={skill}>
-          <Chip
-            label={
-              <Typography variant={'Tag'} color={'purple.strong'}>
-                {skill}
-              </Typography>
-            }
-            sx={{
-              padding: '0px 6px',
-              backgroundColor: 'purple.tinted',
-              borderRadius: '2px',
-              height: '20px',
-              '& .MuiChip-label': {
-                padding: '0px',
-              },
-            }}
-          />
-        </Grid>
-      ))}
-    </Grid>
+    <Stack direction={'column'} spacing={'0.5rem'}>
+      <ProfileSection
+        sectionTitle="skills"
+        setModalType={setModalType}
+        titleTypographyProps={{
+          color: 'text.strong',
+          variant: 'CaptionEmphasis',
+        }}
+        isEditable={isEditable}
+      />
+      <Stack
+        justifyContent={'flex-start'}
+        direction={'row'}
+        alignItems={'baseline'}
+        gap={1}
+        flexWrap={'wrap'}
+      >
+        {skillList?.length ? (
+          skillList.map((skill) => (
+            <Chip
+              key={skill.tagId}
+              label={
+                <Typography variant={'Tag'} color={'purple.strong'}>
+                  {skill.name}
+                </Typography>
+              }
+              sx={{
+                padding: '0px 6px',
+                backgroundColor: 'purple.tinted',
+                borderRadius: '2px',
+                height: '1.25rem',
+                '& .MuiChip-label': {
+                  padding: '0px',
+                },
+              }}
+            />
+          ))
+        ) : (
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            등록된 스킬이 없습니다.
+          </Typography>
+        )}
+      </Stack>
+    </Stack>
   )
 }
 

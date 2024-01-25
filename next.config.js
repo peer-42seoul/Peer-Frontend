@@ -26,6 +26,7 @@ const nextConfig = withPWA({
       'picsum.photos',
       'source.unsplash.com',
       'lh3.googleusercontent.com',
+      'lh3.google.com',
       'kr1-api-object-storage.nhncloudservice.com',
     ],
   },
@@ -35,6 +36,15 @@ const nextConfig = withPWA({
       skipWaiting: true,
     }),
   ],
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: ['@svgr/webpack'],
+    })
+
+    return config
+  },
 })
 
 const runtimeCaching = {

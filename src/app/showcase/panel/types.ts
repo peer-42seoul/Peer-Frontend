@@ -1,6 +1,7 @@
-interface tag {
+export interface IShowcaseTag {
   id: number
   name: string
+  color: string
 }
 
 export interface ICardData {
@@ -8,7 +9,7 @@ export interface ICardData {
   image: string | null
   name: string
   description: string
-  skill: tag[]
+  skill: IShowcaseTag[]
   like: number
   liked: boolean
   favorite: boolean
