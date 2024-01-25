@@ -1,12 +1,12 @@
 import { Box, Stack } from '@mui/material'
 import React from 'react'
-import TeamName from '../../panel/common/TeamName'
-import SkillInput from '../../panel/common/SkillInput'
-import StartEndDateViewer from '../../panel/common/StartEndDateViewer'
-import TeamMembers from '../../panel/common/TeamMembers'
+import TeamName from '../../../panel/common/TeamName'
+import SkillInput from '../../../panel/common/SkillInput'
+import StartEndDateViewer from '../../../panel/common/StartEndDateViewer'
+import TeamMembers from '../../../panel/common/TeamMembers'
 import { IShowcaseViewerFields } from '@/types/IShowcaseEdit'
 import ToastViewer from '@/components/ToastUIViewer'
-import LinksViewer from '../../panel/common/LinksViewer'
+import LinksViewer from '../../../panel/common/LinksViewer'
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 interface IShowcaseViewerProps {
   data: IShowcaseViewerFields // IShowcase 타입을 import 해야 합니다.

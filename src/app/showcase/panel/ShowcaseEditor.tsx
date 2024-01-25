@@ -81,7 +81,7 @@ const ShowcaseEditor = ({
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/showcase?showcaseId=${showcaseId}`)
+        router.push(`/showcase/detail/${showcaseId}`)
       }
     } catch (error: any) {
       closeModal()

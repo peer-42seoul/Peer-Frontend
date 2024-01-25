@@ -5,10 +5,18 @@ import { TagIcon } from '@/icons'
 import * as Style from './SkillInput.style'
 
 interface IlinksProps {
-  links: any
+  links: string[] | undefined
 }
 
 const LinksViewer = ({ links }: IlinksProps) => {
+  const convertLink = (link: string) => {
+    const httpPattern = /^https?:\/\//i
+    if (!httpPattern.test(link)) {
+      return `http://${link}`
+    }
+    return link
+  }
+
   return (
     <Stack>
       <LabelWithIcon
@@ -31,7 +39,7 @@ const LinksViewer = ({ links }: IlinksProps) => {
               direction={'row'}
               useFlexGap
             >
-              <a href={link.link} target="_blank" rel="noreferrer">
+              <a href={convertLink(link.link)} target="_blank" rel="noreferrer">
                 {link.name}
               </a>
             </Stack>
