@@ -29,7 +29,7 @@ const PushAlertBanner = () => {
       .then((currentToken: any) => {
         if (currentToken) {
           axiosInstance
-            .post(`${process.env.NEXT_PUBLIC_API_URL}/alarm/send-push`, {
+            .post(`${process.env.NEXT_PUBLIC_API_URL}:8082/alarm/send-push`, {
               token: currentToken,
               title: '푸시 알림 테스트',
               message: '푸시 알림 테스트 메시지입니다.',
