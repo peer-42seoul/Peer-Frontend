@@ -21,7 +21,7 @@ const BoardPostList = ({
   const { setBoard } = useTeamPageState()
   const { data, error, isLoading, size, setSize, targetRef } =
     useInfiniteSWRScroll(
-      `/api/v1/team-page/posts/${1}?&size=${10}&keyword=${keyword}`,
+      `/api/v1/team-page/posts/${boardId}?&size=${10}&keyword=${keyword}`,
       (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     )
 
