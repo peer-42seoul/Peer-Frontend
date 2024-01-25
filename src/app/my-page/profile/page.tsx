@@ -103,6 +103,7 @@ const MyProfile = () => {
         email={userInfo.email}
         introduction={userInfo.introduction}
         setModalType={setModalType}
+        isEditable={true}
       />
 
       {/* profile my info */}
@@ -111,9 +112,11 @@ const MyProfile = () => {
         skillList={userInfo?.skillList}
         setModalType={setModalType}
         handleLogout={handleLogout}
+        isEditable={true}
       />
 
-      <MyPortfolio />
+      <MyPortfolio portfolioVisibility={userInfo.portfolioVisibility} />
+
       {/* modals */}
       <ProfileBioEditor
         data={{
