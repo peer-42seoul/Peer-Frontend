@@ -38,6 +38,7 @@ import CuButton from '@/components/CuButton'
 import TagAutoComplete from '@/components/TagAutoComplete'
 import axios from 'axios'
 import useMedia from '@/hook/useMedia'
+import useAuthStore from '@/states/useAuthStore'
 
 const componentName = {
   alignItems: 'center',
@@ -101,6 +102,11 @@ const CreateTeam = () => {
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
   const { isPc } = useMedia()
+  const { isLogin } = useAuthStore()
+
+  useEffect(() => {
+    if (!isLogin) router.push('/login')
+  }, [isLogin])
 
   const { data, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
@@ -170,7 +176,7 @@ const CreateTeam = () => {
           region: place === 'ONLINE' ? null : region,
           link: link,
           tagList: tagList.map((tag) => tag.tagId),
-          roleList: roleList,
+          roleList: type === 'PROJECT' ? roleList : null,
           interviewList: interviewList,
           max: type === 'STUDY' ? parseInt(teamsize) : null,
         },

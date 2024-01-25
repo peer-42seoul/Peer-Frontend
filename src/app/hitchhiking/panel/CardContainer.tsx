@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { FormControlLabel, Stack, Typography } from '@mui/material'
 import CuTypeToggle from '@/components/CuTypeToggle'
@@ -28,6 +30,7 @@ const CardContainer = ({
       direction={'column'}
     >
       <Stack
+        direction={'row'}
         justifyContent={'center'}
         alignItems={'center'}
         sx={containerStyle.gnbContainerStyle}

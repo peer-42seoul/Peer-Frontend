@@ -9,13 +9,13 @@ import * as Style from './SkillInput.style'
 /* eslint-disable no-unused-vars */
 const ImageInput = ({
   previewImage,
-  setPreviewImage,
+  setPreviewImage, // setImage,
   setImage,
-  image,
-}: {
+} // image,
+: {
   previewImage: string
-  image: File[]
   setPreviewImage: (image: string) => void
+  image: File[]
   setImage: (image: File[]) => void
 }) => {
   return (
@@ -34,7 +34,8 @@ const ImageInput = ({
           <Box
             component={'img'}
             alt="쇼캐이스 대표 이미지"
-            src={image ? previewImage : '/images/teamLogo.png'}
+            src={previewImage} // 기존
+            // src={previewImage ? previewImage : '/images/teamLogo.png'}
             sx={Style.ShowcaseImageStyle}
           />
         ) : (

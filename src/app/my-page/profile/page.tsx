@@ -115,7 +115,8 @@ const MyProfile = () => {
         isEditable={true}
       />
 
-      <MyPortfolio />
+      <MyPortfolio portfolioVisibility={userInfo.portfolioVisibility} />
+
       {/* modals */}
       <ProfileBioEditor
         data={{

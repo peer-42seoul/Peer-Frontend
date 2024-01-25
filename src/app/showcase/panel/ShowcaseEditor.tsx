@@ -1,6 +1,6 @@
 'use client'
 import { Button, Stack } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
@@ -37,15 +37,22 @@ const ShowcaseEditor = ({
   const axiosWithAuth = useAxiosWithAuth()
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
-    '/images/defaultImage.png',
+    data.image ?? '/images/defaultImage.png',
   )
   const [errorMessages, setErrorMessages] = useState<string>('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
-    useLinks([])
-  const { content } = useShowCaseState()
+    useLinks(data.links ? data.links : [])
+  const { content, setContent } = useShowCaseState()
   const router = useRouter()
+
+  useEffect(() => {
+    if (requestMethodType === 'put') {
+      setContent(data?.content)
+    }
+  }, [requestMethodType, data?.content])
+
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
     if (!isValid) {
@@ -53,7 +60,7 @@ const ShowcaseEditor = ({
     }
     try {
       if (requestMethodType === 'post') {
-        const response = await axiosWithAuth.post(
+        await axiosWithAuth.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
           {
             image: previewImage.split(',')[1],
@@ -62,18 +69,17 @@ const ShowcaseEditor = ({
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${response.data.get('id')}`) // next 13에서 redirect 하는 법
+        router.push(`/showcase/${teamId}`)
       } else if (requestMethodType === 'put') {
-        const response = await axiosWithAuth.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${teamId}}`,
+        await axiosWithAuth.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${teamId}`,
           {
-            image: previewImage.split(',')[1],
+            image: image.length ? previewImage.split(',')[1] : null,
             content: content,
-            teamId: teamId,
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${response.data.get('id')}`)
+        router.push(`/showcase/${teamId}`)
       }
     } catch (error: any) {
       closeModal()
