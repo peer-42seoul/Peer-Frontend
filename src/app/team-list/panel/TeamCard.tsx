@@ -12,6 +12,7 @@ const TeamType = (type: string) => {
         textAlign={'center'}
         color={type === 'STUDY' ? 'yellow.strong' : 'green.strong'}
         fontWeight={'bold'}
+        height={'fit-content'}
       >
         {type === 'STUDY' ? '스터디' : '프로젝트'}
       </Typography>

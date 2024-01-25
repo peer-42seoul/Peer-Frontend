@@ -3,6 +3,7 @@ import { PieClearIcon } from '../Icons'
 import { Control, Controller } from 'react-hook-form'
 import { dueList } from '../SettingSelect'
 import { ISetupTeam } from '../SettingTeamInfo'
+import useMedia from '@/hook/useMedia'
 
 interface ISettingTeamTime {
   teamTime: string
@@ -10,12 +11,13 @@ interface ISettingTeamTime {
 }
 
 const SettingTeamTime = ({ teamTime, control }: ISettingTeamTime) => {
+  const isPc = useMedia()
   return (
     <Stack
       direction={'row'}
       alignItems={'center'}
+      mx={!isPc ? '0.5rem' : ''}
       mb={'1.2rem'}
-      mx={'0.5rem'}
       spacing={'0.5rem'}
     >
       <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.25rem'}>

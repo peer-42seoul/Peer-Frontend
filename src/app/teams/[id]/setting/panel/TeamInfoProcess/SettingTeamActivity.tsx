@@ -4,6 +4,7 @@ import { Control, Controller } from 'react-hook-form'
 import { Select } from '@mui/material'
 import { TeamOperationForm } from '@/app/teams/types/types'
 import { ISetupTeam } from '../SettingTeamInfo'
+import useMedia from '@/hook/useMedia'
 
 interface ISettingTeamActivity {
   teamActivity: TeamOperationForm
@@ -14,12 +15,13 @@ const SettingTeamActivity = ({
   teamActivity,
   control,
 }: ISettingTeamActivity) => {
+  const isPc = useMedia()
   return (
     <Stack
       direction={'row'}
       alignItems={'center'}
       mb={'1.2rem'}
-      mx={'0.5rem'}
+      mx={!isPc ? '0.5rem' : ''}
       spacing={'0.5rem'}
     >
       <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.35rem'}>
