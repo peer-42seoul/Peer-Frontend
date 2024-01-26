@@ -2,10 +2,13 @@
 
 import {
   Avatar,
+  Button,
   Card,
   CardActions,
   CardContent,
   IconButton,
+  Menu,
+  MenuItem,
   Stack,
   Typography,
 } from '@mui/material'
@@ -16,6 +19,7 @@ import { CalendarIcon, TagIcon, ThreeDotsIcon } from '../icons'
 import { MouseEvent, useCallback, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import TagChip from '@/components/TagChip'
+import { useRouter } from 'next/navigation'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -34,7 +38,10 @@ function toStringByFormatting(source: Date, delimiter = '-') {
 }
 
 const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
+  const router = useRouter()
   const [isTouched, setIsTouched] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
   const axiosWithAuth = useAxiosWithAuth()
   const handleCardClick = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
@@ -75,12 +82,20 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
       })
   }, [data, axiosWithAuth])
 
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleMenuOpen = (e: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(e.currentTarget)
+  }
+
   return (
     <Stack direction={'row'} spacing={10}>
       <Card
         sx={{
-          height: '33rem',
-          backgroundColor: 'primary',
+          height: '37rem',
+          backgroundColor: 'background.tertiary',
           width: '25rem',
         }}
       >
@@ -88,7 +103,11 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
           <CardActions onClick={handleCardClick}>
             <CardContent>
               <Stack spacing={'1.5rem'}>
-                <Stack direction={'row'} height={'1.5rem'}>
+                <Stack
+                  direction={'row'}
+                  height={'1.5rem'}
+                  justifyContent={'space-between'}
+                >
                   <Stack direction={'row'} spacing={'0.5rem'}>
                     <Avatar
                       src={data.image!}
@@ -132,15 +151,43 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                         m: 0,
                         p: 0,
                       }}
+                      onClick={handleMenuOpen}
                     >
                       <ThreeDotsIcon />
                     </IconButton>
+                    <Menu
+                      open={open}
+                      onClose={handleMenuClose}
+                      anchorEl={anchorEl}
+                    >
+                      <MenuItem>공유</MenuItem>
+                      <MenuItem>신고</MenuItem>
+                    </Menu>
                   </Stack>
                 </Stack>
-                <Stack minHeight={'20rem'} textOverflow={'ellipsis'}>
-                  <Typography>{data.description}</Typography>
+                <Stack
+                  height={'20rem'}
+                  width={'22rem'}
+                  whiteSpace={'normal'}
+                  overflow={'hidden'}
+                  textOverflow={'ellipsis'}
+                >
+                  <Typography sx={{ wordBreak: 'break-word' }}>
+                    {data.description}
+                  </Typography>
                 </Stack>
-                <Stack>전체 글 보기</Stack>
+                <Stack alignItems={'center'}>
+                  <Button
+                    variant="text"
+                    color="primary"
+                    sx={{ width: 'fit-content' }}
+                    onClick={() => router.push(`/showcase/${data.id}`)}
+                  >
+                    <Typography noWrap variant="caption">
+                      전체 글 보기
+                    </Typography>
+                  </Button>
+                </Stack>
                 <Stack spacing={'0.25rem'}>
                   <Stack
                     direction={'row'}

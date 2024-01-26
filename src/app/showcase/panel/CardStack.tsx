@@ -123,14 +123,7 @@ const CardStack = ({
                 transition={{ duration: 0.3 }}
               >
                 <ShowcaseCard
-                  authorImage={
-                    card.teamLogo ? card.teamLogo : '/image/logo.png'
-                  }
-                  teamName={card.name}
-                  title={card.description}
-                  tagList={card.skill}
-                  image={card.image}
-                  postId={card.id}
+                  data={card}
                   sx={isPc ? style.cardPcStyleBase : style.cardMobileStyleBase}
                   dragged={dragged}
                   setDragged={setDragged}
