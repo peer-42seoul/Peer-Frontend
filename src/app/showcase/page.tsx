@@ -54,6 +54,7 @@ const Showcase = () => {
   if (!isLoading && !cardList.length) message = '쇼케이스 끝!'
   else if (isLoading && !cardList.length) message = '로딩중'
   else if (error) message = '에러 발생'
+
   if (isPc) {
     return (
       <Stack

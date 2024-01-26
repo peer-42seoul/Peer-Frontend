@@ -243,7 +243,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 sx={{
                   bottom: 0,
                   height: '1vh',
-                  backgroundColor: 'primary.main',
                 }}
                 ref={target}
               />
@@ -309,7 +308,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                     sx={{
                       bottom: 0,
                       height: '1vh',
-                      backgroundColor: 'primary.main',
                     }}
                     ref={target}
                   />

@@ -2,7 +2,6 @@
 import React from 'react'
 import useMedia from '@/hook/useMedia'
 import { Stack, Typography } from '@mui/material'
-import Interest from './Interest'
 import * as cardStyle from './ShowcaseCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
@@ -11,12 +10,10 @@ import { ICardData } from '@/app/showcase/panel/types'
 const CardContainer = ({
   cardList,
   removeCard,
-
   message,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
-
   message: string
 }) => {
   const { isPc } = useMedia()
@@ -30,6 +27,7 @@ const CardContainer = ({
           : containerStyle.cardContainerMobileStyle
       }
       direction={'column'}
+      spacing={'2rem'}
     >
       <Stack
         justifyContent={'center'}
@@ -54,7 +52,6 @@ const CardContainer = ({
           <Typography variant="CaptionEmphasis">{message}</Typography>
         )}
       </Stack>
-      <Interest id={cardList[cardList.length - 1]?.id} />
     </Stack>
   )
 }
