@@ -44,10 +44,10 @@ const ProfileLinkEditor = ({
 
   const {
     handleSubmit,
-    // getFieldState,
-    // getValues,
+    getValues,
     control,
-    setError,
+    // setError,
+    clearErrors,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<Array<IUserProfileLink>>({
@@ -60,32 +60,65 @@ const ProfileLinkEditor = ({
     closeModal()
   }
 
+  // 링크 제목에서 부르는 함수
+  const isLinkUrlRequired = (idx: number, linkName: string) => {
+    const linkUrl = getValues(`${idx}.linkUrl`)
+    if (linkUrl) {
+      return
+    } else if (!linkUrl && !linkName) {
+      clearErrors(`${idx}.linkUrl`)
+    }
+  }
+
+  // 링크 주소에서 부르는 함수
+  const isLinkNameRequired = (idx: number, linkUrl: string) => {
+    const linkName = getValues(`${idx}.linkName`)
+    if (linkName) {
+      return
+    } else if (!linkUrl) {
+      clearErrors(`${idx}.linkName`)
+    }
+  }
+
+  // 링크 주소 유효성 검사
+  const isLinkUrlValid = (idx: number) => {
+    return (linkUrl: string) => {
+      const linkName = getValues(`${idx}.linkName`)
+      if (linkUrl) {
+        return true
+      } else if (linkName && !linkUrl) {
+        return '링크 주소(URL)를 입력해주세요.'
+      }
+    }
+  }
+
+  // 링크 제목 유효성 검사
+  const isLinkNameValid = (idx: number) => {
+    return (linkName: string) => {
+      const linkUrl = getValues(`${idx}.linkUrl`)
+      if (linkName) {
+        return true
+      } else if (linkUrl && !linkName) {
+        return '링크 제목을 입력해주세요.'
+      }
+    }
+  }
+
   const onSubmit = async (data: Array<IUserProfileLink>) => {
+    console.log(data)
     const requestBody: {
       linkList: Array<{ linkName: string; linkUrl: string }>
     } = {
-      linkList: [] as Array<{ linkName: string; linkUrl: string }>,
+      linkList: [],
     }
-    for (let i = 0; i < 3; i++) {
-      if (data[i].linkUrl && !data[i].linkName) {
-        setError(`${i}.linkName`, {
-          type: 'required',
-          message: '아래 링크에 제목이 없습니다.',
-        })
-        return
-      } else if (data[i].linkName && !data[i].linkUrl) {
-        setError(`${i}.linkUrl`, {
-          type: 'required',
-          message: '위 링크 제목에 링크가 없습니다.',
-        })
-        return
-      }
+
+    for (let i = 0; i < data.length; i++) {
       requestBody.linkList.push({
-        linkName: data[i].linkName,
-        linkUrl: data[i].linkUrl,
+        linkName: data[i].linkName ?? '',
+        linkUrl: data[i].linkUrl ?? '',
       })
     }
-    console.log('제출중!', isSubmitting)
+
     closeToast()
     await axiosWithAuth
       .put(
@@ -153,6 +186,14 @@ const ProfileLinkEditor = ({
                         variant="outlined"
                         id={`${i}.linkName`}
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e)
+                          isLinkUrlRequired(i, field.value)
+                        }}
+                        onBlur={() => {
+                          field.onBlur()
+                          isLinkUrlRequired(i, field.value)
+                        }}
                         autoComplete="off"
                         error={errors[i]?.linkName ? true : false}
                         fullWidth
@@ -173,6 +214,9 @@ const ProfileLinkEditor = ({
                         message:
                           '링크 제목은 최대 20글자까지만 적용 가능합니다.',
                       },
+                      validate: {
+                        required: isLinkNameValid(i),
+                      },
                     }}
                   />
                   <Controller
@@ -181,6 +225,14 @@ const ProfileLinkEditor = ({
                         variant="outlined"
                         id={`${i}.linkUrl`}
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e)
+                          isLinkNameRequired(i, field.value)
+                        }}
+                        onBlur={() => {
+                          field.onBlur()
+                          isLinkNameRequired(i, field.value)
+                        }}
                         autoComplete="off"
                         error={errors[i]?.linkUrl ? true : false}
                         fullWidth
@@ -199,6 +251,9 @@ const ProfileLinkEditor = ({
                       maxLength: {
                         value: 300,
                         message: '링크는 최대 300글자까지만 적용 가능합니다.',
+                      },
+                      validate: {
+                        required: isLinkUrlValid(i),
                       },
                     }}
                   />
