@@ -1,6 +1,7 @@
 'use client'
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 import CuModal from '@/components/CuModal'
+import { ICuModalProps } from '@/types/ModalTypes'
 import { IEvent } from '@/types/WidgetDataTypes'
 import PreviewModalContent from './PreviewModalContent'
 import * as style from './CalendarModal.style'
@@ -9,13 +10,6 @@ interface IPreviewModalProps {
   open: boolean
   onClose: () => void
   events?: IEvent[]
-}
-
-interface IContainerProps {
-  open: boolean
-  onClose: () => void
-  title: string
-  children: ReactNode
 }
 
 type TCalendarModalType = 'preview' | 'create'
@@ -32,19 +26,21 @@ const CalendarModal = ({ open, onClose, events }: IPreviewModalProps) => {
           />
         </CalendarModalContainer>
       )
+    case 'create':
+      return (
+        <CalendarModalContainer open={open} onClose={onClose} title={'캘린더'}>
+          <div>create</div>
+        </CalendarModalContainer>
+      )
     default:
       return null
   }
 }
 
-const CalendarModalContainer = ({
-  open,
-  onClose,
-  children,
-}: IContainerProps) => {
+const CalendarModalContainer = (props: ICuModalProps) => {
   return (
-    <CuModal sx={style.modal} open={open} onClose={onClose} title={'캘린더'}>
-      <>{children}</>
+    <CuModal sx={style.modal} {...props}>
+      <>{props.children}</>
     </CuModal>
   )
 }
