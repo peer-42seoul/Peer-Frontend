@@ -10,7 +10,6 @@ import {
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import WidgetUpdate from '@/app/teams/[id]/panel/WidgetUpdate'
 import SelectedWidget from './SelectedWidget'
-// import BoardWidget from './widgets/BoardWidget'
 
 interface IWidgetsRenderProps {
   data: ITeamDnDLayout | undefined
@@ -25,15 +24,15 @@ interface IWidgetsRenderProps {
 
 /** @todo 나중에 위젯 데이터 받는 방식 결정나면 저장버튼-툴박스-렌더 컴포넌트가 형제컴포넌트가 되도록 리팩토링 **/
 const WidgetsRender = ({
-  data,
-  type,
-  size,
-  isDropping,
-  droppingItem,
-  edit,
-  setEdit,
-  children,
-}: IWidgetsRenderProps) => {
+                         data,
+                         type,
+                         size,
+                         isDropping,
+                         droppingItem,
+                         edit,
+                         setEdit,
+                         children,
+                       }: IWidgetsRenderProps) => {
   const [index, setIndex] = useState(0)
   const layoutRef = useRef<HTMLInputElement | null>(null)
 
@@ -43,7 +42,7 @@ const WidgetsRender = ({
     return data?.widgets?.map((widget, index) => {
       const res = {
         ...widget,
-        key: index,
+        key: crypto.randomUUID(),
         grid: {
           ...widget.grid,
           i: index.toString(),
@@ -56,7 +55,7 @@ const WidgetsRender = ({
 
   const [layouts, setLayouts] = useState<IWidget[]>(setInitLayouts)
   const [prevLayouts, setPrevLayouts] = useState<IWidget[] | null>(null)
-
+  console.log('layouts', layouts)
   /* tablet 보다 크면 4개, 작으면 2개 */
   const isFourRow = useMediaQuery('(min-width:900px)')
 
@@ -90,8 +89,8 @@ const WidgetsRender = ({
     const checkX = newLayout.some((item) => item?.x + item?.w > 4)
     if (checkX) return false
     const checkY = newLayout.some((item) => item?.y + item?.h > 4)
-    if (checkY) return false
-    return true
+    return !checkY;
+
   }, [])
 
   /*
@@ -123,7 +122,7 @@ const WidgetsRender = ({
       if (!edit) return
       if (!isValidLayout(layout)) return
       const res = {
-        key: index,
+        key: crypto.randomUUID(),
         grid: {
           ...layoutItem,
           i: index.toString(),
@@ -132,7 +131,7 @@ const WidgetsRender = ({
         size,
         createdAt: new Date(),
         updatedAt: new Date(),
-        data: null,
+        data: undefined,
       }
 
       setLayouts(layouts ? [...layouts, res] : [res])

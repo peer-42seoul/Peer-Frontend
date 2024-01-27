@@ -27,7 +27,7 @@ export interface ITeamDnDLayout {
 // 위젯의 데이터
 //new Date
 export interface IWidget {
-  key: number
+  key: number | string
   size: SizeType // S/M/L
   grid: Layout // x,y,w,h
   type: WidgetType
