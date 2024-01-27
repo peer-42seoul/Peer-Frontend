@@ -1,9 +1,10 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CuModal from '@/components/CuModal'
 import { ICuModalProps } from '@/types/ModalTypes'
 import { IEvent } from '@/types/WidgetDataTypes'
 import PreviewModalContent from './PreviewModalContent'
+import EditModalContent from './EditModalContent'
 import * as style from './CalendarModal.style'
 
 interface IPreviewModalProps {
@@ -15,7 +16,7 @@ interface IPreviewModalProps {
 
 interface IModalData {
   type: TCalendarModalType
-  teamId?: number
+  teamId: number
   eventId?: number
   widgetId?: string
 }
@@ -32,6 +33,12 @@ const CalendarModal = ({
     type: 'preview',
     teamId,
   })
+  useEffect(() => {
+    setModalData({
+      type: 'preview',
+      teamId,
+    })
+  }, [open])
   switch (modalData.type) {
     case 'preview':
       return (
@@ -46,8 +53,30 @@ const CalendarModal = ({
       )
     case 'create':
       return (
-        <CalendarModalContainer open={open} onClose={onClose} title={'캘린더'}>
-          <div>create</div>
+        <CalendarModalContainer
+          open={open}
+          onClose={onClose}
+          title={'새로운 일정'}
+          textButton={{
+            text: '취소',
+            onClick: () =>
+              setModalData((prev) => ({
+                type: 'preview',
+                teamId: prev.teamId,
+              })),
+          }}
+          containedButton={{
+            text: '완료',
+            type: 'submit',
+            form: 'calender-form',
+          }}
+        >
+          <EditModalContent
+            teamId={modalData.teamId}
+            eventId={modalData.eventId}
+            widgetId={modalData.widgetId}
+            mode={'create'}
+          />
         </CalendarModalContainer>
       )
     default:
