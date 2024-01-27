@@ -23,15 +23,7 @@ const EncryptedSender = ({
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
 
-  const getStatus = async ({
-    payload,
-    setData,
-    apiType,
-  }: {
-    apiType: EApiType
-    payload: any
-    setData: (data: any) => void
-  }) => {
+  const getStatus = async (payload: any) => {
     if (!payload) {
       return
     }
@@ -91,7 +83,7 @@ const EncryptedSender = ({
         return
       }
       if (setIsLoading) setIsLoading(true)
-      await getStatus({ payload, setData, apiType })
+      await getStatus(payload)
       if (setIsLoading) setIsLoading(false)
     } catch (e) {
       console.log(e)
