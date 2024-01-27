@@ -8,7 +8,7 @@ import { SizeType } from '@/types/ITeamDnDLayout'
 import { IEvent } from '@/types/WidgetDataTypes'
 import WidgetCard from '../WidgetCard'
 import { getTodayData } from './utils'
-import PreviewModal from './CalendarModal'
+import CalendarModal from './CalendarModal'
 import Calendar from './Calendar'
 import * as style from './index.style'
 import './CalendarMini.scss'
@@ -36,7 +36,12 @@ const CalenderWidget = ({ data, size }: ICalendarWidget) => {
       <WidgetCard onClick={openModal}>
         <CalendarRender data={data} size={size} />
       </WidgetCard>
-      <PreviewModal open={isOpen} onClose={closeModal} events={data} />
+      <CalendarModal
+        open={isOpen}
+        onClose={closeModal}
+        events={data}
+        teamId={1} // TODO : teamId는 #519 PR 이후에 src/states/useDnDStore.ts 에서 얻어오기
+      />
     </>
   )
 }
