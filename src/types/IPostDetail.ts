@@ -1,11 +1,13 @@
+import { SxProps } from '@mui/material'
+
 export type ProjectType = 'STUDY' | 'PROJECT'
 
 export interface ITag {
   tagId: number
   name: string
   color: string
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface IMainCard {
@@ -19,6 +21,9 @@ export interface IMainCard {
   favorite?: boolean
   recruit_id: number
   type: ProjectType | undefined
+  href?: string
+  onFavorite?: () => void
+  sx?: SxProps
 }
 
 export interface IPost {

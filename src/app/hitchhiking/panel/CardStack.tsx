@@ -33,13 +33,8 @@ const CardStack = ({
     }
   }
 
-  const handleDragEnd = (
-    e: any,
-    info: any,
-    recruit_id: number,
-    title: string,
-  ) => {
-    // 위로 조금만 움직였을 때 카드가 사라지지 않도록 처리
+  const handleDragEnd = (e: any, info: any, recruit_id: number) => {
+    // COMMENT : 위로 조금만 움직였을 때 카드가 사라지지 않도록 처리
     if (
       Math.abs(info.offset.y) < 150 ||
       checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
@@ -49,8 +44,6 @@ const CardStack = ({
       return
     }
     removeCard(recruit_id)
-    // TODO: backend api 연결 시 콘솔 삭제 및 api 호출
-    console.log(`dislike api 호출 pathValue: ${recruit_id}, title: ${title}`)
 
     setDragged(false)
   }
@@ -115,12 +108,12 @@ const CardStack = ({
                 dragTransition={{ bounceStiffness: 300, bounceDamping: 50 }}
                 onDragStart={() => setDragged(true)}
                 onDragEnd={(e: any, info: any) =>
-                  handleDragEnd(e, info, card.recruitId, card.title)
+                  handleDragEnd(e, info, card.recruitId)
                 }
                 transition={{ duration: 0.3 }}
               >
                 <HitchhikingCard
-                  authorImage={''}
+                  authorImage={card.authorImage}
                   teamName={card.teamName}
                   title={card.title}
                   tagList={card.tagList}

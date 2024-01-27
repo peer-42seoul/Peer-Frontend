@@ -2,6 +2,12 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import { SizeType, WidgetType } from '@/types/ITeamDnDLayout'
 import { useCallback, useState } from 'react'
 import { sizeRatio } from '@/app/teams/[id]/panel/TeamDnD'
+import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
+import CalenderWidget from '@/app/teams/[id]/panel/widgets/CalenderWidget'
+import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
+import TmpImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
+import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
+import BoardWidget from './widgets/BoardWidget'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -71,6 +77,41 @@ const WidgetList = ({
     },
     [setDroppingItem, setIsDropping, setType, toolSize, setSize],
   )
+
+  // const getWidget = useCallback(
+  //   (typeValue: WidgetType) => {
+  //     switch (typeValue) {
+  //       case 'notice':
+  //         return <BoardWidget size={toolSize[typeValue] ?? 'S'} />
+  //       case 'board':
+  //         return (
+  //           <TmpBoardWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+  //         )
+  //       case 'calender':
+  //         return (
+  //           <CalenderWidget
+  //             data={undefined}
+  //             size={toolSize[typeValue] ?? 'S'}
+  //           />
+  //         )
+  //       case 'attendance':
+  //         return (
+  //           <TmpAttendWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+  //         )
+  //       case 'text':
+  //         return <TmpTextWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+  //       case 'image':
+  //         return (
+  //           <TmpImageWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+  //         )
+  //       case 'linkTable':
+  //         return <TmpLinkWidget data={null} size={toolSize[typeValue] ?? 'S'} />
+  //       default:
+  //         return null
+  //     }
+  //   },
+  //   [toolSize],
+  // )
 
   const settings = {
     dots: true,

@@ -1,9 +1,7 @@
 'use client'
 import React from 'react'
 import useMedia from '@/hook/useMedia'
-import { FormControlLabel, Stack, Typography } from '@mui/material'
-import CuTypeToggle from '@/components/CuTypeToggle'
-import Interest from './Interest'
+import { Stack, Typography } from '@mui/material'
 import * as cardStyle from './ShowcaseCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
@@ -12,15 +10,11 @@ import { ICardData } from '@/app/showcase/panel/types'
 const CardContainer = ({
   cardList,
   removeCard,
-  isProject,
   message,
-  handleChange,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
-  isProject: boolean
   message: string
-  handleChange: any
 }) => {
   const { isPc } = useMedia()
   return (
@@ -33,6 +27,7 @@ const CardContainer = ({
           : containerStyle.cardContainerMobileStyle
       }
       direction={'column'}
+      spacing={'2rem'}
     >
       <Stack
         justifyContent={'center'}
@@ -44,18 +39,6 @@ const CardContainer = ({
         </Typography>
       </Stack>
       <Stack
-        sx={containerStyle.toggleContainerStyle}
-        justifyContent={'center'}
-        alignItems={'center'}
-        direction={'row'}
-        spacing={'0.5rem'}
-      >
-        <FormControlLabel
-          control={<CuTypeToggle checked={isProject} onChange={handleChange} />}
-          label={''}
-        />
-      </Stack>
-      <Stack
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
@@ -64,16 +47,11 @@ const CardContainer = ({
         }}
       >
         {!message ? (
-          <CardStack
-            cardList={cardList}
-            removeCard={removeCard}
-            isProject={isProject}
-          />
+          <CardStack cardList={cardList} removeCard={removeCard} />
         ) : (
           <Typography variant="CaptionEmphasis">{message}</Typography>
         )}
       </Stack>
-      <Interest id={cardList[cardList.length - 1]?.id} />
     </Stack>
   )
 }

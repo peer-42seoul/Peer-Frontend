@@ -17,7 +17,7 @@ interface ICommentFormProps {
 }
 
 const Comment = ({ comment }: { comment: ITeamComment }) => {
-  const [isEditMode, setEditMode] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
   const axiosWithAuth = useAxiosWithAuth()
 
   const handleEdit = (e: FormEvent<HTMLFormElement>) => {
@@ -29,7 +29,7 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
       })
       .then(() => {
         alert('댓글을 수정했습니다.')
-        setEditMode(false)
+        setIsEditMode(false)
       })
       .catch(() => {
         alert('댓글 수정에 실패했습니다.')
@@ -54,7 +54,7 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
       comment={comment}
       isEditMode={isEditMode}
       handleDelete={handleDelete}
-      setEditMode={setEditMode}
+      setEditMode={setIsEditMode}
       handleEdit={handleEdit}
     />
   )

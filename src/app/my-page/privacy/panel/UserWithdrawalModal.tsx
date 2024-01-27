@@ -2,21 +2,15 @@
 
 import CuModal from '@/components/CuModal'
 
-import { useState, Dispatch, SetStateAction } from 'react'
+import { useState } from 'react'
 import { Button, Stack, TextField, Typography } from '@mui/material'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
-import IToastProps from '@/types/IToastProps'
 import LocalStorage from '@/states/localStorage'
 import { useRouter } from 'next/navigation'
+import useToast from '@/states/useToast'
 
-const UserWithdrawalModal = ({
-  setToastProps,
-  openToast,
-}: {
-  setToastProps: Dispatch<SetStateAction<IToastProps>>
-  openToast: () => void
-}) => {
+const UserWithdrawalModal = () => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true) // 다른 버튼이나 요소를 얘를 활용해서 모달 핸들링 가능
   const handleClose = () => setOpen(false)
@@ -30,13 +24,15 @@ const UserWithdrawalModal = ({
     }
   }
 
+  const { openToast, closeToast } = useToast()
+
   const handleDelete = async () => {
+    closeToast()
     if (password === '') {
-      setToastProps({
+      openToast({
         severity: 'error',
         message: '비밀번호를 입력해주세요',
       })
-      openToast()
       return
     }
     try {
@@ -55,17 +51,16 @@ const UserWithdrawalModal = ({
       router.push('/')
     } catch (error: any) {
       if (error.response?.status === 403) {
-        setToastProps({
+        openToast({
           severity: 'error',
           message: '비밀번호가 일치하지 않습니다',
         })
       } else {
-        setToastProps({
+        openToast({
           severity: 'error',
           message: '계정 삭제에 실패했습니다',
         })
       }
-      openToast()
     }
   }
 

@@ -10,6 +10,7 @@ import {
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import WidgetUpdate from '@/app/teams/[id]/panel/WidgetUpdate'
 import SelectedWidget from './SelectedWidget'
+// import BoardWidget from './widgets/BoardWidget'
 
 interface IWidgetsRenderProps {
   data: ITeamDnDLayout | undefined
@@ -60,6 +61,29 @@ const WidgetsRender = ({
   const isFourRow = useMediaQuery('(min-width:900px)')
 
   /* widget 가져오기 */
+  // const getWidget = useCallback(
+  //   (type: WidgetType, wgData: any, wgSize: SizeType) => {
+  //     switch (type) {
+  //       case 'notice':
+  //         return <BoardWidget size={wgSize} />
+  //       case 'board':
+  //         return <TmpBoardWidget data={wgData} size={wgSize} />
+  //       case 'calender':
+  //         return <CalenderWidget data={wgData} size={wgSize} />
+  //       case 'attendance':
+  //         return <TmpAttendWidget data={wgData} size={wgSize} />
+  //       case 'text':
+  //         return <TextWidget data={wgData} size={wgSize} />
+  //       case 'image':
+  //         return <ImageWidget data={wgData} size={wgSize} />
+  //       case 'linkTable':
+  //         return <TmpLinkWidget data={wgData} size={wgSize} />
+  //       default:
+  //         return null
+  //     }
+  //   },
+  //   [],
+  // )
 
   /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
   const isValidLayout = useCallback((newLayout: Layout[]) => {

@@ -14,6 +14,7 @@ import MyInfoCard from './panel/MyInfoCard'
 import useMedia from '@/hook/useMedia'
 import * as style from '../panel/my-page.style'
 import MyPortfolio from './panel/MyPortfolio'
+import SkillsEditor from './panel/SkillsEditor'
 
 interface IModals {
   introduction: boolean
@@ -102,16 +103,20 @@ const MyProfile = () => {
         email={userInfo.email}
         introduction={userInfo.introduction}
         setModalType={setModalType}
+        isEditable={true}
       />
 
       {/* profile my info */}
       <MyInfoCard
         linkList={userInfo?.linkList}
+        skillList={userInfo?.skillList}
         setModalType={setModalType}
         handleLogout={handleLogout}
+        isEditable={true}
       />
 
-      <MyPortfolio />
+      <MyPortfolio portfolioVisibility={userInfo.portfolioVisibility} />
+
       {/* modals */}
       <ProfileBioEditor
         data={{
@@ -130,6 +135,12 @@ const MyProfile = () => {
         closeModal={() => setModalType('')}
         mutate={mutate}
         open={modalOpen.links}
+      />
+      <SkillsEditor
+        open={modalOpen.skills}
+        skillList={userInfo?.skillList}
+        mutate={mutate}
+        closeModal={() => setModalType('')}
       />
     </Stack>
   )
