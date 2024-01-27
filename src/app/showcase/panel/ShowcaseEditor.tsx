@@ -1,5 +1,5 @@
 'use client'
-import { Button, Stack } from '@mui/material'
+import { Button, Container, Stack } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
@@ -17,6 +17,7 @@ import * as style from './ShowcaseEditor.style'
 import { useLinks } from '@/hook/useLinks'
 import useShowCaseState from '@/states/useShowCaseState'
 import { useRouter } from 'next/navigation'
+import useMedia from '@/hook/useMedia'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
@@ -48,6 +49,7 @@ const ShowcaseEditor = ({
     useLinks(data.links ? data.links : [])
   const { content, setContent } = useShowCaseState()
   const router = useRouter()
+  const { isPc } = useMedia()
 
   useEffect(() => {
     if (requestMethodType === 'put') {
@@ -117,8 +119,32 @@ const ShowcaseEditor = ({
   }
 
   return (
-    <form id="showcase-form">
-      <Stack direction={'column'} spacing={'2.5rem'} sx={{ width: '26rem' }}>
+    <Container
+      sx={{
+        padding: isPc ? '2.5rem 4rem 2.5rem 4rem' : '0 1rem 0 1rem',
+        width: '100%',
+        height: 'auto',
+      }}
+    >
+      <Stack
+        sx={{
+          width: '100%',
+          height: '4.5rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+          marginBottom: '1rem',
+        }}
+      >
+        <Button
+          onClick={openModal}
+          sx={style.saveButton}
+          style={{ width: '4.3125rem', height: '2rem' }}
+        >
+          저장
+        </Button>
+      </Stack>
+      <Stack direction={'column'} sx={{ width: '100%', gap: '2.5rem' }}>
         <ImageInput
           previewImage={previewImage}
           image={image}
@@ -142,9 +168,6 @@ const ShowcaseEditor = ({
           changeUrl={changeUrl}
         />
         <DynamicEditor content={data.content} />
-        <Button onClick={openModal} sx={style.saveButton}>
-          저장
-        </Button>
         <CuToast
           open={isOpen}
           onClose={closeToast}
@@ -166,7 +189,7 @@ const ShowcaseEditor = ({
           }}
         />
       </Stack>
-    </form>
+    </Container>
   )
 }
 export default ShowcaseEditor

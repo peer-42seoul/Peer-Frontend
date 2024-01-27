@@ -5,9 +5,12 @@ import CreateShowcasePage from './panel/CreateShowcasePage'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import useMedia from '@/hook/useMedia'
+import * as style from './panel/IntersectionSection.style'
 
 const ShowcaseGenerationPage = ({ params }: { params: { id: string } }) => {
   const { id } = params
+  const { isPc } = useMedia()
   const axiosWithAuth = useAxiosWithAuth()
 
   const { data, isLoading, error } = useSWR<any>(
@@ -23,22 +26,24 @@ const ShowcaseGenerationPage = ({ params }: { params: { id: string } }) => {
   return (
     <Stack
       display={'flex'}
-      width={'56.75rem'}
-      padding={'2rem 0rem'}
+      width={'100%'}
+      height={'auto'}
+      padding={'2rem 0 2rem 0'}
       flexDirection={'column'}
-      gap={'4rem'}
+      gap={'0.5rem'}
     >
-      <Typography color={'noraml'}>쇼케이스</Typography>
+      <Typography color={'text.strong'} variant="Body2">
+        쇼케이스
+      </Typography>
       <Stack
         display={'flex'}
         flexDirection={'row'}
         padding={'1.5rem'}
         justifyContent={'center'}
         alignItems={'center'}
-        gap={'1.5rem'}
-        alignSelf={'stretch'}
-        borderRadius={'1.5rem'}
-        sx={{ backgroundColor: 'background.secondary' }}
+        borderRadius={'1rem'}
+        boxSizing={'border-box'}
+        sx={style.contentBox(isPc)}
       >
         <CreateShowcasePage
           isPublished={data.isPublished}
