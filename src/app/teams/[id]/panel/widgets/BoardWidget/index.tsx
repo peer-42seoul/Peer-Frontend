@@ -11,7 +11,7 @@ import useMedia from '@/hook/useMedia'
 import { NoticeIcon } from '@/icons/TeamPage'
 import { SizeType } from '@/types/ITeamDnDLayout'
 import { ITeamNotice } from '@/types/TeamBoardTypes'
-import PreviewModal from './PreviewModal'
+import CalendarModal from '../CalenderWidget/CalendarModal'
 import WidgetCard from '../WidgetCard'
 import * as style from './index.style'
 
@@ -98,7 +98,7 @@ const BoardWidgetContainer = ({
         </Stack>
       </WidgetCard>
       {modalData && (
-        <PreviewModal
+        <CalendarModal
           open={isOpen}
           onClose={closeModal}
           data={modalData}

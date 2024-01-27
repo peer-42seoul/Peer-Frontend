@@ -9,7 +9,7 @@ import useMedia from '@/hook/useMedia'
 import { IEvent } from '@/types/WidgetDataTypes'
 import CalendarLarge from './CalendarLarge'
 import { isPastEvent, useCalendar } from './utils'
-import * as style from './PreviewModal.style'
+import * as style from './CalendarModal.style'
 
 interface IPreviewModalProps {
   open: boolean
@@ -23,7 +23,7 @@ interface IEventItem {
   end: Date | undefined
 }
 
-const PreviewModal = ({ open, onClose, events }: IPreviewModalProps) => {
+const CalendarModal = ({ open, onClose, events }: IPreviewModalProps) => {
   const { selectedDate, setSelectedDate, todayEvents, isEmpty } =
     useCalendar(events)
   const { isPc } = useMedia()
@@ -105,4 +105,4 @@ const EventItem = ({ title, start, end }: IEventItem) => {
   )
 }
 
-export default PreviewModal
+export default CalendarModal
