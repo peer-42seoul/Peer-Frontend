@@ -46,7 +46,7 @@ const NoticeEditForm = ({
     if (!editor) return
     const formData = new FormData(event.currentTarget)
     const form = {
-      title: formData.get('title') as string,
+      title: formData.get('post-title') as string,
       content: editor.getMarkdown(),
     }
     if (postId) {

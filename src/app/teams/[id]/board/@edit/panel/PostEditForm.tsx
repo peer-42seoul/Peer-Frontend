@@ -45,7 +45,6 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
     event.preventDefault()
     if (!editor) return
     const formData = new FormData(event.currentTarget)
-    console.log(formData.keys())
     const form = {
       title: formData.get('post-title') as string,
       content: editor.getMarkdown(),
