@@ -11,6 +11,7 @@ const EncryptedSender = ({
   apiType,
   setPayload,
   setIsLoading,
+  needToken = false,
 }: {
   children: React.ReactNode
   payload: any
@@ -18,6 +19,7 @@ const EncryptedSender = ({
   apiType: EApiType
   setPayload: (payload: any) => void
   setIsLoading?: (isLoading: boolean) => void
+  needToken?: boolean
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -60,15 +62,27 @@ const EncryptedSender = ({
 
     const payloadToken = await getToken(payload, verifySeed)
 
-    await axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`, {
-        code: verifyCode,
-        token: payloadToken,
-      })
-      .then((res) => {
-        console.log(res)
-        setData(res.data)
-      })
+    if (!needToken) {
+      await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`, {
+          code: verifyCode,
+          token: payloadToken,
+        })
+        .then((res) => {
+          console.log(res)
+          setData(res.data)
+        })
+    } else {
+      await axiosWithAuth
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`, {
+          code: verifyCode,
+          token: payloadToken,
+        })
+        .then((res) => {
+          console.log(res)
+          setData(res.data)
+        })
+    }
   }
 
   const apiSend = useCallback(async () => {
