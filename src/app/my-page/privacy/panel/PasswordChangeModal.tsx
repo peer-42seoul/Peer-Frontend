@@ -7,6 +7,7 @@ import FieldWithLabel from './FieldWithLabel'
 import { Box, Stack, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import * as style from './privacy-setting.style'
+import useToast from '@/states/useToast'
 
 const PasswordCheck = ({
   setPayload,
@@ -216,6 +217,23 @@ const PasswordChangeModal = ({
   const [data, setData] = useState<any>(null)
   const [payload, setPayload] = useState<any>(null)
 
+  const { openToast } = useToast()
+
+  const onSuccess = () => {
+    openToast({
+      severity: 'success',
+      message: '비밀번호가 변경되었습니다.',
+    })
+    closeModal()
+  }
+
+  const onError = (message: string) => {
+    openToast({
+      severity: 'error',
+      message,
+    })
+  }
+
   return (
     <CuModal
       open={isOpen}
@@ -258,19 +276,30 @@ const PasswordChangeModal = ({
           height={'100%'}
           sx={{ flexGrow: 1 }}
         >
-          <EncryptedSender
-            payload={payload}
-            setPayload={setPayload}
-            apiType={data ? EApiType.PASSWORD_MODIFY : EApiType.PASSWORD_CHECK}
-            setData={setData}
-            needToken
-          >
-            {data ? (
+          {data ? (
+            <EncryptedSender
+              payload={payload}
+              setPayload={setPayload}
+              apiType={EApiType.PASSWORD_MODIFY}
+              setData={setData}
+              needToken
+              onSuccess={onSuccess}
+              onError={onError}
+            >
               <PasswordModify setPayload={setPayload} code={data.code} />
-            ) : (
+            </EncryptedSender>
+          ) : (
+            <EncryptedSender
+              payload={payload}
+              setPayload={setPayload}
+              apiType={EApiType.PASSWORD_CHECK}
+              setData={setData}
+              needToken
+              onError={onError}
+            >
               <PasswordCheck setPayload={setPayload} />
-            )}
-          </EncryptedSender>
+            </EncryptedSender>
+          )}
         </Stack>
       </Stack>
     </CuModal>

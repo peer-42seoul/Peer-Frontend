@@ -12,6 +12,8 @@ const EncryptedSender = ({
   setPayload,
   setIsLoading,
   needToken = false,
+  onSuccess,
+  onError,
 }: {
   children: React.ReactNode
   payload: any
@@ -20,6 +22,8 @@ const EncryptedSender = ({
   setPayload: (payload: any) => void
   setIsLoading?: (isLoading: boolean) => void
   needToken?: boolean
+  onSuccess?: () => void
+  onError?: (message: string) => void
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -82,9 +86,12 @@ const EncryptedSender = ({
       }
       if (setIsLoading) setIsLoading(true)
       await getStatus(payload)
+      if (onSuccess) onSuccess()
       if (setIsLoading) setIsLoading(false)
-    } catch (e) {
+    } catch (e: any) {
       console.log(e)
+      if (onError)
+        onError(e?.response?.data?.message ?? '알 수 없는 오류가 발생했습니다.')
       if (setIsLoading) setIsLoading(false)
       setPayload(null)
     }
