@@ -8,7 +8,7 @@ interface IStoreDnDState {
   setTeamId: (teamId: number | undefined) => void
   storedWidgets: IWidget[] | undefined
   setStoredWidgets: (updatedData: IWidget[]) => any
-  setStoredWidgetData: (key: number, data: any) => any
+  setStoredWidgetData: (key: number | string, data: any) => any
 }
 
 /**
