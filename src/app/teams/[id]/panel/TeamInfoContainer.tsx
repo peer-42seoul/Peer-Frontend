@@ -3,6 +3,8 @@ import { Avatar, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import { ITeamInfo } from '@/types/ITeamInfo'
 import { StatusIcon, IconInfo } from './TeamInfoComponent'
+import { useEffect } from 'react'
+import useHeaderStore from '@/states/useHeaderStore'
 
 const defaultLogoPath = '/images/profile.jpeg' // TODO : 기본 로고 path 확인하기
 
@@ -12,6 +14,14 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/main/${id}`,
     (url: string) => axiosInstance(url).then((res) => res.data),
   )
+  const { setHeaderTitle } = useHeaderStore()
+
+  // set header
+  useEffect(() => {
+    if (data) {
+      setHeaderTitle(data.name)
+    }
+  }, [data])
 
   if (isLoading) {
     return <Typography>로딩중...</Typography>
