@@ -196,7 +196,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                     variant="text"
                     color="primary"
                     sx={{ width: 'fit-content' }}
-                    onClick={() => router.push(`/showcase/${data.id}`)}
+                    onClick={() => router.push(`/showcase/detail/${data.id}`)}
                   >
                     <Typography noWrap variant="caption">
                       전체 글 보기
