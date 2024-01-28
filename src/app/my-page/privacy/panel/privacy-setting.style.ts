@@ -8,3 +8,9 @@ export const buttonStyleBase: SxProps = {
   height: '1.75rem',
   wordBreak: 'keep-all',
 }
+
+export const circleStyle: SxProps = {
+  borderRadius: '500px',
+  width: '0.5rem',
+  height: '0.5rem',
+}

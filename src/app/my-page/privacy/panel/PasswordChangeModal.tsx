@@ -4,8 +4,9 @@ import React, { useState } from 'react'
 import { EApiType } from '@/types/EApiType'
 import EncryptedSender from '@/components/EncryptedSender'
 import FieldWithLabel from './FieldWithLabel'
-import { Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
+import * as style from './privacy-setting.style'
 
 const PasswordCheck = ({
   setPayload,
@@ -37,16 +38,145 @@ const PasswordCheck = ({
                 type: 'password',
                 maxLength: 20,
               }}
-              autoComplete="password"
+              autoComplete="current-password"
               error={!!errors.password}
               helperText={
-                <Typography variant="Caption" color={'error'}>
-                  {errors.password && errors.password.message}
-                </Typography>
+                <Box height={'1.125rem'}>
+                  <Typography variant="Caption" color={'error'}>
+                    {errors.password && errors.password.message}
+                  </Typography>
+                </Box>
               }
             />
           )}
           name="password"
+          rules={{
+            required: true,
+            minLength: {
+              value: 8,
+              message: '비밀번호는 8자 이상이어야 합니다',
+            },
+            maxLength: {
+              value: 20,
+              message: '비밀번호는 20자 이하여야 합니다',
+            },
+            validate: {
+              includeNumber: (value) =>
+                /\d/.test(value) || '비밀번호에 숫자가 포함되어야 합니다',
+              includeSpecial: (value) =>
+                /[!@#$%^&*]/.test(value) ||
+                '비밀번호에 특수문자가 포함되어야 합니다',
+              includeCapital: (value) =>
+                /[A-Z]/.test(value) || '비밀번호에 대문자가 포함되어야 합니다',
+              includeSmall: (value) =>
+                /[a-z]/.test(value) || '비밀번호에 소문자가 포함되어야 합니다',
+            },
+          }}
+          control={control}
+        />
+      </Stack>
+    </form>
+  )
+}
+
+const PasswordModify = ({
+  setPayload,
+  code,
+}: {
+  setPayload: (payload: any) => void
+  code: string
+}) => {
+  const {
+    handleSubmit,
+    getValues,
+    control,
+    formState: { errors },
+  } = useForm<{ newPassword: string; confirmPassword: string }>({
+    mode: 'onChange',
+  })
+
+  const onSubmit = (data: { newPassword: string; confirmPassword: string }) => {
+    setPayload({ password: data.newPassword, code })
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} id="password-modify">
+      <Stack spacing={'1rem'}>
+        <Controller
+          render={({ field }) => (
+            <FieldWithLabel
+              variant="outlined"
+              {...field}
+              id={'newPassword'}
+              title={'새 비밀번호 입력'}
+              placeholder="최소 8자, 최대 20자, 영문 대소문자, 숫자, 특수문자를 포함해주세요."
+              inputProps={{
+                type: 'password',
+                maxLength: 20,
+              }}
+              autoComplete="new-password"
+              error={!!errors.newPassword}
+              helperText={
+                <Box height={'1.125rem'}>
+                  <Typography variant="Caption" color={'error'}>
+                    {errors.newPassword && errors.newPassword.message}
+                  </Typography>
+                </Box>
+              }
+            />
+          )}
+          name="newPassword"
+          rules={{
+            required: true,
+            minLength: {
+              value: 8,
+              message: '비밀번호는 8자 이상이어야 합니다',
+            },
+            maxLength: {
+              value: 20,
+              message: '비밀번호는 20자 이하여야 합니다',
+            },
+            validate: {
+              includeNumber: (value) =>
+                /\d/.test(value) || '비밀번호에 숫자가 포함되어야 합니다',
+              includeSpecial: (value) =>
+                /[!@#$%^&*]/.test(value) ||
+                '비밀번호에 특수문자가 포함되어야 합니다',
+              includeCapital: (value) =>
+                /[A-Z]/.test(value) || '비밀번호에 대문자가 포함되어야 합니다',
+              includeSmall: (value) =>
+                /[a-z]/.test(value) || '비밀번호에 소문자가 포함되어야 합니다',
+              isSame: (value) =>
+                getValues('newPassword') === value ||
+                '비밀번호가 일치하지 않습니다.',
+            },
+          }}
+          control={control}
+        />
+        <Controller
+          render={({ field }) => (
+            <FieldWithLabel
+              variant="outlined"
+              {...field}
+              id={'confirmPassword'}
+              title={'새 비밀번호 재입력'}
+              placeholder="최소 8자, 최대 20자, 영문 대소문자, 숫자, 특수문자를 포함해주세요."
+              inputProps={{
+                type: 'password',
+                maxLength: 20,
+              }}
+              autoComplete="confirmPassword"
+              error={!!errors.confirmPassword}
+              helperText={
+                <Box height={'1.125rem'}>
+                  <Typography variant="Caption" color={'error'}>
+                    {errors.confirmPassword && errors.confirmPassword.message}
+                  </Typography>
+                </Box>
+              }
+            />
+          )}
+          name="confirmPassword"
           rules={{
             required: true,
             minLength: {
@@ -98,18 +228,51 @@ const PasswordChangeModal = ({
       containedButton={{
         text: '변경하기',
         type: 'submit',
-        form: 'password-check',
+        form: data ? 'password-modify' : 'password-check',
       }}
     >
-      <EncryptedSender
-        payload={payload}
-        setPayload={setPayload}
-        apiType={EApiType.PASSWORD_CHECK}
-        setData={setData}
-        needToken
+      <Stack
+        direction={'column'}
+        spacing={'1.5rem'}
+        height={'100%'}
+        sx={{ flexGrow: 1 }}
       >
-        <PasswordCheck setPayload={setPayload} />
-      </EncryptedSender>
+        <Stack
+          direction={'row'}
+          spacing={'0.75rem'}
+          justifyContent={'center'}
+          alignItems={'center'}
+        >
+          <Box
+            sx={{ ...style.circleStyle }}
+            bgcolor={data ? 'background.tertiary' : 'purple.strong'}
+          />
+          <Box
+            sx={{ ...style.circleStyle }}
+            bgcolor={data ? 'purple.strong' : 'background.tertiary'}
+          />
+        </Stack>
+        <Stack
+          direction={'column'}
+          justifyContent={'center'}
+          height={'100%'}
+          sx={{ flexGrow: 1 }}
+        >
+          <EncryptedSender
+            payload={payload}
+            setPayload={setPayload}
+            apiType={data ? EApiType.PASSWORD_MODIFY : EApiType.PASSWORD_CHECK}
+            setData={setData}
+            needToken
+          >
+            {data ? (
+              <PasswordModify setPayload={setPayload} code={data.code} />
+            ) : (
+              <PasswordCheck setPayload={setPayload} />
+            )}
+          </EncryptedSender>
+        </Stack>
+      </Stack>
     </CuModal>
   )
 }

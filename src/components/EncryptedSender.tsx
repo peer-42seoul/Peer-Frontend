@@ -61,7 +61,6 @@ const EncryptedSender = ({
           token: payloadToken,
         })
         .then((res) => {
-          console.log(res)
           setData(res.data)
         })
     } else {
@@ -71,7 +70,6 @@ const EncryptedSender = ({
           token: payloadToken,
         })
         .then((res) => {
-          console.log(res)
           setData(res.data)
         })
     }
