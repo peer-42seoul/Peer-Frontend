@@ -36,7 +36,7 @@ const MainShowcase = () => {
 
       {error && <Typography>에러 발생</Typography>}
 
-      {data && (
+      {data && data.content[0] && (
         <Stack alignItems={'center'} position={'relative'}>
           <Image
             width={300}
