@@ -27,7 +27,7 @@ interface IListItemProps {
   title: string
   authorNickname: string
   createdAt: Date
-  onClick: () => void
+  onClick?: () => void
   hit?: number
 }
 
