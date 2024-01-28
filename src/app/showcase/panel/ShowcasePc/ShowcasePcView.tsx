@@ -16,7 +16,7 @@ import { ICardData } from '../types'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import { CalendarIcon, TagIcon, ThreeDotsIcon } from '../icons'
-import { MouseEvent, useCallback, useState } from 'react'
+import { MouseEvent, useCallback, useEffect, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import TagChip from '@/components/TagChip'
 import { useRouter } from 'next/navigation'
@@ -38,6 +38,7 @@ function toStringByFormatting(source: Date, delimiter = '-') {
 }
 
 const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
+  const [isLiked, setIsLiked] = useState<boolean | undefined>(data?.liked)
   const router = useRouter()
   const [isTouched, setIsTouched] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -48,6 +49,12 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
     setIsTouched(!isTouched)
   }
 
+  useEffect(() => {
+    console.log('data', data)
+    console.log('isLiked', isLiked)
+    setIsLiked(data?.liked)
+  }, [data, isLiked])
+
   const clickLike = useCallback(() => {
     if (!data) return alert('로그인이 필요합니다.')
     axiosWithAuth
@@ -57,15 +64,20 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
       .then((res) => {
         if (res.status === 200) {
           console.log(res)
-          if (data.like < res.data.like) {
+          if (data.like <= res.data.like) {
             data.liked = true
+            setIsLiked(true)
+            console.log('true')
+            data.like = data.like + 1
           } else {
             data.liked = false
+            setIsLiked(false)
+            console.log('false')
+            data.like = data.like - 1
           }
-          data.like = res.data.like
         }
       })
-  }, [data, axiosWithAuth])
+  }, [data, axiosWithAuth, setIsLiked])
 
   const clickFavorite = useCallback(() => {
     if (!data) return alert('로그인이 필요합니다.')
@@ -121,7 +133,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                     <Stack direction={'row'} spacing={'0.5rem'}>
                       <IconButton
                         onClick={clickLike}
-                        color={data.liked ? 'primary' : 'inherit'}
+                        color={isLiked ? 'primary' : 'default'}
                         size="small"
                         sx={{
                           m: 0,
@@ -135,7 +147,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
 
                     <IconButton
                       onClick={clickFavorite}
-                      color={data.favorite ? 'primary' : 'inherit'}
+                      color={data.favorite ? 'primary' : 'default'}
                       size="small"
                       sx={{
                         m: 0,
