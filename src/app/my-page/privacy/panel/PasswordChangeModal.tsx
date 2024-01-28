@@ -239,6 +239,7 @@ const PasswordChangeModal = ({
       open={isOpen}
       onClose={closeModal}
       title="비밀번호 변경"
+      mobileFullSize
       textButton={{
         text: '취소',
         onClick: closeModal,
