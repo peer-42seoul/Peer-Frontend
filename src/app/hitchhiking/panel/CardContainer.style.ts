@@ -1,22 +1,13 @@
 import { SxProps } from '@mui/material'
 
-export const cardContainerStyleBase: SxProps = {
+export const cardContainerStyle: SxProps = {
   width: '100%',
   overflow: 'hidden',
   bottom: 0,
-}
-
-export const cardContainerPCStyle: SxProps = {
-  ...cardContainerStyleBase,
-  height: '100%',
-  position: 'absolute',
-  top: '2.75rem',
-  left: '0px',
-}
-
-export const cardContainerMobileStyle: SxProps = {
-  ...cardContainerStyleBase,
-  height: '80svh',
+  height: ['80svh', '100%'],
+  position: ['static', 'absolute'],
+  top: [0, '2.75rem'],
+  left: 0,
 }
 
 export const gnbContainerStyle: SxProps = {

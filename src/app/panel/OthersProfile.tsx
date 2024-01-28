@@ -3,6 +3,7 @@
 import ReportModal from '@/components/ReportModal'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { MouseEvent, ReactNode, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import useModal from '@/hook/useModal'
 
 interface IOthersProfile {
@@ -12,6 +13,7 @@ interface IOthersProfile {
 }
 
 const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
+  const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const { isOpen, openModal, closeModal } = useModal()
 
@@ -25,6 +27,10 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
 
   const open = Boolean(anchorEl)
   const id = open ? 'simple-popover' : undefined
+
+  const goOthersProfile = () => {
+    router.push(`/profile/${userId}`)
+  }
 
   return (
     <div>
@@ -56,7 +62,7 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
         <Box sx={{ p: 2 }}>
           <Typography>이름: {name}</Typography>
           <Typography>아이디: {userId}</Typography>
-          <Button>프로필 보기</Button>
+          <Button onClick={goOthersProfile}>프로필 보기</Button>
           <Button>쪽지 보내기</Button>
           <Button onClick={openModal}>신고하기</Button>
         </Box>

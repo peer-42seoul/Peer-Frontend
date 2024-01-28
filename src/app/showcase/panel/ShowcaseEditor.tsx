@@ -1,6 +1,6 @@
 'use client'
 import { Button, Stack } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
@@ -20,7 +20,8 @@ import { useRouter } from 'next/navigation'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
-  teamId: number
+  teamId?: number
+  showcaseId?: number
   requestMethodType: 'post' | 'put'
   router: any | undefined
 }
@@ -32,20 +33,28 @@ const DynamicEditor = dynamic(() => import('../panel/common/FormUIEditor'), {
 const ShowcaseEditor = ({
   data,
   teamId,
+  showcaseId,
   requestMethodType,
 }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
-    '/images/defaultImage.png',
+    data.image ?? '/images/defaultImage.png',
   )
   const [errorMessages, setErrorMessages] = useState<string>('')
   const { CuToast, isOpen, openToast, closeToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
-    useLinks([])
-  const { content } = useShowCaseState()
+    useLinks(data.links ? data.links : [])
+  const { content, setContent } = useShowCaseState()
   const router = useRouter()
+
+  useEffect(() => {
+    if (requestMethodType === 'put') {
+      setContent(data?.content)
+    }
+  }, [requestMethodType, data?.content])
+
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
     if (!isValid) {
@@ -53,7 +62,7 @@ const ShowcaseEditor = ({
     }
     try {
       if (requestMethodType === 'post') {
-        const response = await axiosWithAuth.post(
+        await axiosWithAuth.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
           {
             image: previewImage.split(',')[1],
@@ -62,20 +71,20 @@ const ShowcaseEditor = ({
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${response.data.get('id')}`) // next 13에서 redirect 하는 법
+        router.push(`/teams/${teamId}/showcase`)
       } else if (requestMethodType === 'put') {
-        const response = await axiosWithAuth.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
+        await axiosWithAuth.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${showcaseId}`,
           {
-            image: previewImage.split(',')[1],
+            image: image.length ? previewImage.split(',')[1] : null,
             content: content,
-            teamId: teamId,
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${response.data.get('id')}`)
+        router.push(`/showcase/detail/${showcaseId}`)
       }
     } catch (error: any) {
+      closeModal()
       if (error.response) {
         switch (error.response.status) {
           case 400:
@@ -88,6 +97,10 @@ const ShowcaseEditor = ({
             break
           case 404:
             setErrorMessages('페이지를 찾을 수 없습니다. (NOT_FOUND)')
+            openToast()
+            break
+          case 409:
+            setErrorMessages('이미 쇼케이스가 존재합니다.')
             openToast()
             break
           default:
@@ -112,10 +125,14 @@ const ShowcaseEditor = ({
           setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
-        <TeamName teamName={data.title} />
+        <TeamName teamName={data.name} />
         <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
-        <TeamMembers members={data?.member} />
+        <TeamMembers
+          members={
+            'memberList' in data ? data.memberList || [] : data.member || []
+          }
+        />
         <LinkForm
           links={links}
           addLink={addLink}
@@ -124,7 +141,7 @@ const ShowcaseEditor = ({
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        <DynamicEditor />
+        <DynamicEditor content={data.content} />
         <Button onClick={openModal} sx={style.saveButton}>
           저장
         </Button>

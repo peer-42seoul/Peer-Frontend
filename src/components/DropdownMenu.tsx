@@ -9,6 +9,7 @@ import * as dropdownMenuStyle from './dropdownMenu/dropdownMenu.styles'
 const DropdownMenu = ({ children }: { children: React.ReactNode }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+
   const { isPc } = useMedia()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

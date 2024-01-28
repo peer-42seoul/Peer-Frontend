@@ -1,6 +1,6 @@
 'use client'
+
 import React from 'react'
-import useMedia from '@/hook/useMedia'
 import { FormControlLabel, Stack, Typography } from '@mui/material'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import Interest from './Interest'
@@ -22,19 +22,15 @@ const CardContainer = ({
   message: string
   handleChange: any
 }) => {
-  const { isPc } = useMedia()
   return (
     <Stack
       justifyContent={'flex-start'}
       alignItems={'center'}
-      sx={
-        isPc
-          ? containerStyle.cardContainerPCStyle
-          : containerStyle.cardContainerMobileStyle
-      }
+      sx={containerStyle.cardContainerStyle}
       direction={'column'}
     >
       <Stack
+        direction={'row'}
         justifyContent={'center'}
         alignItems={'center'}
         sx={containerStyle.gnbContainerStyle}
@@ -76,6 +72,7 @@ const CardContainer = ({
           ...cardStyle.cardSize,
           mb: '0.875rem',
           position: 'relative',
+          zIndex: 100,
         }}
       >
         {!message ? (

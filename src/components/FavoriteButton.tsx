@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
@@ -11,10 +11,12 @@ const FavoriteButton = ({
   favorite,
   recruit_id,
   redirect_url,
+  onFavorite,
 }: {
   favorite: boolean | undefined
   recruit_id: number
   redirect_url: string
+  onFavorite?: () => void // 기존의 로직과 다른 것을 원할 때 사용
 }) => {
   const [isFavorite, setIsFavorite] = useState(favorite)
   const { isLogin } = useAuthStore()
@@ -25,9 +27,13 @@ const FavoriteButton = ({
     if (!isLogin) return router.push('/login?redirect=' + redirect_url)
     try {
       setIsFavorite(!isFavorite)
-      await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
-      )
+      if (onFavorite) {
+        onFavorite()
+      } else {
+        await axiosInstance.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
+        )
+      }
     } catch (e) {
       console.log('error', e)
       setIsFavorite(!isFavorite)

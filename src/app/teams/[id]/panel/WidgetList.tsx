@@ -3,12 +3,12 @@ import { SizeType, WidgetType } from '@/types/ITeamDnDLayout'
 import TmpTextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
 import { useCallback, useState } from 'react'
 import { sizeRatio } from '@/app/teams/[id]/panel/TeamDnD'
-import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
 import CalenderWidget from '@/app/teams/[id]/panel/widgets/CalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TmpImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
+import BoardWidget from './widgets/BoardWidget'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -82,9 +82,7 @@ const WidgetList = ({
     (typeValue: WidgetType) => {
       switch (typeValue) {
         case 'notice':
-          return (
-            <TmpNoticeWidget data={null} size={toolSize[typeValue] ?? 'S'} />
-          )
+          return <BoardWidget size={toolSize[typeValue] ?? 'S'} />
         case 'board':
           return (
             <TmpBoardWidget data={null} size={toolSize[typeValue] ?? 'S'} />

@@ -16,7 +16,7 @@ const DictionaryPage = () => {
           }}
         >
           <Stack direction={'row'} spacing={'1rem'}>
-            <img src="/images/peer.png" width={100} height={130} alt="peer" />
+            {/* <img src="/images/peer.png" width={100} height={130} alt="peer" /> */}
             <Stack spacing={'0.3rem'}>
               <Typography variant="Title1Emphasis">
                 Front, Back, Designer - 피어 개발백서
