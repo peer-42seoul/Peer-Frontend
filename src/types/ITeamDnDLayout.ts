@@ -13,7 +13,7 @@ export type DateTimeArray = [
 export interface IWidgetProps {
   data: any
   size: SizeType
-  wgKey?: number //@todo optional 빼기
+  wgKey?: number | string //@todo optional 빼기
 }
 
 export interface ITeamDnDLayout {

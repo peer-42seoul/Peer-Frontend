@@ -24,15 +24,15 @@ interface IWidgetsRenderProps {
 
 /** @todo 나중에 위젯 데이터 받는 방식 결정나면 저장버튼-툴박스-렌더 컴포넌트가 형제컴포넌트가 되도록 리팩토링 **/
 const WidgetsRender = ({
-                         data,
-                         type,
-                         size,
-                         isDropping,
-                         droppingItem,
-                         edit,
-                         setEdit,
-                         children,
-                       }: IWidgetsRenderProps) => {
+  data,
+  type,
+  size,
+  isDropping,
+  droppingItem,
+  edit,
+  setEdit,
+  children,
+}: IWidgetsRenderProps) => {
   const [index, setIndex] = useState(0)
   const layoutRef = useRef<HTMLInputElement | null>(null)
 
@@ -42,7 +42,7 @@ const WidgetsRender = ({
     return data?.widgets?.map((widget, index) => {
       const res = {
         ...widget,
-        key: crypto.randomUUID(),
+        key: index,
         grid: {
           ...widget.grid,
           i: index.toString(),
@@ -55,42 +55,16 @@ const WidgetsRender = ({
 
   const [layouts, setLayouts] = useState<IWidget[]>(setInitLayouts)
   const [prevLayouts, setPrevLayouts] = useState<IWidget[] | null>(null)
-  console.log('layouts', layouts)
+
   /* tablet 보다 크면 4개, 작으면 2개 */
   const isFourRow = useMediaQuery('(min-width:900px)')
-
-  /* widget 가져오기 */
-  // const getWidget = useCallback(
-  //   (type: WidgetType, wgData: any, wgSize: SizeType) => {
-  //     switch (type) {
-  //       case 'notice':
-  //         return <BoardWidget size={wgSize} />
-  //       case 'board':
-  //         return <TmpBoardWidget data={wgData} size={wgSize} />
-  //       case 'calender':
-  //         return <CalenderWidget data={wgData} size={wgSize} />
-  //       case 'attendance':
-  //         return <TmpAttendWidget data={wgData} size={wgSize} />
-  //       case 'text':
-  //         return <TextWidget data={wgData} size={wgSize} />
-  //       case 'image':
-  //         return <ImageWidget data={wgData} size={wgSize} />
-  //       case 'linkTable':
-  //         return <TmpLinkWidget data={wgData} size={wgSize} />
-  //       default:
-  //         return null
-  //     }
-  //   },
-  //   [],
-  // )
 
   /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
   const isValidLayout = useCallback((newLayout: Layout[]) => {
     const checkX = newLayout.some((item) => item?.x + item?.w > 4)
     if (checkX) return false
     const checkY = newLayout.some((item) => item?.y + item?.h > 4)
-    return !checkY;
-
+    return !checkY
   }, [])
 
   /*
@@ -122,7 +96,7 @@ const WidgetsRender = ({
       if (!edit) return
       if (!isValidLayout(layout)) return
       const res = {
-        key: crypto.randomUUID(),
+        key: index,
         grid: {
           ...layoutItem,
           i: index.toString(),

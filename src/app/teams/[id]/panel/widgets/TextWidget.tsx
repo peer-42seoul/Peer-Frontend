@@ -14,7 +14,7 @@ const TextWidget = ({
 }: {
   data: any
   size: SizeType
-  wgKey: number
+  wgKey: number | string
 }) => {
   const sizeHeight = { S: '5.75rem', M: '5.75rem', L: '20rem' }
   const { isOpen, openModal, closeModal } = useModal()

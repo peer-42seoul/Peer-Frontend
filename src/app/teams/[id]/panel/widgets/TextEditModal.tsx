@@ -16,7 +16,7 @@ const TextEditModal = ({
   handleClose: () => void
   data: string
   setData: (data: string) => void
-  wgKey: number
+  wgKey: number | string
 }) => {
   const [text, setText] = useState<string>(data)
   const [charCount, setCharCount] = useState(0)

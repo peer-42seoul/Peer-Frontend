@@ -10,9 +10,8 @@ import * as Style from './SkillInput.style'
 const ImageInput = ({
   previewImage,
   setPreviewImage, // setImage,
-  setImage,
-} // image,
-: {
+  setImage, // image,
+}: {
   previewImage: string
   setPreviewImage: (image: string) => void
   image: File[]
