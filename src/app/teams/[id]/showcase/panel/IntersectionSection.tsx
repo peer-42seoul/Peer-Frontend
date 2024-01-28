@@ -71,7 +71,7 @@ const IntersectionSection = ({
               fontSize: '0.75rem',
             }}
             action={() => {
-              router.push(`/showcase/showcase?showcaseId=${showcaseId}`)
+              router.push(`/showcase/detail/${showcaseId}`)
             }}
           />
           <CuButton
