@@ -7,7 +7,7 @@ import { FormControlLabel } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import * as style from './IntersectionSection.style'
-import useToast from '@/hook/useToast'
+import useToast from '@/states/useToast'
 
 const IntersectionSection = ({
   isPublished,
@@ -24,8 +24,7 @@ const IntersectionSection = ({
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const router = useRouter()
   const axiosWithAuth = useAxiosWithAuth()
-  const [errorMessages, setErrorMessages] = useState<string>('')
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const { openToast } = useToast()
 
   const handleChange = async () => {
     try {
@@ -37,24 +36,31 @@ const IntersectionSection = ({
       if (error.response) {
         switch (error.response.status) {
           case 403:
-            setErrorMessages('팀 리더가 아닙니다.')
-            openToast()
+            openToast({ severity: 'error', message: '팀 리더가 아닙니다.' })
             break
           case 404:
-            setErrorMessages('해당 쇼케이스가 존재하지 않습니다.')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '해당 쇼케이스가 존재하지 않습니다.',
+            })
             break
           default:
-            setErrorMessages('알 수 없는 에러가 발생했습니다.')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '알 수 없는 에러가 발생했습니다.',
+            })
             break
         }
       } else if (error.request) {
-        setErrorMessages('서버와 연결할 수 없습니다.')
-        openToast()
+        openToast({
+          severity: 'error',
+          message: '서버와 연결할 수 없습니다.',
+        })
       } else {
-        setErrorMessages('알 수 없는 에러가 발생했습니다.')
-        openToast()
+        openToast({
+          severity: 'error',
+          message: '알 수 없는 에러가 발생했습니다.',
+        })
       }
     }
   }
@@ -126,12 +132,6 @@ const IntersectionSection = ({
           text: '취소',
           onClick: closeModal,
         }}
-      />
-      <CuToast
-        open={isOpen}
-        onClose={closeToast}
-        severity="error"
-        message={errorMessages}
       />
     </>
   )

@@ -40,7 +40,7 @@ const LinksViewer = ({ links }: IlinksProps) => {
               <Typography
                 component="a"
                 color={'text.normal'}
-                variant="body2"
+                variant="Body2"
                 href={convertLink(link.link)}
                 target="_blank"
                 rel="noreferrer"

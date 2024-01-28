@@ -29,9 +29,9 @@ const CoverImage = ({ image }: { image: string }) => {
   )
 }
 
-const InformationViewer = ({ isPc, data }: any) => {
+const InformationViewer = ({ data }: any) => {
   return (
-    <Stack spacing={'2rem'} sx={style.InformationViewer(isPc)}>
+    <Stack spacing={'2rem'} sx={style.InformationViewer}>
       <StartEndDateViewer start={data?.start} end={data?.end} />
       <SkillInput skills={data?.skills} />
       <TeamMembers members={data?.member} />
@@ -66,7 +66,7 @@ const ShowcaseViewer = ({ data }: IShowcaseViewerProps) => {
           <Stack>
             <TeamName teamName={data?.name} />
             <Stack sx={style.InformationViewerBox}>
-              <InformationViewer isPc={isPc} data={data} />
+              <InformationViewer data={data} />
               <Stack
                 spacing={'1rem'}
                 display={'flex'}
@@ -90,7 +90,7 @@ const ShowcaseViewer = ({ data }: IShowcaseViewerProps) => {
             <TeamName teamName={data?.name} />
             <CoverImage image={data.image} />
           </Stack>
-          <InformationViewer isPc={isPc} data={data} />
+          <InformationViewer data={data} />
           <ContentViewer content={data?.content} />
         </Container>
       )}

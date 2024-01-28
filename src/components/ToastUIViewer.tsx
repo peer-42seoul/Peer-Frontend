@@ -36,7 +36,7 @@ const ToastViewer = ({
     <Box
       sx={{ ...sx, fontSize: '0.9375rem' }}
       ref={viewerRef}
-      color={'white'}
+      color={'text.alternative'}
     />
   )
 }

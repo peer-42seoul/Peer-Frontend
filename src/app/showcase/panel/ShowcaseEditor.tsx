@@ -6,7 +6,7 @@ import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
 import SkillInput from '../panel/common/SkillInput'
 import LinkForm from '../panel/common/LinkForm'
-import useToast from '@/hook/useToast'
+import useToast from '@/states/useToast'
 import useModal from '@/hook/useModal'
 import CuTextModal from '@/components/CuTextModal'
 import useAxiosWithAuth from '@/api/config'
@@ -42,8 +42,7 @@ const ShowcaseEditor = ({
   const [previewImage, setPreviewImage] = useState<string>(
     data.image ?? '/images/defaultImage.png',
   )
-  const [errorMessages, setErrorMessages] = useState<string>('')
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const { openToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
     useLinks(data.links ? data.links : [])
@@ -90,30 +89,47 @@ const ShowcaseEditor = ({
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            setErrorMessages('요청이 올바르지 않습니다. (BAD_REQUEST)')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '요청이 올바르지 않습니다.',
+            })
+
             break
           case 403:
-            setErrorMessages('접근이 거부되었습니다. (FORBIDDEN)')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '접근이 거부되었습니다.',
+            })
             break
           case 404:
-            setErrorMessages('페이지를 찾을 수 없습니다. (NOT_FOUND)')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '페이지를 찾을 수 없습니다.',
+            })
             break
           case 409:
-            setErrorMessages('이미 쇼케이스가 존재합니다.')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '이미 쇼케이스가 존재합니다.',
+            })
             break
           default:
-            setErrorMessages('알 수 없는 에러가 발생했습니다.')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '알 수 없는 에러가 발생했습니다.',
+            })
             break
         }
       } else if (error.request) {
-        setErrorMessages('서버에서 응답이 없습니다.')
+        openToast({
+          severity: 'error',
+          message: '서버에서 응답이 없습니다.',
+        })
       } else {
-        setErrorMessages('요청을 설정하는 중에 에러가 발생했습니다.')
+        openToast({
+          severity: 'error',
+          message: '요청을 설정하는 중에 에러가 발생했습니다.',
+        })
       }
     }
   }
@@ -168,12 +184,7 @@ const ShowcaseEditor = ({
           changeUrl={changeUrl}
         />
         <DynamicEditor content={data.content} />
-        <CuToast
-          open={isOpen}
-          onClose={closeToast}
-          severity="error"
-          message={errorMessages}
-        />
+
         <CuTextModal
           open={alertOpen}
           onClose={closeModal}

@@ -1,9 +1,10 @@
-import { Avatar, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import LabelWithIcon from '../LabelWithIcon'
 import ListIcon from '@/icons/ListIcon'
 import * as Style from './SkillInput.style'
 import { IMember } from '@/types/IShowcaseEdit'
+import CuAvatar from '@/components/CuAvatar'
 
 const MemberInformation = ({ member }: { member: IMember }) => {
   return (
@@ -14,7 +15,7 @@ const MemberInformation = ({ member }: { member: IMember }) => {
       width={'auto'}
       height={'auto'}
     >
-      <Avatar
+      <CuAvatar
         src={member.image}
         sx={{ width: '1.75rem', height: '1.75rem', border: '1px solid 2C2E35' }}
       />
