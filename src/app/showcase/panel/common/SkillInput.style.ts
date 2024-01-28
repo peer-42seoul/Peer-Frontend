@@ -4,7 +4,7 @@ const IconStyle: SxProps = {
   color: 'text.normal',
   width: '1rem',
   height: '1rem',
-  gap: '0.rem',
+  gap: '0.25rem',
 }
 
 const ShowcaseImageStyle = (isPc: boolean) => ({
