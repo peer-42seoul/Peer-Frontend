@@ -8,6 +8,7 @@ import * as pageStyle from '../panel/my-page.style'
 import TitleBox from '@/components/TitleBox'
 import AuthSettingSection from './panel/AuthSettingSection'
 import InfoDisplaySection from './panel/InfoDisplaySection'
+import PasswordChangeSection from './panel/PasswordChangeSection'
 
 const PrivacyPage = () => {
   const axiosWithAuth = useAxiosWithAuth()
@@ -28,7 +29,7 @@ const PrivacyPage = () => {
     >
       <TitleBox title="개인정보">
         <InfoDisplaySection infoTitle={'이름'} info={name} />
-        <InfoDisplaySection infoTitle={'이메일'} info={email} />
+        <InfoDisplaySection infoTitle={'아이디 (이메일)'} info={email} />
         <AuthSettingSection
           authorized={authenticationFt}
           authenticationTitle="42계정"
@@ -41,6 +42,7 @@ const PrivacyPage = () => {
           authenticatedContent={authenticationGoogle}
           href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`}
         />
+        <PasswordChangeSection />
       </TitleBox>
       <TitleBox title={'계정 관리'}>
         <Stack spacing={1} direction={'row'} justifyContent={'space-between'}>
