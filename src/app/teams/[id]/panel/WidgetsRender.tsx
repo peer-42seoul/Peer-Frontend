@@ -1,5 +1,5 @@
 import { Box, IconButton, Stack, useMediaQuery } from '@mui/material'
-import TmpNoticeWidget from '@/app/teams/[id]/panel/widgets/TmpNoticeWidget'
+import BoardWidget from './widgets/BoardWidget'
 import TmpBoardWidget from '@/app/teams/[id]/panel/widgets/TmpBoardWidget'
 import CalenderWidget from '@/app/teams/[id]/panel/widgets/CalenderWidget'
 import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
@@ -81,7 +81,7 @@ const WidgetsRender = ({
     (type: WidgetType, wgData: any, wgSize: SizeType) => {
       switch (type) {
         case 'notice':
-          return <TmpNoticeWidget data={wgData} size={wgSize} />
+          return <BoardWidget size={wgSize} />
         case 'board':
           return <TmpBoardWidget data={wgData} size={wgSize} />
         case 'calender':

@@ -11,31 +11,27 @@ import {
   Stack,
   CircularProgress,
   CardActionArea,
+  Avatar,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import Members from './Members'
 import DropdownMenu from '@/components/DropdownMenu'
 import useMedia from '@/hook/useMedia'
 import * as style from './ShowcaseCard.style'
-import { IShowcaseTag } from '@/app/showcase/panel/types'
+import { ICardData } from '@/app/showcase/panel/types'
 import PostCard from './PostCard'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
-
-interface IShowcaseCardBack {
-  content: string
-  memberImage: Array<{ url: string }>
-  recruitmentQuota: number
-}
 
 const ShowcaseCardBack = ({
   postId,
   sx,
   onClick,
-  flipped,
+  content,
   cardWidth,
   title,
+  name,
+  image,
   currentDomain,
 }: {
   postId: number
@@ -43,11 +39,12 @@ const ShowcaseCardBack = ({
   onClick?: (e: React.MouseEvent) => void
   flipped?: boolean
   title: string
+  image: string | null
+  name: string
+  content: string
   cardWidth: number
   currentDomain: string
 }) => {
-  const [data, setData] = useState<IShowcaseCardBack | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
   const { isPc } = useMedia()
 
@@ -55,21 +52,6 @@ const ShowcaseCardBack = ({
     const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
     return lineCount ? lineCount : 1
   }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(`fetchData ${postId}`)
-      setIsLoading(true)
-      setData({
-        content:
-          '모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.\n\n모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다. 모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.모집글의 요약형태가 이 곳에 보여집니다.',
-        memberImage: [{ url: 'https://picsum.photos/200' }],
-        recruitmentQuota: 10,
-      })
-      setIsLoading(false)
-    }
-    if (!isLoading && !data && flipped) fetchData()
-  }, [flipped])
 
   const handleSeeAll = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -85,7 +67,7 @@ const ShowcaseCardBack = ({
         padding: '1rem',
       }}
     >
-      {data ? (
+      {content ? (
         <Stack
           direction={'column'}
           justifyContent={'space-between'}
@@ -116,7 +98,7 @@ const ShowcaseCardBack = ({
                 <ShareMenuItem
                   title={title}
                   url={`${currentDomain}/recruit/${postId}`}
-                  content={data.content}
+                  content={content}
                 />
                 {/* TODO : 모집글 작성자 아이디 가져올 수 있는 방법 찾기 */}
                 <ReportMenuItem targetId={postId} />
@@ -136,10 +118,7 @@ const ShowcaseCardBack = ({
                     : getLineCount(46, 22.5) /* 라인수 */,
                 }}
               >
-                {/* {title} */}
-                제목이 들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이
-                들어오는 자리입니다. 제목이 들어오는 자리입니다. 제목이 들어오는
-                자리입니다.
+                {title}
               </Typography>
             }
             sx={{ padding: 0, maxHeight: '3rem', flexGrow: 1 }}
@@ -162,7 +141,7 @@ const ShowcaseCardBack = ({
                 WebkitLineClamp: isPc ? 10 : getLineCount(180, 18) /* 라인수 */,
               }}
             >
-              {data.content.split('\n').map((line) => {
+              {content.split('\n').map((line) => {
                 return (
                   <>
                     {line}
@@ -173,10 +152,15 @@ const ShowcaseCardBack = ({
             </Typography>
           </CardContent>
           <CardContent sx={{ padding: 0 }} onClick={onClick}>
-            <Members
-              members={data.memberImage}
-              recruitmentQuota={data.recruitmentQuota}
-            />
+            <Stack direction={'row'} spacing={'0.5rem'}>
+              <Avatar
+                src={image ? image : '/icons/52.png'}
+                sx={{ width: '1.5rem', height: '1.5rem' }}
+              />
+              <Typography color={'text.alternative'} width={'11rem'}>
+                {name}
+              </Typography>
+            </Stack>
           </CardContent>
           <CardContent
             sx={{ position: 'relative', bottom: 0, height: '2.75rem' }}
@@ -206,22 +190,12 @@ const ShowcaseCardBack = ({
 }
 
 const ShowcaseCard = ({
-  authorImage,
-  teamName,
-  title,
-  tagList,
-  image,
-  postId,
+  data,
   dragged,
   setDragged,
   sx,
 }: {
-  authorImage: string
-  teamName: string
-  title: string
-  tagList: Array<IShowcaseTag>
-  image: string | null
-  postId: number
+  data: ICardData
   sx?: SxProps
   dragged: boolean
   setDragged: React.Dispatch<React.SetStateAction<boolean>>
@@ -272,25 +246,32 @@ const ShowcaseCard = ({
       }}
     >
       <PostCard
-        postId={postId}
-        authorImage={authorImage}
-        teamName={teamName}
-        title={title}
-        tagList={tagList}
-        image={image ? image : '/image/logo.png'}
+        postId={data.id}
+        authorImage={data.image}
+        title={data.name}
+        teamName={data.name}
+        tagList={data.skill}
+        image={data.image ? data.image : '/image/logo.png'}
+        isFavorite={data.favorite}
+        like={data.like}
+        liked={data.liked}
         sx={{
           ...sx,
           backfaceVisibility: 'hidden',
           transform: 'translate(-50%, 0)',
           width: isPc ? '90%' : '90vw',
         }}
+        onClick={handleMouseUp}
       />
       <ShowcaseCardBack
-        postId={postId}
+        postId={data.id}
         sx={sx}
         onClick={handleMouseUp}
         flipped={isFlipped}
-        title={title}
+        title={data.name}
+        image={data.image}
+        name={data.name}
+        content={data.description}
         cardWidth={cardWidth}
         currentDomain={currentDomain}
       />

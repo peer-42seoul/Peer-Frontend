@@ -1,0 +1,5 @@
+export enum EApiType {
+  SIGN_UP = 662,
+  PASSWORD_CHECK = 1425,
+  PASSWORD_MODIFY = 1563,
+}
