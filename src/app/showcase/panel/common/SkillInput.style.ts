@@ -4,6 +4,7 @@ const IconStyle: SxProps = {
   color: 'text.normal',
   width: '1rem',
   height: '1rem',
+  gap: '0.25rem',
 }
 
 const ShowcaseImageStyle: SxProps = {
@@ -27,4 +28,10 @@ const AutocompleteStyle: SxProps = {
   },
 }
 
-export { IconStyle, ShowcaseImageStyle, AutocompleteStyle }
+const skillInputViewer = {
+  width: '100%',
+  height: 'auto',
+  gridArea: 'skillInput',
+}
+
+export { IconStyle, ShowcaseImageStyle, AutocompleteStyle, skillInputViewer }
