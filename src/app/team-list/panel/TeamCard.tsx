@@ -20,17 +20,24 @@ const TeamType = (type: string) => {
   )
 }
 
-const ApproveChip = ({ isApproved }: { isApproved: boolean }) => {
+const ApproveChip = ({
+  isApproved,
+  job,
+}: {
+  isApproved: boolean
+  job: string
+}) => {
+  const isLeader = job === 'L' ? 'LEADER' : 'MEMBER'
   return (
     <Box
       width={80}
       sx={{
         margin: 0,
-        backgroundColor: isApproved ? 'green.strong' : 'red.strong',
+        backgroundColor: isApproved ? 'text.alternative' : 'red.strong',
       }}
     >
       <Typography textAlign={'center'} color={'white'} fontWeight={'bold'}>
-        {isApproved ? '승인됨' : '승인대기중'}
+        {isApproved ? isLeader : '대기중'}
       </Typography>
     </Box>
   )
@@ -75,7 +82,7 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
               {team.name}
             </Typography>
           </Stack>
-          <ApproveChip isApproved={team.isApproved} />
+          <ApproveChip isApproved={team.isApproved} job={team.role[0]} />
         </Stack>
         <Stack direction={isPc ? 'row' : 'column'} spacing={'0.5rem'}>
           <Stack direction={'row'} spacing={isPc ? '0.5rem' : '1.5rem'}>
