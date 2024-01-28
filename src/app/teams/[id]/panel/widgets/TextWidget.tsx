@@ -7,9 +7,16 @@ import useModal from '@/hook/useModal'
 import TextIcon from '@/icons/TextIcon'
 
 /* 임시 위젯 */
-const TextWidget = ({ data, size }: { data: any; size: SizeType }) => {
+const TextWidget = ({
+  data,
+  size,
+  wgKey,
+}: {
+  data: any
+  size: SizeType
+  wgKey: number | string
+}) => {
   const sizeHeight = { S: '5.75rem', M: '5.75rem', L: '20rem' }
-
   const { isOpen, openModal, closeModal } = useModal()
   const [text, setText] = useState(data)
 
@@ -57,6 +64,7 @@ const TextWidget = ({ data, size }: { data: any; size: SizeType }) => {
         </Stack>
       </WidgetCard>
       <TextEditModal
+        wgKey={wgKey}
         open={isOpen}
         handleClose={closeModal}
         data={text}
