@@ -1,8 +1,8 @@
 import { Event } from 'react-big-calendar'
 
 export interface IMember {
-  id: number
-  name: string
+  userId: number
+  nickname: string
 }
 
 export interface IEvent extends Event {
@@ -10,7 +10,7 @@ export interface IEvent extends Event {
   // start: Date // extends Event
   // end: Date // extends Event
   teamId: number
-  id: number
   members: IMember[]
   eventId: number
+  memo: string
 }
