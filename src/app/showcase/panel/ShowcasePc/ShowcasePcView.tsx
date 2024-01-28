@@ -39,6 +39,9 @@ function toStringByFormatting(source: Date, delimiter = '-') {
 
 const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
   const [isLiked, setIsLiked] = useState<boolean | undefined>(data?.liked)
+  const [isFavorite, setIsFavorite] = useState<boolean | undefined>(
+    data?.favorite,
+  )
   const router = useRouter()
   const [isTouched, setIsTouched] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -50,9 +53,8 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
   }
 
   useEffect(() => {
-    console.log('data', data)
-    console.log('isLiked', isLiked)
     setIsLiked(data?.liked)
+    setIsFavorite(data?.favorite)
   }, [data, isLiked])
 
   const clickLike = useCallback(() => {
@@ -63,16 +65,13 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
-          if (data.like <= res.data.like) {
+          if (isLiked === false) {
             data.liked = true
             setIsLiked(true)
-            console.log('true')
             data.like = data.like + 1
           } else {
             data.liked = false
             setIsLiked(false)
-            console.log('false')
             data.like = data.like - 1
           }
         }
@@ -81,18 +80,22 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
 
   const clickFavorite = useCallback(() => {
     if (!data) return alert('로그인이 필요합니다.')
-    if (data.favorite) return alert('이미 관심을 추가한 팀입니다.')
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${data.id}`,
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
-          data.favorite = true
+          if (isFavorite === false) {
+            data.favorite = true
+            setIsFavorite(true)
+          } else {
+            data.favorite = false
+            setIsFavorite(false)
+          }
         }
       })
-  }, [data, axiosWithAuth])
+  }, [setIsFavorite, axiosWithAuth])
 
   const handleMenuClose = () => {
     setAnchorEl(null)
