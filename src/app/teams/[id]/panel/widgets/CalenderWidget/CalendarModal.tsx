@@ -39,6 +39,7 @@ const CalendarModal = ({
       teamId,
     })
   }, [open])
+
   switch (modalData.type) {
     case 'preview':
       return (
