@@ -18,10 +18,11 @@ const MainShowcase = () => {
   )
 
   const handleClick = useCallback(() => {
+    if (data?.content.length === 0) return
     var id = data?.content[0].id
     if (!id) return
-    router.push(`/showcase/${data?.content[0].id}`)
-  }, [data?.content[0].id])
+    router.push(`/showcase/detail/${data?.content[0].id}`)
+  }, [data])
 
   return (
     <Box height={'400px'}>
@@ -35,6 +36,8 @@ const MainShowcase = () => {
       {isLoading && <CuCircularProgress color="primary" />}
 
       {error && <Typography>에러 발생</Typography>}
+
+      {data?.content === null && <Typography>데이터가 없습니다.</Typography>}
 
       {data && data.content[0] && (
         <Stack alignItems={'center'} position={'relative'}>
