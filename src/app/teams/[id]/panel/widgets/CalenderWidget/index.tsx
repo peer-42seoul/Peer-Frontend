@@ -18,18 +18,19 @@ interface ICalendarWidget {
   data?: IEvent[]
   size: SizeType
 }
-
+interface ICalendarKeyData extends ICalendarWidget {
+  widgetKey: number | string
+}
 interface ICalendar {
   data?: IEvent[]
 }
-
 interface IEventItem {
   title: ReactNode
   start: Date | undefined
   end: Date | undefined
 }
 
-const CalenderWidget = ({ data, size }: ICalendarWidget) => {
+const CalenderWidget = ({ data, size, widgetKey }: ICalendarKeyData) => {
   const { isOpen, openModal, closeModal } = useModal()
   const { teamId } = useDnDStore()
 
@@ -44,6 +45,7 @@ const CalenderWidget = ({ data, size }: ICalendarWidget) => {
           onClose={closeModal}
           events={data}
           teamId={teamId}
+          widgetKey={widgetKey}
         />
       )}
     </>

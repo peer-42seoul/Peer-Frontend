@@ -14,14 +14,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import useAxiosWithAuth from '@/api/config'
 import CuCheckbox from '@/components/CuCheckBox'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import useDnDStore from '@/states/useDnDStore'
 import useToast from '@/states/useToast'
-import { IMember } from '@/types/WidgetDataTypes'
+import { IEvent, IMember } from '@/types/WidgetDataTypes'
 import * as style from './EditModalContent.style'
 
 interface IEditModalProps {
   teamId: number
   eventId?: number
-  widgetId?: string // TODO: 519 PR 이후 추가 예정
+  widgetKey: number | string
   closeEditModal: () => void
   mode: 'create' | 'edit'
 }
@@ -35,12 +36,14 @@ const EditModalContent = ({
   teamId,
   eventId = -1,
   closeEditModal, // widgetId, mode, (lint error를 피하기 위해 주석처리함)
+  widgetKey,
 }: IEditModalProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [memberMap, setMemberMap] = useState<Map<number, string>>(new Map())
   const [selectedMemberId, setSelectedMemberId] = useState<number[]>([])
   const axiosInstance = useAxiosWithAuth()
   const { openToast } = useToast()
+  const { setStoredWidgetData } = useDnDStore()
 
   useEffect(() => {
     const fetchMemberList = async () => {
@@ -83,7 +86,11 @@ const EditModalContent = ({
       })),
     }
     // TODO: 519 PR 이후 위젯 데이터 업데이트 로직 추가
-    const scheduleData = { ...alarmData, memo: formData.get('memo') as string }
+    const scheduleData: IEvent = {
+      ...alarmData,
+      id: crypto.randomUUID(), // 이벤트에 대한 id 생성
+      memo: formData.get('memo') as string,
+    }
     if (formData.get('set-alarm') === 'on') {
       axiosInstance
         .post(`/api/v1/dnd-sub/calendar/set-alarm`, alarmData)

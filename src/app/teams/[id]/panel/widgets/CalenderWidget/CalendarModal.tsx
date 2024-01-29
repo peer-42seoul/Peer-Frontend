@@ -12,13 +12,14 @@ interface IPreviewModalProps {
   onClose: () => void
   events?: IEvent[]
   teamId: number
+  widgetKey: number | string
 }
 
 interface IModalData {
   type: TCalendarModalType
   teamId: number
   eventId?: number
-  widgetId?: string
+  widgetKey: number | string
 }
 
 type TCalendarModalType = 'preview' | 'create'
@@ -28,15 +29,18 @@ const CalendarModal = ({
   onClose,
   events,
   teamId,
+  widgetKey,
 }: IPreviewModalProps) => {
   const [modalData, setModalData] = useState<IModalData>({
     type: 'preview',
     teamId,
+    widgetKey,
   })
   useEffect(() => {
     setModalData({
       type: 'preview',
       teamId,
+      widgetKey,
     })
   }, [open])
 
@@ -64,6 +68,7 @@ const CalendarModal = ({
               setModalData((prev) => ({
                 type: 'preview',
                 teamId: prev.teamId,
+                widgetKey: prev.widgetKey,
               })),
           }}
           containedButton={{
@@ -75,12 +80,13 @@ const CalendarModal = ({
           <EditModalContent
             teamId={modalData.teamId}
             eventId={modalData.eventId}
-            widgetId={modalData.widgetId}
+            widgetKey={modalData.widgetKey}
             mode={'create'}
             closeEditModal={() =>
               setModalData((prev) => ({
                 type: 'preview',
                 teamId: prev.teamId,
+                widgetKey: prev.widgetKey,
               }))
             }
           />

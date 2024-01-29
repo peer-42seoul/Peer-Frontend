@@ -8,7 +8,6 @@ import TextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
 import ImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
 import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 
-
 /* widget 가져오기 */
 const SelectedWidget = ({
   type,
@@ -27,9 +26,9 @@ const SelectedWidget = ({
     case 'board':
       return <TmpBoardWidget data={wgData} size={wgSize} />
     case 'calender':
-      return <CalenderWidget data={wgData} size={wgSize} />
+      return <CalenderWidget data={wgData} size={wgSize} widgetKey={wgKey} />
     case 'attendance':
-      return <TmpAttendWidget data={wgData} size={wgSize}  />
+      return <TmpAttendWidget data={wgData} size={wgSize} />
     case 'text':
       return <TextWidget data={wgData} size={wgSize} wgKey={wgKey} />
     case 'image':
