@@ -6,26 +6,37 @@ import CuCircularProgress from '@/components/CuCircularProgress'
 import { IPagination } from '@/types/IPagination'
 import { Box, Stack, Typography, Button, Card, Avatar } from '@mui/material'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 import useSWR from 'swr'
 
 const MainShowcase = () => {
+  const router = useRouter()
   const { data, isLoading, error } = useSWR<IPagination<ICardData[]>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=1&pageSize=10`,
     defaultGetFetcher,
   )
 
+  const handleClick = useCallback(() => {
+    var id = data?.content[0].id
+    if (!id) return
+    router.push(`/showcase/${data?.content[0].id}`)
+  }, [data?.content[0].id])
+
   return (
     <Box height={'400px'}>
       <Stack justifyContent={'space-between'} direction="row">
         <Typography variant="Body1">쇼케이스</Typography>
-        <Button variant="text">더보기</Button>
+        <Button onClick={handleClick} variant="text">
+          더보기
+        </Button>
       </Stack>
 
       {isLoading && <CuCircularProgress color="primary" />}
 
       {error && <Typography>에러 발생</Typography>}
 
-      {data && (
+      {data && data.content[0] && (
         <Stack alignItems={'center'} position={'relative'}>
           <Image
             width={300}
@@ -63,8 +74,19 @@ const MainShowcase = () => {
               whiteSpace={'normal'}
               overflow={'hidden'}
               textOverflow={'ellipsis'}
+              m={'1rem'}
             >
-              <Typography color={'text'} sx={{ wordBreak: 'break-word' }}>
+              <Typography
+                color={'text'}
+                sx={{
+                  wordBreak: 'break-word',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                }}
+              >
                 {data.content[0].description}
               </Typography>
             </Stack>

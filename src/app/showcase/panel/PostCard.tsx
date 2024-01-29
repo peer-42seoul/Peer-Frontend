@@ -64,7 +64,7 @@ function PostCard({
           setFavorite(!favorite)
         }
       })
-  }, [isFavorite, axiosWithAuth])
+  }, [setFavorite, axiosWithAuth])
 
   const clickLike = useCallback(() => {
     axiosWithAuth
@@ -72,15 +72,16 @@ function PostCard({
       .then((res) => {
         if (res.status === 200) {
           console.log(res)
-          if (like < res.data.like) {
+          if (liked === false) {
             setIsLiked(true)
+            setLikeNum(likeNum + 1)
           } else {
             setIsLiked(false)
+            setLikeNum(likeNum - 1)
           }
-          setLikeNum(res.data.like)
         }
       })
-  }, [like, liked, axiosWithAuth])
+  }, [setIsLiked, setLikeNum, axiosWithAuth])
 
   return (
     <Card

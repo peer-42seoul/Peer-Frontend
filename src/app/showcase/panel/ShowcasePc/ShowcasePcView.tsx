@@ -16,7 +16,7 @@ import { ICardData } from '../types'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import { CalendarIcon, TagIcon, ThreeDotsIcon } from '../icons'
-import { MouseEvent, useCallback, useState } from 'react'
+import { MouseEvent, useCallback, useEffect, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import TagChip from '@/components/TagChip'
 import { useRouter } from 'next/navigation'
@@ -38,6 +38,10 @@ function toStringByFormatting(source: Date, delimiter = '-') {
 }
 
 const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
+  const [isLiked, setIsLiked] = useState<boolean | undefined>(data?.liked)
+  const [isFavorite, setIsFavorite] = useState<boolean | undefined>(
+    data?.favorite,
+  )
   const router = useRouter()
   const [isTouched, setIsTouched] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -48,6 +52,11 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
     setIsTouched(!isTouched)
   }
 
+  useEffect(() => {
+    setIsLiked(data?.liked)
+    setIsFavorite(data?.favorite)
+  }, [data, isLiked])
+
   const clickLike = useCallback(() => {
     if (!data) return alert('로그인이 필요합니다.')
     axiosWithAuth
@@ -56,31 +65,37 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
-          if (data.like < res.data.like) {
+          if (isLiked === false) {
             data.liked = true
+            setIsLiked(true)
+            data.like = data.like + 1
           } else {
             data.liked = false
+            setIsLiked(false)
+            data.like = data.like - 1
           }
-          data.like = res.data.like
         }
       })
-  }, [data, axiosWithAuth])
+  }, [data, axiosWithAuth, setIsLiked])
 
   const clickFavorite = useCallback(() => {
     if (!data) return alert('로그인이 필요합니다.')
-    if (data.favorite) return alert('이미 관심을 추가한 팀입니다.')
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${data.id}`,
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
-          data.favorite = true
+          if (isFavorite === false) {
+            data.favorite = true
+            setIsFavorite(true)
+          } else {
+            data.favorite = false
+            setIsFavorite(false)
+          }
         }
       })
-  }, [data, axiosWithAuth])
+  }, [setIsFavorite, axiosWithAuth])
 
   const handleMenuClose = () => {
     setAnchorEl(null)
@@ -121,7 +136,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                     <Stack direction={'row'} spacing={'0.5rem'}>
                       <IconButton
                         onClick={clickLike}
-                        color={data.liked ? 'primary' : 'inherit'}
+                        color={isLiked ? 'primary' : 'default'}
                         size="small"
                         sx={{
                           m: 0,
@@ -135,7 +150,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
 
                     <IconButton
                       onClick={clickFavorite}
-                      color={data.favorite ? 'primary' : 'inherit'}
+                      color={data.favorite ? 'primary' : 'default'}
                       size="small"
                       sx={{
                         m: 0,
@@ -181,7 +196,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                     variant="text"
                     color="primary"
                     sx={{ width: 'fit-content' }}
-                    onClick={() => router.push(`/showcase/${data.id}`)}
+                    onClick={() => router.push(`/showcase/detail/${data.id}`)}
                   >
                     <Typography noWrap variant="caption">
                       전체 글 보기
