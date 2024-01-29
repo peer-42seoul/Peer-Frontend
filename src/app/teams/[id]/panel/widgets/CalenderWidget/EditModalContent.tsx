@@ -5,9 +5,9 @@ import {
   TextField,
   Select,
   MenuItem,
-  ListItemText,
   SelectChangeEvent,
   FormControlLabel,
+  InputBase,
 } from '@mui/material'
 import { LocalizationProvider, DateTimeField } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -16,6 +16,7 @@ import CuCheckbox from '@/components/CuCheckBox'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import useToast from '@/states/useToast'
 import { IMember } from '@/types/WidgetDataTypes'
+import * as style from './EditModalContent.style'
 
 interface IEditModalProps {
   teamId: number
@@ -154,12 +155,15 @@ const EditModalContent = ({
               renderValue={(selected) =>
                 selected.map((value) => memberMap.get(value)).join(', ')
               }
+              input={<InputBase sx={style.selectInput} />}
             >
               {/* map을 순회할 수 있는 더 좋은 방법을 찾아보기 */}
               {Array.from(memberMap.keys()).map((memberId) => (
-                <MenuItem key={memberId} value={memberId}>
+                <MenuItem dense key={memberId} value={memberId}>
                   <CuCheckbox checked={selectedMemberId.includes(memberId)} />
-                  <ListItemText primary={memberMap.get(memberId)} />
+                  <Typography variant={'Body2'}>
+                    {memberMap.get(memberId)}
+                  </Typography>
                 </MenuItem>
               ))}
             </Select>
