@@ -10,3 +10,10 @@ export const mobileHeaderToolbar = {
 export const mobileHeaderTitle = {
   flexGlow: 1,
 }
+
+export const mobileHeaderStack = {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+}

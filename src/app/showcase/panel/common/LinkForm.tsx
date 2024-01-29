@@ -36,7 +36,7 @@ const LinkForm = ({
   }
 
   return (
-    <Stack width={'26rem'} spacing={'0.5rem'}>
+    <Stack width={'100%'} spacing={'0.5rem'}>
       <Stack
         direction={'row'}
         spacing={'0.5rem'}

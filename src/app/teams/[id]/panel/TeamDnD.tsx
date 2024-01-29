@@ -7,6 +7,8 @@ import ReactGridLayout from 'react-grid-layout'
 import useSWRMutation from 'swr/mutation'
 import WidgetsRender from './WidgetsRender'
 import WidgetList from '@/app/teams/[id]/panel/WidgetList'
+import useDnDStore from '@/states/useDnDStore'
+import { useParams } from 'next/navigation'
 
 export const sizeRatio = {
   S: { w: 1, h: 1 },
@@ -15,6 +17,7 @@ export const sizeRatio = {
 }
 
 const TeamDnD = ({ id }: { id: string }) => {
+  const { setStoredWidgets, setTeamId } = useDnDStore()
   const [edit, setEdit] = useState(false)
   const [type, setType] = useState<WidgetType>('text')
   const [droppingItem, setDroppingItem] = useState<
@@ -34,9 +37,17 @@ const TeamDnD = ({ id }: { id: string }) => {
         .post(url, { teamId: id, type: 'team' })
         .then((res) => res.data),
   )
+  const params = useParams<{ id: string }>()
+
   useEffect(() => {
     trigger()
+    setTeamId(Number(params?.id))
   }, [])
+
+  useEffect(() => {
+    if (!data) return
+    setStoredWidgets(data.widgets)
+  }, [data])
 
   // api 에러 생길 시 주석 처리 필요
   if (!data && isMutating) return <Typography>로딩중입니다...</Typography>
@@ -52,8 +63,7 @@ const TeamDnD = ({ id }: { id: string }) => {
     >
       {/*dnd 렌더링*/}
       <WidgetsRender
-        id={id}
-        // key={data}
+        key={data?.updatedAt ? data?.updatedAt.toString() : null}
         data={data}
         type={type}
         size={size}

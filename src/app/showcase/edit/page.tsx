@@ -1,6 +1,6 @@
 'use client'
 
-import { Stack, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import React from 'react'
 import ShowcaseEditor from '../panel/ShowcaseEditor'
 import { IShowcaseData } from '@/types/IShowcaseEdit'
@@ -15,7 +15,6 @@ const ShowCaseEditPage = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseData>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${showcaseId}`,
-    // defaultGetFetcher,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )
@@ -28,7 +27,7 @@ const ShowCaseEditPage = () => {
     return <Typography color={'error'}>에러가 발생했습니다.</Typography>
 
   return (
-    <Stack direction={'column'} sx={{ overflow: 'auto' }}>
+    <>
       {data && (
         <ShowcaseEditor
           data={data}
@@ -37,7 +36,7 @@ const ShowCaseEditPage = () => {
           router={null}
         />
       )}
-    </Stack>
+    </>
   )
 }
 
