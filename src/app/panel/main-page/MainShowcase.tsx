@@ -21,7 +21,7 @@ const MainShowcase = () => {
     if (!data) return
     var id = data?.content[0].id
     if (!id) return
-    router.push(`/showcase/${data?.content[0].id}`)
+    router.push(`/showcase/detail/${data?.content[0].id}`)
   }, [data])
 
   return (
