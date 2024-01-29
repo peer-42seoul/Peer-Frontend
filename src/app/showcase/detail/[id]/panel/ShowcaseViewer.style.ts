@@ -44,12 +44,13 @@ export const imageViewer = {
   height: '13.6rem',
   gridArea: 'img',
   borderRadius: '0.25rem',
-  border: '1px solid #2C2E35',
+  border: '1px solid',
+  borderColor: 'line.alternative',
   margin: '0 0 1rem 0',
 }
 
-export const InformationViewer = (isPc: boolean) => ({
-  width: isPc ? '70%' : '100%',
+export const InformationViewer = {
+  width: ['100%', '70%'],
   gap: '2rem',
   margin: '0 0 2rem 0',
-})
+}

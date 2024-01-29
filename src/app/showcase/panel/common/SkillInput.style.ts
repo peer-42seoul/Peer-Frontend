@@ -7,14 +7,15 @@ const IconStyle: SxProps = {
   gap: '0.25rem',
 }
 
-const ShowcaseImageStyle: SxProps = {
-  width: '18.5rem',
+const ShowcaseImageStyle = (isPc: boolean) => ({
+  width: isPc ? '18.5rem' : '100%',
   height: '12.5rem',
   objectFit: 'cover',
   borderRadius: '0.25rem',
   border: '1px solid',
   borderColor: 'line.alternative',
-}
+  padding: 0,
+})
 
 const AutocompleteStyle: SxProps = {
   '.MuiFormControl-root': {

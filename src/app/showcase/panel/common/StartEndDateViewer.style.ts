@@ -1,6 +1,7 @@
-export const StartEndDateViewerBox = (isPc: boolean) => ({
+export const StartEndDateViewerBox = (isPc?: boolean) => ({
   display: isPc ? 'flex' : 'none',
   justifyContent: isPc ? 'space-between' : 'none',
+  alignItems: 'center',
   gap: '1rem',
   gridArea: 'startEndDateViewer',
   width: '100%',
