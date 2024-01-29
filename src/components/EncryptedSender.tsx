@@ -14,6 +14,7 @@ const EncryptedSender = ({
   needToken = false,
   onSuccess,
   onError,
+  axiosOption,
 }: {
   children: React.ReactNode
   payload: any
@@ -24,6 +25,7 @@ const EncryptedSender = ({
   needToken?: boolean
   onSuccess?: () => void
   onError?: (message: string) => void
+  axiosOption?: any
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -60,19 +62,27 @@ const EncryptedSender = ({
 
     if (!needToken) {
       await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`, {
-          code: verifyCode,
-          token: payloadToken,
-        })
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`,
+          {
+            code: verifyCode,
+            token: payloadToken,
+          },
+          axiosOption,
+        )
         .then((res) => {
           setData(res.data)
         })
     } else {
       await axiosWithAuth
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`, {
-          code: verifyCode,
-          token: payloadToken,
-        })
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`,
+          {
+            code: verifyCode,
+            token: payloadToken,
+          },
+          axiosOption,
+        )
         .then((res) => {
           setData(res.data)
         })
