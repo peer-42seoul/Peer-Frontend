@@ -12,46 +12,11 @@ import BoxBase from '@/components/BoxBase'
 import EyeIcon from '@/components/EyeIcon'
 import EncryptedSender from '@/components/EncryptedSender'
 import { EApiType } from '@/types/EApiType'
+import * as style from './login.style'
 
 interface ILoginFormInput {
   userEmail: string
   password: string
-}
-
-const PCLoginBox = {
-  display: 'flex',
-  position: 'relative',
-  width: '34rem',
-  padding: '2.5rem 4rem',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '3rem',
-}
-
-const MobileLoginBox = {
-  display: 'flex',
-  width: '100%',
-  flexDirection: 'column',
-  alignItems: 'center',
-  padding: '2.5rem 1rem',
-  gap: '1.5rem',
-}
-
-const Form = {
-  display: 'flex',
-  width: '100%',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '6px',
-}
-
-const PCLabelBox = {
-  display: 'flex',
-  width: '100%',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: '6px',
-  fontSize: '14px',
 }
 
 const Login = () => {
@@ -112,9 +77,9 @@ const Login = () => {
 
   return (
     <>
-      <BoxBase pcSx={PCLoginBox} mobileSx={MobileLoginBox}>
+      <BoxBase pcSx={style.PCLoginBox} mobileSx={style.MobileLoginBox}>
         <Typography variant="Title3">로그인</Typography>
-        <Box sx={Form}>
+        <Box sx={style.Form}>
           <OauthLoginBox />
         </Box>
         <EncryptedSender
@@ -127,7 +92,11 @@ const Login = () => {
           axiosOption={{ withCredentials: true }}
           setIsLoading={setIsLoading}
         >
-          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={Form}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={style.Form}
+          >
             <Box sx={{ display: 'flex', width: '100%' }}>
               <Controller
                 name="userEmail"
@@ -141,7 +110,7 @@ const Login = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <Box sx={PCLabelBox}>
+                  <Box sx={style.PCLabelBox}>
                     <CuTextField
                       {...field}
                       style={{ width: '100%' }}
@@ -164,7 +133,7 @@ const Login = () => {
                   required: '비밀번호를 입력해주세요',
                 }}
                 render={({ field }) => (
-                  <Box sx={PCLabelBox}>
+                  <Box sx={style.PCLabelBox}>
                     <CuTextField
                       type={showPassword}
                       {...field}
