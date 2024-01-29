@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import { Box, Grid, Stack, Typography } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import useModal from '@/hook/useModal'
+import useDnDStore from '@/states/useDnDStore'
 import { SizeType } from '@/types/ITeamDnDLayout'
 import { IEvent } from '@/types/WidgetDataTypes'
 import WidgetCard from '../WidgetCard'
@@ -30,18 +31,21 @@ interface IEventItem {
 
 const CalenderWidget = ({ data, size }: ICalendarWidget) => {
   const { isOpen, openModal, closeModal } = useModal()
+  const { teamId } = useDnDStore()
 
   return (
     <>
       <WidgetCard onClick={openModal}>
         <CalendarRender data={data} size={size} />
       </WidgetCard>
-      <CalendarModal
-        open={isOpen}
-        onClose={closeModal}
-        events={data}
-        teamId={1} // TODO : teamId는 #519 PR 이후에 src/states/useDnDStore.ts 에서 얻어오기
-      />
+      {!!teamId && (
+        <CalendarModal
+          open={isOpen}
+          onClose={closeModal}
+          events={data}
+          teamId={teamId}
+        />
+      )}
     </>
   )
 }
