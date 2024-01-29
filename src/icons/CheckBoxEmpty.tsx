@@ -15,7 +15,7 @@ const CheckBoxEmpty = createSvgIcon(
       width="12.75"
       height="12.75"
       rx="1.375"
-      stroke="#currentColor"
+      stroke="currentColor"
       strokeWidth="1.25"
     />
   </svg>,
