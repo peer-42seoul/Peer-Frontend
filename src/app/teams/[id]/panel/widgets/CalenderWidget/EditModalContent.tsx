@@ -50,28 +50,28 @@ const EditModalContent = ({
   const axiosInstance = useAxiosWithAuth()
 
   useEffect(() => {
-    const fetchMemberList = async () => {
+    const fetchMemberList = () => {
       setIsLoading(true)
       try {
-        const res = await axiosInstance.post(
-          '/api/v1/dnd-sub/calendar/team-list',
-          {
-            teamId,
-          },
-        )
-        setMemberMap(
-          res.data.reduce((acc: Map<number, string>, cur: IMember) => {
-            acc.set(cur.userId, cur.nickname)
-            return acc
-          }, new Map<number, string>()),
-        )
-        // mock data 사용하는 부분
+        // const res = await axiosInstance.post(
+        //   '/api/v1/dnd-sub/calendar/team-list',
+        //   {
+        //     teamId,
+        //   },
+        // )
         // setMemberMap(
-        //   teamMembers.reduce((acc: Map<number, string>, cur: IMember) => {
+        //   res.data.reduce((acc: Map<number, string>, cur: IMember) => {
         //     acc.set(cur.userId, cur.nickname)
         //     return acc
         //   }, new Map<number, string>()),
         // )
+        // mock data 사용하는 부분
+        setMemberMap(
+          teamMembers.reduce((acc: Map<number, string>, cur: IMember) => {
+            acc.set(cur.userId, cur.nickname)
+            return acc
+          }, new Map<number, string>()),
+        )
       } catch (e) {
         console.error(e)
       } finally {
@@ -126,7 +126,9 @@ const EditModalContent = ({
               multiple
               value={selectedMemberId}
               onChange={handleChange}
-              // TODO :renderValue 추가
+              renderValue={(selected) =>
+                selected.map((value) => memberMap.get(value)).join(', ')
+              }
             >
               {teamMembers.map((member) => (
                 <MenuItem key={member.userId} value={member.userId}>
