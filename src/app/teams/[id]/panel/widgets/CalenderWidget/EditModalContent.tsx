@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import useAxiosWithAuth from '@/api/config'
 import CuCheckbox from '@/components/CuCheckBox'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import useToast from '@/states/useToast'
 import { IMember } from '@/types/WidgetDataTypes'
 
 interface IEditModalProps {
@@ -38,6 +39,7 @@ const EditModalContent = ({
   const [memberMap, setMemberMap] = useState<Map<number, string>>(new Map())
   const [selectedMemberId, setSelectedMemberId] = useState<number[]>([])
   const axiosInstance = useAxiosWithAuth()
+  const { openToast } = useToast()
 
   useEffect(() => {
     const fetchMemberList = async () => {
@@ -92,10 +94,19 @@ const EditModalContent = ({
         })
         .finally(() => {
           // TODO : 위젯 업데이트
+          openToast({
+            severity: 'success',
+            message: '일정과 알림이 추가되었습니다.',
+          })
           closeEditModal()
         })
     } else {
       // TODO : 위젯 업데이트
+      openToast({
+        severity: 'success',
+        message: '일정이 추가되었습니다.',
+      })
+      closeEditModal()
     }
   }
 
