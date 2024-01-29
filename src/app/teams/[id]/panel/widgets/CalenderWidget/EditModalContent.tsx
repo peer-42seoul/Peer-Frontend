@@ -89,16 +89,16 @@ const EditModalContent = ({
         .post(`/api/v1/dnd-sub/calendar/set-alarm`, alarmData)
         .then((res) => {
           scheduleData.eventId = res.data // eventId를 받아옴
+          openToast({
+            severity: 'success',
+            message: '일정과 알림이 추가되었습니다.',
+          })
         })
         .catch((e) => {
           console.error(e)
         })
         .finally(() => {
           // TODO : 위젯 업데이트
-          openToast({
-            severity: 'success',
-            message: '일정과 알림이 추가되었습니다.',
-          })
           closeEditModal()
         })
     } else {
