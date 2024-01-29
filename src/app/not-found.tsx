@@ -1,5 +1,8 @@
+'use client'
+
 import { Container, Typography } from '@mui/material'
-import Image from 'next/image'
+import Lottie from 'react-lottie-player'
+import dolphin from '../../public/404-dolphin.lottie.json'
 
 export default function Custom404() {
   return (
@@ -12,12 +15,7 @@ export default function Custom404() {
         alignItems: 'center',
       }}
     >
-      <Image
-        src={'/images/dolphin.png'}
-        width={300}
-        height={200}
-        alt="404에러 이미지"
-      />
+      <Lottie loop animationData={dolphin} play />
       <Typography
         color={'secondary'}
         fontWeight={'600'}
