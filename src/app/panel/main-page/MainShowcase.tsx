@@ -18,7 +18,7 @@ const MainShowcase = () => {
   )
 
   const handleClick = useCallback(() => {
-    if (!data) return
+    if (data?.content.length === 0) return
     var id = data?.content[0].id
     if (!id) return
     router.push(`/showcase/detail/${data?.content[0].id}`)
