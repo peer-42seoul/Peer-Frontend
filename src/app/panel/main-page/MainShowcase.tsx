@@ -19,10 +19,10 @@ const MainShowcase = () => {
 
   const handleClick = useCallback(() => {
     if (data?.content.length === 0) return
-    var id = data?.content[0].id
+    const id = data?.content[0].id
     if (!id) return
     router.push(`/showcase/detail/${data?.content[0].id}`)
-  }, [data])
+  }, [data?.content])
 
   return (
     <Box height={'400px'}>
