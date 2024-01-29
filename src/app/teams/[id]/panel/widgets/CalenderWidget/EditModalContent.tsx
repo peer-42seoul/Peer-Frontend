@@ -5,13 +5,15 @@ import {
   TextField,
   Select,
   MenuItem,
-  Checkbox,
   ListItemText,
   SelectChangeEvent,
+  FormControlLabel,
 } from '@mui/material'
 import { LocalizationProvider, DateTimeField } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import useAxiosWithAuth from '@/api/config'
+import CuCheckbox from '@/components/CuCheckBox'
+import CuCircularProgress from '@/components/CuCircularProgress'
 import { IEvent, IMember } from '@/types/WidgetDataTypes'
 
 interface IEditModalProps {
@@ -26,18 +28,6 @@ interface IFormWrapperProps {
   children: ReactNode
 }
 
-// mock data
-const teamMembers = [
-  {
-    userId: 1,
-    nickname: '김철수',
-  },
-  {
-    userId: 2,
-    nickname: '김영희',
-  },
-]
-
 const EditModalContent = ({
   teamId,
   eventId = -1,
@@ -50,24 +40,17 @@ const EditModalContent = ({
   const axiosInstance = useAxiosWithAuth()
 
   useEffect(() => {
-    const fetchMemberList = () => {
+    const fetchMemberList = async () => {
       setIsLoading(true)
       try {
-        // const res = await axiosInstance.post(
-        //   '/api/v1/dnd-sub/calendar/team-list',
-        //   {
-        //     teamId,
-        //   },
-        // )
-        // setMemberMap(
-        //   res.data.reduce((acc: Map<number, string>, cur: IMember) => {
-        //     acc.set(cur.userId, cur.nickname)
-        //     return acc
-        //   }, new Map<number, string>()),
-        // )
-        // mock data 사용하는 부분
+        const res = await axiosInstance.post(
+          '/api/v1/dnd-sub/calendar/team-list',
+          {
+            teamId,
+          },
+        )
         setMemberMap(
-          teamMembers.reduce((acc: Map<number, string>, cur: IMember) => {
+          res.data.reduce((acc: Map<number, string>, cur: IMember) => {
             acc.set(cur.userId, cur.nickname)
             return acc
           }, new Map<number, string>()),
@@ -96,7 +79,8 @@ const EditModalContent = ({
         nickname: memberMap.get(id) as string,
       })),
     }
-    alert(scheduleData)
+    console.log(scheduleData)
+    // TODO : 일정 데이터 전송
   }
 
   const handleChange = (event: SelectChangeEvent<typeof selectedMemberId>) => {
@@ -108,6 +92,9 @@ const EditModalContent = ({
     )
   }
 
+  if (isLoading) {
+    return <CuCircularProgress color={'primary'} />
+  }
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form id={'calender-form'} onSubmit={onSubmit}>
@@ -117,6 +104,16 @@ const EditModalContent = ({
           </FormWrapper>
           <FormWrapper title={'시작'}>
             <CustomDateTimePicker name={'start'} />
+            <FormControlLabel
+              componentsProps={{
+                typography: {
+                  variant: 'Caption',
+                  color: 'text.strong',
+                },
+              }}
+              control={<CuCheckbox />}
+              label="알림 설정하기"
+            />
           </FormWrapper>
           <FormWrapper title={'종료'}>
             <CustomDateTimePicker name={'end'} />
@@ -130,12 +127,11 @@ const EditModalContent = ({
                 selected.map((value) => memberMap.get(value)).join(', ')
               }
             >
-              {teamMembers.map((member) => (
-                <MenuItem key={member.userId} value={member.userId}>
-                  <Checkbox
-                    checked={selectedMemberId.includes(member.userId)}
-                  />
-                  <ListItemText primary={member.nickname} />
+              {/* map을 순회할 수 있는 더 좋은 방법을 찾아보기 */}
+              {Array.from(memberMap.keys()).map((memberId) => (
+                <MenuItem key={memberId} value={memberId}>
+                  <CuCheckbox checked={selectedMemberId.includes(memberId)} />
+                  <ListItemText primary={memberMap.get(memberId)} />
                 </MenuItem>
               ))}
             </Select>
