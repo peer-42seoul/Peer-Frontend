@@ -14,12 +14,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import useAxiosWithAuth from '@/api/config'
 import CuCheckbox from '@/components/CuCheckBox'
 import CuCircularProgress from '@/components/CuCircularProgress'
-import { IEvent, IMember } from '@/types/WidgetDataTypes'
+import { IMember } from '@/types/WidgetDataTypes'
 
 interface IEditModalProps {
   teamId: number
   eventId?: number
   widgetId?: string // TODO: 519 PR 이후 추가 예정
+  closeEditModal: () => void
   mode: 'create' | 'edit'
 }
 
@@ -31,8 +32,7 @@ interface IFormWrapperProps {
 const EditModalContent = ({
   teamId,
   eventId = -1,
-  widgetId,
-  mode,
+  closeEditModal, // widgetId, mode, (lint error를 피하기 위해 주석처리함)
 }: IEditModalProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [memberMap, setMemberMap] = useState<Map<number, string>>(new Map())
@@ -56,7 +56,8 @@ const EditModalContent = ({
           }, new Map<number, string>()),
         )
       } catch (e) {
-        console.error(e)
+        alert('멤버 목록을 불러오는데 실패했습니다.')
+        closeEditModal()
       } finally {
         setIsLoading(false)
       }
@@ -67,20 +68,35 @@ const EditModalContent = ({
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
-    const scheduleData: IEvent = {
+    const alarmData = {
       teamId,
       eventId,
       title: formData.get('title') as string,
       start: new Date(formData.get('start') as string),
       end: new Date(formData.get('end') as string),
-      memo: formData.get('memo') as string,
-      members: selectedMemberId.map((id) => ({
+      member: selectedMemberId.map((id) => ({
         userId: id,
         nickname: memberMap.get(id) as string,
       })),
     }
-    console.log(scheduleData)
-    // TODO : 일정 데이터 전송
+    // TODO: 519 PR 이후 위젯 데이터 업데이트 로직 추가
+    const scheduleData = { ...alarmData, memo: formData.get('memo') as string }
+    if (formData.get('set-alarm') === 'on') {
+      axiosInstance
+        .post(`/api/v1/dnd-sub/calendar/set-alarm`, alarmData)
+        .then((res) => {
+          scheduleData.eventId = res.data // eventId를 받아옴
+        })
+        .catch((e) => {
+          console.error(e)
+        })
+        .finally(() => {
+          // TODO : 위젯 업데이트
+          closeEditModal()
+        })
+    } else {
+      // TODO : 위젯 업데이트
+    }
   }
 
   const handleChange = (event: SelectChangeEvent<typeof selectedMemberId>) => {
@@ -113,6 +129,7 @@ const EditModalContent = ({
               }}
               control={<CuCheckbox />}
               label="알림 설정하기"
+              name={'set-alarm'}
             />
           </FormWrapper>
           <FormWrapper title={'종료'}>

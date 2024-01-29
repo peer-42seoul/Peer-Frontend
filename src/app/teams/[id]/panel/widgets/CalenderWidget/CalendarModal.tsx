@@ -77,6 +77,12 @@ const CalendarModal = ({
             eventId={modalData.eventId}
             widgetId={modalData.widgetId}
             mode={'create'}
+            closeEditModal={() =>
+              setModalData((prev) => ({
+                type: 'preview',
+                teamId: prev.teamId,
+              }))
+            }
           />
         </CalendarModalContainer>
       )

@@ -10,7 +10,7 @@ export interface IEvent extends Event {
   // start: Date // extends Event
   // end: Date // extends Event
   teamId: number
-  members: IMember[]
+  member: IMember[]
   eventId: number
   memo: string
 }
