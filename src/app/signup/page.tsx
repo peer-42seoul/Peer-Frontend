@@ -110,7 +110,7 @@ const SignUp = () => {
         setEmailSendStatus('submit')
         setToastProps({
           severity: 'info',
-          message: '이메일이 인증되었습니다',
+          message: '입력하신 메일로 코드를 전송했습니다',
         })
       } catch (error: any) {
         setEmailSendStatus('error')
@@ -159,7 +159,7 @@ const SignUp = () => {
         setCodeSendStatus('submit')
         setToastProps({
           severity: 'info',
-          message: '인증코드가 인증되었습니다',
+          message: '코드인증이 완료되었습니다',
         })
       } catch (error: any) {
         setCodeSendStatus('error')
@@ -201,7 +201,7 @@ const SignUp = () => {
     } else if (codeSendStatus !== 'submit') {
       setToastProps({
         severity: 'error',
-        message: '인증코드를 인증해주세요',
+        message: '코드를 인증해주세요',
       })
     } else {
       setSignUpStep(1)
@@ -228,7 +228,7 @@ const SignUp = () => {
       setNickNameSendStatus('submit')
       setToastProps({
         severity: 'info',
-        message: '닉네임이 인증되었습니다',
+        message: '닉네임이 확인되었습니다',
       })
     } catch (error: any) {
       setNickNameSendStatus('error')
@@ -301,7 +301,7 @@ const SignUp = () => {
         <Typography
           aria-label="회원가입"
           sx={{ textAlign: 'center' }}
-          component="h3"
+          variant="Title3Emphasis"
         >
           회원가입
         </Typography>
@@ -406,8 +406,8 @@ const SignUp = () => {
                     message: '닉네임은 2자 이상이어야 합니다',
                   },
                   maxLength: {
-                    value: 7,
-                    message: '닉네임은 7자 이하여야 합니다',
+                    value: 30,
+                    message: '닉네임은 30자 이하여야 합니다',
                   },
                   pattern: {
                     value: /^[가-힣a-zA-Z0-9]+$/i,
