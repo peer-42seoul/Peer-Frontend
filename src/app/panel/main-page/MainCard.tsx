@@ -117,9 +117,9 @@ const MainCard = ({
               overflow: 'auto',
               flexWrap: 'wrap',
               '&::-webkit-scrollbar': {
-                display: 'none', // 크롬, 사파리, 최신 엣지에서 스크롤바 숨김
+                display: 'none',
               },
-              scrollbarWidth: 'none', // 파이어폭스에서 스크롤바 숨김
+              scrollbarWidth: 'none',
               msOverflowStyle: 'none',
             }}
             flexWrap={'wrap'}
