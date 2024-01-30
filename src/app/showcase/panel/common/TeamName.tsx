@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import * as style from './TeamName.style'
 
 interface IteamNameProps {
