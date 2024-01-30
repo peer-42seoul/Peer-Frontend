@@ -169,10 +169,8 @@ const MyInterests = () => {
   const { data, isLoading, mutate, error } = useSWR<
     IPagination<Array<IDefaultPostCard> | Array<IShowcasePostCard>>
   >(
-    `/api/v1/${
-      type === 'SHOWCASE'
-        ? 'mypage/favorite/showcase?'
-        : `recruit/favorite?type=${type}&`
+    `/api/v1/mypage/favorite${
+      type === 'SHOWCASE' ? '/showcase?' : `?type=${type}&`
     }page=${page}&pagesize=${pagesize}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
