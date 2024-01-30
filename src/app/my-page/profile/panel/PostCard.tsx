@@ -40,7 +40,7 @@ function PostCard({
   const [selectedOption, setSelectedOption] = useState<string>('')
 
   const gotoTeamPage = () => {
-    if (postId > 0) router.push(`/teams/${postId}`)
+    if (postId !== 0) router.push(`/teams/${postId}`)
   }
 
   const goToRecruitPage = () => {
