@@ -90,7 +90,12 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
       >
         <Typography>팀을 해산시겠습니까?</Typography>
         <Button
-          disabled={teamStatus === TeamStatus.RECRUITING ? true : false}
+          disabled={
+            teamStatus === TeamStatus.RECRUITING ||
+            teamStatus === TeamStatus.COMPLETE
+              ? true
+              : false
+          }
           variant="contained"
           onClick={openModal}
         >

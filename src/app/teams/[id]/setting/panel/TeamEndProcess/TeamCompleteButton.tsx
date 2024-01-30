@@ -88,7 +88,12 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
       >
         <Typography>팀 활동을 완료하겠습니까?</Typography>
         <Button
-          disabled={teamStatus === TeamStatus.RECRUITING ? true : false}
+          disabled={
+            teamStatus === TeamStatus.RECRUITING ||
+            teamStatus === TeamStatus.COMPLETE
+              ? true
+              : false
+          }
           variant="contained"
           onClick={openModal}
         >
