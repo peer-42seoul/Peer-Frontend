@@ -111,7 +111,7 @@ const InterestsContents = ({
           })
         : postList.map((post) => {
             return (
-              <Grid key={post.recruit_id} xs={12} sm={6} md={4}>
+              <Grid key={post.recruit_id} xs={12} sm={6} md={4} lg={3}>
                 <MainCard
                   key={post.recruit_id}
                   title={post.title}
@@ -130,8 +130,8 @@ const InterestsContents = ({
               </Grid>
             )
           })}
-      <Grid xs={12} sm={6} md={4}>
-        <Box ref={target} position={'relative'}>
+      <Grid xs={12} sm={6} md={4} lg={3}>
+        <Box ref={target}>
           {spinner && <CuCircularProgress color="primary" />}
         </Box>
       </Grid>

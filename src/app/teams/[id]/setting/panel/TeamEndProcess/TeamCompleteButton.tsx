@@ -20,7 +20,7 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
   const finishTeam = () => {
     console.log('exit team')
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/finish`, {
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/complete`, {
         teamId: teamId,
       })
       .then((res) => {
@@ -79,13 +79,13 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Typography>팀을 나가겠습니까?</Typography>
+        <Typography>팀 활동을 완료하겠습니까?</Typography>
         <Button
           disabled={teamStatus === TeamStatus.RECRUITING ? true : false}
           variant="contained"
           onClick={openModal}
         >
-          <Typography>팀 나가기</Typography>
+          <Typography>완료하기</Typography>
         </Button>
       </Stack>
 

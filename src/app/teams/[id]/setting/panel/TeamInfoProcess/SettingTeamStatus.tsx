@@ -3,6 +3,7 @@ import { TargetClearIcon } from '../Icons'
 import { Control, Controller } from 'react-hook-form'
 import { TeamStatus } from '@/app/teams/types/types'
 import { ISetupTeam } from '../SettingTeamInfo'
+import useMedia from '@/hook/useMedia'
 
 interface ISettingTeamStatus {
   teamStatus: TeamStatus
@@ -10,11 +11,12 @@ interface ISettingTeamStatus {
 }
 
 const SettingTeamStatus = ({ teamStatus, control }: ISettingTeamStatus) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       direction={'row'}
       alignItems={'center'}
-      mx={'0.5rem'}
+      mx={isPc ? '0.5rem' : ''}
       mb={'1.2rem'}
       spacing={'0.25rem'}
     >
