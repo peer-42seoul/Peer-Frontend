@@ -79,7 +79,7 @@ const Privacy = () => {
     if (checkStatus[0] && checkStatus[1])
       router.push(`/signup?service-agreement=${
         signedDate[0]
-      }&personal-info-agreement=${signedDate[1]}
+      }&privacy-agreement=${signedDate[1]}
         ${socialEmail && '&social-email=' + socialEmail}`)
   }
 
@@ -98,9 +98,7 @@ const Privacy = () => {
       setSignedDate((prev) => [new Date().toISOString(), prev[1]])
   }
 
-  const handleCheckPersonalInfo = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handlePrivacy = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCheckStatus((prev) => [prev[0], event.target.checked])
     if (event.target.checked)
       setSignedDate((prev) => [prev[0], new Date().toISOString()])
@@ -150,7 +148,7 @@ const Privacy = () => {
           </Stack>
           <Stack>
             <FormControlLabel
-              control={<Checkbox onChange={handleCheckPersonalInfo} />}
+              control={<Checkbox onChange={handlePrivacy} />}
               label={
                 <Typography
                   variant="CaptionEmphasis"
