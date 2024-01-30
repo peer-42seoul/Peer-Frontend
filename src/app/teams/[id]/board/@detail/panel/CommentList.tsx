@@ -57,8 +57,8 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
 const CommentList = ({ postId }: { postId: number }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
-    `/api/v1/team/board/posts/comment/${postId}`,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    `/api/v1/team/post/comment/${postId}?page=1&pageSize=100`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data.content),
   )
 
   if (error || !data) {
