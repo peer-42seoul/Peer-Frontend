@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import { useSWRConfig } from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { CommentFormContainer } from '@/components/board/CommentPanel'
@@ -11,6 +11,7 @@ interface ICommentFormProps {
 export const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setIsLoading] = useState(false)
+  const textRef = useRef<HTMLInputElement>()
   const { mutate } = useSWRConfig()
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -25,6 +26,7 @@ export const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
       })
       .then(() => {
         setIsLoading(false)
+        textRef.current && textRef.current.value && (textRef.current.value = '')
         mutate(`/api/v1/team/post/comment/${postId}?page=1&pageSize=100`) // 댓글 데이터 만료
       })
       .catch(() => {
@@ -33,6 +35,10 @@ export const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
   }
 
   return (
-    <CommentFormContainer handleSubmit={handleSubmit} isLoading={isLoading} />
+    <CommentFormContainer
+      textRef={textRef}
+      handleSubmit={handleSubmit}
+      isLoading={isLoading}
+    />
   )
 }
