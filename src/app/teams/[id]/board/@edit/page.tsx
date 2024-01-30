@@ -26,7 +26,7 @@ const BoardEdit = () => {
       title={postId ? '게시글 수정' : '게시글 작성'}
     >
       <EditBox>
-        <PostEditForm boardId={boardId} />
+        <PostEditForm boardId={boardId} postId={postId} />
         {isPc && <PostEditButton />}
       </EditBox>
     </EditPage>

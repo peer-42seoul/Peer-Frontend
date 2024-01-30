@@ -8,7 +8,7 @@ import { EditForm } from '@/components/board/EditPanel'
 interface IPostEditFormProps {
   boardId: number
   // teamId: string
-  postId?: string
+  postId?: number
 }
 
 const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
