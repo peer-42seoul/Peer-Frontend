@@ -92,6 +92,8 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
           console.log('서버에 저장 완료')
           setIsEdit(false)
           location.reload()
+        } else {
+          console.log('서버에 저장 실패')
         }
       })
       .catch((err) => {
@@ -169,6 +171,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
             flexDirection={'row-reverse'}
           >
             <Button
+              disabled={team.status === TeamStatus.COMPLETE ? true : false}
               sx={styles.SaveButtonStyle}
               variant="contained"
               type="button"

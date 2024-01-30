@@ -30,6 +30,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
             severity: 'success',
             message: '팀을 나갔습니다.',
           })
+          closeModal()
         } else if (res.status === 401) {
           console.log(res)
           router.push('/login')
@@ -37,12 +38,14 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
             severity: 'error',
             message: '잘못된 접근입니다.',
           })
+          closeModal()
         } else if (res.status === 404) {
           console.log(res)
           openToast({
             severity: 'error',
             message: '팀이 존재하지 않습니다.',
           })
+          closeModal()
         } else if (res.status === 409) {
           console.log(res)
           openToast({
@@ -50,12 +53,14 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
             message:
               '혼자 남았을 경우 팀을 나갈 수 없습니다. 해산절차를 진행해주세요.',
           })
+          closeModal()
         } else {
           console.log(res)
           openToast({
             severity: 'error',
             message: '팀 나가기에 실패하였습니다.',
           })
+          closeModal()
         }
       })
       .catch((err) => {
@@ -64,6 +69,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
           severity: 'error',
           message: '팀 나가기에 실패하였습니다.',
         })
+        closeModal()
       })
   }
 

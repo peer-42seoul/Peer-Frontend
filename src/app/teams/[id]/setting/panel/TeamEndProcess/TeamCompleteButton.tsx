@@ -30,6 +30,7 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
             severity: 'success',
             message: '팀 활동이 완료되었습니다.',
           })
+          closeModal()
         } else if (res.status === 401) {
           console.log(res)
           router.push('/login')
@@ -37,38 +38,44 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
             severity: 'error',
             message: '로그인이 필요합니다.',
           })
+          closeModal()
         } else if (res.status === 403) {
           console.log(res)
           openToast({
             severity: 'error',
             message: '권한이 없습니다.',
           })
+          closeModal()
         } else if (res.status === 404) {
           console.log(res)
           openToast({
             severity: 'error',
             message: '팀이 존재하지 않습니다.',
           })
+          closeModal()
         } else if (res.status === 409) {
           console.log(res)
           openToast({
             severity: 'error',
             message: '모집을 완료 후 완료할 수 있습니다.',
           })
+          closeModal()
         } else {
           console.log(res)
           openToast({
             severity: 'error',
-            message: '팀 해산에 실패하였습니다.',
+            message: '팀 활동 완료에 실패하였습니다.',
           })
+          closeModal()
         }
       })
       .catch((err) => {
         console.log(err)
         openToast({
           severity: 'error',
-          message: '팀 해산에 실패하였습니다.',
+          message: '팀 활동 완료에 실패하였습니다.',
         })
+        closeModal()
       })
   }
 
