@@ -18,6 +18,8 @@ import ImageUploadButton from '@/components/ImageUploadButton'
 import Image from 'next/image'
 import { Controller, useForm } from 'react-hook-form'
 import { Radio } from '@mui/material'
+import ToastEditor from '@/components/ToastUIEditor'
+import ToastViewer from '@/components/ToastUIViewer'
 
 const alignCenter = {
   display: 'flex',
@@ -39,7 +41,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: '100%',
   height: '100%',
-  bgcolor: 'background.paper',
+  bgcolor: 'background-tertiary',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
@@ -76,7 +78,7 @@ const Announce = () => {
     useForm<IAnnounce>({ defaultValues: defaultValues })
   const announcementNoticeStatus = watch('announcementNoticeStatus')
   const writeMode = useRef<string>('')
-  let previewImage
+  let previewImage = watch('image')
   const fourthPage = useRef<boolean>(false)
   const fifthPage = useRef<boolean>(false)
   const renderFlag = useRef<boolean>(false)
@@ -157,11 +159,11 @@ const Announce = () => {
         alert('공지사항 조회 실패')
       })
     const title = content.find((item) => item.announcementId === id)?.title
-    const writer = content.find((item) => item.announcementId === id)?.wr
+    // const writer = content.find((item) => item.announcementId === id)?.wr
     const image = content.find((item) => item.announcementId === id)?.image
 
     if (title !== undefined) setValue('title', title)
-    if (writer !== undefined) setValue('writer', writer)
+    // if (writer !== undefined) setValue('writer', writer)
     if (image !== undefined) setValue('image', image)
   }
 
@@ -173,13 +175,13 @@ const Announce = () => {
         alignItems: 'center',
         width: '80rem',
         height: '60rem',
-        backgroundColor: 'black',
+        // backgroundColor: 'background.primary',
       }}
     >
       <Stack>
         {/* 새 글 버튼 */}
         <Stack direction={'row'} justifyContent={'space-between'}>
-          <Typography variant={'h4'} align="center">
+          <Typography variant={'Title1'} align="center">
             공지사항
           </Typography>
           <Box justifyContent={'right'}>
@@ -206,7 +208,7 @@ const Announce = () => {
                 sx={{ width: '90%', height: '90%' }}
                 key={item.announcementId}
               >
-                <Typography variant={'body1'} sx={alignCenter}>
+                <Typography variant={'Body1'} sx={alignCenter}>
                   {item.announcementId}
                 </Typography>
                 <Typography variant={'body1'} sx={alignCenter}>
@@ -271,10 +273,11 @@ const Announce = () => {
           <Typography variant={'h6'}>제목</Typography>
           <TextField {...register('title', { required: 'you need this' })} />
           <Typography variant={'h6'}>글쓴이</Typography>
-          <TextField {...register('writer', { required: true })} />\
+          <TextField {...register('writer', { required: true })} />
           <Typography variant={'h6'}>내용</Typography>
           <TextField {...register('content', { required: true })} multiline />
           {/* <ToastEditor initialValue="" /> */}
+          <ToastViewer/>
           <Stack>
             <Typography variant={'h6'}>공지상태</Typography>
             <Stack direction={'row'} justifyContent={'space-between'}>
