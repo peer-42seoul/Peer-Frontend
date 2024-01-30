@@ -14,7 +14,7 @@ import CuCircularProgress from '@/components/CuCircularProgress'
 import { getUniqueArray } from '@/utils/getUniqueArray'
 import { ISkill } from '@/types/IUserProfile'
 
-interface IMyPortfolio {
+export interface IMyPortfolio {
   teamId: number // 팀 Id
   tagList: ISkill[] // 지정된 태그 리스트
   teamName: string
