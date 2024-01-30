@@ -5,7 +5,6 @@ import { Box } from '@mui/system'
 import { Button, Container, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import NewTag from './panel/NewTag'
-import { useStore } from 'zustand'
 import useAdminStore from '@/states/useAdminStore'
 import { useRouter } from 'next/navigation'
 
@@ -111,7 +110,7 @@ const Tag = () => {
               // withCredentials: true,
               // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
             })
-            .then((res) => {
+            .then(() => {
               setContent(res.data)
             })
         })
@@ -125,7 +124,7 @@ const Tag = () => {
           name: tagName,
           color: tagColor,
         })
-        .then((res) => {
+        .then(() => {
           alert('태그가 수정되었습니다.')
           axios
             .get(`${API_URL}/api/v1/tag`, {
@@ -162,7 +161,7 @@ const Tag = () => {
           <Stack direction={'row'} justifyContent={'space-between'}>
             <Stack>
               <Typography variant={'h4'}>태그 리스트</Typography>
-              <Typography>'ctrl + f' 로 태그를 검색하세요</Typography>
+              <Typography>ctrl + f 로 태그를 검색하세요</Typography>
             </Stack>
             <Box justifyContent={'right'}>
               <Button
