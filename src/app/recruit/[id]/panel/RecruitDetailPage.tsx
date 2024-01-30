@@ -2,7 +2,7 @@
 
 import { Typography, Stack, Container, Divider } from '@mui/material'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
 import RecruitQuickMenu from '@/app/recruit/[id]/panel/RecruitQuickMenu'
@@ -13,15 +13,23 @@ import DropdownMenu from '@/components/DropdownMenu'
 import FavoriteButton from '@/components/FavoriteButton'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
+import useHeaderStore from '@/states/useHeaderStore'
 
 const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
   const { isPc } = useMedia()
   const path = usePathname()
+  const { setHeaderTitle } = useHeaderStore()
 
   const roleList = useMemo(() => {
     if (!data) return []
     return data.roleList.filter((role) => role.name !== 'Leader')
+  }, [data])
+
+  useEffect(() => {
+    if (data) {
+      setHeaderTitle(data.teamName)
+    }
   }, [data])
 
   if (!data) return <Typography>데이터가 없습니다</Typography>

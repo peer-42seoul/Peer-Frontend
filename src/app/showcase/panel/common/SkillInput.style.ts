@@ -4,16 +4,18 @@ const IconStyle: SxProps = {
   color: 'text.normal',
   width: '1rem',
   height: '1rem',
+  gap: '0.25rem',
 }
 
-const ShowcaseImageStyle: SxProps = {
-  width: '18.5rem',
+const ShowcaseImageStyle = (isPc: boolean) => ({
+  width: isPc ? '18.5rem' : '100%',
   height: '12.5rem',
   objectFit: 'cover',
   borderRadius: '0.25rem',
   border: '1px solid',
   borderColor: 'line.alternative',
-}
+  padding: 0,
+})
 
 const AutocompleteStyle: SxProps = {
   '.MuiFormControl-root': {
@@ -27,4 +29,10 @@ const AutocompleteStyle: SxProps = {
   },
 }
 
-export { IconStyle, ShowcaseImageStyle, AutocompleteStyle }
+const skillInputViewer = {
+  width: '100%',
+  height: 'auto',
+  gridArea: 'skillInput',
+}
+
+export { IconStyle, ShowcaseImageStyle, AutocompleteStyle, skillInputViewer }

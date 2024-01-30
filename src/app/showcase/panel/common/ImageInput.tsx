@@ -5,19 +5,22 @@ import LabelWithIcon from '../LabelWithIcon'
 import ImageIcon from '@/icons/ImageIcon'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import * as Style from './SkillInput.style'
+import useMedia from '@/hook/useMedia'
+import Image from 'next/image'
 
 /* eslint-disable no-unused-vars */
 const ImageInput = ({
   previewImage,
-  setPreviewImage,
-  setImage,
-  image,
+  setPreviewImage, // setImage,
+  setImage, // image,
 }: {
   previewImage: string
-  image: File[]
   setPreviewImage: (image: string) => void
+  image: File[]
   setImage: (image: File[]) => void
 }) => {
+  const { isPc } = useMedia()
+
   return (
     <Stack direction={'column'} spacing={'0.5rem'} alignItems={'flex-start'}>
       <LabelWithIcon
@@ -31,16 +34,11 @@ const ImageInput = ({
         setPreviewImage={setPreviewImage}
       >
         {previewImage ? (
-          <Box
-            component={'img'}
-            alt="쇼캐이스 대표 이미지"
-            src={image ? previewImage : '/images/teamLogo.png'}
-            sx={Style.ShowcaseImageStyle}
-          />
+          <Image src={previewImage} alt="쇼케이스 대표 이미지" fill={true} />
         ) : (
           <Box
             sx={{
-              ...Style.ShowcaseImageStyle,
+              ...Style.ShowcaseImageStyle(isPc),
               position: 'relative',
               backgroundColor: 'background.tertiary',
             }}

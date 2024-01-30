@@ -54,7 +54,7 @@ export interface IDetailOption {
   tag: string
 }
 
-export const socket = io('ws://back.peer-test.co.kr:8081', {
+export const socket = io(`${process.env.NEXT_PUBLIC_API_URL}:8084`, {
   transports: ['socket.io', 'polling'],
   query: {
     token: getCookie('accessToken') ? getCookie('accessToken') : '',
@@ -243,7 +243,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 sx={{
                   bottom: 0,
                   height: '1vh',
-                  backgroundColor: 'primary.main',
                 }}
                 ref={target}
               />
@@ -264,6 +263,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* pc view */}
       <div className="pc-layout">
         <Container
+          disableGutters
           sx={{
             backgroundColor: 'Background.primary',
             border: '1px solid black',
@@ -309,7 +309,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                     sx={{
                       bottom: 0,
                       height: '1vh',
-                      backgroundColor: 'primary.main',
                     }}
                     ref={target}
                   />

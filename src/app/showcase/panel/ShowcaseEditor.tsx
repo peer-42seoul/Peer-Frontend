@@ -1,12 +1,12 @@
 'use client'
-import { Button, Stack } from '@mui/material'
-import React, { useState } from 'react'
+import { Button, Container, Stack } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
 import SkillInput from '../panel/common/SkillInput'
 import LinkForm from '../panel/common/LinkForm'
-import useToast from '@/hook/useToast'
+import useToast from '@/states/useToast'
 import useModal from '@/hook/useModal'
 import CuTextModal from '@/components/CuTextModal'
 import useAxiosWithAuth from '@/api/config'
@@ -17,10 +17,12 @@ import * as style from './ShowcaseEditor.style'
 import { useLinks } from '@/hook/useLinks'
 import useShowCaseState from '@/states/useShowCaseState'
 import { useRouter } from 'next/navigation'
+import useMedia from '@/hook/useMedia'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
-  teamId: number
+  teamId?: number
+  showcaseId?: number
   requestMethodType: 'post' | 'put'
   router: any | undefined
 }
@@ -32,20 +34,28 @@ const DynamicEditor = dynamic(() => import('../panel/common/FormUIEditor'), {
 const ShowcaseEditor = ({
   data,
   teamId,
+  showcaseId,
   requestMethodType,
 }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
-    '/images/defaultImage.png',
+    data.image ?? '/images/defaultImage.png',
   )
-  const [errorMessages, setErrorMessages] = useState<string>('')
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const { openToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
-    useLinks([])
-  const { content } = useShowCaseState()
+    useLinks(data.links ? data.links : [])
+  const { content, setContent } = useShowCaseState()
   const router = useRouter()
+  const { isPc } = useMedia()
+
+  useEffect(() => {
+    if (requestMethodType === 'put') {
+      setContent(data?.content)
+    }
+  }, [requestMethodType, data?.content])
+
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
     if (!isValid) {
@@ -53,7 +63,7 @@ const ShowcaseEditor = ({
     }
     try {
       if (requestMethodType === 'post') {
-        const response = await axiosWithAuth.post(
+        await axiosWithAuth.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
           {
             image: previewImage.split(',')[1],
@@ -62,55 +72,95 @@ const ShowcaseEditor = ({
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${response.data.get('id')}`) // next 13에서 redirect 하는 법
+        router.push(`/teams/${teamId}/showcase`)
       } else if (requestMethodType === 'put') {
-        const response = await axiosWithAuth.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${teamId}}`,
+        await axiosWithAuth.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${showcaseId}`,
           {
-            image: previewImage.split(',')[1],
+            image: image.length ? previewImage.split(',')[1] : null,
             content: content,
-            teamId: teamId,
             links: linksWithoutId,
           },
         )
-        router.push(`/showcase/${response.data.get('id')}`)
+        router.push(`/showcase/detail/${showcaseId}`)
       }
     } catch (error: any) {
       closeModal()
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            setErrorMessages('요청이 올바르지 않습니다. (BAD_REQUEST)')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '요청이 올바르지 않습니다.',
+            })
+
             break
           case 403:
-            setErrorMessages('접근이 거부되었습니다. (FORBIDDEN)')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '접근이 거부되었습니다.',
+            })
             break
           case 404:
-            setErrorMessages('페이지를 찾을 수 없습니다. (NOT_FOUND)')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '페이지를 찾을 수 없습니다.',
+            })
             break
           case 409:
-            setErrorMessages('이미 쇼케이스가 존재합니다.')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '이미 쇼케이스가 존재합니다.',
+            })
             break
           default:
-            setErrorMessages('알 수 없는 에러가 발생했습니다.')
-            openToast()
+            openToast({
+              severity: 'error',
+              message: '알 수 없는 에러가 발생했습니다.',
+            })
             break
         }
       } else if (error.request) {
-        setErrorMessages('서버에서 응답이 없습니다.')
+        openToast({
+          severity: 'error',
+          message: '서버에서 응답이 없습니다.',
+        })
       } else {
-        setErrorMessages('요청을 설정하는 중에 에러가 발생했습니다.')
+        openToast({
+          severity: 'error',
+          message: '요청을 설정하는 중에 에러가 발생했습니다.',
+        })
       }
     }
   }
 
   return (
-    <form id="showcase-form">
-      <Stack direction={'column'} spacing={'2.5rem'} sx={{ width: '26rem' }}>
+    <Container
+      sx={{
+        padding: isPc ? '2.5rem 4rem 2.5rem 4rem' : '0 1rem 0 1rem',
+        width: '100%',
+        height: 'auto',
+      }}
+    >
+      <Stack
+        sx={{
+          width: '100%',
+          height: '4.5rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+          marginBottom: '1rem',
+        }}
+      >
+        <Button
+          onClick={openModal}
+          sx={style.saveButton}
+          style={{ width: '4.3125rem', height: '2rem' }}
+        >
+          저장
+        </Button>
+      </Stack>
+      <Stack direction={'column'} sx={{ width: '100%', gap: '2.5rem' }}>
         <ImageInput
           previewImage={previewImage}
           image={image}
@@ -134,15 +184,7 @@ const ShowcaseEditor = ({
           changeUrl={changeUrl}
         />
         <DynamicEditor content={data.content} />
-        <Button onClick={openModal} sx={style.saveButton}>
-          저장
-        </Button>
-        <CuToast
-          open={isOpen}
-          onClose={closeToast}
-          severity="error"
-          message={errorMessages}
-        />
+
         <CuTextModal
           open={alertOpen}
           onClose={closeModal}
@@ -158,7 +200,7 @@ const ShowcaseEditor = ({
           }}
         />
       </Stack>
-    </form>
+    </Container>
   )
 }
 export default ShowcaseEditor

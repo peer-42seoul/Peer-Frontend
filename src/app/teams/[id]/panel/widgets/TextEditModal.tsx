@@ -1,6 +1,7 @@
 import CuModal from '@/components/CuModal'
 import React, { useState } from 'react'
 import { FormHelperText, TextField, Typography } from '@mui/material'
+import useDnDStore from '@/states/useDnDStore'
 
 const MAX_CHARS = 500
 
@@ -9,15 +10,18 @@ const TextEditModal = ({
   handleClose,
   data,
   setData,
+  wgKey,
 }: {
   open: boolean
   handleClose: () => void
   data: string
   setData: (data: string) => void
+  wgKey: number | string
 }) => {
   const [text, setText] = useState<string>(data)
-
   const [charCount, setCharCount] = useState(0)
+  //추가한 코드
+  const { setStoredWidgetData } = useDnDStore()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputText = event.target.value
@@ -31,6 +35,8 @@ const TextEditModal = ({
 
   const handleSubmit = () => {
     setData(text)
+    // 추가한 코드
+    setStoredWidgetData(wgKey, text)
     handleClose()
   }
   return (

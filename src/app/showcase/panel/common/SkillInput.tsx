@@ -2,7 +2,7 @@ import React from 'react'
 import { Stack } from '@mui/material'
 import TagIcon from '@/icons/TagIcon'
 import LabelWithIcon from '../LabelWithIcon'
-import * as Style from './SkillInput.style'
+import * as style from './SkillInput.style'
 import TagChip from '@/components/TagChip'
 import { ISkill } from '@/types/IShowcaseEdit'
 
@@ -12,19 +12,13 @@ interface ISkillProps {
 
 const SkillInput = ({ skills }: ISkillProps) => {
   return (
-    <Stack direction={'column'} spacing={'0.5rem'} width={'26rem'}>
+    <Stack spacing={'0.75rem'} sx={style.skillInputViewer}>
       <LabelWithIcon
-        svgIcon={<TagIcon sx={Style.IconStyle} />}
+        svgIcon={<TagIcon sx={style.IconStyle} />}
         message="기술 스택"
+        color="text.alternative"
       />
-      <Stack
-        spacing={0.75}
-        py={1}
-        flexWrap={'wrap'}
-        width={1}
-        direction={'row'}
-        useFlexGap
-      >
+      <Stack spacing={'0.75rem'} py={1} direction={'row'} useFlexGap>
         {skills?.map((skill, index: number) => (
           <TagChip key={index} name={skill.name} color={skill.color} />
         ))}

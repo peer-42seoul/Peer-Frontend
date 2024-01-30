@@ -37,7 +37,7 @@ const NickNameField = ({
         placeholder="닉네임을 입력하세요."
         inputProps={{
           minLength: 2,
-          maxLength: 7,
+          maxLength: 30,
         }}
         InputProps={{
           endAdornment: (

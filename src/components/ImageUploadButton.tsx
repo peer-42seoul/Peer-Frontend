@@ -1,6 +1,9 @@
+import useMedia from '@/hook/useMedia'
 import { Button } from '@mui/material'
 import React from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
+import * as style from '../app/showcase/panel/common/SkillInput.style'
+
 // import { UseFormRegisterReturn } from 'react-hook-form'
 
 // setImage를 react-hook-form의 setValue 사용시 setImage를 다음과 같이 넣어주세요
@@ -45,11 +48,22 @@ const ImageUploadButton = ({
   onChange?: () => void
   register?: UseFormRegisterReturn
 }) => {
+  const { isPc } = useMedia()
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
+
+    // 파일이 선택되었고, 그 크기가 4MB를 초과하면 경고 메시지를 보여주고 함수를 빠져나갑니다.
+    if (file && file.size > 4 * 1024 * 1024) {
+      alert('파일 크기가 4MB를 초과하였습니다.')
+      return
+    }
+
     if (e.target.files && e.target.files?.length && e.target.files[0]) {
       const reader = new FileReader()
-      if (setImage) setImage([e.target.files[0]])
+      if (setImage) {
+        setImage([e.target.files[0]])
+      }
       reader.onload = (e) => {
         setPreviewImage(e.target?.result as string)
         onChange && onChange()
@@ -58,7 +72,7 @@ const ImageUploadButton = ({
     }
   }
   return (
-    <Button component="label" sx={{ padding: 0 }}>
+    <Button component="label" sx={style.ShowcaseImageStyle(isPc)}>
       {children}
       <input
         type="file"

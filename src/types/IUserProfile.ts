@@ -17,6 +17,7 @@ export interface IUserProfile {
   association: string | null // 해당 없을 시 null
   email: string
   skillList: Array<ISkill>
+  portfolioVisibility: boolean
 }
 
 export interface IUserProfileLink {

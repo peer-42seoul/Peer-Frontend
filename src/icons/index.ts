@@ -1,5 +1,7 @@
 export { default as ArrowDown } from './ArrowDown'
 export { default as ArrowUp } from './ArrowUp'
+export { default as CheckBoxEmpty } from './CheckBoxEmpty'
+export { default as CheckBoxSelected } from './CheckBoxSelected'
 export { default as ChevronLeft } from './ChevronLeft'
 export { default as ChevronRight } from './ChevronRight'
 export { default as ChevronDown } from './ChevronDown'
