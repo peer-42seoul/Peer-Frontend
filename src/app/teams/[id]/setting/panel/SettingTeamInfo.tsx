@@ -91,6 +91,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
         if (res.status == 200) {
           console.log('서버에 저장 완료')
           setIsEdit(false)
+          location.reload()
         }
       })
       .catch((err) => {
