@@ -34,6 +34,7 @@ const Showcase = () => {
         return newArray
       })
     }
+    if (data) console.log('data', data?.content)
   }, [isLoading, data?.content])
 
   const removeCard = (recruit_id: number) => {
