@@ -2,15 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Box } from '@mui/system'
-import {
-  Button,
-  Container,
-  Modal,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Button, Container, Stack, Typography } from '@mui/material'
 import axios from 'axios'
+import NewTag from './panel/NewTag'
+import { useStore } from 'zustand'
+import useAdminStore from '@/states/useAdminStore'
+import { useRouter } from 'next/navigation'
 
 interface content {
   tagId: number
@@ -31,14 +28,15 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '100%',
-  height: '100%',
-  bgcolor: 'background.paper',
+  width: '80%',
+  height: '80%',
+  bgcolor: 'background.secondary',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
   overflowY: 'scroll',
 }
+
 const Tag = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [content, setContent] = useState<content[]>([])
@@ -47,6 +45,15 @@ const Tag = () => {
   const [tagColor, setTagColor] = useState<string>('#000000')
   const [open, setOpen] = useState<boolean>(false)
   const writeMode = useRef<string>('')
+  const { isLoggedIn } = useAdminStore()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      alert('로그인이 필요한 서비스입니다.')
+      router.push('/admin/login')
+    }
+  }, [isLoggedIn])
 
   useEffect(() => {
     axios
@@ -78,10 +85,19 @@ const Tag = () => {
       .delete(`${API_URL}/api/v1/admin/tag`, { data: { tagId: tagId } })
       .then(() => {
         alert(tagId + '번 태그가 삭제되었습니다.')
+        axios
+          .get(`${API_URL}/api/v1/tag`, {
+            // withCredentials: true,
+            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+          })
+          .then((res) => {
+            setContent(res.data)
+          })
       })
   }
 
   const onHandleSubmit = () => {
+    console.log('submit')
     if (writeMode.current === 'write') {
       axios
         .post(`${API_URL}/api/v1/admin/tag`, {
@@ -90,6 +106,14 @@ const Tag = () => {
         })
         .then((res) => {
           alert('새로운 태그가 등록되었습니다.')
+          axios
+            .get(`${API_URL}/api/v1/tag`, {
+              // withCredentials: true,
+              // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+            })
+            .then((res) => {
+              setContent(res.data)
+            })
         })
         .catch(() => {
           alert('태그 등록에 실패하였습니다.')
@@ -103,6 +127,14 @@ const Tag = () => {
         })
         .then((res) => {
           alert('태그가 수정되었습니다.')
+          axios
+            .get(`${API_URL}/api/v1/tag`, {
+              // withCredentials: true,
+              // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+            })
+            .then((res) => {
+              setContent(res.data)
+            })
         })
         .catch(() => {
           alert('태그 수정에 실패하였습니다.')
@@ -122,7 +154,7 @@ const Tag = () => {
           alignItems: 'center',
           width: '80rem',
           height: '30rem',
-          backgroundColor: 'black',
+          backgroundColor: 'background.primary',
         }}
       >
         <Stack>
@@ -145,7 +177,7 @@ const Tag = () => {
             </Box>
           </Stack>
           {/* 태그 리스트 */}
-          <Stack sx={{ width: '45rem', height: '10rem', overflowY: 'scroll' }}>
+          <Stack sx={{ width: '45rem', height: '20rem', overflowY: 'scroll' }}>
             <Stack>
               {content?.map((item) => (
                 <Stack
@@ -155,28 +187,28 @@ const Tag = () => {
                   sx={{ width: '90%', height: '90%' }}
                   key={item.tagId}
                 >
-                  <Typography variant={'body1'} sx={alignCenter}>
+                  <Typography variant={'Body1'} sx={alignCenter}>
                     {item.tagId}
                   </Typography>
-                  <Typography variant={'body1'} sx={alignCenter}>
+                  <Typography variant={'Body1'} sx={alignCenter}>
                     {item.name}
                   </Typography>
-                  <Typography variant={'body1'} sx={alignCenter}>
+                  <Typography variant={'Body1'} sx={alignCenter}>
                     {item.color}
                   </Typography>
-                  <Typography variant={'body1'} sx={alignCenter}>
+                  <Typography variant={'Body1'} sx={alignCenter}>
                     {item.createdAt}
                   </Typography>
-                  <Typography variant={'body1'} sx={alignCenter}>
+                  <Typography variant={'Body1'} sx={alignCenter}>
                     {item.updatedAt}
                   </Typography>
                   <Button onClick={() => onHandleEdit(item.tagId)}>
-                    <Typography variant={'body1'} sx={alignCenter}>
+                    <Typography variant={'Body1'} sx={alignCenter}>
                       수정
                     </Typography>
                   </Button>
                   <Button onClick={() => onHandleRemove(item.tagId)}>
-                    <Typography variant={'body1'} sx={alignCenter}>
+                    <Typography variant={'Body1'} sx={alignCenter}>
                       삭제
                     </Typography>
                   </Button>
@@ -185,44 +217,17 @@ const Tag = () => {
             </Stack>
           </Stack>
           {/* 새 태그 만들기 모달 */}
-          <Modal
+          <NewTag
             open={open}
-            onClose={() => setOpen(false)}
-            aria-labelledby="새 태그 작성"
-            aria-describedby="새 태그를 작성할 수 있는 모달입니다."
-          >
-            <Container sx={style}>
-              <Typography variant={'h4'} align="center">
-                {writeMode.current === 'write'
-                  ? '새 태그 추가하기'
-                  : '태그 수정하기'}
-              </Typography>
-              <Typography variant={'body1'} align="center">
-                태그 이름
-              </Typography>
-              <TextField
-                value={tagName}
-                sx={{ display: 'flex', justifyContent: 'center' }}
-                onChange={(e) => setTagName(e.target.value)}
-              />
-              <Typography variant={'body1'} align="center">
-                태그 색상
-              </Typography>
-              <TextField
-                value={tagColor}
-                sx={{ display: 'flex', justifyContent: 'center' }}
-                onChange={(e) => setTagColor(e.target.value)}
-              />
-              <Stack direction={'row'} justifyContent={'flex-end'}>
-                <Button variant={'contained'} onClick={() => setOpen(false)}>
-                  취소
-                </Button>
-                <Button variant={'contained'} onClick={() => onHandleSubmit()}>
-                  등록
-                </Button>
-              </Stack>
-            </Container>
-          </Modal>
+            setOpen={setOpen}
+            writeMode={writeMode}
+            tagName={tagName}
+            setTagName={setTagName}
+            tagColor={tagColor}
+            setTagColor={setTagColor}
+            onHandleSubmit={onHandleSubmit}
+            style={style}
+          />
         </Stack>
       </Container>
     </>
