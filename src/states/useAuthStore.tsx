@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import LocalStorage from './localStorage'
 import axios from 'axios'
 import { setCookie } from 'cookies-next'
+import useNicknameStore from './useNicknameStore'
 
 interface IAuthStore {
   isLogin: boolean
@@ -22,10 +23,19 @@ const useAuthStore = create<IAuthStore>((set) => {
     isLogin: !!authData.accessToken,
     accessToken: authData.accessToken,
     login: (accessToken) => {
-      // save userId, accessToken to LocalStorage
       const authDataToSave = { accessToken }
       LocalStorage.setItem('authData', JSON.stringify(authDataToSave))
       setCookie('accessToken', accessToken)
+      axios
+        .get(`${API_URL}/api/v1/profile`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          const nickname = res.data.nickname
+          useNicknameStore.getState().setNickname(nickname)
+        })
       // set state
       set(() => ({
         isLogin: true,
@@ -45,6 +55,7 @@ const useAuthStore = create<IAuthStore>((set) => {
         isLogin: false,
         accessToken: null,
       }))
+      useNicknameStore.getState().unsetNickname()
     },
   }
 })
