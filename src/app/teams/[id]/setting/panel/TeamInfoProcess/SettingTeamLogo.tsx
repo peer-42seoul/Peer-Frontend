@@ -47,8 +47,8 @@ const SettingTeamLogo = ({ teamLogoImage, setValue }: ISettingTeamLogo) => {
         p={'0.5rem'}
       >
         <Box
-          width={[56, '10rem']}
-          height={[56, '10rem']}
+          width={['100%', '10rem']}
+          height={['100%', '10rem']}
           sx={{ position: 'relative' }}
         >
           <IconButton sx={styles.closeButtonStyle} onClick={openModal}>
