@@ -1,6 +1,6 @@
 'use client'
 import { FormEvent, useState } from 'react'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import {
@@ -9,10 +9,17 @@ import {
   CommentItem,
 } from '@/components/board/CommentPanel'
 import { ITeamBoardComment, ITeamComment } from '@/types/TeamBoardTypes'
+import useToast from '@/states/useToast'
 
-const Comment = ({ comment }: { comment: ITeamComment }) => {
+interface ICommentProps {
+  comment: ITeamComment
+  postId: number
+}
+
+const Comment = ({ comment, postId }: ICommentProps) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const axiosWithAuth = useAxiosWithAuth()
+  const { openToast } = useToast()
 
   const handleEdit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -34,12 +41,13 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
     const confirm = window.confirm('댓글을 삭제하시겠습니까?')
     if (!confirm) return
     axiosWithAuth
-      .delete(`/api/v1/team/board/posts/comment/${comment.answerId}`)
+      .delete(`/api/v1/team/post/comment/${comment.answerId}`)
       .then(() => {
-        alert('댓글을 삭제했습니다.')
+        openToast({ severity: 'success', message: '댓글을 삭제했습니다.' })
+        mutate(`/api/v1/team/post/comment/${postId}?page=1&pageSize=100`) // 댓글 데이터 만료
       })
       .catch(() => {
-        alert('댓글 삭제에 실패했습니다.')
+        openToast({ severity: 'error', message: '댓글 삭제에 실패했습니다.' })
       })
   }
 
@@ -85,7 +93,13 @@ const CommentList = ({ postId }: { postId: number }) => {
             createdAt: comment.createdAt,
             isAuthor: comment.isAuthor,
           }
-          return <Comment key={comment.commentId} comment={transformComment} />
+          return (
+            <Comment
+              key={comment.commentId}
+              comment={transformComment}
+              postId={postId}
+            />
+          )
         })}
       </CommentContainer>
     </Stack>
