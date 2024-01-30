@@ -27,7 +27,7 @@ const BoardEdit = () => {
     >
       <EditBox>
         <PostEditForm boardId={boardId} postId={postId} />
-        {isPc && <PostEditButton />}
+        {isPc && <PostEditButton postId={postId} />}
       </EditBox>
     </EditPage>
   )

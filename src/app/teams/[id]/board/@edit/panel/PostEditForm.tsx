@@ -4,10 +4,10 @@ import useAxiosWithAuth from '@/api/config'
 import useTeamPageState from '@/states/useTeamPageState'
 import useEditorState from '@/states/useEditorState'
 import { EditForm } from '@/components/board/EditPanel'
+import useToast from '@/states/useToast'
 
 interface IPostEditFormProps {
   boardId: number
-  // teamId: string
   postId?: number
 }
 
@@ -20,6 +20,7 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
   })
   const [isLoading, setIsLoading] = useState(false)
   const { editor } = useEditorState()
+  const { openToast } = useToast()
   useEffect(() => {
     if (postId) {
       setIsLoading(true)
@@ -48,37 +49,48 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
     const form = {
       title: formData.get('post-title') as string,
       content: editor.getMarkdown(),
+      image: null,
     }
     if (!form.title) {
-      alert('제목을 입력해주세요.')
+      openToast({
+        severity: 'error',
+        message: '제목을 입력해주세요.',
+      })
       return
     }
     if (postId) {
       // 글 수정
       axiosWithAuth
-        .put(`/api/v1/team/board/post/${postId}`, form)
+        .put(`/api/v1/team/post/${postId}`, form)
         .then(() => {
           alert('게시글을 수정했습니다.')
-          setBoard('DETAIL', boardId, parseInt(postId))
+          setBoard('DETAIL', boardId, postId)
         })
         .catch(() => {
-          alert('게시글 수정에 실패했습니다.')
+          openToast({
+            severity: 'error',
+            message: '게시글 수정에 실패했습니다.',
+          })
+        })
+    } else {
+      // 글 작성
+      axiosWithAuth
+        .post(`/api/v1/team-page/posts/create`, {
+          ...form,
+          boardId,
+          image: null,
+        })
+        .then((res) => {
+          alert('게시글이 등록되었습니다.')
+          setBoard('DETAIL', res.data.boardId, res.data.postId)
+        })
+        .catch(() => {
+          openToast({
+            severity: 'error',
+            message: '게시글 작성에 실패했습니다.',
+          })
         })
     }
-    // 글 작성
-    axiosWithAuth
-      .post(`/api/v1/team-page/posts/create`, {
-        ...form,
-        boardId,
-        image: null,
-      })
-      .then((res) => {
-        alert('게시글이 등록되었습니다.')
-        setBoard('DETAIL', boardId, res.data.postId)
-      })
-      .catch(() => {
-        alert('게시글 작성에 실패했습니다.')
-      })
   }
 
   return (
