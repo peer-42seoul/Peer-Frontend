@@ -38,6 +38,11 @@ export interface ISetupTeam {
   // job: Job[] | null
 }
 
+const layoutPcBox = {
+  m: '0.5rem',
+  p: '0.5rem',
+}
+
 const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
   const { isPc } = useMedia()
   const [message, setMessage] = useState<string>('')
@@ -126,12 +131,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
       <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
         <Typography>팀상태</Typography>
         <form ref={sendRef} onSubmit={onSubmit}>
-          <Box
-            sx={{
-              m: '0.5rem',
-              p: '0.5rem',
-            }}
-          >
+          <Box sx={isPc ? layoutPcBox : {}}>
             <Stack
               direction={isPc ? 'row' : 'column'}
               alignItems={isPc ? 'center' : ''}
@@ -162,7 +162,11 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
         </form>
 
         <Stack spacing={'0.4rem'}>
-          <Stack py={'0.25rem'} display={'flex'} flexDirection={'row-reverse'}>
+          <Stack
+            py={!isPc ? '1rem' : '0.25rem'}
+            display={'flex'}
+            flexDirection={'row-reverse'}
+          >
             <Button
               sx={styles.SaveButtonStyle}
               variant="contained"

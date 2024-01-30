@@ -12,12 +12,7 @@ interface ISettingTeamName {
 
 const SettingTeamName = ({ teamType, errors, register }: ISettingTeamName) => {
   return (
-    <Stack
-      direction={'row'}
-      alignItems={'center'}
-      m={'0.5rem'}
-      spacing={'0.25rem'}
-    >
+    <Stack direction={'row'} alignItems={'center'} spacing={'0.25rem'}>
       <PencilClearIcon />
       <Stack
         direction={'row'}
