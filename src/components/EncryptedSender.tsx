@@ -71,7 +71,7 @@ const EncryptedSender = ({
           axiosOption,
         )
         .then((res) => {
-          if (setData) setData(res.data)
+          if (setData) setData(res.data ?? null)
         })
     } else {
       await axiosWithAuth
@@ -84,7 +84,7 @@ const EncryptedSender = ({
           axiosOption,
         )
         .then((res) => {
-          if (setData) setData(res.data)
+          if (setData) setData(res.data ?? null)
         })
     }
   }
