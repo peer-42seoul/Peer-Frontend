@@ -62,13 +62,11 @@ export const socket = io(`${process.env.NEXT_PUBLIC_API_URL}:8084`, {
 })
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   const { setSocket } = useSocket()
-  /* 추후 디자인 추가되면 schedule 추가하기 */
   const [detailOption, setDetailOption] = useState<IDetailOption>({
     isInit: true,
     due1: 0,
@@ -87,6 +85,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     80: '9개월',
     100: '12개월 이상',
   }
+
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
@@ -119,6 +118,36 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       ? (url: string) => axiosInstance.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
+
+  const { data: favoriteData } = useSWR<boolean[]>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites?type=${
+      type ?? 'STUDY'
+    }&sort=${
+      sort ?? 'latest'
+    }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
+      dueObject[detailOption.due1]
+    }&due=${dueObject[detailOption.due2]}&region1=${
+      detailOption.region1
+    }&region2=${detailOption.region2}&place=${detailOption.place}&status=${
+      detailOption.status
+    }&tag=${detailOption.tag}`,
+    isLogin
+      ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      : defaultGetFetcher,
+  )
+  const setData = (content: IPost[] | undefined) => {
+    return content?.map((item, index) => ({
+      ...item,
+      favorite: favoriteData?.[index],
+    }))
+  }
+
+  console.log('favoriteData', favoriteData)
+
+  const [content, setContent] = useState<IPost[] | undefined>(() =>
+    setData(initData?.content),
+  )
+  console.log('content', content)
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -198,7 +227,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         <Container
           sx={{
             backgroundColor: 'Background.primary',
-            border: '1px solid black',
             maxWidth: '56.75rem',
           }}
         >
@@ -266,10 +294,9 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           disableGutters
           sx={{
             backgroundColor: 'Background.primary',
-            border: '1px solid black',
           }}
         >
-          <Stack direction={'row'} border="1px solid black" spacing={4}>
+          <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
               <MainBanner />
               <SelectType type={type} setType={handleType} />
