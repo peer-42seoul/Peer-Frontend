@@ -76,7 +76,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
       >
         <Typography>팀을 나가겠습니까?</Typography>
         <Button
-          disabled={teamStatus === TeamStatus.RECRUITING ? true : false}
+          disabled={teamStatus === TeamStatus.RECRUITING ? false : true}
           variant="contained"
           onClick={openModal}
         >
