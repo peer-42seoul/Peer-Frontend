@@ -97,12 +97,6 @@ const SignUp = () => {
         .post(`${API_URL}/api/v1/signup/email`, {
           email: email,
         })
-<<<<<<< HEAD
-        setEmailSendStatus('submit')
-        setToastProps({
-          severity: 'info',
-          message: '입력하신 메일로 코드를 전송했습니다',
-=======
         .then(() => {
           setEmailSendStatus('submit')
           openToast({
@@ -124,7 +118,6 @@ const SignUp = () => {
               message: '알 수 없는 오류가 발생했습니다.',
             })
           }
->>>>>>> develop
         })
     }
     setIsSubmitting(false)
@@ -154,11 +147,7 @@ const SignUp = () => {
         setCodeSendStatus('submit')
         openToast({
           severity: 'info',
-<<<<<<< HEAD
-          message: '코드인증이 완료되었습니다',
-=======
           message: '인증코드가 확인되었습니다.',
->>>>>>> develop
         })
       } catch (error: any) {
         setCodeSendStatus('error')
