@@ -3,22 +3,21 @@ import React, { useEffect, useState } from 'react'
 import TitleBox from '@/components/TitleBox'
 import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import useInfiniteScroll from '@/hook/useInfiniteScroll'
-import { IPagination } from '@/types/IPagination'
-import { IMainCard } from '@/types/IPostDetail'
-import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import { Box, CircularProgress, Typography } from '@mui/material'
+import PostCard from '@/app/my-page/profile/panel/PostCard'
+import { IMyPortfolio } from '@/app/my-page/profile/panel/MyPortfolio'
+import { getUniqueArray } from '@/utils/getUniqueArray'
+import axios from 'axios'
 
 const PortfolioList = ({ userId }: { userId: string }) => {
   const [page, setPage] = useState<number>(1)
-  const [postList, setPostList] = useState<Array<IMainCard>>([])
+  const [postList, setPostList] = useState<Array<IMyPortfolio>>([])
   const [pageLimit, setPageLimit] = useState(1)
 
-  const axiosWithAuth = useAxiosWithAuth()
-
-  const { data, isLoading } = useSWR<IPagination<Array<IMainCard>>>(
+  const { data, isLoading } = useSWR<Array<IMyPortfolio>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/otherPortfolio/list?userId=${userId}&page=${page}`,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    (url: string) => axios.get(url).then((res) => res.data),
   )
 
   const { target } = useInfiniteScroll({
@@ -29,13 +28,14 @@ const PortfolioList = ({ userId }: { userId: string }) => {
   })
 
   useEffect(() => {
-    if (!isLoading && data && !data.last) {
-      setPostList((prev) => prev.concat(data.content))
-      if (!data.last) {
+    if (data) {
+      setPostList((prev) => getUniqueArray(prev.concat(data), 'redirectionIds'))
+      console.log(data)
+      if (data.length && !data[data.length - 1]?.isEnd) {
         setPageLimit((prev) => prev + 1)
       }
     }
-  }, [isLoading, data])
+  }, [data])
 
   return (
     <TitleBox
@@ -48,7 +48,9 @@ const PortfolioList = ({ userId }: { userId: string }) => {
       titleBoxSpacing={['0.5rem', '0.75rem']}
     >
       {postList.length === 0 ? (
-        <Typography>작업물이 존재하지않습니다.</Typography>
+        <Typography variant="Caption" color={'text.alternative'} p={1}>
+          작업물이 존재하지않습니다.
+        </Typography>
       ) : (
         <Grid
           container
@@ -56,9 +58,18 @@ const PortfolioList = ({ userId }: { userId: string }) => {
           columnSpacing={[0, '1rem']}
           columns={12}
         >
-          {postList.length === 0 && (
-            <Typography>작업물이 존재하지 않습니다.</Typography>
-          )}
+          {postList.map((post) => (
+            <Grid xs={12} sm={6} lg={4} key={post.redirectionIds[0]}>
+              <PostCard
+                teamLogo={post.teamLogo}
+                tagList={post.tagList}
+                image={post.recruitImage}
+                teamName={post.teamName}
+                postId={post.teamId}
+                redirectionIds={post.redirectionIds}
+              />
+            </Grid>
+          ))}
           <Grid xs={12} sm={6}>
             <Box position={'relative'} ref={target} height={1}>
               {isLoading && <CircularProgress />}
