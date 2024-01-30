@@ -2,6 +2,7 @@ import { FormEvent, useRef, useState } from 'react'
 import { useSWRConfig } from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { CommentFormContainer } from '@/components/board/CommentPanel'
+import useToast from '@/states/useToast'
 
 interface ICommentFormProps {
   postId: number
@@ -13,6 +14,7 @@ export const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const textRef = useRef<HTMLInputElement>()
   const { mutate } = useSWRConfig()
+  const { openToast } = useToast()
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -30,7 +32,7 @@ export const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
         mutate(`/api/v1/team/post/comment/${postId}?page=1&pageSize=100`) // 댓글 데이터 만료
       })
       .catch(() => {
-        alert('댓글 작성에 실패했습니다.')
+        openToast({ severity: 'error', message: '댓글 작성에 실패했습니다.' })
       })
   }
 
