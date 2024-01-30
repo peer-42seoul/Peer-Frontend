@@ -25,15 +25,16 @@ const Comment = ({ comment, postId }: ICommentProps) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     axiosWithAuth
-      .put(`/api/v1/team/board/posts/comment/${comment.answerId}`, {
+      .put(`/api/v1/team/post/comment/${comment.answerId}`, {
         content: formData.get('content') as string,
       })
       .then(() => {
-        alert('댓글을 수정했습니다.')
+        openToast({ severity: 'success', message: '댓글을 수정했습니다.' })
+        mutate(`/api/v1/team/post/comment/${postId}?page=1&pageSize=100`) // 댓글 데이터 만료
         setIsEditMode(false)
       })
       .catch(() => {
-        alert('댓글 수정에 실패했습니다.')
+        openToast({ severity: 'error', message: '댓글 수정에 실패했습니다.' })
       })
   }
 
