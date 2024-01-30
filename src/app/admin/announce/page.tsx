@@ -18,7 +18,7 @@ import ImageUploadButton from '@/components/ImageUploadButton'
 import Image from 'next/image'
 import { Controller, useForm } from 'react-hook-form'
 import { Radio } from '@mui/material'
-import ToastEditor from '@/components/ToastUIEditor'
+// import ToastEditor from '@/components/ToastUIEditor'
 import ToastViewer from '@/components/ToastUIViewer'
 
 const alignCenter = {
@@ -70,7 +70,7 @@ const Announce = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
 
   const [page, setPage] = useState<number>(0)
-  const [totalPage, setTotalPage] = useState<number>(0)
+  // const [totalPage, setTotalPage] = useState<number>(0)
   let totalPageVar = 0
   const [content, setContent] = useState<content[]>([])
   const [open, setOpen] = useState<boolean>(false)
