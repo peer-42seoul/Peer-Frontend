@@ -14,13 +14,17 @@ const ShowcaseDetailPage = ({ params }: { params: { id: number } }) => {
     defaultGetFetcher,
     { shouldRetryOnError: false },
   )
-
-  if (!data) return <CuCircularProgress color={'secondary'} />
   if (isLoading) return <CuCircularProgress color={'secondary'} />
-  if (error)
+  if (error) {
+    if (error.response && error.response.status === 404) {
+      return (
+        <Typography color={'error'}>{error.response.data.message}</Typography>
+      )
+    }
     return <Typography color={'error'}>에러가 발생했습니다.</Typography>
+  }
 
-  return <ShowcaseViewer data={data} />
+  return data && <ShowcaseViewer data={data} />
 }
 
 export default ShowcaseDetailPage
