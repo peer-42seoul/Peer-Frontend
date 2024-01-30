@@ -11,7 +11,6 @@ import {
   TeamOperationForm,
 } from '@/app/teams/types/types'
 import NoDataDolphin from '@/components/NoDataDolphin'
-import Loading from '@/components/Loading'
 
 export interface ITeamInfo {
   id: string
@@ -33,11 +32,11 @@ const TeamsListPage = () => {
     (url: string) => axiosInstance(url).then((res) => res.data),
   )
 
-  const test = true
+  // const test = true
 
-  if (test) {
-    return <Loading />
-  }
+  // if (test) {
+  //   return <Loading />
+  // }
 
   if (isLoading)
     return (

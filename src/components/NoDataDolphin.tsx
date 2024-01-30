@@ -2,8 +2,8 @@ import { Stack, Typography } from '@mui/material'
 
 const SadDolphin = () => (
   <svg
-    width="311"
-    height="280"
+    width="200"
+    height="180"
     viewBox="0 0 311 280"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -59,13 +59,19 @@ const SadDolphin = () => (
 
 interface IProps {
   message: string
+  backgroundColor?: string
 }
 
-const NoDataDolphin = ({ message }: IProps) => {
+const NoDataDolphin = ({
+  message,
+  backgroundColor = 'background.secondary',
+}: IProps) => {
   return (
     <Stack
       alignItems={'center'}
-      sx={{ backgroundColor: 'background.secondary', borderRadius: '1rem' }}
+      justifyContent={'center'}
+      height={'20rem'}
+      sx={{ backgroundColor: backgroundColor, borderRadius: '1rem' }}
     >
       <SadDolphin />
       <Typography p={'1rem'}>{message}</Typography>
