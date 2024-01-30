@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Button, TextField, Typography, Container, Stack } from '@mui/material'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import useAdminStore from '@/states/useAdminStore'
 // import { setCookie } from 'cookies-next'
 
 const sheetSytle = {
@@ -19,6 +20,7 @@ const LoginForm = () => {
   const [pw, setPw] = useState('')
   // const [token, setToken] = useState('')
   const router = useRouter()
+  const { login } = useAdminStore()
 
   let date = new Date()
   date.setTime(date.getTime() + 1 * 30 * 60 * 1000) // 현재 시간에서 0.5시간 뒤
@@ -32,16 +34,19 @@ const LoginForm = () => {
           id: id,
           password: pw,
         },
-        { withCredentials: true },
+        // { withCredentials: true },
       )
-      .then((res) => {
-        console.log('hey', res)
-        router.push('/admin/announce')
+      .then(() => {
+        login()
+        router.push('/admin/tag')
       })
       .catch((err) => {
-        console.log(err)
-        if (err.response.status === 400) {
-          alert('아이디 또는 비밀번호가 틀렸습니다.')
+        if (
+          err.response.status === 404 ||
+          err.response.status === 401 ||
+          err.response.status === 400
+        ) {
+          alert('아이디 또는 비밀번호가 존재하지 않거나 틀렸습니다.')
         } else alert('로그인 실패 ' + err)
       })
   }
@@ -57,7 +62,7 @@ const LoginForm = () => {
   return (
     <Container sx={sheetSytle}>
       <Stack gap={'1rem'}>
-        <Typography variant="h3" align="center">
+        <Typography variant="Title3" align="center">
           관리자 로그인
         </Typography>
         <Stack direction={'row'} justifyContent={'center'} columnGap={'0.5rem'}>
@@ -67,7 +72,13 @@ const LoginForm = () => {
               justifyContent={'space-between'}
               gap={'0.5rem'}
             >
-              <Typography variant="h6">ID</Typography>
+              <Typography
+                variant="Body1"
+                display={'flex'}
+                alignItems={'center'}
+              >
+                ID
+              </Typography>
               <TextField value={id} onChange={onHandleChagneId} />
             </Stack>
             <Stack
@@ -75,7 +86,13 @@ const LoginForm = () => {
               justifyContent={'space-between'}
               gap={'0.5rem'}
             >
-              <Typography variant="h6">PW</Typography>
+              <Typography
+                variant="Body1"
+                display={'flex'}
+                alignItems={'center'}
+              >
+                PW
+              </Typography>
               <TextField value={pw} onChange={onHandleChangePw} />
             </Stack>
           </Stack>
