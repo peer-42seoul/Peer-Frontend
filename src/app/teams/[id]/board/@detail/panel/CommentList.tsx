@@ -1,6 +1,6 @@
 'use client'
 import { FormEvent, useState } from 'react'
-import useSWR, { mutate } from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import {
@@ -8,8 +8,8 @@ import {
   StatusMessage,
   CommentItem,
 } from '@/components/board/CommentPanel'
-import { ITeamBoardComment, ITeamComment } from '@/types/TeamBoardTypes'
 import useToast from '@/states/useToast'
+import { ITeamBoardComment, ITeamComment } from '@/types/TeamBoardTypes'
 
 interface ICommentProps {
   comment: ITeamComment
@@ -20,6 +20,7 @@ const Comment = ({ comment, postId }: ICommentProps) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const axiosWithAuth = useAxiosWithAuth()
   const { openToast } = useToast()
+  const { mutate } = useSWRConfig()
 
   const handleEdit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
