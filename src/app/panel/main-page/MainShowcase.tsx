@@ -42,7 +42,7 @@ const MainShowcase = () => {
 
       {isLoading && <CuCircularProgress color="primary" />}
 
-      {error && <Typography>에러 발생</Typography>}
+      {error && <NoDataDolphin message="문제가 있어요 😰" />}
 
       {data?.content.length === 0 && (
         <NoDataDolphin message="아직 비어있어요 😰" />
