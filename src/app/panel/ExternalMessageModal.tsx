@@ -89,7 +89,6 @@ const ExternalMessageModal = ({
 
   const handleSendClick = () => {
     if (!content.trim()) {
-      // content가 비어있는 경우
       openToast({
         severity: 'error',
         message: '내용을 입력해주세요.',
