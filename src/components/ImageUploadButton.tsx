@@ -80,8 +80,8 @@ const ImageUploadButton = ({
         style={{ display: 'none' }}
         id={id}
         name={id}
-        onChange={handleImageChange}
         {...register}
+        onChange={handleImageChange}
       />
     </Button>
   )
