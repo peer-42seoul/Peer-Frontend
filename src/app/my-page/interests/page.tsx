@@ -171,7 +171,7 @@ const MyInterests = () => {
   >(
     `/api/v1/mypage/favorite${
       type === 'SHOWCASE' ? '/showcase?' : `?type=${type}&`
-    }page=${page}&pagesize=${pagesize}`,
+    }page=${page}&pageSize=${pagesize}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
