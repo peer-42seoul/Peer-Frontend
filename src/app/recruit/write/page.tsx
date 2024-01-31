@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import useToast from '@/hook/useToast'
+import useToast from '@/states/useToast'
 import {
   Box,
   Button,
@@ -22,6 +22,12 @@ import SelectRegion from '../[id]/edit/panel/SelectRegion'
 import { IFormInterview, IRoleWrite, ITag } from '@/types/IPostDetail'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
+import CuButton from '@/components/CuButton'
+import TagAutoComplete from '@/components/TagAutoComplete'
+import axios from 'axios'
+import useMedia from '@/hook/useMedia'
+import useAuthStore from '@/states/useAuthStore'
+// icons
 import ImageIcon from '@mui/icons-material/Image'
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
@@ -34,11 +40,6 @@ import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined'
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
-import CuButton from '@/components/CuButton'
-import TagAutoComplete from '@/components/TagAutoComplete'
-import axios from 'axios'
-import useMedia from '@/hook/useMedia'
-import useAuthStore from '@/states/useAuthStore'
 
 const componentName = {
   alignItems: 'center',
@@ -97,8 +98,7 @@ const CreateTeam = () => {
   const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [allTagList, setAllTagList] = useState<ITag[]>()
   const [openBasicModal, setOpenBasicModal] = useState(false)
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
-  const [toastMessage, setToastMessage] = useState<string>('')
+  const { openToast, closeToast } = useToast()
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
   const { isPc } = useMedia()
@@ -115,8 +115,10 @@ const CreateTeam = () => {
 
   useEffect(() => {
     if (error) {
-      setToastMessage('태그를 불러오는데 실패했습니다.')
-      openToast()
+      openToast({
+        severity: 'error',
+        message: '태그를 불러오지 못했습니다.',
+      })
     } else if (data) {
       setAllTagList(data)
     }
@@ -155,11 +157,15 @@ const CreateTeam = () => {
   }
 
   const onHandlerFinish = async () => {
+    closeToast()
     if (
       (type === 'PROJECT' && doNeedMoreConditionAtProject()) ||
       (type === 'STUDY' && doNeedMoreConditionAtStudy())
     ) {
-      alert('빈칸을 모두 채워주세요')
+      openToast({
+        severity: 'error',
+        message: '필수 입력 항목을 모두 입력해주세요.',
+      })
       return
     }
     try {
@@ -184,8 +190,10 @@ const CreateTeam = () => {
       router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
     } catch (error: any) {
       console.log('error : ', error)
-      setToastMessage(error.response.data)
-      openToast()
+      openToast({
+        severity: 'error',
+        message: error.response.data,
+      })
     }
   }
 
@@ -420,9 +428,6 @@ const CreateTeam = () => {
                 variant="contained"
               />
             </Stack>
-            <CuToast open={isOpen} onClose={closeToast} severity="error">
-              <Typography>{toastMessage}</Typography>
-            </CuToast>
           </Stack>
         </Container>
       </Container>
