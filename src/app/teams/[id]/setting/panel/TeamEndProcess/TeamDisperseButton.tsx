@@ -31,7 +31,6 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
             severity: 'success',
             message: '팀이 해산되었습니다.',
           })
-          closeModal()
         } else if (res.status === 401) {
           console.log(res)
           router.push('/login')
@@ -39,7 +38,6 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
             severity: 'error',
             message: '잘못된 접근입니다.',
           })
-          closeModal()
         } else if (res.status === 403) {
           console.log(res)
           router.push('/login')
@@ -47,28 +45,24 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
             severity: 'error',
             message: '권한이 없습니다.',
           })
-          closeModal()
         } else if (res.status === 404) {
           console.log(res)
           openToast({
             severity: 'error',
             message: '팀이 존재하지 않습니다.',
           })
-          closeModal()
         } else if (res.status === 409) {
           console.log(res)
           openToast({
             severity: 'error',
             message: '모집을 완료 후 팀을 해산하셔야 합니다.',
           })
-          closeModal()
         } else {
           console.log(res)
           openToast({
             severity: 'error',
             message: '팀 해산에 실패하였습니다.',
           })
-          closeModal()
         }
       })
       .catch((err) => {
@@ -77,8 +71,8 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
           severity: 'error',
           message: '팀 해산에 실패하였습니다.',
         })
-        closeModal()
       })
+    closeModal()
   }
 
   return (
