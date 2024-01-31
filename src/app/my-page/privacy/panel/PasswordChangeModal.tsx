@@ -3,7 +3,7 @@ import CuModal from '@/components/CuModal'
 import React, { useState } from 'react'
 import { EApiType } from '@/types/EApiType'
 import EncryptedSender from '@/components/EncryptedSender'
-import FieldWithLabel from './FieldWithLabel'
+import TextFieldWithLabel from '@/components/TextFieldWithLabel'
 import { Box, Stack, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import * as style from './privacy-setting.style'
@@ -29,16 +29,17 @@ const PasswordCheck = ({
       <Stack spacing={'1rem'}>
         <Controller
           render={({ field }) => (
-            <FieldWithLabel
+            <TextFieldWithLabel
               variant="outlined"
               {...field}
               id={'password'}
-              title={'현재 비밀번호 확인'}
+              label={'현재 비밀번호 확인'}
               placeholder="현재 비밀번호를 입력해주세요."
               inputProps={{
                 type: 'password',
                 maxLength: 20,
               }}
+              fullWidth
               autoComplete="current-password"
               error={!!errors.password}
               helperText={
@@ -105,16 +106,17 @@ const PasswordModify = ({
       <Stack spacing={'1rem'}>
         <Controller
           render={({ field }) => (
-            <FieldWithLabel
+            <TextFieldWithLabel
               variant="outlined"
               {...field}
               id={'newPassword'}
-              title={'새 비밀번호 입력'}
+              label={'새 비밀번호 입력'}
               placeholder="최소 8자, 최대 20자, 영문 대소문자, 숫자, 특수문자를 포함해주세요."
               inputProps={{
                 type: 'password',
                 maxLength: 20,
               }}
+              fullWidth
               autoComplete="new-password"
               error={!!errors.newPassword}
               helperText={
@@ -156,16 +158,17 @@ const PasswordModify = ({
         />
         <Controller
           render={({ field }) => (
-            <FieldWithLabel
+            <TextFieldWithLabel
               variant="outlined"
               {...field}
               id={'confirmPassword'}
-              title={'새 비밀번호 재입력'}
+              label={'새 비밀번호 재입력'}
               placeholder="최소 8자, 최대 20자, 영문 대소문자, 숫자, 특수문자를 포함해주세요."
               inputProps={{
                 type: 'password',
                 maxLength: 20,
               }}
+              fullWidth
               autoComplete="confirmPassword"
               error={!!errors.confirmPassword}
               helperText={

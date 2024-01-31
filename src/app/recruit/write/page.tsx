@@ -31,6 +31,7 @@ import * as style from './page.style'
 import LabelWithIcon from '@/components/LabelWithIcon'
 // icons
 import * as Icon from '@/icons'
+import TextFieldWithLabel from '@/components/TextFieldWithLabel'
 
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
@@ -199,49 +200,38 @@ const CreateTeam = () => {
             <RowRadioButtonsGroup setValue={setType} />
           </Box>
           {/* 모집글 제목 */}
-          <Box>
-            <LabelWithIcon
-              message="모집글 제목"
-              svgIcon={
-                <Icon.EditIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            />
-            <TextField
-              sx={{ width: ['100%', '26rem'] }}
-              variant="outlined"
-              value={title}
-              onChange={(e) => {
-                if (e.target.value.length > 20)
-                  setTitle(e.target.value.slice(0, 20) as string)
-                else setTitle(e.target.value as string)
-              }}
-              placeholder="모집글 제목을 입력해주세요."
-            />
-          </Box>
+          <TextFieldWithLabel
+            labelIcon={
+              <Icon.EditIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+            label="모집글 제목"
+            value={title}
+            onChange={(e) => {
+              if (e.target.value.length > 20)
+                setTitle(e.target.value.slice(0, 20) as string)
+              else setTitle(e.target.value as string)
+            }}
+            placeholder="모집글 제목을 입력해주세요."
+          />
+
           {/* 스터디 명 / 프로젝트 명 */}
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <LabelWithIcon
-              message={type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
-              svgIcon={
-                <Icon.ListIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            />
-            <TextField
-              sx={{ width: ['100%', '26rem'] }}
-              variant="outlined"
-              value={name}
-              onChange={(e) => {
-                if (e.target.value.length > 20)
-                  setName(e.target.value.slice(0, 20) as string)
-                else setName(e.target.value as string)
-              }}
-              placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
-            />
-          </Box>
+          <TextFieldWithLabel
+            labelIcon={
+              <Icon.ListIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+            label={type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
+            value={name}
+            onChange={(e) => {
+              if (e.target.value.length > 20)
+                setName(e.target.value.slice(0, 20) as string)
+              else setName(e.target.value as string)
+            }}
+            placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
+          />
           {/* (프로젝트인 경우만) 역할 추가 */}
           {type === 'STUDY' ? null : (
             <Box>
