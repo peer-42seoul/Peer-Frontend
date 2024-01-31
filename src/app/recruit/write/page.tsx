@@ -28,10 +28,9 @@ import axios from 'axios'
 import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'
 import * as style from './page.style'
-import LabelWithIcon from '@/components/LabelWithIcon'
-// icons
 import * as Icon from '@/icons'
 import TextFieldWithLabel from '@/components/TextFieldWithLabel'
+import FieldWithLabel from '@/components/FieldWithLabel'
 
 const CreateTeam = () => {
   const [title, setTitle] = useState<string>('')
@@ -163,15 +162,15 @@ const CreateTeam = () => {
         ) : null}
         <Stack spacing={'1.5rem'} sx={style.boxStyle}>
           {/* 대표이미지 */}
-          <Box>
-            <LabelWithIcon
-              svgIcon={
-                <Icon.ImageIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-              message="대표이미지"
-            />
+          <FieldWithLabel
+            labelIcon={
+              <Icon.ImageIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+            label="대표이미지"
+            id="image"
+          >
             <ImageUploadButton
               setImage={setImage}
               setPreviewImage={setPreviewImage}
@@ -186,19 +185,18 @@ const CreateTeam = () => {
                 />
               </Box>
             </ImageUploadButton>
-          </Box>
+          </FieldWithLabel>
           {/* 스터디 or 프로젝트 선택 */}
-          <Box>
-            <LabelWithIcon
-              message="유형"
-              svgIcon={
-                <Icon.ClipboardIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            />
+          <FieldWithLabel
+            label="유형"
+            labelIcon={
+              <Icon.ClipboardIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+          >
             <RowRadioButtonsGroup setValue={setType} />
-          </Box>
+          </FieldWithLabel>
           {/* 모집글 제목 */}
           <TextFieldWithLabel
             labelIcon={
@@ -234,103 +232,96 @@ const CreateTeam = () => {
           />
           {/* (프로젝트인 경우만) 역할 추가 */}
           {type === 'STUDY' ? null : (
-            <Box>
-              <LabelWithIcon
-                message="역할"
-                svgIcon={
-                  <Icon.UserCheckIcon
-                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                  />
-                }
-              />
+            <FieldWithLabel
+              label="역할"
+              labelIcon={
+                <Icon.UserCheckIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+            >
               <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
-            </Box>
+            </FieldWithLabel>
           )}
           {type === 'STUDY' && (
-            <Box>
-              <LabelWithIcon
-                message="모집인원"
-                svgIcon={
-                  <Icon.UserCheckIcon
-                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                  />
-                }
-              />
+            <FieldWithLabel
+              label="모집인원"
+              labelIcon={
+                <Icon.UserCheckIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+            >
               <BasicSelect
                 type={ComponentType.TeamSize}
                 value={teamsize}
                 setValue={setTeamsize}
               />
-            </Box>
+            </FieldWithLabel>
           )}
           {/* 온/오프라인 활동방식 선택 */}
-          <Box>
-            <LabelWithIcon
-              message="활동방식"
-              svgIcon={
-                <Icon.WifiIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            />
+          <FieldWithLabel
+            label="활동방식"
+            labelIcon={
+              <Icon.WifiIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+          >
             <BasicSelect
               type={ComponentType.Place}
               value={place}
               setValue={setPlace}
             />
-          </Box>
+          </FieldWithLabel>
           {/* 목표기간 */}
-          <Box>
-            <LabelWithIcon
-              message="목표기간"
-              svgIcon={
-                <Icon.PieChartIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            />
+          <FieldWithLabel
+            label="목표기간"
+            labelIcon={
+              <Icon.PieChartIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+          >
             <BasicSelect
               type={ComponentType.Month}
               value={due}
               setValue={setMonth}
             />
-          </Box>
+          </FieldWithLabel>
           {/* 지역 선택 */}
           {place === 'ONLINE' ? null : (
-            <Box>
-              <LabelWithIcon
-                message="지역"
-                svgIcon={
-                  <Icon.LocationIcon
-                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                  />
-                }
-              />
+            <FieldWithLabel
+              label="지역"
+              labelIcon={
+                <Icon.LocationIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+            >
               <SelectRegion setValue={setRegion} />
-            </Box>
+            </FieldWithLabel>
           )}
           {/* 커뮤니케이션 링크 등록 */}
-          <Box>
-            <LabelWithIcon
-              message="커뮤니케이션 링크"
-              svgIcon={
-                <Icon.LinkDiagonalIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            />
+          <FieldWithLabel
+            label="커뮤니케이션 링크"
+            labelIcon={
+              <Icon.LinkDiagonalIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+          >
             <SetCommunicationToolLink setValue={setCommunicationTool} />
-          </Box>
+          </FieldWithLabel>
           {/* 태그 추가 */}
-          <Box>
-            <LabelWithIcon
-              message="기술 스택"
-              svgIcon={
-                <Icon.TagIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            />
+          <FieldWithLabel
+            label="기술 스택"
+            labelIcon={
+              <Icon.TagIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+          >
             {allTagList ? (
               <TagAutoComplete
                 tagList={allTagList}
@@ -339,17 +330,16 @@ const CreateTeam = () => {
                 style={{ width: ['100%', '26rem'] }}
               />
             ) : null}
-          </Box>
+          </FieldWithLabel>
           {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
-          <Box>
-            <LabelWithIcon
-              message="팀 소개 글"
-              svgIcon={
-                <Icon.FileIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            />
+          <FieldWithLabel
+            label="팀 소개 글"
+            labelIcon={
+              <Icon.FileIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+          >
             <TextField
               variant="outlined"
               value={content}
@@ -361,19 +351,18 @@ const CreateTeam = () => {
               fullWidth
               multiline
             />
-          </Box>
+          </FieldWithLabel>
           {/* 모집 인터뷰 */}
-          <Stack>
-            <LabelWithIcon
-              message="모집 인터뷰"
-              svgIcon={
-                <Icon.FolderPlusIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            />
+          <FieldWithLabel
+            label="모집 인터뷰"
+            labelIcon={
+              <Icon.FolderPlusIcon
+                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+              />
+            }
+          >
             <Button
-              sx={isPc ? { width: '26rem' } : { width: '100%' }}
+              sx={{ width: ['100%', '26rem'] }}
               variant="outlined"
               onClick={() => setOpenBasicModal(true)}
             >
@@ -385,7 +374,7 @@ const CreateTeam = () => {
               interviewData={interviewList}
               setInterviewData={setInterviewList}
             />
-          </Stack>
+          </FieldWithLabel>
           {/* 등록, 취소 버튼 */}
           <Stack direction={'row'} gap={2} justifyContent={'flex-end'}>
             <CuButton
