@@ -164,7 +164,11 @@ const CreateTeam = () => {
           {/* 대표이미지 */}
           <Box>
             <LabelWithIcon
-              svgIcon={<Icon.ImageIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.ImageIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
               message="대표이미지"
             />
             <ImageUploadButton
@@ -186,7 +190,11 @@ const CreateTeam = () => {
           <Box>
             <LabelWithIcon
               message="유형"
-              svgIcon={<Icon.ClipboardIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.ClipboardIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             />
             <RowRadioButtonsGroup setValue={setType} />
           </Box>
@@ -194,7 +202,11 @@ const CreateTeam = () => {
           <Box>
             <LabelWithIcon
               message="모집글 제목"
-              svgIcon={<Icon.EditIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.EditIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             />
             <TextField
               sx={isPc ? { width: '26rem' } : { width: '100%' }}
@@ -212,7 +224,11 @@ const CreateTeam = () => {
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <LabelWithIcon
               message={type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
-              svgIcon={<Icon.ListIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.ListIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             />
             <TextField
               sx={isPc ? { width: '26rem' } : { width: '100%' }}
@@ -231,7 +247,11 @@ const CreateTeam = () => {
             <Box>
               <LabelWithIcon
                 message="역할"
-                svgIcon={<Icon.UserCheckIcon sx={{ color: 'text.normal' }} />}
+                svgIcon={
+                  <Icon.UserCheckIcon
+                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                  />
+                }
               />
               <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
             </Box>
@@ -240,7 +260,11 @@ const CreateTeam = () => {
             <Box>
               <LabelWithIcon
                 message="모집인원"
-                svgIcon={<Icon.UserCheckIcon sx={{ color: 'text.normal' }} />}
+                svgIcon={
+                  <Icon.UserCheckIcon
+                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                  />
+                }
               />
               <BasicSelect
                 type={ComponentType.TeamSize}
@@ -253,7 +277,11 @@ const CreateTeam = () => {
           <Box>
             <LabelWithIcon
               message="활동방식"
-              svgIcon={<Icon.WifiIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.WifiIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             />
             <BasicSelect
               type={ComponentType.Place}
@@ -265,7 +293,11 @@ const CreateTeam = () => {
           <Box>
             <LabelWithIcon
               message="목표기간"
-              svgIcon={<Icon.PieChartIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.PieChartIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             />
             <BasicSelect
               type={ComponentType.Month}
@@ -278,7 +310,11 @@ const CreateTeam = () => {
             <Box>
               <LabelWithIcon
                 message="지역"
-                svgIcon={<Icon.LocationIcon sx={{ color: 'text.normal' }} />}
+                svgIcon={
+                  <Icon.LocationIcon
+                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                  />
+                }
               />
               <SelectRegion setValue={setRegion} />
             </Box>
@@ -287,7 +323,11 @@ const CreateTeam = () => {
           <Box>
             <LabelWithIcon
               message="커뮤니케이션 링크"
-              svgIcon={<Icon.LinkDiagonalIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.LinkDiagonalIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             />
             <SetCommunicationToolLink setValue={setCommunicationTool} />
           </Box>
@@ -295,7 +335,11 @@ const CreateTeam = () => {
           <Box>
             <LabelWithIcon
               message="기술 스택"
-              svgIcon={<Icon.TagIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.TagIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             />
             {allTagList ? (
               <TagAutoComplete
@@ -314,7 +358,11 @@ const CreateTeam = () => {
           <Box>
             <LabelWithIcon
               message="팀 소개 글"
-              svgIcon={<Icon.FileIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.FileIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             />
             <TextField
               variant="outlined"
@@ -332,7 +380,11 @@ const CreateTeam = () => {
           <Stack>
             <LabelWithIcon
               message="모집 인터뷰"
-              svgIcon={<Icon.FolderPlusIcon sx={{ color: 'text.normal' }} />}
+              svgIcon={
+                <Icon.FolderPlusIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             />
             <Button
               sx={isPc ? { width: '26rem' } : { width: '100%' }}
@@ -349,12 +401,7 @@ const CreateTeam = () => {
             />
           </Stack>
           {/* 등록, 취소 버튼 */}
-          <Stack
-            direction={'row'}
-            gap={2}
-            sx={isPc ? style.componentName : style.interviewButtonMobileStyle}
-            justifyContent={'flex-end'}
-          >
+          <Stack direction={'row'} gap={2} justifyContent={'flex-end'}>
             <CuButton
               message="취소"
               action={() => {

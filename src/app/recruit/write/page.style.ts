@@ -1,7 +1,8 @@
 import { SxProps } from '@mui/material'
 
-export const componentName: SxProps = {
-  alignItems: 'center',
+export const iconStyleBase: SxProps = {
+  width: '1rem',
+  height: '1rem',
 }
 
 export const interviewButtonMobileStyle: SxProps = {
