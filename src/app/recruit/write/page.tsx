@@ -209,7 +209,7 @@ const CreateTeam = () => {
               }
             />
             <TextField
-              sx={isPc ? { width: '26rem' } : { width: '100%' }}
+              sx={{ width: ['100%', '26rem'] }}
               variant="outlined"
               value={title}
               onChange={(e) => {
@@ -231,7 +231,7 @@ const CreateTeam = () => {
               }
             />
             <TextField
-              sx={isPc ? { width: '26rem' } : { width: '100%' }}
+              sx={{ width: ['100%', '26rem'] }}
               variant="outlined"
               value={name}
               onChange={(e) => {
@@ -346,11 +346,7 @@ const CreateTeam = () => {
                 tagList={allTagList}
                 datas={tagList}
                 setData={setTagList}
-                style={
-                  isPc
-                    ? { width: '26rem', height: '2rem' }
-                    : { width: '100%', height: '2rem' }
-                }
+                style={{ width: ['100%', '26rem'] }}
               />
             ) : null}
           </Box>
