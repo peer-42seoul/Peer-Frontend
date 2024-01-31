@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import BoxBase from '@/components/BoxBase'
+import PrivacyPolicy from './panel/PrivacyPolicy'
 
 const PCSignupBox = {
   display: 'flex',
@@ -69,8 +70,8 @@ const Privacy = () => {
   const searchParams = useSearchParams()
   const socialEmail = searchParams.get('social-email')
 
-  // 로그인 상태일 경우 메인 페이지로 이동
   useEffect(() => {
+    // 로그인 상태일 경우 메인 페이지로 이동
     const isLogin = useAuthStore.getState().isLogin
     if (isLogin) router.replace('/')
   }, [])
@@ -160,9 +161,7 @@ const Privacy = () => {
               checked={checkStatus[1]}
             />
             <Paper sx={isPc ? PCPaper : MobilePaper}>
-              <Typography variant="Caption" color={'text.alternative'}>
-                {Policy1}
-              </Typography>
+              <PrivacyPolicy />
             </Paper>
           </Stack>
         </Stack>
