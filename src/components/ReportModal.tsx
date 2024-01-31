@@ -1,13 +1,12 @@
 import CuModal from './CuModal'
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import CuTextField from '@/components/CuTextField'
 import useAxiosWithAuth from '@/api/config'
-import { Box, Typography } from '@mui/material'
+import { AlertColor, Box, Typography } from '@mui/material'
 import ReportTypeSelect from '@/components/ReportTypeSelect'
-import useToast from '@/hook/useToast'
-import IToastProps from '@/types/IToastProps'
+import useToast from '@/states/useToast'
 
 interface IReportModalProps {
   isModalOpen: boolean
@@ -27,11 +26,14 @@ const ReportModal = ({
   targetId,
 }: IReportModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [toastProps, setToastProps] = useState<IToastProps>({
+  const [toastProps, setToastProps] = useState<{
+    severity: AlertColor
+    message: ReactNode
+  }>({
     severity: 'info',
     message: '',
   })
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
+  const { openToast } = useToast()
 
   const axiosInstance = useAxiosWithAuth()
   const {
@@ -57,7 +59,7 @@ const ReportModal = ({
           message: '신고가 접수되었습니다.',
         })
         handleClose()
-        openToast()
+        openToast(toastProps)
       })
       .catch((error) => {
         if (error.response.status !== 401) {
@@ -65,7 +67,7 @@ const ReportModal = ({
             severity: 'error',
             message: '신고 접수 중 오류가 발생했습니다.',
           })
-          openToast()
+          openToast(toastProps)
         }
       })
     setIsSubmitting(false)
@@ -138,12 +140,6 @@ const ReportModal = ({
           </form>
         </Box>
       </CuModal>
-      <CuToast
-        open={isOpen}
-        message={toastProps.message}
-        severity={toastProps.severity}
-        onClose={closeToast}
-      />
     </>
   )
 }
