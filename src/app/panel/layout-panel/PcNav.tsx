@@ -26,6 +26,10 @@ const PcNav = () => {
   const router = useRouter()
   const { isLogin } = useAuthStore()
 
+  const interestsPath = isLogin
+    ? '/my-page/interests'
+    : '/login?redirect=/my-page/interests'
+
   useEffect(() => {
     if (pathname === '/') {
       setValue('home')
@@ -110,7 +114,7 @@ const PcNav = () => {
         <Stack direction={'row'} alignItems={'center'} gap={'0.25rem'}>
           <AlertIcon />
           <SearchButton />
-          <Link href="/my-page/interests">
+          <Link href={interestsPath}>
             <IconButton sx={{ color: 'purple.strong' }} aria-label="favorites">
               <Favorite />
             </IconButton>
