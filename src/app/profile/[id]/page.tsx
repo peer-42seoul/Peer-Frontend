@@ -10,18 +10,17 @@ import { useRouter } from 'next/navigation'
 import { ChevronLeft, CloseIcon } from '@/icons'
 import useSWR from 'swr'
 import { IUserProfile } from '@/types/IUserProfile'
-import useAxiosWithAuth from '@/api/config'
 import PortfolioList from './panel/PortfolioList'
+import axios from 'axios'
 
 const Profile = ({ params }: { params: { id: string } }) => {
-  const axiosWithAuth = useAxiosWithAuth()
   const {
     data: userInfo,
     error,
     isLoading,
   } = useSWR<IUserProfile>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/otherUser?userId=${params.id}`,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    (url: string) => axios.get(url).then((res) => res.data),
   )
   const { isPc } = useMedia()
   const router = useRouter()

@@ -24,6 +24,9 @@ const SignUp = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const socialEmail = searchParams.get('social-email')
+  const serviceAgreement = searchParams.get('service-agreement')
+  const privacyAgreement = searchParams.get('privacy-agreement')
+
   const {
     handleSubmit,
     control,
@@ -59,6 +62,16 @@ const SignUp = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const { openToast, closeToast } = useToast()
+
+  useEffect(() => {
+    if (!serviceAgreement || !privacyAgreement) {
+      openToast({
+        severity: 'error',
+        message: '잘못된 접근입니다',
+      })
+      router.replace('/')
+    }
+  }, [])
 
   // EncryptedSender에서 사용하는 변수 및 함수
 
@@ -189,7 +202,7 @@ const SignUp = () => {
     } else if (codeSendStatus !== 'submit') {
       openToast({
         severity: 'error',
-        message: '인증코드를 인증해주세요',
+        message: '코드를 인증해주세요',
       })
     } else {
       setSignUpStep(1)
@@ -216,7 +229,7 @@ const SignUp = () => {
       setNickNameSendStatus('submit')
       openToast({
         severity: 'info',
-        message: '닉네임이 인증되었습니다',
+        message: '닉네임이 확인되었습니다',
       })
     } catch (error: any) {
       setNickNameSendStatus('error')
@@ -249,13 +262,14 @@ const SignUp = () => {
       })
     } else {
       const { email, password, name, nickName } = data
-      const social = socialEmail ? socialEmail : null
       setPayload({
         email: email,
         password: password,
         name: name,
         nickname: nickName,
-        socialEmail: social,
+        socialEmail: socialEmail ?? null,
+        serviceUseAgreement: serviceAgreement,
+        personalInformationUseAgreement: privacyAgreement,
       })
     }
   }
