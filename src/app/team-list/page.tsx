@@ -10,6 +10,7 @@ import {
   TeamType,
   TeamOperationForm,
 } from '@/app/teams/types/types'
+import NoDataDolphin from '@/components/NoDataDolphin'
 
 export interface ITeamInfo {
   id: string
@@ -31,7 +32,11 @@ const TeamsListPage = () => {
     (url: string) => axiosInstance(url).then((res) => res.data),
   )
 
-  console.log(data)
+  // const test = true
+
+  // if (test) {
+  //   return <Loading />
+  // }
 
   if (isLoading)
     return (
@@ -43,7 +48,7 @@ const TeamsListPage = () => {
   if (!data)
     return (
       <Stack spacing={1} sx={{ p: 1 }} flex={4} borderRadius={2}>
-        데이터가 없습니다.
+        <NoDataDolphin message="팀이 없습니다." />
       </Stack>
     )
 

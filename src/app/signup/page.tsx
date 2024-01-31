@@ -189,7 +189,7 @@ const SignUp = () => {
     } else if (codeSendStatus !== 'submit') {
       openToast({
         severity: 'error',
-        message: '인증코드를 인증해주세요',
+        message: '코드를 인증해주세요',
       })
     } else {
       setSignUpStep(1)
@@ -216,7 +216,7 @@ const SignUp = () => {
       setNickNameSendStatus('submit')
       openToast({
         severity: 'info',
-        message: '닉네임이 인증되었습니다',
+        message: '닉네임이 확인되었습니다',
       })
     } catch (error: any) {
       setNickNameSendStatus('error')
