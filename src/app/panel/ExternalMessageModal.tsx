@@ -1,5 +1,5 @@
 import React, { useState, ReactNode } from 'react'
-import { AlertColor, Box, Stack, InputBase, Typography } from '@mui/material'
+import { Box, Stack, InputBase, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import useModal from '@/hook/useModal'
 import useToast from '@/states/useToast'
@@ -62,10 +62,9 @@ const ExternalMessageModal = ({
   })
 
   const onSubmit: SubmitHandler<IMessageData> = (data) => {
-    //console.log(data)
     setIsSubmitting(true)
     axiosInstance
-      .post(`api/v1/message/external-page`, data)
+      .post(`api/v1/message/external-message`, data)
       .then(() => {
         closeModal()
         handleClose()
