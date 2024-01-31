@@ -91,16 +91,20 @@ const PasswordModify = ({
 }) => {
   const {
     handleSubmit,
-    getValues,
     control,
     formState: { errors },
+    watch,
+    // reset,
   } = useForm<{ newPassword: string; confirmPassword: string }>({
     mode: 'onChange',
   })
 
   const onSubmit = (data: { newPassword: string; confirmPassword: string }) => {
     setPayload({ password: data.newPassword, code })
+    // reset()
   }
+
+  const newPassword = watch('newPassword')
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id="password-modify">
@@ -151,9 +155,6 @@ const PasswordModify = ({
                 /[A-Z]/.test(value) || '비밀번호에 대문자가 포함되어야 합니다',
               includeSmall: (value) =>
                 /[a-z]/.test(value) || '비밀번호에 소문자가 포함되어야 합니다',
-              isSame: (value) =>
-                getValues('newPassword') === value ||
-                '비밀번호가 일치하지 않습니다.',
             },
           }}
           control={control}
@@ -204,6 +205,8 @@ const PasswordModify = ({
                 /[A-Z]/.test(value) || '비밀번호에 대문자가 포함되어야 합니다',
               includeSmall: (value) =>
                 /[a-z]/.test(value) || '비밀번호에 소문자가 포함되어야 합니다',
+              isSame: (value) =>
+                newPassword === value || '비밀번호가 일치하지 않습니다.',
             },
           }}
           control={control}
@@ -222,18 +225,25 @@ const PasswordChangeModal = ({
 }) => {
   const [data, setData] = useState<any>(null)
   const [payload, setPayload] = useState<any>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { openToast } = useToast()
 
-  const onSuccess = () => {
+  console.log(data, payload)
+
+  const handleCloseModal = () => {
     // 모달이 꺼져도 데이터가 남아있는 문제가 있어서 초기화 후 꺼지도록 처리하였습니다.
-    setData(null)
     setPayload(null)
+    setData(null)
+    closeModal()
+  }
+
+  const onSuccess = () => {
     openToast({
       severity: 'success',
       message: '비밀번호가 변경되었습니다.',
     })
-    closeModal()
+    handleCloseModal()
   }
 
   const onError = (message: string) => {
@@ -246,17 +256,19 @@ const PasswordChangeModal = ({
   return (
     <CuModal
       open={isOpen}
-      onClose={closeModal}
+      onClose={handleCloseModal}
       title="비밀번호 변경"
       mobileFullSize
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCloseModal,
+        isLoading: isSubmitting,
       }}
       containedButton={{
         text: '변경하기',
         type: 'submit',
         form: data ? 'password-modify' : 'password-check',
+        isLoading: isSubmitting,
       }}
     >
       <Stack
@@ -296,6 +308,7 @@ const PasswordChangeModal = ({
                 needToken
                 onSuccess={onSuccess}
                 onError={onError}
+                setIsLoading={setIsSubmitting}
               >
                 <PasswordModify setPayload={setPayload} code={data.code} />
               </EncryptedSender>
