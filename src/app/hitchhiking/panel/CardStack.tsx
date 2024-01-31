@@ -114,6 +114,7 @@ const CardStack = ({
               >
                 <HitchhikingCard
                   authorImage={card.authorImage}
+                  authorId={card.authorId}
                   teamName={card.teamName}
                   title={card.title}
                   tagList={card.tagList}
