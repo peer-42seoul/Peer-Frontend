@@ -24,9 +24,9 @@ const Tutorial = ({ title, content }: ITutorialProps) => {
           sx={isPc ? style.pcWrapper : style.mobileWrapper}
         >
           <Typography
-            sx={{ padding: '0.375rem 0' }}
             variant={isPc ? 'Title2Emphasis' : 'Body1Emphasis'}
             color="text.normal"
+            lineHeight={'2.5rem'}
           >
             {title}
           </Typography>
