@@ -139,7 +139,7 @@ const ReportModal = ({
                         rows={5}
                         onChange={(e) => {
                           field.onChange(e.target.value)
-                          trigger()
+                          trigger('content')
                         }}
                       />
                       <Typography color="error" variant="Caption">

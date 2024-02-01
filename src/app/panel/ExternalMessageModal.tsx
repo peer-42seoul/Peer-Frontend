@@ -54,7 +54,12 @@ const ExternalMessageModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { openToast } = useToast()
 
-  const { handleSubmit, control, watch } = useForm<IMessageData>({
+  const {
+    handleSubmit,
+    control,
+    trigger,
+    formState: { errors },
+  } = useForm<IMessageData>({
     defaultValues: {
       targetId: targetId,
       content: '',
@@ -85,17 +90,9 @@ const ExternalMessageModal = ({
     setIsSubmitting(false)
   }
 
-  const content = watch('content')
-
-  const handleSendClick = () => {
-    if (!content.trim()) {
-      openToast({
-        severity: 'error',
-        message: '내용을 입력해주세요.',
-      })
-    } else {
-      openModal()
-    }
+  const handleSendClick = async () => {
+    const isValid = await trigger('content')
+    if (isValid) openModal()
   }
 
   return (
@@ -134,20 +131,32 @@ const ExternalMessageModal = ({
                 onSubmit={handleSubmit(onSubmit)}
                 id={'external-message-form'}
               >
-                <Box sx={style.form}>
-                  <Controller
-                    name="content"
-                    control={control}
-                    render={({ field }) => (
-                      <InputBase
-                        fullWidth
-                        placeholder="내용을 입력하세요."
-                        {...field}
-                        sx={style.input}
-                      />
-                    )}
-                  />
-                </Box>
+                <Stack gap={1}>
+                  <Box sx={style.form}>
+                    <Controller
+                      name="content"
+                      control={control}
+                      rules={{
+                        required: '내용을 입력해주세요.',
+                      }}
+                      render={({ field }) => (
+                        <InputBase
+                          fullWidth
+                          placeholder="내용을 입력하세요."
+                          {...field}
+                          sx={style.input}
+                          onChange={(e) => {
+                            field.onChange(e.target.value)
+                            trigger('content')
+                          }}
+                        />
+                      )}
+                    />
+                  </Box>
+                  <Typography color="error" variant="Caption">
+                    {errors.content?.message || '\u00A0'}
+                  </Typography>
+                </Stack>
               </form>
               <CuTextModal
                 open={modalOpen}
