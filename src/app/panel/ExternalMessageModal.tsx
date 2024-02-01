@@ -58,7 +58,7 @@ const ExternalMessageModal = ({
     handleSubmit,
     control,
     trigger,
-    formState: { errors },
+    formState: { isValid, errors },
   } = useForm<IMessageData>({
     defaultValues: {
       targetId: targetId,
@@ -90,8 +90,8 @@ const ExternalMessageModal = ({
     setIsSubmitting(false)
   }
 
-  const handleSendClick = async () => {
-    const isValid = await trigger('content')
+  const handleSendClick = () => {
+    trigger()
     if (isValid) openModal()
   }
 
@@ -105,9 +105,7 @@ const ExternalMessageModal = ({
         containedButton={{
           text: '보내기',
           type: 'button',
-          onClick: async () => {
-            await handleSendClick()
-          },
+          onClick: handleSendClick,
         }}
         textButton={{
           text: '취소',

@@ -36,7 +36,7 @@ const ReportModal = ({
     handleSubmit,
     control,
     trigger,
-    formState: { errors },
+    formState: { isValid, errors },
   } = useForm<IReportFormInput>({
     defaultValues: {
       userId: targetId ? targetId : '',
@@ -69,8 +69,8 @@ const ReportModal = ({
     setIsSubmitting(false)
   }
 
-  const handleReportClick = async () => {
-    const isValid = await trigger()
+  const handleReportClick = () => {
+    trigger()
     if (isValid) openModal()
   }
 
@@ -84,9 +84,7 @@ const ReportModal = ({
         containedButton={{
           text: '신고',
           type: 'button',
-          onClick: async () => {
-            await handleReportClick()
-          },
+          onClick: handleReportClick,
         }}
         textButton={{
           text: '취소',
