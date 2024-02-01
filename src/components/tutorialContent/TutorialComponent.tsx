@@ -1,16 +1,16 @@
 import { Stack, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 
-interface childrenProps {
+interface IchildProps {
   children: React.ReactNode
 }
 
-interface textProps {
+interface ItextProps {
   text: string
 }
 
 // 튜토리얼 컨텐츠의 최상위 컨테이너
-export const TutorialContainer = ({ children }: childrenProps) => {
+export const TutorialContainer = ({ children }: IchildProps) => {
   return (
     <Stack
       width={'100%'}
@@ -24,12 +24,12 @@ export const TutorialContainer = ({ children }: childrenProps) => {
 }
 
 // 제목 - 내용을 감싸는 컨테이너
-export const TitleContianer = ({ children }: childrenProps) => {
+export const TitleContianer = ({ children }: IchildProps) => {
   return <Stack width={'100%'}>{children}</Stack>
 }
 
 // 제목 typography
-export const SubTitle = ({ text }: textProps) => {
+export const SubTitle = ({ text }: ItextProps) => {
   const { isPc } = useMedia()
   return (
     <Typography
@@ -42,7 +42,7 @@ export const SubTitle = ({ text }: textProps) => {
 }
 
 // 내용 typography
-export const Content = ({ text }: textProps) => {
+export const Content = ({ text }: ItextProps) => {
   const { isPc } = useMedia()
   return (
     <Typography variant={isPc ? 'Body1' : 'Caption'} color={'text.normal'}>
