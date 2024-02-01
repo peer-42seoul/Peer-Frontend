@@ -4,6 +4,7 @@ export interface IPostId {
 
 export interface CommentProps {
   data: IComment
+  postId: number
 }
 export interface IComment {
   authorImage: string

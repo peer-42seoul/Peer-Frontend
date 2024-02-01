@@ -19,16 +19,20 @@ import useSWR, { mutate } from 'swr'
 import { CommentWriter } from './CommentWriter'
 import useToast from '@/states/useToast'
 
-const Comment = ({ data }: CommentProps) => {
+const Comment = ({ data, postId }: CommentProps) => {
   const theme = useTheme()
   const axiosWithAuth = useAxiosWithAuth()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
-  const { openToast } = useToast()
+  const { openToast, closeToast } = useToast()
 
   const onDeleteComment = async () => {
     try {
       await axiosWithAuth.delete(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${data.commentId}`,
+      )
+      closeToast()
+      mutate(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/post/comment/${postId}?page=1&pageSize=3`,
       )
     } catch (error: any) {
       switch (error.response.status) {
@@ -49,7 +53,7 @@ const Comment = ({ data }: CommentProps) => {
         case 404: {
           openToast({
             severity: 'error',
-            message: '접근이 거부되었습니다.',
+            message: '존재하지 않는 댓글입니다.',
           })
           break
         }
@@ -120,7 +124,7 @@ const Comment = ({ data }: CommentProps) => {
               }}
             />
           </IconButton>
-          <IconButton onClick={openModal}>
+          {/* <IconButton onClick={openModal}>
             <EditIcon
               sx={{
                 width: '1.2rem',
@@ -128,7 +132,7 @@ const Comment = ({ data }: CommentProps) => {
                 color: alpha(theme.palette.text.assistive, 0.5),
               }}
             />
-          </IconButton>
+          </IconButton> */}
         </Box>
         <CuTextModal
           open={alertOpen}
@@ -189,7 +193,7 @@ const CommentContainer = ({ postId }: IPostId) => {
           </Typography>
           <Stack gap={'1rem'}>
             {data?.map((comment: IComment) => (
-              <Comment key={comment.commentId} data={comment} />
+              <Comment key={comment.commentId} data={comment} postId={postId} />
             ))}
           </Stack>
         </Stack>
