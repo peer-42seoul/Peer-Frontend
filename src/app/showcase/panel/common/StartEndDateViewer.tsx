@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import * as Style from './SkillInput.style'
 import { CalendarIcon } from '@/app/showcase/panel/icons'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import useMedia from '@/hook/useMedia'
 import * as style from './StartEndDateViewer.style'
 interface Idate {

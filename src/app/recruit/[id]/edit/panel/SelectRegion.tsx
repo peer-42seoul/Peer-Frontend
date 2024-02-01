@@ -4,7 +4,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { koreaDistrict } from '@/constant/DistrictData'
 import { Stack } from '@mui/material'
-import useMedia from '@/hook/useMedia'
 
 interface BasicSelectProps {
   setValue: Dispatch<SetStateAction<string[]>>
@@ -14,7 +13,6 @@ interface BasicSelectProps {
 export default function SelectRegion({ setValue, region }: BasicSelectProps) {
   const [largeScaleData, setLargeScaleData] = useState<string>('')
   const [smallScaleData, setSmallScaleData] = useState<string>('')
-  const { isPc } = useMedia()
 
   const handleChangeLargeScaleData = (event: SelectChangeEvent) => {
     setLargeScaleData(event.target.value as string)
@@ -55,41 +53,36 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
 
   return (
     <Stack
-      sx={isPc ? { width: '26rem' } : { width: '100%' }}
+      sx={{ width: ['100%', '26rem'], height: '2rem' }}
       direction={'row'}
       gap={'1rem'}
     >
-      <FormControl
-        sx={
-          isPc
-            ? { width: '12.75rem', height: '2rem' }
-            : { width: '100%', height: '2rem' }
-        }
-      >
+      <FormControl sx={{ width: ['100%', '12.75rem'], height: '2rem' }}>
         <Select
-          sx={
-            isPc
-              ? { width: '12.75rem', height: '2rem' }
-              : { width: '100%', height: '2rem' }
-          }
+          sx={{
+            width: ['100%', '12.75rem'],
+            height: '2rem',
+            backgroundColor: 'background.tertiary',
+            borderWidth: '0',
+          }}
+          variant="outlined"
           value={largeScaleData}
           onChange={handleChangeLargeScaleData}
         >
           {options1}
         </Select>
       </FormControl>
-      <FormControl
-        sx={isPc ? { width: '12.75rem' } : { width: '100%' }}
-        fullWidth
-      >
+      <FormControl sx={{ width: ['100%', '12.75rem'] }}>
         <Select
-          sx={
-            isPc
-              ? { width: '12.75rem', height: '2rem' }
-              : { width: '100%', height: '2rem' }
-          }
+          sx={{
+            width: ['100%', '12.75rem'],
+            height: '2rem',
+            backgroundColor: 'background.tertiary',
+            borderWidth: '0',
+          }}
           value={smallScaleData}
           onChange={handleChangeSmallScaleData}
+          variant="outlined"
         >
           {options2}
         </Select>
