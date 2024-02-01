@@ -49,7 +49,7 @@ interface IRecruitWriteField {
 }
 
 const CreateTeam = () => {
-  const [image, setImage] = useState<File[]>([])
+  // const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
     '/images/defaultImage.png',
   )
@@ -213,7 +213,7 @@ const CreateTeam = () => {
               id="image"
             >
               <ImageUploadButton
-                setImage={setImage}
+                // setImage={setImage}
                 setPreviewImage={setPreviewImage}
               >
                 {/* 폴백 이미지 바꾸기 */}
