@@ -160,237 +160,239 @@ const CreateTeam = () => {
             </Typography>
           </Box>
         ) : null}
-        <Stack spacing={'1.5rem'} sx={style.boxStyle}>
-          {/* 대표이미지 */}
-          <FieldWithLabel
-            labelIcon={
-              <Icon.ImageIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-            label="대표이미지"
-            id="image"
-          >
-            <ImageUploadButton
-              setImage={setImage}
-              setPreviewImage={setPreviewImage}
-            >
-              {/* 폴백 이미지 바꾸기 */}
-              <Box>
-                <Image
-                  src={previewImage}
-                  width={240}
-                  height={160}
-                  alt="Picture of the author"
-                />
-              </Box>
-            </ImageUploadButton>
-          </FieldWithLabel>
-          {/* 스터디 or 프로젝트 선택 */}
-          <FieldWithLabel
-            label="유형"
-            labelIcon={
-              <Icon.ClipboardIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-          >
-            <RowRadioButtonsGroup setValue={setType} />
-          </FieldWithLabel>
-          {/* 모집글 제목 */}
-          <TextFieldWithLabel
-            labelIcon={
-              <Icon.EditIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-            label="모집글 제목"
-            value={title}
-            onChange={(e) => {
-              if (e.target.value.length > 20)
-                setTitle(e.target.value.slice(0, 20) as string)
-              else setTitle(e.target.value as string)
-            }}
-            placeholder="모집글 제목을 입력해주세요."
-          />
-
-          {/* 스터디 명 / 프로젝트 명 */}
-          <TextFieldWithLabel
-            labelIcon={
-              <Icon.ListIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-            label={type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
-            value={name}
-            onChange={(e) => {
-              if (e.target.value.length > 20)
-                setName(e.target.value.slice(0, 20) as string)
-              else setName(e.target.value as string)
-            }}
-            placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
-          />
-          {/* (프로젝트인 경우만) 역할 추가 */}
-          {type === 'STUDY' ? null : (
+        <form>
+          <Stack spacing={'1.5rem'} sx={style.boxStyle}>
+            {/* 대표이미지 */}
             <FieldWithLabel
-              label="역할"
               labelIcon={
-                <Icon.UserCheckIcon
+                <Icon.ImageIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+              label="대표이미지"
+              id="image"
+            >
+              <ImageUploadButton
+                setImage={setImage}
+                setPreviewImage={setPreviewImage}
+              >
+                {/* 폴백 이미지 바꾸기 */}
+                <Box>
+                  <Image
+                    src={previewImage}
+                    width={240}
+                    height={160}
+                    alt="Picture of the author"
+                  />
+                </Box>
+              </ImageUploadButton>
+            </FieldWithLabel>
+            {/* 스터디 or 프로젝트 선택 */}
+            <FieldWithLabel
+              label="유형"
+              labelIcon={
+                <Icon.ClipboardIcon
                   sx={{ ...style.iconStyleBase, color: 'text.normal' }}
                 />
               }
             >
-              <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
+              <RowRadioButtonsGroup setValue={setType} />
             </FieldWithLabel>
-          )}
-          {type === 'STUDY' && (
+            {/* 모집글 제목 */}
+            <TextFieldWithLabel
+              label_icon={
+                <Icon.EditIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+              label="모집글 제목"
+              value={title}
+              onChange={(e) => {
+                if (e.target.value.length > 20)
+                  setTitle(e.target.value.slice(0, 20) as string)
+                else setTitle(e.target.value as string)
+              }}
+              placeholder="모집글 제목을 입력해주세요."
+            />
+
+            {/* 스터디 명 / 프로젝트 명 */}
+            <TextFieldWithLabel
+              label_icon={
+                <Icon.ListIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+              label={type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
+              value={name}
+              onChange={(e) => {
+                if (e.target.value.length > 20)
+                  setName(e.target.value.slice(0, 20) as string)
+                else setName(e.target.value as string)
+              }}
+              placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
+            />
+            {/* (프로젝트인 경우만) 역할 추가 */}
+            {type === 'STUDY' ? null : (
+              <FieldWithLabel
+                label="역할"
+                labelIcon={
+                  <Icon.UserCheckIcon
+                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                  />
+                }
+              >
+                <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
+              </FieldWithLabel>
+            )}
+            {type === 'STUDY' && (
+              <FieldWithLabel
+                label="모집인원"
+                labelIcon={
+                  <Icon.UserCheckIcon
+                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                  />
+                }
+              >
+                <BasicSelect
+                  type={ComponentType.TeamSize}
+                  value={teamsize}
+                  setValue={setTeamsize}
+                />
+              </FieldWithLabel>
+            )}
+            {/* 온/오프라인 활동방식 선택 */}
             <FieldWithLabel
-              label="모집인원"
+              label="활동방식"
               labelIcon={
-                <Icon.UserCheckIcon
+                <Icon.WifiIcon
                   sx={{ ...style.iconStyleBase, color: 'text.normal' }}
                 />
               }
             >
               <BasicSelect
-                type={ComponentType.TeamSize}
-                value={teamsize}
-                setValue={setTeamsize}
+                type={ComponentType.Place}
+                value={place}
+                setValue={setPlace}
               />
             </FieldWithLabel>
-          )}
-          {/* 온/오프라인 활동방식 선택 */}
-          <FieldWithLabel
-            label="활동방식"
-            labelIcon={
-              <Icon.WifiIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-          >
-            <BasicSelect
-              type={ComponentType.Place}
-              value={place}
-              setValue={setPlace}
-            />
-          </FieldWithLabel>
-          {/* 목표기간 */}
-          <FieldWithLabel
-            label="목표기간"
-            labelIcon={
-              <Icon.PieChartIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-          >
-            <BasicSelect
-              type={ComponentType.Month}
-              value={due}
-              setValue={setMonth}
-            />
-          </FieldWithLabel>
-          {/* 지역 선택 */}
-          {place === 'ONLINE' ? null : (
+            {/* 목표기간 */}
             <FieldWithLabel
-              label="지역"
+              label="목표기간"
               labelIcon={
-                <Icon.LocationIcon
+                <Icon.PieChartIcon
                   sx={{ ...style.iconStyleBase, color: 'text.normal' }}
                 />
               }
             >
-              <SelectRegion setValue={setRegion} />
+              <BasicSelect
+                type={ComponentType.Month}
+                value={due}
+                setValue={setMonth}
+              />
             </FieldWithLabel>
-          )}
-          {/* 커뮤니케이션 링크 등록 */}
-          <FieldWithLabel
-            label="커뮤니케이션 링크"
-            labelIcon={
-              <Icon.LinkDiagonalIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-          >
-            <SetCommunicationToolLink setValue={setCommunicationTool} />
-          </FieldWithLabel>
-          {/* 태그 추가 */}
-          <FieldWithLabel
-            label="기술 스택"
-            labelIcon={
-              <Icon.TagIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-          >
-            {allTagList ? (
-              <TagAutoComplete
-                tagList={allTagList}
-                datas={tagList}
-                setData={setTagList}
-                style={{ width: ['100%', '26rem'] }}
-              />
-            ) : null}
-          </FieldWithLabel>
-          {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
-          <FieldWithLabel
-            label="팀 소개 글"
-            labelIcon={
-              <Icon.FileIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-          >
-            <TextField
-              variant="outlined"
-              value={content}
-              onChange={(e) => {
-                if (e.target.value.length > 1000)
-                  setContent(e.target.value.slice(0, 1000) as string)
-                else setContent(e.target.value as string)
-              }}
-              fullWidth
-              multiline
-            />
-          </FieldWithLabel>
-          {/* 모집 인터뷰 */}
-          <FieldWithLabel
-            label="모집 인터뷰"
-            labelIcon={
-              <Icon.FolderPlusIcon
-                sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-              />
-            }
-          >
-            <Button
-              sx={{ width: ['100%', '26rem'] }}
-              variant="outlined"
-              onClick={() => setOpenBasicModal(true)}
+            {/* 지역 선택 */}
+            {place === 'ONLINE' ? null : (
+              <FieldWithLabel
+                label="지역"
+                labelIcon={
+                  <Icon.LocationIcon
+                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                  />
+                }
+              >
+                <SelectRegion setValue={setRegion} />
+              </FieldWithLabel>
+            )}
+            {/* 커뮤니케이션 링크 등록 */}
+            <FieldWithLabel
+              label="커뮤니케이션 링크"
+              labelIcon={
+                <Icon.LinkDiagonalIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
             >
-              인터뷰 추가
-            </Button>
-            <SetInterview
-              openBasicModal={openBasicModal}
-              handleCloseBasicModal={setOpenBasicModal}
-              interviewData={interviewList}
-              setInterviewData={setInterviewList}
-            />
-          </FieldWithLabel>
-          {/* 등록, 취소 버튼 */}
-          <Stack direction={'row'} gap={2} justifyContent={'flex-end'}>
-            <CuButton
-              message="취소"
-              action={() => {
-                router.push('/')
-              }}
-              variant="outlined"
-            />
-            <CuButton
-              message="등록하기"
-              action={onHandlerFinish}
-              variant="contained"
-            />
+              <SetCommunicationToolLink setValue={setCommunicationTool} />
+            </FieldWithLabel>
+            {/* 태그 추가 */}
+            <FieldWithLabel
+              label="기술 스택"
+              labelIcon={
+                <Icon.TagIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+            >
+              {allTagList ? (
+                <TagAutoComplete
+                  tagList={allTagList}
+                  datas={tagList}
+                  setData={setTagList}
+                  style={{ width: ['100%', '26rem'] }}
+                />
+              ) : null}
+            </FieldWithLabel>
+            {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
+            <FieldWithLabel
+              label="팀 소개 글"
+              labelIcon={
+                <Icon.FileIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+            >
+              <TextField
+                variant="outlined"
+                value={content}
+                onChange={(e) => {
+                  if (e.target.value.length > 1000)
+                    setContent(e.target.value.slice(0, 1000) as string)
+                  else setContent(e.target.value as string)
+                }}
+                fullWidth
+                multiline
+              />
+            </FieldWithLabel>
+            {/* 모집 인터뷰 */}
+            <FieldWithLabel
+              label="모집 인터뷰"
+              labelIcon={
+                <Icon.FolderPlusIcon
+                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+            >
+              <Button
+                sx={{ width: ['100%', '26rem'] }}
+                variant="outlined"
+                onClick={() => setOpenBasicModal(true)}
+              >
+                인터뷰 추가
+              </Button>
+              <SetInterview
+                openBasicModal={openBasicModal}
+                handleCloseBasicModal={setOpenBasicModal}
+                interviewData={interviewList}
+                setInterviewData={setInterviewList}
+              />
+            </FieldWithLabel>
+            {/* 등록, 취소 버튼 */}
+            <Stack direction={'row'} gap={2} justifyContent={'flex-end'}>
+              <CuButton
+                message="취소"
+                action={() => {
+                  router.push('/')
+                }}
+                variant="outlined"
+              />
+              <CuButton
+                message="등록하기"
+                action={onHandlerFinish}
+                variant="contained"
+              />
+            </Stack>
           </Stack>
-        </Stack>
+        </form>
       </Container>
     </>
   )

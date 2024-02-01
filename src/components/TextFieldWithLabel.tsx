@@ -9,7 +9,7 @@ import {
 import React, { forwardRef } from 'react'
 
 interface ITextFieldWithLabelProps extends Omit<TextFieldProps, 'outlined'> {
-  labelIcon?: React.ReactNode
+  label_icon?: React.ReactNode
   labelProps?: TypographyProps
 }
 
@@ -26,7 +26,7 @@ const TextFieldWithLabel = forwardRef<
           alignItems={'center'}
           sx={{ width: '100%', height: '1.5rem' }}
         >
-          {props.labelIcon}
+          {props.label_icon}
           <Typography
             variant={'CaptionEmphasis'}
             color={'text.normal'}
