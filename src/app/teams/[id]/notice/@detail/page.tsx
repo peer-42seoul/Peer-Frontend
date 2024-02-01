@@ -19,7 +19,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { postId, setNotice } = useTeamPageState()
   const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
-    `/api/v1/team/notice/${postId}`,
+    `/api/v1/team-page/post/${postId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const { isPc } = useMedia()

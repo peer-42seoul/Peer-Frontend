@@ -24,7 +24,7 @@ const NoticeEditForm = ({
     if (postId) {
       setIsLoading(true)
       axiosWithAuth
-        .get(`/api/v1/team/notice/${postId}`)
+        .get(`/api/v1/team-page/post/${postId}`)
         .then((res) => {
           if (!res?.data) throw new Error()
           setPreviousData({
