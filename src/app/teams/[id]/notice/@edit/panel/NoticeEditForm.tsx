@@ -48,6 +48,7 @@ const NoticeEditForm = ({
     const form = {
       title: formData.get('post-title') as string,
       content: editor.getMarkdown(),
+      image: null,
     }
     if (postId) {
       // 글 수정
@@ -62,7 +63,7 @@ const NoticeEditForm = ({
     }
     // 글 작성
     axiosWithAuth
-      .post(`/api/v1/team/notice`, {
+      .post(`/api/v1/team-page/notice/create`, {
         ...form,
         teamId,
       })
