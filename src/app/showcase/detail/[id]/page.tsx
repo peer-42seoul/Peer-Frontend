@@ -7,6 +7,7 @@ import { IShowcaseViewerFields } from '@/types/IShowcaseEdit'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
+import CommentContainer from './panel/CommentContainer'
 
 const ShowcaseDetailPage = ({ params }: { params: { id: number } }) => {
   const { data, isLoading, error } = useSWR<IShowcaseViewerFields>(
@@ -24,7 +25,14 @@ const ShowcaseDetailPage = ({ params }: { params: { id: number } }) => {
     return <Typography color={'error'}>에러가 발생했습니다.</Typography>
   }
 
-  return data && <ShowcaseViewer data={data} />
+  return (
+    data && (
+      <>
+        <ShowcaseViewer data={data} />
+        <CommentContainer postId={params.id} />
+      </>
+    )
+  )
 }
 
 export default ShowcaseDetailPage
