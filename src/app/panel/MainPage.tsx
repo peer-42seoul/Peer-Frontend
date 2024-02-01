@@ -114,7 +114,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     sort,
     page,
     keyword,
-    dueObject,
     detailOption.due1,
     detailOption.due2,
     detailOption.region1,
