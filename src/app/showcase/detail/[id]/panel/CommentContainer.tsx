@@ -3,7 +3,7 @@ import CuAvatar from '@/components/CuAvatar'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
-import { EditIcon, TrashIcon } from '@/icons'
+import { TrashIcon } from '@/icons'
 import { CommentProps, IComment, IPostId } from '@/types/IComment'
 import {
   Box,
