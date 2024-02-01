@@ -9,6 +9,7 @@ interface textProps {
   text: string
 }
 
+// 튜토리얼 컨텐츠의 최상위 컨테이너
 export const TutorialContainer = ({ children }: childrenProps) => {
   return (
     <Stack
@@ -22,10 +23,12 @@ export const TutorialContainer = ({ children }: childrenProps) => {
   )
 }
 
+// 제목 - 내용을 감싸는 컨테이너
 export const TitleContianer = ({ children }: childrenProps) => {
   return <Stack width={'100%'}>{children}</Stack>
 }
 
+// 제목 typography
 export const SubTitle = ({ text }: textProps) => {
   const { isPc } = useMedia()
   return (
@@ -38,6 +41,7 @@ export const SubTitle = ({ text }: textProps) => {
   )
 }
 
+// 내용 typography
 export const Content = ({ text }: textProps) => {
   const { isPc } = useMedia()
   return (
