@@ -1,9 +1,9 @@
 import { ReactNode, useState } from 'react'
-import { IconButton, Modal, Stack, Typography } from '@mui/material'
+import { Box, IconButton, Modal, Stack, Typography } from '@mui/material'
 import { Help } from '@mui/icons-material'
 import useMedia from '@/hook/useMedia'
 import { CloseIcon } from '@/icons'
-import * as style from './CuModal.style'
+import * as style from './Tutorial.style'
 
 interface ITutorialProps {
   title?: string
@@ -21,7 +21,7 @@ const Tutorial = ({ title, content }: ITutorialProps) => {
       <Modal open={open} onClose={() => setOpen(false)} keepMounted>
         <Stack
           alignItems={'center'}
-          sx={isPc ? style.pcWrapper : style.mobileWrapper}
+          sx={isPc ? style.pcModal : style.mobileModal}
         >
           <Typography
             variant={isPc ? 'Title2Emphasis' : 'Body1Emphasis'}
@@ -46,7 +46,7 @@ const Tutorial = ({ title, content }: ITutorialProps) => {
               sx={{ color: 'text.assistive' }}
             />
           </IconButton>
-          <>{content}</>
+          <Box sx={{ overflowY: 'scroll' }}>{content}</Box>
         </Stack>
       </Modal>
     </>
