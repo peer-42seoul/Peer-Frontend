@@ -8,7 +8,7 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import FloatEditButton from './main-page/FloatEditButton'
 import MainCard from './main-page/MainCard'
 import SearchOption from './main-page/SearchOption'
@@ -39,10 +39,12 @@ export interface BeforeInstallPromptEvent extends Event {
     outcome: 'accepted' | 'dismissed'
     platform: string
   }>
+
   prompt(): Promise<void>
 }
 
 export type ProjectSort = 'latest' | 'hit'
+
 export interface IDetailOption {
   isInit?: boolean
   due1: number
@@ -77,14 +79,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     status: '',
     tag: '',
   })
-  const dueObject: { [key: number]: string } = {
-    0: '1주일',
-    20: '1개월',
-    40: '3개월',
-    60: '6개월',
-    80: '9개월',
-    100: '12개월 이상',
-  }
 
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
@@ -96,33 +90,17 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
   const pageSize = 6
-  const {
-    data: newData,
-    isLoading,
-    error,
-  } = useSWR<IPagination<IPost[]>>(
-    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
-      ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
-          type ?? 'STUDY'
-        }&sort=${
-          sort ?? 'latest'
-        }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
-          dueObject[detailOption.due1]
-        }&due=${dueObject[detailOption.due2]}&region1=${
-          detailOption.region1
-        }&region2=${detailOption.region2}&place=${detailOption.place}&status=${
-          detailOption.status
-        }&tag=${detailOption.tag}`,
-    isLogin
-      ? (url: string) => axiosInstance.get(url).then((res) => res.data)
-      : defaultGetFetcher,
-  )
+  const option = useMemo(() => {
+    const dueObject: { [key: number]: string } = {
+      0: '1주일',
+      20: '1개월',
+      40: '3개월',
+      60: '6개월',
+      80: '9개월',
+      100: '12개월 이상',
+    }
 
-  const { data: favoriteData } = useSWR<boolean[]>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites?type=${
-      type ?? 'STUDY'
-    }&sort=${
+    return `?type=${type ?? 'STUDY'}&sort=${
       sort ?? 'latest'
     }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
       dueObject[detailOption.due1]
@@ -130,24 +108,57 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       detailOption.region1
     }&region2=${detailOption.region2}&place=${detailOption.place}&status=${
       detailOption.status
-    }&tag=${detailOption.tag}`,
+    }&tag=${detailOption.tag}`
+  }, [
+    type,
+    sort,
+    page,
+    keyword,
+    dueObject,
+    detailOption.due1,
+    detailOption.due2,
+    detailOption.region1,
+    detailOption.region2,
+    detailOption.place,
+    detailOption.status,
+    detailOption.tag,
+  ])
+
+  // const { data: favoriteData, mutate } = useSWR<boolean[]>(
+  //   isLogin
+  //     ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites` + option
+  //     : null,
+  //   (url: string) => axiosInstance.get(url).then((res) => res.data),
+  // )
+
+  // const getFavoriteData = (index: number) => {
+  //   return favoriteData?.[index]
+  // }
+
+  const {
+    data: newData,
+    isLoading,
+    error,
+    // mutate: dataMutate,
+  } = useSWR<IPagination<IPost[]>>(
+    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
+      ? null
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit` + option,
     isLogin
-      ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      ? (url: string) =>
+          axiosInstance.get(url).then((res) => {
+            // mutate()
+            return res.data
+          })
       : defaultGetFetcher,
   )
-  const setData = (content: IPost[] | undefined) => {
-    return content?.map((item, index) => ({
-      ...item,
-      favorite: favoriteData?.[index],
-    }))
-  }
 
-  console.log('favoriteData', favoriteData)
+  const [content, setContent] = useState<IPost[]>(initData?.content ?? [])
 
-  const [content, setContent] = useState<IPost[] | undefined>(() =>
-    setData(initData?.content),
-  )
-  console.log('content', content)
+  // const favoriteMutate = async () => {
+  //   await mutate()
+  //   await dataMutate()
+  // }
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -261,7 +272,17 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 <Stack gap={2}>
                   {content?.map((project: IPost, index: number) => (
                     <Box key={index}>
-                      <MainCard {...project} type={type} />
+                      <MainCard
+                        {...project}
+                        type={type}
+                        //추후 수정 예정
+                        favorite={false}
+                        // favorite={getFavoriteData(index)}
+                        // favoriteMutate={favoriteMutate}
+                        sx={{
+                          height: '21.875rem',
+                        }}
+                      />
                     </Box>
                   ))}
                 </Stack>
@@ -326,7 +347,16 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   <Grid container spacing={'1rem'}>
                     {content?.map((project: IPost, index: number) => (
                       <Grid item key={index} sm={12} md={6} lg={4}>
-                        <MainCard {...project} type={type} />
+                        <MainCard
+                          {...project}
+                          type={type}
+                          favorite={false}
+                          // favorite={getFavoriteData(index)}
+                          // favoriteMutate={favoriteMutate}
+                          sx={{
+                            height: '21.875rem',
+                          }}
+                        />
                       </Grid>
                     ))}
                   </Grid>

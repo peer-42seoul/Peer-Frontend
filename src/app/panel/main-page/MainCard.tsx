@@ -28,6 +28,7 @@ const MainCard = ({
   type,
   href,
   onFavorite,
+  favoriteMutate,
   sx,
 }: IMainCard) => {
   return (
@@ -86,10 +87,11 @@ const MainCard = ({
         }
         action={
           <FavoriteButton
-            favorite={favorite}
             recruit_id={recruit_id}
-            redirect_url={'/'}
+            favorite={favorite}
+            redirect_url={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
             onFavorite={onFavorite}
+            mutate={favoriteMutate}
           />
         }
         title={user_nickname}
