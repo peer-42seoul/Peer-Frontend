@@ -84,7 +84,9 @@ const ReportModal = ({
         containedButton={{
           text: '신고',
           type: 'button',
-          onClick: handleReportClick,
+          onClick: async () => {
+            await handleReportClick()
+          },
         }}
         textButton={{
           text: '취소',

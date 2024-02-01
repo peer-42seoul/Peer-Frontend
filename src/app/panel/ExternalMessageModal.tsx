@@ -105,80 +105,80 @@ const ExternalMessageModal = ({
         containedButton={{
           text: '보내기',
           type: 'button',
-          onClick: handleSendClick,
+          onClick: async () => {
+            await handleSendClick()
+          },
         }}
         textButton={{
           text: '취소',
           onClick: handleClose,
         }}
       >
-        <>
-          <Stack
-            alignItems={isPc ? 'center' : 'flex-start'}
-            spacing={'1rem'}
-            sx={isPc ? style.pcContainer : style.mobileContainer}
-          >
-            <InputContainer title={'받는 이'}>
-              <InputBase
-                fullWidth
-                value={targetNickname}
-                disabled
-                sx={style.inputBase}
-              />
-            </InputContainer>
-            <InputContainer title={'내용'}>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                id={'external-message-form'}
-              >
-                <Stack gap={1}>
-                  <Box sx={style.form}>
-                    <Controller
-                      name="content"
-                      control={control}
-                      rules={{
-                        required: '내용을 입력해주세요.',
-                      }}
-                      render={({ field }) => (
-                        <InputBase
-                          fullWidth
-                          placeholder="내용을 입력하세요."
-                          {...field}
-                          sx={style.input}
-                          onChange={(e) => {
-                            field.onChange(e.target.value)
-                            trigger('content')
-                          }}
-                        />
-                      )}
-                    />
-                  </Box>
-                  <Typography color="error" variant="Caption">
-                    {errors.content?.message || '\u00A0'}
-                  </Typography>
-                </Stack>
-              </form>
-              <CuTextModal
-                open={modalOpen}
-                title={'쪽지 보내기'}
-                onClose={closeModal}
-                containedButton={{
-                  text: isSubmitting ? '제출 중' : '확인',
-                  type: 'submit',
-                  form: 'external-message-form',
-                }}
-                textButton={{
-                  text: '취소',
-                  onClick: () => {
-                    closeModal()
-                  },
-                }}
-                content={`${targetNickname}에게 쪽지를 보내시겠습니까?`}
-              />
-            </InputContainer>
-          </Stack>
-        </>
+        <Stack
+          alignItems={isPc ? 'center' : 'flex-start'}
+          spacing={'1rem'}
+          sx={isPc ? style.pcContainer : style.mobileContainer}
+        >
+          <InputContainer title={'받는 이'}>
+            <InputBase
+              fullWidth
+              value={targetNickname}
+              disabled
+              sx={style.inputBase}
+            />
+          </InputContainer>
+          <InputContainer title={'내용'}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              id={'external-message-form'}
+            >
+              <Stack gap={1}>
+                <Box sx={style.form}>
+                  <Controller
+                    name="content"
+                    control={control}
+                    rules={{
+                      required: '내용을 입력해주세요.',
+                    }}
+                    render={({ field }) => (
+                      <InputBase
+                        fullWidth
+                        placeholder="내용을 입력하세요."
+                        {...field}
+                        sx={style.input}
+                        onChange={(e) => {
+                          field.onChange(e.target.value)
+                          trigger('content')
+                        }}
+                      />
+                    )}
+                  />
+                </Box>
+                <Typography color="error" variant="Caption">
+                  {errors.content?.message || '\u00A0'}
+                </Typography>
+              </Stack>
+            </form>
+          </InputContainer>
+        </Stack>
       </CuModal>
+      <CuTextModal
+        open={modalOpen}
+        title={'쪽지 보내기'}
+        onClose={closeModal}
+        containedButton={{
+          text: isSubmitting ? '제출 중' : '확인',
+          type: 'submit',
+          form: 'external-message-form',
+        }}
+        textButton={{
+          text: '취소',
+          onClick: () => {
+            closeModal()
+          },
+        }}
+        content={`${targetNickname}에게 쪽지를 보내시겠습니까?`}
+      />
     </>
   )
 }
