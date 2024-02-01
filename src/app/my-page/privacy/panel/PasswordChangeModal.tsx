@@ -42,11 +42,13 @@ const PasswordCheck = ({
               autoComplete="current-password"
               error={!!errors.password}
               helperText={
-                <Box height={'1.125rem'}>
-                  <Typography variant="Caption" color={'error'}>
-                    {errors.password && errors.password.message}
-                  </Typography>
-                </Box>
+                <Typography
+                  variant="Caption"
+                  color={'error'}
+                  height={'1.125rem'}
+                >
+                  {errors.password && errors.password.message}
+                </Typography>
               }
             />
           )}
@@ -89,16 +91,20 @@ const PasswordModify = ({
 }) => {
   const {
     handleSubmit,
-    getValues,
     control,
     formState: { errors },
+    watch,
+    // reset,
   } = useForm<{ newPassword: string; confirmPassword: string }>({
     mode: 'onChange',
   })
 
   const onSubmit = (data: { newPassword: string; confirmPassword: string }) => {
     setPayload({ password: data.newPassword, code })
+    // reset()
   }
+
+  const newPassword = watch('newPassword')
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id="password-modify">
@@ -118,11 +124,13 @@ const PasswordModify = ({
               autoComplete="new-password"
               error={!!errors.newPassword}
               helperText={
-                <Box height={'1.125rem'}>
-                  <Typography variant="Caption" color={'error'}>
-                    {errors.newPassword && errors.newPassword.message}
-                  </Typography>
-                </Box>
+                <Typography
+                  variant="Caption"
+                  color={'error'}
+                  height={'1.125rem'}
+                >
+                  {errors.newPassword && errors.newPassword.message}
+                </Typography>
               }
             />
           )}
@@ -147,9 +155,6 @@ const PasswordModify = ({
                 /[A-Z]/.test(value) || '비밀번호에 대문자가 포함되어야 합니다',
               includeSmall: (value) =>
                 /[a-z]/.test(value) || '비밀번호에 소문자가 포함되어야 합니다',
-              isSame: (value) =>
-                getValues('newPassword') === value ||
-                '비밀번호가 일치하지 않습니다.',
             },
           }}
           control={control}
@@ -169,11 +174,13 @@ const PasswordModify = ({
               autoComplete="confirmPassword"
               error={!!errors.confirmPassword}
               helperText={
-                <Box height={'1.125rem'}>
-                  <Typography variant="Caption" color={'error'}>
-                    {errors.confirmPassword && errors.confirmPassword.message}
-                  </Typography>
-                </Box>
+                <Typography
+                  variant="Caption"
+                  color={'error'}
+                  height={'1.125rem'}
+                >
+                  {errors.confirmPassword && errors.confirmPassword.message}
+                </Typography>
               }
             />
           )}
@@ -198,6 +205,8 @@ const PasswordModify = ({
                 /[A-Z]/.test(value) || '비밀번호에 대문자가 포함되어야 합니다',
               includeSmall: (value) =>
                 /[a-z]/.test(value) || '비밀번호에 소문자가 포함되어야 합니다',
+              isSame: (value) =>
+                newPassword === value || '비밀번호가 일치하지 않습니다.',
             },
           }}
           control={control}
@@ -216,15 +225,25 @@ const PasswordChangeModal = ({
 }) => {
   const [data, setData] = useState<any>(null)
   const [payload, setPayload] = useState<any>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { openToast } = useToast()
+
+  console.log(data, payload)
+
+  const handleCloseModal = () => {
+    // 모달이 꺼져도 데이터가 남아있는 문제가 있어서 초기화 후 꺼지도록 처리하였습니다.
+    setPayload(null)
+    setData(null)
+    closeModal()
+  }
 
   const onSuccess = () => {
     openToast({
       severity: 'success',
       message: '비밀번호가 변경되었습니다.',
     })
-    closeModal()
+    handleCloseModal()
   }
 
   const onError = (message: string) => {
@@ -237,17 +256,19 @@ const PasswordChangeModal = ({
   return (
     <CuModal
       open={isOpen}
-      onClose={closeModal}
+      onClose={handleCloseModal}
       title="비밀번호 변경"
       mobileFullSize
       textButton={{
         text: '취소',
-        onClick: closeModal,
+        onClick: handleCloseModal,
+        isLoading: isSubmitting,
       }}
       containedButton={{
         text: '변경하기',
         type: 'submit',
         form: data ? 'password-modify' : 'password-check',
+        isLoading: isSubmitting,
       }}
     >
       <Stack
@@ -256,52 +277,55 @@ const PasswordChangeModal = ({
         height={'100%'}
         sx={{ flexGrow: 1 }}
       >
-        <Stack
-          direction={'row'}
-          spacing={'0.75rem'}
-          justifyContent={'center'}
-          alignItems={'center'}
-        >
-          <Box
-            sx={{ ...style.circleStyle }}
-            bgcolor={data ? 'background.tertiary' : 'purple.strong'}
-          />
-          <Box
-            sx={{ ...style.circleStyle }}
-            bgcolor={data ? 'purple.strong' : 'background.tertiary'}
-          />
-        </Stack>
-        <Stack
-          direction={'column'}
-          justifyContent={'center'}
-          height={'100%'}
-          sx={{ flexGrow: 1 }}
-        >
-          {data ? (
-            <EncryptedSender
-              payload={payload}
-              setPayload={setPayload}
-              apiType={EApiType.PASSWORD_MODIFY}
-              setData={setData}
-              needToken
-              onSuccess={onSuccess}
-              onError={onError}
-            >
-              <PasswordModify setPayload={setPayload} code={data.code} />
-            </EncryptedSender>
-          ) : (
-            <EncryptedSender
-              payload={payload}
-              setPayload={setPayload}
-              apiType={EApiType.PASSWORD_CHECK}
-              setData={setData}
-              needToken
-              onError={onError}
-            >
-              <PasswordCheck setPayload={setPayload} />
-            </EncryptedSender>
-          )}
-        </Stack>
+        <>
+          <Stack
+            direction={'row'}
+            spacing={'0.75rem'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <Box
+              sx={{ ...style.circleStyle }}
+              bgcolor={data ? 'background.tertiary' : 'purple.strong'}
+            />
+            <Box
+              sx={{ ...style.circleStyle }}
+              bgcolor={data ? 'purple.strong' : 'background.tertiary'}
+            />
+          </Stack>
+          <Stack
+            direction={'column'}
+            justifyContent={'center'}
+            height={'100%'}
+            sx={{ flexGrow: 1 }}
+          >
+            {data ? (
+              <EncryptedSender
+                payload={payload}
+                setPayload={setPayload}
+                apiType={EApiType.PASSWORD_MODIFY}
+                setData={setData}
+                needToken
+                onSuccess={onSuccess}
+                onError={onError}
+                setIsLoading={setIsSubmitting}
+              >
+                <PasswordModify setPayload={setPayload} code={data.code} />
+              </EncryptedSender>
+            ) : (
+              <EncryptedSender
+                payload={payload}
+                setPayload={setPayload}
+                apiType={EApiType.PASSWORD_CHECK}
+                setData={setData}
+                needToken
+                onError={onError}
+              >
+                <PasswordCheck setPayload={setPayload} />
+              </EncryptedSender>
+            )}
+          </Stack>
+        </>
       </Stack>
     </CuModal>
   )
