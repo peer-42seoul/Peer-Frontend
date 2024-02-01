@@ -17,10 +17,9 @@ import RowRadioButtonsGroup from '../[id]/edit/panel/radioGroup'
 import SetTeamRole from '../[id]/edit/panel/SetTeamRole/SetTeamRole'
 import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
 import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
-import SetCommunicationToolLink from '../[id]/edit/panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import SelectRegion from '../[id]/edit/panel/SelectRegion'
 import { IFormInterview, IRoleWrite, ITag } from '@/types/IPostDetail'
-import useAxiosWithAuth from '@/api/config'
+// import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import CuButton from '@/components/CuButton'
 import TagAutoComplete from '@/components/TagAutoComplete'
@@ -31,29 +30,39 @@ import * as style from './page.style'
 import * as Icon from '@/icons'
 import TextFieldWithLabel from '@/components/TextFieldWithLabel'
 import FieldWithLabel from '@/components/FieldWithLabel'
+import { Controller, useForm } from 'react-hook-form'
+
+interface IRecruitWriteField {
+  place: string
+  image: string
+  title: string
+  name: string
+  due: string
+  type: string
+  content: string
+  region: Array<string> | null
+  link: string
+  tagList: Array<ITag> | null
+  roleList: Array<IRoleWrite>
+  interviewList: Array<IFormInterview>
+  max: number | null
+}
 
 const CreateTeam = () => {
-  const [title, setTitle] = useState<string>('')
   const [image, setImage] = useState<File[]>([])
   const [previewImage, setPreviewImage] = useState<string>(
     '/images/defaultImage.png',
   )
-  const [name, setName] = useState<string>('')
   const [type, setType] = useState<string>('PROJECT')
   const [tagList, setTagList] = useState<ITag[]>([])
-  const [region, setRegion] = useState<string[]>([])
-  const [place, setPlace] = useState<string>('')
-  const [due, setMonth] = useState<string>('')
   const [teamsize, setTeamsize] = useState<string>('')
-  const [link, setCommunicationTool] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const [roleList, setRoleList] = useState<IRoleWrite[]>([])
-  const [interviewList, setInterviewList] = useState<IFormInterview[]>([])
   const [allTagList, setAllTagList] = useState<ITag[]>()
+
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const { openToast, closeToast } = useToast()
   const router = useRouter()
-  const axiosInstance = useAxiosWithAuth()
+  // const axiosInstance = useAxiosWithAuth()
   const { isPc } = useMedia()
   const { isLogin } = useAuthStore()
 
@@ -77,78 +86,109 @@ const CreateTeam = () => {
     }
   }, [data])
 
-  const doNeedMoreConditionAtProject = () => {
-    if (
-      !image ||
-      !title ||
-      !name ||
-      !due ||
-      !place ||
-      !tagList ||
-      !roleList ||
-      !content ||
-      (place !== 'ONLINE' && !region)
-    )
-      return true
-    else return false
-  }
+  // const doNeedMoreConditionAtProject = () => {
+  //   if (
+  //     !image ||
+  //     !title ||
+  //     !name ||
+  //     !due ||
+  //     !place ||
+  //     !tagList ||
+  //     !roleList ||
+  //     !content ||
+  //     (place !== 'ONLINE' && !region)
+  //   )
+  //     return true
+  //   else return false
+  // }
 
-  const doNeedMoreConditionAtStudy = () => {
-    if (
-      !image ||
-      !title ||
-      !name ||
-      !due ||
-      !place ||
-      !tagList ||
-      !teamsize ||
-      !content ||
-      (place !== 'ONLINE' && !region)
-    )
-      return true
-    else return false
-  }
+  // const doNeedMoreConditionAtStudy = () => {
+  //   if (
+  //     !image ||
+  //     !title ||
+  //     !name ||
+  //     !due ||
+  //     !place ||
+  //     !tagList ||
+  //     !teamsize ||
+  //     !content ||
+  //     (place !== 'ONLINE' && !region)
+  //   )
+  //     return true
+  //   else return false
+  // }
 
-  const onHandlerFinish = async () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<IRecruitWriteField>({
+    defaultValues: {
+      place: '',
+      image: '',
+      title: '',
+      name: '',
+      due: '',
+      type: '',
+      content: '',
+      region: null,
+      link: '',
+      tagList: null,
+      roleList: [],
+      interviewList: [],
+      max: null,
+    },
+  })
+
+  const onHandlerFinish = async (data: IRecruitWriteField) => {
     closeToast()
-    if (
-      (type === 'PROJECT' && doNeedMoreConditionAtProject()) ||
-      (type === 'STUDY' && doNeedMoreConditionAtStudy())
-    ) {
-      openToast({
-        severity: 'error',
-        message: '필수 입력 항목을 모두 입력해주세요.',
-      })
-      return
-    }
-    try {
-      const response = await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
-        {
-          place: place,
-          image: previewImage.split(',')[1],
-          title: title,
-          name: name,
-          due: due,
-          type: type,
-          content: content,
-          region: place === 'ONLINE' ? null : region,
-          link: link,
-          tagList: tagList.map((tag) => tag.tagId),
-          roleList: type === 'PROJECT' ? roleList : null,
-          interviewList: interviewList,
-          max: type === 'STUDY' ? parseInt(teamsize) : null,
-        },
-      )
-      router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
-    } catch (error: any) {
-      console.log('error : ', error)
-      openToast({
-        severity: 'error',
-        message: error.response.data,
-      })
-    }
+
+    console.log('data : ', data)
+    // if (
+    //   (type === 'PROJECT' && doNeedMoreConditionAtProject()) ||
+    //   (type === 'STUDY' && doNeedMoreConditionAtStudy())
+    // ) {
+    //   openToast({
+    //     severity: 'error',
+    //     message: '필수 입력 항목을 모두 입력해주세요.',
+    //   })
+    //   return
+    // }
+    // try {
+    //   const response = await axiosInstance.post(
+    //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/write`,
+    //     {
+    //       place: data.place,
+    //       image: previewImage.split(',')[1],
+    //       title: data.title,
+    //       name: data.name,
+    //       due: data.due,
+    //       type: type,
+    //       content: content,
+    //       region: data.place === 'ONLINE' ? null : data.region,
+    //       link: data.link,
+    //       tagList: tagList.map((tag) => tag.tagId),
+    //       roleList: type === 'PROJECT' ? data.roleList : null,
+    //       interviewList: data.interviewList,
+    //       max: type === 'STUDY' ? parseInt(teamsize) : null,
+    //     },
+    //   )
+    //   router.push(`/recruit/${response.data}`) // 백엔드에서 리턴값으로 새로생긴 모집글의 id 를 던져줌
+    // } catch (error: any) {
+    //   console.log('error : ', error)
+    //   openToast({
+    //     severity: 'error',
+    //     message: error.response.data,
+    //   })
+    // }
   }
+
+  const roleList = watch('roleList')
+  const interviewList = watch('interviewList')
+  const region = watch('region')
+  const place = watch('place')
 
   return (
     <>
@@ -160,7 +200,7 @@ const CreateTeam = () => {
             </Typography>
           </Box>
         ) : null}
-        <form>
+        <form onSubmit={handleSubmit(onHandlerFinish)}>
           <Stack spacing={'1.5rem'} sx={style.boxStyle}>
             {/* 대표이미지 */}
             <FieldWithLabel
@@ -199,37 +239,89 @@ const CreateTeam = () => {
               <RowRadioButtonsGroup setValue={setType} />
             </FieldWithLabel>
             {/* 모집글 제목 */}
-            <TextFieldWithLabel
-              label_icon={
-                <Icon.EditIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+            <Controller
+              render={({ field }) => (
+                <TextFieldWithLabel
+                  {...field}
+                  inputProps={{
+                    maxLength: 20,
+                  }}
+                  label_icon={
+                    <Icon.EditIcon
+                      sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                    />
+                  }
+                  label="모집글 제목"
+                  placeholder="모집글 제목을 입력해주세요."
+                  id="title"
+                  error={!!errors?.title}
+                  helperText={
+                    <Typography
+                      variant="Caption"
+                      color="error"
+                      height={'1.125rem'}
+                    >
+                      {errors?.title?.message}
+                    </Typography>
+                  }
                 />
-              }
-              label="모집글 제목"
-              value={title}
-              onChange={(e) => {
-                if (e.target.value.length > 20)
-                  setTitle(e.target.value.slice(0, 20) as string)
-                else setTitle(e.target.value as string)
+              )}
+              name="title"
+              control={control}
+              rules={{
+                required: '필수 입력 항목입니다.',
+                maxLength: {
+                  value: 20,
+                  message: '20자 이내로 입력해주세요.',
+                },
+                minLength: {
+                  value: 2,
+                  message: '2자 이상 입력해주세요.',
+                },
               }}
-              placeholder="모집글 제목을 입력해주세요."
             />
 
             {/* 스터디 명 / 프로젝트 명 */}
-            <TextFieldWithLabel
-              label_icon={
-                <Icon.ListIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+            <Controller
+              render={({ field }) => (
+                <TextFieldWithLabel
+                  {...field}
+                  label_icon={
+                    <Icon.ListIcon
+                      sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                    />
+                  }
+                  label={type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
+                  placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
+                  id="name"
+                  error={!!errors?.name}
+                  helperText={
+                    <Typography
+                      variant="Caption"
+                      color="error"
+                      height={'1.125rem'}
+                    >
+                      {errors?.name?.message}
+                    </Typography>
+                  }
+                  inputProps={{
+                    maxLength: 20,
+                  }}
                 />
-              }
-              label={type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
-              value={name}
-              onChange={(e) => {
-                if (e.target.value.length > 20)
-                  setName(e.target.value.slice(0, 20) as string)
-                else setName(e.target.value as string)
+              )}
+              name="name"
+              control={control}
+              rules={{
+                required: '필수 입력 항목입니다.',
+                maxLength: {
+                  value: 20,
+                  message: '20자 이내로 입력해주세요.',
+                },
+                minLength: {
+                  value: 2,
+                  message: '2자 이상 입력해주세요.',
+                },
               }}
-              placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
             />
             {/* (프로젝트인 경우만) 역할 추가 */}
             {type === 'STUDY' ? null : (
@@ -241,7 +333,12 @@ const CreateTeam = () => {
                   />
                 }
               >
-                <SetTeamRole roleData={roleList} setRoleData={setRoleList} />
+                <SetTeamRole
+                  roleData={roleList}
+                  setRoleData={(value: Array<IRoleWrite>) => {
+                    setValue('roleList', value)
+                  }}
+                />
               </FieldWithLabel>
             )}
             {type === 'STUDY' && (
@@ -256,40 +353,62 @@ const CreateTeam = () => {
                 <BasicSelect
                   type={ComponentType.TeamSize}
                   value={teamsize}
-                  setValue={setTeamsize}
+                  setvalue={setTeamsize}
                 />
               </FieldWithLabel>
             )}
             {/* 온/오프라인 활동방식 선택 */}
-            <FieldWithLabel
-              label="활동방식"
-              labelIcon={
-                <Icon.WifiIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            >
-              <BasicSelect
-                type={ComponentType.Place}
-                value={place}
-                setValue={setPlace}
-              />
-            </FieldWithLabel>
+            <Controller
+              render={({ field }) => (
+                <FieldWithLabel
+                  label="활동방식"
+                  labelIcon={
+                    <Icon.WifiIcon
+                      sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                    />
+                  }
+                  formHelperText={errors?.place?.message ?? undefined}
+                >
+                  <BasicSelect
+                    type={ComponentType.Place}
+                    {...field}
+                    error={!!errors?.place}
+                  />
+                </FieldWithLabel>
+              )}
+              name="place"
+              control={control}
+              rules={{
+                required: '필수 입력 항목입니다.',
+              }}
+            />
+
             {/* 목표기간 */}
-            <FieldWithLabel
-              label="목표기간"
-              labelIcon={
-                <Icon.PieChartIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                />
-              }
-            >
-              <BasicSelect
-                type={ComponentType.Month}
-                value={due}
-                setValue={setMonth}
-              />
-            </FieldWithLabel>
+            <Controller
+              render={({ field }) => (
+                <FieldWithLabel
+                  label="목표기간"
+                  labelIcon={
+                    <Icon.PieChartIcon
+                      sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                    />
+                  }
+                  id="due"
+                >
+                  <BasicSelect
+                    id="due"
+                    type={ComponentType.Month}
+                    {...field}
+                    error={!!errors?.due}
+                  />
+                </FieldWithLabel>
+              )}
+              name="due"
+              control={control}
+              rules={{
+                required: '필수 입력 항목입니다.',
+              }}
+            />
             {/* 지역 선택 */}
             {place === 'ONLINE' ? null : (
               <FieldWithLabel
@@ -300,20 +419,58 @@ const CreateTeam = () => {
                   />
                 }
               >
-                <SelectRegion setValue={setRegion} />
+                <SelectRegion
+                  setValue={(value) => {
+                    setValue('region', value)
+                  }}
+                  region={region ?? undefined}
+                />
               </FieldWithLabel>
             )}
             {/* 커뮤니케이션 링크 등록 */}
-            <FieldWithLabel
-              label="커뮤니케이션 링크"
-              labelIcon={
-                <Icon.LinkDiagonalIcon
-                  sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+            <Controller
+              render={({ field }) => (
+                <TextFieldWithLabel
+                  {...field}
+                  label="커뮤니케이션 링크"
+                  label_icon={
+                    <Icon.LinkDiagonalIcon
+                      sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                    />
+                  }
+                  placeholder={'팀 커뮤니케이션 툴 링크를 입력해주세요.'}
+                  sx={{ width: '26rem' }}
+                  id="link"
+                  inputProps={{
+                    maxLength: 300,
+                  }}
+                  error={!!errors?.link}
+                  helperText={
+                    <Typography
+                      variant="Caption"
+                      color="error"
+                      height={'1.125rem'}
+                    >
+                      {errors?.link?.message}
+                    </Typography>
+                  }
                 />
-              }
-            >
-              <SetCommunicationToolLink setValue={setCommunicationTool} />
-            </FieldWithLabel>
+              )}
+              name="link"
+              control={control}
+              rules={{
+                required: '필수 입력 항목입니다.',
+                minLength: {
+                  value: 2,
+                  message: '2자 이상 입력해주세요.',
+                },
+                maxLength: {
+                  value: 300,
+                  message: '300자 이내로 입력해주세요.',
+                },
+              }}
+            />
+
             {/* 태그 추가 */}
             <FieldWithLabel
               label="기술 스택"
@@ -373,7 +530,9 @@ const CreateTeam = () => {
                 openBasicModal={openBasicModal}
                 handleCloseBasicModal={setOpenBasicModal}
                 interviewData={interviewList}
-                setInterviewData={setInterviewList}
+                setInterviewData={(value: Array<IFormInterview>) => {
+                  setValue('interviewList', value)
+                }}
               />
             </FieldWithLabel>
             {/* 등록, 취소 버튼 */}
@@ -385,11 +544,9 @@ const CreateTeam = () => {
                 }}
                 variant="outlined"
               />
-              <CuButton
-                message="등록하기"
-                action={onHandlerFinish}
-                variant="contained"
-              />
+              <Button variant="contained" type="submit">
+                등록
+              </Button>
             </Stack>
           </Stack>
         </form>

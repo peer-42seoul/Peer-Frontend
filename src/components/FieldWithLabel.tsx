@@ -1,4 +1,10 @@
-import { InputLabel, Stack, Typography, TypographyProps } from '@mui/material'
+import {
+  FormHelperText,
+  InputLabel,
+  Stack,
+  Typography,
+  TypographyProps,
+} from '@mui/material'
 
 interface IFieldWithLabelProps {
   labelIcon?: React.ReactNode
@@ -6,6 +12,7 @@ interface IFieldWithLabelProps {
   id?: string
   labelProps?: TypographyProps
   children: React.ReactNode
+  formHelperText?: string
 }
 
 const FieldWithLabel = (props: IFieldWithLabelProps) => {
@@ -30,6 +37,11 @@ const FieldWithLabel = (props: IFieldWithLabelProps) => {
         </Stack>
       </InputLabel>
       {props.children}
+      <FormHelperText>
+        <Typography variant={'Caption'} color={'error'} height={'1.125rem'}>
+          {props?.formHelperText}
+        </Typography>
+      </FormHelperText>
     </Stack>
   )
 }
