@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectProps } from '@mui/material/Select'
 import { Dispatch, SetStateAction, forwardRef } from 'react'
@@ -39,27 +40,37 @@ const BasicSelect = forwardRef<HTMLInputElement, IBasicSelectProps>(
           '12개월 이상',
         ].map((dueTo, idx) => (
           <MenuItem key={'dueTo' + idx} value={dueTo}>
-            {dueTo}
+            <Typography variant="Body2" color={'text.normal'}>
+              {dueTo}
+            </Typography>
           </MenuItem>
         ))
         break
       case ComponentType.TeamSize:
         options = Array.from({ length: 9 }, (_, index) => (
           <MenuItem key={index + 2} value={index + 2}>
-            {index + 2}
+            <Typography variant="Body2" color={'text.normal'}>
+              {index + 2} 명
+            </Typography>
           </MenuItem>
         ))
         break
       case ComponentType.Place:
         options = [
           <MenuItem key={0} value={'ONLINE'}>
-            온라인
+            <Typography variant="Body2" color={'text.normal'}>
+              온라인
+            </Typography>
           </MenuItem>,
           <MenuItem key={1} value={'OFFLINE'}>
-            오프라인
+            <Typography variant="Body2" color={'text.normal'}>
+              오프라인
+            </Typography>
           </MenuItem>,
           <MenuItem key={2} value={'MIX'}>
-            혼합
+            <Typography variant="Body2" color={'text.normal'}>
+              혼합
+            </Typography>
           </MenuItem>,
         ]
         break
