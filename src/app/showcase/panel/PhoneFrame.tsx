@@ -1,4 +1,5 @@
 import { Box, Card, Stack } from '@mui/material'
+import Image from 'next/image'
 
 const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
   return (
@@ -27,8 +28,8 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
             }}
           />
         </Stack>
-        <Stack>
-          {imageUrl ? (
+        <Stack alignItems={'center'} justifyContent={'center'}>
+          {imageUrl != undefined ? (
             <Box
               component="img"
               src={imageUrl}
@@ -36,18 +37,24 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
                 width: '22.5rem',
                 height: '50rem',
               }}
-              // variant="rounded"
             />
           ) : (
             <Box
-              component="img"
-              src="/images/icons/icon-512x512.png"
+              display={'flex'}
               sx={{
                 width: '22.5rem',
-                height: '50rem',
+                height: '40rem',
               }}
-              // variant="rounded"
-            />
+              alignItems={'center'}
+              justifyContent={'center'}
+            >
+              <Image
+                src={'/icons/ios/1024.png'}
+                alt="logo"
+                width={200}
+                height={200}
+              />
+            </Box>
           )}
         </Stack>
       </Card>
