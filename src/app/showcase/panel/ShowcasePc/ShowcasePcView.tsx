@@ -20,6 +20,7 @@ import { MouseEvent, useCallback, useEffect, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import TagChip from '@/components/TagChip'
 import { useRouter } from 'next/navigation'
+import ToastViewer from '@/components/ToastUIViewer'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -111,7 +112,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
         sx={{
           height: '37rem',
           backgroundColor: 'background.tertiary',
-          width: '25rem',
+          width: '30rem',
         }}
       >
         {data !== undefined ? (
@@ -180,9 +181,9 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                     </Menu>
                   </Stack>
                 </Stack>
-                <Stack
+                {/* <Stack
                   height={'20rem'}
-                  width={'22rem'}
+                  width={'28rem'}
                   whiteSpace={'normal'}
                   overflow={'hidden'}
                   textOverflow={'ellipsis'}
@@ -190,6 +191,19 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                   <Typography sx={{ wordBreak: 'break-word' }}>
                     {data.description}
                   </Typography>
+                </Stack> */}
+                <Stack
+                  height={'20rem'}
+                  width={'28rem'}
+                  whiteSpace={'normal'}
+                  overflow={'hidden'}
+                  textOverflow={'ellipsis'}
+                >
+                  <ToastViewer
+                    initialValue={data.description}
+                    height="20rem"
+                    sx={{ width: '100%', wordBreak: 'break-word' }}
+                  />
                 </Stack>
                 <Stack alignItems={'center'}>
                   <Button
@@ -234,14 +248,15 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                       <Typography color={'text.alternative'}>
                         기술스택
                       </Typography>
+
+                      {data.skill.map((skill, index) => (
+                        <TagChip
+                          key={index}
+                          name={skill.name}
+                          color={skill.color}
+                        />
+                      ))}
                     </Stack>
-                    {data.skill.map((skill, index) => (
-                      <TagChip
-                        key={index}
-                        name={skill.name}
-                        color={skill.color}
-                      />
-                    ))}
                   </Stack>
                 </Stack>
               </Stack>
