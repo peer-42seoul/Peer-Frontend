@@ -1,12 +1,20 @@
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import useAuthStore from '@/states/useAuthStore'
-import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material'
-import RecruitIcon from '@/icons/Nav/RecruitIcon'
-import HitchIcon from '@/icons/Nav/HitchIcon'
-import ShowcaseIcon from '@/icons/Nav/ShowcaseIcon'
-import TeamsIcon from '@/icons/Nav/TeamsIcon'
-import MyPageIcon from '@/icons/Nav/MyPageIcon'
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Paper,
+  Typography,
+} from '@mui/material'
+import {
+  HitchIcon,
+  MyPageIcon,
+  RecruitIcon,
+  ShowcaseIcon,
+  TeamsIcon,
+} from '@/icons/Nav'
+import { bottomNavStyle } from './MobileNav.style'
 
 const MobileNav = () => {
   const [value, setValue] = useState<
@@ -16,21 +24,17 @@ const MobileNav = () => {
   const router = useRouter()
   const { isLogin } = useAuthStore()
 
-  const bottomNavStyle = {
-    minWidth: 'auto',
-    padding: '6px 0',
-  }
-
   useEffect(() => {
     if (pathname === '/') {
       setValue('home')
-    } else if (pathname === '/team-list') {
+    } else if (pathname.startsWith('/team-list')) {
       setValue('team-list')
-    } else if (pathname === '/hitchhiking') {
+    } else if (pathname.startsWith('/hitchhiking')) {
       setValue('hitchhiking')
-    } else if (pathname === '/my-page') {
-      setValue('my-page')
-    } else if (pathname === '/showcase') {
+    } else if (pathname.startsWith('/my-page')) {
+      if (!isLogin) return router.push('/login?redirect=/my-page')
+      else setValue('my-page')
+    } else if (pathname.startsWith('/showcase')) {
       setValue('showcase')
     }
   }, [pathname])
@@ -57,7 +61,7 @@ const MobileNav = () => {
         <BottomNavigationAction
           sx={bottomNavStyle}
           icon={<RecruitIcon />}
-          label="모집글"
+          label={<Typography fontSize={'10px'}>모집글</Typography>}
           value={'home'}
           onClick={() => {
             router.push('/')
@@ -66,7 +70,7 @@ const MobileNav = () => {
         <BottomNavigationAction
           sx={bottomNavStyle}
           icon={<HitchIcon />}
-          label="히치하이킹"
+          label={<Typography fontSize={'10px'}>히치하이킹</Typography>}
           value={'hitchhiking'}
           onClick={() => {
             router.push('/hitchhiking')
@@ -74,7 +78,7 @@ const MobileNav = () => {
         />
         <BottomNavigationAction
           sx={bottomNavStyle}
-          label="쇼케이스"
+          label={<Typography fontSize={'10px'}>쇼케이스</Typography>}
           value={'showcase'}
           onClick={() => {
             router.push('/showcase')
@@ -83,7 +87,7 @@ const MobileNav = () => {
         />
         <BottomNavigationAction
           sx={bottomNavStyle}
-          label="팀페이지"
+          label={<Typography fontSize={'10px'}>팀페이지</Typography>}
           value={'team-list'}
           onClick={() => {
             router.push('/team-list')
@@ -92,10 +96,10 @@ const MobileNav = () => {
         />
         <BottomNavigationAction
           sx={bottomNavStyle}
-          label="내 프로필"
+          label={<Typography fontSize={'10px'}>내 프로필</Typography>}
           value={'my-page'}
           onClick={() => {
-            router.push(isLogin ? '/my-page' : '/login?redirect=/my-page')
+            router.push('/my-page')
           }}
           icon={<MyPageIcon />}
         />

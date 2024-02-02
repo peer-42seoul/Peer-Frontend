@@ -2,30 +2,36 @@
 
 import { Box } from '@mui/material'
 import Header from './layout-panel/Header'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React, { useMemo } from 'react'
 import MobileNav from './layout-panel/MobileNav'
 import PcNav from './layout-panel/PcNav'
+import useAuthStore from '@/states/useAuthStore'
 import useHeaderStore from '@/states/useHeaderStore'
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const { setHeaderTitle } = useHeaderStore()
+  const { isLogin } = useAuthStore()
+  const router = useRouter()
   const pathname = usePathname()
+  const { setHeaderTitle } = useHeaderStore()
+
   const pathTitle = useMemo(() => {
-    switch (pathname) {
-      case '/':
-        return '메인'
-      case '/recruit/write':
-        return '모집글 작성'
-      case '/team-list':
+    if (pathname === '/') {
+      return '메인'
+    } else if (pathname.startsWith('/login')) {
+      return '로그인'
+    } else if (pathname.startsWith('/team-list')) {
+      if (!isLogin) {
+        router.push('/login?redirect=/team-list')
         return '팀페이지'
-      case '/my-page':
-        return '마이페이지'
-      case '/my-page/profile':
-        return '마이페이지'
-      default:
-        setHeaderTitle('')
+      } else if (pathname.startsWith('/my-page')) {
+        if (!isLogin) {
+          router.push('/login?redirect=/my-page')
+          return undefined
+        } else return '마이페이지'
+      } else {
         return undefined
+      }
     }
   }, [pathname])
 
@@ -38,10 +44,10 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   //   return (
   //     <Box sx={{ backgroundColor: 'background.primary' }}>
   //       <div className="mobile-layout">
-  //         <Box sx={{ marginBottom: '60px' }}>{children}</Box>
+  //         <Box sx={{ marginBottom: '64px' }}>{children}</Box>
   //       </div>
   //       <div className="pc-layout">
-  //         <Box sx={{ marginY: '60px' }}>{children}</Box>
+  //         <Box sx={{ marginY: '64px' }}>{children}</Box>
   //       </div>
   //     </Box>
   //   )
