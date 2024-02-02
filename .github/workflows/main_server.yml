@@ -96,3 +96,15 @@ jobs:
             docker run -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
             docker container prune -f
             docker image prune -f
+
+  create-release:
+    needs: [CD, extract-version]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: create release
+        uses: ncipollo/release-action@v1.13.0
+        with:
+          tag: ${{ needs.extract-version.outputs.version }}
+          name: ${{ needs.extract-version.outputs.version }}
