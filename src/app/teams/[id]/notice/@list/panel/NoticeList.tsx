@@ -21,7 +21,7 @@ const NoticeList = ({
   const { setNotice } = useTeamPageState()
   const { data, error, isLoading, size, setSize, targetRef } =
     useInfiniteSWRScroll(
-      `/api/v1/team-page/notice/${teamId}?&keyword=${keyword}pageSize=${10}`,
+      `/api/v1/team-page/notice/${teamId}?keyword=&${keyword}pageSize=${10}`,
       (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     )
   useEffect(() => {
