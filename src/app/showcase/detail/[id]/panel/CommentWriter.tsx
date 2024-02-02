@@ -6,6 +6,7 @@ import { TextField } from '@mui/material'
 import { Container, IconButton, Stack } from '@mui/material'
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { mutate as mutateType } from 'swr'
+import * as style from './CommentWriter.style'
 
 export const CommentWriter = ({
   postId,
@@ -60,57 +61,18 @@ export const CommentWriter = ({
   }
 
   return (
-    <Container
-      sx={{
-        width: '100%',
-        height: '3.5rem',
-        backgroundColor: 'background.tertiary',
-      }}
-    >
-      <Stack
-        sx={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'background.tertiary',
-        }}
-      >
-        <form
-          onSubmit={submitContent}
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-          }}
-        >
-          <Stack
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              gap: '1rem',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
+    <Container sx={style.writerWrapper}>
+      <Stack sx={style.writerContainer}>
+        <form onSubmit={submitContent} style={style.writerForm}>
+          <Stack sx={style.writerInputContainer}>
             <TextField
               type="text"
               value={content}
               onChange={onChangeContent}
               placeholder="댓글을 작성해주세요."
-              style={{
-                width: '100%',
-                height: '100%',
-                justifyContent: 'center',
-                color: 'text.alternative',
-              }}
+              style={style.writerInput}
             />
-            <IconButton
-              type="submit"
-              style={{
-                width: '1.5rem',
-                height: '1.5rem',
-              }}
-            >
+            <IconButton type="submit" style={style.writerButton}>
               <SendIcon />
             </IconButton>
           </Stack>
