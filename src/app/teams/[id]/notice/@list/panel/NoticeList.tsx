@@ -25,8 +25,8 @@ const NoticeList = ({
       (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     )
   useEffect(() => {
-    // keyword가 바뀔 때마다 size를 0으로 초기화 (size의 초깃값은 0입니다.)
-    if (!isLoading && size !== 0) setSize(0)
+    // keyword가 바뀔 때마다 size를 1로 초기화 (다시 첫 페이지부터 불러오기)
+    if (!isLoading && size !== 1) setSize(1)
   }, [keyword])
 
   if (!data || error) return <StatusMessage message="문제가 발생했습니다." />
