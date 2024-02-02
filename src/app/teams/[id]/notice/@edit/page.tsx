@@ -24,7 +24,7 @@ const NoticeEdit = ({ params }: { params: { id: string } }) => {
       title={postId ? '공지사항 수정' : '공지사항 작성'}
     >
       <EditBox>
-        <NoticeEditForm teamId={id} />
+        <NoticeEditForm teamId={id} postId={postId} />
         {isPc && <NoticeEditButton />}
       </EditBox>
     </EditPage>

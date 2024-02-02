@@ -10,7 +10,7 @@ const NoticeEditForm = ({
   postId,
 }: {
   teamId: string
-  postId?: string
+  postId?: number
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { setNotice } = useTeamPageState()
@@ -56,24 +56,26 @@ const NoticeEditForm = ({
         .put(`/api/v1/team/post/${postId}`, form)
         .then(() => {
           alert('공지사항을 수정했습니다.')
+          setNotice('DETAIL', postId)
         })
         .catch(() => {
           alert('공지사항 수정에 실패했습니다.')
         })
+    } else {
+      // 글 작성
+      axiosWithAuth
+        .post(`/api/v1/team-page/notice/create`, {
+          ...form,
+          teamId,
+        })
+        .then((res) => {
+          alert('공지사항이 등록되었습니다.')
+          setNotice('DETAIL', res.data.postId)
+        })
+        .catch(() => {
+          alert('공지사항 작성에 실패했습니다.')
+        })
     }
-    // 글 작성
-    axiosWithAuth
-      .post(`/api/v1/team-page/notice/create`, {
-        ...form,
-        teamId,
-      })
-      .then((res) => {
-        alert('공지사항이 등록되었습니다.')
-        setNotice('DETAIL', res.data.postId)
-      })
-      .catch(() => {
-        alert('공지사항 작성에 실패했습니다.')
-      })
   }
 
   return (
