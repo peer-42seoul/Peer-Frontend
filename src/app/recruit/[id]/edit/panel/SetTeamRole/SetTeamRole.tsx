@@ -1,17 +1,18 @@
 import { Box, Button, FormControl, Stack, TextField } from '@mui/material'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import BasicSelectMember from './BasicSelectMember'
 import { IRoleWrite } from '@/types/IPostDetail'
 import useMedia from '@/hook/useMedia'
 import { CloseIcon } from '@/icons'
 
+// 해당 컴포넌트에는 react-hook-form을 제대로 적용하지 않았습니다.
 const SetTeamRole = ({
   roleData,
   setRoleData,
   disabled,
 }: {
   roleData: IRoleWrite[]
-  setRoleData: Dispatch<SetStateAction<IRoleWrite[]>>
+  setRoleData: (roleData: IRoleWrite[]) => void
   disabled?: boolean
 }) => {
   const [role, setRole] = useState<string>('')
@@ -62,7 +63,7 @@ const SetTeamRole = ({
         </Button>
       </Stack>
       <FormControl>
-        {roleData.map((data, index) => {
+        {roleData?.map((data, index) => {
           if (data.name === '' || data.number === 0) {
             return
           }

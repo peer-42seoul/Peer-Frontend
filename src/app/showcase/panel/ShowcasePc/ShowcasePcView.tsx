@@ -21,6 +21,7 @@ import useAxiosWithAuth from '@/api/config'
 import TagChip from '@/components/TagChip'
 import { useRouter } from 'next/navigation'
 import ToastViewer from '@/components/ToastUIViewer'
+import NoDataDolphin from '@/components/NoDataDolphin'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -263,7 +264,17 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
             </CardContent>
           </CardActions>
         ) : (
-          <Typography>데이터가 없습니다.</Typography>
+          <Stack
+            width={'25rem'}
+            height={'37rem'}
+            alignItems={'center'}
+            justifyContent={'center'}
+          >
+            <NoDataDolphin
+              message="비어있네요 😭"
+              backgroundColor="background.tertiray"
+            />
+          </Stack>
         )}
       </Card>
     </Stack>

@@ -10,7 +10,6 @@ const OauthLogin = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { login } = useAuthStore()
-
   useEffect(() => {
     const accessToken = searchParams.get('accessToken')
     if (accessToken) {

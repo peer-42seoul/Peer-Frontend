@@ -1,7 +1,7 @@
 'use client'
 import { Stack, Box, Typography } from '@mui/material'
 import React from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import ImageIcon from '@/icons/ImageIcon'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import * as Style from './SkillInput.style'

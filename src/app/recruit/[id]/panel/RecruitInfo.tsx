@@ -7,6 +7,7 @@ import {
   RecruitTitle,
   TypeChip,
 } from '@/app/recruit/[id]/panel/RecruitInfoElement'
+import OthersProfile from '@/app/panel/OthersProfile'
 
 interface RecruitInfoProps {
   data: IPostDetail
@@ -31,7 +32,12 @@ const RecruitInfo = ({ data, type, children, pc }: RecruitInfoProps) => {
               <RecruitTitle title={data?.title} status={data?.status} />
             </Stack>
             <Stack gap={'1rem'} direction="row" alignItems={'center'}>
-              <Avatar alt="avatar" src={data?.leader_image} sizes={'small'} />
+              <OthersProfile
+                userId={data?.leader_id}
+                name={data?.leader_nickname}
+              >
+                <Avatar alt="avatar" src={data?.leader_image} sizes={'small'} />
+              </OthersProfile>
               <Typography variant={'Body2'}>{data?.teamName}</Typography>
               <LinkButton href={data?.link} variant={'contained'} />
             </Stack>
@@ -60,7 +66,12 @@ const RecruitInfo = ({ data, type, children, pc }: RecruitInfoProps) => {
           justifyContent={'space-between'}
         >
           <Stack flexDirection={'row'} alignItems={'center'} gap={'0.5rem'}>
-            <Avatar alt="avatar" src={data?.leader_image} sizes={'small'} />
+            <OthersProfile
+              userId={data?.leader_id}
+              name={data?.leader_nickname}
+            >
+              <Avatar alt="avatar" src={data?.leader_image} sizes={'small'} />
+            </OthersProfile>
             <Typography variant={'Body2'}>{data?.teamName}</Typography>
           </Stack>
           <LinkButton href={data?.link} variant={'contained'} />

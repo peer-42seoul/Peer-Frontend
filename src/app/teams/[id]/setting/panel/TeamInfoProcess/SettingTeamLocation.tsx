@@ -3,6 +3,7 @@ import { GeoClearIcon } from '../Icons'
 import { Control, Controller } from 'react-hook-form'
 import { locationData } from '@/api/location'
 import { ISetupTeam } from '../SettingTeamInfo'
+import useMedia from '@/hook/useMedia'
 
 interface ISettingTeamLocation {
   teamLocation: string[]
@@ -13,12 +14,13 @@ const SettingTeamLocation = ({
   teamLocation,
   control,
 }: ISettingTeamLocation) => {
+  const isPc = useMedia()
   return (
     <Stack
-      direction={'row'}
-      alignItems={'center'}
+      direction={!isPc ? 'row' : 'column'}
+      alignItems={!isPc ? 'center' : 'flex-start'}
       spacing={'0.5rem'}
-      mx={'0.5rem'}
+      mx={!isPc ? '0.5rem' : ''}
     >
       <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.35rem'}>
         <GeoClearIcon />

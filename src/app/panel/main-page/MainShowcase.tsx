@@ -3,6 +3,7 @@
 import { defaultGetFetcher } from '@/api/fetchers'
 import { ICardData } from '@/app/showcase/panel/types'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import NoDataDolphin from '@/components/NoDataDolphin'
 import { IPagination } from '@/types/IPagination'
 import { Box, Stack, Typography, Button, Card, Avatar } from '@mui/material'
 import Image from 'next/image'
@@ -17,15 +18,22 @@ const MainShowcase = () => {
     defaultGetFetcher,
   )
 
+  console.log(data)
+
   const handleClick = useCallback(() => {
-    var id = data?.content[0].id
+    if (data?.content.length === 0) return
+    const id = data?.content[0].id
     if (!id) return
-    router.push(`/showcase/${data?.content[0].id}`)
-  }, [data?.content[0].id])
+    router.push(`/showcase/detail/${data?.content[0].id}`)
+  }, [data?.content])
 
   return (
     <Box height={'400px'}>
-      <Stack justifyContent={'space-between'} direction="row">
+      <Stack
+        justifyContent={'space-between'}
+        direction="row"
+        alignItems={'center'}
+      >
         <Typography variant="Body1">쇼케이스</Typography>
         <Button onClick={handleClick} variant="text">
           더보기
@@ -34,7 +42,11 @@ const MainShowcase = () => {
 
       {isLoading && <CuCircularProgress color="primary" />}
 
-      {error && <Typography>에러 발생</Typography>}
+      {error && <NoDataDolphin message="문제가 있어요 😰" />}
+
+      {data?.content.length === 0 && (
+        <NoDataDolphin message="아직 비어있어요 😰" />
+      )}
 
       {data && data.content[0] && (
         <Stack alignItems={'center'} position={'relative'}>

@@ -14,7 +14,7 @@ const BackIcon = (props: SvgIconProps) => {
           <path
             id="Vector"
             d="M12.5 15L7.5 10L12.5 5"
-            stroke="white"
+            stroke="currentColor"
             strokeWidth="1.25"
             strokeLinecap="round"
             strokeLinejoin="round"

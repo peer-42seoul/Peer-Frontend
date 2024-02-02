@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import BoxBase from '@/components/BoxBase'
+import PrivacyPolicy from './panel/PrivacyPolicy'
 
 const PCSignupBox = {
   display: 'flex',
@@ -62,33 +63,46 @@ const Policy1 =
 
 const Privacy = () => {
   const { isPc } = useMedia()
-  const [checkAll, setCheckAll] = useState<boolean>(false)
   const [checkStatus, setCheckStatus] = useState<boolean[]>([false, false])
-  const [disabled, setDisabled] = useState<boolean>(true)
+  const [signedDate, setSignedDate] = useState<[string, string]>(['', ''])
+
   const router = useRouter()
   const searchParams = useSearchParams()
   const socialEmail = searchParams.get('social-email')
 
-  // 로그인 상태일 경우 메인 페이지로 이동
   useEffect(() => {
+    // 로그인 상태일 경우 메인 페이지로 이동
     const isLogin = useAuthStore.getState().isLogin
     if (isLogin) router.replace('/')
   }, [])
 
-  useEffect(() => {
-    if (!checkStatus[0] || !checkStatus[1]) {
-      setCheckAll(false)
-    }
-    if (checkStatus[0] && checkStatus[1]) {
-      setDisabled(false)
-    } else setDisabled(true)
-  }, [checkStatus])
-
   const onClick = () => {
     if (checkStatus[0] && checkStatus[1])
-      router.push(
-        socialEmail ? '/signup' + '?social-email=' + socialEmail : '/signup',
-      )
+      router.push(`/signup?service-agreement=${
+        signedDate[0]
+      }&privacy-agreement=${signedDate[1]}
+        ${socialEmail && '&social-email=' + socialEmail}`)
+  }
+
+  const handleCheckAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckStatus([event.target.checked, event.target.checked])
+    if (event.target.checked) {
+      setSignedDate([new Date().toISOString(), new Date().toISOString()])
+    }
+  }
+
+  const handleCheckServiceUse = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setCheckStatus((prev) => [event.target.checked, prev[1]])
+    if (event.target.checked)
+      setSignedDate((prev) => [new Date().toISOString(), prev[1]])
+  }
+
+  const handlePrivacy = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckStatus((prev) => [prev[0], event.target.checked])
+    if (event.target.checked)
+      setSignedDate((prev) => [prev[0], new Date().toISOString()])
   }
 
   return (
@@ -98,17 +112,16 @@ const Privacy = () => {
         <Stack gap={'16px'}>
           <Stack>
             <FormControlLabel
-              control={<Checkbox />}
+              control={
+                <Checkbox
+                  checked={checkStatus[0] && checkStatus[1]}
+                  indeterminate={checkStatus[0] !== checkStatus[1]}
+                  onChange={handleCheckAll}
+                />
+              }
               label={
                 <Typography variant="CaptionEmphasis">전체동의</Typography>
               }
-              onChange={() => {
-                if (checkAll === false) setCheckStatus([true, true])
-                else if (checkAll === true && checkStatus[0] && checkStatus[1])
-                  setCheckStatus([false, false])
-                setCheckAll(!checkAll)
-              }}
-              checked={checkAll}
             />
             <Typography variant="Caption">
               실명 인증된 아이디로 가입,이벤트 혜택 정보 수신(선택) 동의를
@@ -117,10 +130,7 @@ const Privacy = () => {
           </Stack>
           <Stack>
             <FormControlLabel
-              control={<Checkbox />}
-              onChange={() => {
-                setCheckStatus([!checkStatus[0], checkStatus[1]])
-              }}
+              control={<Checkbox onChange={handleCheckServiceUse} />}
               label={
                 <Typography
                   variant="CaptionEmphasis"
@@ -139,7 +149,7 @@ const Privacy = () => {
           </Stack>
           <Stack>
             <FormControlLabel
-              control={<Checkbox />}
+              control={<Checkbox onChange={handlePrivacy} />}
               label={
                 <Typography
                   variant="CaptionEmphasis"
@@ -148,15 +158,10 @@ const Privacy = () => {
                   [필수] 개인정보 수집 및 이용
                 </Typography>
               }
-              onChange={() => {
-                setCheckStatus([checkStatus[0], !checkStatus[1]])
-              }}
               checked={checkStatus[1]}
             />
             <Paper sx={isPc ? PCPaper : MobilePaper}>
-              <Typography variant="Caption" color={'text.alternative'}>
-                {Policy1}
-              </Typography>
+              <PrivacyPolicy />
             </Paper>
           </Stack>
         </Stack>
@@ -164,7 +169,7 @@ const Privacy = () => {
           message={'다음'}
           action={onClick}
           variant={'contained'}
-          disabled={disabled}
+          disabled={!checkStatus[0] || !checkStatus[1]}
           fullWidth
         />
       </BoxBase>

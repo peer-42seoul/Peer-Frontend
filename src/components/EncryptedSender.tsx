@@ -12,14 +12,20 @@ const EncryptedSender = ({
   setPayload,
   setIsLoading,
   needToken = false,
+  onSuccess,
+  onError,
+  axiosOption,
 }: {
   children: React.ReactNode
   payload: any
-  setData: (data: { code: string }) => void
+  setData?: (data: any) => void
   apiType: EApiType
   setPayload: (payload: any) => void
   setIsLoading?: (isLoading: boolean) => void
   needToken?: boolean
+  onSuccess?: () => void
+  onError?: (message: string) => void
+  axiosOption?: any
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -56,23 +62,29 @@ const EncryptedSender = ({
 
     if (!needToken) {
       await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`, {
-          code: verifyCode,
-          token: payloadToken,
-        })
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`,
+          {
+            code: verifyCode,
+            token: payloadToken,
+          },
+          axiosOption,
+        )
         .then((res) => {
-          console.log(res)
-          setData(res.data)
+          if (setData) setData(res.data ?? null)
         })
     } else {
       await axiosWithAuth
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`, {
-          code: verifyCode,
-          token: payloadToken,
-        })
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`,
+          {
+            code: verifyCode,
+            token: payloadToken,
+          },
+          axiosOption,
+        )
         .then((res) => {
-          console.log(res)
-          setData(res.data)
+          if (setData) setData(res.data ?? null)
         })
     }
   }
@@ -84,9 +96,12 @@ const EncryptedSender = ({
       }
       if (setIsLoading) setIsLoading(true)
       await getStatus(payload)
+      if (onSuccess) onSuccess()
       if (setIsLoading) setIsLoading(false)
-    } catch (e) {
+    } catch (e: any) {
       console.log(e)
+      if (onError)
+        onError(e?.response?.data?.message ?? '알 수 없는 오류가 발생했습니다.')
       if (setIsLoading) setIsLoading(false)
       setPayload(null)
     }
@@ -94,6 +109,11 @@ const EncryptedSender = ({
 
   useEffect(() => {
     apiSend()
+
+    return () => {
+      setPayload(null)
+      if (setData) setData(null)
+    }
   }, [apiSend])
 
   return <>{children}</>

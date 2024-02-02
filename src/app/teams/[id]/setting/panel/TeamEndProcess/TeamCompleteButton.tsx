@@ -20,7 +20,7 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
   const finishTeam = () => {
     console.log('exit team')
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/finish`, {
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/complete`, {
         teamId: teamId,
       })
       .then((res) => {
@@ -59,7 +59,7 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
           console.log(res)
           openToast({
             severity: 'error',
-            message: '팀 해산에 실패하였습니다.',
+            message: '팀 활동 완료에 실패하였습니다.',
           })
         }
       })
@@ -67,9 +67,10 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
         console.log(err)
         openToast({
           severity: 'error',
-          message: '팀 해산에 실패하였습니다.',
+          message: '팀 활동 완료에 실패하였습니다.',
         })
       })
+    closeModal()
   }
 
   return (
@@ -79,13 +80,18 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Typography>팀을 나가겠습니까?</Typography>
+        <Typography>팀 활동을 완료하겠습니까?</Typography>
         <Button
-          disabled={teamStatus === TeamStatus.RECRUITING ? true : false}
+          disabled={
+            teamStatus === TeamStatus.RECRUITING ||
+            teamStatus === TeamStatus.COMPLETE
+              ? true
+              : false
+          }
           variant="contained"
           onClick={openModal}
         >
-          <Typography>팀 나가기</Typography>
+          <Typography>완료하기</Typography>
         </Button>
       </Stack>
 

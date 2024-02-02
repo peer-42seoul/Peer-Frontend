@@ -1,7 +1,7 @@
 import React from 'react'
 import { Typography } from '@mui/material'
+import { ICuModalProps } from '@/types/ModalTypes'
 import CuModal from './CuModal'
-import { ICuModalProps } from './CuModal'
 
 interface ICuTextModal extends Omit<ICuModalProps, 'children'> {
   content: string

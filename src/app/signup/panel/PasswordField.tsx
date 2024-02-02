@@ -1,24 +1,28 @@
 import React, { useState } from 'react'
 
-import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import EyeIcon from '@/components/EyeIcon'
-import { ControllerRenderProps } from 'react-hook-form'
+import { Control, ControllerRenderProps, useFormState } from 'react-hook-form'
 import { ISignUpInputs } from '@/types/ISignUpInputs'
 import CheckIcon from '@mui/icons-material/Check'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import { TextField } from '@mui/material'
 
 const PasswordField = ({
   field,
+  control,
 }: {
+  control: Control<ISignUpInputs, any>
   field: ControllerRenderProps<ISignUpInputs, 'password'>
 }) => {
   const [showPassword, setShowPassword] = useState<'password' | 'text'>(
     'password',
   )
+
+  const { errors } = useFormState({ control })
 
   const deletePassword = () => {
     field.onChange('')
@@ -35,15 +39,16 @@ const PasswordField = ({
       <CuTextFieldLabel htmlFor="password">
         <Typography variant="Caption">비밀번호</Typography>
       </CuTextFieldLabel>
-      <CuTextField
+      <TextField
         {...field}
         autoComplete="new-password"
-        error={false}
-        type={showPassword}
+        error={errors.password !== undefined}
         placeholder="비밀번호를 입력하세요."
         inputProps={{
           minLength: 8,
           maxLength: 20,
+          pattern: '[A-Za-z0-9!@#$%^&*]*',
+          type: showPassword,
         }}
         onFocus={() => {
           setShowValidating(true)

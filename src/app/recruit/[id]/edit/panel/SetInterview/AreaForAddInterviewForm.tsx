@@ -39,6 +39,7 @@ const AreaForAddInterviewForm = ({
   setFormType,
   answer,
   setAnswer,
+  interviewData,
   setInterviewData,
 }: {
   question: string
@@ -47,7 +48,8 @@ const AreaForAddInterviewForm = ({
   setFormType: Dispatch<SetStateAction<string>>
   answer: string[]
   setAnswer: Dispatch<SetStateAction<string[]>>
-  setInterviewData: Dispatch<SetStateAction<IFormInterview[]>>
+  interviewData: IFormInterview[]
+  setInterviewData: (value: Array<IFormInterview>) => void
 }) => {
   const [option, setOption] = useState<string[]>([])
   const [max, setMax] = useState<string>('5')
@@ -73,8 +75,8 @@ const AreaForAddInterviewForm = ({
           alert('모든 값을 입력해주세요')
           return
         }
-        setInterviewData((prev) => [
-          ...prev,
+        setInterviewData([
+          ...interviewData,
           {
             question: question,
             type: formType,
@@ -101,8 +103,8 @@ const AreaForAddInterviewForm = ({
         if (question === '' || formType === '' || option.length === 0) return
       }
     }
-    setInterviewData((prev) => [
-      ...prev,
+    setInterviewData([
+      ...interviewData,
       {
         question: question,
         type: formType,

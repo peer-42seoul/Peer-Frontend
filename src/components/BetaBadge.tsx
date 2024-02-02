@@ -9,13 +9,7 @@ const BetaIcon = createSvgIcon(
     xmlns="http://www.w3.org/2000/svg"
   >
     <g filter="url(#filter0_d_3_52)">
-      <rect
-        x="4"
-        width="300"
-        height="180"
-        rx="12"
-        fill="url(#paint0_linear_3_52)"
-      />
+      <rect x="4" width="250" height="120" rx="12" fill="#EB4034" />
     </g>
     <g filter="url(#filter1_d_3_52)">
       <path
@@ -94,17 +88,6 @@ const BetaIcon = createSvgIcon(
           result="shape"
         />
       </filter>
-      <linearGradient
-        id="paint0_linear_3_52"
-        x1="129"
-        y1="0"
-        x2="129"
-        y2="120"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#F43434" />
-        <stop offset="1" stopColor="#630808" />
-      </linearGradient>
     </defs>
   </svg>,
   'BetaIcon',

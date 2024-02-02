@@ -341,7 +341,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 <BasicSelect
                   type={ComponentType.TeamSize}
                   value={teamsize}
-                  setValue={setTeamsize}
+                  setvalue={setTeamsize}
                 />
               </Box>
             )}
@@ -354,7 +354,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
               <BasicSelect
                 type={ComponentType.Place}
                 value={place}
-                setValue={setPlace}
+                setvalue={setPlace}
               />
             </Box>
             {/* 목표기간 */}
@@ -366,7 +366,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
               <BasicSelect
                 type={ComponentType.Month}
                 value={due}
-                setValue={setMonth}
+                setvalue={setMonth}
               />
             </Box>
             {/* 지역 선택 */}
