@@ -7,7 +7,7 @@ const AreaForShowAnswers = ({
   setInterviewData,
 }: {
   interviewData: IFormInterview[]
-  setInterviewData: React.Dispatch<React.SetStateAction<IFormInterview[]>>
+  setInterviewData: (value: Array<IFormInterview>) => void
 }) => {
   const onHandlerRemove = (index: number) => {
     setInterviewData(interviewData.filter((_, i) => i !== index))

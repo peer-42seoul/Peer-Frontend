@@ -24,7 +24,7 @@ export const SetInterview = ({
   openBasicModal: boolean
   handleCloseBasicModal: Dispatch<SetStateAction<boolean>>
   interviewData: IFormInterview[]
-  setInterviewData: React.Dispatch<React.SetStateAction<IFormInterview[]>>
+  setInterviewData: (value: Array<IFormInterview>) => void
 }) => {
   const [question, setQuestion] = useState<string>('')
   const [formType, setFormType] = useState<string>('OPEN')
@@ -59,6 +59,7 @@ export const SetInterview = ({
           setFormType={setFormType}
           answer={answer}
           setAnswer={setAnswer}
+          interviewData={interviewData}
           setInterviewData={setInterviewData}
         />
         {/* 만들어진 질문 답변 칸 보기 */}
