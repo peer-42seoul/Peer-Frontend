@@ -2,7 +2,7 @@ name: Main CI/CD
 
 on:
   pull_request:
-    branches: ['env/main_cicd']
+    branches: ['main']
     types: ['closed']
 
 permissions:
@@ -38,7 +38,7 @@ jobs:
       - name: Extract version
         id: extract-version
         run: |
-          echo "Extract version: this version is $(echo "$(git show -s --format=%s)" | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')" >> "$GITHUB_OUTPUT"
+          echo "version=$(echo "$(git show -s --format=%s)" | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')" >> "$GITHUB_OUTPUT"
 
   CI:
     name: Main Server CI Check
