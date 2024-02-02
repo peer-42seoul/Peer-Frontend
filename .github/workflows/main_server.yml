@@ -89,7 +89,7 @@ jobs:
           host: ${{ secrets.MAIN_HOST }}
           port: 4222
           username: ${{ secrets.MAIN_USERNAME }}
-          key: ${{ secrets.MAIN_KEY }}
+          password: ${{ secrets.MAIN_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
             docker rm -f ${{ secrets.MAIN_DOCKER_IMAGE }}
