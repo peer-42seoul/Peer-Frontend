@@ -20,8 +20,8 @@ import { MouseEvent, useCallback, useEffect, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import TagChip from '@/components/TagChip'
 import { useRouter } from 'next/navigation'
-import ToastViewer from '@/components/ToastUIViewer'
 import NoDataDolphin from '@/components/NoDataDolphin'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -200,10 +200,13 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                   overflow={'hidden'}
                   textOverflow={'ellipsis'}
                 >
-                  <ToastViewer
+                  <DynamicToastViewer
                     initialValue={data.description}
-                    height="20rem"
-                    sx={{ width: '100%', wordBreak: 'break-word' }}
+                    sx={{
+                      width: '100%',
+                      wordBreak: 'break-word',
+                      height: '20rem',
+                    }}
                   />
                 </Stack>
                 <Stack alignItems={'center'}>
