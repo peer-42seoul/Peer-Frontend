@@ -50,6 +50,8 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
 
   if (isLoading) return <Typography>로딩중</Typography>
 
+  console.log(data)
+
   return (
     <Stack
       margin={4}
