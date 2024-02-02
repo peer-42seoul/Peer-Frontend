@@ -32,6 +32,8 @@ import MainBanner from '@/app/panel/main-page/MainBanner'
 import io from 'socket.io-client'
 import { getCookie } from 'cookies-next'
 import useSocket from '@/states/useSocket'
+import Tutorial from '@/components/Tutorial'
+import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -319,7 +321,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
               <MainBanner />
-              <SelectType type={type} setType={handleType} />
+              <Stack direction={'row'} justifyContent={'space-between'}>
+                <SelectType type={type} setType={handleType} />
+                <Tutorial
+                  title={'프로젝트 검색'}
+                  content={<MainPageTutorial />}
+                />
+              </Stack>
               <Grid container bgcolor={'Background.primary'}>
                 <SearchOption
                   openOption={openOption}
