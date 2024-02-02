@@ -14,11 +14,14 @@ import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from '@/components/board/CommentList'
 import { CommentForm } from '@/components/board/CommentForm'
+import CuTextModal from '@/components/CuTextModal'
+import useModal from '@/hook/useModal'
 
 const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
   const axiosWithAuth = useAxiosWithAuth()
   const { postId, setNotice } = useTeamPageState()
+  const { isOpen, openModal, closeModal } = useModal()
   const { data, error, isLoading } = useSWR<ITeamNoticeDetail>(
     `/api/v1/team-page/post/${postId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
@@ -26,8 +29,6 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const { isPc } = useMedia()
 
   const handleDelete = () => {
-    const confirm = window.confirm('공지사항을 삭제하시겠습니까?')
-    if (!confirm) return
     axiosWithAuth
       .delete(`/api/v1/team/notice/${postId}`)
       .then(() => {
@@ -61,50 +62,66 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
       />
     )
   return (
-    <DetailPage handleGoBack={handleGoBack}>
-      {isPc && (
-        <CuButton
-          message={'이전 페이지'}
-          action={handleGoBack}
-          variant={'text'}
-          TypographyProps={{
-            color: 'text.strong',
-            variant: 'Body2Emphasis',
-          }}
-          style={{ width: 'fit-content' }}
-        />
-      )}
-      <DetailContentCotainer
-        containerTitle={'공지사항'}
-        onClickEditButton={() => setNotice('EDIT', postId)}
-        author={data.isAuthor}
-      >
-        <DetailContent
-          title={data.title}
-          createdAt={data.createdAt}
-          authorNickname={data.authorNickname}
-          content={data.content}
-        />
-        {data.isAuthor && (
-          <Stack alignItems={'flex-end'}>
-            <CuButton
-              message={'삭제'}
-              action={handleDelete}
-              variant={'text'}
-              TypographyProps={{
-                color: 'red.normal',
-                variant: 'Caption',
-              }}
-              style={{ width: 'fit-content' }}
-            />
-          </Stack>
+    <>
+      <DetailPage handleGoBack={handleGoBack}>
+        {isPc && (
+          <CuButton
+            message={'이전 페이지'}
+            action={handleGoBack}
+            variant={'text'}
+            TypographyProps={{
+              color: 'text.strong',
+              variant: 'Body2Emphasis',
+            }}
+            style={{ width: 'fit-content' }}
+          />
         )}
-      </DetailContentCotainer>
-      <Stack>
-        <CommentList postId={postId} />
-        <CommentForm postId={postId} teamId={parseInt(teamId)} />
-      </Stack>
-    </DetailPage>
+        <DetailContentCotainer
+          containerTitle={'공지사항'}
+          onClickEditButton={() => setNotice('EDIT', postId)}
+          author={data.isAuthor}
+        >
+          <DetailContent
+            title={data.title}
+            createdAt={data.createdAt}
+            authorNickname={data.authorNickname}
+            content={data.content}
+          />
+          {data.isAuthor && (
+            <Stack alignItems={'flex-end'}>
+              <CuButton
+                message={'삭제'}
+                action={openModal}
+                variant={'text'}
+                TypographyProps={{
+                  color: 'red.normal',
+                  variant: 'Caption',
+                }}
+                style={{ width: 'fit-content' }}
+              />
+            </Stack>
+          )}
+        </DetailContentCotainer>
+        <Stack>
+          <CommentList postId={postId} />
+          <CommentForm postId={postId} teamId={parseInt(teamId)} />
+        </Stack>
+      </DetailPage>
+      <CuTextModal
+        open={isOpen}
+        title={'공지사항을 삭제할까요?'}
+        onClose={closeModal}
+        content={'공지사항을 삭제하면 복구할 수 없어요.'}
+        containedButton={{
+          text: '삭제',
+          onClick: handleDelete,
+        }}
+        textButton={{
+          text: '취소',
+          onClick: closeModal,
+        }}
+      />
+    </>
   )
 }
 
