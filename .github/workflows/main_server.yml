@@ -73,15 +73,12 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/checkout@v2
 
       - name: Build and push Docker image
         run: |
-          touch ${{ secrets.WORK_DIRECTORY }}/.env.production
-          echo "${{ secrets.MAIN_ENV }}" >> /home/runner/work/Peer-Frontend/Peer-Frontend/.env.production
+          touch .env.production
+          echo "${{ secrets.MAIN_ENV }}" >> .env.production
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin 
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
