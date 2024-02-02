@@ -7,13 +7,11 @@ import React, { useMemo } from 'react'
 import MobileNav from './layout-panel/MobileNav'
 import PcNav from './layout-panel/PcNav'
 import useAuthStore from '@/states/useAuthStore'
-import useHeaderStore from '@/states/useHeaderStore'
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isLogin } = useAuthStore()
   const router = useRouter()
   const pathname = usePathname()
-  const { setHeaderTitle } = useHeaderStore()
 
   const pathTitle = useMemo(() => {
     if (pathname === '/') {
@@ -68,7 +66,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <Box sx={{ backgroundColor: 'background.primary', minHeight: '100svh' }}>
+    <Box sx={{ backgroundColor: 'background.primary', minHeight: '100dvh' }}>
       <div className="mobile-layout">
         <Header title={pathTitle} onlyTitle={pathTitle === '마이페이지'} />
         {/* margin은 header와 bottom appbar의 크기 */}
