@@ -90,7 +90,7 @@ const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
 const CommentList = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
-    `/api/v1/team/notice/answer/${postId}`,
+    `/api/v1/team/post/comment/${postId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 

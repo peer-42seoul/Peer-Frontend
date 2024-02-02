@@ -31,7 +31,7 @@ const Comment = ({ comment, postId }: ICommentProps) => {
       })
       .then(() => {
         openToast({ severity: 'success', message: '댓글을 수정했습니다.' })
-        mutate(`/api/v1/team/post/comment/${postId}?page=1&pageSize=100`) // 댓글 데이터 만료
+        mutate(`/api/v1/team/post/comment/${postId}`) // 댓글 데이터 만료
         setIsEditMode(false)
       })
       .catch(() => {
@@ -46,7 +46,7 @@ const Comment = ({ comment, postId }: ICommentProps) => {
       .delete(`/api/v1/team/post/comment/${comment.answerId}`)
       .then(() => {
         openToast({ severity: 'success', message: '댓글을 삭제했습니다.' })
-        mutate(`/api/v1/team/post/comment/${postId}?page=1&pageSize=100`) // 댓글 데이터 만료
+        mutate(`/api/v1/team/post/comment/${postId}`) // 댓글 데이터 만료
       })
       .catch(() => {
         openToast({ severity: 'error', message: '댓글 삭제에 실패했습니다.' })
@@ -67,7 +67,7 @@ const Comment = ({ comment, postId }: ICommentProps) => {
 const CommentList = ({ postId }: { postId: number }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
-    `/api/v1/team/post/comment/${postId}?page=1&pageSize=100`,
+    `/api/v1/team/post/comment/${postId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data.content),
   )
 

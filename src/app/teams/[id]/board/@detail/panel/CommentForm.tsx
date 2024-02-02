@@ -29,7 +29,7 @@ export const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
       .then(() => {
         setIsLoading(false)
         textRef.current && textRef.current.value && (textRef.current.value = '')
-        mutate(`/api/v1/team/post/comment/${postId}?page=1&pageSize=100`) // 댓글 데이터 만료
+        mutate(`/api/v1/team/post/comment/${postId}`) // 댓글 데이터 만료
       })
       .catch(() => {
         openToast({ severity: 'error', message: '댓글 작성에 실패했습니다.' })
