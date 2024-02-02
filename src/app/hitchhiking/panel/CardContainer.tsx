@@ -34,6 +34,7 @@ const CardContainer = ({
         direction={'row'}
         justifyContent={'center'}
         alignItems={'center'}
+        spacing={'0.25rem'}
         sx={containerStyle.gnbContainerStyle}
       >
         <Typography component={'h4'} sx={containerStyle.gnbTypographyStyle}>

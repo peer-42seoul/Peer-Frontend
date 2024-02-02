@@ -39,6 +39,7 @@ const HitchhikingCardBack = ({
   cardWidth,
   title,
   currentDomain,
+  authorId,
 }: {
   postId: number
   sx?: SxProps
@@ -48,6 +49,7 @@ const HitchhikingCardBack = ({
   title: string
   cardWidth: number
   currentDomain: string
+  authorId: number
 }) => {
   const [data, setData] = useState<IHitchhikingCardBack | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -144,7 +146,7 @@ const HitchhikingCardBack = ({
                   content="피어에서 동료를 구해보새요!"
                   message={`피어에서 동료를 구해보세요! 이런 프로젝트가 있어요! ${currentDomain}/recruit/${postId}`}
                 />
-                <ReportMenuItem targetId={postId} />
+                <ReportMenuItem targetId={authorId} />
               </DropdownMenu>
             </CardActionArea>
           </Stack>
@@ -230,6 +232,7 @@ const HitchhikingCardBack = ({
 
 const HitchhikingCard = ({
   authorImage,
+  authorId,
   teamName,
   title,
   tagList,
@@ -240,6 +243,7 @@ const HitchhikingCard = ({
   isProject,
 }: {
   authorImage: string
+  authorId: number
   teamName: string
   title: string
   tagList: Array<ITag>
@@ -309,6 +313,7 @@ const HitchhikingCard = ({
         onClick={handleMouseUp}
       />
       <HitchhikingCardBack
+        authorId={authorId}
         postId={postId}
         sx={style.cardStyleBase}
         onClick={handleMouseUp}
