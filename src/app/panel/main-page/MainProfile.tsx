@@ -1,12 +1,14 @@
 import useAxiosWithAuth from '@/api/config'
 import useAuthStore from '@/states/useAuthStore'
 import { IUserProfile } from '@/types/IUserProfile'
-import { Avatar, Link, Stack, Typography } from '@mui/material'
+import { Avatar, Button, Link, Stack, Typography } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 const MainProfile = () => {
   const axiosWithAuth = useAxiosWithAuth()
+  const router = useRouter()
   const { isLogin } = useAuthStore()
   const { data } = useSWR<IUserProfile>(
     isLogin ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile` : undefined,
@@ -44,7 +46,10 @@ const MainProfile = () => {
             </Link>
           </>
         ) : (
-          <Typography variant={'Body1'}>로그인이 필요합니다</Typography>
+          <Stack>
+            <Typography variant={'Body1'}>로그인이 필요합니다</Typography>
+            <Button onClick={() => router.push('/login')}>로그인 하기</Button>
+          </Stack>
         )}
         {/* 업적은 2step이라 주석처리 */}
         {/* <Stack direction="row">

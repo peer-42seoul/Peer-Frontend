@@ -9,6 +9,7 @@ import {
   Button,
   IconButton,
   Stack,
+  Typography,
 } from '@mui/material'
 import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 import AlertIcon from '@/app/panel/layout-panel/AlertIcon'
@@ -66,7 +67,14 @@ const PcNav = () => {
       >
         <Stack direction={'row'} gap={'1.25rem'}>
           <Stack alignItems={'center'} justifyContent={'center'}>
-            <PeerLogo sx={{ width: 50, height: 50, color: 'text.normal' }} />
+            <IconButton
+              sx={{ margin: 0, padding: 0 }}
+              onClick={() => {
+                router.push('/')
+              }}
+            >
+              <PeerLogo sx={{ width: 50, height: 50, color: 'text.normal' }} />
+            </IconButton>
           </Stack>
           <BottomNavigation
             showLabels={true}
@@ -76,16 +84,22 @@ const PcNav = () => {
             }}
           >
             <BottomNavigationAction
-              value={'home'}
-              label="모집글"
-              onClick={() => {
-                router.push('/')
-              }}
-            />
-            <BottomNavigationAction
-              icon={<BetaIcon />}
               value={'hitchhiking'}
-              label="히치하이킹"
+              label={
+                <Stack
+                  direction={'row'}
+                  alignItems={'center'}
+                  spacing={'0.15rem'}
+                >
+                  <Typography variant="Caption">히치하이킹</Typography>
+                  <BetaIcon
+                    style={{
+                      position: 'relative',
+                      top: '-0.5rem',
+                    }}
+                  />
+                </Stack>
+              }
               sx={{
                 wordBreak: 'keep-all',
               }}
@@ -102,9 +116,22 @@ const PcNav = () => {
               }}
             />
             <BottomNavigationAction
-              icon={<BetaIcon />}
               value={'showcase'}
-              label="쇼케이스"
+              label={
+                <Stack
+                  direction={'row'}
+                  alignItems={'center'}
+                  spacing={'0.15rem'}
+                >
+                  <Typography variant="Caption">쇼케이스</Typography>
+                  <BetaIcon
+                    style={{
+                      position: 'relative',
+                      top: '-0.5rem',
+                    }}
+                  />
+                </Stack>
+              }
               onClick={() => {
                 router.push('/showcase')
               }}
