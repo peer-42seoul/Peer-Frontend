@@ -1,38 +1,41 @@
 'use client'
-import { FormEvent, useRef, useState } from 'react'
-import useSWR from 'swr'
+import { FormEvent, useState } from 'react'
+import useSWR, { useSWRConfig } from 'swr'
 import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import {
   CommentContainer,
   StatusMessage,
   CommentItem,
-  CommentFormContainer,
 } from '@/components/board/CommentPanel'
-import { ITeamComment } from '@/types/TeamBoardTypes'
+import useToast from '@/states/useToast'
+import { ITeamBoardComment, ITeamComment } from '@/types/TeamBoardTypes'
 
-interface ICommentFormProps {
+interface ICommentProps {
+  comment: ITeamComment
   postId: number
-  teamId: number
 }
 
-const Comment = ({ comment }: { comment: ITeamComment }) => {
+const Comment = ({ comment, postId }: ICommentProps) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const axiosWithAuth = useAxiosWithAuth()
+  const { openToast } = useToast()
+  const { mutate } = useSWRConfig()
 
   const handleEdit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     axiosWithAuth
-      .put(`/api/v1/team/notice/answer/${comment.answerId}`, {
+      .put(`/api/v1/team/post/comment/${comment.answerId}`, {
         content: formData.get('content') as string,
       })
       .then(() => {
-        alert('댓글을 수정했습니다.')
+        openToast({ severity: 'success', message: '댓글을 수정했습니다.' })
+        mutate(`/api/v1/team/post/comment/${postId}`) // 댓글 데이터 만료
         setIsEditMode(false)
       })
       .catch(() => {
-        alert('댓글 수정에 실패했습니다.')
+        openToast({ severity: 'error', message: '댓글 수정에 실패했습니다.' })
       })
   }
 
@@ -40,12 +43,13 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
     const confirm = window.confirm('댓글을 삭제하시겠습니까?')
     if (!confirm) return
     axiosWithAuth
-      .delete(`/api/v1/team/notice/answer/${comment.answerId}`)
+      .delete(`/api/v1/team/post/comment/${comment.answerId}`)
       .then(() => {
-        alert('댓글을 삭제했습니다.')
+        openToast({ severity: 'success', message: '댓글을 삭제했습니다.' })
+        mutate(`/api/v1/team/post/comment/${postId}`) // 댓글 데이터 만료
       })
       .catch(() => {
-        alert('댓글 삭제에 실패했습니다.')
+        openToast({ severity: 'error', message: '댓글 삭제에 실패했습니다.' })
       })
   }
 
@@ -60,39 +64,7 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
   )
 }
 
-const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
-  const axiosWithAuth = useAxiosWithAuth()
-  const [isLoading, setIsLoading] = useState(false)
-  const textRef = useRef<HTMLInputElement>()
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
-    const formData = new FormData(e.currentTarget)
-    axiosWithAuth
-      .post('/api/v1/team/notice/answer', {
-        teamId: teamId,
-        postId: postId,
-        content: formData.get('new-content') as string,
-      })
-      .then(() => {
-        setIsLoading(false)
-      })
-      .catch(() => {
-        alert('댓글 작성에 실패했습니다.')
-      })
-  }
-
-  return (
-    <CommentFormContainer
-      textRef={textRef}
-      handleSubmit={handleSubmit}
-      isLoading={isLoading}
-    />
-  )
-}
-
-const CommentList = ({ postId, teamId }: ICommentFormProps) => {
+const CommentList = ({ postId }: { postId: number }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR(
     `/api/v1/team/post/comment/${postId}`,
@@ -113,11 +85,25 @@ const CommentList = ({ postId, teamId }: ICommentFormProps) => {
   return (
     <Stack>
       <CommentContainer>
-        {data.map((comment: ITeamComment) => (
-          <Comment key={comment.answerId} comment={comment} />
-        ))}
+        {data.map((comment: ITeamBoardComment) => {
+          // TODO : notice와 댓글 타입 통일 필요함....
+          const transformComment: ITeamComment = {
+            answerId: comment.commentId,
+            authorImage: comment.authorImage,
+            authorNickname: comment.authorNickname,
+            content: comment.content,
+            createdAt: comment.createdAt,
+            isAuthor: comment.isAuthor,
+          }
+          return (
+            <Comment
+              key={comment.commentId}
+              comment={transformComment}
+              postId={postId}
+            />
+          )
+        })}
       </CommentContainer>
-      <CommentForm postId={postId} teamId={teamId} />
     </Stack>
   )
 }

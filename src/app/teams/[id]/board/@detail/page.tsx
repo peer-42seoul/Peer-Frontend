@@ -12,10 +12,10 @@ import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamPostDetail } from '@/types/TeamBoardTypes'
-import CommentList from './panel/CommentList'
-import { CommentForm } from './panel/CommentForm'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
+import { CommentForm } from '@/components/board/CommentForm'
+import CommentList from '@/components/board/CommentList'
 
 const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params

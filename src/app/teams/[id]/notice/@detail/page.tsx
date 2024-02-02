@@ -12,7 +12,8 @@ import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
-import CommentList from './panel/CommentList'
+import CommentList from '@/components/board/CommentList'
+import { CommentForm } from '@/components/board/CommentForm'
 
 const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
@@ -99,7 +100,10 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
           </Stack>
         )}
       </DetailContentCotainer>
-      <CommentList postId={postId} teamId={parseInt(teamId)} />
+      <Stack>
+        <CommentList postId={postId} />
+        <CommentForm postId={postId} teamId={parseInt(teamId)} />
+      </Stack>
     </DetailPage>
   )
 }
