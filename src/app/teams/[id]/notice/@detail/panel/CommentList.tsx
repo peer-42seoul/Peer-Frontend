@@ -1,5 +1,5 @@
 'use client'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
@@ -63,6 +63,7 @@ const Comment = ({ comment }: { comment: ITeamComment }) => {
 const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setIsLoading] = useState(false)
+  const textRef = useRef<HTMLInputElement>()
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -83,7 +84,11 @@ const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
   }
 
   return (
-    <CommentFormContainer handleSubmit={handleSubmit} isLoading={isLoading} />
+    <CommentFormContainer
+      textRef={textRef}
+      handleSubmit={handleSubmit}
+      isLoading={isLoading}
+    />
   )
 }
 
