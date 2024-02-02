@@ -271,7 +271,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                       <MainCard
                         {...project}
                         type={type}
-                        //추후 수정 예정
                         favorite={getFavoriteData(index)}
                         sx={{
                           height: '21.875rem',

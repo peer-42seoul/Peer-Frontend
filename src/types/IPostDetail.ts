@@ -24,7 +24,6 @@ export interface IMainCard {
   href?: string
   onFavorite?: () => void
   sx?: SxProps
-  favoriteMutate?: () => void
 }
 
 export interface IPost {
