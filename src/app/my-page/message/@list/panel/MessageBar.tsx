@@ -75,7 +75,11 @@ export const SearchBar = ({
         alignItems={'center'}
         spacing={'0.38rem'}
       >
-        <SearchIcon width={'1.25rem'} height={'1.25rem'} sx={{ color: 'text.normal' }}/>
+        <SearchIcon
+          width={'1.25rem'}
+          height={'1.25rem'}
+          sx={{ color: 'text.normal' }}
+        />
         <InputBase
           sx={style.searchInput}
           onChange={(e) => setSearchKeyword(e.target.value)}

@@ -1,10 +1,6 @@
 'use client'
 import { useDarkMode } from '@/states/useDarkMode'
-import {
-  ThemeProvider,
-  createTheme,
-  StyledEngineProvider,
-} from '@mui/material/styles'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { useEffect } from 'react'
 
 declare module '@mui/material/styles' {
@@ -361,15 +357,11 @@ declare module '@mui/material/Chip' {
 }
 
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  let theme = createTheme()
-
-  const { theme: colorTheme, getModeFromLocalStorage } = useDarkMode()
+  const { theme, getModeFromLocalStorage } = useDarkMode()
 
   useEffect(() => {
     getModeFromLocalStorage()
   }, [])
-
-  theme = createTheme(theme, colorTheme)
 
   if (theme.palette) {
     theme.palette.red = theme.palette.augmentColor({

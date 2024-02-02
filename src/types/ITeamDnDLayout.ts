@@ -10,6 +10,12 @@ export type DateTimeArray = [
   number,
 ]
 
+export interface IWidgetProps {
+  data: any
+  size: SizeType
+  wgKey?: number | string //@todo optional 빼기
+}
+
 export interface ITeamDnDLayout {
   teamId: number
   type: string // teamPage, peerLog
@@ -21,7 +27,7 @@ export interface ITeamDnDLayout {
 // 위젯의 데이터
 //new Date
 export interface IWidget {
-  key: number
+  key: number | string
   size: SizeType // S/M/L
   grid: Layout // x,y,w,h
   type: WidgetType

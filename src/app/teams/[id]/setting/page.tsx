@@ -2,14 +2,14 @@
 
 import { Button, Card, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import SetupMember from './panel/SetupMember'
+import SetupMember from './panel/SettingTeamMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import { ITeam, TeamType } from '../../types/types'
-import RedirectionRecruit from './panel/RedirectionRecruit'
-import TeamJobAdd from './panel/TeamJobAdd'
-import SetupInfo from './panel/SetupInfo'
+import RedirectionRecruit from './panel/RedirectRecruitPage'
+import TeamJobAdd from './panel/SettingTeamJobs'
+import SetupInfo from './panel/SettingTeamInfo'
 import useSocket from '@/states/useSocket'
 
 export interface IMyInfo {
@@ -49,6 +49,8 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   }, [])
 
   if (isLoading) return <Typography>로딩중</Typography>
+
+  console.log(data)
 
   return (
     <Stack

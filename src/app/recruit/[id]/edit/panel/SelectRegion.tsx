@@ -1,20 +1,25 @@
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { koreaDistrict } from '@/constant/DistrictData'
 import { Stack } from '@mui/material'
-import useMedia from '@/hook/useMedia'
 
 interface BasicSelectProps {
-  setValue: Dispatch<SetStateAction<string[]>>
+  setValue: (value: string[]) => void
   region?: string[]
+  error?: boolean
 }
 
-export default function SelectRegion({ setValue, region }: BasicSelectProps) {
+// 해당 컴포넌트에는 react-hook-form을 제대로 적용하지 않았습니다.
+
+export default function SelectRegion({
+  setValue,
+  region,
+  error = false,
+}: BasicSelectProps) {
   const [largeScaleData, setLargeScaleData] = useState<string>('')
   const [smallScaleData, setSmallScaleData] = useState<string>('')
-  const { isPc } = useMedia()
 
   const handleChangeLargeScaleData = (event: SelectChangeEvent) => {
     setLargeScaleData(event.target.value as string)
@@ -55,41 +60,38 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
 
   return (
     <Stack
-      sx={isPc ? { width: '26rem' } : { width: '100%' }}
+      sx={{ width: ['100%', '26rem'], height: '2rem' }}
       direction={'row'}
       gap={'1rem'}
     >
-      <FormControl
-        sx={
-          isPc
-            ? { width: '12.75rem', height: '2rem' }
-            : { width: '100%', height: '2rem' }
-        }
-      >
+      <FormControl sx={{ width: ['100%', '12.75rem'], height: '2rem' }}>
         <Select
-          sx={
-            isPc
-              ? { width: '12.75rem', height: '2rem' }
-              : { width: '100%', height: '2rem' }
-          }
+          sx={{
+            width: ['100%', '12.75rem'],
+            height: '2rem',
+            backgroundColor: 'background.tertiary',
+            borderWidth: '0',
+          }}
+          variant="outlined"
           value={largeScaleData}
           onChange={handleChangeLargeScaleData}
+          error={error}
         >
           {options1}
         </Select>
       </FormControl>
-      <FormControl
-        sx={isPc ? { width: '12.75rem' } : { width: '100%' }}
-        fullWidth
-      >
+      <FormControl sx={{ width: ['100%', '12.75rem'] }} error={error}>
         <Select
-          sx={
-            isPc
-              ? { width: '12.75rem', height: '2rem' }
-              : { width: '100%', height: '2rem' }
-          }
+          sx={{
+            width: ['100%', '12.75rem'],
+            height: '2rem',
+            backgroundColor: 'background.tertiary',
+            borderWidth: '0',
+          }}
           value={smallScaleData}
           onChange={handleChangeSmallScaleData}
+          variant="outlined"
+          error={error}
         >
           {options2}
         </Select>

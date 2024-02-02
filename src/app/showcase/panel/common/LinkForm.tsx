@@ -1,6 +1,6 @@
 import { IconButton, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
 import * as Style from './SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
@@ -36,7 +36,7 @@ const LinkForm = ({
   }
 
   return (
-    <Stack width={'26rem'} spacing={'0.5rem'}>
+    <Stack width={'100%'} spacing={'0.5rem'}>
       <Stack
         direction={'row'}
         spacing={'0.5rem'}

@@ -20,15 +20,17 @@ const ProfileSection = ({
   setModalType,
   titleTypographyProps,
   sx,
+  isEditable,
 }: {
   sectionTitle: 'introduction' | 'achievements' | 'skills' | 'links'
   setModalType: (type: string) => void
   sx?: SxProps
   titleTypographyProps?: TypographyProps
+  isEditable: boolean
 }) => {
   const sectionTypeMap = new Map(Object.entries(SectionType))
   const handleEditClick = () => {
-    setModalType(sectionTitle)
+    if (setModalType) setModalType(sectionTitle)
   }
 
   return (
@@ -42,24 +44,26 @@ const ProfileSection = ({
       <Typography {...titleTypographyProps}>
         {sectionTypeMap.get(sectionTitle)}
       </Typography>
-      <Button
-        variant="text"
-        onClick={handleEditClick}
-        sx={{
-          padding: '0 0.25rem',
-          width: 'fit-content',
-          height: '1.5rem',
-          minWidth: '1.8rem',
-        }}
-      >
-        <Typography
-          variant="CaptionEmphasis"
-          color={'text.alternative'}
-          sx={{ padding: 0, whiteSpace: 'pre-line', wordBreak: 'keep-all' }}
+      {isEditable && (
+        <Button
+          variant="text"
+          onClick={handleEditClick}
+          sx={{
+            padding: '0 0.25rem',
+            width: 'fit-content',
+            height: '1.5rem',
+            minWidth: '1.8rem',
+          }}
         >
-          수정
-        </Typography>
-      </Button>
+          <Typography
+            variant="CaptionEmphasis"
+            color={'text.alternative'}
+            sx={{ padding: 0, whiteSpace: 'pre-line', wordBreak: 'keep-all' }}
+          >
+            수정
+          </Typography>
+        </Button>
+      )}
     </Stack>
   )
 }

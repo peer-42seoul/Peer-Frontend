@@ -6,9 +6,11 @@ import { ISkill } from '@/types/IUserProfile'
 const Skills = ({
   skillList,
   setModalType,
+  isEditable,
 }: {
   skillList: Array<ISkill>
   setModalType: (type: string) => void
+  isEditable: boolean
 }) => {
   console.log(skillList)
   return (
@@ -20,6 +22,7 @@ const Skills = ({
           color: 'text.strong',
           variant: 'CaptionEmphasis',
         }}
+        isEditable={isEditable}
       />
       <Stack
         justifyContent={'flex-start'}

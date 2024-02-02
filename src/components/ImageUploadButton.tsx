@@ -1,6 +1,9 @@
+import useMedia from '@/hook/useMedia'
 import { Button } from '@mui/material'
 import React from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
+import * as style from '../app/showcase/panel/common/SkillInput.style'
+
 // import { UseFormRegisterReturn } from 'react-hook-form'
 
 // setImage를 react-hook-form의 setValue 사용시 setImage를 다음과 같이 넣어주세요
@@ -45,6 +48,8 @@ const ImageUploadButton = ({
   onChange?: () => void
   register?: UseFormRegisterReturn
 }) => {
+  const { isPc } = useMedia()
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
 
@@ -67,7 +72,7 @@ const ImageUploadButton = ({
     }
   }
   return (
-    <Button component="label" sx={{ padding: 0 }}>
+    <Button component="label" sx={style.ShowcaseImageStyle(isPc)}>
       {children}
       <input
         type="file"
@@ -75,8 +80,8 @@ const ImageUploadButton = ({
         style={{ display: 'none' }}
         id={id}
         name={id}
-        onChange={handleImageChange}
         {...register}
+        onChange={handleImageChange}
       />
     </Button>
   )

@@ -1,38 +1,44 @@
 'use client'
 import { Stack, Box, Typography } from '@mui/material'
 import React from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import ImageIcon from '@/icons/ImageIcon'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import * as Style from './SkillInput.style'
+import useMedia from '@/hook/useMedia'
+import Image from 'next/image'
 
 /* eslint-disable no-unused-vars */
 const ImageInput = ({
   previewImage,
   setPreviewImage, // setImage,
+  setImage, // image,
 }: {
   previewImage: string
   setPreviewImage: (image: string) => void
+  image: File[]
+  setImage: (image: File[]) => void
 }) => {
+  const { isPc } = useMedia()
+
   return (
     <Stack direction={'column'} spacing={'0.5rem'} alignItems={'flex-start'}>
       <LabelWithIcon
         svgIcon={<ImageIcon sx={Style.IconStyle} />}
         message={'쇼케이스 대표 이미지'}
       />
-      <ImageUploadButton setPreviewImage={setPreviewImage}>
+      <ImageUploadButton
+        setImage={(image: File[]) => {
+          setImage(image)
+        }}
+        setPreviewImage={setPreviewImage}
+      >
         {previewImage ? (
-          <Box
-            component={'img'}
-            alt="쇼캐이스 대표 이미지"
-            src={previewImage} // 기존
-            // src={previewImage ? previewImage : '/images/teamLogo.png'}
-            sx={Style.ShowcaseImageStyle}
-          />
+          <Image src={previewImage} alt="쇼케이스 대표 이미지" fill={true} />
         ) : (
           <Box
             sx={{
-              ...Style.ShowcaseImageStyle,
+              ...Style.ShowcaseImageStyle(isPc),
               position: 'relative',
               backgroundColor: 'background.tertiary',
             }}
