@@ -57,7 +57,7 @@ jobs:
         run: |
           echo "This release version: ${{ needs.extract-version.outputs.version }}"
       - name: Change directory
-        run: cd ${{ secrets.WORK_DIRECTORY }} // 환경 변수화 필요
+        run: cd ${{ secrets.WORK_DIRECTORY }}
       - name: Install dependencies
         run: npm install ${{ secrets.WORK_DIRECTORY }}
       - name: Prettier
