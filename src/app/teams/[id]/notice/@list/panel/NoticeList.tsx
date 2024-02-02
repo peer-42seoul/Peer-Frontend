@@ -44,7 +44,7 @@ const NoticeList = ({
                 <ListItem
                   key={notice.postId}
                   title={notice.title}
-                  authorNickname={notice.authorNickname}
+                  authorNickname={notice.nickname}
                   createdAt={notice.createdAt}
                   onClick={() => {
                     setNotice('DETAIL', notice.postId)
