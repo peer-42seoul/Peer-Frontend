@@ -23,7 +23,6 @@ const RatioQuestionForm = ({
   value?: string
   disabled: boolean
 }) => {
-  console.log('optionList', optionList)
   const number = parseInt(optionList?.[0])
   const listArray = Array.from({ length: number }, (_, index) =>
     index.toString(),

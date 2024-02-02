@@ -125,22 +125,21 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     detailOption.tag,
   ])
 
-  // const { data: favoriteData, mutate } = useSWR<boolean[]>(
-  //   isLogin
-  //     ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites` + option
-  //     : null,
-  //   (url: string) => axiosInstance.get(url).then((res) => res.data),
-  // )
+  const { data: favoriteData, mutate: favoriteMutate } = useSWR<boolean[]>(
+    isLogin
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites` + option
+      : null,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
+  )
 
-  // const getFavoriteData = (index: number) => {
-  //   return favoriteData?.[index]
-  // }
+  const getFavoriteData = (index: number) => {
+    return favoriteData?.[index]
+  }
 
   const {
     data: newData,
     isLoading,
     error,
-    // mutate: dataMutate,
   } = useSWR<IPagination<IPost[]>>(
     page == 1 && !type && !sort && detailOption.isInit && keyword == ''
       ? null
@@ -148,18 +147,14 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     isLogin
       ? (url: string) =>
           axiosInstance.get(url).then((res) => {
-            // mutate()
+            //data를 다시 불러올때 favorite 데이터도 갱신
+            favoriteMutate()
             return res.data
           })
       : defaultGetFetcher,
   )
 
   const [content, setContent] = useState<IPost[]>(initData?.content ?? [])
-
-  // const favoriteMutate = async () => {
-  //   await mutate()
-  //   await dataMutate()
-  // }
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -277,9 +272,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                         {...project}
                         type={type}
                         //추후 수정 예정
-                        favorite={false}
-                        // favorite={getFavoriteData(index)}
-                        // favoriteMutate={favoriteMutate}
+                        favorite={getFavoriteData(index)}
                         sx={{
                           height: '21.875rem',
                         }}
@@ -357,9 +350,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                         <MainCard
                           {...project}
                           type={type}
-                          favorite={false}
-                          // favorite={getFavoriteData(index)}
-                          // favoriteMutate={favoriteMutate}
+                          favorite={getFavoriteData(index)}
                           sx={{
                             height: '21.875rem',
                           }}

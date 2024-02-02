@@ -61,11 +61,7 @@ export enum EInterviewType {
 //TODO: 타입 묶기
 export type CloseQuestionList = string[]
 
-export type RatioQuestionList = {
-  number: string
-  option1: string
-  option2: string
-}
+export type RatioQuestionList = string[]
 
 export type CheckQuestionList = string[]
 
