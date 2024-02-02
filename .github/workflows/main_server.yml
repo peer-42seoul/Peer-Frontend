@@ -92,8 +92,9 @@ jobs:
           password: ${{ secrets.MAIN_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
+            docker stop ${{ secrets.MAIN_DOCKER_IMAGE }}
             docker rm -f ${{ secrets.MAIN_DOCKER_IMAGE }}
-            docker run -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
+            docker run --name=${{ secrets.DOCKER_DEV_TEST_IMAGE }} -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_DEV_TEST_IMAGE }}
             docker container prune -f
             docker image prune -f
 
