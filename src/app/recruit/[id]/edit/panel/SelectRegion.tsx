@@ -1,16 +1,23 @@
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { koreaDistrict } from '@/constant/DistrictData'
 import { Stack } from '@mui/material'
 
 interface BasicSelectProps {
-  setValue: Dispatch<SetStateAction<string[]>>
+  setValue: (value: string[]) => void
   region?: string[]
+  error?: boolean
 }
 
-export default function SelectRegion({ setValue, region }: BasicSelectProps) {
+// 해당 컴포넌트에는 react-hook-form을 제대로 적용하지 않았습니다.
+
+export default function SelectRegion({
+  setValue,
+  region,
+  error = false,
+}: BasicSelectProps) {
   const [largeScaleData, setLargeScaleData] = useState<string>('')
   const [smallScaleData, setSmallScaleData] = useState<string>('')
 
@@ -68,11 +75,12 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
           variant="outlined"
           value={largeScaleData}
           onChange={handleChangeLargeScaleData}
+          error={error}
         >
           {options1}
         </Select>
       </FormControl>
-      <FormControl sx={{ width: ['100%', '12.75rem'] }}>
+      <FormControl sx={{ width: ['100%', '12.75rem'] }} error={error}>
         <Select
           sx={{
             width: ['100%', '12.75rem'],
@@ -83,6 +91,7 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
           value={smallScaleData}
           onChange={handleChangeSmallScaleData}
           variant="outlined"
+          error={error}
         >
           {options2}
         </Select>
