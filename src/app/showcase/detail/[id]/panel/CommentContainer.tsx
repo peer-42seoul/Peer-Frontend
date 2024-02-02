@@ -11,13 +11,14 @@ import {
   IconButton,
   Stack,
   Typography,
-  alpha,
   useTheme,
+  alpha,
 } from '@mui/material'
 import React from 'react'
 import useSWR, { mutate } from 'swr'
 import { CommentWriter } from './CommentWriter'
 import useToast from '@/states/useToast'
+import * as style from './CommentContainer.style'
 
 const Comment = ({ data, postId }: CommentProps) => {
   const theme = useTheme()
@@ -69,29 +70,13 @@ const Comment = ({ data, postId }: CommentProps) => {
 
   return (
     <>
-      <Stack
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          height: 'auto',
-          gap: '1rem',
-          justifyContent: 'space-between',
-        }}
-      >
+      <Stack sx={style.commentListContainer}>
         <Box>
-          <Box
-            sx={{
-              display: 'flex',
-              marginBottom: '0.25rem',
-              alignItems: 'center',
-              gap: '0.38rem',
-            }}
-          >
+          <Box sx={style.commenterInfo}>
             <CuAvatar
               key={data.commentId}
               src={data.authorImage ?? undefined}
-              sx={{ width: '1.5rem', height: '1.5rem' }}
+              sx={style.avatarStyle}
             />
             <Typography variant="Caption" color={'text.alternative'}>
               {data.authorNickname}
@@ -107,19 +92,11 @@ const Comment = ({ data, postId }: CommentProps) => {
               .replace('월 ', '년 ') + '일'}
           </Typography>
         </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '0.5rem',
-          }}
-        >
+        <Box sx={style.iconContainer}>
           <IconButton onClick={openModal}>
             <TrashIcon
               sx={{
-                width: '1.2rem',
-                height: '1.25rem',
+                ...style.iconStyle,
                 color: alpha(theme.palette.text.assistive, 0.5),
               }}
             />
@@ -171,23 +148,12 @@ const CommentContainer = ({ postId }: IPostId) => {
   }
   return (
     <>
-      <Container
-        sx={{
-          width: '100%',
-          height: 'auto',
-        }}
-      >
-        <Stack
-          sx={{
-            padding: '1.5rem',
-            borderRadius: '0.75rem 0.7rem 0 0',
-            backgroundColor: 'background.secondary',
-          }}
-        >
+      <Container sx={style.containerWrapper}>
+        <Stack sx={style.CommentContainer}>
           <Typography
             variant={'Title1'}
             color={'text.normal'}
-            sx={{ marginBottom: '1rem' }}
+            marginBottom={'1rem'}
           >
             댓글
           </Typography>
