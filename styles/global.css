@@ -1,4 +1,3 @@
-
 /* pretendard variable 폰트 */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
@@ -45,4 +44,22 @@ body * {
 }
 .no-scroll::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
+}
+
+/* .toastui-editor-contents p {
+  color: #1a1a1a !important;
+} */
+
+/* 라이트 모드일 때 */
+@media (prefers-color-scheme: light) {
+  .toastui-editor-contents p {
+    color: #1a1a1a !important;
+  }
+}
+
+/* 다크 모드일 때 */
+@media (prefers-color-scheme: dark) {
+  .toastui-editor-contents p {
+    color: #f6f6f6 !important;
+  }
 }
