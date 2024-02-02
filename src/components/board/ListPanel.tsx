@@ -214,7 +214,7 @@ export const ListItem = ({
         <Typography variant={'Caption'} color={'text.alternative'}>
           {dayjs(createdAt).format('MM월 DD일')}
         </Typography>
-        {hit && (
+        {hit !== undefined && (
           <Typography variant={'Caption'} color={'text.alternative'}>
             조회수 {hit}
           </Typography>
