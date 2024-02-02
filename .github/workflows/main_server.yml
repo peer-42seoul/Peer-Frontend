@@ -56,8 +56,6 @@ jobs:
       - name: Check version
         run: |
           echo "This release version: ${{ needs.extract-version.outputs.version }}"
-      - name: Install Docker
-        run: docker compose up -d
       - name: Change directory
         run: cd ${{ secrets.WORK_DIRECTORY }} // 환경 변수화 필요
       - name: Install dependencies
