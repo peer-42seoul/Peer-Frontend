@@ -91,7 +91,12 @@ const PcNav = () => {
                   alignItems={'center'}
                   spacing={'0.15rem'}
                 >
-                  <Typography variant="Caption">히치하이킹</Typography>
+                  <Typography
+                    color={value === 'hitchhiking' ? 'primary' : 'normal'}
+                    variant="Caption"
+                  >
+                    히치하이킹
+                  </Typography>
                   <BetaIcon
                     style={{
                       position: 'relative',
@@ -102,6 +107,7 @@ const PcNav = () => {
               }
               sx={{
                 wordBreak: 'keep-all',
+                padding: 0,
               }}
               onClick={() => {
                 router.push('/hitchhiking')
@@ -110,10 +116,18 @@ const PcNav = () => {
 
             <BottomNavigationAction
               value={'team-list'}
-              label="팀페이지"
+              label={
+                <Typography
+                  color={value === 'team-list' ? 'primary' : 'normal'}
+                  variant="Caption"
+                >
+                  팀페이지
+                </Typography>
+              }
               onClick={() => {
                 router.push('/team-list')
               }}
+              sx={{ padding: 0 }}
             />
             <BottomNavigationAction
               value={'showcase'}
@@ -123,7 +137,12 @@ const PcNav = () => {
                   alignItems={'center'}
                   spacing={'0.15rem'}
                 >
-                  <Typography variant="Caption">쇼케이스</Typography>
+                  <Typography
+                    color={value === 'showcase' ? 'primary' : 'normal'}
+                    variant="Caption"
+                  >
+                    쇼케이스
+                  </Typography>
                   <BetaIcon
                     style={{
                       position: 'relative',
@@ -135,6 +154,7 @@ const PcNav = () => {
               onClick={() => {
                 router.push('/showcase')
               }}
+              sx={{ padding: 0 }}
             />
           </BottomNavigation>
         </Stack>
