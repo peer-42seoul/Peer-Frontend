@@ -56,10 +56,8 @@ jobs:
       - name: Check version
         run: |
           echo "This release version: ${{ needs.extract-version.outputs.version }}"
-      - name: Change directory
-        run: cd ${{ secrets.WORK_DIRECTORY }}
       - name: Install dependencies
-        run: npm install ${{ secrets.WORK_DIRECTORY }}
+        run: npm install
       - name: Prettier
         run: npm run prettier
       - name: Lint
