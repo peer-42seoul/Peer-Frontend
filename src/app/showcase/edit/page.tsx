@@ -19,9 +19,9 @@ const ShowCaseEditPage = () => {
     { shouldRetryOnError: false },
   )
 
-  if (!data?.author) {
-    return <Typography color={'error'}>잘못된 접근입니다.</Typography>
-  }
+  // if (!data?.author) {
+  //   return <Typography color={'error'}>잘못된 접근입니다.</Typography>
+  // }
   if (isLoading) return <CuCircularProgress color={'secondary'} />
   if (error)
     return <Typography color={'error'}>에러가 발생했습니다.</Typography>

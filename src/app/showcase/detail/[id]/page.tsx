@@ -28,7 +28,7 @@ const ShowcaseDetailPage = ({ params }: { params: { id: number } }) => {
   return (
     data && (
       <>
-        <ShowcaseViewer data={data} />
+        <ShowcaseViewer data={data} postId={params.id} />
         <CommentContainer postId={params.id} />
       </>
     )
