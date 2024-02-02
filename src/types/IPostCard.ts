@@ -14,6 +14,7 @@ export interface IPostCard {
 }
 export interface IPostCardHitchhiking {
   authorImage: string // 글 작성자 프로필 이미지
+  authorId: number // 글 작성자 id
   teamName: string // 팀 이름
   title: string // 글 제목
   recruitId: number // 글 id

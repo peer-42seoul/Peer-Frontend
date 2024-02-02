@@ -18,7 +18,7 @@ const EncryptedSender = ({
 }: {
   children: React.ReactNode
   payload: any
-  setData?: (data: { code: string }) => void
+  setData?: (data: any) => void
   apiType: EApiType
   setPayload: (payload: any) => void
   setIsLoading?: (isLoading: boolean) => void
@@ -71,7 +71,7 @@ const EncryptedSender = ({
           axiosOption,
         )
         .then((res) => {
-          if (setData) setData(res.data)
+          if (setData) setData(res.data ?? null)
         })
     } else {
       await axiosWithAuth
@@ -84,7 +84,7 @@ const EncryptedSender = ({
           axiosOption,
         )
         .then((res) => {
-          if (setData) setData(res.data)
+          if (setData) setData(res.data ?? null)
         })
     }
   }
@@ -109,6 +109,11 @@ const EncryptedSender = ({
 
   useEffect(() => {
     apiSend()
+
+    return () => {
+      setPayload(null)
+      if (setData) setData(null)
+    }
   }, [apiSend])
 
   return <>{children}</>

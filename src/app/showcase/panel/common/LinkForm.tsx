@@ -1,6 +1,6 @@
 import { IconButton, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
 import * as Style from './SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
