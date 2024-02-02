@@ -6,9 +6,9 @@ import SirenIcon from '@/app/recruit/[id]/panel/SirenIcon'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 const RecruitQuickMenu = ({
-                            favorite,
-                            recruit_id,
-                          }: {
+  favorite,
+  recruit_id,
+}: {
   favorite: boolean | undefined
   recruit_id: number
 }) => {
@@ -23,14 +23,12 @@ const RecruitQuickMenu = ({
         redirect_url={`${path}?type=${type}`}
       />
       <Tooltip title={'공유'}>
-        <IconButton onClick={() => {
-        }}>
+        <IconButton onClick={() => {}}>
           <ShareOutlinedIcon sx={{ color: 'purple.strong' }} />
         </IconButton>
       </Tooltip>
       <Tooltip title={'신고'}>
-        <IconButton onClick={() => {
-        }}>
+        <IconButton onClick={() => {}}>
           <SirenIcon />
         </IconButton>
       </Tooltip>
