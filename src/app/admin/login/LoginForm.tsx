@@ -38,7 +38,7 @@ const LoginForm = () => {
       )
       .then(() => {
         login()
-        router.push('/admin/tag')
+        router.push('/admin')
       })
       .catch((err) => {
         if (
