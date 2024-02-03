@@ -19,6 +19,7 @@ import CuTextModal from '@/components/CuTextModal'
 import * as style from './interests.style'
 import { centeredPosition } from '@/constant/centerdPosition.style'
 import { IPagination } from '@/types/IPagination'
+import { ITag } from '@/types/IPostDetail'
 
 export interface IDefaultPostCard {
   recruit_id: number
@@ -42,10 +43,7 @@ export interface IShowcasePostCard {
   teamLogo: string
   teamName: string
   content: string
-  tags: Array<{
-    name: string
-    color: string
-  }>
+  tags: Array<ITag>
 }
 
 const TypeTabs = ({
@@ -209,9 +207,11 @@ const MyInterests = () => {
   useEffect(() => {
     if (!isLoading && data) {
       if (type === 'SHOWCASE') {
+        console.log('data.content: ', data.content)
         setShowcaseList((prev) => {
           return prev.concat(data.content as Array<IShowcasePostCard>)
         })
+        console.log('showcaseList: ', showcaseList)
       } else {
         setPostList((prev) => {
           return prev.concat(data.content as Array<IDefaultPostCard>)
@@ -256,7 +256,7 @@ const MyInterests = () => {
       >
         <TypeTabs type={type} handleChange={handleTabChange} />
 
-        {postList.length ? (
+        {postList.length || showcaseList ? (
           <InterestsContents
             postList={postList}
             showcaseList={showcaseList}

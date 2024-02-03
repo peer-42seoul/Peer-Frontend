@@ -29,6 +29,8 @@ const MainCard = ({
   href,
   onFavorite,
   sx,
+  titleMaxLine = 2,
+  tagMaxLine = 2,
 }: IMainCard) => {
   return (
     <Card sx={{ maxWidth: 345, ...sx }}>
@@ -105,7 +107,18 @@ const MainCard = ({
             },
           }}
         >
-          <Typography variant="Body1" color="text.secondary">
+          <Typography
+            variant="Body1"
+            color="text.secondary"
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxHeight: 22.5 * titleMaxLine,
+              WebkitLineClamp: titleMaxLine,
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+            }}
+          >
             {title}
           </Typography>
           <Stack
@@ -113,7 +126,7 @@ const MainCard = ({
             mt={1}
             direction={'row'}
             sx={{
-              height: '3.5rem',
+              height: `${1.5 * tagMaxLine + 0.5}rem`,
               overflow: 'auto',
               flexWrap: 'wrap',
               '&::-webkit-scrollbar': {

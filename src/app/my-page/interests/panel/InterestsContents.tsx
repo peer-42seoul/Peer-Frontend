@@ -29,6 +29,8 @@ const InterestsContents = ({
   setPostList: React.Dispatch<React.SetStateAction<IDefaultPostCard[]>>
   setShowcaseList: React.Dispatch<React.SetStateAction<IShowcasePostCard[]>>
 }) => {
+  console.log('InterestsContents')
+  console.log(showcaseList)
   const axiosInstance = useAxiosWithAuth()
 
   const handleDefaultUnfavorite = (recruit_id: number) => () => {
@@ -86,51 +88,54 @@ const InterestsContents = ({
           />
         </Stack>
       </Grid>
-      {type === 'SHOWCASE'
-        ? showcaseList.map((post) => {
-            return (
-              <Grid key={post.showcaseId} xs={12} sm={6} md={4} lg={3}>
-                <MainCard
-                  key={post.showcaseId}
-                  title={post.content}
-                  image={post.image}
-                  user_id={`${post.showcaseId}`}
-                  user_nickname={post.teamName}
-                  user_thumbnail={post.teamLogo}
-                  status={''}
-                  tagList={post.tags as ITag[]}
-                  recruit_id={post.showcaseId}
-                  favorite={true}
-                  type={type as ProjectType}
-                  onFavorite={handleShowcaseUnfavorite(post.showcaseId)}
-                  href={`/showcase/${post.showcaseId}`}
-                  sx={{ maxWidth: undefined }}
-                />
-              </Grid>
-            )
-          })
-        : postList.map((post) => {
-            return (
-              <Grid key={post.recruit_id} xs={12} sm={6} md={4} lg={3}>
-                <MainCard
-                  key={post.recruit_id}
-                  title={post.title}
-                  image={post.image}
-                  user_id={`${post.userId}`}
-                  user_nickname={post.userNickname}
-                  user_thumbnail={post.userImage}
-                  status={post.status}
-                  tagList={post.skillList}
-                  recruit_id={post.recruit_id}
-                  favorite={post.isFavorite}
-                  type={type as ProjectType}
-                  onFavorite={handleDefaultUnfavorite(post.recruit_id)}
-                  sx={{ maxWidth: undefined }}
-                />
-              </Grid>
-            )
-          })}
-      <Grid xs={12} sm={6} md={4} lg={3}>
+      {type === 'SHOWCASE' &&
+        showcaseList.map((post) => {
+          return (
+            <Grid key={post.showcaseId} xs={12} sm={6} md={4}>
+              <MainCard
+                key={post.showcaseId}
+                title={post.content}
+                image={post.image}
+                user_id={`${post.showcaseId}`}
+                user_nickname={post.teamName ?? '익명의 팀'}
+                user_thumbnail={post.teamLogo}
+                status={''}
+                tagList={post.tags as ITag[]}
+                recruit_id={post.showcaseId}
+                favorite={true}
+                type={type as ProjectType}
+                onFavorite={handleShowcaseUnfavorite(post.showcaseId)}
+                href={`/showcase/${post.showcaseId}`}
+                sx={{ maxWidth: undefined }}
+                titleMaxLine={3}
+              />
+            </Grid>
+          )
+        })}
+      {type !== 'SHOWCASE' &&
+        postList.map((post) => {
+          return (
+            <Grid key={post.recruit_id} xs={12} sm={6} md={4}>
+              <MainCard
+                key={post.recruit_id}
+                title={post.title}
+                image={post.image}
+                user_id={`${post.userId}`}
+                user_nickname={post.userNickname}
+                user_thumbnail={post.userImage}
+                status={post.status}
+                tagList={post.skillList}
+                recruit_id={post.recruit_id}
+                favorite={post.isFavorite}
+                type={type as ProjectType}
+                onFavorite={handleDefaultUnfavorite(post.recruit_id)}
+                sx={{ maxWidth: undefined }}
+                titleMaxLine={2}
+              />
+            </Grid>
+          )
+        })}
+      <Grid xs={12} sm={6} md={4}>
         <Box ref={target}>
           {spinner && <CuCircularProgress color="primary" />}
         </Box>
