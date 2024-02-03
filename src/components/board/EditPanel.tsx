@@ -90,13 +90,14 @@ export const EditForm = ({
         <Stack spacing={'0.5rem'}>
           <Typography variant={'CaptionEmphasis'}>제목</Typography>
           <TextField
-            name={'title'}
-            id={'title'}
+            name={'post-title'}
+            id={'post-title'}
             placeholder={'제목을 입력해주세요.'}
             disabled={isLoading}
             defaultValue={initialTitle}
             sx={{ maxWidth: '26rem' }}
           />
+          <button type={'submit'}>제출하기</button>
         </Stack>
         <Stack spacing={'0.5rem'} height={'100%'}>
           <Typography variant={'CaptionEmphasis'}>내용</Typography>
