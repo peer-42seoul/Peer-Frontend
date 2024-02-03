@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import LoginForm from './LoginForm'
 import { Box } from '@mui/system'

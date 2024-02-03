@@ -1,16 +1,17 @@
 import { Button } from '@mui/material'
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
-import { Dispatch, MutableRefObject, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 interface Props {
   page: number
   setPage: Dispatch<SetStateAction<number>>
-  pageFourth: MutableRefObject<boolean>
-  pageFifth: MutableRefObject<boolean>
+  pageFourth: boolean
+  pageFifth: boolean
+  totalPage: number
 }
 
-const PageButton = ({ page, setPage, pageFourth, pageFifth }: Props) => {
+const PageButton = ({ page, setPage, pageFourth, pageFifth, totalPage }: Props) => {
   const onSelectingPage = (currentPage: number) => {
     setPage(currentPage)
   }
@@ -27,13 +28,13 @@ const PageButton = ({ page, setPage, pageFourth, pageFifth }: Props) => {
         <Button onClick={() => onSelectingPage(page - 1)}>{page - 1}</Button>
       ) : null}
       <Button disabled={true}>{page}</Button>
-      {pageFourth.current === true ? (
+      {pageFourth === true ? (
         <Button onClick={() => onSelectingPage(page + 1)}>{page + 1}</Button>
       ) : null}
-      {pageFifth.current === true ? (
+      {pageFifth === true ? (
         <Button onClick={() => onSelectingPage(page + 2)}>{page + 2}</Button>
       ) : null}
-      <Button disabled={true}>
+      <Button onClick={() => onSelectingPage(totalPage)}>
         <KeyboardDoubleArrowRightIcon />
       </Button>
     </>

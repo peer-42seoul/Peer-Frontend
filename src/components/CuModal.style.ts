@@ -13,6 +13,9 @@ export const pcWrapper = {
   minHeight: '21.5rem',
   padding: '1.5rem 2rem',
   borderRadius: '2rem',
+  maxHeight: '70vh',
+  overflowY: 'auto',
+  scrollbarWidth: 'none',
   backgroundColor: (theme: Theme) => theme.palette.background.primary,
 }
 
@@ -22,6 +25,9 @@ export const mobileWrapper = {
   minWidth: '20.5rem',
   borderRadius: '2rem',
   padding: '1.25rem 1.25rem 1.5rem 1.25rem',
+  maxHeight: '70vh',
+  overflowY: 'auto',
+  scrollbarWidth: 'none',
   backgroundColor: (theme: Theme) => theme.palette.background.primary,
 }
 
