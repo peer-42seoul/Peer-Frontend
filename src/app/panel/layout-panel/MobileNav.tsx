@@ -62,7 +62,7 @@ const MobileNav = () => {
         <BottomNavigationAction
           sx={bottomNavStyle}
           icon={<RecruitIcon />}
-          label={<Typography fontSize={'0.625rem'}>모집글</Typography>}
+          label={<Typography fontSize={'0.6875rem'}>모집글</Typography>}
           value={'home'}
           onClick={() => {
             router.push('/')
@@ -71,7 +71,7 @@ const MobileNav = () => {
         <BottomNavigationAction
           sx={bottomNavStyle}
           icon={<HitchIcon />}
-          label={<Typography fontSize={'0.625rem'}>히치하이킹</Typography>}
+          label={<Typography fontSize={'0.6875rem'}>히치하이킹</Typography>}
           value={'hitchhiking'}
           onClick={() => {
             router.push('/hitchhiking')
@@ -79,7 +79,7 @@ const MobileNav = () => {
         />
         <BottomNavigationAction
           sx={bottomNavStyle}
-          label={<Typography fontSize={'0.625rem'}>쇼케이스</Typography>}
+          label={<Typography fontSize={'0.6875rem'}>쇼케이스</Typography>}
           value={'showcase'}
           onClick={() => {
             router.push('/showcase')
@@ -88,7 +88,7 @@ const MobileNav = () => {
         />
         <BottomNavigationAction
           sx={bottomNavStyle}
-          label={<Typography fontSize={'0.625rem'}>팀페이지</Typography>}
+          label={<Typography fontSize={'0.6875rem'}>팀페이지</Typography>}
           value={'team-list'}
           onClick={() => {
             router.push('/team-list')
@@ -97,7 +97,7 @@ const MobileNav = () => {
         />
         <BottomNavigationAction
           sx={bottomNavStyle}
-          label={<Typography fontSize={'0.625rem'}>내 프로필</Typography>}
+          label={<Typography fontSize={'0.6875rem'}>내 프로필</Typography>}
           value={'my-page'}
           onClick={() => {
             router.push('/my-page')

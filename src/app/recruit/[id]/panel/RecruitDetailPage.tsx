@@ -30,6 +30,9 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
     if (data) {
       setHeaderTitle(data.teamName)
     }
+    return () => {
+      setHeaderTitle('')
+    }
   }, [data])
 
   if (!data) return <Typography>데이터가 없습니다</Typography>
