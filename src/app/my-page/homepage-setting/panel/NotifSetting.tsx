@@ -1,4 +1,5 @@
 'use client'
+import { BetaBadge } from '@/components/BetaBadge'
 import CuToggle from '@/components/CuToggle'
 import TitleBox from '@/components/TitleBox'
 import { Box, FormControlLabel, Stack, Typography } from '@mui/material'
@@ -25,13 +26,21 @@ const Notif = ({
           />
         }
         label={
-          <Typography
-            variant="CaptionEmphasis"
-            color={'text.strong'}
-            sx={{ marginRight: '16px', marginLeft: '0' }}
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            spacing={'0.5rem'}
+            sx={{ marginRight: '1rem', marginLeft: '0' }}
           >
-            {type}
-          </Typography>
+            <Typography variant="CaptionEmphasis" color={'text.strong'}>
+              {type}
+            </Typography>
+            <BetaBadge
+              sx={{
+                height: '0.8rem',
+              }}
+            />
+          </Stack>
         }
         labelPlacement="start"
       />
