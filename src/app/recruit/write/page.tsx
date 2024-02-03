@@ -13,7 +13,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import Image from 'next/image'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import SetTeamRole from '../[id]/edit/panel/SetTeamRole/SetTeamRole'
 import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
@@ -38,7 +37,7 @@ import { ISkill } from '@/types/IUserProfile'
 
 export interface IRecruitWriteField {
   place: string
-  image: string
+  image: string | null
   title: string
   name: string
   due: string
@@ -125,7 +124,7 @@ const CreateTeam = () => {
   } = useForm<IRecruitWriteField>({
     defaultValues: {
       place: '',
-      image: '/images/defaultImage.png',
+      image: null,
       title: '',
       name: '',
       due: '',
@@ -222,16 +221,42 @@ const CreateTeam = () => {
                 register={register('image', {
                   required: '필수 입력 항목입니다.',
                 })}
+                sx={{ width: ['100%', 'content-fit'], maxWidth: '26rem', p: 0 }}
               >
-                {/* 폴백 이미지 바꾸기 */}
-                <Box>
-                  <Image
-                    src={image}
-                    width={240}
-                    height={160}
-                    alt="Picture of the author"
-                  />
-                </Box>
+                <Stack
+                  direction={'column'}
+                  spacing={'0.5rem'}
+                  sx={{ width: ['100%', '26rem'] }}
+                >
+                  {/* 폴백 이미지 바꾸기 */}
+                  {image && (
+                    <Box
+                      component={'img'}
+                      src={image}
+                      alt="Thumbnail"
+                      sx={{
+                        width: '100%',
+                        maxWidth: '26rem',
+                        objectFit: 'cover',
+                        borderRadius: '0.75rem',
+                      }}
+                    />
+                  )}
+                  {/* 스타일만 따오도록 사용하는 컴포넌트를 div로 설정해주었습니다. */}
+                  <Button
+                    component="div"
+                    variant="outlined"
+                    startIcon={
+                      <Icon.PlusIcon
+                        color={errors.image ? 'error' : 'primary'}
+                      />
+                    }
+                    sx={{ width: ['100%', '26rem'] }}
+                    color={errors.image ? 'error' : 'primary'}
+                  >
+                    대표이미지 등록
+                  </Button>
+                </Stack>
               </ImageUploadButton>
             </FieldWithLabel>
             {/* 스터디 or 프로젝트 선택 */}
@@ -303,6 +328,7 @@ const CreateTeam = () => {
                   placeholder="모집글 제목을 입력해주세요."
                   id="title"
                   error={!!errors?.title}
+                  sx={{ width: ['100%', '26rem'] }}
                   helperText={
                     <Typography
                       variant="Caption"
@@ -343,6 +369,7 @@ const CreateTeam = () => {
                   placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
                   id="name"
                   error={!!errors?.name}
+                  sx={{ width: ['100%', '26rem'] }}
                   helperText={
                     <Typography
                       variant="Caption"
