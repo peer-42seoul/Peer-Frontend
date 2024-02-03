@@ -35,7 +35,7 @@ import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBullet
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
 import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined'
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+// import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
 import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined'
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'

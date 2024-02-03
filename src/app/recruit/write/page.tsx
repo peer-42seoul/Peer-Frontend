@@ -51,7 +51,6 @@ export interface IRecruitWriteField {
 }
 
 const CreateTeam = () => {
-  // const [image, setImage] = useState<File[]>([])
   const [tagList, setTagList] = useState<ITag[]>([])
   const [content, setContent] = useState<string>('')
   const [allTagList, setAllTagList] = useState<ITag[]>()
