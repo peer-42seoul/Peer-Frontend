@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Tabs, Tab, Stack } from '@mui/material'
 import Announce from './announce/page'
 import Tag from './tag/page'

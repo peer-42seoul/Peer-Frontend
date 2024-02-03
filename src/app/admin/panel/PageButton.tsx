@@ -1,13 +1,11 @@
 import { Button } from '@mui/material'
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
-import { Dispatch, MutableRefObject, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 interface Props {
   page: number
   setPage: Dispatch<SetStateAction<number>>
-  // pageFourth: MutableRefObject<boolean>
-  // pageFifth: MutableRefObject<boolean>
   pageFourth: boolean
   pageFifth: boolean
   totalPage: number

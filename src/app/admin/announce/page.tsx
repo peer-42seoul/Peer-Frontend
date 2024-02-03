@@ -22,8 +22,8 @@ import dayjs from 'dayjs'
 import CuModal from '@/components/CuModal'
 import useAdminStore from '@/states/useAdminStore'
 import { useRouter } from 'next/navigation'
-import ToastEditor from '@/components/ToastUIEditor'
-import ToastViewer from '@/components/ToastUIViewer'
+// import ToastEditor from '@/components/ToastUIEditor'
+// import ToastViewer from '@/components/ToastUIViewer'
 import { idStyle, statusStyle, titleStyle } from './AnnounceStyles'
 
 interface IAnnounceAllContent {
@@ -617,7 +617,7 @@ const Announce = () => {
             <Controller
               name="reservationDate"
               control={control}
-              render={({ field: { onChange }, fieldState: { error } }) => (
+              render={({ field: { onChange } }) => (
                 <DateTimePicker
                   value={dayjs(
                     getValues('date') ?? new Date(Date.now() + 3600000),
