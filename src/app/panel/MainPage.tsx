@@ -56,7 +56,7 @@ export interface IDetailOption {
   tag: string
 }
 
-export const socket = io(`${process.env.NEXT_PUBLIC_API_URL}:8084`, {
+export const socket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
   transports: ['socket.io', 'polling'],
   query: {
     token: getCookie('accessToken') ? getCookie('accessToken') : '',
