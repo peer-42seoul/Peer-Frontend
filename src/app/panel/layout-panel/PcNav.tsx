@@ -15,6 +15,7 @@ import AlertIcon from '@/app/panel/layout-panel/AlertIcon'
 import SearchButton from '@/app/panel/main-page/SearchButton'
 import Link from 'next/link'
 import { BorderColor, Favorite } from '@mui/icons-material'
+import { BetaIcon } from '@/components/BetaBadge'
 
 const PcNav = () => {
   const [value, setValue] = useState<
@@ -24,6 +25,10 @@ const PcNav = () => {
   const pathname = usePathname()
   const router = useRouter()
   const { isLogin } = useAuthStore()
+
+  const interestsPath = isLogin
+    ? '/my-page/interests'
+    : '/login?redirect=/my-page/interests'
 
   useEffect(() => {
     if (pathname === '/') {
@@ -78,6 +83,7 @@ const PcNav = () => {
               }}
             />
             <BottomNavigationAction
+              icon={<BetaIcon />}
               value={'hitchhiking'}
               label="히치하이킹"
               sx={{
@@ -96,6 +102,7 @@ const PcNav = () => {
               }}
             />
             <BottomNavigationAction
+              icon={<BetaIcon />}
               value={'showcase'}
               label="쇼케이스"
               onClick={() => {
@@ -107,7 +114,7 @@ const PcNav = () => {
         <Stack direction={'row'} alignItems={'center'} gap={'0.25rem'}>
           <AlertIcon />
           <SearchButton />
-          <Link href="/my-page/interests">
+          <Link href={interestsPath}>
             <IconButton sx={{ color: 'purple.strong' }} aria-label="favorites">
               <Favorite />
             </IconButton>

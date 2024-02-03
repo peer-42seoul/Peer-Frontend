@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material'
 import React from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import { TagIcon } from '@/icons'
 import * as Style from './SkillInput.style'
 

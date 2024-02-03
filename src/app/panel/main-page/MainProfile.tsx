@@ -44,7 +44,18 @@ const MainProfile = () => {
             </Link>
           </>
         ) : (
-          <Typography variant={'Body1'}>로그인이 필요합니다</Typography>
+          <Link style={{ textDecoration: 'none' }} href={'/login'}>
+            <Typography
+              variant={'Body1'}
+              sx={{
+                '&:hover': {
+                  textDecoration: 'underline',
+                },
+              }}
+            >
+              로그인이 필요합니다
+            </Typography>
+          </Link>
         )}
         {/* 업적은 2step이라 주석처리 */}
         {/* <Stack direction="row">

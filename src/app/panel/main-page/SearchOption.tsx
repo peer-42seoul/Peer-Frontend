@@ -54,7 +54,7 @@ const SearchOption = ({
         bgcolor={'purple.strong'}
         borderRadius={'0.75rem'}
       >
-        <Typography variant="body2">맞춤 프로젝트를 빠르게 찾아요.</Typography>
+        <Typography variant="Body2">맞춤 프로젝트를 빠르게 찾아요.</Typography>
         <IconButton
           onClick={() => setOpenOption(!openOption)}
           sx={{ color: 'text.normal' }}
@@ -63,7 +63,6 @@ const SearchOption = ({
         </IconButton>
       </Stack>
       <SwipeableDrawer
-        sx={{ zIndex: 1500 }}
         onOpen={() => setOpenOption(false)}
         open={openOption}
         onClose={() => setOpenOption(false)}
@@ -71,7 +70,7 @@ const SearchOption = ({
       >
         <Stack padding={2} sx={{ height: '70vh' }}>
           <Stack flexDirection={'row'} alignItems={'center'}>
-            <Typography variant="body1" color={'purple.strong'}>
+            <Typography variant="Body1" color={'purple.strong'}>
               맞춤 프로젝트를 빠르게 찾아요.
             </Typography>
             <IconButton

@@ -1,53 +1,39 @@
 import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import Select from '@mui/material/Select'
 import { koreaDistrict } from '@/constant/DistrictData'
-import { Stack } from '@mui/material'
-import useMedia from '@/hook/useMedia'
+import { Stack, Typography } from '@mui/material'
+import * as style from './SelectRegion.style'
+import { Control, Controller, useFormState } from 'react-hook-form'
+import { IRecruitWriteField } from '@/app/recruit/write/page'
 
 interface BasicSelectProps {
-  setValue: Dispatch<SetStateAction<string[]>>
-  region?: string[]
+  region: string[]
+  control: Control<IRecruitWriteField, any>
 }
 
-export default function SelectRegion({ setValue, region }: BasicSelectProps) {
-  const [largeScaleData, setLargeScaleData] = useState<string>('')
-  const [smallScaleData, setSmallScaleData] = useState<string>('')
-  const { isPc } = useMedia()
+// 해당 컴포넌트에는 react-hook-form을 제대로 적용하지 않았습니다.
 
-  const handleChangeLargeScaleData = (event: SelectChangeEvent) => {
-    setLargeScaleData(event.target.value as string)
-    setValue([event.target.value as string, smallScaleData])
-  }
-
-  const handleChangeSmallScaleData = (event: SelectChangeEvent) => {
-    setSmallScaleData(event.target.value as string)
-    setValue([largeScaleData, event.target.value as string])
-  }
-
-  useEffect(() => {
-    if (region) {
-      setLargeScaleData(region[0])
-      setSmallScaleData(region[1])
-    }
-  }, [region])
-
+export default function SelectRegion({ region, control }: BasicSelectProps) {
+  const { errors } = useFormState<IRecruitWriteField>({ control })
   let options1 = [
     koreaDistrict.largeScaleData.map((value) => {
       return (
         <MenuItem key={value} value={value}>
-          {value}
+          <Typography variant="Body2" color={'text.normal'}>
+            {value}
+          </Typography>
         </MenuItem>
       )
     }),
   ]
 
-  let options2 = koreaDistrict.smallScaleData[largeScaleData]
-    ? koreaDistrict.smallScaleData[largeScaleData].map((value) => {
+  let options2 = koreaDistrict.smallScaleData[region[0] ?? '']
+    ? koreaDistrict.smallScaleData[region[0] ?? ''].map((value) => {
         return (
           <MenuItem key={value} value={value}>
-            {value}
+            <Typography variant="Body2" color={'text.normal'}>
+              {value}
+            </Typography>
           </MenuItem>
         )
       })
@@ -55,45 +41,41 @@ export default function SelectRegion({ setValue, region }: BasicSelectProps) {
 
   return (
     <Stack
-      sx={isPc ? { width: '26rem' } : { width: '100%' }}
+      sx={{ width: ['100%', '26rem'], height: '2rem' }}
       direction={'row'}
-      gap={'1rem'}
+      spacing={'1rem'}
     >
-      <FormControl
-        sx={
-          isPc
-            ? { width: '12.75rem', height: '2rem' }
-            : { width: '100%', height: '2rem' }
-        }
-      >
-        <Select
-          sx={
-            isPc
-              ? { width: '12.75rem', height: '2rem' }
-              : { width: '100%', height: '2rem' }
-          }
-          value={largeScaleData}
-          onChange={handleChangeLargeScaleData}
-        >
-          {options1}
-        </Select>
-      </FormControl>
-      <FormControl
-        sx={isPc ? { width: '12.75rem' } : { width: '100%' }}
-        fullWidth
-      >
-        <Select
-          sx={
-            isPc
-              ? { width: '12.75rem', height: '2rem' }
-              : { width: '100%', height: '2rem' }
-          }
-          value={smallScaleData}
-          onChange={handleChangeSmallScaleData}
-        >
-          {options2}
-        </Select>
-      </FormControl>
+      <Controller
+        render={({ field }) => (
+          <Select
+            {...field}
+            sx={style.selectStyle}
+            variant="outlined"
+            error={errors.region?.[0] ? true : false}
+          >
+            {options1}
+          </Select>
+        )}
+        name={'region.0'}
+        control={control}
+        rules={{ required: '필수 입력 항목 입니다.' }}
+      />
+
+      <Controller
+        render={({ field }) => (
+          <Select
+            {...field}
+            sx={style.selectStyle}
+            variant="outlined"
+            error={errors.region?.[1] ? true : false}
+          >
+            {options2}
+          </Select>
+        )}
+        name={'region.1'}
+        control={control}
+        rules={{ required: '필수 입력 항목 입니다.' }}
+      />
     </Stack>
   )
 }

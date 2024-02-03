@@ -59,7 +59,7 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
           console.log(res)
           openToast({
             severity: 'error',
-            message: '팀 해산에 실패하였습니다.',
+            message: '팀 활동 완료에 실패하였습니다.',
           })
         }
       })
@@ -67,9 +67,10 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
         console.log(err)
         openToast({
           severity: 'error',
-          message: '팀 해산에 실패하였습니다.',
+          message: '팀 활동 완료에 실패하였습니다.',
         })
       })
+    closeModal()
   }
 
   return (
@@ -81,7 +82,12 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
       >
         <Typography>팀 활동을 완료하겠습니까?</Typography>
         <Button
-          disabled={teamStatus === TeamStatus.RECRUITING ? true : false}
+          disabled={
+            teamStatus === TeamStatus.RECRUITING ||
+            teamStatus === TeamStatus.COMPLETE
+              ? true
+              : false
+          }
           variant="contained"
           onClick={openModal}
         >

@@ -8,6 +8,7 @@ import * as cardStyle from './HitchhikingCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
 import { IPostCardHitchhiking } from '@/types/IPostCard'
+import { BetaIcon } from '@/components/BetaBadge'
 
 const CardContainer = ({
   cardList,
@@ -33,11 +34,13 @@ const CardContainer = ({
         direction={'row'}
         justifyContent={'center'}
         alignItems={'center'}
+        spacing={'0.25rem'}
         sx={containerStyle.gnbContainerStyle}
       >
         <Typography component={'h4'} sx={containerStyle.gnbTypographyStyle}>
           히치하이킹
         </Typography>
+        <BetaIcon />
       </Stack>
       <Stack
         sx={containerStyle.toggleContainerStyle}

@@ -86,9 +86,9 @@ const MainCard = ({
         }
         action={
           <FavoriteButton
-            favorite={favorite}
             recruit_id={recruit_id}
-            redirect_url={'/'}
+            favorite={favorite}
+            redirect_url={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
             onFavorite={onFavorite}
           />
         }
@@ -98,11 +98,32 @@ const MainCard = ({
         href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}
       >
-        <CardContent>
+        <CardContent
+          sx={{
+            '&:last-child': {
+              paddingBottom: '1rem !important',
+            },
+          }}
+        >
           <Typography variant="Body1" color="text.secondary">
             {title}
           </Typography>
-          <Stack gap={1} direction={'row'}>
+          <Stack
+            gap={'0.25rem'}
+            mt={1}
+            direction={'row'}
+            sx={{
+              height: '3.5rem',
+              overflow: 'auto',
+              flexWrap: 'wrap',
+              '&::-webkit-scrollbar': {
+                display: 'none',
+              },
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+            flexWrap={'wrap'}
+          >
             {tagList?.map(({ name, color }: ITag, idx: number) => (
               <TagChip name={name} color={color} key={idx} />
             ))}

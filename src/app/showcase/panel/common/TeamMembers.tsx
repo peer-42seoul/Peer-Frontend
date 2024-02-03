@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material'
 import React from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import ListIcon from '@/icons/ListIcon'
 import * as Style from './SkillInput.style'
 import { IMember } from '@/types/IShowcaseEdit'

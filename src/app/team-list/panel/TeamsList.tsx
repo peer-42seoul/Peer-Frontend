@@ -5,6 +5,7 @@ import { TeamStatus } from '@/app/teams/types/types'
 //icons
 import useShowTeams from '@/states/useShowTeams'
 import TeamCard from './TeamCard'
+import NoDataDolphin from '@/components/NoDataDolphin'
 
 const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
   const { showTeams } = useShowTeams()
@@ -38,7 +39,7 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
         {prop.length ? (
           prop.map((team, index) => <TeamCard key={index} team={team} />)
         ) : (
-          <Typography>아직 참가한 팀이 없습니다.</Typography>
+          <NoDataDolphin message="아직 참가한 팀이 없습니다." />
         )}
       </Stack>
     </Stack>

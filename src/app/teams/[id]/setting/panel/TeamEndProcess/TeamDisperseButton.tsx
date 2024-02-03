@@ -72,6 +72,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
           message: '팀 해산에 실패하였습니다.',
         })
       })
+    closeModal()
   }
 
   return (
@@ -83,7 +84,12 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
       >
         <Typography>팀을 해산시겠습니까?</Typography>
         <Button
-          disabled={teamStatus === TeamStatus.RECRUITING ? true : false}
+          disabled={
+            teamStatus === TeamStatus.RECRUITING ||
+            teamStatus === TeamStatus.COMPLETE
+              ? true
+              : false
+          }
           variant="contained"
           onClick={openModal}
         >

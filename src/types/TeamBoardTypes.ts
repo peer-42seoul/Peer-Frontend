@@ -28,7 +28,7 @@ export interface ITeamPostDetail extends ITeamPostBase {
 
 export interface ITeamNoticeBase {
   title: string
-  authorNickname: string
+  nickname: string
   createdAt: Date // TODO : 확인 필요함.
 }
 

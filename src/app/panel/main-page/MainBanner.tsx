@@ -6,7 +6,7 @@ const MainBanner = () => {
 
   return (
     <Box
-      height={isPc ? '12.5rem' : '100px'}
+      // height={isPc ? '12.5rem' : '100px'}
       // borderRadius={'0.75rem'}
       // bgcolor={'white'}
       p={0}

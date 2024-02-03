@@ -2,14 +2,14 @@ import { SxProps } from '@mui/material'
 
 export const container: SxProps = {
   width: [undefined, '100vw'],
-  maxWidth: [undefined, '124rem'],
+  maxWidth: [undefined, '80rem'],
   padding: [undefined, 0],
   boxSizing: [undefined, 'border-box'],
 }
 
 export const stack: SxProps = {
   width: [undefined, '100%'],
-  maxWidth: [undefined, 1280],
+  maxWidth: [undefined, '80rem'],
   boxSizing: [undefined, 'border-box'],
   marginTop: ['1rem', undefined],
 }

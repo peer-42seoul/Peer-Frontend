@@ -119,7 +119,7 @@ const BoardWidgetList = ({ isPc, listData }: TBoardWidgetRenderProps) => {
           <BoardWidgetItem
             key={item.postId}
             title={item.title}
-            authorNickname={item.authorNickname}
+            authorNickname={item.nickname}
             createdAt={item.createdAt}
           />
         ))}
