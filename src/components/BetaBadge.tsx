@@ -105,7 +105,12 @@ const BetaBadge = ({ sx }: { sx?: SxProps }) => {
         ...sx,
       }}
     >
-      <Typography fontSize={'small'} fontWeight={'bold'} textAlign={'center'}>
+      <Typography
+        fontSize={'small'}
+        fontWeight={'bold'}
+        textAlign={'center'}
+        color={'white'}
+      >
         BETA
       </Typography>
     </Card>
