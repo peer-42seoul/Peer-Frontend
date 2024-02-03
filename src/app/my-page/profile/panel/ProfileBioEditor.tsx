@@ -24,6 +24,7 @@ import TrashIcon from '@/icons/TrashIcon'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
 import useToast from '@/states/useToast'
+import useNicknameStore from '@/states/useNicknameStore'
 
 interface IFormInput {
   nickname: string
@@ -52,6 +53,8 @@ const ProfileBioEditor = ({
   const [cropper, setCropper] = useState<Cropper | null>(null)
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
   const { isPc } = useMedia()
+
+  const { setNickname } = useNicknameStore()
 
   const { openToast, closeToast } = useToast()
 
@@ -278,6 +281,7 @@ const ProfileBioEditor = ({
           message: '프로필 변경에 성공하였습니다.',
         })
         mutate()
+        setNickname(formData.nickname)
         closeModal()
       })
       .catch((e) => {
