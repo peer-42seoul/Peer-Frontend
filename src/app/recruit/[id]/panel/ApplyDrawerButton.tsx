@@ -1,4 +1,11 @@
-import { Button, Drawer, List, ListItem, ListItemButton } from '@mui/material'
+import {
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  Typography,
+} from '@mui/material'
 import React, { useState } from 'react'
 import { IRole } from '@/types/IPostDetail'
 
@@ -22,15 +29,26 @@ const ApplyDrawerButton = ({
         sx={{ zIndex: 1500 }}
       >
         <List>
-          {roleList.map(({ name }) => (
-            <ListItem key={name}>
+          {roleList.map((role) => (
+            <ListItem key={role?.name}>
               <ListItemButton
                 onClick={() => {
                   setOpen(false)
-                  handleApply(name)
+                  handleApply(role?.name)
                 }}
               >
-                {name}
+                <Typography
+                  variant={'Body1'}
+                  noWrap
+                  sx={{
+                    color: 'text.normal',
+                    '&:hover ': {
+                      color: 'purple.normal',
+                    },
+                  }}
+                >
+                  {role?.name} {role?.current}/{role?.number}
+                </Typography>
               </ListItemButton>
             </ListItem>
           ))}
@@ -45,7 +63,9 @@ const ApplyDrawerButton = ({
           setOpen(true)
         }}
       >
-        지원하기
+        <Typography variant={'Body1'} color={'white'}>
+          지원하기
+        </Typography>
       </Button>
     </>
   )
