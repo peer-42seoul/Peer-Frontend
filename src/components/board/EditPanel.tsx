@@ -75,6 +75,8 @@ export const EditForm = ({
   type,
   handleGoBack,
 }: IEditFormProps) => {
+  const { isPc } = useMedia()
+
   return (
     <form onSubmit={onSubmit}>
       <Stack sx={style.EditForm} spacing={'1.5rem'}>
@@ -95,6 +97,7 @@ export const EditForm = ({
             <DynamicToastEditor
               initialValue={initialData.content || ''}
               editorRef={editorRef}
+              height={isPc ? '30rem' : '50vh'}
             />
           </Box>
         </Stack>
@@ -106,6 +109,7 @@ export const EditForm = ({
 
 export const EditButton = ({ type, handleGoBack }: IEditButtonProps) => {
   const { isPc } = useMedia()
+
   return (
     <Stack
       direction={'row'}
