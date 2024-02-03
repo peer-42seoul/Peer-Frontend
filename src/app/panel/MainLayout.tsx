@@ -3,7 +3,7 @@
 import { Box } from '@mui/material'
 import Header from './layout-panel/Header'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import MobileNav from './layout-panel/MobileNav'
 import PcNav from './layout-panel/PcNav'
 import useAuthStore from '@/states/useAuthStore'
@@ -12,23 +12,22 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isLogin } = useAuthStore()
   const router = useRouter()
   const pathname = usePathname()
-
-  const pathTitle = useMemo(() => {
+  const [pathTitle, setPathTitle] = useState<string | undefined>(undefined)
+  useEffect(() => {
     if (pathname === '/') {
-      return '메인'
+      setPathTitle('메인')
     } else if (pathname.startsWith('/login')) {
-      return '로그인'
+      setPathTitle('로그인')
     } else if (pathname.startsWith('/team-list')) {
       if (!isLogin) {
         router.push('/login?redirect=/team-list')
-      } else return '팀페이지'
+      } else setPathTitle('팀페이지')
     } else if (pathname.startsWith('/my-page')) {
       if (!isLogin) {
         router.push('/login?redirect=/my-page')
-        return undefined
-      } else return '마이페이지'
+      } else setPathTitle('마이페이지')
     } else {
-      return undefined
+      setPathTitle(undefined)
     }
   }, [pathname])
 
