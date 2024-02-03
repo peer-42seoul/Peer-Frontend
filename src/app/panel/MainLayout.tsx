@@ -21,15 +21,14 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     } else if (pathname.startsWith('/team-list')) {
       if (!isLogin) {
         router.push('/login?redirect=/team-list')
-        return '팀페이지'
-      } else if (pathname.startsWith('/my-page')) {
-        if (!isLogin) {
-          router.push('/login?redirect=/my-page')
-          return undefined
-        } else return '마이페이지'
-      } else {
+      } else return '팀페이지'
+    } else if (pathname.startsWith('/my-page')) {
+      if (!isLogin) {
+        router.push('/login?redirect=/my-page')
         return undefined
-      }
+      } else return '마이페이지'
+    } else {
+      return undefined
     }
   }, [pathname])
 
