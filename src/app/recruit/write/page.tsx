@@ -21,7 +21,6 @@ import { IFormInterview, IRoleWrite } from '@/types/IPostDetail'
 // import useAxiosWithAuth from '@/api/config'
 // import useSWR from 'swr'
 import CuButton from '@/components/CuButton'
-// import TagAutoComplete from '@/components/TagAutoComplete'
 // import axios from 'axios'
 import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'
@@ -578,7 +577,7 @@ const CreateTeam = () => {
                 />
               }
             >
-              <DynamicToastEditor />
+              <DynamicToastEditor initialValue="팀 소개 글 입니다." />
             </FieldWithLabel>
             {/* 모집 인터뷰 */}
             <FieldWithLabel
