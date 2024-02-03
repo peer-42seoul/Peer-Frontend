@@ -66,7 +66,7 @@ const NewMessageForm = ({
       } catch (error) {
         openToast({
           severity: 'error',
-          message: '쪽지를 보내는데 실패했습니다. 다시 시도해주세요.',
+          message: '쪽지 보내기에 실패했습니다. 다시 시도해주세요.',
         })
       }
     },
