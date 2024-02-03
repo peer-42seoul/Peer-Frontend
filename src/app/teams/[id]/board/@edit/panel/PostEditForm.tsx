@@ -5,13 +5,14 @@ import useAxiosWithAuth from '@/api/config'
 import useTeamPageState from '@/states/useTeamPageState'
 import useToast from '@/states/useToast'
 import { EditForm } from '@/components/board/EditPanel'
+import { IBoardEditFormType } from '@/types/TeamBoardTypes'
 
-interface IPostEditFormProps {
-  boardId: number
-  postId?: number
-}
-
-const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
+const PostEditForm = ({
+  postId,
+  boardId,
+  type,
+  handleGoBack,
+}: IBoardEditFormType) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { setBoard } = useTeamPageState()
   const [previousData, setPreviousData] = useState({
@@ -95,12 +96,13 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
 
   return (
     <EditForm
-      formId={'post-edit-form'}
       isLoading={isLoading}
       onSubmit={handleSubmit}
       titleRef={titleRef}
       editorRef={editorRef}
       initialData={previousData}
+      type={type}
+      handleGoBack={handleGoBack}
     />
   )
 }

@@ -12,20 +12,20 @@ interface IChildrenProps {
 }
 
 interface IEditFormProps {
-  formId: string
   isLoading: boolean
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
-  titleRef: React.MutableRefObject<HTMLInputElement | null>
-  editorRef: React.MutableRefObject<Editor | null>
+  titleRef: React.RefObject<HTMLInputElement>
+  editorRef: React.RefObject<Editor>
   initialData: {
     title: string
     content: string
   }
+  type: 'new' | 'edit'
+  handleGoBack: () => void
 }
 
 interface IEditButtonProps {
   type: 'new' | 'edit'
-  formId: string
   handleGoBack: () => void
 }
 
@@ -35,12 +35,7 @@ interface IEditPageProps extends IChildrenProps {
   handleGoBack: () => void
 }
 
-export const EditPage = ({
-  title,
-  children,
-  type,
-  handleGoBack,
-}: IEditPageProps) => {
+export const EditPage = ({ title, children, handleGoBack }: IEditPageProps) => {
   const { isPc } = useMedia()
   if (isPc)
     return (
@@ -52,18 +47,7 @@ export const EditPage = ({
       </Stack>
     )
   return (
-    <CuModal
-      open={true}
-      title={title}
-      onClose={handleGoBack}
-      mobileFullSize
-      textButton={{ text: '취소', onClick: handleGoBack }}
-      containedButton={{
-        text: type === 'new' ? '등록' : '완료',
-        type: 'submit',
-        form: 'notice-form',
-      }}
-    >
+    <CuModal open={true} title={title} onClose={handleGoBack} mobileFullSize>
       <Stack sx={{ height: '100%', overflowY: 'scroll' }} spacing={'1.5rem'}>
         {children}
       </Stack>
@@ -83,15 +67,16 @@ export const EditBox = ({ children }: IChildrenProps) => {
 }
 
 export const EditForm = ({
-  formId,
   isLoading,
   onSubmit,
   titleRef,
   editorRef,
   initialData,
+  type,
+  handleGoBack,
 }: IEditFormProps) => {
   return (
-    <form onSubmit={onSubmit} id={formId}>
+    <form onSubmit={onSubmit}>
       <Stack sx={style.EditForm} spacing={'1.5rem'}>
         <Stack spacing={'0.5rem'}>
           <Typography variant={'CaptionEmphasis'}>제목</Typography>
@@ -114,15 +99,12 @@ export const EditForm = ({
           </Box>
         </Stack>
       </Stack>
+      <EditButton type={type} handleGoBack={handleGoBack} />
     </form>
   )
 }
 
-export const EditButton = ({
-  type,
-  formId,
-  handleGoBack,
-}: IEditButtonProps) => {
+export const EditButton = ({ type, handleGoBack }: IEditButtonProps) => {
   return (
     <Stack direction={'row'} justifyContent={'flex-end'}>
       <Stack width={'18.5rem'} direction={'row'} spacing={'1rem'}>
@@ -136,7 +118,6 @@ export const EditButton = ({
         />
         <CuButton
           type={'submit'}
-          form={formId}
           variant={'contained'}
           message={type === 'new' ? '등록' : '완료'}
           style={style.EditButton}

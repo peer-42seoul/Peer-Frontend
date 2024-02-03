@@ -5,14 +5,14 @@ import useAxiosWithAuth from '@/api/config'
 import useTeamPageState from '@/states/useTeamPageState'
 import useToast from '@/states/useToast'
 import { EditForm } from '@/components/board/EditPanel'
+import { IEditFormType } from '@/types/TeamBoardTypes'
 
 const NoticeEditForm = ({
   teamId,
   postId,
-}: {
-  teamId: string
-  postId?: number
-}) => {
+  type,
+  handleGoBack,
+}: IEditFormType) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { setNotice } = useTeamPageState()
   const [previousData, setPreviousData] = useState({
@@ -95,12 +95,13 @@ const NoticeEditForm = ({
 
   return (
     <EditForm
-      formId={'notice-form'}
       isLoading={isLoading}
       onSubmit={handleSubmit}
       titleRef={titleRef}
       editorRef={editorRef}
       initialData={previousData}
+      type={type}
+      handleGoBack={handleGoBack}
     />
   )
 }
