@@ -19,12 +19,12 @@ import SetTeamRole from '../[id]/edit/panel/SetTeamRole/SetTeamRole'
 import BasicSelect, { ComponentType } from '../[id]/edit/panel/BasicSelect'
 import SetInterview from '../[id]/edit/panel/SetInterview/SetInterview'
 import SelectRegion from '../[id]/edit/panel/SelectRegion'
-import { IFormInterview, IRoleWrite, ITag } from '@/types/IPostDetail'
+import { IFormInterview, IRoleWrite } from '@/types/IPostDetail'
 // import useAxiosWithAuth from '@/api/config'
-import useSWR from 'swr'
+// import useSWR from 'swr'
 import CuButton from '@/components/CuButton'
-import TagAutoComplete from '@/components/TagAutoComplete'
-import axios from 'axios'
+// import TagAutoComplete from '@/components/TagAutoComplete'
+// import axios from 'axios'
 import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'
 import * as style from './page.style'
@@ -33,6 +33,8 @@ import TextFieldWithLabel from '@/components/TextFieldWithLabel'
 import FieldWithLabel from '@/components/FieldWithLabel'
 import { Controller, useForm } from 'react-hook-form'
 import { FormControlLabel } from '@mui/material'
+import SkillAutocomplete from '@/components/SkillAutocomplete'
+import { ISkill } from '@/types/IUserProfile'
 
 export interface IRecruitWriteField {
   place: string
@@ -44,19 +46,17 @@ export interface IRecruitWriteField {
   content: string
   region: Array<string> | null
   link: string
-  tagList: Array<ITag> | null
+  tagList: Array<ISkill>
   roleList: Array<IRoleWrite>
   interviewList: Array<IFormInterview>
   max: string | undefined
 }
 
 const CreateTeam = () => {
-  const [tagList, setTagList] = useState<ITag[]>([])
   const [content, setContent] = useState<string>('')
-  const [allTagList, setAllTagList] = useState<ITag[]>()
 
   const [openBasicModal, setOpenBasicModal] = useState(false)
-  const { openToast, closeToast } = useToast()
+  const { closeToast } = useToast()
   const router = useRouter()
   // const axiosInstance = useAxiosWithAuth()
   const { isPc } = useMedia()
@@ -66,21 +66,21 @@ const CreateTeam = () => {
     if (!isLogin) router.push('/login')
   }, [isLogin])
 
-  const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
-    (url: string) => axios.get(url).then((res) => res.data),
-  )
+  // const { data, error } = useSWR(
+  //   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
+  //   (url: string) => axios.get(url).then((res) => res.data),
+  // )
 
-  useEffect(() => {
-    if (error) {
-      openToast({
-        severity: 'error',
-        message: '태그를 불러오지 못했습니다.',
-      })
-    } else if (data) {
-      setAllTagList(data)
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (error) {
+  //     openToast({
+  //       severity: 'error',
+  //       message: '태그를 불러오지 못했습니다.',
+  //     })
+  //   } else if (data) {
+  //     setAllTagList(data)
+  //   }
+  // }, [data])
 
   // const doNeedMoreConditionAtProject = () => {
   //   if (
@@ -121,6 +121,7 @@ const CreateTeam = () => {
     setValue,
     watch,
     register,
+    trigger,
   } = useForm<IRecruitWriteField>({
     defaultValues: {
       place: '',
@@ -130,9 +131,9 @@ const CreateTeam = () => {
       due: '',
       type: 'PROJECT',
       content: '',
-      region: null,
+      region: ['', ''],
       link: '',
-      tagList: null,
+      tagList: [],
       roleList: [],
       interviewList: [],
       max: undefined,
@@ -188,6 +189,7 @@ const CreateTeam = () => {
   const place = watch('place')
   const image = watch('image')
   const type = watch('type')
+  const tagList = watch('tagList')
 
   return (
     <>
@@ -540,14 +542,23 @@ const CreateTeam = () => {
                 />
               }
             >
-              {allTagList ? (
-                <TagAutoComplete
-                  tagList={allTagList}
-                  datas={tagList}
-                  setData={setTagList}
-                  style={{ width: ['100%', '26rem'] }}
-                />
-              ) : null}
+              <Controller
+                render={({ field }) => (
+                  <SkillAutocomplete
+                    setSkillList={(value: Array<ISkill>) => {
+                      setValue('tagList', value)
+                    }}
+                    skillList={tagList}
+                    type="TAG"
+                    field={field}
+                    error={!!errors?.tagList}
+                    trigger={trigger}
+                  />
+                )}
+                control={control}
+                name="tagList"
+                rules={{ required: true }}
+              />
             </FieldWithLabel>
             {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
             <FieldWithLabel

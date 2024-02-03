@@ -13,21 +13,26 @@ import {
 import React, { useEffect, useState } from 'react'
 import CuTextModal from './CuTextModal'
 import TagChip from './TagChip'
+import { ControllerRenderProps, UseFormTrigger } from 'react-hook-form'
 
 const TIMEOUT = 500
 
 // 리액트 훅 폼을 위한 리펙토링 필요
 const SkillAutocomplete = ({
   skillList,
+  setSkillList,
   type,
+  field,
+  error,
+  trigger,
 }: {
   skillList: Array<ISkill> //  초기 스킬 리스트
   setSkillList: (value: Array<ISkill>) => void // 스킬 리스트 변경 함수
   type: 'SKILL' | 'TAG' // 스킬인지 태그인지 구분
+  field?: ControllerRenderProps<any, 'tagList'> // 리액트 훅 폼에 name을 무조건 'tagList'로 해야함
+  error?: boolean
+  trigger?: UseFormTrigger<any>
 }) => {
-  const [selected, setSelected] = useState<Array<string>>(
-    skillList.map((skill) => skill.name) as Array<string>,
-  ) // 선택 된 데이터
   const [tagList, setTagList] = useState(skillList) // 검색 된 데이터
 
   const [text, setText] = useState('') // 검색 텍스트
@@ -83,11 +88,19 @@ const SkillAutocomplete = ({
   }
 
   const handleInput = (_: any, value: string[]) => {
-    setSelected(value)
+    const newSkillList: ISkill[] = []
+    value.map((newValue) => {
+      newSkillList.push(
+        tagList.find((skill) => newValue === skill.name) as ISkill,
+      )
+    })
+    setSkillList(newSkillList)
+    if (trigger) trigger('tagList')
   }
   return (
     <>
       <Autocomplete
+        {...field}
         multiple
         sx={{
           fieldset: {
@@ -95,18 +108,20 @@ const SkillAutocomplete = ({
           },
         }}
         loading={isLoading}
-        value={selected}
+        value={skillList.map((skill) => skill.name) as Array<string>}
+        inputValue={text}
         options={tagList.map((tag) => tag.name)}
         onChange={handleInput}
         renderTags={() => <></>}
         renderInput={(params) => (
           <TextField
             {...params}
-            disabled={selected?.length >= 10}
+            disabled={skillList?.length >= 10}
             onChange={handleTextFieldChange}
             size="small"
             placeholder={'프레임워크 또는 개발언어를 입력해주세요.'}
-            sx={{ position: 'relative' }}
+            sx={{ position: 'relative', maxWidth: '26rem' }}
+            error={error}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
@@ -135,6 +150,7 @@ const SkillAutocomplete = ({
         flexWrap={'wrap'}
         justifyContent={'flex-start'}
         alignItems={'center'}
+        maxWidth={'26rem'}
       >
         <Stack
           direction={'row'}
@@ -142,8 +158,8 @@ const SkillAutocomplete = ({
           width={1}
           alignItems={'center'}
         >
-          <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-            선택한 {type === 'SKILL' ? '스킬' : '태그'} ({selected.length}/10)
+          <Typography variant={'Caption'} color={'text.normal'}>
+            선택한 {type === 'SKILL' ? '스킬' : '태그'} ({skillList.length}/10)
           </Typography>
           <Button
             variant={'text'}
@@ -151,40 +167,41 @@ const SkillAutocomplete = ({
             onClick={openAlertModal}
           >
             <Typography
-              variant={'CaptionEmphasis'}
+              variant={'Caption'}
               color={'text.alternative'}
               lineHeight={'normal'}
             >
               전체 삭제
             </Typography>
           </Button>
-          {selected.length ? (
-            selected.map((tagName) => {
-              const tag = tagList.find((tag) => tag.name === tagName)
-              if (!tag) return null
-              return (
-                <TagChip
-                  key={tag.tagId}
-                  name={tag.name}
-                  onDelete={() => {
-                    setSelected((prev) => {
-                      const newTags = prev.filter(
-                        (curTag) => curTag !== tag.name,
-                      )
-                      console.log(newTags)
-                      return newTags
-                    })
-                  }}
-                  color={tag.color}
-                />
-              )
-            })
-          ) : (
-            <Typography variant={'Caption'} color={'text.alternative'}>
-              선택된 {type === 'SKILL' ? '스킬이' : '태그가'} 없습니다.
-            </Typography>
-          )}
         </Stack>
+        {skillList.length ? (
+          skillList.map((skill) => {
+            const tag = tagList.find((tag) => tag.name === skill.name)
+            if (!tag) return null
+            return (
+              <TagChip
+                key={tag.tagId}
+                name={tag.name}
+                onDelete={() => {
+                  const newTags = skillList.filter(
+                    (curTag) => curTag.name !== tag.name,
+                  )
+                  setSkillList(newTags)
+                }}
+                color={tag.color}
+              />
+            )
+          })
+        ) : error ? (
+          <Typography variant="Caption" color={'error'}>
+            필수 항목입니다.
+          </Typography>
+        ) : (
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            선택된 {type === 'SKILL' ? '스킬이' : '태그가'} 없습니다.
+          </Typography>
+        )}
       </Stack>
       <CuTextModal
         open={isOpen}
@@ -196,7 +213,7 @@ const SkillAutocomplete = ({
         containedButton={{
           text: '확인',
           onClick: () => {
-            setSelected([])
+            setSkillList([])
             closeAlertModal()
           },
         }}
