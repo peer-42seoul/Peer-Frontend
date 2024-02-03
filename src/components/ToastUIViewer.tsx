@@ -34,9 +34,16 @@ const ToastViewer = ({
   }, [initialValue, viewerRef])
   return (
     <Box
-      sx={{ ...sx, fontSize: '0.9375rem' }}
+      sx={{
+        ...sx,
+        fontSize: '0.9375rem',
+        '& .toastui-editor-contents': {
+          '& p': {
+            color: 'text.alternative',
+          },
+        },
+      }}
       ref={viewerRef}
-      color={'text.alternative'}
     />
   )
 }
