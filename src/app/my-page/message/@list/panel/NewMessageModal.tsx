@@ -5,13 +5,12 @@ import { IconButton, InputBase, Popper, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
 import CuModal from '@/components/CuModal'
-import useToast from '@/hook/useToast'
 import { SearchIcon, CloseIcon } from '@/icons'
 import { IMessageListData, IMessageTarget } from '@/types/IMessage'
 import NewMessageForm from './NewMessageForm'
 import TargetList from './TargetList'
 import * as style from './NewMessageModal.style'
-import CuToast from '@/components/CuToast'
+import useToast from '@/states/useToast'
 import { isAxiosError } from 'axios'
 import useMedia from '@/hook/useMedia'
 
@@ -50,21 +49,17 @@ const NewMessageModal = ({
   const [keyword, setKeyword] = useState('')
   const [targetUser, setTargetUser] = useState<IMessageTarget | undefined>()
   const [messageTargetList, setMessageTargetList] = useState<IMessageTarget[]>()
-  const {
-    isOpen: isToastOpen,
-    openToast,
-    closeToast,
-    toastMessage,
-    setToastMessage,
-  } = useToast()
   const axiosInstance = useAxiosWithAuth()
   const ref = useRef<HTMLDivElement>(null)
   const { isPc } = useMedia()
+  const { openToast } = useToast()
 
   const searchUserWithKeyword = useCallback(async () => {
     if (!keyword) {
-      setToastMessage('검색어를 입력해주세요.')
-      openToast()
+      openToast({
+        severity: 'error',
+        message: '검색어를 입력해주세요.',
+      })
       return
     }
 
@@ -81,11 +76,15 @@ const NewMessageModal = ({
         error.response?.status === 400 &&
         error.response?.data?.messages
       ) {
-        setToastMessage(error.response.data.messages[0])
-        openToast()
+        openToast({
+          severity: 'error',
+          message: error.response.data.messages[0],
+        })
       } else {
-        setToastMessage('검색에 실패했습니다. 다시 시도해주세요.')
-        openToast()
+        openToast({
+          severity: 'error',
+          message: '검색 중 오류가 발생했습니다. 다시 시도해주세요.',
+        })
       }
     }
   }, [keyword])
@@ -178,9 +177,6 @@ const NewMessageModal = ({
             />
           </InputContainer>
         </Stack>
-        <CuToast open={isToastOpen} onClose={closeToast} severity={'error'}>
-          {toastMessage}
-        </CuToast>
       </>
     </CuModal>
   )
