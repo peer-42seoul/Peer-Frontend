@@ -133,10 +133,11 @@ const CreateTeam = () => {
       region: ['', ''],
       link: '',
       tagList: [],
-      roleList: [],
+      roleList: [{ name: '', number: 0 }],
       interviewList: [],
       max: undefined,
     },
+    mode: 'onChange',
   })
 
   const onHandlerFinish = async (data: IRecruitWriteField) => {
@@ -182,7 +183,6 @@ const CreateTeam = () => {
     // }
   }
 
-  const roleList = watch('roleList')
   const interviewList = watch('interviewList')
   const region = watch('region')
   const place = watch('place')
@@ -400,21 +400,7 @@ const CreateTeam = () => {
             />
             {/* (프로젝트인 경우만) 역할 추가 */}
             {type === 'PROJECT' ? (
-              <FieldWithLabel
-                label="역할"
-                labelIcon={
-                  <Icon.UserCheckIcon
-                    sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                  />
-                }
-              >
-                <SetTeamRole
-                  roleData={roleList}
-                  setRoleData={(value: Array<IRoleWrite>) => {
-                    setValue('roleList', value)
-                  }}
-                />
-              </FieldWithLabel>
+              <SetTeamRole control={control} trigger={trigger} />
             ) : (
               // (스터디인 경우만) 모집인원 선택
               <Controller

@@ -8,6 +8,7 @@ import {
 
 interface IFieldWithLabelProps {
   labelIcon?: React.ReactNode
+  endIconButton?: React.ReactNode
   label?: string
   id?: string
   labelProps?: TypographyProps
@@ -34,6 +35,7 @@ const FieldWithLabel = (props: IFieldWithLabelProps) => {
           >
             {props.label}
           </Typography>
+          {props.endIconButton}
         </Stack>
       </InputLabel>
       {props.children}
