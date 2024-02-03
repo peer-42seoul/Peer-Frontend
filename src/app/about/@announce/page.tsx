@@ -70,7 +70,7 @@ const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
 
 const AnnouncePage = () => {
   const { isPc } = useMedia()
-  const [page, setPage] = useState<number>(0)
+  const [page, setPage] = useState<number>(1)
   const { data, isLoading, error } = useSWR<IPagination<AnnounceCardProps[]>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/about/announcement?page=${page}&size=5`,
     defaultGetFetcher,
