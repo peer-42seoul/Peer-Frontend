@@ -52,6 +52,13 @@ const NoticeEditForm = ({
       content: editorRef.current.getMarkdown(),
       image: null,
     }
+    if (!form.title || !form.content) {
+      openToast({
+        severity: 'error',
+        message: '제목과 내용을 입력해주세요.',
+      })
+      return
+    }
     if (postId) {
       // 글 수정
       axiosWithAuth

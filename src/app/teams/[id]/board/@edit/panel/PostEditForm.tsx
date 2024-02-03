@@ -51,10 +51,10 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
       content: editorRef.current.getMarkdown(),
       image: null,
     }
-    if (!form.title) {
+    if (!form.title || !form.content) {
       openToast({
         severity: 'error',
-        message: '제목을 입력해주세요.',
+        message: '제목과 내용을 입력해주세요.',
       })
       return
     }
