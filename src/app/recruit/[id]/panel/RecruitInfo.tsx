@@ -26,20 +26,31 @@ const RecruitInfo = ({ data, type, children, pc }: RecruitInfoProps) => {
             width={'18.5rem'}
             height={'12.5rem'}
           />
-          <Box display="flex" flexDirection="column" gap={2}>
-            <Stack gap={'1rem'} direction="row" alignItems={'center'}>
-              <TypeChip type={type} />
-              <RecruitTitle title={data?.title} status={data?.status} />
-            </Stack>
-            <Stack gap={'1rem'} direction="row" alignItems={'center'}>
-              <OthersProfile
-                userId={data?.leader_id}
-                name={data?.leader_nickname}
-              >
-                <Avatar alt="avatar" src={data?.leader_image} sizes={'small'} />
-              </OthersProfile>
-              <Typography variant={'Body2'}>{data?.teamName}</Typography>
-              <LinkButton href={data?.link} variant={'contained'} />
+          <Box
+            display="flex"
+            flexDirection="column"
+            gap={2}
+            justifyContent={'space-between'}
+          >
+            <Stack gap={'1rem'}>
+              <Stack gap={'1rem'} direction="row" alignItems={'center'}>
+                <TypeChip type={type} />
+                <RecruitTitle title={data?.title} status={data?.status} />
+              </Stack>
+              <Stack gap={'1rem'} direction="row" alignItems={'center'}>
+                <OthersProfile
+                  userId={data?.leader_id}
+                  name={data?.leader_nickname}
+                >
+                  <Avatar
+                    alt="avatar"
+                    src={data?.leader_image}
+                    sizes={'small'}
+                  />
+                </OthersProfile>
+                <Typography variant={'Body2'}>{data?.teamName}</Typography>
+                <LinkButton href={data?.link} variant={'contained'} />
+              </Stack>
             </Stack>
             {/*지원 버튼*/}
             {children}
