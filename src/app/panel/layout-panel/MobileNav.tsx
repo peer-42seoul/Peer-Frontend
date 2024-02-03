@@ -57,6 +57,7 @@ const MobileNav = () => {
         onChange={(event, newValue) => {
           setValue(newValue)
         }}
+        sx={{ paddingX: '1rem' }}
       >
         <BottomNavigationAction
           sx={bottomNavStyle}
