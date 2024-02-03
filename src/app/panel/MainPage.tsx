@@ -200,7 +200,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         <Container
           sx={{
             backgroundColor: 'Background.primary',
-            border: '1px solid black',
             maxWidth: '56.75rem',
           }}
         >
