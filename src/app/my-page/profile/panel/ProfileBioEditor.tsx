@@ -200,11 +200,17 @@ const ProfileBioEditor = ({
           })
           .catch((error) => {
             setIsNicknameUnique(false)
-            console.log(error)
-            openToast({
-              severity: 'error',
-              message: '중복된 닉네임 입니다.',
-            })
+            if (error.data.message) {
+              openToast({
+                severity: 'error',
+                message: error.data.message,
+              })
+            } else {
+              openToast({
+                severity: 'error',
+                message: '중복된 닉네임 입니다.',
+              })
+            }
             setError('nickname', {
               type: 'notUnique',
               message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
@@ -256,7 +262,6 @@ const ProfileBioEditor = ({
     }
     submitData.append('imageChange', imageChanged.toString().toUpperCase())
 
-    console.log('닉네임 중복확인', isNicknameUnique)
     if (!isNicknameUnique) {
       setError('nickname', {
         type: 'notUnique',

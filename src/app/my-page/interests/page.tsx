@@ -203,11 +203,9 @@ const MyInterests = () => {
   useEffect(() => {
     if (!isLoading && data) {
       if (type === 'SHOWCASE') {
-        console.log('data.content: ', data.content)
         setShowcaseList((prev) => {
           return prev.concat(data.content as Array<IShowcasePostCard>)
         })
-        console.log('showcaseList: ', showcaseList)
       } else {
         setPostList((prev) => {
           return prev.concat(data.content as Array<IDefaultPostCard>)

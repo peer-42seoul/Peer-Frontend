@@ -232,8 +232,6 @@ const PasswordChangeModal = ({
 
   const { openToast } = useToast()
 
-  console.log(data, payload)
-
   const handleCloseModal = () => {
     // 모달이 꺼져도 데이터가 남아있는 문제가 있어서 초기화 후 꺼지도록 처리하였습니다.
     setPayload(null)
