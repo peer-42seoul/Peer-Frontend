@@ -103,7 +103,6 @@ export const EditForm = ({
             defaultValue={initialData.title || ''}
             sx={{ maxWidth: '26rem' }}
           />
-          <button type={'submit'}>제출하기</button>
         </Stack>
         <Stack spacing={'0.5rem'} height={'100%'}>
           <Typography variant={'CaptionEmphasis'}>내용</Typography>
