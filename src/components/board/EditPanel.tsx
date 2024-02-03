@@ -1,10 +1,11 @@
-import { Stack, TextField, Typography } from '@mui/material'
+import { Box, Stack, TextField, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import BackgroundBox from '../BackgroundBox'
 import CuButton from '../CuButton'
 import CuModal from '../CuModal'
 import DynamicToastEditor from '../DynamicToastEditor'
 import * as style from './EditPanel.style'
+import { Editor } from '@toast-ui/editor'
 
 interface IChildrenProps {
   children: React.ReactNode
@@ -14,8 +15,12 @@ interface IEditFormProps {
   formId: string
   isLoading: boolean
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
-  initialTitle: string
-  initialContent: string
+  titleRef: React.MutableRefObject<HTMLInputElement | null>
+  editorRef: React.MutableRefObject<Editor | null>
+  initialData: {
+    title: string
+    content: string
+  }
 }
 
 interface IEditButtonProps {
@@ -81,8 +86,9 @@ export const EditForm = ({
   formId,
   isLoading,
   onSubmit,
-  initialTitle,
-  initialContent,
+  titleRef,
+  editorRef,
+  initialData,
 }: IEditFormProps) => {
   return (
     <form onSubmit={onSubmit} id={formId}>
@@ -90,18 +96,23 @@ export const EditForm = ({
         <Stack spacing={'0.5rem'}>
           <Typography variant={'CaptionEmphasis'}>제목</Typography>
           <TextField
+            inputRef={titleRef}
             name={'post-title'}
-            id={'post-title'}
             placeholder={'제목을 입력해주세요.'}
             disabled={isLoading}
-            defaultValue={initialTitle}
+            defaultValue={initialData.title || ''}
             sx={{ maxWidth: '26rem' }}
           />
           <button type={'submit'}>제출하기</button>
         </Stack>
         <Stack spacing={'0.5rem'} height={'100%'}>
           <Typography variant={'CaptionEmphasis'}>내용</Typography>
-          <DynamicToastEditor initialValue={initialContent} />
+          <Box>
+            <DynamicToastEditor
+              initialValue={initialData.content || ''}
+              editorRef={editorRef}
+            />
+          </Box>
         </Stack>
       </Stack>
     </form>
