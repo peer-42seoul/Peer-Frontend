@@ -10,7 +10,6 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  TextField,
   Typography,
 } from '@mui/material'
 import ImageUploadButton from '@/components/ImageUploadButton'
@@ -34,6 +33,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { FormControlLabel } from '@mui/material'
 import SkillAutocomplete from '@/components/SkillAutocomplete'
 import { ISkill } from '@/types/IUserProfile'
+import DynamicToastEditor from '@/components/DynamicToastEditor'
 
 export interface IRecruitWriteField {
   place: string
@@ -42,7 +42,6 @@ export interface IRecruitWriteField {
   name: string
   due: string
   type: string
-  content: string
   region: Array<string> | null
   link: string
   tagList: Array<ISkill>
@@ -52,8 +51,6 @@ export interface IRecruitWriteField {
 }
 
 const CreateTeam = () => {
-  const [content, setContent] = useState<string>('')
-
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const { closeToast } = useToast()
   const router = useRouter()
@@ -129,7 +126,6 @@ const CreateTeam = () => {
       name: '',
       due: '',
       type: 'PROJECT',
-      content: '',
       region: ['', ''],
       link: '',
       tagList: [],
@@ -582,17 +578,7 @@ const CreateTeam = () => {
                 />
               }
             >
-              <TextField
-                variant="outlined"
-                value={content}
-                onChange={(e) => {
-                  if (e.target.value.length > 1000)
-                    setContent(e.target.value.slice(0, 1000) as string)
-                  else setContent(e.target.value as string)
-                }}
-                fullWidth
-                multiline
-              />
+              <DynamicToastEditor />
             </FieldWithLabel>
             {/* 모집 인터뷰 */}
             <FieldWithLabel
