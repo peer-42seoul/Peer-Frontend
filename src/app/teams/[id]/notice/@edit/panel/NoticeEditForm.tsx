@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Editor } from '@toast-ui/editor'
 import useAxiosWithAuth from '@/api/config'
 import useTeamPageState from '@/states/useTeamPageState'
+import useToast from '@/states/useToast'
 import { EditForm } from '@/components/board/EditPanel'
 
 const NoticeEditForm = ({
@@ -21,6 +22,7 @@ const NoticeEditForm = ({
   const [isLoading, setIsLoading] = useState(false)
   const titleRef = useRef<HTMLInputElement | null>(null)
   const editorRef = useRef<Editor | null>(null)
+  const { openToast } = useToast()
   useEffect(() => {
     if (postId) {
       setIsLoading(true)
@@ -59,7 +61,10 @@ const NoticeEditForm = ({
           setNotice('DETAIL', postId)
         })
         .catch(() => {
-          alert('공지사항 수정에 실패했습니다.')
+          openToast({
+            severity: 'error',
+            message: '공지사항 수정에 실패했습니다.',
+          })
         })
     } else {
       // 글 작성
@@ -73,7 +78,10 @@ const NoticeEditForm = ({
           setNotice('DETAIL', res.data.postId)
         })
         .catch(() => {
-          alert('공지사항 작성에 실패했습니다.')
+          openToast({
+            severity: 'error',
+            message: '공지사항 수정에 실패했습니다.',
+          })
         })
     }
   }

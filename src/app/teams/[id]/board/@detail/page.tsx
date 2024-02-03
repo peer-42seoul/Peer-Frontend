@@ -11,6 +11,7 @@ import {
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
+import useToast from '@/states/useToast'
 import { ITeamPostDetail } from '@/types/TeamBoardTypes'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
@@ -27,6 +28,7 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   )
   const { isPc } = useMedia()
   const { openModal, isOpen, closeModal } = useModal()
+  const { openToast } = useToast()
 
   const handleDelete = () => {
     if (!boardId) return
@@ -37,7 +39,10 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
         setBoard('LIST', boardId)
       })
       .catch(() => {
-        alert('게시글 삭제에 실패했습니다.')
+        openToast({
+          severity: 'error',
+          message: '게시글을 삭제하지 못했습니다.',
+        })
       })
   }
 
