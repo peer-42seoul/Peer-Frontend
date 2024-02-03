@@ -96,11 +96,11 @@ const CuNavBar = ({
   )
 }
 
-const getTextColor = (selected: boolean, disabled?: boolean) => {
-  if (selected) return 'purple.strong'
-  if (disabled) return 'text.disable'
-  return 'text.assistive'
-}
+// const getTextColor = (selected: boolean, disabled?: boolean) => {
+//   if (selected) return 'purple.strong'
+//   if (disabled) return 'text.disable'
+//   return 'text.assistive'
+// }
 
 const PcToggleButton = ({
   tab,
@@ -127,13 +127,7 @@ const PcToggleButton = ({
         alignItems={'center'}
         justifyContent={'center'}
       >
-        <Box sx={style.iconBoxBase}>{tab.icon}</Box>
-        <Typography
-          color={getTextColor(selected, tab.disabled)}
-          variant={'Caption'}
-        >
-          {tab.label}
-        </Typography>
+        <Typography variant={'Caption'}>{tab.label}</Typography>
         {isNewTab && (
           <Typography sx={style.newTextBadge} variant={'Caption'}>
             NEW
@@ -165,12 +159,7 @@ const MobileToggleButton = ({
         <Badge sx={style.newBadge} variant={'dot'} invisible={!isNewTab}>
           <Box sx={style.iconBoxBase}>{tab.icon}</Box>
         </Badge>
-        <Typography
-          variant={'Tag'}
-          color={getTextColor(selected, tab.disabled)}
-        >
-          {tab.mobileLabel ?? tab.label}
-        </Typography>
+        <Typography variant={'Tag'}>{tab.mobileLabel ?? tab.label}</Typography>
       </Stack>
     </ToggleButton>
   )
