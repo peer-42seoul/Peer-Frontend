@@ -35,7 +35,7 @@ export interface IPost {
   user_thumbnail: string
   status: string
   tagList: ITag[]
-  favorite: boolean
+  favorite: boolean | undefined
 }
 
 export interface IPostDetail {

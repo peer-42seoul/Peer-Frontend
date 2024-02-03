@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
 import useAxiosWithAuth from '@/api/config'
@@ -23,7 +23,11 @@ const FavoriteButton = ({
   const router = useRouter()
   const axiosInstance = useAxiosWithAuth()
 
-  const changeFavorite = async () => {
+  useEffect(() => {
+    if (favorite !== undefined) setIsFavorite(favorite)
+  }, [favorite])
+
+  const changeFavorite = useCallback(async () => {
     if (!isLogin) return router.push('/login?redirect=' + redirect_url)
     try {
       setIsFavorite(!isFavorite)
@@ -38,7 +42,15 @@ const FavoriteButton = ({
       console.log('error', e)
       setIsFavorite(!isFavorite)
     }
-  }
+  }, [
+    axiosInstance,
+    isFavorite,
+    isLogin,
+    onFavorite,
+    recruit_id,
+    redirect_url,
+    router,
+  ])
 
   return (
     <Tooltip title="관심">
