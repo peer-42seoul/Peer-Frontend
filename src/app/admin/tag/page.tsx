@@ -47,12 +47,12 @@ const Tag = () => {
   const { isLoggedIn } = useAdminStore()
   const router = useRouter()
 
-  // useEffect(() => {
-  //   if (isLoggedIn === false) {
-  //     alert('로그인이 필요한 서비스입니다.')
-  //     router.push('/admin/login')
-  //   }
-  // }, [isLoggedIn])
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      alert('로그인이 필요한 서비스입니다.')
+      router.push('/admin/login')
+    }
+  }, [isLoggedIn])
 
   useEffect(() => {
     axios

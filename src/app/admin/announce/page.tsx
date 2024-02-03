@@ -24,46 +24,7 @@ import useAdminStore from '@/states/useAdminStore'
 import { useRouter } from 'next/navigation'
 import ToastEditor from '@/components/ToastUIEditor'
 import ToastViewer from '@/components/ToastUIViewer'
-
-const idStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-}
-const statusStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-}
-
-const alignCenter = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-}
-
-const titleStyle = {
-  display: 'flex',
-  justifyContent: 'flex-start', // 제목을 왼쪽 정렬합니다.
-  alignItems: 'center',
-  overflow: 'hidden', // 내용이 넘칠 경우 숨깁니다.
-  textOverflow: 'ellipsis', // 넘치는 텍스트를 ...으로 표시합니다.
-  whiteSpace: 'nowrap', // 텍스트를 한 줄로 표시합니다.
-}
-
-// const style = {
-//   position: 'absolute' as 'absolute',
-//   top: '50%',
-//   left: '50%',
-//   transform: 'translate(-50%, -50%)',
-//   width: '80%',
-//   height: '80%',
-//   bgcolor: 'background.tertiary',
-//   border: '2px solid #000',
-//   boxShadow: 24,
-//   p: 4,
-//   overflowY: 'scroll',
-// }
+import { idStyle, statusStyle, titleStyle } from './AnnounceStyles'
 
 interface IAnnounceAllContent {
   announcementId: number
@@ -169,14 +130,14 @@ const Announce = () => {
   }
   // 백엔드 API에서는 page가 0부터 시작하므로 page - 1로 설정
 
-  // const { isLoggedIn } = useAdminStore()
-  // const router = useRouter()
-  // useEffect(() => {
-  //   if (isLoggedIn === false) {
-  //     alert('로그인이 필요한 서비스입니다.')
-  //     router.push('/admin/login')
-  //   }
-  // }, [isLoggedIn])
+  const { isLoggedIn } = useAdminStore()
+  const router = useRouter()
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      alert('로그인이 필요한 서비스입니다.')
+      router.push('/admin/login')
+    }
+  }, [isLoggedIn])
 
   // 초기 페이지 진입시 공지사항 목록 불러오기
   useEffect(() => {
