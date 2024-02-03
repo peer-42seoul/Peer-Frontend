@@ -29,8 +29,6 @@ const InterestsContents = ({
   setPostList: React.Dispatch<React.SetStateAction<IDefaultPostCard[]>>
   setShowcaseList: React.Dispatch<React.SetStateAction<IShowcasePostCard[]>>
 }) => {
-  console.log('InterestsContents')
-  console.log(showcaseList)
   const axiosInstance = useAxiosWithAuth()
 
   const handleDefaultUnfavorite = (recruit_id: number) => () => {

@@ -1,4 +1,4 @@
-import { useState, ReactElement, useEffect } from 'react'
+import { useState, ReactElement, useEffect, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import {
   Box,
@@ -40,9 +40,13 @@ const CuNavBar = ({
   const [value, setValue] = useState<string | undefined>(undefined)
   const { isPc } = useMedia()
 
-  useEffect(() => {
+  const setTabValue = useCallback(() => {
     setValue(getTabValue(pathName))
-  }, [pathName])
+  }, [pathName, getTabValue])
+
+  useEffect(() => {
+    setTabValue()
+  }, [setTabValue])
 
   return (
     <Box sx={isPc ? style.pcNavBar : style.mobileNavBar}>
@@ -68,7 +72,7 @@ const CuNavBar = ({
         sx={style.tabs}
         exclusive
         onChange={(_event, newValue) => {
-          setValue(newValue)
+          if (newValue) setValue(newValue)
         }}
       >
         {isPc
@@ -95,13 +99,6 @@ const CuNavBar = ({
     </Box>
   )
 }
-
-// const getTextColor = (selected: boolean, disabled?: boolean) => {
-//   if (selected) return 'purple.strong'
-//   if (disabled) return 'text.disable'
-//   return 'text.assistive'
-// }
-
 const PcToggleButton = ({
   tab,
   selected,
