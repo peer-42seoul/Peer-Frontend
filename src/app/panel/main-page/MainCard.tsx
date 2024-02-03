@@ -14,6 +14,7 @@ import Link from 'next/link'
 import OthersProfile from '../OthersProfile'
 import TagChip from '@/components/TagChip'
 import FavoriteButton from '@/components/FavoriteButton'
+import { ChipStyle, tagListStyle } from '@/app/panel/main-page/MainCard.style'
 
 const MainCard = ({
   title,
@@ -30,8 +31,15 @@ const MainCard = ({
   onFavorite,
   sx,
 }: IMainCard) => {
+  const statusLabel =
+    status === 'ONGOING'
+      ? '모집중'
+      : status === 'BEFORE'
+        ? '모집전'
+        : '모집완료'
+
   return (
-    <Card sx={{ maxWidth: 345, ...sx }}>
+    <Card sx={sx}>
       <Link
         href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}
@@ -45,27 +53,8 @@ const MainCard = ({
           />
           {status && (
             <Chip
-              label={
-                <Typography variant="Tag">
-                  {status === 'ONGOING'
-                    ? '모집중'
-                    : status === 'BEFORE'
-                      ? '모집전'
-                      : '모집완료'}
-                </Typography>
-              }
-              sx={{
-                position: 'absolute',
-                top: 16,
-                left: 16,
-                borderRadius: 1,
-                backgroundColor: 'background.tertiary',
-                color: 'white',
-                height: '1.25rem',
-                '.MuiChip-label': {
-                  paddingX: '0.375rem',
-                },
-              }}
+              label={<Typography variant="Tag">{statusLabel}</Typography>}
+              sx={ChipStyle}
               size="medium"
             />
           )}
@@ -74,14 +63,14 @@ const MainCard = ({
       <CardHeader
         avatar={
           <OthersProfile userId={user_id} name={user_nickname}>
-            <Avatar aria-label="profile">
-              <Box
-                component="img"
-                height="194"
-                src={user_thumbnail}
-                alt="profile image"
-              />
-            </Avatar>
+            <Avatar
+              aria-label="profile"
+              src={user_thumbnail}
+              sx={{
+                width: '2rem',
+                height: '2rem',
+              }}
+            />
           </OthersProfile>
         }
         action={
@@ -92,7 +81,11 @@ const MainCard = ({
             onFavorite={onFavorite}
           />
         }
-        title={user_nickname}
+        title={
+          <Typography variant="Body2" color="text.alternative">
+            {user_nickname}
+          </Typography>
+        }
       />
       <Link
         href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
@@ -103,27 +96,13 @@ const MainCard = ({
             '&:last-child': {
               paddingBottom: '1rem !important',
             },
+            paddingY: 0,
           }}
         >
-          <Typography variant="Body1" color="text.secondary">
+          <Typography variant="Body1" color="text.normal">
             {title}
           </Typography>
-          <Stack
-            gap={'0.25rem'}
-            mt={1}
-            direction={'row'}
-            sx={{
-              height: '3.5rem',
-              overflow: 'auto',
-              flexWrap: 'wrap',
-              '&::-webkit-scrollbar': {
-                display: 'none',
-              },
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-            }}
-            flexWrap={'wrap'}
-          >
+          <Stack sx={tagListStyle}>
             {tagList?.map(({ name, color }: ITag, idx: number) => (
               <TagChip name={name} color={color} key={idx} />
             ))}

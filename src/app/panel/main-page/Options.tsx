@@ -13,10 +13,10 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import FormCheckbox from './FormCheckbox'
 import TagAutoComplete from '@/components/TagAutoComplete'
-import SetupSelect from '../../teams/[id]/setting/panel/SettingSelect'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 import { ITag } from '@/types/IPostDetail'
+import SettingSelect from '@/app/teams/[id]/setting/panel/SettingSelect'
 
 const Options = ({ setDetailOption }: { setDetailOption: any }) => {
   const { handleSubmit, control, reset } = useForm({
@@ -42,7 +42,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
     { value: 40, label: '3개월' },
     { value: 60, label: '6개월' },
     { value: 80, label: '9개월' },
-    { value: 100, label: '12개월 이상' },
+    { value: 100, label: '1년이상' },
   ]
 
   const onSubmit = (data: any) => {
@@ -105,7 +105,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={2} padding={1.5}>
+      <Grid container spacing={2} padding={'1rem'}>
         <Grid item xs={12}>
           <TagAutoComplete
             title={'기술스택'}
@@ -116,7 +116,7 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Typography variant={'Caption'}>목표기간</Typography>
-          <Box paddingX={4}>
+          <Box paddingX={'1.25rem'}>
             <Slider
               size="small"
               value={due}
@@ -124,7 +124,12 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
               onChange={handleDueChange}
               step={null}
               valueLabelDisplay="off"
-              marks={dueList}
+              marks={dueList.map((mark) => ({
+                value: mark.value,
+                label: (
+                  <Typography fontSize={'0.6875rem'}>{mark.label}</Typography>
+                ),
+              }))}
             />
           </Box>
         </Grid>
@@ -144,22 +149,27 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
           </FormGroup>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography variant={'Caption'}>활동지역</Typography>
-          <SetupSelect
-            value={parentLocation}
-            setValue={(event: SelectChangeEvent) =>
-              setParentLocation(event.target.value)
-            }
-            type="location"
-          />
-          <SetupSelect
-            value={location}
-            setValue={(event: SelectChangeEvent) =>
-              setLocation(event.target.value)
-            }
-            type="location"
-            parentLocation={parentLocation}
-          />
+          <Typography
+            variant={'Caption'}
+            sx={{
+              display: 'block',
+            }}
+          >
+            활동지역
+          </Typography>
+          <Stack gap={'0.5rem'} flexWrap={'wrap'} direction={'row'}>
+            <SettingSelect
+              value={parentLocation}
+              setValue={(value) => setParentLocation(value)}
+              type="location"
+            />
+            <SettingSelect
+              value={location}
+              setValue={(value) => setLocation(value)}
+              type="location"
+              parentLocation={parentLocation}
+            />
+          </Stack>
         </Grid>
         <Grid item xs={12} sm={6}>
           <Typography variant={'Caption'}>활동방식</Typography>
@@ -175,8 +185,12 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
         </Grid>
         <Grid item xs={12}>
           <Stack direction="row" justifyContent={'space-between'}>
-            <Button onClick={handleReset}>초기화</Button>
-            <Button type={'submit'}>확인</Button>
+            <Button onClick={handleReset} sx={{ padding: 0 }}>
+              <Typography variant={'Caption'}>초기화</Typography>
+            </Button>
+            <Button type={'submit'} variant={'text'} sx={{ padding: 0 }}>
+              <Typography variant={'Caption'}>확인</Typography>
+            </Button>
           </Stack>
         </Grid>
       </Grid>

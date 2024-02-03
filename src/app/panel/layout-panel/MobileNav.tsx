@@ -14,7 +14,7 @@ import {
   ShowcaseIcon,
   TeamsIcon,
 } from '@/icons/Nav'
-import { bottomNavStyle } from './MobileNav.style'
+import { bottomNavStyle } from './Nav.style'
 
 const MobileNav = () => {
   const [value, setValue] = useState<

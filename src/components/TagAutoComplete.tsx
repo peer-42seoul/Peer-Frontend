@@ -69,7 +69,7 @@ const TagAutoComplete = ({
           )}
         />
       </Stack>
-      <Stack gap={1} direction={'row'}>
+      <Stack gap={1} direction={'row'} flexWrap={'wrap'}>
         {datas?.map((tag: ITag) => {
           return (
             <TagChip

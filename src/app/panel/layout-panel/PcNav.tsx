@@ -9,6 +9,7 @@ import {
   Button,
   IconButton,
   Stack,
+  Typography,
 } from '@mui/material'
 import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 import AlertIcon from '@/app/panel/layout-panel/AlertIcon'
@@ -16,6 +17,10 @@ import SearchButton from '@/app/panel/main-page/SearchButton'
 import Link from 'next/link'
 import { BorderColor, Favorite } from '@mui/icons-material'
 import { BetaIcon } from '@/components/BetaBadge'
+import useSWR from 'swr'
+import { IUserProfile } from '@/types/IUserProfile'
+import useAxiosWithAuth from '@/api/config'
+import { navContainerStyle, navStyle } from '@/app/panel/layout-panel/Nav.style'
 
 const PcNav = () => {
   const [value, setValue] = useState<
@@ -25,10 +30,15 @@ const PcNav = () => {
   const pathname = usePathname()
   const router = useRouter()
   const { isLogin } = useAuthStore()
-
+  const axiosWithAuth = useAxiosWithAuth()
   const interestsPath = isLogin
     ? '/my-page/interests'
     : '/login?redirect=/my-page/interests'
+
+  const { data: profileData } = useSWR<IUserProfile>(
+    isLogin ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile` : undefined,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+  )
 
   useEffect(() => {
     if (pathname === '/') {
@@ -43,21 +53,7 @@ const PcNav = () => {
   }, [pathname])
 
   return (
-    <Stack
-      direction={'row'}
-      justifyContent={'center'}
-      alignItems={'center'}
-      width={'100%'}
-      sx={{
-        position: 'fixed',
-        left: 0,
-        right: 0,
-        top: 0,
-        overflow: 'hidden',
-        zIndex: 1300, // NOTE : 가능한 가장 높은 값으로 설정한 것이므로 이 값은 높이지 말아주세요. (낮추는건 괜찮습니다.)
-        backgroundColor: 'background.primary',
-      }}
-    >
+    <Stack sx={navContainerStyle}>
       <Stack
         direction={'row'}
         maxWidth={1280}
@@ -77,16 +73,18 @@ const PcNav = () => {
           >
             <BottomNavigationAction
               value={'home'}
-              label="모집글"
+              label={<Typography fontSize={'0.8125rem'}>모집글</Typography>}
               onClick={() => {
                 router.push('/')
               }}
+              sx={navStyle}
             />
             <BottomNavigationAction
               icon={<BetaIcon />}
               value={'hitchhiking'}
-              label="히치하이킹"
+              label={<Typography fontSize={'0.8125rem'}>히치하이킹</Typography>}
               sx={{
+                ...navStyle,
                 wordBreak: 'keep-all',
               }}
               onClick={() => {
@@ -96,18 +94,20 @@ const PcNav = () => {
 
             <BottomNavigationAction
               value={'team-list'}
-              label="팀페이지"
+              label={<Typography fontSize={'0.8125rem'}>팀페이지</Typography>}
               onClick={() => {
                 router.push('/team-list')
               }}
+              sx={navStyle}
             />
             <BottomNavigationAction
               icon={<BetaIcon />}
               value={'showcase'}
-              label="쇼케이스"
+              label={<Typography fontSize={'0.8125rem'}>쇼케이스</Typography>}
               onClick={() => {
                 router.push('/showcase')
               }}
+              sx={navStyle}
             />
           </BottomNavigation>
         </Stack>
@@ -126,6 +126,7 @@ const PcNav = () => {
               width: '2rem',
               height: '2rem',
             }}
+            src={profileData?.profileImageUrl}
             onClick={() =>
               router.push(
                 isLogin
