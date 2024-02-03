@@ -1,7 +1,7 @@
 'use client'
 
 import { Container, Box, Grid, Stack, Typography } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import FloatEditButton from './main-page/FloatEditButton'
 import MainCard from './main-page/MainCard'
 import SelectType from './main-page/SelectType'

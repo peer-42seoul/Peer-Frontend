@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { ProjectType } from '@/types/IPostDetail'
 
 const SelectType = ({

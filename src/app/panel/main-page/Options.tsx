@@ -3,7 +3,6 @@ import {
   Button,
   FormGroup,
   Grid,
-  SelectChangeEvent,
   Slider,
   Stack,
   Typography,
