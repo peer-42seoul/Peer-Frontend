@@ -2,6 +2,7 @@
 import { BetaBadge } from '@/components/BetaBadge'
 import CuToggle from '@/components/CuToggle'
 import TitleBox from '@/components/TitleBox'
+import useMedia from '@/hook/useMedia'
 import { Box, FormControlLabel, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
@@ -26,21 +27,9 @@ const Notif = ({
           />
         }
         label={
-          <Stack
-            direction={'row'}
-            alignItems={'center'}
-            spacing={'0.5rem'}
-            sx={{ marginRight: '1rem', marginLeft: '0' }}
-          >
-            <Typography variant="CaptionEmphasis" color={'text.strong'}>
-              {type}
-            </Typography>
-            <BetaBadge
-              sx={{
-                height: '0.8rem',
-              }}
-            />
-          </Stack>
+          <Typography variant="CaptionEmphasis" color={'text.strong'}>
+            {type}
+          </Typography>
         }
         labelPlacement="start"
       />
@@ -54,8 +43,26 @@ const NotifSetting = () => {
   const [message, setMessage] = useState(false)
   const [night, setNight] = useState(false)
 
+  const { isPc } = useMedia()
+
   return (
-    <TitleBox title="알림 설정">
+    <TitleBox
+      title="알림 설정"
+      titleComponent={
+        <Stack direction="row" spacing={1} alignItems={'baseline'}>
+          <Typography
+            variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}
+            component={'h3'}
+          >
+            알림 설정
+          </Typography>
+          <BetaBadge sx={{ height: '0.75rem' }} />
+          <Typography variant="Caption" color={'text.assistive'}>
+            아직 개발 중인 기능입니다.
+          </Typography>
+        </Stack>
+      }
+    >
       <Stack spacing={2}>
         <Notif
           type="키워드 알림"
