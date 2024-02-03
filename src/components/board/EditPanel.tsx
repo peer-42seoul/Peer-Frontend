@@ -105,9 +105,18 @@ export const EditForm = ({
 }
 
 export const EditButton = ({ type, handleGoBack }: IEditButtonProps) => {
+  const { isPc } = useMedia()
   return (
-    <Stack direction={'row'} justifyContent={'flex-end'}>
-      <Stack width={'18.5rem'} direction={'row'} spacing={'1rem'}>
+    <Stack
+      direction={'row'}
+      justifyContent={'flex-end'}
+      sx={style.EditButtonContainer}
+    >
+      <Stack
+        width={isPc ? '18.5rem' : '100%'}
+        direction={'row'}
+        spacing={'1rem'}
+      >
         <CuButton
           variant={'text'}
           action={handleGoBack}
