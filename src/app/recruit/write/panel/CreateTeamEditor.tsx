@@ -1,9 +1,6 @@
 'use client'
 
-import {
-  // useEffect,
-  useState,
-} from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Box,
@@ -19,11 +16,8 @@ import ImageUploadButton from '@/components/ImageUploadButton'
 import { ComponentType } from './fields/BasicSelect'
 import { BasicSelect, SelectRegion, SetTeamRole } from './fields'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
-// import useAxiosWithAuth from '@/api/config'
-// import useSWR from 'swr'
-// import axios from 'axios'
 import useMedia from '@/hook/useMedia'
-// import useAuthStore from '@/states/useAuthStore'
+import useAuthStore from '@/states/useAuthStore'
 import * as style from '../page.style'
 import * as Icon from '@/icons'
 import TextFieldWithLabel from '@/components/TextFieldWithLabel'
@@ -32,7 +26,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { FormControlLabel } from '@mui/material'
 import SkillAutocomplete from '@/components/SkillAutocomplete'
 import { ISkill } from '@/types/IUserProfile'
-import DynamicToastEditor from '@/components/DynamicToastEditor'
+// import DynamicToastEditor from '@/components/DynamicToastEditor'
 import { Editor } from '@toast-ui/editor'
 import { IFormInterview } from '@/types/IPostDetail'
 import SetInterview from './fields/SetInterview/SetInterview'
@@ -40,7 +34,7 @@ import SetInterview from './fields/SetInterview/SetInterview'
 const CreateTeamEditor = ({
   defaultValues,
   submitHandler,
-  editorRef,
+  // editorRef,
   editorType,
   isAnswered,
 }: {
@@ -55,11 +49,11 @@ const CreateTeamEditor = ({
   // const axiosInstance = useAxiosWithAuth()
   const { isPc } = useMedia()
 
-  // const { isLogin } = useAuthStore()
+  const { isLogin } = useAuthStore()
 
-  // useEffect(() => {
-  //   if (!isLogin) router.push('/login')
-  // }, [isLogin])
+  useEffect(() => {
+    if (!isLogin) router.push('/login')
+  }, [isLogin])
 
   const {
     control,
@@ -67,7 +61,6 @@ const CreateTeamEditor = ({
     formState: { errors },
     setValue,
     watch,
-    register,
     trigger,
   } = useForm<IRecruitWriteField>({
     defaultValues: defaultValues,
@@ -109,9 +102,6 @@ const CreateTeamEditor = ({
                 setPreviewImage={(value: string) => {
                   setValue('image', value)
                 }}
-                register={register('image', {
-                  required: '필수 입력 항목입니다.',
-                })}
                 sx={{ width: ['100%', 'content-fit'], maxWidth: '26rem', p: 0 }}
               >
                 <Stack
@@ -471,7 +461,42 @@ const CreateTeamEditor = ({
               />
             </FieldWithLabel>
             {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
-            <FieldWithLabel
+            <Controller
+              name={'content'}
+              render={({ field }) => (
+                <TextFieldWithLabel
+                  {...field}
+                  label="팀 소개 글"
+                  label_icon={
+                    <Icon.FileIcon
+                      sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                    />
+                  }
+                  id="content"
+                  helperText={errors?.content?.message ?? undefined}
+                  error={!!errors?.content}
+                  inputProps={{
+                    maxLength: 1000, // Corrected maxLength value
+                  }}
+                  multiline
+                  rows={10}
+                  placeholder="팀 소개 글을 입력해주세요."
+                />
+              )}
+              control={control}
+              rules={{
+                required: '필수 입력 항목입니다.',
+                minLength: {
+                  value: 2,
+                  message: '2자 이상 입력해주세요.',
+                },
+                maxLength: {
+                  value: 1000,
+                  message: '1000자 이내로 입력해주세요.',
+                },
+              }}
+            />
+            {/* <FieldWithLabel
               label="팀 소개 글"
               labelIcon={
                 <Icon.FileIcon
@@ -483,7 +508,7 @@ const CreateTeamEditor = ({
                 initialValue="팀 소개 글 입니다."
                 editorRef={editorRef}
               />
-            </FieldWithLabel>
+            </FieldWithLabel> */}
             {/* 모집 인터뷰 */}
             <FieldWithLabel
               label="모집 인터뷰"

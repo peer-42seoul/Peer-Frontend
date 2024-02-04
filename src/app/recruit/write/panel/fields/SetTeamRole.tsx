@@ -15,6 +15,7 @@ import FieldWithLabel from '@/components/FieldWithLabel'
 import { CloseIcon, PlusIcon, UserCheckIcon } from '@/icons'
 import * as style from '../../page.style'
 import { IconButton } from '@mui/material'
+import useToast from '@/states/useToast'
 
 // 해당 컴포넌트는 react-hook-form에 최적화되어있습니다.
 const SetTeamRole = ({
@@ -27,7 +28,6 @@ const SetTeamRole = ({
   editorType: 'write' | 'edit'
 }) => {
   const { isPc } = useMedia()
-  const [maxMember, setMaxMember] = useState<Array<number>>([])
   const [leftMember, setLeftMember] = useState(10)
   const { prepend, remove, fields } = useFieldArray({
     control,
@@ -37,12 +37,20 @@ const SetTeamRole = ({
 
   const { errors } = useFormState({ control })
 
+  const { closeToast, openToast } = useToast()
+
   const handlePrepend = () => {
-    if (leftMember < 1) return
+    closeToast()
+    if (leftMember == roleData) {
+      openToast({
+        message: '최대 10명 까지만 등록 가능합니다.',
+        severity: 'error',
+      })
+      return
+    }
     trigger('roleList').then(() => {
       if (!errors.roleList) {
         setLeftMember((prev) => {
-          setMaxMember([prev - roleData, ...maxMember])
           return prev - roleData
         })
         prepend({ name: '', number: 1 })
@@ -55,10 +63,6 @@ const SetTeamRole = ({
       return prev + fields[index].number
     })
     remove(index)
-    setMaxMember((prev) => {
-      prev[0] = leftMember
-      return prev
-    })
   }
 
   return (
@@ -96,17 +100,21 @@ const SetTeamRole = ({
                       ? '모집하는 역할을 입력해주세요, ex) 프론트엔드 개발자, 디자이너'
                       : '모집 역할을 입력해주세요.'
                   }
-                  rules={{
-                    required: '모집 역할을 입력해주세요.',
-                    minLength: {
-                      value: 2,
-                      message: '2글자 이상 입력해주세요.',
-                    },
-                    maxLength: {
-                      value: 20,
-                      message: '20글자 이하로 입력해주세요.',
-                    },
-                  }}
+                  rules={
+                    index === 0
+                      ? {
+                          required: '모집 역할을 입력해주세요.',
+                          minLength: {
+                            value: 2,
+                            message: '2글자 이상 입력해주세요.',
+                          },
+                          maxLength: {
+                            value: 20,
+                            message: '20글자 이하로 입력해주세요.',
+                          },
+                        }
+                      : undefined
+                  }
                   disabled={editorType === 'edit' || !!index}
                   error={!!errors?.roleList?.[index]?.name}
                 />
@@ -124,16 +132,20 @@ const SetTeamRole = ({
                   onBlur={() => {
                     trigger([`roleList.${index}.number`])
                   }}
-                  rules={{
-                    required: '모집 인원을 입력해주세요.',
-                    min: { value: 1, message: '1명 이상 입력해주세요.' },
-                    max: {
-                      value: maxMember[index] > 6 ? 6 : maxMember[index],
-                      message: `${
-                        maxMember[index] > 6 ? 6 : maxMember[index]
-                      }명 이하로 입력해주세요.`,
-                    },
-                  }}
+                  rules={
+                    index === 0
+                      ? {
+                          required: '모집 인원을 입력해주세요.',
+                          min: { value: 1, message: '1명 이상 입력해주세요.' },
+                          max: {
+                            value: leftMember > 6 ? 6 : leftMember,
+                            message: `${
+                              leftMember > 6 ? 6 : leftMember
+                            }명 이하로 입력해주세요.`,
+                          },
+                        }
+                      : undefined
+                  }
                   sx={{
                     width: '4.5rem',
                   }}

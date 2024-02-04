@@ -14,4 +14,5 @@ export interface IRecruitWriteField {
   roleList: Array<IRoleWrite>
   interviewList: Array<IFormInterview>
   max: string | undefined
+  content: string
 }
