@@ -7,7 +7,7 @@ const FloatEditButton = () => {
   const { isLogin } = useAuthStore()
 
   return (
-    <Fab color="primary" aria-label="edit" size={'medium'}>
+    <Fab color="primary" aria-label="edit" size={'large'}>
       <Link
         style={{ width: '100%', height: '100%' }}
         href={isLogin ? '/recruit/write' : '/login?redirect=/recruit/write'}

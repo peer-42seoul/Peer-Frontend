@@ -45,6 +45,7 @@ export interface IShowcaseEditorFields {
 
 // /[id] 디렉토리 interface
 export interface IShowcaseViewerFields {
+  author: boolean
   name: string
   skills: ISkill[]
   start: string

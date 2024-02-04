@@ -167,7 +167,7 @@ const ShowcaseEditor = ({
           setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
-        <TeamName teamName={data.name} />
+        <TeamName teamName={data.name} editMode={true} />
         <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
         <TeamMembers
