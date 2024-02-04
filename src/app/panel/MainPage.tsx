@@ -36,6 +36,7 @@ import {
 import SearchOptionPanel, {
   InfinityScrollPanel,
 } from '@/app/panel/main-page/MainPanel'
+import SelectSort from '@/app/panel/main-page/SelectSort'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -124,7 +125,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   }&tag=${detailOption.tag}`
 
   const isInit =
-    page == 1 && !type && !sort && detailOption.isInit && keyword == '' &&  init
+    page == 1 && !type && !sort && detailOption.isInit && keyword == '' && init
 
   const { data: favoriteData } = useSWR<IFavorite[]>(
     isInit && isLogin
@@ -202,22 +203,25 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     page,
   )
 
-  const handleType = useCallback((value: ProjectType) => {
-    setType(value)
-    //type이 변경될 경우 초기화
-    setPage(1)
-    setDetailOption({
-      due1: 0,
-      due2: 100,
-      region1: '',
-      region2: '',
-      place: '',
-      status: '',
-      tag: '',
-    })
-    setSort('latest')
-    router.push('/')
-  }, [])
+  const handleType = useCallback(
+    (value: ProjectType) => {
+      setType(value)
+      //type이 변경될 경우 초기화
+      setPage(1)
+      setDetailOption({
+        due1: 0,
+        due2: 100,
+        region1: '',
+        region2: '',
+        place: '',
+        status: '',
+        tag: '',
+      })
+      setSort('latest')
+      router.push('/')
+    },
+    [router],
+  )
 
   const handleSort = useCallback((value: ProjectSort) => {
     setSort(value)
@@ -244,21 +248,50 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* mobile view */}
       <div className="mobile-layout">
         <Container sx={containerStyle}>
-          <MainBanner />
-          <Box marginY={'0.5rem'}>
-            <SelectType type={type} setType={handleType} />
-          </Box>
-          <SearchOptionPanel
-            handleOption={handleOption}
-            type={type}
-            openOption={openOption}
-            setOpenOption={setOpenOption}
-            sort={sort}
-            handleSort={handleSort}
-          />
+          {keyword === '' ? (
+            <>
+              <MainBanner />
+              <Box marginY={'0.5rem'}>
+                <SelectType type={type} setType={handleType} />
+              </Box>
+
+              <SearchOptionPanel
+                handleOption={handleOption}
+                type={type}
+                openOption={openOption}
+                setOpenOption={setOpenOption}
+                sort={sort}
+                handleSort={handleSort}
+              />
+            </>
+          ) : (
+            <Stack
+              direction="row"
+              alignItems={'center'}
+              justifyContent={'space-between'}
+              my={'0.75rem'}
+            >
+              <Typography variant={'Body1'}>{headerTitle}</Typography>
+              <SelectSort sort={sort} setSort={handleSort} />
+            </Stack>
+          )}
           {/*card list 영역*/}
           {noContent ? (
-            <Typography>{noContent}</Typography>
+            <Stack
+              width={'100%'}
+              height={'100%'}
+              justifyContent={'center'}
+              alignItems={'center'}
+            >
+              {isLoading ? (
+                <Typography variant={'Body1'}>{noContent}</Typography>
+              ) : (
+                <NoDataDolphin
+                  message={noContent}
+                  backgroundColor={'background.primary'}
+                />
+              )}
+            </Stack>
           ) : (
             <>
               <Stack alignItems={'center'}>
@@ -294,28 +327,56 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         <Container disableGutters sx={containerStyle}>
           <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
-              <Stack maxWidth={'56rem'} mx={'auto'}>
-                <MainBanner />
-              </Stack>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <SelectType type={type} setType={handleType} />
-                <Tutorial
-                  title={'프로젝트 검색'}
-                  content={<MainPageTutorial />}
-                />
-              </Stack>
-              <SearchOptionPanel
-                handleOption={handleOption}
-                type={type}
-                openOption={openOption}
-                setOpenOption={setOpenOption}
-                sort={sort}
-                handleSort={handleSort}
-                isPc
-              />
+              {keyword === '' ? (
+                <>
+                  <Stack maxWidth={'56rem'} mx={'auto'}>
+                    <MainBanner />
+                  </Stack>
+                  <Stack direction={'row'} justifyContent={'space-between'}>
+                    <SelectType type={type} setType={handleType} />
+                    <Tutorial
+                      title={'프로젝트 검색'}
+                      content={<MainPageTutorial />}
+                    />
+                  </Stack>
+                  <SearchOptionPanel
+                    handleOption={handleOption}
+                    type={type}
+                    openOption={openOption}
+                    setOpenOption={setOpenOption}
+                    sort={sort}
+                    handleSort={handleSort}
+                    isPc
+                  />
+                </>
+              ) : (
+                <Stack
+                  direction="row"
+                  alignItems={'center'}
+                  justifyContent={'space-between'}
+                  mb={'0.75rem'}
+                >
+                  <Typography variant={'Body1'}>{headerTitle}</Typography>
+                  <SelectSort sort={sort} setSort={handleSort} />
+                </Stack>
+              )}
               {/*card list 영역*/}
               {noContent ? (
-                <Typography>{noContent}</Typography>
+                <Stack
+                  width={'100%'}
+                  height={'100%'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  {isLoading ? (
+                    <Typography variant={'Body1'}>{noContent}</Typography>
+                  ) : (
+                    <NoDataDolphin
+                      message={noContent}
+                      backgroundColor={'background.primary'}
+                    />
+                  )}
+                </Stack>
               ) : (
                 <>
                   <Grid container spacing={'1rem'}>

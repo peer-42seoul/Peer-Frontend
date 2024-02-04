@@ -15,7 +15,7 @@ const SelectType = ({
     <Stack flexDirection={'row'} gap={'0.75rem'} alignItems={'center'}>
       <Typography
         color={!type || type === 'STUDY' ? 'text.strong' : 'text.assistive'}
-        variant={'Title3'}
+        variant={'Title1'}
         onClick={() => {
           setType('STUDY')
         }}
@@ -25,7 +25,7 @@ const SelectType = ({
       </Typography>
       <Typography
         color={type === 'PROJECT' ? 'text.strong' : 'text.assistive'}
-        variant={'Title3'}
+        variant={'Title1'}
         onClick={() => {
           setType('PROJECT')
         }}
