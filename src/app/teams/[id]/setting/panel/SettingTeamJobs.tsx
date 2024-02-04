@@ -17,13 +17,15 @@ import {
   Typography,
 } from '@mui/material'
 import AddNewJob from './AddNewJob'
-import { Job } from '@/app/teams/types/types'
+import { Job, TeamStatus } from '@/app/teams/types/types'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useEffect, useState } from 'react'
 import CloseButton from '@/components/CloseButton'
 import { SettingIcon } from '@/icons/TeamPage'
 import useAxiosWithAuth from '@/api/config'
+import Tutorial from '@/components/Tutorial'
+import TeamJobsTutorial from '@/components/tutorialContent/TeamJobsTutorial'
 
 interface TableColumn {
   id: string
@@ -41,9 +43,10 @@ const tableColumn: TableColumn[] = [
 interface Props {
   teamId: string
   jobList: Job[]
+  teamStatus: TeamStatus
 }
 
-const SettingTeamJobs = ({ teamId, jobList }: Props) => {
+const SettingTeamJobs = ({ teamId, jobList, teamStatus }: Props) => {
   const [jobs, setJobs] = useState<Job[]>(jobList)
   const [isSettingButton, setIsSettingButton] = useState('')
   const axiosWithAuth = useAxiosWithAuth()
@@ -131,7 +134,10 @@ const SettingTeamJobs = ({ teamId, jobList }: Props) => {
   return (
     <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
       <Stack spacing={2}>
-        <Typography>역할 추가</Typography>
+        <Stack direction={'row'} display={'flex'} alignItems={'center'}>
+          <Typography fontWeight="bold">역할 추가</Typography>
+          <Tutorial content={<TeamJobsTutorial />} />
+        </Stack>
         <Card
           sx={{
             p: 2,
@@ -206,6 +212,9 @@ const SettingTeamJobs = ({ teamId, jobList }: Props) => {
                       ) : (
                         <>
                           <IconButton
+                            disabled={
+                              teamStatus === TeamStatus.COMPLETE ? true : false
+                            }
                             sx={{ p: 0, m: 0 }}
                             onClick={() => handleSettingButton(job.name)}
                           >
@@ -217,6 +226,9 @@ const SettingTeamJobs = ({ teamId, jobList }: Props) => {
                           <IconButton
                             sx={{ p: 0, m: 0 }}
                             onClick={() => handleDelete(job.id)}
+                            disabled={
+                              teamStatus === TeamStatus.COMPLETE ? true : false
+                            }
                           >
                             <CloseButton style={{ fontSize: 15 }} />
                           </IconButton>
@@ -229,7 +241,11 @@ const SettingTeamJobs = ({ teamId, jobList }: Props) => {
             </Table>
           </TableContainer>
 
-          <AddNewJob onNewJob={handleAddNewJob} teamId={teamId} />
+          <AddNewJob
+            onNewJob={handleAddNewJob}
+            teamId={teamId}
+            teamStatus={TeamStatus.COMPLETE}
+          />
         </Card>
       </Stack>
     </Card>

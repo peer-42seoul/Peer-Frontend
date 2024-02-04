@@ -7,12 +7,14 @@ import SetupMember from './panel/SettingTeamMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
-import { ITeam, TeamType } from '../../types/types'
+import { ITeam, TeamStatus, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectRecruitPage'
 import TeamJobAdd from './panel/SettingTeamJobs'
 import SetupInfo from './panel/SettingTeamInfo'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import useSocket from '@/states/useSocket'
+import Tutorial from '@/components/Tutorial'
+import TeamMemberTutorial from '@/components/tutorialContent/TeamMemberTutorial'
 
 export interface IMyInfo {
   userId: string
@@ -82,7 +84,11 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
           <RedirectionRecruit id={params.id} data={data} />
           <SetupInfo team={data.team} />
           {data.team.type === TeamType.PROJECT && (
-            <TeamJobAdd teamId={params.id} jobList={data.job} />
+            <TeamJobAdd
+              teamId={params.id}
+              jobList={data.job.filter((job) => job.name != 'Leader')}
+              teamStatus={data.team.status}
+            />
           )}
           {!showApplicant ? (
             <Card
@@ -98,9 +104,14 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 alignItems={'center'}
                 mb={3}
               >
-                <Typography fontWeight="bold">팀원 목록</Typography>
-
+                <Stack direction={'row'} display={'flex'} alignItems={'center'}>
+                  <Typography fontWeight="bold">팀원 목록</Typography>
+                  <Tutorial content={<TeamMemberTutorial />} />
+                </Stack>
                 <Button
+                  disabled={
+                    data.team.status === TeamStatus.COMPLETE ? true : false
+                  }
                   onClick={openApplicant}
                   sx={{ width: '9rem' }}
                   variant="contained"
@@ -111,6 +122,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 </Button>
               </Stack>
               <SetupMember
+                teamStatus={data.team.status}
                 team={data.member}
                 teamId={data.team.id}
                 jobs={data.job}
