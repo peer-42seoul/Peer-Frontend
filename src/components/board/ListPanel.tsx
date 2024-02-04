@@ -13,6 +13,7 @@ import { PlusIcon, SearchIcon } from '@/icons'
 import * as style from './ListPanel.style'
 import CuButton from '../CuButton'
 import CuTextField from '../CuTextField'
+import CuCircularProgress from '../CuCircularProgress'
 
 interface IChildrenProps {
   children: React.ReactNode
@@ -186,6 +187,7 @@ export const StatusMessage = ({ message }: { message: string }) => {
       >
         {message}
       </Typography>
+      <CuCircularProgress color={'primary'} />
     </ListStack>
   )
 }
