@@ -6,8 +6,7 @@ import useMessagePageState from '@/states/useMessagePageState'
 import { IMessageListData } from '@/types/IMessage'
 import MessageItemBase from './MessageItemBase'
 import * as style from './MobileMessageItem.style'
-import useToast from '@/hook/useToast'
-import CuToast from '@/components/CuToast'
+import useToast from '@/states/useToast'
 
 /* ANCHOR - interface */
 interface ITouchState {
@@ -112,7 +111,7 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
   const { setDetailPage } = useMessagePageState()
   const { targetId, conversationId } = message
   const listItemRef = useRef(null)
-  const { isOpen, openToast, closeToast } = useToast()
+  const { openToast } = useToast()
 
   const deleteOneMessage = () => {
     axiosWithAuth
@@ -120,7 +119,10 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
         data: { target: [{ targetId }] },
       })
       .catch(() => {
-        openToast()
+        openToast({
+          severity: 'error',
+          message: '삭제 중 오류가 발생했습니다. 다시 시도해주세요.',
+        })
       })
   }
 
@@ -136,9 +138,6 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
           <MessageItemBase message={message} />
         </ListItemButton>
       </SwappableMessageItem>
-      <CuToast open={isOpen} onClose={closeToast} severity="error">
-        삭제에 실패하였습니다.
-      </CuToast>
     </Box>
   )
 }
