@@ -12,10 +12,3 @@ export const avatarImage = {
   width: '2rem',
   height: '2rem',
 }
-
-export const teamName = {
-  fontSize: '0.875rem',
-  fontStyle: 'normal',
-  fontWeight: 400,
-  lineHeight: 'normal',
-}

@@ -14,7 +14,7 @@ const TeamName = ({ teamName, author, postId, editMode }: IteamNameProps) => {
   const router = useRouter()
   return (
     <Stack sx={style.teamNameBox}>
-      <Typography variant={'Body2'} color={'text.normal'} sx={style.teamName}>
+      <Typography variant={'Title3Emphasis'} color={'text.normal'}>
         {teamName}
       </Typography>
       {author && !editMode && (
