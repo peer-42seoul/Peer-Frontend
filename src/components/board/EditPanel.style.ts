@@ -6,6 +6,11 @@ export const EditForm = {
   padding: '0 1rem',
 }
 
+export const EditButtonContainer = {
+  marginTop: '2.5rem',
+  padding: '0 1rem',
+}
+
 export const EditButton = {
   padding: ' 0.75rem 1rem',
 }

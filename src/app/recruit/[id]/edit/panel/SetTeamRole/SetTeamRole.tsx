@@ -100,7 +100,7 @@ const SetTeamRole = ({
                 <ControlledTextfield
                   control={control}
                   name={`roleList.${index}.number`}
-                  inputProps={{ type: 'number', max: 6, min: 1 }}
+                  inputProps={{ type: 'number' }}
                   InputProps={{
                     endAdornment: (
                       <Typography variant="Caption" color="text.alternative">

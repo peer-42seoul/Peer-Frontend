@@ -23,7 +23,7 @@ const MainCarousel = () => {
           height={130}
         />
       </Box>
-      <Box height={'7.5rem'} border="1px solid black" bgcolor={'white'}>
+      <Box height={'7.5rem'} bgcolor={'white'}>
         <Image
           src={'/images/banners/default-banner-2.png'}
           alt="banner-1"
@@ -31,7 +31,7 @@ const MainCarousel = () => {
           height={130}
         />
       </Box>
-      <Box height={'7.5rem'} border="1px solid black" bgcolor={'white'}>
+      <Box height={'7.5rem'} bgcolor={'white'}>
         <Image
           src={'/images/banners/default-banner-3.png'}
           alt="banner-1"

@@ -592,6 +592,11 @@ const CreateTeam = () => {
                 sx={{ width: ['100%', '26rem'] }}
                 variant="outlined"
                 onClick={() => setOpenBasicModal(true)}
+                startIcon={
+                  <Icon.PlusIcon
+                    sx={{ ...style.iconStyleBase, color: 'primary' }}
+                  />
+                }
               >
                 인터뷰 추가
               </Button>

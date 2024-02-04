@@ -1,0 +1,6 @@
+export { default as BackIcon } from './BackIcon'
+export { default as HitchIcon } from './HitchIcon'
+export { default as MyPageIcon } from './MyPageIcon'
+export { default as RecruitIcon } from './RecruitIcon'
+export { default as ShowcaseIcon } from './ShowcaseIcon'
+export { default as TeamsIcon } from './TeamsIcon'

@@ -1,17 +1,18 @@
 'use client'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
+import { Editor } from '@toast-ui/editor'
 import useAxiosWithAuth from '@/api/config'
 import useTeamPageState from '@/states/useTeamPageState'
-import useEditorState from '@/states/useEditorState'
-import { EditForm } from '@/components/board/EditPanel'
 import useToast from '@/states/useToast'
+import { EditForm } from '@/components/board/EditPanel'
+import { IBoardEditFormType } from '@/types/TeamBoardTypes'
 
-interface IPostEditFormProps {
-  boardId: number
-  postId?: number
-}
-
-const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
+const PostEditForm = ({
+  postId,
+  boardId,
+  type,
+  handleGoBack,
+}: IBoardEditFormType) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { setBoard } = useTeamPageState()
   const [previousData, setPreviousData] = useState({
@@ -19,8 +20,9 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
     content: '',
   })
   const [isLoading, setIsLoading] = useState(false)
-  const { editor } = useEditorState()
   const { openToast } = useToast()
+  const titleRef = useRef<HTMLInputElement | null>(null)
+  const editorRef = useRef<Editor | null>(null)
   useEffect(() => {
     if (postId) {
       setIsLoading(true)
@@ -44,17 +46,16 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
   }, [postId])
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!editor) return
-    const formData = new FormData(event.currentTarget)
+    if (!editorRef.current || !titleRef.current) return
     const form = {
-      title: formData.get('post-title') as string,
-      content: editor.getMarkdown(),
+      title: titleRef.current.value,
+      content: editorRef.current.getMarkdown(),
       image: null,
     }
-    if (!form.title) {
+    if (!form.title || !form.content) {
       openToast({
         severity: 'error',
-        message: '제목을 입력해주세요.',
+        message: '제목과 내용을 입력해주세요.',
       })
       return
     }
@@ -95,11 +96,13 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
 
   return (
     <EditForm
-      formId={'post-edit-form'}
       isLoading={isLoading}
       onSubmit={handleSubmit}
-      initialTitle={previousData.title || ''}
-      initialContent={previousData.content || ''}
+      titleRef={titleRef}
+      editorRef={editorRef}
+      initialData={previousData}
+      type={type}
+      handleGoBack={handleGoBack}
     />
   )
 }
