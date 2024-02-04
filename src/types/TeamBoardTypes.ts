@@ -21,7 +21,7 @@ export interface ITeamBoardListData extends IPagination<ITeamPost[]> {}
 
 export interface ITeamPostDetail extends ITeamPostBase {
   content: string
-  isAuthor: boolean // TODO : 아직 구현 안됨.
+  isAuthor: boolean
 }
 
 // Notice
@@ -29,7 +29,7 @@ export interface ITeamPostDetail extends ITeamPostBase {
 export interface ITeamNoticeBase {
   title: string
   nickname: string
-  createdAt: Date // TODO : 확인 필요함.
+  createdAt: Date
 }
 
 export interface ITeamNotice extends ITeamNoticeBase {
