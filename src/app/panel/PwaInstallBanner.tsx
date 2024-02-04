@@ -80,7 +80,6 @@ const PwaInstallBanner = () => {
             position={'fixed'}
             bottom={0}
             width={'100%'}
-            border="1px solid black"
             sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
           >
             <Stack
@@ -88,7 +87,7 @@ const PwaInstallBanner = () => {
               direction={'row'}
               justifyContent={'space-between'}
             >
-              <Typography>
+              <Typography color={'white'} variant="Caption">
                 사용하시는 브라우저는 PWA 기능을 사용하기 위해서는{' '}
                 <IosShareIcon fontSize="small" />
                 [공유하기 버튼]을 눌러서 [홈 화면에 추가]를 해주셔야 합니다.
@@ -115,20 +114,23 @@ const PwaInstallBanner = () => {
           position={'fixed'}
           bottom={0}
           width={'100%'}
-          border="1px solid black"
           sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
         >
           <Stack margin={1}>
-            <Typography>
+            <Typography color={'white'} variant="Caption">
               사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
               {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
             </Typography>
             <Stack direction="row">
               <Button onClick={handleInstall}>
-                <Typography>설치</Typography>
+                <Typography color={'white'} variant="Caption">
+                  설치
+                </Typography>
               </Button>
               <Button onClick={() => setIsShowInstall(false)}>
-                <Typography>다음에</Typography>
+                <Typography color={'white'} variant="Caption">
+                  다음에
+                </Typography>
               </Button>
               <Button
                 onClick={() => {
@@ -136,7 +138,9 @@ const PwaInstallBanner = () => {
                   localStorage.setItem('isShowInstall', 'false')
                 }}
               >
-                <Typography>닫기</Typography>
+                <Typography color={'white'} variant="Caption">
+                  닫기
+                </Typography>
               </Button>
             </Stack>
           </Stack>

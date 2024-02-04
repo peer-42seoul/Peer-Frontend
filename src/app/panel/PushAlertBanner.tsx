@@ -116,23 +116,26 @@ const PushAlertBanner = () => {
           position={'fixed'}
           top={isScroll ? 0 : 57}
           width={'100%'}
-          border="1px solid black"
           sx={{
             backgroundColor: 'primary.main',
             zIndex: 3000,
           }}
         >
           <Stack margin={1}>
-            <Typography>
+            <Typography color={'white'} variant="Caption">
               사용하시는 브라우저는 알림 기능을 사용할 수 있습니다.
               사용하시겠습니까?
             </Typography>
             <Stack direction="row">
               <Button onClick={handlePush}>
-                <Typography>네</Typography>
+                <Typography color={'white'} variant="Caption">
+                  네
+                </Typography>
               </Button>
               <Button onClick={() => setIsShowPush(false)}>
-                <Typography>다음에</Typography>
+                <Typography color={'white'} variant="Caption">
+                  다음에
+                </Typography>
               </Button>
               <Button
                 onClick={() => {
@@ -140,7 +143,9 @@ const PushAlertBanner = () => {
                   localStorage.setItem('isShowPush', 'false')
                 }}
               >
-                <Typography>아니요</Typography>
+                <Typography color={'white'} variant="Caption">
+                  아니요
+                </Typography>
               </Button>
             </Stack>
           </Stack>
