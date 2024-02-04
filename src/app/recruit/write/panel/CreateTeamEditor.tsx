@@ -33,6 +33,7 @@ import RecruitEditPageTutorial from '@/components/tutorialContent/RecruitEditPag
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
 import useToast from '@/states/useToast'
+import InterviewForm from './fields/Interview/InterviewForm'
 
 const CreateTeamEditor = ({
   defaultValues,
@@ -70,9 +71,15 @@ const CreateTeamEditor = ({
   } = useModal()
 
   const {
+    openModal: openInterviewModal,
+    closeModal: closeInterviewModal,
+    isOpen: isInterviewOpen,
+  } = useModal()
+
+  const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setValue,
     watch,
     trigger,
@@ -542,7 +549,12 @@ const CreateTeamEditor = ({
               <Button
                 sx={{ width: ['100%', '26rem'] }}
                 variant="outlined"
-                onClick={() => setOpenBasicModal(true)}
+                // onClick={() => {
+                //   setOpenBasicModal(true)
+                // }}
+                onClick={() => {
+                  openInterviewModal()
+                }}
                 disabled={isAnswered}
                 startIcon={
                   <Icon.PlusIcon
@@ -552,14 +564,14 @@ const CreateTeamEditor = ({
               >
                 인터뷰 추가
               </Button>
-              <SetInterview
+              {/* <SetInterview
                 openBasicModal={openBasicModal}
                 handleCloseBasicModal={setOpenBasicModal}
                 interviewData={interviewList}
                 setInterviewData={(value: Array<IFormInterview>) => {
                   setValue('interviewList', value)
                 }}
-              />
+              /> */}
             </FieldWithLabel>
             {/* 등록, 취소 버튼 */}
             <Stack
@@ -608,6 +620,7 @@ const CreateTeamEditor = ({
           text: editorType === 'write' ? '등록하기' : '수정하기',
           type: 'submit',
           form: 'recruit-form',
+          isLoading: isSubmitting,
         }}
       />
       <CuTextModal
@@ -625,6 +638,11 @@ const CreateTeamEditor = ({
             router.replace('/')
           },
         }}
+      />
+      <InterviewForm
+        control={control}
+        closeModal={closeInterviewModal}
+        isOpen={isInterviewOpen}
       />
     </>
   )

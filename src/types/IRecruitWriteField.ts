@@ -1,6 +1,12 @@
 import { IFormInterview, IRoleWrite } from './IPostDetail'
 import { ISkill } from './IUserProfile'
 
+export interface IFormInterviewField {
+  question: string
+  type: 'OPEN' | 'CLOSE' | 'CHECK' | 'RATIO'
+  optionList: Array<{ option: string }>
+}
+
 export interface IRecruitWriteField {
   place: string
   image: string | null
@@ -12,7 +18,8 @@ export interface IRecruitWriteField {
   link: string
   tagList: Array<ISkill>
   roleList: Array<IRoleWrite>
-  interviewList: Array<IFormInterview>
+  interviewList: Array<IFormInterviewField>
+  // interviewList: Array<IFormInterview>
   max: string | undefined
   content: string
 }

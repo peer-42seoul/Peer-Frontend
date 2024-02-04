@@ -26,44 +26,51 @@ const Page = () => {
     link: '',
     tagList: [],
     roleList: [{ name: '', number: 0 }],
-    interviewList: [],
+    interviewList: [
+      {
+        question: '질문을 입력하세요.',
+        type: 'CLOSE',
+        optionList: [{ option: '답변 1' }],
+      },
+    ],
     max: '2',
     content: '모집글 소개 글입니다.',
   }
 
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
-    await axiosWithAuth
-      .post('/api/v1/recruit/write', {
-        image: data.image?.split(',')[1],
-        title: data.title,
-        name: data.name,
-        due: data.due,
-        type: data.type,
-        region: data.place === 'ONLINE' ? null : data.region,
-        tagList: data.tagList.map((tag: ITag) => {
-          return tag.tagId
-        }),
-        roleList: data.type === 'PROJECT' ? data.roleList : null,
-        interviewList: data.interviewList,
-        place: data.place,
-        max: data.type === 'PROJECT' ? null : Number(data.max),
-        content: editorRef.current?.getMarkdown(),
-        link: data.link,
-      })
-      .then((res) => {
-        openToast({
-          message: '모집글이 성공적으로 등록되었습니다.',
-          severity: 'success',
-        })
-        router.replace(`/recruit/${res.data}`)
-      })
-      .catch((error) => {
-        openToast({
-          message: error.data.message ?? '모집글 등록에 실패했습니다.',
-          severity: 'error',
-        })
-      })
+    console.log(data)
+    // await axiosWithAuth
+    //   .post('/api/v1/recruit/write', {
+    //     image: data.image?.split(',')[1],
+    //     title: data.title,
+    //     name: data.name,
+    //     due: data.due,
+    //     type: data.type,
+    //     region: data.place === 'ONLINE' ? null : data.region,
+    //     tagList: data.tagList.map((tag: ITag) => {
+    //       return tag.tagId
+    //     }),
+    //     roleList: data.type === 'PROJECT' ? data.roleList : null,
+    //     interviewList: data.interviewList,
+    //     place: data.place,
+    //     max: data.type === 'PROJECT' ? null : Number(data.max),
+    //     content: editorRef.current?.getMarkdown(),
+    //     link: data.link,
+    //   })
+    //   .then((res) => {
+    //     openToast({
+    //       message: '모집글이 성공적으로 등록되었습니다.',
+    //       severity: 'success',
+    //     })
+    //     router.replace(`/recruit/${res.data}`)
+    //   })
+    //   .catch((error) => {
+    //     openToast({
+    //       message: error.data.message ?? '모집글 등록에 실패했습니다.',
+    //       severity: 'error',
+    //     })
+    //   })
   }
 
   return (
