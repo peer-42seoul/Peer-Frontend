@@ -16,7 +16,6 @@ import ImageUploadButton from '@/components/ImageUploadButton'
 import { ComponentType } from './fields/BasicSelect'
 import { BasicSelect, SelectRegion, SetTeamRole } from './fields'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
-import useMedia from '@/hook/useMedia'
 import useAuthStore from '@/states/useAuthStore'
 import * as style from '../page.style'
 import * as Icon from '@/icons'
@@ -48,7 +47,6 @@ const CreateTeamEditor = ({
 }) => {
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const router = useRouter()
-  const { isPc } = useMedia()
 
   const { isLogin } = useAuthStore()
 
