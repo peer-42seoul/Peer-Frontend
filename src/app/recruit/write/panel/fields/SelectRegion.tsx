@@ -4,7 +4,7 @@ import { koreaDistrict } from '@/constant/DistrictData'
 import { Stack, Typography } from '@mui/material'
 import * as style from './SelectRegion.style'
 import { Control, Controller, useFormState } from 'react-hook-form'
-import { IRecruitWriteField } from '@/app/recruit/write/page'
+import { IRecruitWriteField } from '@/types/IRecruitWriteField'
 
 interface BasicSelectProps {
   region: string[]
