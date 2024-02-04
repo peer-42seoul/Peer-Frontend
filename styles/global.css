@@ -21,20 +21,24 @@ body * {
   .mobile-layout {
     display: flex;
     flex-direction: column;
+    height: 100%;
   }
   .pc-layout {
     display: none;
+    height: 100%;
   }
 }
 
 @media (min-width: 481px) {
   .mobile-layout {
     display: none;
+    height: 100%;
   }
 
   .pc-layout {
     display: flex;
     flex-direction: column;
+    height: 100%;
   }
 }
 

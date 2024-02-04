@@ -18,7 +18,7 @@ import { bottomNavStyle } from './MobileNav.style'
 
 const MobileNav = () => {
   const [value, setValue] = useState<
-    'home' | 'hitchhiking' | 'team-list' | 'showcase' | 'my-page'
+    'home' | 'hitchhiking' | 'team-list' | 'showcase' | 'my-page' | ''
   >('home')
   const pathname = usePathname()
   const router = useRouter()
@@ -36,6 +36,8 @@ const MobileNav = () => {
       else setValue('my-page')
     } else if (pathname.startsWith('/showcase')) {
       setValue('showcase')
+    } else if (pathname.startsWith('/login')) {
+      setValue('')
     }
   }, [pathname])
 
