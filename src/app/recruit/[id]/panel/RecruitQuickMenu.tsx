@@ -1,50 +1,60 @@
-import { IconButton, Stack, Tooltip } from '@mui/material'
+import { Stack } from '@mui/material'
 import FavoriteButton from '@/components/FavoriteButton'
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
 import React from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { handleShare } from '@/components/dropdownMenu/ShareMenuItem'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
+import DropdownMenu from '@/components/DropdownMenu'
+import { ShareIcon } from '@/icons'
+import * as style from '@/components/dropdownMenu/dropdownMenu.styles'
+import IconMenuItem from '@/components/dropdownMenu/IconMenuItem'
 
 const RecruitQuickMenu = ({
   favorite,
   recruit_id,
   title,
   content,
+  me,
 }: {
   favorite: boolean | undefined
   recruit_id: number
   title: string
   content: string
+  me?: boolean
 }) => {
   const path = usePathname()
   const type = useSearchParams().get('type')
+  const router = useRouter()
 
   return (
-    <Stack alignItems={'center'}>
+    <Stack flexDirection={'row'}>
       <FavoriteButton
-        recruit_id={recruit_id}
         favorite={favorite}
+        recruit_id={recruit_id}
         redirect_url={`${path}?type=${type}`}
       />
-      <Tooltip title={'공유'}>
-        <IconButton
-          onClick={() => {
-            handleShare(
-              title,
-              `${path}?type=${type}`,
-              content,
-              `피어에서 동료를 구해보세요! 이런 프로젝트가 있어요!`,
-            )
-          }}
-        >
-          <ShareOutlinedIcon sx={{ color: 'purple.strong' }} />
-        </IconButton>
-      </Tooltip>
-      {/*<Tooltip title={'신고'}>*/}
-      {/*  <IconButton onClick={() => {}}>*/}
-      {/*    <SirenIcon />*/}
-      {/*  </IconButton>*/}
-      {/*</Tooltip>*/}
+      <DropdownMenu>
+        <ShareMenuItem
+          title={title}
+          url={`${path}?type=${type}`}
+          content={content}
+          message={`피어에서 동료를 구해보세요! 이런 프로젝트가 있어요!`}
+        />
+        {me && (
+          <IconMenuItem
+            action={() => router.push(`/recruit/${recruit_id}/edit`)}
+            icon={
+              <ShareIcon
+                sx={{
+                  ...style.menuItemIconStyleBase,
+                  padding: '0.125rem',
+                  color: 'text.alternative',
+                }}
+              />
+            }
+            text={'수정'}
+          />
+        )}
+      </DropdownMenu>
     </Stack>
   )
 }

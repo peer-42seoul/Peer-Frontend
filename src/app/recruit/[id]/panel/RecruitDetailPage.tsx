@@ -3,15 +3,12 @@
 import { Typography, Stack, Container, Divider } from '@mui/material'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
 import React, { useEffect, useMemo, useState } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
 import RecruitQuickMenu from '@/app/recruit/[id]/panel/RecruitQuickMenu'
 import RecruitInfo from './RecruitInfo'
 import ApplyFormButton from '@/app/recruit/[id]/panel/ApplyFormButton'
 import RecruitDetailContent from '@/app/recruit/[id]/panel/RecruitDetailContent'
-import DropdownMenu from '@/components/DropdownMenu'
-import FavoriteButton from '@/components/FavoriteButton'
-import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import useHeaderStore from '@/states/useHeaderStore'
 import UseNicknameStore from '@/states/useNicknameStore'
 import useSWR from 'swr'
@@ -20,7 +17,6 @@ import useAxiosWithAuth from '@/api/config'
 
 const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   const [isClient, setIsClient] = useState(false)
-  const path = usePathname()
   const router = useRouter()
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
   const { isPc } = useMedia()
@@ -102,33 +98,24 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
 
   /** 모바일 뷰 **/
   return (
-    <Container>
-      <Stack height={'100%'} padding={'1.5rem'}>
-        <Stack flexDirection={'row'} justifyContent={'flex-end'}>
-          <FavoriteButton
-            favorite={favoriteData}
+    <Stack height={'100%'} padding={'2.5rem'}>
+      <Stack gap={'1.5rem'} width={'100%'}>
+        <Stack>
+          <RecruitQuickMenu
             recruit_id={parseInt(id)}
-            redirect_url={`${path}?type=${type}`}
+            favorite={favoriteData}
+            title={data?.title}
+            content={data?.content}
           />
-          <DropdownMenu>
-            <ShareMenuItem
-              title={data?.title}
-              url={`${path}?type=${type}`}
-              content={data?.content}
-              message={`피어에서 동료를 구해보세요! 이런 프로젝트가 있어요!`}
-            />
-          </DropdownMenu>
         </Stack>
-        <Stack gap={'1.5rem'}>
-          <RecruitInfo data={data} type={type} />
-          <Divider />
-          <RecruitDetailContent data={data} type={type} roleList={roleList} />
-        </Stack>
-        {isClient && nickname !== data?.leader_nickname && (
-          <ApplyFormButton id={id} type={type} roleList={roleList} />
-        )}
+        <RecruitInfo data={data} type={type} />
+        <Divider />
+        <RecruitDetailContent data={data} type={type} roleList={roleList} />
       </Stack>
-    </Container>
+      {isClient && nickname !== data?.leader_nickname && (
+        <ApplyFormButton id={id} type={type} roleList={roleList} />
+      )}
+    </Stack>
   )
 }
 
