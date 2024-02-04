@@ -3,11 +3,13 @@ import { ITeamBoard } from '@/types/TeamBoardTypes'
 import { IconButton, Stack, Typography } from '@mui/material'
 import { TrashLineIcon } from '@/icons'
 import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 import CuTextModal from '@/components/CuTextModal'
 
 const BoardItem = ({ board }: { board: ITeamBoard }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { isOpen, closeModal, openModal } = useModal()
+  const { openToast } = useToast()
   const handleDeleteBoard = (boardId: number) => {
     axiosWithAuth
       .delete(`/api/v1/team/board/${boardId}`)
@@ -15,7 +17,10 @@ const BoardItem = ({ board }: { board: ITeamBoard }) => {
         alert('게시판을 삭제했습니다.')
       })
       .catch(() => {
-        alert('게시판 삭제에 실패했습니다.')
+        openToast({
+          severity: 'error',
+          message: '게시판을 삭제하지 못했습니다.',
+        })
       })
   }
   return (
