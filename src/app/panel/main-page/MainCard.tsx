@@ -14,7 +14,7 @@ import Link from 'next/link'
 import OthersProfile from '../OthersProfile'
 import TagChip from '@/components/TagChip'
 import FavoriteButton from '@/components/FavoriteButton'
-import { ChipStyle, tagListStyle } from '@/app/panel/main-page/MainCard.style'
+import { ChipStyle } from '@/app/panel/main-page/MainCard.style'
 
 const MainCard = ({
   title,
@@ -30,6 +30,8 @@ const MainCard = ({
   href,
   onFavorite,
   sx,
+  titleMaxLine = 2,
+  tagMaxLine = 2,
 }: IMainCard) => {
   const statusLabel =
     status === 'ONGOING'
@@ -99,10 +101,36 @@ const MainCard = ({
             paddingY: 0,
           }}
         >
-          <Typography variant="Body1" color="text.normal">
+          <Typography
+            variant="Body1"
+            color="text.secondary"
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxHeight: 22.5 * titleMaxLine,
+              WebkitLineClamp: titleMaxLine,
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+            }}
+          >
             {title}
           </Typography>
-          <Stack sx={tagListStyle}>
+          <Stack
+            gap={'0.25rem'}
+            mt={1}
+            direction={'row'}
+            sx={{
+              height: `${1.5 * tagMaxLine + 0.5}rem`,
+              overflow: 'auto',
+              flexWrap: 'wrap',
+              '&::-webkit-scrollbar': {
+                display: 'none',
+              },
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+            flexWrap={'wrap'}
+          >
             {tagList?.map(({ name, color }: ITag, idx: number) => (
               <TagChip name={name} color={color} key={idx} />
             ))}

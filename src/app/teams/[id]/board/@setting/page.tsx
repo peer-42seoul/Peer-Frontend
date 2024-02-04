@@ -7,6 +7,7 @@ import useAxiosWithAuth from '@/api/config'
 import BackgroundBox from '@/components/BackgroundBox'
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
+import useToast from '@/states/useToast'
 import { ITeamBoard } from '@/types/TeamBoardTypes'
 import BoardItem from './panel/BoardItem'
 import * as style from './page.style'
@@ -40,8 +41,8 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
   const textFieldRef = useRef<HTMLInputElement>(null)
   const { isPc } = useMedia()
   const axiosWithAuth = useAxiosWithAuth()
+  const { openToast } = useToast()
 
-  // FIXME : 업데이트가 바로 되지 않음. (새로고침 필요)
   const { data, isLoading, error } = useSWR<ITeamBoard[]>(
     `/api/v1/team-page/simple/${teamId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
@@ -51,7 +52,10 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
     if (!textFieldRef.current) return
     const name = textFieldRef.current.value
     if (!name) {
-      alert('게시판 이름을 입력해주세요.')
+      openToast({
+        severity: 'error',
+        message: '게시판 이름을 입력해주세요.',
+      })
       return
     }
     axiosWithAuth
@@ -62,16 +66,25 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
       })
       .then(() => {
         textFieldRef.current!.value = ''
-        alert('게시판을 추가했습니다.')
+        openToast({
+          severity: 'success',
+          message: '게시판을 추가했습니다.',
+        })
       })
       .catch((e: unknown) => {
         if (isAxiosError(e)) {
           if (e.response?.status === 409) {
-            alert('이미 존재하는 게시판 이름입니다.')
+            openToast({
+              severity: 'error',
+              message: '이미 존재하는 게시판 이름입니다.',
+            })
             return
           }
         }
-        alert('게시판 추가에 실패했습니다.')
+        openToast({
+          severity: 'error',
+          message: '게시판을 추가하지 못했습니다.',
+        })
       })
   }
 

@@ -59,8 +59,6 @@ const MyProfile = () => {
       newModalOpen.skills = true
     } else if (modalType === 'links') {
       newModalOpen.links = true
-    } else if (modalType === '') {
-      console.log('API GET request!')
     }
 
     setModalOpen(newModalOpen)

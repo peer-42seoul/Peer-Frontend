@@ -62,7 +62,14 @@ const PcNav = () => {
       >
         <Stack direction={'row'} gap={'1.25rem'}>
           <Stack alignItems={'center'} justifyContent={'center'}>
-            <PeerLogo sx={{ width: 50, height: 50, color: 'text.normal' }} />
+            <IconButton
+              sx={{ margin: 0, padding: 0 }}
+              onClick={() => {
+                router.push('/')
+              }}
+            >
+              <PeerLogo sx={{ width: 50, height: 50, color: 'text.normal' }} />
+            </IconButton>
           </Stack>
           <BottomNavigation
             showLabels={true}
@@ -72,20 +79,32 @@ const PcNav = () => {
             }}
           >
             <BottomNavigationAction
-              value={'home'}
-              label={<Typography fontSize={'0.8125rem'}>모집글</Typography>}
-              onClick={() => {
-                router.push('/')
-              }}
               sx={navStyle}
-            />
-            <BottomNavigationAction
-              icon={<BetaIcon />}
               value={'hitchhiking'}
-              label={<Typography fontSize={'0.8125rem'}>히치하이킹</Typography>}
+              label={
+                <Stack
+                  direction={'row'}
+                  alignItems={'center'}
+                  spacing={'0.15rem'}
+                >
+                  <Typography
+                    color={value === 'hitchhiking' ? 'primary' : 'normal'}
+                    variant="Caption"
+                  >
+                    히치하이킹
+                  </Typography>
+                  <BetaIcon
+                    style={{
+                      position: 'relative',
+                      top: '-0.5rem',
+                    }}
+                  />
+                </Stack>
+              }
               sx={{
                 ...navStyle,
                 wordBreak: 'keep-all',
+                padding: 0,
               }}
               onClick={() => {
                 router.push('/hitchhiking')
@@ -94,19 +113,46 @@ const PcNav = () => {
 
             <BottomNavigationAction
               value={'team-list'}
-              label={<Typography fontSize={'0.8125rem'}>팀페이지</Typography>}
+              label={
+                <Typography
+                  color={value === 'team-list' ? 'primary' : 'normal'}
+                  variant="Caption"
+                >
+                  팀페이지
+                </Typography>
+              }
               onClick={() => {
                 router.push('/team-list')
               }}
+              sx={{ padding: 0 }}
               sx={navStyle}
             />
             <BottomNavigationAction
-              icon={<BetaIcon />}
               value={'showcase'}
-              label={<Typography fontSize={'0.8125rem'}>쇼케이스</Typography>}
+              label={
+                <Stack
+                  direction={'row'}
+                  alignItems={'center'}
+                  spacing={'0.15rem'}
+                >
+                  <Typography
+                    color={value === 'showcase' ? 'primary' : 'normal'}
+                    variant="Caption"
+                  >
+                    쇼케이스
+                  </Typography>
+                  <BetaIcon
+                    style={{
+                      position: 'relative',
+                      top: '-0.5rem',
+                    }}
+                  />
+                </Stack>
+              }
               onClick={() => {
                 router.push('/showcase')
               }}
+              sx={{ padding: 0 }}
               sx={navStyle}
             />
           </BottomNavigation>

@@ -51,6 +51,7 @@ const ApplyFormButton = ({
             roleList={roleList}
             onApply={handleApply}
             disabled={checkIsFull}
+            sx={{ width: '8.25rem', marginTop: '2rem' }}
           />
         ) : (
           <ApplyDefaultButton

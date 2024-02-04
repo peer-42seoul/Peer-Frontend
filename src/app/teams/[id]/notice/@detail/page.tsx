@@ -11,6 +11,7 @@ import {
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
+import useToast from '@/states/useToast'
 import { ITeamNoticeDetail } from '@/types/TeamBoardTypes'
 import CommentList from '@/components/board/CommentList'
 import { CommentForm } from '@/components/board/CommentForm'
@@ -27,6 +28,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const { isPc } = useMedia()
+  const { openToast } = useToast()
 
   const handleDelete = () => {
     axiosWithAuth
@@ -36,7 +38,10 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
         setNotice('LIST')
       })
       .catch(() => {
-        alert('공지사항 삭제에 실패했습니다.')
+        openToast({
+          severity: 'error',
+          message: '공지사항을 삭제하지 못했습니다.',
+        })
       })
   }
 

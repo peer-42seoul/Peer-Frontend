@@ -105,7 +105,6 @@ const ProfileLinkEditor = ({
   }
 
   const onSubmit = async (data: Array<IUserProfileLink>) => {
-    console.log(data)
     const requestBody: {
       linkList: Array<{ linkName: string; linkUrl: string }>
     } = {
