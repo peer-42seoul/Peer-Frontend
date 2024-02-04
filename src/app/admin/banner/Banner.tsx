@@ -302,6 +302,8 @@ const Banner = () => {
         console.log(res)
         setValue('bannerId', id)
         setValue('bannerStatus', res.data.bannerStatus)
+        setValue('bannerType', res.data.bannerType)
+        setCurrentBannerType(res.data.bannerType)
         setValue('title', res.data.title)
         setValue('previewImage', res.data.image)
         setValue('date', res.data.date)
@@ -512,13 +514,13 @@ const Banner = () => {
                   <FormControlLabel
                     value="큰 배너"
                     control={<Radio />}
-                    label="큰 배너 (946*200)"
+                    label="큰 배너 (권장 946*200)"
                     disabled={writeMode === 'view' || writeMode === 'edit'}
                   />
                   <FormControlLabel
                     value="작은 배너"
                     control={<Radio />}
-                    label="작은 배너 (251*100)"
+                    label="작은 배너 (권장 251*100)"
                     disabled={writeMode === 'view' || writeMode === 'edit'}
                   />
                 </RadioGroup>
