@@ -12,7 +12,6 @@ interface IteamNameProps {
 }
 const TeamName = ({ teamName, author, postId, editMode }: IteamNameProps) => {
   const router = useRouter()
-  console.log('showcaseId', postId)
   return (
     <Stack sx={style.teamNameBox}>
       <Typography variant={'Body2'} color={'text.normal'} sx={style.teamName}>

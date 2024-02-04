@@ -133,7 +133,6 @@ const Comment = ({ data, postId }: CommentProps) => {
 }
 
 const CommentContainer = ({ postId }: IPostId) => {
-  console.log('다', postId)
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IComment[]>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
