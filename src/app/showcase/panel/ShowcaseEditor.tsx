@@ -1,6 +1,6 @@
 'use client'
 import { Button, Container, Stack } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
@@ -12,12 +12,13 @@ import CuTextModal from '@/components/CuTextModal'
 import useAxiosWithAuth from '@/api/config'
 import StartEndDateViewer from '../panel/common/StartEndDateViewer'
 import TeamMembers from '../panel/common/TeamMembers'
-import dynamic from 'next/dynamic'
 import * as style from './ShowcaseEditor.style'
 import { useLinks } from '@/hook/useLinks'
 import useShowCaseState from '@/states/useShowCaseState'
 import { useRouter } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
+import DynamicToastEditor from '@/components/DynamicToastEditor'
+import { Editor } from '@toast-ui/editor'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
@@ -26,10 +27,6 @@ interface IShowcaseEditorProps {
   requestMethodType: 'post' | 'put'
   router: any | undefined
 }
-
-const DynamicEditor = dynamic(() => import('../panel/common/FormUIEditor'), {
-  ssr: false,
-})
 
 const ShowcaseEditor = ({
   data,
@@ -49,6 +46,7 @@ const ShowcaseEditor = ({
   const { content, setContent } = useShowCaseState()
   const router = useRouter()
   const { isPc } = useMedia()
+  const editorRef = useRef<Editor | null>(null)
 
   useEffect(() => {
     if (requestMethodType === 'put') {
@@ -183,8 +181,14 @@ const ShowcaseEditor = ({
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        <DynamicEditor content={data.content} />
-
+        {/* <DynamicEditor content={data.content} /> */}
+        <DynamicToastEditor
+          initialValue={data.content}
+          initialEditType="wysiwyg"
+          editorRef={editorRef}
+          previewStyle="tab"
+          height={'30rem'}
+        />
         <CuTextModal
           open={alertOpen}
           onClose={closeModal}
