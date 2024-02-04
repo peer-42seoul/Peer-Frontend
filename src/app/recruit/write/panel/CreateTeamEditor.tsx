@@ -112,6 +112,7 @@ const CreateTeamEditor = ({
                   setValue('image', value)
                 }}
                 sx={{ width: ['100%', 'content-fit'], maxWidth: '26rem', p: 0 }}
+                disabled={editorType === 'edit'}
               >
                 <Stack
                   direction={'column'}

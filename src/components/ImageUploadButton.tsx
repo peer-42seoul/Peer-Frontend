@@ -37,6 +37,7 @@ const ImageUploadButton = ({
   setPreviewImage,
   onChange,
   register,
+  disabled,
   sx,
 }: {
   children?: React.ReactNode
@@ -46,6 +47,7 @@ const ImageUploadButton = ({
   setPreviewImage: (imageUrl: string) => void
   onChange?: () => void
   register?: UseFormRegisterReturn
+  disabled?: boolean
   sx?: SxProps
 }) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +72,7 @@ const ImageUploadButton = ({
     }
   }
   return (
-    <Button component="label" sx={sx}>
+    <Button component="label" sx={sx} disabled={disabled}>
       {children}
       <input
         type="file"
