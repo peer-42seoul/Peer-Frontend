@@ -24,7 +24,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState<'password' | 'text'>(
     'password',
   )
-  const { login } = useAuthStore()
+  const { isLogin, login } = useAuthStore()
 
   const { openToast, closeToast } = useToast()
 
@@ -78,6 +78,8 @@ const Login = () => {
         message: '로그인이 필요한 서비스입니다.',
         severity: 'error',
       })
+    } else if (isLogin) {
+      router.push('/')
     }
   }, [])
 
