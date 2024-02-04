@@ -24,6 +24,9 @@ const InterviewForm = ({
   })
 
   const handleAddQuestion = () => {
+    if (fields.length >= 10) {
+      return
+    }
     if (value === 'OPEN')
       append({
         question: '질문을 입력하세요.',
@@ -102,7 +105,9 @@ const InterviewForm = ({
               <Typography variant="Body2">선형 배율</Typography>
             </MenuItem>
           </Select>
-          <Button onClick={handleAddQuestion}>질문 추가</Button>
+          <Button onClick={handleAddQuestion} disabled={fields.length >= 10}>
+            질문 추가
+          </Button>
         </Stack>
       </Stack>
     </CuModal>

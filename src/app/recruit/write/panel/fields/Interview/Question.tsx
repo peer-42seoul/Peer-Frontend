@@ -58,7 +58,7 @@ const Question = ({
           },
         }}
       />
-      <Options control={control} index={index} type={type} />
+      <Options control={control} firstIndex={index} type={type} />
     </>
   )
 }

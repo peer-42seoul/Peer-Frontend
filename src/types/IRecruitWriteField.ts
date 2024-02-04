@@ -1,4 +1,4 @@
-import { IFormInterview, IRoleWrite } from './IPostDetail'
+import { IRoleWrite } from './IPostDetail'
 import { ISkill } from './IUserProfile'
 
 export interface IFormInterviewField {
