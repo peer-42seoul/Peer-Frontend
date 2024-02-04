@@ -87,7 +87,7 @@ const PcNav = () => {
                   spacing={'0.15rem'}
                 >
                   <Typography
-                    color={value === 'hitchhiking' ? 'primary' : 'normal'}
+                    color={value === 'hitchhiking' ? 'primary' : 'text.normal'}
                     variant="Caption"
                   >
                     히치하이킹
@@ -113,7 +113,7 @@ const PcNav = () => {
               value={'team-list'}
               label={
                 <Typography
-                  color={value === 'team-list' ? 'primary' : 'normal'}
+                  color={value === 'team-list' ? 'primary' : 'text.normal'}
                   variant="Caption"
                 >
                   팀페이지
@@ -133,7 +133,7 @@ const PcNav = () => {
                   spacing={'0.15rem'}
                 >
                   <Typography
-                    color={value === 'showcase' ? 'primary' : 'normal'}
+                    color={value === 'showcase' ? 'primary' : 'text.normal'}
                     variant="Caption"
                   >
                     쇼케이스
@@ -149,7 +149,10 @@ const PcNav = () => {
               onClick={() => {
                 router.push('/showcase')
               }}
-              sx={navStyle}
+              sx={{
+                ...navStyle,
+                wordBreak: 'keep-all',
+              }}
             />
           </BottomNavigation>
         </Stack>
