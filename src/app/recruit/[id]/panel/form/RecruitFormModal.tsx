@@ -80,7 +80,7 @@ const RecruitFormModal = ({
         } else return res
       })
       value = {
-        role,
+        role: role ? role : 'STUDY',
         answerList,
       }
     }

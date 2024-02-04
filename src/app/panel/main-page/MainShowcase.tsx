@@ -18,7 +18,7 @@ const MainShowcase = () => {
     defaultGetFetcher,
   )
 
-  console.log(data)
+  // console.log(data)
 
   const handleClick = useCallback(() => {
     if (data?.content.length === 0) return
