@@ -84,6 +84,7 @@ interface IBannerContentWrite {
 interface IBannerContentEdit {
   bannerId: number
   bannerType: string //"큰 배너", // enum
+  title: string
   image: string | null // "url",  // 수정 안되었으면 null
   bannerReservationType: string // "즉시", // enum
   reservationDate: string | null //"yyyy-MM-dd'T'HH:mm",
@@ -257,6 +258,7 @@ const Banner = () => {
       submitData = {
         bannerId: data.bannerId,
         bannerType: data.bannerType,
+        title: data.title,
         image:
           data.previewImage === '' ? null : data.previewImage.split(',')[1],
         bannerReservationType: data.bannerReservationType,
@@ -310,13 +312,13 @@ const Banner = () => {
         setValue('date', res.data.date)
         setValue('announcementUrl', res.data.announcementUrl)
 
-        let reservationStatusValue = '없음' // 기본값
+        let reservationStatusValue = '' // 기본값
         if (
           res.data.bannerStatus === '종료' ||
-          res.data.bannerStatus === '진행중'
+          res.data.bannerStatus === '진행 중'
         ) {
-          reservationStatusValue = '없음'
-        } else if (res.data.announcementStatus === '예약') {
+          reservationStatusValue = '즉시'
+        } else if (res.data.bannerStatus === '예약') {
           reservationStatusValue = '예약'
         }
         setValue('bannerReservationType', reservationStatusValue)
@@ -567,9 +569,7 @@ const Banner = () => {
               <Controller
                 name="bannerReservationType"
                 control={control}
-                defaultValue={
-                  getValues('bannerStatus') === '예약' ? '예약' : '즉시'
-                }
+                defaultValue={getValues('bannerReservationType')}
                 rules={{ required: '배너 예약 상태를 설정해주세요' }} // 필수 조건 추가
                 render={({ field }) => (
                   <RadioGroup
