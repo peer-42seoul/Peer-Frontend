@@ -1,6 +1,6 @@
 'use client'
 import { Button, Container, Stack } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
@@ -14,7 +14,6 @@ import StartEndDateViewer from '../panel/common/StartEndDateViewer'
 import TeamMembers from '../panel/common/TeamMembers'
 import * as style from './ShowcaseEditor.style'
 import { useLinks } from '@/hook/useLinks'
-import useShowCaseState from '@/states/useShowCaseState'
 import { useRouter } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
 import DynamicToastEditor from '@/components/DynamicToastEditor'
@@ -43,16 +42,9 @@ const ShowcaseEditor = ({
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
     useLinks(data.links ? data.links : [])
-  const { content, setContent } = useShowCaseState()
   const router = useRouter()
   const { isPc } = useMedia()
   const editorRef = useRef<Editor | null>(null)
-
-  useEffect(() => {
-    if (requestMethodType === 'put') {
-      setContent(data?.content)
-    }
-  }, [requestMethodType, data?.content])
 
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
@@ -65,7 +57,7 @@ const ShowcaseEditor = ({
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
           {
             image: previewImage.split(',')[1],
-            content: content,
+            content: editorRef.current?.getMarkdown() ?? '',
             teamId: teamId,
             links: linksWithoutId,
           },
@@ -76,7 +68,7 @@ const ShowcaseEditor = ({
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${showcaseId}`,
           {
             image: image.length ? previewImage.split(',')[1] : null,
-            content: content,
+            content: editorRef.current?.getMarkdown() ?? '',
             links: linksWithoutId,
           },
         )
