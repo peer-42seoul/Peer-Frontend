@@ -18,6 +18,8 @@ import { useRouter } from 'next/navigation'
 import CloseIcon from '../../../icons/CloseIcon'
 import BackIcon from '@/icons/Nav/BackIcon'
 import useHeaderStore from '@/states/useHeaderStore'
+import { useEffect, useState } from 'react'
+import useAuthStore from '@/states/useAuthStore'
 
 /**
  * TODO : 상황에 따라 다른 헤더를 보여 줄 수 있어야 할 것 같습니다.
@@ -26,20 +28,40 @@ import useHeaderStore from '@/states/useHeaderStore'
  * - 오른쪽 아이콘 (있을 수도 있고 없을 수도 있음)
  */
 
-const Header = ({
-  title,
-  onlyTitle,
-}: {
-  title?: string
-  onlyTitle?: boolean
-}) => {
+const Header = ({ pathname }: { pathname?: string }) => {
   const theme = useTheme()
   const mobileHeader = {
     ...style.mobileHeader,
     backgroundColor: alpha(theme.palette.background.primary, 0.8),
   }
-  const { headerTitle } = useHeaderStore()
+  const { isLogin } = useAuthStore()
   const router = useRouter()
+  const [title, setTitle] = useState('')
+
+  useEffect(() => {
+    if (!pathname) return setTitle('')
+    if (pathname === '/') {
+      setTitle('메인')
+    } else if (pathname.startsWith('/login')) {
+      setTitle('로그인')
+    } else if (pathname.startsWith('/team-list')) {
+      if (!isLogin) {
+        console.log('팀페이지')
+        router.push('/login?redirect=/team-list')
+      } else setTitle('팀페이지')
+    } else if (pathname.startsWith('/my-page')) {
+      if (!isLogin) {
+        router.push('/login?redirect=/my-page')
+      } else setTitle('마이페이지')
+    } else {
+      setTitle('')
+    }
+  }, [pathname])
+  const { headerTitle } = useHeaderStore()
+
+  // 타이틀만 보여주고 싶은 경우 (뒤로 가기 버튼이 보이지 않았으면 하는 경우)
+  const onlyTitle = title === '마이페이지' || title === '팀페이지'
+
   return (
     <AppBar position="fixed" sx={mobileHeader}>
       <Toolbar disableGutters sx={style.mobileHeaderToolbar}>
@@ -68,9 +90,9 @@ const Header = ({
               <BackIcon />
             </IconButton>
             <Box sx={style.mobileHeaderTitle}>
-              {/* 페이지별로 다른 제목이 들어갈 수 있어야 함. */}
+              {/* headerTitle이 있는 경우: 페이지안에서 header를 설정하는 경우 (ex 모집글뷰, 팀페이지) */}
               <Typography fontSize={'0.8125rem'} fontWeight={700}>
-                {title ?? headerTitle}
+                {headerTitle === '' ? title : headerTitle}
               </Typography>
             </Box>
             <IconButton

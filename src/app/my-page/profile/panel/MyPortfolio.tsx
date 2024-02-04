@@ -50,7 +50,6 @@ const MyPortfolio = ({
     if (data) {
       // COMMENT : 임시 해결책. useSWR 도큐먼트 뒤적거리기
       setPostList((prev) => getUniqueArray(prev.concat(data), 'teamId'))
-      console.log(data)
       if (data.length && !data[data.length - 1]?.isEnd) {
         setPageLimit((prev) => prev + 1)
       }

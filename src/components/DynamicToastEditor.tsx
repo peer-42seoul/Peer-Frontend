@@ -1,9 +1,10 @@
 // ToastEditorWrapper.tsx
 import dynamic from 'next/dynamic'
 import React from 'react'
-import { IEditorOptions } from '@toast-ui/editor'
+import { Box } from '@mui/material'
+import { IToastEditorProps } from '@toast-ui/editor'
 
-interface Props extends IEditorOptions {
+interface Props extends IToastEditorProps {
   theme?: string
 }
 
@@ -16,7 +17,11 @@ const ToastEditor = dynamic(
  * SSR 환경에서 발생하는 충돌을 막기 위해서 dynamic import로 ToastEditor를 불러오는 컴포넌트
  */
 const DynamicToastEditor = (props: Props) => {
-  return <ToastEditor {...props} />
+  return (
+    <Box>
+      <ToastEditor {...props} />
+    </Box>
+  )
 }
 
 export default DynamicToastEditor

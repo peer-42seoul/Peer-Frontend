@@ -7,7 +7,6 @@ import { useTheme } from '@mui/material'
 import * as style from './Profile.style'
 
 const ProfileLink = (props: IUserProfileLink) => {
-  console.log(props.linkUrl)
   const theme = useTheme()
   return (
     <Stack direction={'row'} spacing={0.5} alignItems={'center'}>

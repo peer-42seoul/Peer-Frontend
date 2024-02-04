@@ -1,26 +1,31 @@
-import { Stack, TextField, Typography } from '@mui/material'
+import { Box, Stack, TextField, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import BackgroundBox from '../BackgroundBox'
 import CuButton from '../CuButton'
 import CuModal from '../CuModal'
 import DynamicToastEditor from '../DynamicToastEditor'
 import * as style from './EditPanel.style'
+import { Editor } from '@toast-ui/editor'
 
 interface IChildrenProps {
   children: React.ReactNode
 }
 
 interface IEditFormProps {
-  formId: string
   isLoading: boolean
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
-  initialTitle: string
-  initialContent: string
+  titleRef: React.RefObject<HTMLInputElement>
+  editorRef: React.RefObject<Editor>
+  initialData: {
+    title: string
+    content: string
+  }
+  type: 'new' | 'edit'
+  handleGoBack: () => void
 }
 
 interface IEditButtonProps {
   type: 'new' | 'edit'
-  formId: string
   handleGoBack: () => void
 }
 
@@ -30,12 +35,7 @@ interface IEditPageProps extends IChildrenProps {
   handleGoBack: () => void
 }
 
-export const EditPage = ({
-  title,
-  children,
-  type,
-  handleGoBack,
-}: IEditPageProps) => {
+export const EditPage = ({ title, children, handleGoBack }: IEditPageProps) => {
   const { isPc } = useMedia()
   if (isPc)
     return (
@@ -47,18 +47,7 @@ export const EditPage = ({
       </Stack>
     )
   return (
-    <CuModal
-      open={true}
-      title={title}
-      onClose={handleGoBack}
-      mobileFullSize
-      textButton={{ text: '취소', onClick: handleGoBack }}
-      containedButton={{
-        text: type === 'new' ? '등록' : '완료',
-        type: 'submit',
-        form: 'notice-form',
-      }}
-    >
+    <CuModal open={true} title={title} onClose={handleGoBack} mobileFullSize>
       <Stack sx={{ height: '100%', overflowY: 'scroll' }} spacing={'1.5rem'}>
         {children}
       </Stack>
@@ -78,44 +67,60 @@ export const EditBox = ({ children }: IChildrenProps) => {
 }
 
 export const EditForm = ({
-  formId,
   isLoading,
   onSubmit,
-  initialTitle,
-  initialContent,
+  titleRef,
+  editorRef,
+  initialData,
+  type,
+  handleGoBack,
 }: IEditFormProps) => {
+  const { isPc } = useMedia()
+
   return (
-    <form onSubmit={onSubmit} id={formId}>
+    <form onSubmit={onSubmit}>
       <Stack sx={style.EditForm} spacing={'1.5rem'}>
         <Stack spacing={'0.5rem'}>
           <Typography variant={'CaptionEmphasis'}>제목</Typography>
           <TextField
+            inputRef={titleRef}
             name={'post-title'}
-            id={'post-title'}
             placeholder={'제목을 입력해주세요.'}
             disabled={isLoading}
-            defaultValue={initialTitle}
+            defaultValue={initialData.title || ''}
             sx={{ maxWidth: '26rem' }}
           />
-          <button type={'submit'}>제출하기</button>
         </Stack>
         <Stack spacing={'0.5rem'} height={'100%'}>
           <Typography variant={'CaptionEmphasis'}>내용</Typography>
-          <DynamicToastEditor initialValue={initialContent} />
+          <Box>
+            <DynamicToastEditor
+              initialValue={initialData.content || ''}
+              editorRef={editorRef}
+              height={isPc ? '30rem' : '50vh'}
+            />
+          </Box>
         </Stack>
       </Stack>
+      <EditButton type={type} handleGoBack={handleGoBack} />
     </form>
   )
 }
 
-export const EditButton = ({
-  type,
-  formId,
-  handleGoBack,
-}: IEditButtonProps) => {
+export const EditButton = ({ type, handleGoBack }: IEditButtonProps) => {
+  const { isPc } = useMedia()
+
   return (
-    <Stack direction={'row'} justifyContent={'flex-end'}>
-      <Stack width={'18.5rem'} direction={'row'} spacing={'1rem'}>
+    <Stack
+      direction={'row'}
+      justifyContent={'flex-end'}
+      sx={style.EditButtonContainer}
+    >
+      <Stack
+        width={isPc ? '18.5rem' : '100%'}
+        direction={'row'}
+        spacing={'1rem'}
+      >
         <CuButton
           variant={'text'}
           action={handleGoBack}
@@ -126,7 +131,6 @@ export const EditButton = ({
         />
         <CuButton
           type={'submit'}
-          form={formId}
           variant={'contained'}
           message={type === 'new' ? '등록' : '완료'}
           style={style.EditButton}
