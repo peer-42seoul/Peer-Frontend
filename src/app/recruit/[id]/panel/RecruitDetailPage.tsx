@@ -3,7 +3,7 @@
 import { Typography, Stack, Container, Divider } from '@mui/material'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
 import React, { useEffect, useMemo, useState } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
 import RecruitQuickMenu from '@/app/recruit/[id]/panel/RecruitQuickMenu'
 import RecruitInfo from './RecruitInfo'
@@ -12,17 +12,29 @@ import RecruitDetailContent from '@/app/recruit/[id]/panel/RecruitDetailContent'
 import DropdownMenu from '@/components/DropdownMenu'
 import FavoriteButton from '@/components/FavoriteButton'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
-import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
 import useHeaderStore from '@/states/useHeaderStore'
 import UseNicknameStore from '@/states/useNicknameStore'
+import useSWR from 'swr'
+import useAuthStore from '@/states/useAuthStore'
+import useAxiosWithAuth from '@/api/config'
 
 const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
+  const [isClient, setIsClient] = useState(false)
+  const path = usePathname()
+  const router = useRouter()
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
   const { isPc } = useMedia()
-  const path = usePathname()
   const { setHeaderTitle } = useHeaderStore()
   const { nickname } = UseNicknameStore()
-  const [isClient, setIsClient] = useState(false)
+  const { isLogin } = useAuthStore()
+  const axiosInstance = useAxiosWithAuth()
+
+  const { data: favoriteData } = useSWR<boolean>(
+    isLogin
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${id}`
+      : null,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
+  )
 
   //하이드레이션 오류 방지
   useEffect(() => {
@@ -53,17 +65,25 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
         <Stack
           justifyContent={'flex-start'}
           direction={'row'}
-          marginBottom={'2rem'}
+          marginTop={'2rem'}
+          marginBottom={'1rem'}
         >
-          <Typography variant={'Body2Emphasis'}>모집글 보기</Typography>
+          <Typography
+            variant={'Body2Emphasis'}
+            onClick={() => router.back()}
+            sx={{ cursor: 'pointer' }}
+          >
+            돌아가기
+          </Typography>
         </Stack>
         {/* 모집글 영역 */}
         <Stack direction={'row'}>
           <Stack width={'100%'}>
             {/*이미지, 제목, 프로필 영역*/}
             <RecruitInfo data={data} type={type} pc>
-              {isClient && (nickname !== data?.leader_nickname &&
-                <ApplyFormButton roleList={roleList} id={id} type={type} pc />)}
+              {isClient && nickname !== data?.leader_nickname && (
+                <ApplyFormButton roleList={roleList} id={id} type={type} pc />
+              )}
             </RecruitInfo>
             {/* 모집 내용 */}
             <RecruitDetailContent data={data} type={type} roleList={roleList} />
@@ -71,7 +91,9 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
           {/* 퀵 메뉴 */}
           <RecruitQuickMenu
             recruit_id={parseInt(id)}
-            favorite={data?.favorite}
+            favorite={favoriteData}
+            title={data?.title}
+            content={data?.content}
           />
         </Stack>
       </Container>
@@ -84,7 +106,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
       <Stack height={'100%'} padding={'1.5rem'}>
         <Stack flexDirection={'row'} justifyContent={'flex-end'}>
           <FavoriteButton
-            favorite={data?.favorite}
+            favorite={favoriteData}
             recruit_id={parseInt(id)}
             redirect_url={`${path}?type=${type}`}
           />
@@ -95,7 +117,6 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
               content={data?.content}
               message={`피어에서 동료를 구해보세요! 이런 프로젝트가 있어요!`}
             />
-            <ReportMenuItem targetId={parseInt(data.leader_id)} />
           </DropdownMenu>
         </Stack>
         <Stack gap={'1.5rem'}>
@@ -103,8 +124,9 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
           <Divider />
           <RecruitDetailContent data={data} type={type} roleList={roleList} />
         </Stack>
-        {isClient && (nickname !== data?.leader_nickname &&
-          <ApplyFormButton id={id} type={type} roleList={roleList} />)}
+        {isClient && nickname !== data?.leader_nickname && (
+          <ApplyFormButton id={id} type={type} roleList={roleList} />
+        )}
       </Stack>
     </Container>
   )

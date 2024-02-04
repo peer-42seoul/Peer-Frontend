@@ -1,8 +1,6 @@
-import useMedia from '@/hook/useMedia'
-import { Button } from '@mui/material'
+import { Button, SxProps } from '@mui/material'
 import React from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
-import * as style from '../app/showcase/panel/common/SkillInput.style'
 
 // import { UseFormRegisterReturn } from 'react-hook-form'
 
@@ -39,6 +37,7 @@ const ImageUploadButton = ({
   setPreviewImage,
   onChange,
   register,
+  sx,
 }: {
   children?: React.ReactNode
   accept?: string
@@ -47,9 +46,8 @@ const ImageUploadButton = ({
   setPreviewImage: (imageUrl: string) => void
   onChange?: () => void
   register?: UseFormRegisterReturn
+  sx?: SxProps
 }) => {
-  const { isPc } = useMedia()
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
 
@@ -72,7 +70,7 @@ const ImageUploadButton = ({
     }
   }
   return (
-    <Button component="label" sx={style.ShowcaseImageStyle(isPc)}>
+    <Button component="label" sx={sx}>
       {children}
       <input
         type="file"
