@@ -9,8 +9,10 @@ import useAdminStore from '@/states/useAdminStore'
 
 const sheetSytle = {
   width: 'auto',
-  height: 'auto',
-  backgroundColor: 'background.secondary',
+  height: '80vh',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   padding: '2rem',
 }
 
@@ -61,7 +63,14 @@ const LoginForm = () => {
 
   return (
     <Container sx={sheetSytle}>
-      <Stack gap={'1rem'}>
+      <Stack
+        gap={'1rem'}
+        sx={{
+          padding: '2rem',
+          backgroundColor: 'background.secondary',
+          borderRadius: '0.5rem',
+        }}
+      >
         <Typography variant="Title3" align="center">
           관리자 로그인
         </Typography>

@@ -381,9 +381,10 @@ const Announce = () => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        // alignItems: 'center',
         width: '80rem',
-        height: '60rem',
+        height: '30rem',
+        paddingTop: '5rem',
         backgroundColor: 'background.primary',
       }}
     >
@@ -553,24 +554,28 @@ const Announce = () => {
           /> */}
           {/* </Stack> */}
           {writeMode === 'view' ? (
-            <DynamicToastViewer
-              initialValue={getValues('content')}
-              sx={{
-                width: '100%',
-                wordBreak: 'break-word',
-                height: '20rem',
-                color: 'text.alternative',
-                overflowY: 'auto'
-              }}
-            />
+            <div>
+              <DynamicToastViewer
+                initialValue={getValues('content')}
+                sx={{
+                  width: '100%',
+                  wordBreak: 'break-word',
+                  height: '20rem',
+                  color: 'text.alternative',
+                  overflowY: 'auto',
+                }}
+              />
+            </div>
           ) : (
-            <DynamicToastEditor
-              initialValue={getValues('content')}
-              initialEditType="wysiwyg"
-              editorRef={editorRef}
-              previewStyle="tab"
-              height={'30rem'}
-            />
+            <>
+              <DynamicToastEditor
+                initialValue={getValues('content')}
+                initialEditType="wysiwyg"
+                editorRef={editorRef}
+                previewStyle="tab"
+                height={'30rem'}
+              />
+            </>
           )}
           <Stack>
             <Typography variant={'Title2'}>공지 예약 및 알림</Typography>
