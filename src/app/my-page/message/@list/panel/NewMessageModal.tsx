@@ -115,70 +115,68 @@ const NewMessageModal = ({
         onClick: handleClose,
       }}
     >
-      <>
-        <Stack
-          alignItems={isPc ? 'center' : 'flex-start'}
-          spacing={'1rem'}
-          sx={isPc ? style.pcContainer : style.mobileContainer}
-        >
-          <InputContainer title={'받는 이'}>
-            <Stack
-              direction={'row'}
-              alignItems={'center'}
-              spacing={'0.38rem'}
-              sx={style.searchInput}
-              ref={ref}
-            >
-              <SearchIcon sx={style.searchIcon} />
-              <InputBase
-                fullWidth
-                value={targetUser ? targetUser.targetNickname : keyword}
-                disabled={!!targetUser}
-                placeholder={'닉네임 혹은 이메일을 입력하세요.'}
-                sx={style.inputBase}
-                onChange={(e) => setKeyword(e.target.value)}
-              />
-              <CuButton
-                message={targetUser ? '취소' : '검색'}
-                variant={'text'}
-                style={style.searchButton}
-                action={modalButtonAction}
-                TypographyProps={{
-                  variant: 'CaptionEmphasis',
-                  color: targetUser ? 'purple.strong' : 'text.normal',
-                }}
-              />
-            </Stack>
-            <Popper
-              sx={isPc ? style.pcPopper : style.mobilePopper}
-              open={!!messageTargetList}
-              anchorEl={ref.current}
-            >
-              {messageTargetList ? (
-                <Stack alignItems={'flex-end'}>
-                  <IconButton onClick={() => setMessageTargetList(undefined)}>
-                    <CloseIcon sx={style.closeIcon} />
-                  </IconButton>
-                </Stack>
-              ) : null}
-              <TargetList
-                messageTargetState={{
-                  targetList: messageTargetList,
-                  resetList: () => setMessageTargetList(undefined),
-                }}
-                setTargetUser={setTargetUser}
-              />
-            </Popper>
-          </InputContainer>
-          <InputContainer title={'내용'}>
-            <NewMessageForm
-              userInfo={targetUser}
-              handleClose={handleClose}
-              setMessageData={setMessageData}
+      <Stack
+        alignItems={isPc ? 'center' : 'flex-start'}
+        spacing={'1rem'}
+        sx={isPc ? style.pcContainer : style.mobileContainer}
+      >
+        <InputContainer title={'받는 이'}>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            spacing={'0.38rem'}
+            sx={style.searchInput}
+            ref={ref}
+          >
+            <SearchIcon sx={style.searchIcon} />
+            <InputBase
+              fullWidth
+              value={targetUser ? targetUser.targetNickname : keyword}
+              disabled={!!targetUser}
+              placeholder={'닉네임 혹은 이메일을 입력하세요.'}
+              sx={style.inputBase}
+              onChange={(e) => setKeyword(e.target.value)}
             />
-          </InputContainer>
-        </Stack>
-      </>
+            <CuButton
+              message={targetUser ? '취소' : '검색'}
+              variant={'text'}
+              style={style.searchButton}
+              action={modalButtonAction}
+              TypographyProps={{
+                variant: 'CaptionEmphasis',
+                color: targetUser ? 'purple.strong' : 'text.normal',
+              }}
+            />
+          </Stack>
+          <Popper
+            sx={isPc ? style.pcPopper : style.mobilePopper}
+            open={!!messageTargetList}
+            anchorEl={ref.current}
+          >
+            {messageTargetList ? (
+              <Stack alignItems={'flex-end'}>
+                <IconButton onClick={() => setMessageTargetList(undefined)}>
+                  <CloseIcon sx={style.closeIcon} />
+                </IconButton>
+              </Stack>
+            ) : null}
+            <TargetList
+              messageTargetState={{
+                targetList: messageTargetList,
+                resetList: () => setMessageTargetList(undefined),
+              }}
+              setTargetUser={setTargetUser}
+            />
+          </Popper>
+        </InputContainer>
+        <InputContainer title={'내용'}>
+          <NewMessageForm
+            userInfo={targetUser}
+            handleClose={handleClose}
+            setMessageData={setMessageData}
+          />
+        </InputContainer>
+      </Stack>
     </CuModal>
   )
 }
