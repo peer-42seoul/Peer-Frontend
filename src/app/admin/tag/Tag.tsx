@@ -138,7 +138,7 @@ const Tag = () => {
         style={{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
+          paddingTop: '5rem',
           width: '80rem',
           height: '30rem',
           backgroundColor: 'background.primary',
