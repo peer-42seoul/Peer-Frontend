@@ -62,8 +62,10 @@ const NewMessageForm = ({
         )
         setContent('')
         setMessageData(response.data)
+        closeModal() // close confirm modal
         handleClose()
       } catch (error) {
+        closeModal() // close confirm modal
         openToast({
           severity: 'error',
           message: '쪽지 보내기에 실패했습니다. 다시 시도해주세요.',
