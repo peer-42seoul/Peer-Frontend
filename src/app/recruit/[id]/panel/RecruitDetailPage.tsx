@@ -14,6 +14,8 @@ import UseNicknameStore from '@/states/useNicknameStore'
 import useSWR from 'swr'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
+import Tutorial from '@/components/Tutorial'
+import RecruitPageTutorial from '@/components/tutorialContent/RecruitPageTutorial'
 
 const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   const [isClient, setIsClient] = useState(false)
@@ -87,7 +89,13 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
             {/*이미지, 제목, 프로필 영역*/}
             <RecruitInfo data={data} type={type} pc>
               {isClient && !me && (
-                <ApplyFormButton roleList={roleList} id={id} type={type} pc />
+                <Stack display={'flex'} direction={'row'} alignItems={'center'}>
+                  <ApplyFormButton roleList={roleList} id={id} type={type} pc />
+                  <Tutorial
+                    title="지원 방법"
+                    content={<RecruitPageTutorial />}
+                  />
+                </Stack>
               )}
             </RecruitInfo>
             {/* 모집 내용 */}

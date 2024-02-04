@@ -33,7 +33,7 @@ const Comment = ({ data, postId }: CommentProps) => {
       )
       closeToast()
       mutate(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/post/comment/${postId}?page=1&pageSize=3`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
       )
     } catch (error: any) {
       switch (error.response.status) {
@@ -93,14 +93,16 @@ const Comment = ({ data, postId }: CommentProps) => {
           </Typography>
         </Box>
         <Box sx={style.iconContainer}>
-          <IconButton onClick={openModal}>
-            <TrashIcon
-              sx={{
-                ...style.iconStyle,
-                color: alpha(theme.palette.text.assistive, 0.5),
-              }}
-            />
-          </IconButton>
+          {data.isAuthor && (
+            <IconButton onClick={openModal}>
+              <TrashIcon
+                sx={{
+                  ...style.iconStyle,
+                  color: alpha(theme.palette.text.assistive, 0.5),
+                }}
+              />
+            </IconButton>
+          )}
           {/* <IconButton onClick={openModal}>
             <EditIcon
               sx={{
@@ -133,7 +135,7 @@ const Comment = ({ data, postId }: CommentProps) => {
 const CommentContainer = ({ postId }: IPostId) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IComment[]>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/post/comment/${postId}?page=1&pageSize=3`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )
@@ -144,7 +146,22 @@ const CommentContainer = ({ postId }: IPostId) => {
         <Typography color={'error'}>{error.response.data.message}</Typography>
       )
     }
-    return <Typography color={'error'}>에러가 발생했습니다.</Typography>
+    return (
+      <>
+        <Container sx={style.containerWrapper}>
+          <Stack sx={style.CommentContainer}>
+            <Typography
+              variant={'Title1'}
+              color={'text.normal'}
+              marginBottom={'1rem'}
+            >
+              댓글
+            </Typography>
+            <Typography color={'error'}>에러가 발생했습니다.</Typography>
+          </Stack>
+        </Container>
+      </>
+    )
   }
   return (
     <>
