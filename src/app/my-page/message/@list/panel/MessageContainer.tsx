@@ -53,7 +53,6 @@ const MessageContainer = ({
   // event handler
 
   const handleMessageSearch = useCallback(() => {
-    // NOTE : 검색어가 없는 경우에는 모든 메시지를 보여준다?
     if (!originalMessageData) return
     if (!searchKeyword) setMessageList(originalMessageData)
     else

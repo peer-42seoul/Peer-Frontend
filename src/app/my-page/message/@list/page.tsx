@@ -33,7 +33,6 @@ const MessageListPage = () => {
   const { isPc } = useMedia()
   const { isOpen, openModal, closeModal } = useModal()
   const axiosWithAuth = useAxiosWithAuth()
-  // NOTE : SWR를 사용하고 있는데 굳이 messageListState를 사용해야 하는 이유?...??
   const { data, error, isLoading } = useSWR<IMessageListData[]>(
     '/api/v1/message/list',
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
