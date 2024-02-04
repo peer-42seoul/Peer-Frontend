@@ -28,7 +28,7 @@ const Page = () => {
     roleList: [{ name: '', number: 0 }],
     interviewList: [],
     max: '2',
-    content: '',
+    content: '모집글 소개 글입니다.',
   }
 
   const handleSubmit = async (data: IRecruitWriteField) => {
@@ -50,8 +50,8 @@ const Page = () => {
         interviewList: data.interviewList,
         place: data.place,
         max: data.type === 'PROJECT' ? null : Number(data.max),
-        content: data.content,
-        // content: editorRef.current?.getMarkdown(),
+        // content: data.content,
+        content: editorRef.current?.getMarkdown(),
       })
       .then((res) => {
         openToast({
@@ -62,7 +62,7 @@ const Page = () => {
       })
       .catch((error) => {
         openToast({
-          message: error.response.data.message,
+          message: error.response.data.message ?? '모집글 등록에 실패했습니다.',
           severity: 'error',
         })
       })

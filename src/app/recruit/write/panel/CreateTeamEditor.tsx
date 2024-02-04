@@ -26,7 +26,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { FormControlLabel } from '@mui/material'
 import SkillAutocomplete from '@/components/SkillAutocomplete'
 import { ISkill } from '@/types/IUserProfile'
-// import DynamicToastEditor from '@/components/DynamicToastEditor'
+import DynamicToastEditor from '@/components/DynamicToastEditor'
 import { Editor } from '@toast-ui/editor'
 import { IFormInterview } from '@/types/IPostDetail'
 import SetInterview from './fields/SetInterview/SetInterview'
@@ -34,7 +34,7 @@ import SetInterview from './fields/SetInterview/SetInterview'
 const CreateTeamEditor = ({
   defaultValues,
   submitHandler,
-  // editorRef,
+  editorRef,
   editorType,
   isAnswered,
 }: {
@@ -46,7 +46,6 @@ const CreateTeamEditor = ({
 }) => {
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const router = useRouter()
-  // const axiosInstance = useAxiosWithAuth()
   const { isPc } = useMedia()
 
   const { isLogin } = useAuthStore()
@@ -461,42 +460,7 @@ const CreateTeamEditor = ({
               />
             </FieldWithLabel>
             {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
-            <Controller
-              name={'content'}
-              render={({ field }) => (
-                <TextFieldWithLabel
-                  {...field}
-                  label="팀 소개 글"
-                  label_icon={
-                    <Icon.FileIcon
-                      sx={{ ...style.iconStyleBase, color: 'text.normal' }}
-                    />
-                  }
-                  id="content"
-                  helperText={errors?.content?.message ?? undefined}
-                  error={!!errors?.content}
-                  inputProps={{
-                    maxLength: 1000, // Corrected maxLength value
-                  }}
-                  multiline
-                  rows={10}
-                  placeholder="팀 소개 글을 입력해주세요."
-                />
-              )}
-              control={control}
-              rules={{
-                required: '필수 입력 항목입니다.',
-                minLength: {
-                  value: 2,
-                  message: '2자 이상 입력해주세요.',
-                },
-                maxLength: {
-                  value: 1000,
-                  message: '1000자 이내로 입력해주세요.',
-                },
-              }}
-            />
-            {/* <FieldWithLabel
+            <FieldWithLabel
               label="팀 소개 글"
               labelIcon={
                 <Icon.FileIcon
@@ -508,7 +472,7 @@ const CreateTeamEditor = ({
                 initialValue="팀 소개 글 입니다."
                 editorRef={editorRef}
               />
-            </FieldWithLabel> */}
+            </FieldWithLabel>
             {/* 모집 인터뷰 */}
             <FieldWithLabel
               label="모집 인터뷰"
