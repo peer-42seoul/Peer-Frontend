@@ -5,8 +5,6 @@ import { Box } from '@mui/system'
 import { Button, Container, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import NewTag from './panel/NewTag'
-import useAdminStore from '@/states/useAdminStore'
-import { useRouter } from 'next/navigation'
 
 interface content {
   tagId: number
