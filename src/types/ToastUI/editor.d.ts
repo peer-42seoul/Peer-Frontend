@@ -18,6 +18,8 @@ declare module '@toast-ui/editor' {
     initialEditType?: 'markdown' | 'wysiwyg'
     previewStyle?: 'tab' | 'vertical'
     height?: string
+    hooks: any
+
   }
 
   export class Editor {
@@ -29,5 +31,7 @@ declare module '@toast-ui/editor' {
     setHtml(html: string): void
     on(event: string, callback: Function): void
     destroy(): void
+    hooks(): any
+
   }
 }
