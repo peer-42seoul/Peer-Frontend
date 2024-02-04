@@ -38,7 +38,22 @@ const Page = ({ params }: { params: { id: string } }) => {
     return <></>
   }
 
-  const defaultValues: IRecruitWriteField = { ...(data as IRecruitWriteField) }
+  const defaultValues: IRecruitWriteField = {
+    place: data.place,
+    image: data.image,
+    title: data.title,
+    name: data.name,
+    due: data.due,
+    type: data.type,
+    region: data.place === 'ONLINE' ? ['', ''] : data.region,
+    link: data.link ?? '',
+    tagList: data.tagList,
+    roleList:
+      data.type === 'PROJECT' ? data.roleList : [{ name: '', number: 0 }],
+    interviewList: data.interviewList,
+    max: data.max ? data.max.toString() : '2',
+    content: data.content,
+  }
 
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
