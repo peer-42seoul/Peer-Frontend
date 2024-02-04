@@ -15,7 +15,8 @@ import * as Style from '../../../panel/common/SkillInput.style'
 import useMedia from '@/hook/useMedia'
 
 interface IShowcaseViewerProps {
-  data: IShowcaseViewerFields // IShowcase 타입을 import 해야 합니다.
+  data: IShowcaseViewerFields
+  postId: number
 }
 
 const CoverImage = ({ image }: { image: string }) => {
@@ -57,14 +58,19 @@ const ContentViewer = ({ content }: { content: string }) => {
   )
 }
 
-const ShowcaseViewer = ({ data }: IShowcaseViewerProps) => {
+const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
   const { isPc } = useMedia()
   return (
     <>
       {isPc ? (
         <Container sx={style.pcViewer}>
           <Stack>
-            <TeamName teamName={data?.name} />
+            <TeamName
+              teamName={data?.name}
+              author={data.author}
+              postId={postId}
+              editMode={false}
+            />
             <Stack sx={style.InformationViewerBox}>
               <InformationViewer data={data} />
               <Stack
@@ -87,7 +93,12 @@ const ShowcaseViewer = ({ data }: IShowcaseViewerProps) => {
             width={'100%'}
             marginBottom={'1rem'}
           >
-            <TeamName teamName={data?.name} />
+            <TeamName
+              editMode={false}
+              teamName={data?.name}
+              author={data.author}
+              postId={postId}
+            />
             <CoverImage image={data.image} />
           </Stack>
           <InformationViewer data={data} />

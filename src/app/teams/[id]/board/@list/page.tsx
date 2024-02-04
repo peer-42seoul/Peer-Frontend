@@ -16,6 +16,8 @@ import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamBoard } from '@/types/TeamBoardTypes'
 import BoardPostList from './panel/BoardPostList'
 import BoardDropdown from './panel/BoardDropdown'
+import Tutorial from '@/components/Tutorial'
+import TeamBoardTutorial from '@/components/tutorialContent/TeamBoardTutorial'
 
 const TeamBoard = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
@@ -72,6 +74,7 @@ const TeamBoard = ({ params }: { params: { id: string } }) => {
               justifyContent={'space-between'}
             >
               <BoardDropdown boardData={boardList} />
+              <Tutorial content={<TeamBoardTutorial />} />
               <Stack direction={'row'} spacing={'0.5rem'}>
                 <IconButtonContainer
                   setKeyword={setKeyword}

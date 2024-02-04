@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import '@toast-ui/editor/dist/toastui-editor.css'
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css'
 import { Editor, IToastEditorProps } from '@toast-ui/editor'
 import { Card } from '@mui/material'
 import { useTheme } from '@mui/material/styles'

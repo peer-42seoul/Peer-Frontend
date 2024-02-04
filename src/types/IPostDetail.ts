@@ -84,3 +84,8 @@ export enum statusEnum {
   ONGOING,
   AFTER,
 }
+
+export type IFavorite = {
+  recruit_id: number
+  favorite: boolean
+}

@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="/public/icons/favicon.ico" />
+        <link rel="icon" href="/icons/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         {/* 사파리 설정*/}
         <link

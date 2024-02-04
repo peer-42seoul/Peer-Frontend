@@ -101,9 +101,6 @@ const PushAlertBanner = () => {
     if (localStorage && localStorage.getItem('isShowPush') === 'false') {
       setIsShowPush(false)
     }
-    if (Notification.permission === 'granted') {
-      setIsShowPush(false)
-    }
 
     window.addEventListener('scroll', handleScroll)
 

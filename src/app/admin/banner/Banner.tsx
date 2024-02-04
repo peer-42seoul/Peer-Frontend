@@ -32,7 +32,7 @@ interface IBannerAllContent {
   previewImage: string
   bannerReservationType: string // "즉시" enum
   reservationDate: string | null // "yyyy-MM-dd'T'HH:mm",
-  noticeUrl: string //"url"
+  announcementUrl: string //"url"
 }
 
 const defaultValues: IBannerAllContent = {
@@ -45,7 +45,7 @@ const defaultValues: IBannerAllContent = {
   previewImage: '/images/defaultImage.png',
   bannerReservationType: '즉시', // enum
   reservationDate: '',
-  noticeUrl: '',
+  announcementUrl: '',
 }
 
 interface content {
@@ -69,7 +69,7 @@ interface content {
 // "title": string ,
 // "image": string "image url",
 // "date": string "yyyy-MM-dd'T'HH:mm",
-// "noticeUrl": string "url"
+// "announcementUrl": string "url"
 // }
 
 interface IBannerContentWrite {
@@ -78,16 +78,17 @@ interface IBannerContentWrite {
   image: string
   bannerReservationType: string // "즉시" enum
   reservationDate: string | null // "yyyy-MM-dd'T'HH:mm",
-  noticeUrl: string //"url"
+  announcementUrl: string //"url"
 }
 
 interface IBannerContentEdit {
   bannerId: number
   bannerType: string //"큰 배너", // enum
+  title: string
   image: string | null // "url",  // 수정 안되었으면 null
   bannerReservationType: string // "즉시", // enum
   reservationDate: string | null //"yyyy-MM-dd'T'HH:mm",
-  noticeUrl: string //"url"
+  announcementUrl: string //"url"
 }
 
 const Banner = () => {
@@ -211,7 +212,7 @@ const Banner = () => {
       bannerReservationType: data.bannerReservationType,
       reservationDate:
         data.bannerReservationType === '예약' ? DateFormed : null,
-      noticeUrl: data.noticeUrl,
+      announcementUrl: data.announcementUrl,
     }
     // } else return
     await axios
@@ -257,11 +258,13 @@ const Banner = () => {
       submitData = {
         bannerId: data.bannerId,
         bannerType: data.bannerType,
-        image: data.image === '' ? null : data.previewImage.split(',')[1],
+        title: data.title,
+        image:
+          data.previewImage === '' ? null : data.previewImage.split(',')[1],
         bannerReservationType: data.bannerReservationType,
         reservationDate:
           data.bannerReservationType === '예약' ? data.reservationDate : null,
-        noticeUrl: data.noticeUrl,
+        announcementUrl: data.announcementUrl,
       }
     } else return
 
@@ -307,15 +310,15 @@ const Banner = () => {
         setValue('title', res.data.title)
         setValue('previewImage', res.data.image)
         setValue('date', res.data.date)
-        setValue('noticeUrl', res.data.noticeUrl)
+        setValue('announcementUrl', res.data.announcementUrl)
 
-        let reservationStatusValue = '없음' // 기본값
+        let reservationStatusValue = '' // 기본값
         if (
           res.data.bannerStatus === '종료' ||
-          res.data.bannerStatus === '진행중'
+          res.data.bannerStatus === '진행 중'
         ) {
-          reservationStatusValue = '없음'
-        } else if (res.data.announcementStatus === '예약') {
+          reservationStatusValue = '즉시'
+        } else if (res.data.bannerStatus === '예약') {
           reservationStatusValue = '예약'
         }
         setValue('bannerReservationType', reservationStatusValue)
@@ -376,10 +379,9 @@ const Banner = () => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        paddingTop: '5rem',
         width: '80rem',
-        height: '60rem',
-        backgroundColor: 'background.primary',
+        height: '20rem',
       }}
     >
       <Stack>
@@ -549,7 +551,7 @@ const Banner = () => {
           <Typography variant={'Body1'}>관련 글 링크</Typography>
           <TextField
             disabled={writeMode === 'view'}
-            {...register('noticeUrl', {
+            {...register('announcementUrl', {
               required: 'url은 필수 입력 항목입니다.',
               pattern: {
                 value:
@@ -557,8 +559,8 @@ const Banner = () => {
                 message: '유효한 URL 주소를 입력해주세요.',
               },
             })}
-            error={!!errors.noticeUrl}
-            helperText={errors.noticeUrl?.message}
+            error={!!errors.announcementUrl}
+            helperText={errors.announcementUrl?.message}
           />
           {/* 배너 예약 설정 (라디오 버튼) */}
           <Stack>
@@ -567,9 +569,7 @@ const Banner = () => {
               <Controller
                 name="bannerReservationType"
                 control={control}
-                defaultValue={
-                  getValues('bannerStatus') === '예약' ? '예약' : '즉시'
-                }
+                defaultValue={getValues('bannerReservationType')}
                 rules={{ required: '배너 예약 상태를 설정해주세요' }} // 필수 조건 추가
                 render={({ field }) => (
                   <RadioGroup
