@@ -113,6 +113,7 @@ const CardStack = ({
                 transition={{ duration: 0.3 }}
               >
                 <HitchhikingCard
+                  key={card.recruitId}
                   authorImage={card.authorImage}
                   authorId={card.authorId}
                   teamName={card.teamName}
