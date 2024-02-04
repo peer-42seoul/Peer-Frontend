@@ -41,16 +41,12 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         teamName: data?.team.name,
       },
       (data: any) => {
-        console.log('whoAmI receive')
-        console.log(data)
         setMyInfo(data)
       },
     )
   }, [])
 
   if (isLoading) return <Typography>로딩중</Typography>
-
-  console.log(data)
 
   return (
     <Stack
