@@ -39,8 +39,6 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
     defaultGetFetcher,
   )
 
-  console.log(data)
-
   if (isLoading) return <Typography>로딩중</Typography>
 
   if (error || !data) return <Typography>에러 발생</Typography>

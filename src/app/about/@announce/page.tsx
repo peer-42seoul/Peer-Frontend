@@ -1,6 +1,8 @@
 'use client'
 
 import { defaultGetFetcher } from '@/api/fetchers'
+import CuCircularProgress from '@/components/CuCircularProgress'
+import NoDataDolphin from '@/components/NoDataDolphin'
 import useMedia from '@/hook/useMedia'
 import { IPagination } from '@/types/IPagination'
 import {
@@ -76,15 +78,13 @@ const AnnouncePage = () => {
     defaultGetFetcher,
   )
 
-  console.log(data)
-
   const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
     setPage(value)
   }
 
-  if (isLoading) return <div>로딩중</div>
+  if (isLoading) return <CuCircularProgress color="primary" />
 
-  if (error) return <div>에러 발생</div>
+  if (error) return <NoDataDolphin message="문제가 있나봐요 ㅠㅠ" />
 
   return (
     <Card sx={{ padding: '2rem' }}>
