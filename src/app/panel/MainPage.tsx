@@ -312,7 +312,9 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         >
           <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
-              <MainBanner />
+              <Stack maxWidth={'56rem'} mx={'auto'}>
+                <MainBanner />
+              </Stack>
               <Stack direction={'row'} justifyContent={'space-between'}>
                 <SelectType type={type} setType={handleType} />
                 <Tutorial

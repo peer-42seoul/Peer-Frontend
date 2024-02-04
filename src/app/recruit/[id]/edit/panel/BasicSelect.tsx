@@ -88,7 +88,6 @@ const BasicSelect = forwardRef<HTMLInputElement, IBasicSelectProps>(
           borderWidth: '0',
         }}
         style={{ borderColor: 'none' }}
-        variant="outlined"
         {...props}
       >
         {options}

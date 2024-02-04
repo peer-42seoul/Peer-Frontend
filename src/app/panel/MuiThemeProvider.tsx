@@ -544,6 +544,15 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       },
     }
 
+    theme.components.MuiSelect = {
+      styleOverrides: {
+        root: {
+          boxShadow: 'none',
+          '.MuiOutlinedInput-notchedOutline': { border: 0 },
+        },
+      },
+    }
+
     theme.components.MuiAutocomplete = {
       styleOverrides: {
         root: {

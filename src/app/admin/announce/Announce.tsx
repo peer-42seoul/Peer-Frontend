@@ -20,8 +20,6 @@ import { Radio } from '@mui/material'
 import { DateTimePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import CuModal from '@/components/CuModal'
-import useAdminStore from '@/states/useAdminStore'
-import { useRouter } from 'next/navigation'
 // import ToastEditor from '@/components/ToastUIEditor'
 // import ToastViewer from '@/components/ToastUIViewer'
 import { idStyle, statusStyle, titleStyle } from './AnnounceStyles'
@@ -130,14 +128,7 @@ const Announce = () => {
   }
   // 백엔드 API에서는 page가 0부터 시작하므로 page - 1로 설정
 
-  const { isLoggedIn } = useAdminStore()
-  const router = useRouter()
-  useEffect(() => {
-    if (isLoggedIn === false) {
-      alert('로그인이 필요한 서비스입니다.')
-      router.push('/admin/login')
-    }
-  }, [isLoggedIn])
+  const [currentNoticeStatus, setCurrentNoticeStatus] = useState('없음')
 
   // 초기 페이지 진입시 공지사항 목록 불러오기
   useEffect(() => {
@@ -197,7 +188,7 @@ const Announce = () => {
 
   const onSubmit = async (data: IAnnounceAllContent) => {
     console.log('onSubmit', data)
-    if (data.image === '') {
+    if (data.previewImage === '') {
       alert('이미지를 삽입해주세요')
       return
     }
@@ -574,7 +565,14 @@ const Announce = () => {
                 }
                 rules={{ required: '공지 예약 및 알림 상태를 설정해주세요' }} // 필수 조건 추가
                 render={({ field }) => (
-                  <RadioGroup {...field} row>
+                  <RadioGroup
+                    {...field}
+                    row
+                    onChange={(e) => {
+                      setCurrentNoticeStatus(e.target.value)
+                      field.onChange(e)
+                    }}
+                  >
                     <FormControlLabel
                       value="없음"
                       control={<Radio />}
@@ -627,7 +625,7 @@ const Announce = () => {
                   format="YYYY-MM-DD hh:mm"
                   disabled={
                     writeMode === 'view' ||
-                    getValues('announcementNoticeStatus') !== '예약'
+                    currentNoticeStatus !== '예약'
                   }
                   sx={{ width: '12rem' }}
                 />

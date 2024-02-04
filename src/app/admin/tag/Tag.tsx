@@ -5,8 +5,6 @@ import { Box } from '@mui/system'
 import { Button, Container, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import NewTag from './panel/NewTag'
-import useAdminStore from '@/states/useAdminStore'
-import { useRouter } from 'next/navigation'
 
 interface content {
   tagId: number
@@ -44,16 +42,6 @@ const Tag = () => {
   const [tagColor, setTagColor] = useState<string>('#000000')
   const [open, setOpen] = useState<boolean>(false)
   const writeMode = useRef<string>('')
-  const { isLoggedIn } = useAdminStore()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (isLoggedIn === false) {
-      alert('로그인이 필요한 서비스입니다.')
-      router.push('/admin/login')
-    }
-  }, [isLoggedIn])
-
   useEffect(() => {
     axios
       .get(`${API_URL}/api/v1/tag`, {

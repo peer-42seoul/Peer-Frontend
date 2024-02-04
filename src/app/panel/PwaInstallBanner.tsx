@@ -22,7 +22,6 @@ const PwaInstallBanner = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt()
       deferredPrompt.userChoice.then((choiceResult) => {
-        console.log(choiceResult.outcome)
         if (choiceResult.outcome === 'accepted') {
           console.log('User accepted the install prompt')
           setIsShowInstall(false)
@@ -37,11 +36,12 @@ const PwaInstallBanner = () => {
   }
 
   useEffect(() => {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsShowInstall(false)
+    }
     if (localStorage.getItem('isShowInstall') === 'false') {
       setIsShowInstall(false)
     }
-
-    console.log('navigator', navigator.userAgent)
 
     const isSafariBrowser =
       navigator.userAgent.includes('Safari') &&
@@ -70,7 +70,7 @@ const PwaInstallBanner = () => {
         setIsShowInstall(false)
       })
     }
-  }, [deferredPrompt])
+  }, [deferredPrompt, setIsShowInstall])
 
   if (isSafari)
     return (
@@ -94,7 +94,12 @@ const PwaInstallBanner = () => {
                 [공유하기 버튼]을 눌러서 [홈 화면에 추가]를 해주셔야 합니다.
               </Typography>
 
-              <IconButton onClick={() => setIsShowInstall(false)}>
+              <IconButton
+                onClick={() => {
+                  setIsShowInstall(false)
+                  localStorage.setItem('isShowInstall', 'false')
+                }}
+              >
                 <CloseIcon fontSize="small" />
               </IconButton>
             </Stack>
