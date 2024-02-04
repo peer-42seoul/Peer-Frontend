@@ -94,7 +94,12 @@ const PwaInstallBanner = () => {
                 [공유하기 버튼]을 눌러서 [홈 화면에 추가]를 해주셔야 합니다.
               </Typography>
 
-              <IconButton onClick={() => setIsShowInstall(false)}>
+              <IconButton
+                onClick={() => {
+                  setIsShowInstall(false)
+                  localStorage.setItem('isShowInstall', 'false')
+                }}
+              >
                 <CloseIcon fontSize="small" />
               </IconButton>
             </Stack>
