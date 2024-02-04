@@ -8,7 +8,7 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import FloatEditButton from './main-page/FloatEditButton'
 import MainCard from './main-page/MainCard'
 import SearchOption from './main-page/SearchOption'
@@ -41,10 +41,12 @@ export interface BeforeInstallPromptEvent extends Event {
     outcome: 'accepted' | 'dismissed'
     platform: string
   }>
+
   prompt(): Promise<void>
 }
 
 export type ProjectSort = 'latest' | 'hit'
+
 export interface IDetailOption {
   isInit?: boolean
   due1: number
@@ -64,13 +66,11 @@ export const socket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
 })
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  const [content, setContent] = useState<IPost[]>(initData?.content)
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   const { setSocket } = useSocket()
-  /* 추후 디자인 추가되면 schedule 추가하기 */
   const [detailOption, setDetailOption] = useState<IDetailOption>({
     isInit: true,
     due1: 0,
@@ -81,14 +81,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     status: '',
     tag: '',
   })
-  const dueObject: { [key: number]: string } = {
-    0: '1주일',
-    20: '1개월',
-    40: '3개월',
-    60: '6개월',
-    80: '9개월',
-    100: '12개월 이상',
-  }
+
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
@@ -99,6 +92,50 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
   const pageSize = 6
+  const option = useMemo(() => {
+    const dueObject: { [key: number]: string } = {
+      0: '1주일',
+      20: '1개월',
+      40: '3개월',
+      60: '6개월',
+      80: '9개월',
+      100: '12개월 이상',
+    }
+
+    return `?type=${type ?? 'STUDY'}&sort=${
+      sort ?? 'latest'
+    }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
+      dueObject[detailOption.due1]
+    }&due=${dueObject[detailOption.due2]}&region1=${
+      detailOption.region1
+    }&region2=${detailOption.region2}&place=${detailOption.place}&status=${
+      detailOption.status
+    }&tag=${detailOption.tag}`
+  }, [
+    type,
+    sort,
+    page,
+    keyword,
+    detailOption.due1,
+    detailOption.due2,
+    detailOption.region1,
+    detailOption.region2,
+    detailOption.place,
+    detailOption.status,
+    detailOption.tag,
+  ])
+
+  const { data: favoriteData, mutate: favoriteMutate } = useSWR<boolean[]>(
+    isLogin
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites` + option
+      : null,
+    (url: string) => axiosInstance.get(url).then((res) => res.data),
+  )
+
+  const getFavoriteData = (index: number) => {
+    return favoriteData?.[index]
+  }
+
   const {
     data: newData,
     isLoading,
@@ -106,21 +143,18 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   } = useSWR<IPagination<IPost[]>>(
     page == 1 && !type && !sort && detailOption.isInit && keyword == ''
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=${
-          type ?? 'STUDY'
-        }&sort=${
-          sort ?? 'latest'
-        }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
-          dueObject[detailOption.due1]
-        }&due=${dueObject[detailOption.due2]}&region1=${
-          detailOption.region1
-        }&region2=${detailOption.region2}&place=${detailOption.place}&status=${
-          detailOption.status
-        }&tag=${detailOption.tag}`,
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit` + option,
     isLogin
-      ? (url: string) => axiosInstance.get(url).then((res) => res.data)
+      ? (url: string) =>
+          axiosInstance.get(url).then((res) => {
+            //data를 다시 불러올때 favorite 데이터도 갱신
+            favoriteMutate()
+            return res.data
+          })
       : defaultGetFetcher,
   )
+
+  const [content, setContent] = useState<IPost[]>(initData?.content ?? [])
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -234,7 +268,14 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 <Stack gap={2}>
                   {content?.map((project: IPost, index: number) => (
                     <Box key={index}>
-                      <MainCard {...project} type={type} />
+                      <MainCard
+                        {...project}
+                        type={type}
+                        favorite={getFavoriteData(index)}
+                        sx={{
+                          height: '21.875rem',
+                        }}
+                      />
                     </Box>
                   ))}
                 </Stack>
@@ -267,10 +308,9 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           disableGutters
           sx={{
             backgroundColor: 'Background.primary',
-            border: '1px solid black',
           }}
         >
-          <Stack direction={'row'} border="1px solid black" spacing={4}>
+          <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
               <Stack maxWidth={'56rem'} mx={'auto'}>
                 <MainBanner />
@@ -308,7 +348,14 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   <Grid container spacing={'1rem'}>
                     {content?.map((project: IPost, index: number) => (
                       <Grid item key={index} sm={12} md={6} lg={4}>
-                        <MainCard {...project} type={type} />
+                        <MainCard
+                          {...project}
+                          type={type}
+                          favorite={getFavoriteData(index)}
+                          sx={{
+                            height: '21.875rem',
+                          }}
+                        />
                       </Grid>
                     ))}
                   </Grid>

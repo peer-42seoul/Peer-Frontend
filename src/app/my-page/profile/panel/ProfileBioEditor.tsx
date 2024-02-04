@@ -24,6 +24,7 @@ import TrashIcon from '@/icons/TrashIcon'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
 import useToast from '@/states/useToast'
+import useNicknameStore from '@/states/useNicknameStore'
 
 interface IFormInput {
   nickname: string
@@ -52,6 +53,8 @@ const ProfileBioEditor = ({
   const [cropper, setCropper] = useState<Cropper | null>(null)
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
   const { isPc } = useMedia()
+
+  const { setNickname } = useNicknameStore()
 
   const { openToast, closeToast } = useToast()
 
@@ -197,11 +200,17 @@ const ProfileBioEditor = ({
           })
           .catch((error) => {
             setIsNicknameUnique(false)
-            console.log(error)
-            openToast({
-              severity: 'error',
-              message: '중복된 닉네임 입니다.',
-            })
+            if (error.data.message) {
+              openToast({
+                severity: 'error',
+                message: error.data.message,
+              })
+            } else {
+              openToast({
+                severity: 'error',
+                message: '중복된 닉네임 입니다.',
+              })
+            }
             setError('nickname', {
               type: 'notUnique',
               message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
@@ -253,7 +262,6 @@ const ProfileBioEditor = ({
     }
     submitData.append('imageChange', imageChanged.toString().toUpperCase())
 
-    console.log('닉네임 중복확인', isNicknameUnique)
     if (!isNicknameUnique) {
       setError('nickname', {
         type: 'notUnique',
@@ -278,6 +286,7 @@ const ProfileBioEditor = ({
           message: '프로필 변경에 성공하였습니다.',
         })
         mutate()
+        setNickname(formData.nickname)
         closeModal()
       })
       .catch((e) => {

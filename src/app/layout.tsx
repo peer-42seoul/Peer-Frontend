@@ -7,6 +7,7 @@ import MainLayout from './panel/MainLayout'
 import { Pretendard } from './panel/font'
 import ToastNotification from './panel/layout-panel/ToastNotification'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
+import DataPickerProvider from './DataPickerProvider'
 
 export const metadata: Metadata = {
   title: 'peer',
@@ -55,9 +56,11 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <CuSWRConfig>
             <MuiThemeProvider>
-              <MainLayout>{children}</MainLayout>
-              <div id="modal-root"></div>
-              <ToastNotification />
+              <DataPickerProvider>
+                <MainLayout>{children}</MainLayout>
+                <div id="modal-root"></div>
+                <ToastNotification />
+              </DataPickerProvider>
             </MuiThemeProvider>
           </CuSWRConfig>
         </AppRouterCacheProvider>

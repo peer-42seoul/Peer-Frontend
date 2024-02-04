@@ -15,7 +15,7 @@ import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
 import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import useToast from '@/hook/useToast'
-import SelectRegion from './panel/SelectRegion'
+// import SelectRegion from './panel/SelectRegion'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import Image from 'next/image'
 import useSWR from 'swr'
@@ -35,7 +35,7 @@ import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBullet
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
 import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined'
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+// import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
 import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined'
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
@@ -369,8 +369,8 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 setvalue={setMonth}
               />
             </Box>
-            {/* 지역 선택 */}
-            {place === 'ONLINE' ? null : (
+            {/* 지역 선택 리액트 훅 폼에 최적화 되어 있기에 빌드 에러 방지를 위해 주석 처리 하였습니다. */}
+            {/* {place === 'ONLINE' ? null : (
               <Box>
                 <Stack direction={'row'} gap={1} sx={componentName}>
                   <LocationOnOutlinedIcon sx={{ color: 'white' }} />
@@ -378,7 +378,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                 </Stack>
                 <SelectRegion setValue={setRegion} region={region} />
               </Box>
-            )}
+            )} */}
             {/* 커뮤니케이션 링크 등록 */}
             <Box>
               <Stack direction={'row'} gap={1} sx={componentName}>

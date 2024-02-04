@@ -228,7 +228,6 @@ const SkillsEditor = ({
                         const newTags = prev.filter(
                           (curTag) => curTag !== tag.name,
                         )
-                        console.log(newTags)
                         return newTags
                       })
                     }}

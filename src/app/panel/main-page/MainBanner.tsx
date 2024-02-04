@@ -50,19 +50,6 @@ const MainBanner = () => {
           onClick={() => router.push('/about')}
         />
       </Box>
-      <Box height={isPc ? '10rem' : '100%'} p={0} m={0}>
-        <Image
-          src={
-            !isPc
-              ? '/images/banners/default-mobile.svg'
-              : '/images/banners/default-pc.svg'
-          }
-          alt={'main-banner'}
-          width={0}
-          height={0}
-          style={{ width: '100%', height: 'auto' }}
-        />
-      </Box>
     </Slider>
   )
 }
