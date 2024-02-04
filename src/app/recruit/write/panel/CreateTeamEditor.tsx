@@ -78,17 +78,23 @@ const CreateTeamEditor = ({
   return (
     <>
       <Container sx={style.containerStyle}>
-        {isPc && (
-          <Box sx={{ paddingBottom: '1.5rem' }}>
-            <Typography variant="CaptionEmphasis" lineHeight={'normal'}>
-              모집 글 쓰기
-            </Typography>
-            <Tutorial
-              title="모집 글 쓰는 방법"
-              content={<RecruitEditPageTutorial />}
-            />
-          </Box>
-        )}
+        {/* {isPc && ( */}
+        <Box
+          sx={{
+            paddingBottom: ['0.75rem', '1.5rem'],
+            paddingLeft: ['0.25rem', undefined],
+            paddingTop: ['0.75rem', undefined],
+          }}
+        >
+          <Typography variant="CaptionEmphasis" lineHeight={'normal'}>
+            모집 글 쓰기
+          </Typography>
+          <Tutorial
+            title="모집 글 쓰는 방법"
+            content={<RecruitEditPageTutorial />}
+          />
+        </Box>
+        {/* )} */}
         <form onSubmit={handleSubmit(submitHandler)}>
           <Stack spacing={'1.5rem'} sx={style.boxStyle}>
             {/* 대표이미지 */}
