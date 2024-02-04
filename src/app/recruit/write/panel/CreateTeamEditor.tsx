@@ -258,7 +258,7 @@ const CreateTeamEditor = ({
                     />
                   }
                   label="모집글 제목"
-                  placeholder="모집글 제목을 입력해주세요."
+                  placeholder="모집글 제목을 입력하세요."
                   id="title"
                   error={!!errors?.title}
                   sx={{ width: ['100%', '26rem'] }}
@@ -299,7 +299,9 @@ const CreateTeamEditor = ({
                     />
                   }
                   label={type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
-                  placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
+                  placeholder={`${
+                    type === 'STUDY' ? '스터디' : '프로젝트'
+                  } 이름을 입력하세요.`}
                   id="name"
                   error={!!errors?.name}
                   sx={{ width: ['100%', '26rem'] }}
@@ -451,7 +453,9 @@ const CreateTeamEditor = ({
                       sx={{ ...style.iconStyleBase, color: 'text.normal' }}
                     />
                   }
-                  placeholder={'팀 커뮤니케이션 툴 링크를 입력해주세요.'}
+                  placeholder={
+                    '소통을 위해 사용하는 링크를 입력하세요. 예시) 카카오톡 오픈채팅'
+                  }
                   sx={{ width: ['100%', '26rem'] }}
                   id="link"
                   inputProps={{
@@ -504,6 +508,7 @@ const CreateTeamEditor = ({
                     field={field}
                     error={!!errors?.tagList}
                     trigger={trigger}
+                    placeholder="프로젝트에 필요한 기술을 입력하세요."
                   />
                 )}
                 control={control}

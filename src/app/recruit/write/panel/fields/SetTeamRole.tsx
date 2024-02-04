@@ -97,8 +97,8 @@ const SetTeamRole = ({
                   variant="outlined"
                   placeholder={
                     isPc
-                      ? '모집하는 역할을 입력해주세요, ex) 프론트엔드 개발자, 디자이너'
-                      : '모집 역할을 입력해주세요.'
+                      ? '찾고있는 역할을 입력하세요, ex) 프론트엔드 개발자, 디자이너'
+                      : '찾고있는 역할을 입력하세요.'
                   }
                   rules={
                     index === 0

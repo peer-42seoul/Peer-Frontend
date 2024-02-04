@@ -88,6 +88,7 @@ const BasicSelect = forwardRef<HTMLInputElement, IBasicSelectProps>(
           height: '2rem',
         }}
         {...props}
+        placeholder="모집 인원을 입력하세요."
       >
         {options}
       </Select>
