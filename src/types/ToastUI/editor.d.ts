@@ -18,7 +18,7 @@ declare module '@toast-ui/editor' {
     initialEditType?: 'markdown' | 'wysiwyg'
     previewStyle?: 'tab' | 'vertical'
     height?: string
-    hooks: any
+    hooks?: any
 
   }
 
