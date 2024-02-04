@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material'
 import RowRadioButtonsGroup from './panel/radioGroup'
-import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
+// import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
 import { useEffect, useState } from 'react'
 import BasicSelect, { ComponentType } from './panel/BasicSelect'
 import SetInterview from './panel/SetInterview/SetInterview'
@@ -319,7 +319,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
               />
             </Box>
             {/* (프로젝트인 경우만) 역할 추가 */}
-            {type === 'STUDY' ? null : (
+            {/* {type === 'STUDY' ? null : (
               <Box>
                 <Stack direction={'row'} gap={1} sx={componentName}>
                   <HowToRegOutlinedIcon sx={{ color: 'white' }} />
@@ -331,7 +331,7 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
                   disabled={true}
                 />
               </Box>
-            )}
+            )} */}
             {type === 'STUDY' && (
               <Box>
                 <Stack direction={'row'} gap={1} sx={componentName}>
