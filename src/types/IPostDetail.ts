@@ -24,6 +24,8 @@ export interface IMainCard {
   href?: string
   onFavorite?: () => void
   sx?: SxProps
+  titleMaxLine?: number
+  tagMaxLine?: number
 }
 
 export interface IPost {

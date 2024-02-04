@@ -1,4 +1,4 @@
-import { Card, Typography, createSvgIcon } from '@mui/material'
+import { Card, SxProps, Typography, createSvgIcon } from '@mui/material'
 
 const BetaIcon = createSvgIcon(
   <svg
@@ -93,7 +93,7 @@ const BetaIcon = createSvgIcon(
   'BetaIcon',
 )
 
-const BetaBadge = () => {
+const BetaBadge = ({ sx }: { sx?: SxProps }) => {
   return (
     <Card
       sx={{
@@ -102,9 +102,15 @@ const BetaBadge = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        ...sx,
       }}
     >
-      <Typography fontSize={'small'} fontWeight={'bold'} textAlign={'center'}>
+      <Typography
+        fontSize={'small'}
+        fontWeight={'bold'}
+        textAlign={'center'}
+        color={'white'}
+      >
         BETA
       </Typography>
     </Card>
