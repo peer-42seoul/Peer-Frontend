@@ -16,8 +16,13 @@ import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
 import { ITag } from '@/types/IPostDetail'
 import SettingSelect from '@/app/teams/[id]/setting/panel/SettingSelect'
+import useMedia from '@/hook/useMedia'
 
-const Options = ({ setDetailOption }: { setDetailOption: any }) => {
+const Options = ({ setDetailOption, setOpenOption }: {
+  setDetailOption: any,
+  setOpenOption?: (value: boolean) => void
+}) => {
+  const { isPc } = useMedia()
   const { handleSubmit, control, reset } = useForm({
     defaultValues: {
       placeOnline: false,
@@ -103,7 +108,12 @@ const Options = ({ setDetailOption }: { setDetailOption: any }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={() => {
+      handleSubmit(onSubmit)
+      if (!isPc && setOpenOption) {
+        setOpenOption(false)
+      }
+    }}>
       <Grid container spacing={2} padding={'1rem'}>
         <Grid item xs={12}>
           <TagAutoComplete

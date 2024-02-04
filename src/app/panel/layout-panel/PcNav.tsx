@@ -79,7 +79,6 @@ const PcNav = () => {
             }}
           >
             <BottomNavigationAction
-              sx={navStyle}
               value={'hitchhiking'}
               label={
                 <Stack
@@ -104,7 +103,6 @@ const PcNav = () => {
               sx={{
                 ...navStyle,
                 wordBreak: 'keep-all',
-                padding: 0,
               }}
               onClick={() => {
                 router.push('/hitchhiking')
@@ -124,7 +122,6 @@ const PcNav = () => {
               onClick={() => {
                 router.push('/team-list')
               }}
-              sx={{ padding: 0 }}
               sx={navStyle}
             />
             <BottomNavigationAction
@@ -152,7 +149,6 @@ const PcNav = () => {
               onClick={() => {
                 router.push('/showcase')
               }}
-              sx={{ padding: 0 }}
               sx={navStyle}
             />
           </BottomNavigation>

@@ -84,7 +84,7 @@ const SearchOption = ({
               {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
             </IconButton>
           </Stack>
-          <Options setDetailOption={setDetailOption} />
+          <Options setDetailOption={setDetailOption} setOpenOption={setOpenOption}/>
         </Stack>
       </SwipeableDrawer>
     </Stack>

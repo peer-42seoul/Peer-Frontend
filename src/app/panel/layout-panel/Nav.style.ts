@@ -35,5 +35,5 @@ export const navStyle = {
 export const bottomNavStyle = {
   ...navStyle,
   minWidth: 'auto',
-  padding: '6px 0',
+  padding: 0,
 }
