@@ -48,7 +48,7 @@ const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
     <CardActions
       sx={{
         boxShadow: 'none',
-        backgroundColor: 'background.secondary',
+        backgroundColor: 'background.tertiary',
         padding: '0.5rem',
       }}
     >
@@ -87,7 +87,7 @@ const AnnouncePage = () => {
   if (error) return <NoDataDolphin message="문제가 있나봐요 ㅠㅠ" />
 
   return (
-    <Card sx={{ padding: '2rem' }}>
+    <Card sx={{ padding: '2rem', backgroundColor: 'background.secondary' }}>
       <Stack>
         <Typography variant="Title2">공지사항</Typography>
       </Stack>
