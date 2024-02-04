@@ -14,7 +14,7 @@ import SearchButton from '../main-page/SearchButton'
 import AlertIcon from './AlertIcon'
 import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 import * as style from './Header.style'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import CloseIcon from '../../../icons/CloseIcon'
 import BackIcon from '@/icons/Nav/BackIcon'
 import useHeaderStore from '@/states/useHeaderStore'
@@ -37,6 +37,8 @@ const Header = ({ pathname }: { pathname?: string }) => {
   const { isLogin } = useAuthStore()
   const router = useRouter()
   const [title, setTitle] = useState('')
+  const searchParams = useSearchParams()
+  const keyword = searchParams.get('keyword') ?? ''
 
   useEffect(() => {
     if (!pathname) return setTitle('')
@@ -65,7 +67,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
   return (
     <AppBar position="fixed" sx={mobileHeader}>
       <Toolbar disableGutters sx={style.mobileHeaderToolbar}>
-        {title === '메인' ? (
+        {title === '메인' && keyword === '' ? (
           <Stack sx={style.mobileHeaderStack}>
             <AlertIcon />
             <Box sx={style.mobileHeaderTitle}>

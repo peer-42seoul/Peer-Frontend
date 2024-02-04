@@ -21,7 +21,7 @@ const SelectType = ({
       >
         <Typography
           color={!type || type === 'STUDY' ? 'primary' : 'text.assistive'}
-          variant={'Title3'}
+          variant={'Title1'}
         >
           스터디
         </Typography>
@@ -34,7 +34,7 @@ const SelectType = ({
       >
         <Typography
           color={type === 'PROJECT' ? 'primary' : 'text.assistive'}
-          variant={'Title3'}
+          variant={'Title1'}
         >
           프로젝트
         </Typography>

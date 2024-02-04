@@ -19,7 +19,7 @@ import useSWR from 'swr'
 import MainProfile from './main-page/MainProfile'
 import MainShowcase from './main-page/MainShowcase'
 import MainCarousel from './main-page/MainCarousel'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
 import { IPost, ProjectType } from '@/types/IPostDetail'
 import useAuthStore from '@/states/useAuthStore'
@@ -34,6 +34,8 @@ import { getCookie } from 'cookies-next'
 import useSocket from '@/states/useSocket'
 import Tutorial from '@/components/Tutorial'
 import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
+import useHeaderStore from '@/states/useHeaderStore'
+import NoDataDolphin from '@/components/NoDataDolphin'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -66,6 +68,7 @@ export const socket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
 })
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
+  const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
@@ -89,6 +92,15 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
   )
+  const { headerTitle, setHeaderTitle } = useHeaderStore()
+  const [init, setInit] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (keyword !== '') {
+      setHeaderTitle(keyword + ' 검색 결과')
+      setInit(false)
+    } else setHeaderTitle('')
+  }, [keyword])
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
   const pageSize = 6
@@ -141,7 +153,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     isLoading,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
+    page == 1 && !type && !sort && detailOption.isInit && keyword == '' && init
       ? null
       : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit` + option,
     isLogin
@@ -214,6 +226,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       tag: '',
     })
     setSort('latest')
+    router.push('/')
   }, [])
 
   const handleSort = useCallback((value: ProjectSort) => {
@@ -237,31 +250,55 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             maxWidth: '56.75rem',
           }}
         >
-          <MainBanner />
-          <SelectType type={type} setType={handleType} />
-          <Grid container>
-            <SearchOption
-              openOption={openOption}
-              setOpenOption={setOpenOption}
-              setDetailOption={handleOption}
-            />
-            <Grid item xs={12}>
-              <Stack
-                direction="row"
-                alignItems={'center'}
-                justifyContent={'flex-end'}
-              >
-                <SelectSort sort={sort} setSort={handleSort} />
-              </Stack>
-            </Grid>
-          </Grid>
+          {keyword === '' ? (
+            <>
+              <MainBanner />
+              <SelectType type={type} setType={handleType} />
+              <Grid container>
+                <SearchOption
+                  openOption={openOption}
+                  setOpenOption={setOpenOption}
+                  setDetailOption={handleOption}
+                />
+                <Grid item xs={12}>
+                  <Stack
+                    direction="row"
+                    alignItems={'center'}
+                    justifyContent={'flex-end'}
+                    my={'0.75rem'}
+                  >
+                    <SelectSort sort={sort} setSort={handleSort} />
+                  </Stack>
+                </Grid>
+              </Grid>
+            </>
+          ) : (
+            <Stack
+              direction="row"
+              alignItems={'center'}
+              justifyContent={'flex-end'}
+              my={'0.75rem'}
+            >
+              <SelectSort sort={sort} setSort={handleSort} />
+            </Stack>
+          )}
           {/*card list 영역*/}
           {isLoading && page == 1 ? (
             <Typography>로딩중...</Typography>
           ) : error || !initData ? (
             <Typography>에러 발생</Typography>
           ) : content?.length == 0 ? (
-            <Typography>데이터가 없습니다</Typography>
+            <Stack
+              width={'100%'}
+              height={'100%'}
+              justifyContent={'center'}
+              alignItems={'center'}
+            >
+              <NoDataDolphin
+                message={'데이터가 없습니다'}
+                backgroundColor={'background.primary'}
+              />
+            </Stack>
           ) : (
             <>
               <Stack alignItems={'center'}>
@@ -312,37 +349,61 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         >
           <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
-              <Stack maxWidth={'56rem'} mx={'auto'}>
-                <MainBanner />
-              </Stack>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <SelectType type={type} setType={handleType} />
-                <Tutorial
-                  title={'프로젝트 검색'}
-                  content={<MainPageTutorial />}
-                />
-              </Stack>
-              <Grid container bgcolor={'Background.primary'}>
-                <SearchOption
-                  openOption={openOption}
-                  setOpenOption={setOpenOption}
-                  setDetailOption={handleOption}
-                />
-              </Grid>
-              <Stack
-                direction="row"
-                alignItems={'center'}
-                justifyContent={'flex-end'}
-              >
-                <SelectSort sort={sort} setSort={handleSort} />
-              </Stack>
+              {keyword === '' ? (
+                <>
+                  <Stack maxWidth={'56rem'} mx={'auto'}>
+                    <MainBanner />
+                  </Stack>
+                  <Stack direction={'row'} justifyContent={'space-between'}>
+                    <SelectType type={type} setType={handleType} />
+                    <Tutorial
+                      title={'프로젝트 검색'}
+                      content={<MainPageTutorial />}
+                    />
+                  </Stack>
+                  <Grid container bgcolor={'Background.primary'}>
+                    <SearchOption
+                      openOption={openOption}
+                      setOpenOption={setOpenOption}
+                      setDetailOption={handleOption}
+                    />
+                  </Grid>
+                  <Stack
+                    direction="row"
+                    alignItems={'center'}
+                    justifyContent={'flex-end'}
+                  >
+                    <SelectSort sort={sort} setSort={handleSort} />
+                  </Stack>
+                </>
+              ) : (
+                <Stack
+                  direction="row"
+                  alignItems={'center'}
+                  justifyContent={'space-between'}
+                  my={'0.75rem'}
+                >
+                  <Typography variant={'Body1'}>{headerTitle}</Typography>
+                  <SelectSort sort={sort} setSort={handleSort} />
+                </Stack>
+              )}
               {/*card list 영역*/}
               {isLoading && page == 1 ? (
                 <Typography>로딩중...</Typography>
               ) : error ? (
                 <Typography>에러 발생</Typography>
               ) : content?.length == 0 ? (
-                <Typography>데이터가 없습니다</Typography>
+                <Stack
+                  width={'100%'}
+                  height={'100%'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  <NoDataDolphin
+                    message={'데이터가 없습니다'}
+                    backgroundColor={'background.primary'}
+                  />
+                </Stack>
               ) : (
                 <>
                   <Grid container spacing={'1rem'}>

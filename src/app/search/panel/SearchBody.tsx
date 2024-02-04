@@ -1,10 +1,7 @@
 import useMedia from '@/hook/useMedia'
 import SearchHistory from './SearchHistory'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import {
   TextField,
-  AppBar,
-  Toolbar,
   Typography,
   Button,
   Box,
@@ -16,6 +13,7 @@ import { MouseEvent, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import SearchIcon from '@mui/icons-material/Search'
+import Header from '@/app/panel/layout-panel/Header'
 
 const SearchButton = () => {
   return (
@@ -69,6 +67,7 @@ const StyleSeachMobile = {
   width: '90%',
   ml: 'auto',
   mr: 'auto',
+  mt: '5rem',
 }
 
 export default function SearchBody({ onClose }: SearchBodyProps) {
@@ -114,22 +113,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
   return (
     <>
       <Stack sx={{ m: 0, p: 0 }}>
-        <AppBar position="static">
-          <Toolbar
-            sx={{
-              justifyContent: 'space-between',
-              margin: 'dense',
-              padding: 0,
-            }}
-          >
-            <Button sx={{ border: 'none', color: 'normal' }} onClick={onClose}>
-              <ArrowBackIosNewIcon />
-            </Button>
-            <Typography variant="Title1">검색</Typography>
-            <Button disabled />
-          </Toolbar>
-        </AppBar>
-
+        {!isPc && <Header />}
         <Box sx={isPc ? StyleSeachPc : StyleSeachMobile}>
           <ToggleButtonGroup onChange={handleChanged} exclusive value={type}>
             <ToggleButton
@@ -137,14 +121,28 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
               sx={ToggleButtonStyle}
               value={SearchType.STUDY}
             >
-              <Typography variant="Title1">스터디</Typography>
+              <Typography
+                variant="Title1"
+                color={
+                  type === SearchType.STUDY ? 'text.normal' : 'text.assistive'
+                }
+              >
+                스터디
+              </Typography>
             </ToggleButton>
             <ToggleButton
               size="large"
               sx={ToggleButtonStyle}
               value={SearchType.PROJECT}
             >
-              <Typography variant="Title1">프로젝트</Typography>
+              <Typography
+                variant="Title1"
+                color={
+                  type === SearchType.PROJECT ? 'text.normal' : 'text.assistive'
+                }
+              >
+                프로젝트
+              </Typography>
             </ToggleButton>
           </ToggleButtonGroup>
 

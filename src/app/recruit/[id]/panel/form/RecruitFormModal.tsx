@@ -172,11 +172,18 @@ const RecruitFormModal = ({
                       defaultValue=""
                       render={({ field }) => (
                         <CuTextField
+                          fullWidth
+                          multiline
                           {...field}
-                          placeholder={'텍스트로 답변을 입력할 수 있습니다.'}
+                          placeholder={
+                            '텍스트로 답변을 입력할 수 있습니다. (공백포함 1000자 제한)'
+                          }
                           variant="standard"
                           error={!!errors[idx]}
                           helperText={errors[idx]?.message as string}
+                          inputProps={{
+                            maxLength: 1000,
+                          }}
                         />
                       )}
                     />
