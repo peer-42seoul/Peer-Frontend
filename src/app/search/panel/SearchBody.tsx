@@ -66,7 +66,9 @@ const StyleSeachPc = {
 }
 
 const StyleSeachMobile = {
-  width: '100%',
+  width: '90%',
+  ml: 'auto',
+  mr: 'auto',
 }
 
 export default function SearchBody({ onClose }: SearchBodyProps) {
@@ -123,7 +125,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
             <Button sx={{ border: 'none', color: 'normal' }} onClick={onClose}>
               <ArrowBackIosNewIcon />
             </Button>
-            <Typography>검색</Typography>
+            <Typography variant="Title1">검색</Typography>
             <Button disabled />
           </Toolbar>
         </AppBar>
@@ -135,14 +137,14 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
               sx={ToggleButtonStyle}
               value={SearchType.STUDY}
             >
-              스터디
+              <Typography variant="Title1">스터디</Typography>
             </ToggleButton>
             <ToggleButton
               size="large"
               sx={ToggleButtonStyle}
               value={SearchType.PROJECT}
             >
-              프로젝트
+              <Typography variant="Title1">프로젝트</Typography>
             </ToggleButton>
           </ToggleButtonGroup>
 
