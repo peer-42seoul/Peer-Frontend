@@ -11,8 +11,10 @@ import {
 import RowRadioButtonsGroup from './panel/radioGroup'
 // import SetTeamRole from './panel/SetTeamRole/SetTeamRole'
 import { useEffect, useState } from 'react'
-import BasicSelect, { ComponentType } from './panel/BasicSelect'
-import SetInterview from './panel/SetInterview/SetInterview'
+import BasicSelect, {
+  ComponentType,
+} from '../../write/panel/fields/BasicSelect'
+import SetInterview from '../../write/panel/fields/SetInterview/SetInterview'
 import SetCommunicationToolLink from './panel/SetCommunicationToolLink/SetCommunicationToolLink'
 import useToast from '@/hook/useToast'
 // import SelectRegion from './panel/SelectRegion'

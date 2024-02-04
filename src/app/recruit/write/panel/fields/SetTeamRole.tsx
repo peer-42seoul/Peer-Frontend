@@ -1,7 +1,7 @@
 'use client'
 import { FormHelperText, Stack, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
-import { IRecruitWriteField } from '@/app/recruit/write/page'
+import { IRecruitWriteField } from '@/types/IRecruitWriteField'
 import {
   Control,
   UseFormTrigger,
@@ -13,20 +13,22 @@ import ControlledTextfield from '@/components/ControlledTextfield'
 import React, { useState } from 'react'
 import FieldWithLabel from '@/components/FieldWithLabel'
 import { CloseIcon, PlusIcon, UserCheckIcon } from '@/icons'
-import * as style from '../../../../write/page.style'
+import * as style from '../../page.style'
 import { IconButton } from '@mui/material'
 
 // 해당 컴포넌트는 react-hook-form에 최적화되어있습니다.
 const SetTeamRole = ({
   trigger,
   control,
+  editorType,
 }: {
   trigger: UseFormTrigger<IRecruitWriteField>
   control?: Control<IRecruitWriteField, any>
+  editorType: 'write' | 'edit'
 }) => {
   const { isPc } = useMedia()
   const [maxMember, setMaxMember] = useState<Array<number>>([])
-  const [leftMember, setLeftMember] = useState(12)
+  const [leftMember, setLeftMember] = useState(10)
   const { prepend, remove, fields } = useFieldArray({
     control,
     name: 'roleList',
@@ -45,6 +47,17 @@ const SetTeamRole = ({
         })
         prepend({ name: '', number: 1 })
       }
+    })
+  }
+
+  const handleRemove = (index: number) => {
+    setLeftMember((prev) => {
+      return prev + fields[index].number
+    })
+    remove(index)
+    setMaxMember((prev) => {
+      prev[0] = leftMember
+      return prev
     })
   }
 
@@ -94,7 +107,7 @@ const SetTeamRole = ({
                       message: '20글자 이하로 입력해주세요.',
                     },
                   }}
-                  disabled={!!index}
+                  disabled={editorType === 'edit' || !!index}
                   error={!!errors?.roleList?.[index]?.name}
                 />
                 <ControlledTextfield
@@ -124,11 +137,11 @@ const SetTeamRole = ({
                   sx={{
                     width: '4.5rem',
                   }}
-                  disabled={!!index}
+                  disabled={editorType === 'edit' || !!index}
                   error={!!errors?.roleList?.[index]?.number}
                 />
                 <IconButton
-                  onClick={() => remove(index)}
+                  onClick={() => handleRemove(index)}
                   sx={{ height: '1.5rem' }}
                   disabled={fields.length === 1}
                 >
