@@ -33,7 +33,7 @@ const Comment = ({ data, postId }: CommentProps) => {
       )
       closeToast()
       mutate(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/post/comment/${postId}?page=1&pageSize=3`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
       )
     } catch (error: any) {
       switch (error.response.status) {
@@ -136,7 +136,7 @@ const CommentContainer = ({ postId }: IPostId) => {
   console.log('다', postId)
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IComment[]>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/post/comment/${postId}?page=1&pageSize=3`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )

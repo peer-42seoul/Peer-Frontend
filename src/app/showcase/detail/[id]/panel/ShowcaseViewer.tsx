@@ -15,8 +15,8 @@ import * as Style from '../../../panel/common/SkillInput.style'
 import useMedia from '@/hook/useMedia'
 
 interface IShowcaseViewerProps {
-  data: IShowcaseViewerFields // IShowcase 타입을 import 해야 합니다.
-  showcaseId: number
+  data: IShowcaseViewerFields
+  postId: number
 }
 
 const CoverImage = ({ image }: { image: string }) => {
@@ -60,7 +60,6 @@ const ContentViewer = ({ content }: { content: string }) => {
 
 const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
   const { isPc } = useMedia()
-  console.log('위', postId)
   return (
     <>
       {isPc ? (
@@ -70,6 +69,7 @@ const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
               teamName={data?.name}
               author={data.author}
               postId={postId}
+              editMode={false}
             />
             <Stack sx={style.InformationViewerBox}>
               <InformationViewer data={data} />
@@ -94,6 +94,7 @@ const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
             marginBottom={'1rem'}
           >
             <TeamName
+              editMode={false}
               teamName={data?.name}
               author={data.author}
               postId={postId}

@@ -6,10 +6,11 @@ import { useRouter } from 'next/navigation'
 
 interface IteamNameProps {
   teamName: string
-  author: boolean
-  postId: number
+  author?: boolean
+  postId?: number
+  editMode: boolean
 }
-const TeamName = ({ teamName, author, postId }: IteamNameProps) => {
+const TeamName = ({ teamName, author, postId, editMode }: IteamNameProps) => {
   const router = useRouter()
   console.log('showcaseId', postId)
   return (
@@ -17,13 +18,13 @@ const TeamName = ({ teamName, author, postId }: IteamNameProps) => {
       <Typography variant={'Body2'} color={'text.normal'} sx={style.teamName}>
         {teamName}
       </Typography>
-      <IconButton
-        onClick={() => router.push(`/showcase/edit?showcaseId=${postId}`)}
-        disabled={author}
-        // router.push(`/showcase/edit?showcaseId=${showcaseId}`)
-      >
-        <EditIcon />
-      </IconButton>
+      {author && !editMode && (
+        <IconButton
+          onClick={() => router.push(`/showcase/edit?showcaseId=${postId}`)}
+        >
+          <EditIcon />
+        </IconButton>
+      )}
     </Stack>
   )
 }
