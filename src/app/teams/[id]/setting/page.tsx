@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { Button, Card, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import SetupMember from './panel/SettingTeamMember'
@@ -10,6 +11,7 @@ import { ITeam, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectRecruitPage'
 import TeamJobAdd from './panel/SettingTeamJobs'
 import SetupInfo from './panel/SettingTeamInfo'
+import CuCircularProgress from '@/components/CuCircularProgress'
 import useSocket from '@/states/useSocket'
 
 export interface IMyInfo {
@@ -24,10 +26,11 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const [myInfo, setMyInfo] = useState<IMyInfo>()
-  const { data, isLoading } = useSWR<ITeam>(
+  const { data, error, isLoading } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
   )
+  const router = useRouter()
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
@@ -46,7 +49,23 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
     )
   }, [])
 
-  if (isLoading) return <Typography>로딩중</Typography>
+  if (error) {
+    if (error.status === 403) {
+      alert('팀 페이지에 접근할 권한이 없습니다.')
+    } else {
+      alert('팀 페이지에 접근할 수 없습니다.')
+    }
+    router.push('/team-list')
+    return <CuCircularProgress color="primary" />
+  }
+
+  if (!isLoading && !data) {
+    alert('팀 페이지에 접근할 수 없습니다.')
+    router.push('/team-list')
+    return <CuCircularProgress color="primary" />
+  }
+
+  if (isLoading) return <CuCircularProgress color="primary" />
 
   return (
     <Stack
@@ -103,9 +122,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
           )}
         </>
       ) : (
-        <>
-          <Typography>데이터가 없습니다.</Typography>
-        </>
+        <CuCircularProgress color="primary" />
       )}
     </Stack>
   )
