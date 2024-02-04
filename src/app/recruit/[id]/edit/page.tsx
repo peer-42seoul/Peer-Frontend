@@ -13,7 +13,7 @@ interface IRecruitEditApiType extends IRecruitWriteField {
   isAnswered: boolean
 }
 
-const Page = (params: { id: string }) => {
+const Page = ({ params }: { params: { id: string } }) => {
   const { openToast, closeToast } = useToast()
   const router = useRouter()
   const editorRef = useRef<Editor | null>(null)
