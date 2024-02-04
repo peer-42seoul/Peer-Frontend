@@ -549,6 +549,9 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
         root: {
           boxShadow: 'none',
           '.MuiOutlinedInput-notchedOutline': { border: 0 },
+          '.MuiSelect-outlined': {
+            backgroundColor: theme.palette.background.tertiary,
+          },
         },
       },
     }

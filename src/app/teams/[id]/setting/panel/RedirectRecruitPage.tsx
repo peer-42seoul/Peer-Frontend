@@ -11,7 +11,7 @@ const RedirectRecruitPage = ({ id, data }: { id: string; data: ITeam }) => {
         <Typography>모집글</Typography>
         <Button
           variant="outlined"
-          onClick={() => router.push(`/recruit/${id}`)}
+          onClick={() => router.push(`/recruit/${id}?type=${data.team.type}`)}
         >
           모집 글 보기
         </Button>
