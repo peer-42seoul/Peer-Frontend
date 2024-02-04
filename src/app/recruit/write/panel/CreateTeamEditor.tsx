@@ -1,12 +1,10 @@
 'use client'
 
 import {
-  useRef,
   // useEffect,
   useState,
 } from 'react'
 import { useRouter } from 'next/navigation'
-import useToast from '@/states/useToast'
 import {
   Box,
   Button,
@@ -44,14 +42,15 @@ const CreateTeamEditor = ({
   submitHandler,
   editorRef,
   editorType,
+  isAnswered,
 }: {
   defaultValues: IRecruitWriteField
   submitHandler: (data: IRecruitWriteField) => Promise<void>
   editorRef: React.MutableRefObject<Editor | null>
   editorType: 'edit' | 'write'
+  isAnswered?: boolean
 }) => {
   const [openBasicModal, setOpenBasicModal] = useState(false)
-  const { closeToast } = useToast()
   const router = useRouter()
   // const axiosInstance = useAxiosWithAuth()
   const { isPc } = useMedia()
@@ -498,8 +497,7 @@ const CreateTeamEditor = ({
                 sx={{ width: ['100%', '26rem'] }}
                 variant="outlined"
                 onClick={() => setOpenBasicModal(true)}
-                disabled={editorType === 'edit'}
-                // 이후에 isAnswered가 추가되면 조건문 수정
+                disabled={isAnswered}
                 startIcon={
                   <Icon.PlusIcon
                     sx={{ ...style.iconStyleBase, color: 'primary' }}

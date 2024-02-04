@@ -22,9 +22,19 @@ const Page = () => {
     max: undefined,
   }
 
+  const handleSubmit = async (data: IRecruitWriteField) => {
+    console.log(data)
+    console.log(editorRef.current?.getMarkdown())
+  }
+
   return (
     <>
-      <CreateTeamEditor editorRef={editorRef} defaultValues={defaultValues} />
+      <CreateTeamEditor
+        editorRef={editorRef}
+        defaultValues={defaultValues}
+        editorType="write"
+        submitHandler={handleSubmit}
+      />
     </>
   )
 }
