@@ -62,15 +62,13 @@ const Page = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <>
-      <CreateTeamEditor
-        editorRef={editorRef}
-        defaultValues={defaultValues}
-        editorType="write"
-        submitHandler={handleSubmit}
-        isAnswered={data?.isAnswered}
-      />
-    </>
+    <CreateTeamEditor
+      editorRef={editorRef}
+      defaultValues={defaultValues}
+      editorType="write"
+      submitHandler={handleSubmit}
+      isAnswered={data?.isAnswered}
+    />
   )
 }
 

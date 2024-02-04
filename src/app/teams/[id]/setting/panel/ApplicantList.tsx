@@ -16,6 +16,8 @@ import FormAnswer from './InterviewAnswerForm'
 import useAxiosWithAuth from '@/api/config'
 import { CloseIcon } from '@/icons'
 import { NextButton, PrevButton } from './Icons'
+import Tutorial from '@/components/Tutorial'
+import TeamApplicantTutorial from '@/components/tutorialContent/TeamApplicantTutorial'
 
 const ApplicantList = ({
   close,
@@ -129,7 +131,10 @@ const ApplicantList = ({
           alignItems={'center'}
           mb={3}
         >
-          <Typography fontWeight="bold">신청 대기자</Typography>
+          <Stack direction="row" alignItems="center">
+            <Typography fontWeight="bold">신청 대기자</Typography>
+            <Tutorial content={<TeamApplicantTutorial />} />
+          </Stack>
           <IconButton onClick={close} size="small">
             <CloseIcon />
           </IconButton>

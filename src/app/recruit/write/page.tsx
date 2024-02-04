@@ -69,14 +69,12 @@ const Page = () => {
   }
 
   return (
-    <>
-      <CreateTeamEditor
-        editorRef={editorRef}
-        defaultValues={defaultValues}
-        editorType="write"
-        submitHandler={handleSubmit}
-      />
-    </>
+    <CreateTeamEditor
+      editorRef={editorRef}
+      defaultValues={defaultValues}
+      editorType="write"
+      submitHandler={handleSubmit}
+    />
   )
 }
 
