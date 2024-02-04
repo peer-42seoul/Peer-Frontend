@@ -37,11 +37,6 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
     setIsClient(true)
   }, [])
 
-  const roleList = useMemo(() => {
-    if (!data) return []
-    return data.roleList.filter((role) => role.name !== 'Leader')
-  }, [data])
-
   useEffect(() => {
     if (data) {
       setHeaderTitle(data.teamName)
@@ -51,6 +46,13 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
     }
   }, [data])
 
+  const roleList = useMemo(() => {
+    if (!data) return []
+    return data.roleList.filter((role) => role.name !== 'Leader')
+  }, [data])
+
+  const me = nickname === data?.leader_nickname
+
   if (!data) return <Typography>데이터가 없습니다</Typography>
 
   /** PC 뷰 **/
@@ -59,7 +61,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
       <Container sx={{ display: 'flex', flexDirection: 'column' }}>
         {/* 헤더 */}
         <Stack
-          justifyContent={'flex-start'}
+          justifyContent={'space-between'}
           direction={'row'}
           marginTop={'2rem'}
           marginBottom={'1rem'}
@@ -71,26 +73,26 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
           >
             돌아가기
           </Typography>
+          <RecruitQuickMenu
+            recruit_id={parseInt(id)}
+            favorite={favoriteData}
+            title={data?.title}
+            content={data?.content}
+            me={me}
+          />
         </Stack>
         {/* 모집글 영역 */}
         <Stack direction={'row'}>
           <Stack width={'100%'}>
             {/*이미지, 제목, 프로필 영역*/}
             <RecruitInfo data={data} type={type} pc>
-              {isClient && nickname !== data?.leader_nickname && (
+              {isClient && !me && (
                 <ApplyFormButton roleList={roleList} id={id} type={type} pc />
               )}
             </RecruitInfo>
             {/* 모집 내용 */}
             <RecruitDetailContent data={data} type={type} roleList={roleList} />
           </Stack>
-          {/* 퀵 메뉴 */}
-          <RecruitQuickMenu
-            recruit_id={parseInt(id)}
-            favorite={favoriteData}
-            title={data?.title}
-            content={data?.content}
-          />
         </Stack>
       </Container>
     )
@@ -106,13 +108,14 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
             favorite={favoriteData}
             title={data?.title}
             content={data?.content}
+            me={me}
           />
+          <RecruitInfo data={data} type={type} />
         </Stack>
-        <RecruitInfo data={data} type={type} />
         <Divider />
         <RecruitDetailContent data={data} type={type} roleList={roleList} />
       </Stack>
-      {isClient && nickname !== data?.leader_nickname && (
+      {isClient && !me && (
         <ApplyFormButton id={id} type={type} roleList={roleList} />
       )}
     </Stack>

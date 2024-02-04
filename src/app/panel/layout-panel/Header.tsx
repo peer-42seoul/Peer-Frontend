@@ -46,6 +46,12 @@ const Header = ({ pathname }: { pathname?: string }) => {
       setTitle('메인')
     } else if (pathname.startsWith('/login')) {
       setTitle('로그인')
+    } else if (pathname === '/recruit/write') {
+      setTitle('모집글작성')
+    } else if (pathname.startsWith('/recruit')) {
+      const regex = /^\/recruit\/\d+\/edit$/
+      if (regex.test(pathname)) setTitle('모집글수정')
+      else setTitle('')
     } else if (pathname.startsWith('/team-list')) {
       if (!isLogin) {
         console.log('팀페이지')

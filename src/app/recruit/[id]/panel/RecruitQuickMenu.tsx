@@ -4,9 +4,9 @@ import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import DropdownMenu from '@/components/DropdownMenu'
-import { ShareIcon } from '@/icons'
 import * as style from '@/components/dropdownMenu/dropdownMenu.styles'
 import IconMenuItem from '@/components/dropdownMenu/IconMenuItem'
+import WriteIcon from '@/icons/Nav/WriteIcon'
 
 const RecruitQuickMenu = ({
   favorite,
@@ -26,7 +26,7 @@ const RecruitQuickMenu = ({
   const router = useRouter()
 
   return (
-    <Stack flexDirection={'row'}>
+    <Stack flexDirection={'row'} justifyContent={'flex-end'}>
       <FavoriteButton
         favorite={favorite}
         recruit_id={recruit_id}
@@ -43,7 +43,7 @@ const RecruitQuickMenu = ({
           <IconMenuItem
             action={() => router.push(`/recruit/${recruit_id}/edit`)}
             icon={
-              <ShareIcon
+              <WriteIcon
                 sx={{
                   ...style.menuItemIconStyleBase,
                   padding: '0.125rem',
