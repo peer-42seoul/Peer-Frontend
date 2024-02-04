@@ -83,11 +83,10 @@ const BasicSelect = forwardRef<HTMLInputElement, IBasicSelectProps>(
         ref={ref}
         sx={{
           width: ['100%', '26rem'],
-          height: '2rem',
-          backgroundColor: 'background.tertiary',
           borderWidth: '0',
+          backgroundColor: 'background.tertiary',
+          height: '2rem',
         }}
-        style={{ borderColor: 'none' }}
         {...props}
       >
         {options}

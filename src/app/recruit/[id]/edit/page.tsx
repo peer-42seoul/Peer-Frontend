@@ -52,7 +52,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     title: initData.title,
     name: initData.name,
     due: initData.due,
-    type: initData.type,
+    type: type || initData.type,
     region: initData.place === 'ONLINE' ? ['', ''] : initData.region,
     link: initData.link ?? '',
     tagList: initData.tagList,
@@ -71,10 +71,11 @@ const Page = ({ params }: { params: { id: string } }) => {
     console.log(editorRef.current?.getMarkdown())
 
     await axiosWithAuth
-      .put(`/api/v1/recruit/edit/${params.id}`, {
+      .put(`/api/v1/recruit/${params.id}`, {
         name: data.name,
         title: data.title,
         due: data.due,
+        status: 'ONGOING',
         content: editorRef.current?.getMarkdown(),
         region: data.place === 'ONLINE' ? null : data.region,
         link: data.link,
@@ -85,6 +86,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         interviewList: data.interviewList,
         place: data.place,
         max: data.type === 'PROJECT' ? null : Number(data.max),
+        type: data.type,
       })
       .then((res) => {
         openToast({
