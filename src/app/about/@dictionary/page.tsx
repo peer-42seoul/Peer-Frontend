@@ -21,10 +21,16 @@ const DictionaryPage = () => {
               <Typography variant="Title1Emphasis">
                 Front, Back, Designer - 피어 개발백서
               </Typography>
-              <Typography variant="caption">공개일</Typography>
-              <Typography variant="caption">
+              <Typography variant="Caption">공개일: 2024년 2월 5일</Typography>
+              <br />
+              <Typography variant="Body1">
                 개발진 1기의 최초의 Peer 제작의 기록을 여러분에게 공유드립니다.
               </Typography>
+              <iframe
+                src="https://drive.google.com/file/d/147xOujcuBKEETdniDb7q_Xs2MIcK3vf_/preview"
+                width="100%"
+                height="500"
+              ></iframe>
             </Stack>
           </Stack>
         </Card>
