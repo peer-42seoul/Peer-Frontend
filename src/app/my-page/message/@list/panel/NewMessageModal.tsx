@@ -141,6 +141,7 @@ const NewMessageModal = ({
               <CuButton
                 message={targetUser ? '취소' : '검색'}
                 variant={'text'}
+                style={style.searchButton}
                 action={modalButtonAction}
                 TypographyProps={{
                   variant: 'CaptionEmphasis',

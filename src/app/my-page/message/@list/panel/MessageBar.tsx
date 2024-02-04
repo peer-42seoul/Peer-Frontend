@@ -91,6 +91,7 @@ export const SearchBar = ({
             variant: 'CaptionEmphasis',
             color: 'text.alternative',
           }}
+          style={style.searchButton}
           variant="text"
           action={handleMessageSearch}
           message="검색"
