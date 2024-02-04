@@ -12,7 +12,6 @@ import {
   Chip,
   Stack,
   CircularProgress,
-  CardActionArea,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -23,6 +22,7 @@ import * as style from './HitchhikingCard.style'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
 import useToast from '@/states/useToast'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
 
 interface IHitchhikingCardBack {
   content: string
@@ -111,6 +111,7 @@ const HitchhikingCardBack = ({
         backfaceVisibility: 'hidden',
         padding: '1rem',
       }}
+      key={crypto.randomUUID()}
     >
       {data ? (
         <Stack
@@ -138,7 +139,7 @@ const HitchhikingCardBack = ({
               />
             </CardContent>
             {/* TODO : 작성자 id 가져오기 */}
-            <CardActionArea sx={{ padding: 0, width: 'auto' }}>
+            <CardContent sx={{ padding: 0, width: 'auto' }}>
               <DropdownMenu>
                 <ShareMenuItem
                   url={`${currentDomain}/recruit/${postId}`}
@@ -148,7 +149,7 @@ const HitchhikingCardBack = ({
                 />
                 <ReportMenuItem targetId={authorId} />
               </DropdownMenu>
-            </CardActionArea>
+            </CardContent>
           </Stack>
           <CardHeader
             title={
@@ -173,23 +174,13 @@ const HitchhikingCardBack = ({
             }}
             onClick={onClick}
           >
-            <Typography
-              variant="Caption"
-              color={'text.alternative'}
+            <DynamicToastViewer
+              initialValue={data.content}
               sx={{
                 ...style.cardContentStyleBase,
                 WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
               }}
-            >
-              {data.content.split('\n').map((line) => {
-                return (
-                  <>
-                    {line}
-                    <br />
-                  </>
-                )
-              })}
-            </Typography>
+            />
           </CardContent>
           <CardContent sx={{ padding: 0 }} onClick={onClick}>
             <Members
