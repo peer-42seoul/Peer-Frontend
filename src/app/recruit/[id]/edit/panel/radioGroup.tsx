@@ -1,9 +1,9 @@
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import FormControl from '@mui/material/FormControl'
 import { Dispatch, SetStateAction } from 'react'
 import { Stack, Typography } from '@mui/material'
+import * as style from './radioGroup.style'
 
 interface RowRadioButtonsGroupProps {
   setValue: Dispatch<SetStateAction<string>>
@@ -11,8 +11,7 @@ interface RowRadioButtonsGroupProps {
   defaultChecked?: string
 }
 
-// TODO : 상위 컴포넌트에서 value 가져와서 선택된 값의 색을 'text.normal'로 설정하기
-export default function RowRadioButtonsGroup({
+function RowRadioButtonsGroup({
   setValue,
   disabled,
   defaultChecked,
@@ -22,66 +21,38 @@ export default function RowRadioButtonsGroup({
   }
 
   return (
-    <>
-      <FormControl sx={{ boxSizing: 'border-box' }}>
-        <RadioGroup
-          row
-          aria-labelledby="team-type-radio-buttons-group-label"
-          name="team-type-radio-buttons-group"
-          onChange={handleChange}
-          defaultValue={defaultChecked ?? 'PROJECT'}
-        >
-          <Stack spacing={'0.5rem'} direction={'row'}>
-            <FormControlLabel
-              value="PROJECT"
-              control={
-                <Radio
-                  sx={{
-                    width: '1.5rem',
-                    height: '1.5rem',
-                    color: 'text.alternative',
-                    boxSizing: 'border-box',
-                    '&.Mui-checked': {
-                      color: 'text.alternative',
-                    },
-                  }}
-                  size="small"
-                />
-              }
-              label={
-                <Typography variant={'Caption'} color={'text.alternative'}>
-                  프로젝트
-                </Typography>
-              }
-              disabled={disabled}
-              defaultChecked={defaultChecked === 'PROJECT'}
-            />
-            <FormControlLabel
-              value="STUDY"
-              control={
-                <Radio
-                  sx={{
-                    width: '1.5rem',
-                    height: '1.5rem',
-                    color: 'text.alternative',
-                    '&.Mui-checked': {
-                      color: 'text.alternative',
-                    },
-                  }}
-                  size="small"
-                />
-              }
-              label={
-                <Typography variant={'Caption'} color={'text.alternative'}>
-                  스터디
-                </Typography>
-              }
-              disabled={disabled}
-              defaultChecked={defaultChecked === 'STUDY'}
-            />
-          </Stack>
-        </RadioGroup>
-      </FormControl>
-    </>
+    <RadioGroup
+      row
+      aria-labelledby="team-type-radio-buttons-group-label"
+      name="team-type-radio-buttons-group"
+      onChange={handleChange}
+    >
+      <Stack spacing={'0.5rem'} direction={'row'}>
+        <FormControlLabel
+          value="PROJECT"
+          control={<Radio sx={style.radioButtonStyle} size="small" />}
+          label={
+            <Typography variant={'Caption'} color={'text.alternative'}>
+              프로젝트
+            </Typography>
+          }
+          disabled={disabled}
+          defaultChecked={defaultChecked === 'PROJECT'}
+        />
+        <FormControlLabel
+          value="STUDY"
+          control={<Radio sx={style.radioButtonStyle} size="small" />}
+          label={
+            <Typography variant={'Caption'} color={'text.alternative'}>
+              스터디
+            </Typography>
+          }
+          disabled={disabled}
+          defaultChecked={defaultChecked === 'STUDY'}
+        />
+      </Stack>
+    </RadioGroup>
   )
 }
+
+export default RowRadioButtonsGroup

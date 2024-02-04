@@ -12,7 +12,6 @@ const Skills = ({
   setModalType: (type: string) => void
   isEditable: boolean
 }) => {
-  console.log(skillList)
   return (
     <Stack direction={'column'} spacing={'0.5rem'}>
       <ProfileSection

@@ -48,13 +48,11 @@ function PostCard({
   }
 
   const gotoShowCasePage = () => {
-    console.log('gotoShowCasePage')
-    // router.push(`/showcase/${showCaseId}`)
+    router.push(`/showcase/detail/${redirectionIds[1]}`)
   }
 
   const gotoPeerLogPage = () => {
-    console.log('gotoPeerLogPage')
-    // router.push(`/peer-log/${peerLogId}`)
+    router.push(`/peer-log/${redirectionIds[2]}`)
   }
 
   const onClick = () => {

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { AxiosResponse } from 'axios'
+import { AxiosResponse, isAxiosError } from 'axios'
+import { useRouter } from 'next/navigation'
 import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import {
@@ -22,6 +23,7 @@ const TeamBoard = ({ params }: { params: { id: string } }) => {
   const [keyword, setKeyword] = useState<string>('')
   const [boardList, setBoardList] = useState<ITeamBoard[]>([])
   const axiosWithAuth = useAxiosWithAuth()
+  const router = useRouter()
 
   useEffect(() => {
     const getBoardList = async () => {
@@ -33,9 +35,14 @@ const TeamBoard = ({ params }: { params: { id: string } }) => {
         if (!res.data || res.data.length == 0)
           throw new Error('팀 페이지가 존재하지 않습니다.')
         setBoard('LIST', res.data[0].boardId)
-      } catch (err) {
-        // TODO : 권한에 따른 에러 처리
-        console.log(err)
+      } catch (err: unknown) {
+        if (isAxiosError(err) && err.response?.status === 403) {
+          alert('팀 페이지에 접근할 권한이 없습니다.')
+          router.push('/team-list')
+        } else {
+          alert('팀 페이지에 접근할 수 없습니다.')
+          router.push('/team-list')
+        }
       }
     }
     getBoardList()

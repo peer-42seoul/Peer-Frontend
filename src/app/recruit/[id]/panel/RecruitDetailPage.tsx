@@ -2,7 +2,7 @@
 
 import { Typography, Stack, Container, Divider } from '@mui/material'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
 import RecruitQuickMenu from '@/app/recruit/[id]/panel/RecruitQuickMenu'
@@ -14,12 +14,20 @@ import FavoriteButton from '@/components/FavoriteButton'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
 import useHeaderStore from '@/states/useHeaderStore'
+import UseNicknameStore from '@/states/useNicknameStore'
 
 const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
   const { isPc } = useMedia()
   const path = usePathname()
   const { setHeaderTitle } = useHeaderStore()
+  const { nickname } = UseNicknameStore()
+  const [isClient, setIsClient] = useState(false)
+
+  //하이드레이션 오류 방지
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const roleList = useMemo(() => {
     if (!data) return []
@@ -29,6 +37,9 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   useEffect(() => {
     if (data) {
       setHeaderTitle(data.teamName)
+    }
+    return () => {
+      setHeaderTitle('')
     }
   }, [data])
 
@@ -51,7 +62,8 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
           <Stack width={'100%'}>
             {/*이미지, 제목, 프로필 영역*/}
             <RecruitInfo data={data} type={type} pc>
-              <ApplyFormButton roleList={roleList} id={id} type={type} pc />
+              {isClient && (nickname !== data?.leader_nickname &&
+                <ApplyFormButton roleList={roleList} id={id} type={type} pc />)}
             </RecruitInfo>
             {/* 모집 내용 */}
             <RecruitDetailContent data={data} type={type} roleList={roleList} />
@@ -91,7 +103,8 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
           <Divider />
           <RecruitDetailContent data={data} type={type} roleList={roleList} />
         </Stack>
-        <ApplyFormButton id={id} type={type} roleList={roleList} />
+        {isClient && (nickname !== data?.leader_nickname &&
+          <ApplyFormButton id={id} type={type} roleList={roleList} />)}
       </Stack>
     </Container>
   )

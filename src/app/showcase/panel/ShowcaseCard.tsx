@@ -55,7 +55,7 @@ const ShowcaseCardBack = ({
 
   const handleSeeAll = (e: React.MouseEvent) => {
     e.stopPropagation()
-    router.push(`/showcase/${postId}`)
+    router.push(`/showcase/detail/${postId}`)
   }
 
   return (
