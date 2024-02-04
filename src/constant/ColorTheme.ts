@@ -1,6 +1,7 @@
 import { EDisplayMode } from '@/types/DisplayTypes'
 import { alpha, createTheme } from '@mui/material'
 
+// 마지막 시도
 const pretendardVariable = {
   fontFamily: 'Pretendard Variable',
   fontStyle: 'normal',
