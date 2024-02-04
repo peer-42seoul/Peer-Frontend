@@ -20,9 +20,10 @@ import { Radio } from '@mui/material'
 import { DateTimePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import CuModal from '@/components/CuModal'
-// import ToastEditor from '@/components/ToastUIEditor'
-// import ToastViewer from '@/components/ToastUIViewer'
 import { idStyle, statusStyle, titleStyle } from './AnnounceStyles'
+import DynamicToastEditor from '@/components/DynamicToastEditor'
+import { Editor } from '@toast-ui/editor'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
 
 interface IAnnounceAllContent {
   announcementId: number
@@ -101,8 +102,6 @@ interface IAnnounceContentEdit {
 const Announce = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-  const [page, setPage] = useState<number>(1)
-  const totalPageVar = useRef<number>(1)
   const [content, setContent] = useState<content[]>([])
   const [open, setOpen] = useState<boolean>(false)
   const {
@@ -118,8 +117,12 @@ const Announce = () => {
     defaultValues: defaultValues,
     mode: 'onChange',
   })
-  const [writeMode, setWriteMode] = useState<string>('')
   let previewImage = watch('previewImage')
+  const editorRef = useRef<Editor | null>(null)
+  const [writeMode, setWriteMode] = useState<string>('')
+
+  const [page, setPage] = useState<number>(1)
+  const totalPageVar = useRef<number>(1)
   const [fourthPage, setFourthPage] = useState<boolean>(false)
   const [fifthPage, setFifthPage] = useState<boolean>(false)
   const params = {
@@ -141,9 +144,7 @@ const Announce = () => {
       })
       .then((res) => {
         if (isMounted) {
-          console.log('res : ', res)
           totalPageVar.current = res.data.totalPages
-          console.log(totalPageVar)
           setContent(res.data.content)
         }
       })
@@ -156,7 +157,6 @@ const Announce = () => {
   // 페이지가 바뀔 때마다 페이지 버튼의 활성화 여부를 결정
   // fifthPage 는 4번째 페이지 버튼의 활성화 여부, fourthPage 는 5번째 페이지 버튼의 활성화 여부
   useEffect(() => {
-    console.log('page render')
     if (page === totalPageVar.current) {
       setFourthPage(false)
       setFifthPage(false)
@@ -213,7 +213,8 @@ const Announce = () => {
         announcementNoticeStatus: data.announcementNoticeStatus, // 'announcementStatus'를 'announcementNoticeStatus'로 매핑합니다.
         reservationDate:
           data.announcementNoticeStatus === '예약' ? DateFormed : null,
-        content: data.content,
+        // content: data.content,
+        content: editorRef.current ? editorRef.current.getMarkdown() : '',
       }
     } else return
     await axios
@@ -264,7 +265,8 @@ const Announce = () => {
         announcementNoticeStatus: data.announcementNoticeStatus, // 'announcementStatus'를 'announcementNoticeStatus'로 매핑합니다.
         reservationDate:
           data.announcementNoticeStatus === '예약' ? DateFormed : null,
-        content: data.content,
+        // content: data.content,
+        content: editorRef.current ? editorRef.current.getMarkdown() : '',
       }
     } else return
 
@@ -535,7 +537,7 @@ const Announce = () => {
               />
             </>
           ) : null}
-          <Typography variant={'Body1'}>내용</Typography>
+          {/* <Typography variant={'Body1'}>내용</Typography>
           <TextField
             multiline
             disabled={writeMode === 'view'}
@@ -548,10 +550,28 @@ const Announce = () => {
             })}
             error={!!errors.content}
             helperText={errors.content?.message}
-          />
+          /> */}
           {/* </Stack> */}
-          {/* <ToastEditor initialValue="" /> */}
-          {/* <ToastViewer /> */}
+          {writeMode === 'view' ? (
+            <DynamicToastViewer
+              initialValue={getValues('content')}
+              sx={{
+                width: '100%',
+                wordBreak: 'break-word',
+                height: '20rem',
+                color: 'text.alternative',
+                overflowY: 'auto'
+              }}
+            />
+          ) : (
+            <DynamicToastEditor
+              initialValue={getValues('content')}
+              initialEditType="wysiwyg"
+              editorRef={editorRef}
+              previewStyle="tab"
+              height={'30rem'}
+            />
+          )}
           <Stack>
             <Typography variant={'Title2'}>공지 예약 및 알림</Typography>
             <Stack direction={'row'} justifyContent={'space-between'}>
@@ -624,8 +644,7 @@ const Announce = () => {
                   ampm={false}
                   format="YYYY-MM-DD hh:mm"
                   disabled={
-                    writeMode === 'view' ||
-                    currentNoticeStatus !== '예약'
+                    writeMode === 'view' || currentNoticeStatus !== '예약'
                   }
                   sx={{ width: '12rem' }}
                 />
