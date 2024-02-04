@@ -1,18 +1,9 @@
 'use client'
 
-import {
-  Container,
-  Box,
-  Grid,
-  Stack,
-  Typography,
-  CircularProgress,
-} from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Container, Box, Grid, Stack, Typography } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
 import FloatEditButton from './main-page/FloatEditButton'
 import MainCard from './main-page/MainCard'
-import SearchOption from './main-page/SearchOption'
-import SelectSort from './main-page/SelectSort'
 import SelectType from './main-page/SelectType'
 import { defaultGetFetcher } from '@/api/fetchers'
 import useSWR from 'swr'
@@ -21,7 +12,7 @@ import MainShowcase from './main-page/MainShowcase'
 import MainCarousel from './main-page/MainCarousel'
 import { useSearchParams } from 'next/navigation'
 import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
-import { IPost, ProjectType } from '@/types/IPostDetail'
+import { IFavorite, IPost, ProjectType } from '@/types/IPostDetail'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
@@ -34,6 +25,15 @@ import { getCookie } from 'cookies-next'
 import useSocket from '@/states/useSocket'
 import Tutorial from '@/components/Tutorial'
 import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
+import {
+  cardStyle,
+  containerStyle,
+  floatButtonStyle,
+  sideMenuStyle,
+} from '@/app/panel/main-page/Mainpage.style'
+import SearchOptionPanel, {
+  InfinityScrollPanel,
+} from '@/app/panel/main-page/MainPanel'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -91,49 +91,39 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   )
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
+
+  const dueObject: { [key: number]: string } = {
+    0: '1주일',
+    20: '1개월',
+    40: '3개월',
+    60: '6개월',
+    80: '9개월',
+    100: '12개월 이상',
+  }
   const pageSize = 6
-  const option = useMemo(() => {
-    const dueObject: { [key: number]: string } = {
-      0: '1주일',
-      20: '1개월',
-      40: '3개월',
-      60: '6개월',
-      80: '9개월',
-      100: '12개월 이상',
-    }
+  const option = `?type=${type ?? 'STUDY'}&sort=${
+    sort ?? 'latest'
+  }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
+    dueObject[detailOption.due1]
+  }&due=${dueObject[detailOption.due2]}&region1=${
+    detailOption.region1
+  }&region2=${detailOption.region2}&place=${detailOption.place}&status=${
+    detailOption.status
+  }&tag=${detailOption.tag}`
 
-    return `?type=${type ?? 'STUDY'}&sort=${
-      sort ?? 'latest'
-    }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
-      dueObject[detailOption.due1]
-    }&due=${dueObject[detailOption.due2]}&region1=${
-      detailOption.region1
-    }&region2=${detailOption.region2}&place=${detailOption.place}&status=${
-      detailOption.status
-    }&tag=${detailOption.tag}`
-  }, [
-    type,
-    sort,
-    page,
-    keyword,
-    detailOption.due1,
-    detailOption.due2,
-    detailOption.region1,
-    detailOption.region2,
-    detailOption.place,
-    detailOption.status,
-    detailOption.tag,
-  ])
+  const isInit =
+    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
 
-  const { data: favoriteData, mutate: favoriteMutate } = useSWR<boolean[]>(
-    isLogin
+  const { data: favoriteData } = useSWR<IFavorite[]>(
+    isInit && isLogin
       ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites` + option
       : null,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
 
-  const getFavoriteData = (index: number) => {
-    return favoriteData?.[index]
+  const getFavoriteData = (recruit_id: number) => {
+    const res = favoriteData?.find((data) => data?.recruit_id === recruit_id)
+    return res?.favorite
   }
 
   const {
@@ -141,14 +131,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     isLoading,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
+    isInit
       ? null
       : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit` + option,
     isLogin
       ? (url: string) =>
           axiosInstance.get(url).then((res) => {
-            //data를 다시 불러올때 favorite 데이터도 갱신
-            favoriteMutate()
             return res.data
           })
       : defaultGetFetcher,
@@ -228,90 +216,69 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     setPage(1)
   }, [])
 
+  const noContent =
+    isLoading && page == 1
+      ? '로딩중...'
+      : error
+        ? '에러 발생'
+        : content?.length == 0
+          ? '데이터가 없습니다'
+          : null
+
   return (
     <>
       <PushAlertBanner />
       {/* mobile view */}
       <div className="mobile-layout">
-        <Container
-          sx={{
-            backgroundColor: 'Background.primary',
-            maxWidth: '56.75rem',
-          }}
-        >
+        <Container sx={containerStyle}>
           <MainBanner />
-          <SelectType type={type} setType={handleType} />
-          <Grid container>
-            <SearchOption
-              openOption={openOption}
-              setOpenOption={setOpenOption}
-              setDetailOption={handleOption}
-            />
-            <Grid item xs={12}>
-              <Stack
-                direction="row"
-                alignItems={'center'}
-                justifyContent={'flex-end'}
-              >
-                <SelectSort sort={sort} setSort={handleSort} />
-              </Stack>
-            </Grid>
-          </Grid>
+          <Box marginY={'0.5rem'}>
+            <SelectType type={type} setType={handleType} />
+          </Box>
+          <SearchOptionPanel
+            handleOption={handleOption}
+            type={type}
+            openOption={openOption}
+            setOpenOption={setOpenOption}
+            sort={sort}
+            handleSort={handleSort}
+          />
           {/*card list 영역*/}
-          {isLoading && page == 1 ? (
-            <Typography>로딩중...</Typography>
-          ) : error || !initData ? (
-            <Typography>에러 발생</Typography>
-          ) : content?.length == 0 ? (
-            <Typography>데이터가 없습니다</Typography>
+          {noContent ? (
+            <Typography>{noContent}</Typography>
           ) : (
             <>
               <Stack alignItems={'center'}>
                 <Stack gap={2}>
-                  {content?.map((project: IPost, index: number) => (
-                    <Box key={index}>
+                  {content?.map((project: IPost) => (
+                    <Box key={project.recruit_id}>
                       <MainCard
                         {...project}
                         type={type}
-                        favorite={getFavoriteData(index)}
-                        sx={{
-                          height: '21.875rem',
-                        }}
+                        favorite={
+                          isInit
+                            ? getFavoriteData(project.recruit_id)
+                            : project.favorite
+                        }
+                        sx={cardStyle}
                       />
                     </Box>
                   ))}
                 </Stack>
               </Stack>
-              {/* 무한 스크롤 */}
-              <Box
-                sx={{
-                  bottom: 0,
-                  height: '1vh',
-                }}
-                ref={target}
-              />
             </>
           )}
-          <Box
-            sx={{
-              position: 'fixed',
-              right: 20,
-              bottom: 80,
-            }}
-          >
+          <Box sx={floatButtonStyle}>
             <FloatEditButton />
           </Box>
-          {spinner && <CircularProgress />}
+          {/* 무한 스크롤 */}
+          <InfinityScrollPanel target={target} spinner={spinner} />
         </Container>
       </div>
+
       {/* pc view */}
       <div className="pc-layout">
-        <Container
-          disableGutters
-          sx={{
-            backgroundColor: 'Background.primary',
-          }}
-        >
+        <Container disableGutters sx={containerStyle}>
           <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
               <Stack maxWidth={'56rem'} mx={'auto'}>
@@ -324,56 +291,42 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   content={<MainPageTutorial />}
                 />
               </Stack>
-              <Grid container bgcolor={'Background.primary'}>
-                <SearchOption
-                  openOption={openOption}
-                  setOpenOption={setOpenOption}
-                  setDetailOption={handleOption}
-                />
-              </Grid>
-              <Stack
-                direction="row"
-                alignItems={'center'}
-                justifyContent={'flex-end'}
-              >
-                <SelectSort sort={sort} setSort={handleSort} />
-              </Stack>
+              <SearchOptionPanel
+                handleOption={handleOption}
+                type={type}
+                openOption={openOption}
+                setOpenOption={setOpenOption}
+                sort={sort}
+                handleSort={handleSort}
+                isPc
+              />
               {/*card list 영역*/}
-              {isLoading && page == 1 ? (
-                <Typography>로딩중...</Typography>
-              ) : error ? (
-                <Typography>에러 발생</Typography>
-              ) : content?.length == 0 ? (
-                <Typography>데이터가 없습니다</Typography>
+              {noContent ? (
+                <Typography>{noContent}</Typography>
               ) : (
                 <>
                   <Grid container spacing={'1rem'}>
-                    {content?.map((project: IPost, index: number) => (
-                      <Grid item key={index} sm={12} md={6} lg={4}>
+                    {content?.map((project: IPost) => (
+                      <Grid item key={project.recruit_id} sm={12} md={6} lg={4}>
                         <MainCard
                           {...project}
                           type={type}
-                          favorite={getFavoriteData(index)}
-                          sx={{
-                            height: '21.875rem',
-                          }}
+                          favorite={
+                            isInit
+                              ? getFavoriteData(project.recruit_id)
+                              : project.favorite
+                          }
+                          sx={cardStyle}
                         />
                       </Grid>
                     ))}
                   </Grid>
                   {/* 무한 스크롤 */}
-                  {spinner && <CircularProgress />}
-                  <Box
-                    sx={{
-                      bottom: 0,
-                      height: '1vh',
-                    }}
-                    ref={target}
-                  />
+                  <InfinityScrollPanel target={target} spinner={spinner} />
                 </>
               )}
             </Stack>
-            <Stack maxWidth={'19.25rem'} height={'100%'} gap={'1rem'}>
+            <Stack sx={sideMenuStyle}>
               <MainProfile />
               <MainShowcase />
               <MainCarousel />

@@ -26,15 +26,18 @@ const MainShowcase = () => {
   }, [data?.content])
 
   return (
-    <Box height={'400px'}>
+    <Box>
       <Stack
         justifyContent={'space-between'}
         direction="row"
         alignItems={'center'}
+        mb={'0.25rem'}
       >
         <Typography variant="Body1">쇼케이스</Typography>
         <Button onClick={handleClick} variant="text">
-          더보기
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            모두보기
+          </Typography>
         </Button>
       </Stack>
 
@@ -57,8 +60,8 @@ const MainShowcase = () => {
                 : '/icons/ios/256.png'
             }
             alt="main-showcase-image"
+            style={{ borderRadius: '0.75rem' }}
           />
-
           <Card
             sx={{
               position: 'absolute',
@@ -67,6 +70,7 @@ const MainShowcase = () => {
               bottom: '0',
               backgroundColor: 'background.tertiary',
               opacity: '0.9',
+              borderRadius: '0.75rem',
             }}
           >
             <Stack m={'1rem'}>
