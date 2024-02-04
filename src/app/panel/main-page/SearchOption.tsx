@@ -63,7 +63,6 @@ const SearchOption = ({
         </IconButton>
       </Stack>
       <SwipeableDrawer
-        sx={{ zIndex: 1500 }}
         onOpen={() => setOpenOption(false)}
         open={openOption}
         onClose={() => setOpenOption(false)}

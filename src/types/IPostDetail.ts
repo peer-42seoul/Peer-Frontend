@@ -24,6 +24,8 @@ export interface IMainCard {
   href?: string
   onFavorite?: () => void
   sx?: SxProps
+  titleMaxLine?: number
+  tagMaxLine?: number
 }
 
 export interface IPost {
@@ -35,7 +37,7 @@ export interface IPost {
   user_thumbnail: string
   status: string
   tagList: ITag[]
-  favorite: boolean
+  favorite: boolean | undefined
 }
 
 export interface IPostDetail {

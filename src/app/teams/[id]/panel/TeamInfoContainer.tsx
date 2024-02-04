@@ -21,6 +21,9 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
     if (data) {
       setHeaderTitle(data.name)
     }
+    return () => {
+      setHeaderTitle('')
+    }
   }, [data])
 
   if (isLoading) {

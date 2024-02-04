@@ -1,17 +1,18 @@
 'use client'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
+import { Editor } from '@toast-ui/editor'
 import useAxiosWithAuth from '@/api/config'
 import useTeamPageState from '@/states/useTeamPageState'
-import useEditorState from '@/states/useEditorState'
+import useToast from '@/states/useToast'
 import { EditForm } from '@/components/board/EditPanel'
+import { IEditFormType } from '@/types/TeamBoardTypes'
 
 const NoticeEditForm = ({
   teamId,
   postId,
-}: {
-  teamId: string
-  postId?: string
-}) => {
+  type,
+  handleGoBack,
+}: IEditFormType) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { setNotice } = useTeamPageState()
   const [previousData, setPreviousData] = useState({
@@ -19,12 +20,14 @@ const NoticeEditForm = ({
     content: '',
   })
   const [isLoading, setIsLoading] = useState(false)
-  const { editor } = useEditorState()
+  const titleRef = useRef<HTMLInputElement | null>(null)
+  const editorRef = useRef<Editor | null>(null)
+  const { openToast } = useToast()
   useEffect(() => {
     if (postId) {
       setIsLoading(true)
       axiosWithAuth
-        .get(`/api/v1/team/notice/${postId}`)
+        .get(`/api/v1/team-page/post/${postId}`)
         .then((res) => {
           if (!res?.data) throw new Error()
           setPreviousData({
@@ -43,45 +46,62 @@ const NoticeEditForm = ({
   }, [postId])
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!editor) return
-    const formData = new FormData(event.currentTarget)
+    if (!editorRef.current || !titleRef.current) return
     const form = {
-      title: formData.get('title') as string,
-      content: editor.getMarkdown(),
+      title: titleRef.current.value,
+      content: editorRef.current.getMarkdown(),
+      image: null,
+    }
+    if (!form.title || !form.content) {
+      openToast({
+        severity: 'error',
+        message: '제목과 내용을 입력해주세요.',
+      })
+      return
     }
     if (postId) {
       // 글 수정
       axiosWithAuth
-        .put(`/api/v1/team/notice/${postId}`, form)
+        .put(`/api/v1/team/post/${postId}`, form)
         .then(() => {
           alert('공지사항을 수정했습니다.')
+          setNotice('DETAIL', postId)
         })
         .catch(() => {
-          alert('공지사항 수정에 실패했습니다.')
+          openToast({
+            severity: 'error',
+            message: '공지사항 수정에 실패했습니다.',
+          })
+        })
+    } else {
+      // 글 작성
+      axiosWithAuth
+        .post(`/api/v1/team-page/notice/create`, {
+          ...form,
+          teamId,
+        })
+        .then((res) => {
+          alert('공지사항이 등록되었습니다.')
+          setNotice('DETAIL', res.data.postId)
+        })
+        .catch(() => {
+          openToast({
+            severity: 'error',
+            message: '공지사항 수정에 실패했습니다.',
+          })
         })
     }
-    // 글 작성
-    axiosWithAuth
-      .post(`/api/v1/team/notice`, {
-        ...form,
-        teamId,
-      })
-      .then((res) => {
-        alert('공지사항이 등록되었습니다.')
-        setNotice('DETAIL', res.data.postId)
-      })
-      .catch(() => {
-        alert('공지사항 작성에 실패했습니다.')
-      })
   }
 
   return (
     <EditForm
-      formId={'notice-form'}
       isLoading={isLoading}
       onSubmit={handleSubmit}
-      initialTitle={previousData.title || ''}
-      initialContent={previousData.content || ''}
+      titleRef={titleRef}
+      editorRef={editorRef}
+      initialData={previousData}
+      type={type}
+      handleGoBack={handleGoBack}
     />
   )
 }
