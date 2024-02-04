@@ -24,6 +24,9 @@ import SettingTeamStatus from './TeamInfoProcess/SettingTeamStatus'
 import SettingTeamTime from './TeamInfoProcess/SettingTeamTime'
 import SettingTeamActivity from './TeamInfoProcess/SettingTeamActivity'
 import SettingTeamLocation from './TeamInfoProcess/SettingTeamLocation'
+import Tutorial from '@/components/Tutorial'
+import TeamStatusTutorial from '@/components/tutorialContent/TeamStatusTutorial'
+import TeamEndingTutorial from '@/components/tutorialContent/TeamEndingTutorial'
 
 export interface ISetupTeam {
   id: string
@@ -132,7 +135,10 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
   return (
     <>
       <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
-        <Typography>팀상태</Typography>
+        <Stack direction={'row'} display={'flex'} alignItems={'center'}>
+          <Typography fontWeight="bold">팀 상태</Typography>
+          <Tutorial content={<TeamStatusTutorial />} />
+        </Stack>
         <form ref={sendRef} onSubmit={onSubmit}>
           <Box sx={isPc ? layoutPcBox : {}}>
             <Stack
@@ -170,6 +176,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
             display={'flex'}
             flexDirection={'row-reverse'}
           >
+            <Tutorial content={<TeamEndingTutorial />} />
             <Button
               disabled={team.status === TeamStatus.COMPLETE ? true : false}
               sx={styles.SaveButtonStyle}

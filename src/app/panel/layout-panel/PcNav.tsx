@@ -15,8 +15,9 @@ import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 import AlertIcon from '@/app/panel/layout-panel/AlertIcon'
 import SearchButton from '@/app/panel/main-page/SearchButton'
 import Link from 'next/link'
-import { BorderColor, Favorite } from '@mui/icons-material'
+import { Favorite } from '@mui/icons-material'
 import { BetaIcon } from '@/components/BetaBadge'
+import WriteIcon from '@/icons/Nav/WriteIcon'
 import useSWR from 'swr'
 import { IUserProfile } from '@/types/IUserProfile'
 import useAxiosWithAuth from '@/api/config'
@@ -185,7 +186,7 @@ const PcNav = () => {
           >
             {isTablet ? (
               <IconButton>
-                <BorderColor color={'primary'} />
+                <WriteIcon color={'primary'} />
               </IconButton>
             ) : (
               <Button
@@ -194,7 +195,7 @@ const PcNav = () => {
                 }}
                 variant="contained"
               >
-                모집글 쓰기
+                모집글쓰기
               </Button>
             )}
           </Link>

@@ -101,13 +101,16 @@ const PushAlertBanner = () => {
     if (localStorage && localStorage.getItem('isShowPush') === 'false') {
       setIsShowPush(false)
     }
+    if (Notification.permission === 'granted') {
+      setIsShowPush(false)
+    }
 
     window.addEventListener('scroll', handleScroll)
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [])
+  }, [setIsShowPush])
 
   return (
     <>
@@ -119,7 +122,7 @@ const PushAlertBanner = () => {
           border="1px solid black"
           sx={{
             backgroundColor: 'primary.main',
-            zIndex: 9999,
+            zIndex: 3000,
           }}
         >
           <Stack margin={1}>

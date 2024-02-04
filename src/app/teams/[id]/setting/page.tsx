@@ -1,16 +1,20 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { Button, Card, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import SetupMember from './panel/SettingTeamMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
-import { ITeam, TeamType } from '../../types/types'
+import { ITeam, TeamStatus, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectRecruitPage'
 import TeamJobAdd from './panel/SettingTeamJobs'
 import SetupInfo from './panel/SettingTeamInfo'
+import CuCircularProgress from '@/components/CuCircularProgress'
 import useSocket from '@/states/useSocket'
+import Tutorial from '@/components/Tutorial'
+import TeamMemberTutorial from '@/components/tutorialContent/TeamMemberTutorial'
 
 export interface IMyInfo {
   userId: string
@@ -24,10 +28,11 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const [myInfo, setMyInfo] = useState<IMyInfo>()
-  const { data, isLoading } = useSWR<ITeam>(
+  const { data, error, isLoading } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
   )
+  const router = useRouter()
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
@@ -41,16 +46,28 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         teamName: data?.team.name,
       },
       (data: any) => {
-        console.log('whoAmI receive')
-        console.log(data)
         setMyInfo(data)
       },
     )
   }, [])
 
-  if (isLoading) return <Typography>로딩중</Typography>
+  if (error) {
+    if (error.status === 403) {
+      alert('팀 페이지에 접근할 권한이 없습니다.')
+    } else {
+      alert('팀 페이지에 접근할 수 없습니다.')
+    }
+    router.push('/team-list')
+    return <CuCircularProgress color="primary" />
+  }
 
-  console.log(data)
+  if (!isLoading && !data) {
+    alert('팀 페이지에 접근할 수 없습니다.')
+    router.push('/team-list')
+    return <CuCircularProgress color="primary" />
+  }
+
+  if (isLoading) return <CuCircularProgress color="primary" />
 
   return (
     <Stack
@@ -67,7 +84,11 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
           <RedirectionRecruit id={params.id} data={data} />
           <SetupInfo team={data.team} />
           {data.team.type === TeamType.PROJECT && (
-            <TeamJobAdd teamId={params.id} jobList={data.job} />
+            <TeamJobAdd
+              teamId={params.id}
+              jobList={data.job.filter((job) => job.name != 'Leader')}
+              teamStatus={data.team.status}
+            />
           )}
           {!showApplicant ? (
             <Card
@@ -83,9 +104,14 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 alignItems={'center'}
                 mb={3}
               >
-                <Typography fontWeight="bold">팀원 목록</Typography>
-
+                <Stack direction={'row'} display={'flex'} alignItems={'center'}>
+                  <Typography fontWeight="bold">팀원 목록</Typography>
+                  <Tutorial content={<TeamMemberTutorial />} />
+                </Stack>
                 <Button
+                  disabled={
+                    data.team.status === TeamStatus.COMPLETE ? true : false
+                  }
                   onClick={openApplicant}
                   sx={{ width: '9rem' }}
                   variant="contained"
@@ -96,6 +122,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 </Button>
               </Stack>
               <SetupMember
+                teamStatus={data.team.status}
                 team={data.member}
                 teamId={data.team.id}
                 jobs={data.job}
@@ -107,9 +134,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
           )}
         </>
       ) : (
-        <>
-          <Typography>데이터가 없습니다.</Typography>
-        </>
+        <CuCircularProgress color="primary" />
       )}
     </Stack>
   )

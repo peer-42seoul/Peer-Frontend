@@ -242,7 +242,9 @@ const CreateTeam = ({ params }: { params: { id: string } }) => {
       <Container sx={isPc ? Pc_Container : Mobile_Container}>
         {isPc ? (
           <Box sx={{ paddingBottom: '24px' }}>
-            <Typography fontSize={'13px'}>모집 글 쓰기</Typography>
+            <Stack>
+              <Typography fontSize={'13px'}>모집 글 쓰기</Typography>
+            </Stack>
           </Box>
         ) : null}
         <Container sx={isPc ? Pc_Style : Mobile_Style}>

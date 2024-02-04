@@ -27,7 +27,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   if (pathname === '/showcase' || pathname === '/hitchhiking') {
     return (
-      <Box sx={{ backgroundColor: 'background.primary', minHeight: '100svh' }}>
+      <Box sx={{ backgroundColor: 'background.primary', height: '100dvh' }}>
         <div className="mobile-layout">
           <Box sx={{ marginBottom: '64px' }}>{children}</Box>
           <MobileNav />
@@ -41,7 +41,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <Box sx={{ backgroundColor: 'background.primary', minHeight: '100dvh' }}>
+    <Box sx={{ backgroundColor: 'background.primary', height: '100dvh' }}>
       <div className="mobile-layout">
         <Header pathname={pathname} />
         {/* margin은 header와 bottom appbar의 크기 */}

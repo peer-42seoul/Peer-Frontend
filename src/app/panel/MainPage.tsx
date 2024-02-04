@@ -145,22 +145,24 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [content, setContent] = useState<IPost[]>(initData?.content ?? [])
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('socket connected')
-    })
-    socket.on('disconnect', () => {
-      console.log('socket disconnected')
-    })
-    socket.on('connect_error', (err) => {
-      console.log(err)
-    })
-    socket.on('reconnect', (attemptNumber) => {
-      console.log('reconnect', attemptNumber)
-    })
-    socket.on('reconnect_attempt', (attemptNumber) => {
-      console.log('reconnect_attempt', attemptNumber)
-    })
-    setSocket(socket)
+    if (isLogin) {
+      socket.on('connect', () => {
+        console.log('socket connected')
+      })
+      socket.on('disconnect', () => {
+        console.log('socket disconnected')
+      })
+      socket.on('connect_error', (err) => {
+        console.log(err)
+      })
+      socket.on('reconnect', (attemptNumber) => {
+        console.log('reconnect', attemptNumber)
+      })
+      socket.on('reconnect_attempt', (attemptNumber) => {
+        console.log('reconnect_attempt', attemptNumber)
+      })
+      setSocket(socket)
+    }
   }, [])
 
   useEffect(() => {
