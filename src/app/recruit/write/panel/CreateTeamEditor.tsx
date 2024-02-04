@@ -30,6 +30,8 @@ import DynamicToastEditor from '@/components/DynamicToastEditor'
 import { Editor } from '@toast-ui/editor'
 import { IFormInterview } from '@/types/IPostDetail'
 import SetInterview from './fields/SetInterview/SetInterview'
+import Tutorial from '@/components/Tutorial'
+import RecruitEditPageTutorial from '@/components/tutorialContent/RecruitEditPageTutorial'
 
 const CreateTeamEditor = ({
   defaultValues,
@@ -79,8 +81,12 @@ const CreateTeamEditor = ({
         {isPc && (
           <Box sx={{ paddingBottom: '1.5rem' }}>
             <Typography variant="CaptionEmphasis" lineHeight={'normal'}>
-              모집 글 {editorType === 'edit' ? '수정' : '쓰기'}
+              모집 글 쓰기
             </Typography>
+            <Tutorial
+              title="모집 글 쓰는 방법"
+              content={<RecruitEditPageTutorial />}
+            />
           </Box>
         )}
         <form onSubmit={handleSubmit(submitHandler)}>

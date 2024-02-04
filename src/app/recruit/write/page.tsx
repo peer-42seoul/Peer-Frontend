@@ -32,8 +32,6 @@ const Page = () => {
   }
 
   const handleSubmit = async (data: IRecruitWriteField) => {
-    //   console.log(data)
-    //   console.log(editorRef.current?.getMarkdown())
     closeToast()
     await axiosWithAuth
       .post('/api/v1/recruit/write', {
@@ -52,6 +50,7 @@ const Page = () => {
         max: data.type === 'PROJECT' ? null : Number(data.max),
         // content: data.content,
         content: editorRef.current?.getMarkdown(),
+        link: data.link,
       })
       .then((res) => {
         openToast({
