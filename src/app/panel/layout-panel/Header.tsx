@@ -39,6 +39,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
   const [title, setTitle] = useState('')
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
+  const regex = /^\/recruit\/\d+\/edit$/
 
   useEffect(() => {
     if (!pathname) return setTitle('')
@@ -48,13 +49,10 @@ const Header = ({ pathname }: { pathname?: string }) => {
       setTitle('로그인')
     } else if (pathname === '/recruit/write') {
       setTitle('모집글작성')
-    } else if (pathname.startsWith('/recruit')) {
-      const regex = /^\/recruit\/\d+\/edit$/
-      if (regex.test(pathname)) setTitle('모집글수정')
-      else setTitle('')
+    } else if (regex.test(pathname)) {
+      setTitle('모집글수정')
     } else if (pathname.startsWith('/team-list')) {
       if (!isLogin) {
-        console.log('팀페이지')
         router.push('/login?redirect=/team-list')
       } else setTitle('팀페이지')
     } else if (pathname.startsWith('/my-page')) {
