@@ -34,6 +34,9 @@ import { Controller, useForm } from 'react-hook-form'
 import { FormControlLabel } from '@mui/material'
 import SkillAutocomplete from '@/components/SkillAutocomplete'
 import { ISkill } from '@/types/IUserProfile'
+import Tutorial from '@/components/Tutorial'
+import RecruitEditPageTutorial from '@/components/tutorialContent/RecruitEditPageTutorial'
+import RecruiterInterviewTutorial from '@/components/tutorialContent/RecruitInterviewTutorial'
 
 export interface IRecruitWriteField {
   place: string
@@ -198,6 +201,10 @@ const CreateTeam = () => {
             <Typography variant="CaptionEmphasis" lineHeight={'normal'}>
               모집 글 쓰기
             </Typography>
+            <Tutorial
+              title="모집 글 쓰는 방법"
+              content={<RecruitEditPageTutorial />}
+            />
           </Box>
         ) : null}
         <form onSubmit={handleSubmit(onHandlerFinish)}>
@@ -600,6 +607,12 @@ const CreateTeam = () => {
               labelIcon={
                 <Icon.FolderPlusIcon
                   sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+              endIconButton={
+                <Tutorial
+                  title="모집 인터뷰??"
+                  content={<RecruiterInterviewTutorial />}
                 />
               }
             >

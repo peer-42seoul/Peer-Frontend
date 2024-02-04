@@ -12,7 +12,7 @@ import {
   Theme,
   Typography,
 } from '@mui/material'
-import { IMember, Job, TeamGrant } from '../../../types/types'
+import { IMember, Job, TeamGrant, TeamStatus } from '../../../types/types'
 import useModal from '@/hook/useModal'
 import { useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
@@ -27,6 +27,7 @@ interface ISetupMember {
   teamId: string
   jobs: Job[]
   myInfo?: IMyInfo
+  teamStatus: TeamStatus
 }
 
 // interface ICurrentJobCard {
@@ -52,7 +53,13 @@ interface ISetupMember {
 //   )
 // }
 
-const SettingTeamMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
+const SettingTeamMember = ({
+  team,
+  teamId,
+  jobs,
+  myInfo,
+  teamStatus,
+}: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   // const {
@@ -231,6 +238,7 @@ const SettingTeamMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
                 <Stack direction="row" sx={{ justifyContent: 'center' }}>
                   <Typography variant="Body2">리더 권한</Typography>
                   <Switch
+                    disabled={teamStatus === TeamStatus.COMPLETE ? true : false}
                     size="small"
                     onChange={() => handleGrant(member)}
                     checked={member.role === TeamGrant.LEADER ? true : false}
