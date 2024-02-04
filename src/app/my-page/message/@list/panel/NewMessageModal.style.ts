@@ -28,6 +28,10 @@ export const searchIcon = {
   color: 'text.normal',
 }
 
+export const searchButton = {
+  minWidth: '4rem',
+}
+
 export const closeIcon = {
   width: '1rem',
   height: '1rem',

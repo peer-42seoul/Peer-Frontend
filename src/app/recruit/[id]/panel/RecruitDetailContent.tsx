@@ -79,7 +79,7 @@ const RecruitDetailContent = ({
         )}
       </RecruitContentText>
       <RecruitContentText label="기술스택" icon={<LocalOfferOutlinedIcon />}>
-        <Stack direction={'row'} gap={1}>
+        <Stack direction={'row'} gap={1} flexWrap={'wrap'}>
           {data?.tagList?.map((tag: ITag, idx: number) => (
             <TagChip name={tag?.name} key={idx} color={tag?.color} />
           ))}

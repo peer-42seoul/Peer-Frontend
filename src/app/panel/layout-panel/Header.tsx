@@ -14,7 +14,7 @@ import SearchButton from '../main-page/SearchButton'
 import AlertIcon from './AlertIcon'
 import PeerLogo from '@/app/panel/layout-panel/PeerLogo'
 import * as style from './Header.style'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import CloseIcon from '../../../icons/CloseIcon'
 import BackIcon from '@/icons/Nav/BackIcon'
 import useHeaderStore from '@/states/useHeaderStore'
@@ -37,6 +37,9 @@ const Header = ({ pathname }: { pathname?: string }) => {
   const { isLogin } = useAuthStore()
   const router = useRouter()
   const [title, setTitle] = useState('')
+  const searchParams = useSearchParams()
+  const keyword = searchParams.get('keyword') ?? ''
+  const regex = /^\/recruit\/\d+\/edit$/
 
   useEffect(() => {
     if (!pathname) return setTitle('')
@@ -44,9 +47,12 @@ const Header = ({ pathname }: { pathname?: string }) => {
       setTitle('메인')
     } else if (pathname.startsWith('/login')) {
       setTitle('로그인')
+    } else if (pathname === '/recruit/write') {
+      setTitle('모집글작성')
+    } else if (regex.test(pathname)) {
+      setTitle('모집글수정')
     } else if (pathname.startsWith('/team-list')) {
       if (!isLogin) {
-        console.log('팀페이지')
         router.push('/login?redirect=/team-list')
       } else setTitle('팀페이지')
     } else if (pathname.startsWith('/my-page')) {
@@ -65,7 +71,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
   return (
     <AppBar position="fixed" sx={mobileHeader}>
       <Toolbar disableGutters sx={style.mobileHeaderToolbar}>
-        {title === '메인' ? (
+        {title === '메인' && keyword === '' ? (
           <Stack sx={style.mobileHeaderStack}>
             <AlertIcon />
             <Box sx={style.mobileHeaderTitle}>
