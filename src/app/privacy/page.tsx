@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import BoxBase from '@/components/BoxBase'
 import PrivacyPolicy from './panel/PrivacyPolicy'
+import UsagePolicy from './panel/UsagePolicy'
 
 const PCSignupBox = {
   display: 'flex',
@@ -56,9 +57,6 @@ const MobilePaper = {
   padding: '8px',
   backgroundColor: 'background.secondary',
 }
-
-const Policy1 =
-  '이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다.이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다.'
 
 const Privacy = () => {
   const { isPc } = useMedia()
@@ -141,9 +139,7 @@ const Privacy = () => {
               checked={checkStatus[0]}
             />
             <Paper sx={isPc ? PCPaper : MobilePaper}>
-              <Typography variant="Caption" color={'text.alternative'}>
-                {Policy1}
-              </Typography>
+              <UsagePolicy />
             </Paper>
           </Stack>
           <Stack>

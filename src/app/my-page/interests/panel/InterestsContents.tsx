@@ -103,7 +103,7 @@ const InterestsContents = ({
                 favorite={true}
                 type={type as ProjectType}
                 onFavorite={handleShowcaseUnfavorite(post.showcaseId)}
-                href={`/showcase/${post.showcaseId}`}
+                href={`/showcase/detail/${post.showcaseId}`}
                 sx={{ maxWidth: undefined }}
                 titleMaxLine={3}
               />
