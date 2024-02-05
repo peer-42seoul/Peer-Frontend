@@ -27,13 +27,7 @@ const Page = () => {
     link: '',
     tagList: [],
     roleList: [{ name: '', number: 0 }],
-    interviewList: [
-      {
-        question: '질문을 입력하세요.',
-        type: 'CLOSE',
-        optionList: [{ option: '답변 1' }],
-      },
-    ],
+    interviewList: [],
     max: '2',
   }
 
