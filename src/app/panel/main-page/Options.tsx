@@ -83,7 +83,6 @@ const Options = ({
       status,
       tag,
     })
-    console.log('submit', data)
     if (!isPc && setOpenOption) {
       setOpenOption(false)
     }
