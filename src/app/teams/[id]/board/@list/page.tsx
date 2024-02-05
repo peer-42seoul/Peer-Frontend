@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { AxiosResponse, isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
-import { Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import {
   ListPageContainer,
@@ -73,8 +73,10 @@ const TeamBoard = ({ params }: { params: { id: string } }) => {
               alignItems={'center'}
               justifyContent={'space-between'}
             >
-              <BoardDropdown boardData={boardList} />
-              <Tutorial content={<TeamBoardTutorial />} />
+              <Box>
+                <BoardDropdown boardData={boardList} />
+                <Tutorial content={<TeamBoardTutorial />} />
+              </Box>
               <Stack direction={'row'} spacing={'0.5rem'}>
                 <IconButtonContainer
                   setKeyword={setKeyword}
