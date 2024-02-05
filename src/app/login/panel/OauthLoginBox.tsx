@@ -10,8 +10,8 @@ const OauthLoginBox = () => {
     <Box
       sx={{
         display: 'flex',
-        width: '120px',
-        height: '60px',
+        width: '7.5rem',
+        height: '3.75rem',
         justifyContent: 'space-between',
       }}
     >

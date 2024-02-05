@@ -13,7 +13,7 @@ const Form = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '8px',
+  gap: '0.5rem',
 }
 
 const LabelBox = {
@@ -21,8 +21,8 @@ const LabelBox = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '8px',
-  fontSize: '14px',
+  gap: '0.5rem',
+  fontSize: '0.875rem',
 }
 
 const SendEmailForm = ({
