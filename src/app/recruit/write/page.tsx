@@ -7,6 +7,7 @@ import useAxiosWithAuth from '@/api/config'
 import { ITag } from '@/types/IPostDetail'
 import useToast from '@/states/useToast'
 import { useRouter } from 'next/navigation'
+import { fieldToForm } from './panel/fields/Interview/handleInterviewList'
 
 const Page = () => {
   const editorRef = useRef<Editor | null>(null)
@@ -26,9 +27,14 @@ const Page = () => {
     link: '',
     tagList: [],
     roleList: [{ name: '', number: 0 }],
-    interviewList: [],
+    interviewList: [
+      {
+        question: '질문을 입력하세요.',
+        type: 'CLOSE',
+        optionList: [{ option: '답변 1' }],
+      },
+    ],
     max: '2',
-    content: '모집글 소개 글입니다.',
   }
 
   const handleSubmit = async (data: IRecruitWriteField) => {
@@ -45,7 +51,7 @@ const Page = () => {
           return tag.tagId
         }),
         roleList: data.type === 'PROJECT' ? data.roleList : null,
-        interviewList: data.interviewList,
+        interviewList: fieldToForm(data.interviewList), // 인터뷰 리스트 재가공 필요
         place: data.place,
         max: data.type === 'PROJECT' ? null : Number(data.max),
         content: editorRef.current?.getMarkdown(),

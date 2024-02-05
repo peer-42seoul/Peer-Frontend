@@ -1,6 +1,6 @@
 'use client'
 import { Stack, Typography } from '@mui/material'
-import UserWithdrawalModal from './panel/UserWithdrawalModal'
+// import UserWithdrawalModal from './panel/UserWithdrawalModal'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import useMedia from '@/hook/useMedia'
@@ -44,14 +44,15 @@ const PrivacyPage = () => {
         />
         <PasswordChangeSection />
       </TitleBox>
-      <TitleBox title={'계정 관리'}>
+      {/* 백엔드에서 탈퇴하기 기능 컴포넌트를 숨겨달라는 요청이 들어와서 주석처리 하였습니다. */}
+      {/* <TitleBox title={'계정 관리'}>
         <Stack spacing={1} direction={'row'} justifyContent={'space-between'}>
           <Typography variant="Body2" color="text.alternative">
             계정을 삭제하시면....
           </Typography>
           <UserWithdrawalModal />
         </Stack>
-      </TitleBox>
+      </TitleBox> */}
     </Stack>
   )
 }

@@ -20,7 +20,6 @@ const CheckQuestionForm = ({
     <FormControl disabled={disabled} component="fieldset">
       <FormGroup defaultValue={value}>
         {optionList?.map((label: string, index: number) => {
-          console.log(label, value?.includes(label))
           return (
             <FormCheckbox
               name={`${idx}[${index}]`}

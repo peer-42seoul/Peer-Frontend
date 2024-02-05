@@ -62,8 +62,8 @@ export interface IPostDetail {
 
 export interface IFormInterview {
   question: string
-  type: string
-  optionList: string[] | null
+  type: 'OPEN' | 'CLOSE' | 'CHECK' | 'RATIO'
+  optionList: string[]
 }
 
 export interface IRole {

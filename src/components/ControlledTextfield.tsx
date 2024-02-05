@@ -14,8 +14,8 @@ const ControlledTextfield = <T extends FieldValues>(props: TProps<T>) => {
   return (
     <TextField
       variant="outlined"
-      {...(props as TextFieldProps)}
       {...field}
+      {...(props as TextFieldProps)}
       onBlur={(e) => {
         props.onBlur && props.onBlur(e)
         field.onBlur()
