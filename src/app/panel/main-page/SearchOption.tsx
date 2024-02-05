@@ -73,18 +73,28 @@ const SearchOption = ({
         anchor={'bottom'}
       >
         <Stack padding={2} sx={{ height: '70vh' }}>
-          <Stack flexDirection={'row'} alignItems={'center'}>
-            <Typography variant="Body1" color={titleColor}>
+          <Stack
+            flexDirection={'row'}
+            alignItems={'center'}
+            onClick={() => setOpenOption(!openOption)}
+          >
+            <Typography
+              variant="Body1"
+              color={titleColor}
+              sx={{
+                cursor: 'pointer',
+              }}
+            >
               맞춤 프로젝트를 빠르게 찾아요.
             </Typography>
-            <IconButton
-              sx={{ color: titleColor }}
-              onClick={() => setOpenOption(!openOption)}
-            >
+            <IconButton sx={{ color: titleColor }}>
               {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
             </IconButton>
           </Stack>
-          <Options setDetailOption={setDetailOption} setOpenOption={setOpenOption}/>
+          <Options
+            setDetailOption={setDetailOption}
+            setOpenOption={setOpenOption}
+          />
         </Stack>
       </SwipeableDrawer>
     </Stack>
