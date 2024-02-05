@@ -56,6 +56,7 @@ const MainBanner = () => {
             coords={isPc ? '280,100,350,150' : '120,90,170,130'}
             alt="about-banner"
             onClick={() => router.push('/about')}
+            onKeyUp={() => {}}
           />
         </map>
       </Stack>
