@@ -101,7 +101,7 @@ export const newTextBadge = {
 
 const BADGE_TRANSLATE = 'translate(130%, -50%)'
 
-export const newBadge = {
+export const badgeBase = {
   '& .MuiBadge-badge': {
     width: '3px',
     minWidth: '3px', // mui 기본 설정 디자인 오버라이딩
@@ -118,5 +118,17 @@ export const newBadge = {
       msTransform: `scale(0) ${BADGE_TRANSLATE}`,
       MozTransform: `scale(0) ${BADGE_TRANSLATE}`,
     },
+  },
+}
+
+export const newBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: (theme: Theme) => theme.palette.yellow.strong,
+  },
+}
+
+export const betaBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: (theme: Theme) => theme.palette.red.strong,
   },
 }
