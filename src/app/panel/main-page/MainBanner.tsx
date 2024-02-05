@@ -1,3 +1,5 @@
+'use client'
+
 import { Box } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import Image from 'next/image'

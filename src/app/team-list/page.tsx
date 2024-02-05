@@ -11,6 +11,7 @@ import {
   TeamOperationForm,
 } from '@/app/teams/types/types'
 import NoDataDolphin from '@/components/NoDataDolphin'
+import CuCircularProgress from '@/components/CuCircularProgress'
 
 export interface ITeamInfo {
   id: string
@@ -32,18 +33,7 @@ const TeamsListPage = () => {
     (url: string) => axiosInstance(url).then((res) => res.data),
   )
 
-  // const test = true
-
-  // if (test) {
-  //   return <Loading />
-  // }
-
-  if (isLoading)
-    return (
-      <Stack spacing={1} sx={{ p: 1 }} flex={4} borderRadius={2}>
-        로딩 중...
-      </Stack>
-    )
+  if (isLoading) return <CuCircularProgress color="primary" />
 
   if (!data)
     return (
