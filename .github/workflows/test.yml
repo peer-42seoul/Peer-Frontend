@@ -2,9 +2,9 @@ name: Test server CI/CD
 
 on:
   push:
-    branches: ['main', 'develop']
+    branches: ['develop', 'release-**']
   pull_request:
-    branches: ['main', 'develop']
+    branches: ['develop', 'release-**']
     types: ['opened', 'reopened', 'synchronize', 'closed']
 
 jobs:
@@ -50,7 +50,8 @@ jobs:
 
   CD:
     name: Test CD 👻
-    if: github.ref == 'refs/heads/develop' && (github.event.pull_request.merged == true || github.event_name == 'push')
+    # if: github.ref == 'refs/heads/develop' && (github.event.pull_request.merged == true || github.event_name == 'push')
+    if: (github.ref == 'refs/heads/develop' || contains(github.ref, 'release')) && (github.event.pull_request.merged == true || github.event_name == 'push')
     runs-on: ubuntu-latest
     needs: CI
     steps:
