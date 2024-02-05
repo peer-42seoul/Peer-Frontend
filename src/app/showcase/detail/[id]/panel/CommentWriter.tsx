@@ -71,6 +71,7 @@ export const CommentWriter = ({
               onChange={onChangeContent}
               placeholder="댓글을 작성해주세요."
               style={style.writerInput}
+              inputProps={{ maxLength: 150 }}
             />
             <IconButton type="submit" style={style.writerButton}>
               <SendIcon />
