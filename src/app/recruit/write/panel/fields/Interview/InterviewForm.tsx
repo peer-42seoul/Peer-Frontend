@@ -60,6 +60,11 @@ const InterviewForm = ({
     openCompleteModal()
   }
 
+  const handleCompleteModalConfirm = () => {
+    closeCompleteModal()
+    closeModal()
+  }
+
   const handleAddQuestion = () => {
     if (fields.length >= 10) {
       return
@@ -174,7 +179,7 @@ const InterviewForm = ({
         }}
         containedButton={{
           text: '완료',
-          onClick: closeModal,
+          onClick: handleCompleteModalConfirm,
         }}
       />
     </>
