@@ -6,6 +6,7 @@ import { Stack, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import BackgroundBox from '@/components/BackgroundBox'
 import CuButton from '@/components/CuButton'
+import CuCircularProgress from '@/components/CuCircularProgress'
 import useMedia from '@/hook/useMedia'
 import useToast from '@/states/useToast'
 import useTeamPageState from '@/states/useTeamPageState'
@@ -92,7 +93,7 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
       })
   }
 
-  if (!data || isLoading || error) {
+  if (!data || error) {
     alert('게시판 목록을 불러오지 못했습니다.')
     resetState()
     return null
@@ -128,40 +129,46 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
         style={{ width: 'fit-content' }}
       />
       <BackgroundBox pcSx={{ padding: '1.5rem' }}>
-        <Stack spacing={'2rem'}>
-          <TitleStack title="게시판 추가">
-            <Stack
-              direction={'row'}
-              spacing={'0.38rem'}
-              sx={style.inputContainer}
-            >
-              <TextField
-                inputRef={textFieldRef}
-                name={'new-board-name'}
-                sx={{ flexGrow: 1 }}
-              />
-              <CuButton
-                variant={'text'}
-                action={handleCreateBoard}
-                message="추가"
-              />
-            </Stack>
-          </TitleStack>
-          <TitleStack
-            title={'게시판 목록'}
-            warning={'게시판 삭제시 내부 모든 글이 삭제되고 복구할 수 없어요.'}
-          >
-            <Stack>
-              {data.map((board: ITeamBoard) => (
-                <BoardItem
-                  key={crypto.randomUUID()}
-                  board={board}
-                  teamId={teamId}
+        {isLoading ? (
+          <CuCircularProgress color="primary" />
+        ) : (
+          <Stack spacing={'2rem'}>
+            <TitleStack title="게시판 추가">
+              <Stack
+                direction={'row'}
+                spacing={'0.38rem'}
+                sx={style.inputContainer}
+              >
+                <TextField
+                  inputRef={textFieldRef}
+                  name={'new-board-name'}
+                  sx={{ flexGrow: 1 }}
                 />
-              ))}
-            </Stack>
-          </TitleStack>
-        </Stack>
+                <CuButton
+                  variant={'text'}
+                  action={handleCreateBoard}
+                  message="추가"
+                />
+              </Stack>
+            </TitleStack>
+            <TitleStack
+              title={'게시판 목록'}
+              warning={
+                '게시판 삭제시 내부 모든 글이 삭제되고 복구할 수 없어요.'
+              }
+            >
+              <Stack>
+                {data.map((board: ITeamBoard) => (
+                  <BoardItem
+                    key={crypto.randomUUID()}
+                    board={board}
+                    teamId={teamId}
+                  />
+                ))}
+              </Stack>
+            </TitleStack>
+          </Stack>
+        )}
       </BackgroundBox>
     </Stack>
   )
