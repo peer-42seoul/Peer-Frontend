@@ -5,6 +5,7 @@ import { Box } from '@mui/system'
 import { Button, Container, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import NewTag from './panel/NewTag'
+import { fetchTags } from '../panel/AdminAxios'
 
 interface content {
   tagId: number
@@ -43,15 +44,9 @@ const Tag = () => {
   const [open, setOpen] = useState<boolean>(false)
   const writeMode = useRef<string>('')
   useEffect(() => {
-    axios
-      .get(`${API_URL}/api/v1/tag`, {
-        // withCredentials: true,
-        // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
-      })
-      .then((res) => {
-        console.log(res)
-        setContent(res.data)
-      })
+    fetchTags()
+      .then((data) => setContent(data))
+      .catch((err) => alert('배너를 불러오는 데 실패했습니다.' + err))
   }, [])
 
   const onHandleEdit = (tagId: number) => {
@@ -69,17 +64,13 @@ const Tag = () => {
   const onHandleRemove = (tagId: number) => {
     console.log(tagId)
     axios
-      .delete(`${API_URL}/api/v1/admin/tag`, { data: { tagId: tagId } })
+      .delete(`${API_URL}/api/v1/admin/tag`, {
+        data: { tagId: tagId },
+        withCredentials: true,
+      })
       .then(() => {
         alert(tagId + '번 태그가 삭제되었습니다.')
-        axios
-          .get(`${API_URL}/api/v1/tag`, {
-            // withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
-          })
-          .then((res) => {
-            setContent(res.data)
-          })
+        fetchTags().then((data) => setContent(data))
       })
   }
 
@@ -87,41 +78,35 @@ const Tag = () => {
     console.log('submit')
     if (writeMode.current === 'write') {
       axios
-        .post(`${API_URL}/api/v1/admin/tag`, {
-          name: tagName,
-          color: tagColor,
-        })
-        .then((res) => {
+        .post(
+          `${API_URL}/api/v1/admin/tag`,
+          {
+            name: tagName,
+            color: tagColor,
+          },
+          { withCredentials: true },
+        )
+        .then(() => {
           alert('새로운 태그가 등록되었습니다.')
-          axios
-            .get(`${API_URL}/api/v1/tag`, {
-              // withCredentials: true,
-              // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
-            })
-            .then(() => {
-              setContent(res.data)
-            })
+          fetchTags().then((data) => setContent(data))
         })
         .catch(() => {
           alert('태그 등록에 실패하였습니다.')
         })
     } else {
       axios
-        .put(`${API_URL}/api/v1/admin/tag`, {
-          tagId: tagId,
-          name: tagName,
-          color: tagColor,
-        })
+        .put(
+          `${API_URL}/api/v1/admin/tag`,
+          {
+            tagId: tagId,
+            name: tagName,
+            color: tagColor,
+          },
+          { withCredentials: true },
+        )
         .then(() => {
           alert('태그가 수정되었습니다.')
-          axios
-            .get(`${API_URL}/api/v1/tag`, {
-              // withCredentials: true,
-              // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
-            })
-            .then((res) => {
-              setContent(res.data)
-            })
+          fetchTags().then((data) => setContent(data))
         })
         .catch(() => {
           alert('태그 수정에 실패하였습니다.')
