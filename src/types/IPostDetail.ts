@@ -56,6 +56,7 @@ export interface IPostDetail {
   place: string
   image: string
   totalNumber: number
+  current?: number
   favorite: boolean
   teamName: string
 }
