@@ -1,15 +1,12 @@
 import { Stack, Typography } from '@mui/material'
 import RecruitContentText from '@/app/recruit/[id]/panel/RecruitContentText'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
-import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
-import WifiOutlinedIcon from '@mui/icons-material/WifiOutlined'
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
-import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined'
 import { IPostDetail, IRole, ITag, ProjectType } from '@/types/IPostDetail'
 import TagChip from '@/components/TagChip'
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import React from 'react'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
+import * as style from '@/app/recruit/write/page.style'
+import * as Icon from '@/icons'
 
 const RecruitDetailContent = ({
   data,
@@ -31,43 +28,55 @@ const RecruitDetailContent = ({
       />
       <RecruitContentText
         label={type === 'PROJECT' ? '역할' : '인원'}
-        icon={<HowToRegOutlinedIcon />}
+        icon={
+          <Icon.TwoPeopleIcon
+            sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+          />
+        }
       >
         <Stack flexDirection={'row'} gap={1} alignItems={'center'}>
-          {roleList.length ? (
-            roleList?.map(({ name, number, current }, idx: number) =>
-              type === 'PROJECT' ? (
-                <Typography
-                  variant={'Body2'}
-                  color={'text.alternative'}
-                  key={idx}
-                >{`${name} ${current}/${number} 명`}</Typography>
-              ) : (
-                name === 'STUDY' && (
-                  <Typography
-                    variant={'Body2'}
-                    color={'text.alternative'}
-                    key={idx}
-                  >{`${current}/${number} 명`}</Typography>
-                )
-              ),
-            )
+          {type === 'STUDY' ? (
+            <Typography
+              variant={'Body2'}
+              color={'text.alternative'}
+            >{`${data?.current}/${data?.totalNumber} 명`}</Typography>
           ) : (
-            <Typography>-</Typography>
+            roleList?.map(({ name, number, current }, idx: number) => (
+              <Typography
+                variant={'Body2'}
+                color={'text.alternative'}
+                key={idx}
+              >{`${name} ${current}/${number} 명`}</Typography>
+            ))
           )}
         </Stack>
       </RecruitContentText>
       <RecruitContentText
         label="활동방식"
         content={data?.place}
-        icon={<WifiOutlinedIcon />}
+        icon={
+          <Icon.WifiIcon
+            sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+          />
+        }
       />
       <RecruitContentText
-        icon={<AccessTimeOutlinedIcon />}
+        icon={
+          <Icon.PieChartIcon
+            sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+          />
+        }
         label="목표기간"
         content={data?.due}
       />
-      <RecruitContentText label="지역" icon={<LocationOnOutlinedIcon />}>
+      <RecruitContentText
+        label="지역"
+        icon={
+          <Icon.LocationIcon
+            sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+          />
+        }
+      >
         {data?.region ? (
           <Typography variant={'Body2'} color={'text.alternative'}>
             {data.region[0] + ' ' + data.region?.[1]}
@@ -78,7 +87,12 @@ const RecruitDetailContent = ({
           </Typography>
         )}
       </RecruitContentText>
-      <RecruitContentText label="기술스택" icon={<LocalOfferOutlinedIcon />}>
+      <RecruitContentText
+        label="기술스택"
+        icon={
+          <Icon.TagIcon sx={{ ...style.iconStyleBase, color: 'text.normal' }} />
+        }
+      >
         <Stack direction={'row'} gap={1} flexWrap={'wrap'}>
           {data?.tagList?.map((tag: ITag, idx: number) => (
             <TagChip name={tag?.name} key={idx} color={tag?.color} />
@@ -87,9 +101,14 @@ const RecruitDetailContent = ({
       </RecruitContentText>
       <RecruitContentText
         label="설명"
-        content={data?.content}
-        icon={<DescriptionOutlinedIcon />}
-      />
+        icon={
+          <Icon.FileIcon
+            sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+          />
+        }
+      >
+        <DynamicToastViewer initialValue={data?.content} />
+      </RecruitContentText>
     </Stack>
   )
 }
