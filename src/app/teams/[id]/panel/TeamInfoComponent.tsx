@@ -1,8 +1,6 @@
 import { Stack, Typography } from '@mui/material'
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
-import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined'
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
 import { TTeamStatus } from '@/types/ITeamInfo'
+import { GroupIcon, TimeIcon, AccountBox } from '@/icons'
 
 const teamStatusMessage = {
   RECRUITING: {
@@ -42,23 +40,32 @@ export const IconInfo = ({ type, text }: IIconInfoProps) => {
   switch (type) {
     case 'MEMBER':
       return (
-        <Stack direction={'row'}>
-          <GroupsOutlinedIcon color="action" />
-          <Typography>{text}</Typography>
+        <Stack alignItems={'center'} spacing={'0.25rem'} direction={'row'}>
+          <GroupIcon sx={{ width: '1rem', color: 'text.alternative' }} />
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            {text}
+          </Typography>
         </Stack>
       )
     case 'LEADER':
       return (
-        <Stack direction={'row'}>
-          <PermContactCalendarOutlinedIcon color="action" />
-          <Typography>{text}</Typography>
+        <Stack alignItems={'center'} spacing={'0.25rem'} direction={'row'}>
+          <AccountBox
+            spacing={'0.25rem'}
+            sx={{ width: '1rem', color: 'text.alternative' }}
+          />
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            {text}
+          </Typography>
         </Stack>
       )
     case 'DATE':
       return (
-        <Stack direction={'row'}>
-          <CalendarMonthOutlinedIcon color="action" />
-          <Typography>{text} ~</Typography>
+        <Stack alignItems={'center'} spacing={'0.25rem'} direction={'row'}>
+          <TimeIcon sx={{ width: '1rem', color: 'text.alternative' }} />
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            {text} ~
+          </Typography>
         </Stack>
       )
   }
