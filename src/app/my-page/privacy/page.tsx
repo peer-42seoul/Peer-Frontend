@@ -1,6 +1,6 @@
 'use client'
 import { Stack, Typography } from '@mui/material'
-import UserWithdrawalModal from './panel/UserWithdrawalModal'
+// import UserWithdrawalModal from './panel/UserWithdrawalModal'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
 import useMedia from '@/hook/useMedia'
