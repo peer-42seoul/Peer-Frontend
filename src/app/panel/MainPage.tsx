@@ -250,7 +250,9 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         <Container sx={containerStyle}>
           {keyword === '' ? (
             <>
-              <MainBanner />
+              <Stack width={'100%'}>
+                <MainBanner />
+              </Stack>
               <Box marginY={'0.5rem'}>
                 <SelectType type={type} setType={handleType} />
               </Box>
