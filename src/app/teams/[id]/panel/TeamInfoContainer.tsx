@@ -61,10 +61,10 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
                 <Typography variant="Title3">{data.name}</Typography>
                 <StatusIcon status={data.status} />
               </Stack>
-              <Stack direction={'row'} spacing={'0.5rem'}>
-                <IconInfo type="MEMBER" text={data.memberCount.toString()} />
-                <IconInfo type="LEADER" text={data.leaderName} />
+              <Stack spacing={'0.25rem'}>
                 <IconInfo type="DATE" text={data.createdAt} />
+                <IconInfo type="LEADER" text={data.leaderName} />
+                <IconInfo type="MEMBER" text={data.memberCount.toString()} />
               </Stack>
             </Stack>
           </>

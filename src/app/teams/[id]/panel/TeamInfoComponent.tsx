@@ -57,6 +57,9 @@ export const IconInfo = ({ type, text }: IIconInfoProps) => {
           <Typography variant={'Caption'} color={'text.alternative'}>
             {text}
           </Typography>
+          <Typography variant={'Tag'} color={'purple.strong'}>
+            리더
+          </Typography>
         </Stack>
       )
     case 'DATE':

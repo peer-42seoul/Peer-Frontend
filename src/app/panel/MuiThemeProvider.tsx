@@ -677,7 +677,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       color: theme.palette.text.normal,
     }
     theme.typography.Tag = {
-      fontSize: '12px',
+      fontSize: '11px',
       fontStyle: 'normal',
       fontWeight: 400,
       lineHeight: '150%',
