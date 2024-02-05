@@ -80,7 +80,7 @@ jobs:
           touch .env.production
           echo "${{ secrets.MAIN_ENV }}" >> .env.production
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin 
-          docker build -f Dockerfile-prod -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}:${{ needs.extract-version.outputs.version }} .
+          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}:${{ needs.extract-version.outputs.version }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}:${{ needs.extract-version.outputs.version }}
 
       - name: Deploy
