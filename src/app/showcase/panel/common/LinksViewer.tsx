@@ -5,9 +5,12 @@ import { TagIcon } from '@/icons'
 import * as Style from './SkillInput.style'
 
 interface IlinksProps {
-  links: string[] | undefined
+  links: ILink[] | undefined
 }
-
+interface ILink {
+  link: string
+  name: string
+}
 const LinksViewer = ({ links }: IlinksProps) => {
   const convertLink = (link: string) => {
     const httpPattern = /^https?:\/\//i
@@ -34,10 +37,11 @@ const LinksViewer = ({ links }: IlinksProps) => {
         />
       </Stack>
       <Stack>
-        {links?.map((link: any) => {
+        {links?.map((link: ILink) => {
           return (
             <>
               <Typography
+                key={crypto.randomUUID()}
                 component="a"
                 color={'text.normal'}
                 variant="Body2"
