@@ -184,6 +184,7 @@ const ProfileLinkEditor = ({
                       </Typography>
                     }
                     onBlur={() => isLinkUrlRequired(index, field.linkName)}
+                    placeholder="링크 제목을 입력해주세요."
                   />
                   <ControlledTextfield
                     control={control}
@@ -192,8 +193,13 @@ const ProfileLinkEditor = ({
                       validate: isLinkUrlValid(index),
                     }}
                     error={!!errors?.linkList?.[index]?.linkUrl}
-                    helperText={!!errors?.linkList?.[index]?.linkUrl?.message}
+                    helperText={
+                      <Typography variant="Caption" color={'error'}>
+                        !!errors?.linkList?.[index]?.linkUrl?.message
+                      </Typography>
+                    }
                     onBlur={() => isLinkNameRequired(index, field.linkUrl)}
+                    placeholder="링크 주소(URL)를 입력해주세요."
                   />
                 </Stack>
               </Stack>
