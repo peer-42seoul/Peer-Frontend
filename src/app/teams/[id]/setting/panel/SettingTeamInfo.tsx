@@ -85,7 +85,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
   }
 
   const onSubmit = handleSubmit((data) => {
-    if (errors)
+    if (errors.name || errors.dueTo || errors.region || errors.operationForm)
       return openToast({
         severity: 'error',
         message: '팀 정보를 확인해주세요.',
