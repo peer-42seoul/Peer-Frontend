@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import CreateTeamEditor from '@/app/recruit/write/panel/CreateTeamEditor'
 import { Editor } from '@toast-ui/editor'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
@@ -12,29 +12,13 @@ import {
   fieldToForm,
   formToField,
 } from '../../write/panel/fields/Interview/handleInterviewList'
-import { IFormInterview, IRoleWrite } from '@/types/IPostDetail'
-import { ISkill } from '@/types/IUserProfile'
-
-interface IRecruitEditApiType {
-  place: string
-  image: string | null
-  title: string
-  name: string
-  due: string
-  type: string
-  region: Array<string> | null
-  link: string
-  tagList: Array<ISkill>
-  roleList: Array<IRoleWrite>
-  interviewList: Array<IFormInterview>
-  max: string | undefined
-  isAnswered: boolean
-}
 
 const Page = ({ params }: { params: { id: string } }) => {
   const { openToast, closeToast } = useToast()
   const router = useRouter()
   const editorRef = useRef<Editor | null>(null)
+
+  const [isAnswered, setIsAnswered] = useState(false)
 
   const searchParam = useSearchParams()
 
@@ -42,16 +26,39 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const axiosWithAuth = useAxiosWithAuth()
   const {
-    data: initData,
+    data: defaultValues,
     isLoading,
     error,
-  } = useSWR<IRecruitEditApiType>(
+  } = useSWR<IRecruitWriteField>(
     `/api/v1/recruit/edit/${params.id}`,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+    (url: string) =>
+      axiosWithAuth
+        .get(url)
+        .then((res) => res.data)
+        .then((data) => {
+          setIsAnswered(data.isAnswered)
+          return data
+        })
+        .then((data) => ({
+          place: data.place,
+          image: data.image,
+          title: data.title,
+          name: data.name,
+          due: data.due,
+          type: data.type,
+          region: data.place === 'ONLINE' ? ['', ''] : data.region,
+          link: data.link ?? '',
+          tagList: data.tagList,
+          roleList:
+            data.type === 'PROJECT' ? data.roleList : [{ name: '', number: 0 }],
+          interviewList: formToField(data.interviewList),
+          max: data.totalNumber ? `${data.totalNumber}` : `2`,
+        })),
+    { revalidateOnFocus: false },
   )
 
   if (isLoading) return <CuCircularProgress color="primary" />
-  else if (error || !initData) {
+  else if (error || !defaultValues) {
     if (error?.response?.initData?.message) {
       openToast({ message: error?.response?.data?.message, severity: 'error' })
     } else {
@@ -62,24 +69,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     }
     router.replace(`/recruit/${params.id}?type=${type}`)
     return <></>
-  }
-
-  const defaultValues: IRecruitWriteField = {
-    place: initData.place,
-    image: initData.image,
-    title: initData.title,
-    name: initData.name,
-    due: initData.due,
-    type: type || initData.type,
-    region: initData.place === 'ONLINE' ? ['', ''] : initData.region,
-    link: initData.link ?? '',
-    tagList: initData.tagList,
-    roleList:
-      initData.type === 'PROJECT'
-        ? initData.roleList
-        : [{ name: '', number: 0 }],
-    interviewList: formToField(initData.interviewList),
-    max: initData.max ? initData.max.toString() : '2',
   }
 
   const handleSubmit = async (data: IRecruitWriteField) => {
@@ -125,7 +114,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       defaultValues={defaultValues}
       editorType="edit"
       submitHandler={handleSubmit}
-      isAnswered={initData?.isAnswered}
+      isAnswered={isAnswered}
     />
   )
 }
