@@ -25,6 +25,7 @@ const SkillAutocomplete = ({
   field,
   error,
   trigger,
+  placeholder,
 }: {
   skillList: Array<ISkill> //  초기 스킬 리스트
   setSkillList: (value: Array<ISkill>) => void // 스킬 리스트 변경 함수
@@ -32,6 +33,7 @@ const SkillAutocomplete = ({
   field?: ControllerRenderProps<any, 'tagList'> // 리액트 훅 폼에 name을 무조건 'tagList'로 해야함
   error?: boolean
   trigger?: UseFormTrigger<any>
+  placeholder?: string
 }) => {
   const [tagList, setTagList] = useState(skillList) // 검색 된 데이터
 
@@ -119,7 +121,9 @@ const SkillAutocomplete = ({
             disabled={skillList?.length >= 10}
             onChange={handleTextFieldChange}
             size="small"
-            placeholder={'프레임워크 또는 개발언어를 입력해주세요.'}
+            placeholder={
+              placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
+            }
             sx={{ position: 'relative', maxWidth: '26rem' }}
             error={error}
             InputProps={{

@@ -11,7 +11,6 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import CuButton from '@/components/CuButton'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import { ComponentType } from './fields/BasicSelect'
 import { BasicSelect, SelectRegion, SetTeamRole } from './fields'
@@ -31,6 +30,9 @@ import { IFormInterview } from '@/types/IPostDetail'
 import SetInterview from './fields/SetInterview/SetInterview'
 import Tutorial from '@/components/Tutorial'
 import RecruitEditPageTutorial from '@/components/tutorialContent/RecruitEditPageTutorial'
+import CuTextModal from '@/components/CuTextModal'
+import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 
 const CreateTeamEditor = ({
   defaultValues,
@@ -48,11 +50,24 @@ const CreateTeamEditor = ({
   const [openBasicModal, setOpenBasicModal] = useState(false)
   const router = useRouter()
 
+  const { openToast, closeToast } = useToast()
+
   const { isLogin } = useAuthStore()
 
   useEffect(() => {
     if (!isLogin) router.push('/login')
   }, [isLogin])
+
+  const {
+    openModal: openCompleteModal,
+    closeModal: closeCompleteModal,
+    isOpen: isCompleteOpen,
+  } = useModal()
+  const {
+    openModal: openCancelModal,
+    closeModal: closeCancelModal,
+    isOpen: isCancelOpen,
+  } = useModal()
 
   const {
     control,
@@ -61,10 +76,32 @@ const CreateTeamEditor = ({
     setValue,
     watch,
     trigger,
+    setError,
+    clearErrors,
   } = useForm<IRecruitWriteField>({
     defaultValues: defaultValues,
     mode: 'onChange',
   })
+
+  const handleComplete = () => {
+    closeToast()
+    if (!image) {
+      setError('image', {
+        type: 'required',
+        message: '필수 입력 항목입니다.',
+      })
+    }
+    trigger().then((result) => {
+      if (!result || image || errors.image?.message) {
+        openToast({
+          severity: 'error',
+          message: '문제가 있는 입력란이 있어요. 확인해주세요!',
+        })
+        return
+      }
+      openCompleteModal()
+    })
+  }
 
   const interviewList = watch('interviewList')
   const region = watch('region')
@@ -93,7 +130,7 @@ const CreateTeamEditor = ({
           />
         </Box>
         {/* )} */}
-        <form onSubmit={handleSubmit(submitHandler)}>
+        <form onSubmit={handleSubmit(submitHandler)} id="recruit-form">
           <Stack spacing={'1.5rem'} sx={style.boxStyle}>
             {/* 대표이미지 */}
             <FieldWithLabel
@@ -112,6 +149,10 @@ const CreateTeamEditor = ({
                   setValue('image', value)
                 }}
                 sx={{ width: ['100%', 'content-fit'], maxWidth: '26rem', p: 0 }}
+                disabled={editorType === 'edit'}
+                onChange={() => {
+                  clearErrors('image')
+                }}
               >
                 <Stack
                   direction={'column'}
@@ -217,7 +258,7 @@ const CreateTeamEditor = ({
                     />
                   }
                   label="모집글 제목"
-                  placeholder="모집글 제목을 입력해주세요."
+                  placeholder="모집글 제목을 입력하세요."
                   id="title"
                   error={!!errors?.title}
                   sx={{ width: ['100%', '26rem'] }}
@@ -258,7 +299,9 @@ const CreateTeamEditor = ({
                     />
                   }
                   label={type === 'STUDY' ? '스터디 명' : '프로젝트 명'}
-                  placeholder="스터디 명 / 프로젝트 명을 입력해주세요."
+                  placeholder={`${
+                    type === 'STUDY' ? '스터디' : '프로젝트'
+                  } 이름을 입력하세요.`}
                   id="name"
                   error={!!errors?.name}
                   sx={{ width: ['100%', '26rem'] }}
@@ -314,6 +357,7 @@ const CreateTeamEditor = ({
                       {...field}
                       type={ComponentType.TeamSize}
                       error={!!errors?.max}
+                      disabled={editorType === 'edit'}
                     />
                   </FieldWithLabel>
                 )}
@@ -409,8 +453,10 @@ const CreateTeamEditor = ({
                       sx={{ ...style.iconStyleBase, color: 'text.normal' }}
                     />
                   }
-                  placeholder={'팀 커뮤니케이션 툴 링크를 입력해주세요.'}
-                  sx={{ width: '26rem' }}
+                  placeholder={
+                    '소통을 위해 사용하는 링크를 입력하세요. 예시) 카카오톡 오픈채팅'
+                  }
+                  sx={{ width: ['100%', '26rem'] }}
                   id="link"
                   inputProps={{
                     maxLength: 300,
@@ -462,6 +508,7 @@ const CreateTeamEditor = ({
                     field={field}
                     error={!!errors?.tagList}
                     trigger={trigger}
+                    placeholder="프로젝트에 필요한 기술을 입력하세요."
                   />
                 )}
                 control={control}
@@ -515,21 +562,70 @@ const CreateTeamEditor = ({
               />
             </FieldWithLabel>
             {/* 등록, 취소 버튼 */}
-            <Stack direction={'row'} gap={2} justifyContent={'flex-end'}>
-              <CuButton
-                message="취소"
-                action={() => {
-                  router.push('/')
+            <Stack
+              direction={'row'}
+              spacing={'1rem'}
+              justifyContent={['space-between', 'flex-end']}
+            >
+              <Button
+                onClick={() => {
+                  openCancelModal()
                 }}
-                variant="outlined"
-              />
-              <Button variant="contained" type="submit">
-                등록
+                variant="text"
+                sx={{
+                  color: 'primary',
+                  width: ['100%', '8.75rem'],
+                  height: '3rem',
+                }}
+              >
+                취소
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleComplete}
+                sx={{ width: ['100%', '8.75rem'], height: '3rem' }}
+              >
+                {editorType === 'write' ? '등록하기' : '수정하기'}
               </Button>
             </Stack>
           </Stack>
         </form>
       </Container>
+      <CuTextModal
+        open={isCompleteOpen}
+        onClose={closeCompleteModal}
+        title="등록하시겠어요?"
+        content={
+          editorType === 'write'
+            ? '등록하기를 누르면 팀원 모집이 시작돼요.'
+            : '수정하기를 누르면 팀원 모집이 수정돼요.'
+        }
+        textButton={{
+          text: '취소',
+          onClick: closeCompleteModal,
+        }}
+        containedButton={{
+          text: editorType === 'write' ? '등록하기' : '수정하기',
+          type: 'submit',
+          form: 'recruit-form',
+        }}
+      />
+      <CuTextModal
+        open={isCancelOpen}
+        onClose={closeCancelModal}
+        title="다음에 할까요?"
+        content="다양한 멤버들과 함께 새로운 도전을 시작해 보세요."
+        textButton={{
+          text: '취소',
+          onClick: closeCancelModal,
+        }}
+        containedButton={{
+          text: '나가기',
+          onClick: () => {
+            router.replace('/')
+          },
+        }}
+      />
     </>
   )
 }

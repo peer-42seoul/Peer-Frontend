@@ -83,12 +83,12 @@ const BasicSelect = forwardRef<HTMLInputElement, IBasicSelectProps>(
         ref={ref}
         sx={{
           width: ['100%', '26rem'],
-          height: '2rem',
-          backgroundColor: 'background.tertiary',
           borderWidth: '0',
+          backgroundColor: 'background.tertiary',
+          height: '2rem',
         }}
-        style={{ borderColor: 'none' }}
         {...props}
+        placeholder="모집 인원을 입력하세요."
       >
         {options}
       </Select>

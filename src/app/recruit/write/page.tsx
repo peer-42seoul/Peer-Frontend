@@ -48,7 +48,6 @@ const Page = () => {
         interviewList: data.interviewList,
         place: data.place,
         max: data.type === 'PROJECT' ? null : Number(data.max),
-        // content: data.content,
         content: editorRef.current?.getMarkdown(),
         link: data.link,
       })
@@ -61,7 +60,7 @@ const Page = () => {
       })
       .catch((error) => {
         openToast({
-          message: error.response.data.message ?? '모집글 등록에 실패했습니다.',
+          message: error.data.message ?? '모집글 등록에 실패했습니다.',
           severity: 'error',
         })
       })
