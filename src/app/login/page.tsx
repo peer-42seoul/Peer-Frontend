@@ -180,7 +180,7 @@ const Login = () => {
             display: 'flex',
             flexDirection: 'column',
             width: '100%',
-            gap: '16px',
+            gap: '1rem',
             alignItems: 'flex-end',
           }}
         >
