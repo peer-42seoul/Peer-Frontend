@@ -1,4 +1,5 @@
 export const navContainerStyle = {
+  display: 'flex',
   position: 'fixed',
   left: 0,
   right: 0,
@@ -6,7 +7,7 @@ export const navContainerStyle = {
   overflow: 'hidden',
   zIndex: 1300,
   backgroundColor: 'background.primary',
-  flexDirection: 'row',
+  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
   width: '100%',

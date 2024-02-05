@@ -7,6 +7,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Button,
+  Container,
   IconButton,
   Stack,
   Typography,
@@ -54,7 +55,7 @@ const PcNav = () => {
   }, [pathname])
 
   return (
-    <Stack sx={navContainerStyle}>
+    <Container sx={navContainerStyle}>
       <Stack
         direction={'row'}
         maxWidth={1280}
@@ -201,7 +202,7 @@ const PcNav = () => {
           </Link>
         </Stack>
       </Stack>
-    </Stack>
+    </Container>
   )
 }
 
