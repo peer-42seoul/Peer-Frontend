@@ -80,8 +80,8 @@ jobs:
           touch .env.production
           echo "${{ secrets.MAIN_ENV }}" >> .env.production
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin 
-          docker build -f Dockerfile-prod -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}:${{ needs.extract-version.outputs.version }} .
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
+          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}:${{ needs.extract-version.outputs.version }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}:${{ needs.extract-version.outputs.version }}
 
       - name: Deploy
         uses: appleboy/ssh-action@v1.0.0
@@ -91,10 +91,10 @@ jobs:
           username: ${{ secrets.MAIN_USERNAME }}
           password: ${{ secrets.MAIN_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}:${{ needs.extract-version.outputs.version }}
             docker stop ${{ secrets.MAIN_DOCKER_IMAGE }}
             docker rm -f ${{ secrets.MAIN_DOCKER_IMAGE }}
-            docker run --name=${{ secrets.MAIN_DOCKER_IMAGE }} -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
+            docker run --name=${{ secrets.MAIN_DOCKER_IMAGE }} -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}:${{ needs.extract-version.outputs.version }}
             docker container prune -f
             docker image prune -f
 
