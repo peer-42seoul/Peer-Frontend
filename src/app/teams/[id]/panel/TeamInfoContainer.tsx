@@ -56,12 +56,12 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
               sx={style.teamAvatar}
               src={data.teamPicturePath ? data.teamPicturePath : undefined}
             />
-            <Stack>
+            <Stack spacing={'1rem'}>
               <Stack alignItems={'center'} direction={'row'} spacing={'0.5rem'}>
                 <Typography variant="Title3">{data.name}</Typography>
                 <StatusIcon status={data.status} />
               </Stack>
-              <Stack spacing={'0.25rem'}>
+              <Stack>
                 <IconInfo type="DATE" text={data.createdAt} />
                 <IconInfo type="LEADER" text={data.leaderName} />
                 <IconInfo type="MEMBER" text={data.memberCount.toString()} />
