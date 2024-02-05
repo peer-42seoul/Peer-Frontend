@@ -30,6 +30,7 @@ const MainBanner = () => {
         height={'100%'}
         style={{ cursor: 'pointer' }}
         onClick={() => router.push('/about')}
+        onMouseUp={() => {}}
       />
     </Box>
   )
