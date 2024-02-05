@@ -543,9 +543,6 @@ const CreateTeamEditor = ({
               <Button
                 sx={{ width: ['100%', '26rem'] }}
                 variant="outlined"
-                // onClick={() => {
-                //   setOpenBasicModal(true)
-                // }}
                 onClick={() => {
                   openInterviewModal()
                 }}
@@ -580,7 +577,6 @@ const CreateTeamEditor = ({
               </Button>
               <Button
                 variant="contained"
-                // type="submit"
                 onClick={handleComplete}
                 sx={{ width: ['100%', '8.75rem'], height: '3rem' }}
               >
@@ -607,11 +603,9 @@ const CreateTeamEditor = ({
             }}
             containedButton={{
               text: editorType === 'write' ? '등록하기' : '수정하기',
-              // onClick: () => {
-              //   handleSubmit(submitHandler)()
-              // },
-              type: 'submit',
-              form: 'recruit-form',
+              onClick: () => {
+                handleSubmit(submitHandler)()
+              },
               isLoading: isSubmitting,
             }}
           />
