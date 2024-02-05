@@ -130,7 +130,7 @@ const Banner = () => {
     axios
       .get(`${API_URL}/api/v1/admin/banner`, {
         params,
-        // withCredentials: true,
+        withCredentials: true,
         // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
       })
       .then((res) => {
@@ -216,7 +216,9 @@ const Banner = () => {
     }
     // } else return
     await axios
-      .post(`${API_URL}/api/v1/admin/banner`, submitData)
+      .post(`${API_URL}/api/v1/admin/banner`, submitData, {
+        withCredentials: true,
+      })
       .then(() => {
         console.log('submit success')
         setOpen(false)
@@ -224,6 +226,7 @@ const Banner = () => {
         axios
           .get(`${API_URL}/api/v1/admin/banner`, {
             params,
+            withCredentials: true,
             // withCredentials: true,
             // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
@@ -269,7 +272,9 @@ const Banner = () => {
     } else return
 
     await axios
-      .put(`${API_URL}/api/v1/admin/banner`, submitData)
+      .put(`${API_URL}/api/v1/admin/banner`, submitData, {
+        withCredentials: true,
+      })
       .then(() => {
         console.log('Edit submit success', submitData)
         setOpen(false)
@@ -277,7 +282,7 @@ const Banner = () => {
         axios
           .get(`${API_URL}/api/v1/admin/banner`, {
             params,
-            // withCredentials: true,
+            withCredentials: true,
             // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
@@ -300,7 +305,7 @@ const Banner = () => {
     setWriteMode('view')
     setOpen(true)
     await axios
-      .get(`${API_URL}/api/v1/admin/banner/${id}`)
+      .get(`${API_URL}/api/v1/admin/banner/${id}`, { withCredentials: true })
       .then((res) => {
         console.log(res)
         setValue('bannerId', id)
@@ -333,7 +338,11 @@ const Banner = () => {
     console.log('onHandleRunOrEnd, ', getValues('bannerId'))
     const bannerId = getValues('bannerId')
     axios
-      .post(`${API_URL}/api/v1/admin/banner/${mode}`, { bannerId })
+      .post(
+        `${API_URL}/api/v1/admin/banner/${mode}`,
+        { bannerId },
+        { withCredentials: true },
+      )
       .then(() => {
         console.log(`${mode} success`)
         setOpen(false)
@@ -341,7 +350,7 @@ const Banner = () => {
         axios
           .get(`${API_URL}/api/v1/admin/banner`, {
             params,
-            // withCredentials: true,
+            withCredentials: true,
             // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
@@ -358,6 +367,7 @@ const Banner = () => {
     axios
       .delete(`${API_URL}/api/v1/admin/banner`, {
         data: { bannerId: bannerId },
+        withCredentials: true,
       })
       .then(() => {
         console.log('delete success')
@@ -365,7 +375,7 @@ const Banner = () => {
         axios
           .get(`${API_URL}/api/v1/admin/banner`, {
             params,
-            // withCredentials: true,
+            withCredentials: true,
             // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
