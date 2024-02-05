@@ -157,6 +157,8 @@ const ContactPage = () => {
                 />
               </Stack>
               <TextField
+                helperText={errors.text?.message}
+                error={errors.text?.message ? true : false}
                 multiline
                 rows={5}
                 autoComplete="off"
@@ -167,8 +169,8 @@ const ContactPage = () => {
                   required: '필수 입력 내용입니다.',
                   maxLength: 300,
                   minLength: {
-                    value: 10,
-                    message: '10글자 이상 입력해주세요.',
+                    value: 1,
+                    message: '1글자 이상 입력해주세요.',
                   },
                 })}
               />

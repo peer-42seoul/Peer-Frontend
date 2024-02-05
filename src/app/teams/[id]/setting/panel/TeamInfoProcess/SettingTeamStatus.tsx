@@ -44,8 +44,8 @@ const SettingTeamStatus = ({ teamStatus, control }: ISettingTeamStatus) => {
                   ].map((status) => (
                     <MenuItem key={status} value={status}>
                       {status === TeamStatus.RECRUITING && '모집 중'}
-                      {status === TeamStatus.BEFORE && '진행 예정'}
-                      {status === TeamStatus.ONGOING && '진행 중'}
+                      {status === TeamStatus.BEFORE && '모집 완료'}
+                      {status === TeamStatus.ONGOING && '활동 중'}
                     </MenuItem>
                   ))
                 : [TeamStatus.COMPLETE].map((status) => (
