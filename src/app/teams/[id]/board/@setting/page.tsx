@@ -1,7 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import { isAxiosError } from 'axios'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import { Stack, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import BackgroundBox from '@/components/BackgroundBox'
@@ -44,6 +44,7 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { openToast } = useToast()
   const { resetState } = useTeamPageState()
+  const { mutate } = useSWRConfig()
 
   const { data, isLoading, error } = useSWR<ITeamBoard[]>(
     `/api/v1/team-page/simple/${teamId}`,
@@ -72,6 +73,7 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
           severity: 'success',
           message: '게시판을 추가했습니다.',
         })
+        mutate(`/api/v1/team-page/simple/${teamId}`)
       })
       .catch((e: unknown) => {
         if (isAxiosError(e)) {
@@ -151,7 +153,11 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
           >
             <Stack>
               {data.map((board: ITeamBoard) => (
-                <BoardItem key={crypto.randomUUID()} board={board} />
+                <BoardItem
+                  key={crypto.randomUUID()}
+                  board={board}
+                  teamId={teamId}
+                />
               ))}
             </Stack>
           </TitleStack>
