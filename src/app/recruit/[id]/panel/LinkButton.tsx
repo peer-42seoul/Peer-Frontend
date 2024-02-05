@@ -24,10 +24,22 @@ const LinkButton = ({
   href: string
   variant: 'text' | 'outlined' | 'contained'
 }) => {
+  const convertLink = (link: string) => {
+    const httpPattern = /^https?:\/\//i
+    if (!httpPattern.test(link)) {
+      return `http://${link}`
+    }
+    return link
+  }
   //@todo 이동불가능한 url 처리
   return (
     <LinkTooltip placement="bottom-start" title={href}>
-      <Button variant={variant} href={href} sx={style.button} disabled={!href}>
+      <Button
+        variant={variant}
+        href={convertLink(href)}
+        sx={style.button}
+        disabled={!href}
+      >
         <InsertLinkOutlinedIcon />
       </Button>
     </LinkTooltip>
