@@ -76,6 +76,14 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
 
   const watchAllFields = watch()
 
+  const handleEditModal = () => {
+    if (isEdit === false) {
+      closeConfirmModel()
+      return handleOpenToast('변경된 사항이 없습니다.', 'error')
+    }
+    openConfirmModel()
+  }
+
   const onSubmit = handleSubmit((data) => {
     if (
       validation(getValues('name')) ||
@@ -115,7 +123,9 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
 
   useEffect(() => {
     if (watchAllFields) setIsEdit(true)
-  }, [watchAllFields])
+    console.log('watchAllFields', watchAllFields)
+    console.log('isEdit', isEdit)
+  }, [])
 
   // useEffect(() => {
   //   window.history.pushState(null, '', location.href)
@@ -178,11 +188,15 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
           >
             <Tutorial content={<TeamEndingTutorial />} />
             <Button
-              disabled={team.status === TeamStatus.COMPLETE ? true : false}
+              disabled={
+                team.status === TeamStatus.COMPLETE || isEdit === false
+                  ? true
+                  : false
+              }
               sx={styles.SaveButtonStyle}
               variant="contained"
               type="button"
-              onClick={openConfirmModel}
+              onClick={handleEditModal}
             >
               <Typography>저장</Typography>
             </Button>
