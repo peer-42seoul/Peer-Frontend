@@ -86,7 +86,7 @@ const Tag = () => {
           },
           { withCredentials: true },
         )
-        .then((res) => {
+        .then(() => {
           alert('새로운 태그가 등록되었습니다.')
           fetchTags().then((data) => setContent(data))
         })
