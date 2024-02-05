@@ -1,47 +1,24 @@
-import { Chip, Stack, Typography } from '@mui/material'
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
-import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined'
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
+import { Stack, Typography } from '@mui/material'
 import { TTeamStatus } from '@/types/ITeamInfo'
+import { GroupIcon, TimeIcon, AccountBox } from '@/icons'
 
-export const StatusIcon = ({ status }: { status: TTeamStatus }) => {
-  switch (status) {
-    case 'RECRUITING':
-      return (
-        <Chip
-          label={
-            <Typography color={'black'} variant="Body2">
-              모집 중
-            </Typography>
-          }
-          sx={{ backgroundColor: '#FFFBDB' }}
-        />
-      )
-    case 'BEFORE':
-      return <Chip label={'시작 전'} sx={{ backgroundColor: '#B5B5B5' }} />
-    case 'ONGOING':
-      return (
-        <Chip
-          label={
-            <Typography color={'black'} variant="Body2">
-              진행 중
-            </Typography>
-          }
-          sx={{ backgroundColor: '#EADFFF' }}
-        />
-      )
-    case 'COMPLETE':
-      return (
-        <Chip
-          label={
-            <Typography color={'black'} variant="Body2">
-              완료
-            </Typography>
-          }
-          sx={{ backgroundColor: '#F7C5C5' }}
-        />
-      )
-  }
+const teamStatusMessage = {
+  RECRUITING: {
+    message: '모집중',
+    color: 'yellow.strong',
+  },
+  BEFORE: {
+    message: '시작전',
+    color: 'yellow.strong',
+  },
+  ONGOING: {
+    message: '진행중',
+    color: 'yellow.strong',
+  },
+  COMPLETE: {
+    message: '완료',
+    color: 'yellow.strong',
+  },
 }
 
 type TIconType = 'MEMBER' | 'LEADER' | 'DATE'
@@ -51,27 +28,47 @@ interface IIconInfoProps {
   text: string
 }
 
+export const StatusIcon = ({ status }: { status: TTeamStatus }) => {
+  return (
+    <Typography variant="Caption" color={teamStatusMessage[status].color}>
+      {teamStatusMessage[status].message}
+    </Typography>
+  )
+}
+
 export const IconInfo = ({ type, text }: IIconInfoProps) => {
   switch (type) {
     case 'MEMBER':
       return (
-        <Stack direction={'row'}>
-          <GroupsOutlinedIcon color="action" />
-          <Typography>{text}</Typography>
+        <Stack alignItems={'center'} spacing={'0.25rem'} direction={'row'}>
+          <GroupIcon sx={{ width: '1rem', color: 'text.alternative' }} />
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            {text}
+          </Typography>
         </Stack>
       )
     case 'LEADER':
       return (
-        <Stack direction={'row'}>
-          <PermContactCalendarOutlinedIcon color="action" />
-          <Typography>{text}</Typography>
+        <Stack alignItems={'center'} spacing={'0.25rem'} direction={'row'}>
+          <AccountBox
+            spacing={'0.25rem'}
+            sx={{ width: '1rem', color: 'text.alternative' }}
+          />
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            {text}
+          </Typography>
+          <Typography variant={'Tag'} color={'purple.strong'}>
+            리더
+          </Typography>
         </Stack>
       )
     case 'DATE':
       return (
-        <Stack direction={'row'}>
-          <CalendarMonthOutlinedIcon color="action" />
-          <Typography>{text} ~</Typography>
+        <Stack alignItems={'center'} spacing={'0.25rem'} direction={'row'}>
+          <TimeIcon sx={{ width: '1rem', color: 'text.alternative' }} />
+          <Typography variant={'Caption'} color={'text.alternative'}>
+            {text} ~
+          </Typography>
         </Stack>
       )
   }

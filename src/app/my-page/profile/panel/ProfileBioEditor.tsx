@@ -200,7 +200,7 @@ const ProfileBioEditor = ({
           })
           .catch((error) => {
             setIsNicknameUnique(false)
-            if (error.data.message) {
+            if (error?.data?.message) {
               openToast({
                 severity: 'error',
                 message: error.data.message,
@@ -304,11 +304,6 @@ const ProfileBioEditor = ({
       })
   }
 
-  function getStringByteSize(str: string) {
-    const encoder = new TextEncoder()
-    const encoded = encoder.encode(str)
-    return encoded.length
-  }
   const theme = useTheme()
   return (
     <CuModal
@@ -467,10 +462,7 @@ const ProfileBioEditor = ({
                         color={'red.strong'}
                         sx={{ height: '0.75rem' }}
                       >
-                        {/* {errors.introduction
-                              ? errors.introduction.message // NOTE: 테스트용으로 helperText를 사용했습니다. 버그 수정 시 원상복구 요망 
-                              : field.value.length} */}
-                        {getStringByteSize(field.value)}
+                        {errors.introduction && errors.introduction.message}
                       </Typography>
                     }
                   />

@@ -97,8 +97,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
       Math.max(...storedKeywords.map((key) => Number(key.split('_')[1])), 0) + 1
     const newKeywordKey = `searchWord_${newKeywordIndex}`
     localStorage.setItem(newKeywordKey, keyword)
-
-    router.push(`?keyword=${data.searchWord}`)
+    router.push(`/?keyword=${data.searchWord}`)
     onClose()
   }
 

@@ -39,10 +39,6 @@ const SettingTeamName = ({ teamType, errors, register }: ISettingTeamName) => {
               value: 2,
               message: '2글자 이상 입력해주세요.',
             },
-            pattern: {
-              value: /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/,
-              message: '한글, 영문, 숫자만 입력 가능합니다.',
-            },
           })}
           type="text"
           variant="outlined"

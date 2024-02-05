@@ -1,6 +1,5 @@
-import { AlertColor, Box, Button, Card, Stack, Typography } from '@mui/material'
-import { validation, validationNumber } from './utils'
-import { useEffect, useRef, useState } from 'react'
+import { Box, Button, Card, Stack, Typography } from '@mui/material'
+import { useRef } from 'react'
 import useModal from '@/hook/useModal'
 import {
   TeamOperationForm,
@@ -13,7 +12,7 @@ import { useForm } from 'react-hook-form'
 import * as styles from './styles'
 
 import useMedia from '@/hook/useMedia'
-import useToast from '@/hook/useToast'
+import useToast from '@/states/useToast'
 import CuTextModal from '@/components/CuTextModal'
 import TeamQuitButton from './TeamEndProcess/TeamQuitButton'
 import TeamDisperseButton from './TeamEndProcess/TeamDisperseButton'
@@ -48,42 +47,49 @@ const layoutPcBox = {
 
 const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
   const { isPc } = useMedia()
-  const [message, setMessage] = useState<string>('')
-  const [toastSeverity, setToastSeverity] = useState<AlertColor>('info')
-  const { CuToast, isOpen: isOpenToast, openToast, closeToast } = useToast()
   const {
     isOpen: isConfirmOpen,
     openModal: openConfirmModel,
     closeModal: closeConfirmModel,
   } = useModal()
-
-  const [isEdit, setIsEdit] = useState(false)
   const sendRef = useRef<HTMLFormElement>(null)
   const axiosWithAuth = useAxiosWithAuth()
+  const { openToast } = useToast()
 
   const {
     register,
     setValue,
-    getValues,
     handleSubmit,
-    watch,
-    formState: { errors },
+    formState: { errors, isDirty },
     control,
   } = useForm<ISetupTeam>({
     defaultValues: team,
     mode: 'onChange',
   })
 
-  const watchAllFields = watch()
+  const handleEditModal = () => {
+    if (errors.name || errors.dueTo || errors.region || errors.operationForm)
+      return openToast({
+        severity: 'error',
+        message: '팀 정보를 확인해주세요.',
+      })
+
+    if (isDirty === false) {
+      closeConfirmModel()
+      return openToast({
+        severity: 'error',
+        message: '변경된 사항이 없습니다.',
+      })
+    }
+    openConfirmModel()
+  }
 
   const onSubmit = handleSubmit((data) => {
-    if (
-      validation(getValues('name')) ||
-      validationNumber(getValues('maxMember') as string)
-    )
-      return handleOpenToast('입력값을 확인해주세요.', 'error')
-    if (isEdit === false)
-      return handleOpenToast('변경된 사항이 없습니다.', 'error')
+    if (errors)
+      return openToast({
+        severity: 'error',
+        message: '팀 정보를 확인해주세요.',
+      })
 
     axiosWithAuth
       .post(
@@ -93,29 +99,30 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
       .then((res) => {
         if (res.status == 200) {
           console.log('서버에 저장 완료')
-          setIsEdit(false)
           location.reload()
+          openToast({
+            severity: 'success',
+            message: '팀 정보 수정이 완료되었습니다.',
+          })
         } else {
           console.log('서버에 저장 실패')
+          openToast({
+            severity: 'error',
+            message: '팀 정보 수정에 실패하였습니다.',
+          })
         }
       })
       .catch((err) => {
         console.log(err)
+        openToast({
+          severity: 'error',
+          message: '팀 정보 수정에 실패하였습니다.',
+        })
       })
       .finally(() => {
         closeConfirmModel()
       })
   })
-
-  const handleOpenToast = (message: string, severity: AlertColor) => {
-    setMessage(message)
-    setToastSeverity(severity)
-    openToast()
-  }
-
-  useEffect(() => {
-    if (watchAllFields) setIsEdit(true)
-  }, [watchAllFields])
 
   // useEffect(() => {
   //   window.history.pushState(null, '', location.href)
@@ -178,11 +185,15 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
           >
             <Tutorial content={<TeamEndingTutorial />} />
             <Button
-              disabled={team.status === TeamStatus.COMPLETE ? true : false}
+              disabled={
+                team.status === TeamStatus.COMPLETE || isDirty === false
+                  ? true
+                  : false
+              }
               sx={styles.SaveButtonStyle}
               variant="contained"
               type="button"
-              onClick={openConfirmModel}
+              onClick={handleEditModal}
             >
               <Typography>저장</Typography>
             </Button>
@@ -207,10 +218,6 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
           onClick: closeConfirmModel,
         }}
       />
-
-      <CuToast open={isOpenToast} onClose={closeToast} severity={toastSeverity}>
-        {message}
-      </CuToast>
     </>
   )
 }

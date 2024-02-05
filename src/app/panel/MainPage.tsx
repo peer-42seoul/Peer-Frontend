@@ -324,7 +324,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
       {/* pc view */}
       <div className="pc-layout">
-        <Container disableGutters sx={containerStyle}>
+        <Container sx={containerStyle}>
           <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
               {keyword === '' ? (

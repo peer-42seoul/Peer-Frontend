@@ -14,6 +14,9 @@ export const pcWrapper = {
   padding: '1.5rem 2rem',
   borderRadius: '2rem',
   backgroundColor: (theme: Theme) => theme.palette.background.primary,
+  // maxHeight: '70vh',
+  // overflowY: 'auto',
+  // scrollbarWidth: 'none',
 }
 
 export const mobileWrapper = {
@@ -23,6 +26,9 @@ export const mobileWrapper = {
   borderRadius: '2rem',
   padding: '1.25rem 1.25rem 1.5rem 1.25rem',
   backgroundColor: (theme: Theme) => theme.palette.background.primary,
+  // maxHeight: '70vh',
+  // overflowY: 'auto',
+  // scrollbarWidth: 'none',
 }
 
 export const mobileFullSizeWrapper = {
@@ -37,7 +43,8 @@ export const mobileFullSizeWrapper = {
 export const modalContent = {
   flexGrow: 1,
   maxHeight: '70vh',
-  overflowY: 'auto',
+  boxSizing: 'border-box',
+  overflowY: 'scroll',
   scrollbarWidth: 'none',
 }
 

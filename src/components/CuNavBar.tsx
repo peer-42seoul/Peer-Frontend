@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import { ChevronLeft } from '@/icons'
+import { BetaIcon } from '@/components/BetaBadge'
 import * as style from './CuNavBar.style'
 
 interface ITabInfo {
@@ -21,6 +22,7 @@ interface ITabInfo {
   icon: ReactElement
   disabled?: boolean
   new?: boolean
+  isBeta?: boolean
 }
 
 interface ICuNavBarProps {
@@ -113,7 +115,7 @@ const PcToggleButton = ({
       onClick={tab.onClick}
       sx={{
         ...style.pcTab,
-        ...(isNewTab ? style.newTab : undefined),
+        ...(isNewTab || tab.isBeta ? style.newTab : undefined),
       }}
       disabled={tab.disabled}
       selected={selected}
@@ -130,6 +132,7 @@ const PcToggleButton = ({
             NEW
           </Typography>
         )}
+        {tab.isBeta && <BetaIcon sx={{ paddingLeft: '0.5rem' }} />}
       </Stack>
     </ToggleButton>
   )
@@ -153,7 +156,11 @@ const MobileToggleButton = ({
       selected={selected}
     >
       <Stack direction={'column'} spacing={'0.12rem'} alignItems={'center'}>
-        <Badge sx={style.newBadge} variant={'dot'} invisible={!isNewTab}>
+        <Badge
+          sx={isNewTab ? style.newBadge : style.betaBadge}
+          variant={'dot'}
+          invisible={!isNewTab && !tab.isBeta}
+        >
           <Box sx={style.iconBoxBase}>{tab.icon}</Box>
         </Badge>
         <Typography variant={'Tag'}>{tab.mobileLabel ?? tab.label}</Typography>

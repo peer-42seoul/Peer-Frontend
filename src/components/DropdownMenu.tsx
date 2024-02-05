@@ -6,7 +6,13 @@ import useMedia from '@/hook/useMedia'
 import * as style from './DropdownMenu.style'
 import * as dropdownMenuStyle from './dropdownMenu/dropdownMenu.styles'
 
-const DropdownMenu = ({ children }: { children: React.ReactNode }) => {
+const DropdownMenu = ({
+  children,
+  rotateOn,
+}: {
+  children: React.ReactNode
+  rotateOn?: boolean
+}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -34,7 +40,8 @@ const DropdownMenu = ({ children }: { children: React.ReactNode }) => {
         <MoreHorizontalIcon
           sx={{
             ...style.dropdownMenuIconStyleBase,
-            transform: isPc || anchorEl ? 'rotate(0deg)' : 'rotate(90deg)',
+            transform:
+              isPc || anchorEl || !rotateOn ? 'rotate(0deg)' : 'rotate(90deg)',
             color: 'text.alternative',
           }}
         />

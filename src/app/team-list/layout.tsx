@@ -6,7 +6,7 @@ import { ReactNode, useEffect } from 'react'
 import Sidebar from './panel/Sidebar'
 
 const TeamsLayout = ({ children }: { children: ReactNode }) => {
-  const { isPc, isTablet } = useMedia()
+  const { isPc } = useMedia()
 
   useEffect(() => {
     let vh = window.innerHeight * 0.01
@@ -18,7 +18,8 @@ const TeamsLayout = ({ children }: { children: ReactNode }) => {
       display="flex"
       padding={'0.5rem'}
       spacing={'1rem'}
-      px={isPc && !isTablet ? '10.5rem' : '1.5rem'}
+      // px={isPc && !isTablet ? '10.5rem' : '1.5rem'}
+      px={['1.5rem', '2.5rem', '10.5rem']}
       height={'81.5vh'}
     >
       <Stack

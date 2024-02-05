@@ -132,10 +132,12 @@ const Hitchhiking = () => {
   return (
     <CardContainer
       cardList={cardList}
+      addCard={addCard}
       removeCard={removeCard}
       isProject={isProject}
       message={message}
       handleChange={handleChange}
+      addDisabled={draggedCardList.length === 0}
     />
   )
 }

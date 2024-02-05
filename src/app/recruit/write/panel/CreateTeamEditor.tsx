@@ -20,7 +20,7 @@ import * as style from '../page.style'
 import * as Icon from '@/icons'
 import TextFieldWithLabel from '@/components/TextFieldWithLabel'
 import FieldWithLabel from '@/components/FieldWithLabel'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useFormState } from 'react-hook-form'
 import { FormControlLabel } from '@mui/material'
 import SkillAutocomplete from '@/components/SkillAutocomplete'
 import { ISkill } from '@/types/IUserProfile'
@@ -30,7 +30,7 @@ import Tutorial from '@/components/Tutorial'
 import RecruitEditPageTutorial from '@/components/tutorialContent/RecruitEditPageTutorial'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
-// import useToast from '@/states/useToast'
+import useToast from '@/states/useToast'
 import InterviewForm from './fields/Interview/InterviewForm'
 
 const CreateTeamEditor = ({
@@ -48,7 +48,7 @@ const CreateTeamEditor = ({
 }) => {
   const router = useRouter()
 
-  // const { openToast, closeToast } = useToast()
+  const { openToast, closeToast } = useToast()
 
   const { isLogin } = useAuthStore()
 
@@ -56,11 +56,11 @@ const CreateTeamEditor = ({
     if (!isLogin) router.push('/login')
   }, [isLogin])
 
-  // const {
-  //   // openModal: openCompleteModal,
-  //   // closeModal: closeCompleteModal,
-  //   // isOpen: isCompleteOpen,
-  // } = useModal()
+  const {
+    openModal: openCompleteModal,
+    closeModal: closeCompleteModal,
+    isOpen: isCompleteOpen,
+  } = useModal()
   const {
     openModal: openCancelModal,
     closeModal: closeCancelModal,
@@ -76,40 +76,38 @@ const CreateTeamEditor = ({
   const {
     control,
     handleSubmit,
-    formState: {
-      errors,
-      isSubmitting,
-      // isValid
-    },
+    formState: { errors, isSubmitting, isValid },
     setValue,
     watch,
     trigger,
-    // setError,
+    setError,
     clearErrors,
   } = useForm<IRecruitWriteField>({
     defaultValues: defaultValues,
     mode: 'onChange',
   })
 
-  // const handleComplete = () => {
-  //   closeToast()
-  //   if (!image) {
-  //     setError('image', {
-  //       type: 'required',
-  //       message: '필수 입력 항목입니다.',
-  //     })
-  //   }
-  //   trigger().then(() => {
-  //     if (!isValid) {
-  //       openToast({
-  //         severity: 'error',
-  //         message: '문제가 있는 입력란이 있어요. 확인해주세요!',
-  //       })
-  //       return
-  //     }
-  //     openCompleteModal()
-  //   })
-  // }
+  const { dirtyFields } = useFormState({ control })
+
+  const handleComplete = () => {
+    closeToast()
+    if (!image) {
+      setError('image', {
+        type: 'required',
+        message: '필수 입력 항목입니다.',
+      })
+    }
+    trigger().then(() => {
+      if (!isValid) {
+        openToast({
+          severity: 'error',
+          message: '문제가 있는 입력란이 있어요. 확인해주세요!',
+        })
+        return
+      }
+      openCompleteModal()
+    })
+  }
 
   const region = watch('region')
   const place = watch('place')
@@ -120,7 +118,6 @@ const CreateTeamEditor = ({
   return (
     <>
       <Container sx={style.containerStyle}>
-        {/* {isPc && ( */}
         <Box
           sx={{
             paddingBottom: ['0.75rem', '1.5rem'],
@@ -136,7 +133,6 @@ const CreateTeamEditor = ({
             content={<RecruitEditPageTutorial />}
           />
         </Box>
-        {/* )} */}
         <form onSubmit={handleSubmit(submitHandler)} id="recruit-form">
           <Stack spacing={'1.5rem'} sx={style.boxStyle}>
             {/* 대표이미지 */}
@@ -546,32 +542,38 @@ const CreateTeamEditor = ({
                 />
               }
             >
+              {dirtyFields.interviewList && (
+                <Typography
+                  variant="Caption"
+                  color={'primary'}
+                  height={'2rem'}
+                  width={'fit-content'}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  인터뷰 작성 완료
+                </Typography>
+              )}
               <Button
                 sx={{ width: ['100%', '26rem'] }}
                 variant="outlined"
-                // onClick={() => {
-                //   setOpenBasicModal(true)
-                // }}
                 onClick={() => {
                   openInterviewModal()
                 }}
                 disabled={isAnswered}
                 startIcon={
-                  <Icon.PlusIcon
-                    sx={{ ...style.iconStyleBase, color: 'primary' }}
-                  />
+                  !dirtyFields.interviewList && (
+                    <Icon.PlusIcon
+                      sx={{ ...style.iconStyleBase, color: 'primary' }}
+                    />
+                  )
                 }
               >
-                인터뷰 추가
+                인터뷰 {dirtyFields.interviewList ? '수정하기 ' : '추가'}
               </Button>
-              {/* <SetInterview
-                openBasicModal={openBasicModal}
-                handleCloseBasicModal={setOpenBasicModal}
-                interviewData={interviewList}
-                setInterviewData={(value: Array<IFormInterview>) => {
-                  setValue('interviewList', value)
-                }}
-              /> */}
             </FieldWithLabel>
             {/* 등록, 취소 버튼 */}
             <Stack
@@ -594,8 +596,7 @@ const CreateTeamEditor = ({
               </Button>
               <Button
                 variant="contained"
-                type="submit"
-                // onClick={handleComplete}
+                onClick={handleComplete}
                 sx={{ width: ['100%', '8.75rem'], height: '3rem' }}
               >
                 {isSubmitting
@@ -606,31 +607,29 @@ const CreateTeamEditor = ({
               </Button>
             </Stack>
           </Stack>
+          <CuTextModal
+            open={isCompleteOpen}
+            onClose={closeCompleteModal}
+            title="등록하시겠어요?"
+            content={
+              editorType === 'write'
+                ? '등록하기를 누르면 팀원 모집이 시작돼요.'
+                : '수정하기를 누르면 팀원 모집이 수정돼요.'
+            }
+            textButton={{
+              text: '취소',
+              onClick: closeCompleteModal,
+            }}
+            containedButton={{
+              text: editorType === 'write' ? '등록하기' : '수정하기',
+              onClick: () => {
+                handleSubmit(submitHandler)()
+              },
+              isLoading: isSubmitting,
+            }}
+          />
         </form>
       </Container>
-      {/* <CuTextModal
-        open={isCompleteOpen}
-        onClose={closeCompleteModal}
-        title="등록하시겠어요?"
-        content={
-          editorType === 'write'
-            ? '등록하기를 누르면 팀원 모집이 시작돼요.'
-            : '수정하기를 누르면 팀원 모집이 수정돼요.'
-        }
-        textButton={{
-          text: '취소',
-          onClick: closeCompleteModal,
-        }}
-        containedButton={{
-          text: editorType === 'write' ? '등록하기' : '수정하기',
-          onClick: () => {
-            handleSubmit(submitHandler)()
-          },
-          // type: 'submit',
-          // form: 'recruit-form',
-          // isLoading: isSubmitting,
-        }}
-      /> */}
       <CuTextModal
         open={isCancelOpen}
         onClose={closeCancelModal}
@@ -652,6 +651,7 @@ const CreateTeamEditor = ({
         closeModal={closeInterviewModal}
         isOpen={isInterviewOpen}
         trigger={trigger}
+        setFormValue={setValue}
       />
     </>
   )

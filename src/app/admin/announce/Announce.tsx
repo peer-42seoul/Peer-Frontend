@@ -136,6 +136,7 @@ const Announce = () => {
   // 초기 페이지 진입시 공지사항 목록 불러오기
   useEffect(() => {
     let isMounted = true // 마운트 상태를 추적하는 변수 추가
+    axios.defaults.withCredentials = true;
     axios
       .get(`${API_URL}/api/v1/admin/announcement`, {
         params,

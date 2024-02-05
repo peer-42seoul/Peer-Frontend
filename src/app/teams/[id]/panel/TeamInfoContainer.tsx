@@ -1,14 +1,14 @@
 import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
-import { Avatar, Stack, Typography } from '@mui/material'
+import { useEffect } from 'react'
+import { Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import CuAvatar from '@/components/CuAvatar'
+import useHeaderStore from '@/states/useHeaderStore'
 import { ITeamInfo } from '@/types/ITeamInfo'
 import { StatusIcon, IconInfo } from './TeamInfoComponent'
-import { useEffect } from 'react'
-import useHeaderStore from '@/states/useHeaderStore'
-
-const defaultLogoPath = '/images/profile.jpeg' // TODO : 기본 로고 path 확인하기
+import * as style from './TeamInfoContainer.style'
 
 const TeamInfoContainer = ({ id }: { id: number }) => {
   const axiosInstance = useAxiosWithAuth()
@@ -45,28 +45,26 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
 
   return (
     <>
-      <Stack direction={'row'} spacing={1}>
+      <Stack direction={'row'} spacing={'1rem'}>
         {isLoading || !data ? (
           <CuCircularProgress color={'primary'} />
         ) : (
           <>
-            <Avatar
+            <CuAvatar
               alt="team logo"
               variant="rounded"
-              sx={{ width: 89, height: 92, border: 1, borderRadius: 1.2 }}
-              src={
-                data.teamPicturePath ? data.teamPicturePath : defaultLogoPath
-              }
+              sx={style.teamAvatar}
+              src={data.teamPicturePath ? data.teamPicturePath : undefined}
             />
-            <Stack>
-              <Stack direction={'row'} spacing={'0.5rem'}>
-                <Typography variant="h5">{data.name}</Typography>
+            <Stack spacing={'1rem'}>
+              <Stack alignItems={'center'} direction={'row'} spacing={'0.5rem'}>
+                <Typography variant="Title3">{data.name}</Typography>
                 <StatusIcon status={data.status} />
               </Stack>
-              <Stack direction={'row'} spacing={'0.5rem'}>
-                <IconInfo type="MEMBER" text={data.memberCount.toString()} />
-                <IconInfo type="LEADER" text={data.leaderName} />
+              <Stack>
                 <IconInfo type="DATE" text={data.createdAt} />
+                <IconInfo type="LEADER" text={data.leaderName} />
+                <IconInfo type="MEMBER" text={data.memberCount.toString()} />
               </Stack>
             </Stack>
           </>
