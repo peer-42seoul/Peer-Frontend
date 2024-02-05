@@ -1,23 +1,28 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Typography, Box, Stack } from '@mui/material'
+import { Typography, Stack } from '@mui/material'
 import TeamInfoContainer from './panel/TeamInfoContainer'
 // import TeamDnD from './panel/TeamDnD'
 import Image from 'next/image'
+import CuButton from '@/components/CuButton'
 
 const TeamsPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
   const { id } = params
 
   return (
-    <Box width={'100%'}>
-      <Typography
-        onClick={() => router.push('/team-list')}
-        sx={{ color: '#9B9B9B', cursor: 'pointer' }}
-      >
-        팀리스트로 돌아가기
-      </Typography>
+    <Stack spacing={'1.5rem'} width={'100%'}>
+      <CuButton
+        action={() => router.push('/team-list')}
+        message={'팀리스트로 돌아가기'}
+        TypographyProps={{
+          color: 'text.normal',
+          variant: 'Title3',
+        }}
+        variant="text"
+        style={{ width: 'fit-content' }}
+      />
       <TeamInfoContainer id={Number(id)} />
       {/*준비중 메세지*/}
       <Stack
@@ -36,7 +41,7 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
         <Typography variant="Body2">(다른 기능은 이용 가능합니다)</Typography>
       </Stack>
       {/*<TeamDnD id={id} />*/}
-    </Box>
+    </Stack>
   )
 }
 
