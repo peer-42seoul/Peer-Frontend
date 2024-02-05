@@ -36,7 +36,7 @@ const LoginForm = () => {
           id: id,
           password: pw,
         },
-        // { withCredentials: true },
+        { withCredentials: true },
       )
       .then(() => {
         login()
