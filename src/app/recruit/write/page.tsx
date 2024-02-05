@@ -39,7 +39,6 @@ const Page = () => {
 
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
-    console.log(data)
     await axiosWithAuth
       .post('/api/v1/recruit/write', {
         image: data.image?.split(',')[1],

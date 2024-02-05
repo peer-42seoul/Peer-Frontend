@@ -84,8 +84,6 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
-    console.log(data)
-    console.log(editorRef.current?.getMarkdown())
 
     await axiosWithAuth
       .put(`/api/v1/recruit/${params.id}`, {
