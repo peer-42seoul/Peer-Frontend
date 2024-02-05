@@ -20,7 +20,7 @@ const InterviewForm = ({
     'OPEN',
   )
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'interviewList',
   })
@@ -63,7 +63,7 @@ const InterviewForm = ({
     <CuModal
       open={isOpen}
       onClose={closeModal}
-      title="면접 질문"
+      title="인터뷰 작성"
       textButton={{
         text: '취소',
         onClick: closeModal,
@@ -73,7 +73,7 @@ const InterviewForm = ({
         onClick: handleComplete,
       }}
     >
-      <Stack spacing={'1.5rem'} sx={{ pt: '6rem', pb: '3rem' }}>
+      <Stack spacing={'1.5rem'}>
         {fields.map((field, index) => {
           return (
             <Stack
@@ -86,7 +86,7 @@ const InterviewForm = ({
                 borderRadius: ['0.25rem', '0.75rem'],
               }}
             >
-              <Question control={control} index={index} />
+              <Question control={control} index={index} remove={remove} />
             </Stack>
           )
         })}
