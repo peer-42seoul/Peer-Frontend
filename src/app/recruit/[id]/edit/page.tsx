@@ -8,8 +8,26 @@ import useSWR from 'swr'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import useToast from '@/states/useToast'
 import { useRouter, useSearchParams } from 'next/navigation'
+import {
+  fieldToForm,
+  formToField,
+} from '../../write/panel/fields/Interview/handleInterviewList'
+import { IFormInterview, IRoleWrite } from '@/types/IPostDetail'
+import { ISkill } from '@/types/IUserProfile'
 
-interface IRecruitEditApiType extends IRecruitWriteField {
+interface IRecruitEditApiType {
+  place: string
+  image: string | null
+  title: string
+  name: string
+  due: string
+  type: string
+  region: Array<string> | null
+  link: string
+  tagList: Array<ISkill>
+  roleList: Array<IRoleWrite>
+  interviewList: Array<IFormInterview>
+  max: string | undefined
   isAnswered: boolean
 }
 
@@ -60,9 +78,8 @@ const Page = ({ params }: { params: { id: string } }) => {
       initData.type === 'PROJECT'
         ? initData.roleList
         : [{ name: '', number: 0 }],
-    interviewList: initData.interviewList,
+    interviewList: formToField(initData.interviewList),
     max: initData.max ? initData.max.toString() : '2',
-    content: initData.content,
   }
 
   const handleSubmit = async (data: IRecruitWriteField) => {
@@ -83,7 +100,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           return tag.tagId
         }),
         roleList: data.type === 'PROJECT' ? data.roleList : null,
-        interviewList: data.interviewList,
+        interviewList: fieldToForm(data.interviewList),
         place: data.place,
         max: data.type === 'PROJECT' ? null : Number(data.max),
         type: data.type,

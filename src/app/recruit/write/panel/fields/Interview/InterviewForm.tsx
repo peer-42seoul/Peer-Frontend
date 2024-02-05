@@ -2,17 +2,19 @@ import CuModal from '@/components/CuModal'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
 import { Button, MenuItem, Select, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { Control, useFieldArray } from 'react-hook-form'
+import { Control, UseFormTrigger, useFieldArray } from 'react-hook-form'
 import Question from './Question'
 
 const InterviewForm = ({
   control,
   closeModal,
   isOpen,
+  trigger,
 }: {
   control: Control<IRecruitWriteField>
   closeModal: () => void
   isOpen: boolean
+  trigger: UseFormTrigger<IRecruitWriteField>
 }) => {
   const [value, setValue] = useState<'OPEN' | 'CLOSE' | 'CHECK' | 'RATIO'>(
     'OPEN',
@@ -22,6 +24,11 @@ const InterviewForm = ({
     control,
     name: 'interviewList',
   })
+
+  const handleComplete = () => {
+    trigger('interviewList')
+    closeModal()
+  }
 
   const handleAddQuestion = () => {
     if (fields.length >= 10) {
@@ -63,7 +70,7 @@ const InterviewForm = ({
       }}
       containedButton={{
         text: '작성',
-        onClick: closeModal,
+        onClick: handleComplete,
       }}
     >
       <Stack spacing={'1.5rem'} sx={{ pt: '6rem', pb: '3rem' }}>

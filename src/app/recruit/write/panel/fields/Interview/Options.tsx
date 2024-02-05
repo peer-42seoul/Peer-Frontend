@@ -74,7 +74,6 @@ const Options = ({
               <ControlledTextfield
                 name={`interviewList.${firstIndex}.optionList.${index}.option`}
                 control={control}
-                rules={{ required: '필수 입력 항목입니다.' }}
                 placeholder="선택지를 입력해주세요."
                 variant="standard"
                 sx={Body2Style}
@@ -95,7 +94,6 @@ const Options = ({
           variant="text"
           sx={{ color: 'primary', width: 'fit-content', p: '0px 4px' }}
           onClick={() => append({ option: '' })}
-          disabled={fields.length >= 10}
         >
           <Typography variant="CaptionEmphasis" color={'primary'}>
             옵션 추가하기
@@ -120,7 +118,6 @@ const Options = ({
               <ControlledTextfield
                 name={`interviewList.${firstIndex}.optionList.${index}.option`}
                 control={control}
-                rules={{ required: '필수 입력 항목입니다.' }}
                 placeholder="선택지를 입력해주세요."
                 variant="standard"
                 sx={Body2Style}
@@ -141,7 +138,6 @@ const Options = ({
           variant="text"
           sx={{ color: 'primary', width: 'fit-content', p: '0px 4px' }}
           onClick={() => append({ option: '' })}
-          disabled={fields.length >= 10}
         >
           <Typography variant="CaptionEmphasis" color={'primary'}>
             옵션 추가하기
@@ -182,7 +178,6 @@ const Options = ({
                   }}
                   name={`interviewList.${firstIndex}.optionList.${index}.option`}
                   control={control}
-                  rules={{ required: '필수 입력 항목입니다.' }}
                   placeholder="선택지를 입력해주세요."
                   variant="outlined"
                 >
@@ -207,7 +202,6 @@ const Options = ({
               <ControlledTextfield
                 name={`interviewList.${firstIndex}.optionList.${index}.option`}
                 control={control}
-                rules={{ required: '필수 입력 항목입니다.' }}
                 placeholder="선택지를 입력해주세요."
                 variant="standard"
                 sx={Body2Style}
@@ -224,7 +218,6 @@ const Options = ({
         key={field.id}
         name={`interviewList.${firstIndex}.optionList.${index}.option`}
         control={control}
-        rules={{ required: '필수 입력 항목입니다.' }}
         placeholder="선택지를 입력해주세요."
         variant="standard"
         sx={Body2Style}

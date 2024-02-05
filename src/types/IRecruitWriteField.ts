@@ -21,5 +21,5 @@ export interface IRecruitWriteField {
   interviewList: Array<IFormInterviewField>
   // interviewList: Array<IFormInterview>
   max: string | undefined
-  content: string
+  // content: string
 }
