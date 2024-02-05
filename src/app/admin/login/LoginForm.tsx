@@ -5,6 +5,7 @@ import { Button, TextField, Typography, Container, Stack } from '@mui/material'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import useAdminStore from '@/states/useAdminStore'
+import { config } from '../panel/AdminAxios'
 // import { setCookie } from 'cookies-next'
 
 const sheetSytle = {
@@ -36,7 +37,7 @@ const LoginForm = () => {
           id: id,
           password: pw,
         },
-        { withCredentials: true },
+        config,
       )
       .then(() => {
         login()
