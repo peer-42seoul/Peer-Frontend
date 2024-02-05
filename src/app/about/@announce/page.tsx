@@ -1,6 +1,9 @@
 'use client'
 
 import { defaultGetFetcher } from '@/api/fetchers'
+import CuCircularProgress from '@/components/CuCircularProgress'
+import NoDataDolphin from '@/components/NoDataDolphin'
+import useMedia from '@/hook/useMedia'
 import { IPagination } from '@/types/IPagination'
 import {
   Card,
@@ -23,13 +26,29 @@ interface AnnounceCardProps {
   date: string
 }
 
+function formatDate(dateStr: string | null) {
+  if (!dateStr) return '없음'
+  const dateObj = new Date(dateStr)
+  const year = dateObj.getFullYear()
+  const month = dateObj.getMonth() + 1 // getMonth()는 0부터 시작하므로 1을 더해줍니다.
+  const date = dateObj.getDate()
+  const hours = dateObj.getHours()
+  const minutes = dateObj.getMinutes()
+
+  const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${
+    date < 10 ? '0' + date : date
+  } ${hours}시 ${minutes}분`
+
+  return formattedDate
+}
+
 const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
   const router = useRouter()
   return (
     <CardActions
       sx={{
         boxShadow: 'none',
-        backgroundColor: 'background.secondary',
+        backgroundColor: 'background.tertiary',
         padding: '0.5rem',
       }}
     >
@@ -44,7 +63,7 @@ const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
         <Typography>{title}</Typography>
         <Stack spacing={'0.5rem'} direction={'row'}>
           <Typography variant="caption">{writer}</Typography>
-          <Typography variant="caption">{date}</Typography>
+          <Typography variant="caption">{formatDate(date)}</Typography>
         </Stack>
       </CardActionArea>
     </CardActions>
@@ -52,6 +71,7 @@ const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
 }
 
 const AnnouncePage = () => {
+  const { isPc } = useMedia()
   const [page, setPage] = useState<number>(1)
   const { data, isLoading, error } = useSWR<IPagination<AnnounceCardProps[]>>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/about/announcement?page=${page}&size=5`,
@@ -62,9 +82,9 @@ const AnnouncePage = () => {
     setPage(value)
   }
 
-  if (isLoading) return <div>로딩중</div>
+  if (isLoading) return <CuCircularProgress color="primary" />
 
-  if (error) return <div>에러 발생</div>
+  if (error) return <NoDataDolphin message="문제가 있나봐요 ㅠㅠ" />
 
   return (
     <Card sx={{ padding: '2rem', backgroundColor: 'background.secondary' }}>
@@ -87,12 +107,14 @@ const AnnouncePage = () => {
               ))}
           </Stack>
         </Stack>
-        <Pagination
-          color="primary"
-          count={data?.totalPages}
-          page={page}
-          onChange={handlePageChange}
-        />
+        <Stack alignItems={!isPc ? 'center' : ''}>
+          <Pagination
+            color="primary"
+            count={data?.totalPages}
+            page={page}
+            onChange={handlePageChange}
+          />
+        </Stack>
       </Stack>
     </Card>
   )
