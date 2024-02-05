@@ -199,7 +199,8 @@ const ProfileLinkEditor = ({
                         inputProps={{ maxLength: 20 }}
                         helperText={
                           <Typography variant="Caption" color="red.strong">
-                            {errors[i]?.linkName?.message}
+                            {errors[i]?.linkName?.message &&
+                              errors[i]?.linkName?.message}
                           </Typography>
                         }
                         placeholder="링크 제목을 입력해주세요."
@@ -237,7 +238,8 @@ const ProfileLinkEditor = ({
                         fullWidth
                         helperText={
                           <Typography variant="Caption" color="red.strong">
-                            {errors[i]?.linkUrl?.message}
+                            {errors[i]?.linkName?.message &&
+                              errors[i]?.linkUrl?.message}
                           </Typography>
                         }
                         inputProps={{ maxLength: 300 }}
