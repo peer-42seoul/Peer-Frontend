@@ -3,8 +3,10 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 const MainCarousel = () => {
+  const router = useRouter()
   const settings = {
     dots: true,
     infinite: true,
@@ -21,12 +23,22 @@ const MainCarousel = () => {
     height: '100%',
   }
 
-  const imageProps = {
+  // const imageProps = {
+  //   width: 310,
+  //   height: 130,
+  //   style: {
+  //     borderRadius: '0.75rem',
+  //     height: '7.5rem',
+  //   },
+  // }
+
+  const cursorImageProps = {
     width: 310,
     height: 130,
     style: {
       borderRadius: '0.75rem',
       height: '7.5rem',
+      cursor: 'pointer',
     },
   }
 
@@ -34,23 +46,10 @@ const MainCarousel = () => {
     <Slider {...settings}>
       <Box sx={BoxStyle}>
         <Image
-          src={'/images/banners/default-banner-1.png'}
+          src={'/images/banners/about-mobile.svg'}
           alt="banner-1"
-          {...imageProps}
-        />
-      </Box>
-      <Box sx={BoxStyle}>
-        <Image
-          src={'/images/banners/default-banner-2.png'}
-          alt="banner-1"
-          {...imageProps}
-        />
-      </Box>
-      <Box sx={BoxStyle}>
-        <Image
-          src={'/images/banners/default-banner-3.png'}
-          alt="banner-1"
-          {...imageProps}
+          onClick={() => router.push('/about')}
+          {...cursorImageProps}
         />
       </Box>
     </Slider>
