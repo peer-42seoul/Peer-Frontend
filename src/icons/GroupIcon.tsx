@@ -2,7 +2,7 @@
 import React from 'react'
 import { createSvgIcon } from '@mui/material'
 
-const GroupIcon = createSvgIcon(
+export const GroupIcon = createSvgIcon(
   <svg
     width="14"
     height="11"

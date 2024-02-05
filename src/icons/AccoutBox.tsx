@@ -2,7 +2,7 @@
 import React from 'react'
 import { createSvgIcon } from '@mui/material'
 
-const AccoutBox = createSvgIcon(
+export const AccoutBox = createSvgIcon(
   <svg
     width="12"
     height="13"

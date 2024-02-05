@@ -2,7 +2,7 @@
 import React from 'react'
 import { createSvgIcon } from '@mui/material'
 
-const TimeIcon = createSvgIcon(
+export const TimeIcon = createSvgIcon(
   <svg
     width="14"
     height="15"
