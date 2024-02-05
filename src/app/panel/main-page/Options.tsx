@@ -115,7 +115,12 @@ const Options = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={2} padding={'1rem'}>
+      <Grid
+        container
+        spacing={2}
+        padding={'1rem'}
+        paddingBottom={isPc ? '1rem' : '8rem'}
+      >
         <Grid item xs={12}>
           <TagAutoComplete
             title={'기술스택'}
