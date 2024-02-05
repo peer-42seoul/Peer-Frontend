@@ -94,7 +94,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
             docker stop ${{ secrets.MAIN_DOCKER_IMAGE }}
             docker rm -f ${{ secrets.MAIN_DOCKER_IMAGE }}
-            docker run --name=${{ secrets.MAIN_DOCKER_IMAGE }} -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}
+            docker run --name=${{ secrets.MAIN_DOCKER_IMAGE }} -d -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.MAIN_DOCKER_IMAGE }}:${{ needs.extract-version.outputs.version }}
             docker container prune -f
             docker image prune -f
 
