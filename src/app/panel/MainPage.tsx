@@ -155,7 +155,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       : defaultGetFetcher,
   )
 
-  const [content, setContent] = useState<IPost[]>(initData?.content ?? [])
+  const [content, setContent] = useState<IPost[]>(
+    initData?.content.map((v) => ({
+      ...v,
+      favorite: getFavoriteData(v.recruit_id),
+    })) ?? [],
+  )
 
   useEffect(() => {
     if (isLogin) {
@@ -233,14 +238,11 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     setPage(1)
   }, [])
 
-  const noContent =
-    isLoading && page == 1
-      ? '로딩중...'
-      : error
-        ? '에러 발생'
-        : content?.length == 0
-          ? '데이터가 없습니다'
-          : null
+  const noContent = error
+    ? '에러 발생'
+    : content?.length == 0
+      ? '데이터가 없습니다'
+      : null
 
   return (
     <>
@@ -285,14 +287,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               justifyContent={'center'}
               alignItems={'center'}
             >
-              {isLoading ? (
-                <Typography variant={'Body1'}>{noContent}</Typography>
-              ) : (
-                <NoDataDolphin
-                  message={noContent}
-                  backgroundColor={'background.primary'}
-                />
-              )}
+              <NoDataDolphin
+                message={noContent}
+                backgroundColor={'background.primary'}
+              />
             </Stack>
           ) : (
             <>
@@ -370,14 +368,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   justifyContent={'center'}
                   alignItems={'center'}
                 >
-                  {isLoading ? (
-                    <Typography variant={'Body1'}>{noContent}</Typography>
-                  ) : (
-                    <NoDataDolphin
-                      message={noContent}
-                      backgroundColor={'background.primary'}
-                    />
-                  )}
+                  <NoDataDolphin
+                    message={noContent}
+                    backgroundColor={'background.primary'}
+                  />
                 </Stack>
               ) : (
                 <>

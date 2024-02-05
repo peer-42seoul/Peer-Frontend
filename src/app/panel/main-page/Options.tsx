@@ -18,8 +18,11 @@ import { ITag } from '@/types/IPostDetail'
 import SettingSelect from '@/app/teams/[id]/setting/panel/SettingSelect'
 import useMedia from '@/hook/useMedia'
 
-const Options = ({ setDetailOption, setOpenOption }: {
-  setDetailOption: any,
+const Options = ({
+  setDetailOption,
+  setOpenOption,
+}: {
+  setDetailOption: any
   setOpenOption?: (value: boolean) => void
 }) => {
   const { isPc } = useMedia()
@@ -80,6 +83,10 @@ const Options = ({ setDetailOption, setOpenOption }: {
       status,
       tag,
     })
+    console.log('submit', data)
+    if (!isPc && setOpenOption) {
+      setOpenOption(false)
+    }
   }
 
   const handleReset = () => {
@@ -108,12 +115,7 @@ const Options = ({ setDetailOption, setOpenOption }: {
   }
 
   return (
-    <form onSubmit={() => {
-      handleSubmit(onSubmit)
-      if (!isPc && setOpenOption) {
-        setOpenOption(false)
-      }
-    }}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2} padding={'1rem'}>
         <Grid item xs={12}>
           <TagAutoComplete

@@ -148,9 +148,7 @@ const RecruitFormModal = ({
               backgroundColor: 'background.primary',
             }}
           >
-            <Typography color={'text.strong'} fontWeight={600}>
-              인터뷰 작성
-            </Typography>
+            <Typography variant={'Body1Emphasis'}>인터뷰 작성</Typography>
             <Stack gap={'1rem'}>
               {data?.map((quest, idx) => (
                 <Box
