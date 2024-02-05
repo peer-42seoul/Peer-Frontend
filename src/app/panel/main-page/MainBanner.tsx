@@ -1,6 +1,5 @@
-import { Stack } from '@mui/material'
+import { Box } from '@mui/material'
 import useMedia from '@/hook/useMedia'
-import Image from 'next/image'
 
 const MainBanner = () => {
   const { isPc } = useMedia()
@@ -17,26 +16,18 @@ const MainBanner = () => {
   // }
 
   return (
-    <Stack m={0} p={0}>
-      <Image
+    <Box height={isPc ? '12.5rem' : '100px'} p={0} m={0}>
+      <img
         src={
           !isPc
             ? '/images/banners/default-mobile.svg'
             : '/images/banners/default-pc.svg'
         }
         alt={'main-banner'}
-        width={isPc ? 850 : 350}
-        height={isPc ? 250 : 150}
+        width={'100%'}
+        height={'100%'}
       />
-      {/* <map name="main-banner">
-        <area
-          shape="rect"
-          coords={isPc ? '280,100,350,150' : '120,90,170,130'}
-          alt="main-banner"
-          onKeyUp={() => {}}
-        />
-      </map> */}
-    </Stack>
+    </Box>
   )
 }
 

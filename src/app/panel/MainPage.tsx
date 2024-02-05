@@ -252,9 +252,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         <Container sx={containerStyle}>
           {keyword === '' ? (
             <>
-              <Stack width={'100%'}>
-                <MainBanner />
-              </Stack>
+              <MainBanner />
+
               <Box marginY={'0.5rem'}>
                 <SelectType type={type} setType={handleType} />
               </Box>
@@ -329,9 +328,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <Stack flex={1} gap={'0.5rem'}>
               {keyword === '' ? (
                 <>
-                  <Stack maxWidth={'56rem'} mx={'auto'}>
-                    <MainBanner />
-                  </Stack>
+                  <MainBanner />
+
                   <Stack direction={'row'} justifyContent={'space-between'}>
                     <SelectType type={type} setType={handleType} />
                     <Tutorial

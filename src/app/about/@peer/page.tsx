@@ -3,7 +3,7 @@ import { Card, Stack, Typography } from '@mui/material'
 
 const PeerPage = () => {
   const initialValue = `
-# (공지) peer 소개
+# peer 소개
 ### 우리는 동료의 힘을 믿습니다.
 peer 는 42 seoul (école 42 seoul campus) 학생들이 모여서 만든 커뮤니티 입니다. 우리는 교재, 수업, 교수가 없는 곳에서 동료학습으로 동료들과 함께 토론하고, 문제를 해결하는 법을 배우며 성장해왔습니다. 동료들과 함께하면 더 빨리 배우고, 불가능해 보이던 문제도 해결할 수 있다는 걸 경험했습니다.
 
