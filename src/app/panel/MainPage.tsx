@@ -10,7 +10,7 @@ import useSWR from 'swr'
 import MainProfile from './main-page/MainProfile'
 import MainShowcase from './main-page/MainShowcase'
 import MainCarousel from './main-page/MainCarousel'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
 import { IFavorite, IPost, ProjectType } from '@/types/IPostDetail'
 import useAuthStore from '@/states/useAuthStore'
@@ -25,6 +25,8 @@ import { getCookie } from 'cookies-next'
 import useSocket from '@/states/useSocket'
 import Tutorial from '@/components/Tutorial'
 import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
+import useHeaderStore from '@/states/useHeaderStore'
+import NoDataDolphin from '@/components/NoDataDolphin'
 import {
   cardStyle,
   containerStyle,
@@ -34,6 +36,7 @@ import {
 import SearchOptionPanel, {
   InfinityScrollPanel,
 } from '@/app/panel/main-page/MainPanel'
+import SelectSort from '@/app/panel/main-page/SelectSort'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -66,6 +69,7 @@ export const socket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
 })
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
+  const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
@@ -89,6 +93,15 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
   )
+  const { headerTitle, setHeaderTitle } = useHeaderStore()
+  const [init, setInit] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (keyword !== '') {
+      setHeaderTitle(keyword + ' 검색 결과')
+      setInit(false)
+    } else setHeaderTitle('')
+  }, [keyword])
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
 
@@ -112,7 +125,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   }&tag=${detailOption.tag}`
 
   const isInit =
-    page == 1 && !type && !sort && detailOption.isInit && keyword == ''
+    page == 1 && !type && !sort && detailOption.isInit && keyword == '' && init
 
   const { data: favoriteData } = useSWR<IFavorite[]>(
     isInit && isLogin
@@ -190,21 +203,25 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     page,
   )
 
-  const handleType = useCallback((value: ProjectType) => {
-    setType(value)
-    //type이 변경될 경우 초기화
-    setPage(1)
-    setDetailOption({
-      due1: 0,
-      due2: 100,
-      region1: '',
-      region2: '',
-      place: '',
-      status: '',
-      tag: '',
-    })
-    setSort('latest')
-  }, [])
+  const handleType = useCallback(
+    (value: ProjectType) => {
+      setType(value)
+      //type이 변경될 경우 초기화
+      setPage(1)
+      setDetailOption({
+        due1: 0,
+        due2: 100,
+        region1: '',
+        region2: '',
+        place: '',
+        status: '',
+        tag: '',
+      })
+      setSort('latest')
+      router.push('/')
+    },
+    [router],
+  )
 
   const handleSort = useCallback((value: ProjectSort) => {
     setSort(value)
@@ -231,21 +248,50 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* mobile view */}
       <div className="mobile-layout">
         <Container sx={containerStyle}>
-          <MainBanner />
-          <Box marginY={'0.5rem'}>
-            <SelectType type={type} setType={handleType} />
-          </Box>
-          <SearchOptionPanel
-            handleOption={handleOption}
-            type={type}
-            openOption={openOption}
-            setOpenOption={setOpenOption}
-            sort={sort}
-            handleSort={handleSort}
-          />
+          {keyword === '' ? (
+            <>
+              <MainBanner />
+              <Box marginY={'0.5rem'}>
+                <SelectType type={type} setType={handleType} />
+              </Box>
+
+              <SearchOptionPanel
+                handleOption={handleOption}
+                type={type}
+                openOption={openOption}
+                setOpenOption={setOpenOption}
+                sort={sort}
+                handleSort={handleSort}
+              />
+            </>
+          ) : (
+            <Stack
+              direction="row"
+              alignItems={'center'}
+              justifyContent={'space-between'}
+              my={'0.75rem'}
+            >
+              <Typography variant={'Body1'}>{headerTitle}</Typography>
+              <SelectSort sort={sort} setSort={handleSort} />
+            </Stack>
+          )}
           {/*card list 영역*/}
           {noContent ? (
-            <Typography>{noContent}</Typography>
+            <Stack
+              width={'100%'}
+              height={'100%'}
+              justifyContent={'center'}
+              alignItems={'center'}
+            >
+              {isLoading ? (
+                <Typography variant={'Body1'}>{noContent}</Typography>
+              ) : (
+                <NoDataDolphin
+                  message={noContent}
+                  backgroundColor={'background.primary'}
+                />
+              )}
+            </Stack>
           ) : (
             <>
               <Stack alignItems={'center'}>
@@ -281,28 +327,56 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         <Container disableGutters sx={containerStyle}>
           <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
-              <Stack maxWidth={'56rem'} mx={'auto'}>
-                <MainBanner />
-              </Stack>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <SelectType type={type} setType={handleType} />
-                <Tutorial
-                  title={'프로젝트 검색'}
-                  content={<MainPageTutorial />}
-                />
-              </Stack>
-              <SearchOptionPanel
-                handleOption={handleOption}
-                type={type}
-                openOption={openOption}
-                setOpenOption={setOpenOption}
-                sort={sort}
-                handleSort={handleSort}
-                isPc
-              />
+              {keyword === '' ? (
+                <>
+                  <Stack maxWidth={'56rem'} mx={'auto'}>
+                    <MainBanner />
+                  </Stack>
+                  <Stack direction={'row'} justifyContent={'space-between'}>
+                    <SelectType type={type} setType={handleType} />
+                    <Tutorial
+                      title={'프로젝트 검색'}
+                      content={<MainPageTutorial />}
+                    />
+                  </Stack>
+                  <SearchOptionPanel
+                    handleOption={handleOption}
+                    type={type}
+                    openOption={openOption}
+                    setOpenOption={setOpenOption}
+                    sort={sort}
+                    handleSort={handleSort}
+                    isPc
+                  />
+                </>
+              ) : (
+                <Stack
+                  direction="row"
+                  alignItems={'center'}
+                  justifyContent={'space-between'}
+                  mb={'0.75rem'}
+                >
+                  <Typography variant={'Body1'}>{headerTitle}</Typography>
+                  <SelectSort sort={sort} setSort={handleSort} />
+                </Stack>
+              )}
               {/*card list 영역*/}
               {noContent ? (
-                <Typography>{noContent}</Typography>
+                <Stack
+                  width={'100%'}
+                  height={'100%'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  {isLoading ? (
+                    <Typography variant={'Body1'}>{noContent}</Typography>
+                  ) : (
+                    <NoDataDolphin
+                      message={noContent}
+                      backgroundColor={'background.primary'}
+                    />
+                  )}
+                </Stack>
               ) : (
                 <>
                   <Grid container spacing={'1rem'}>

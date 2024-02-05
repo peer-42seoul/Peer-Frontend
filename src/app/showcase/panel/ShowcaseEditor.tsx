@@ -1,6 +1,6 @@
 'use client'
 import { Button, Container, Stack } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
@@ -12,12 +12,12 @@ import CuTextModal from '@/components/CuTextModal'
 import useAxiosWithAuth from '@/api/config'
 import StartEndDateViewer from '../panel/common/StartEndDateViewer'
 import TeamMembers from '../panel/common/TeamMembers'
-import dynamic from 'next/dynamic'
 import * as style from './ShowcaseEditor.style'
 import { useLinks } from '@/hook/useLinks'
-import useShowCaseState from '@/states/useShowCaseState'
 import { useRouter } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
+import DynamicToastEditor from '@/components/DynamicToastEditor'
+import { Editor } from '@toast-ui/editor'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
@@ -26,10 +26,6 @@ interface IShowcaseEditorProps {
   requestMethodType: 'post' | 'put'
   router: any | undefined
 }
-
-const DynamicEditor = dynamic(() => import('../panel/common/FormUIEditor'), {
-  ssr: false,
-})
 
 const ShowcaseEditor = ({
   data,
@@ -46,15 +42,9 @@ const ShowcaseEditor = ({
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
     useLinks(data.links ? data.links : [])
-  const { content, setContent } = useShowCaseState()
   const router = useRouter()
   const { isPc } = useMedia()
-
-  useEffect(() => {
-    if (requestMethodType === 'put') {
-      setContent(data?.content)
-    }
-  }, [requestMethodType, data?.content])
+  const editorRef = useRef<Editor | null>(null)
 
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
@@ -67,7 +57,7 @@ const ShowcaseEditor = ({
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
           {
             image: previewImage.split(',')[1],
-            content: content,
+            content: editorRef.current?.getMarkdown() ?? '',
             teamId: teamId,
             links: linksWithoutId,
           },
@@ -78,7 +68,7 @@ const ShowcaseEditor = ({
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${showcaseId}`,
           {
             image: image.length ? previewImage.split(',')[1] : null,
-            content: content,
+            content: editorRef.current?.getMarkdown() ?? '',
             links: linksWithoutId,
           },
         )
@@ -183,8 +173,14 @@ const ShowcaseEditor = ({
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        <DynamicEditor content={data.content} />
-
+        {/* <DynamicEditor content={data.content} /> */}
+        <DynamicToastEditor
+          initialValue={data.content}
+          initialEditType="wysiwyg"
+          editorRef={editorRef}
+          previewStyle="tab"
+          height={'30rem'}
+        />
         <CuTextModal
           open={alertOpen}
           onClose={closeModal}

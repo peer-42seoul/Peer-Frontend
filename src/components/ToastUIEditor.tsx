@@ -18,6 +18,7 @@ const ToastEditor = ({
   height = '30rem',
   editorRef,
 }: IToastEditorProps) => {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
   const themed = useTheme()
   const editorElementRef = useRef<HTMLDivElement>(null)
   const toggleDark = () => {
@@ -45,6 +46,24 @@ const ToastEditor = ({
       previewStyle: previewStyle,
       height: height,
       initialValue: initialValue,
+      hooks: {
+        addImageBlobHook: async (blob : Blob, callback : (url: string, text: string) => void) => {
+          const formData = new FormData();
+          formData.append('image', blob);
+    
+          try {
+            const response = await fetch(`${API_URL}/api/v1/editor/image`, {
+              method: 'POST',
+              body: formData,
+            });
+            const data = await response.json();
+            const imageUrl = data.url; // 서버에서 반환된 이미지 URL
+            callback(imageUrl, '이미지 대체 텍스트');
+          } catch (error) {
+            console.error('이미지 업로드 실패', error);
+          }
+        },
+      } 
     })
     toggleDark()
 
