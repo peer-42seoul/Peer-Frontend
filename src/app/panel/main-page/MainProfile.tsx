@@ -46,7 +46,7 @@ const MainProfile = () => {
         ) : (
           <Link style={{ textDecoration: 'none' }} href={'/login'}>
             <Typography
-              variant={'Tag'}
+              variant={'Body1'}
               sx={{
                 '&:hover': {
                   textDecoration: 'underline',

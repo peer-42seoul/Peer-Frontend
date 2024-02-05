@@ -139,7 +139,7 @@ const Announce = () => {
     axios
       .get(`${API_URL}/api/v1/admin/announcement`, {
         params,
-        // withCredentials: true,
+        withCredentials: true,
         // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
       })
       .then((res) => {
@@ -218,7 +218,9 @@ const Announce = () => {
       }
     } else return
     await axios
-      .post(`${API_URL}/api/v1/admin/announcement`, submitData)
+      .post(`${API_URL}/api/v1/admin/announcement`, submitData, {
+        withCredentials: true,
+      })
       .then(() => {
         console.log('submit success')
         setOpen(false)
@@ -226,7 +228,7 @@ const Announce = () => {
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
-            // withCredentials: true,
+            withCredentials: true,
             // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
@@ -302,7 +304,9 @@ const Announce = () => {
     setWriteMode('view')
     setOpen(true)
     await axios
-      .get(`${API_URL}/api/v1/admin/announcement/${id}`)
+      .get(`${API_URL}/api/v1/admin/announcement/${id}`, {
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res)
         setValue('announcementId', id)
@@ -335,7 +339,11 @@ const Announce = () => {
     console.log('onHandleHide, ', getValues('announcementId'))
     const announcementId = getValues('announcementId')
     axios
-      .post(`${API_URL}/api/v1/admin/announcement/${mode}`, { announcementId })
+      .post(
+        `${API_URL}/api/v1/admin/announcement/${mode}`,
+        { announcementId },
+        { withCredentials: true },
+      )
       .then(() => {
         console.log(`${mode} success`)
         setOpen(false)
@@ -343,7 +351,7 @@ const Announce = () => {
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
-            // withCredentials: true,
+            withCredentials: true,
             // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
@@ -360,6 +368,7 @@ const Announce = () => {
     axios
       .delete(`${API_URL}/api/v1/admin/announcement`, {
         data: { announcementId: announcementId },
+        withCredentials: true,
       })
       .then(() => {
         console.log('delete success')
@@ -367,7 +376,7 @@ const Announce = () => {
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
-            // withCredentials: true,
+            withCredentials: true,
             // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {

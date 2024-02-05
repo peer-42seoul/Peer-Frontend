@@ -15,7 +15,9 @@ const ProfileLink = (props: IUserProfileLink) => {
         src={`https://www.google.com/s2/favicons?domain=${props.linkUrl}`}
         sx={style.faviconStyle}
         variant="square"
-      />
+      >
+        {props.linkName[0]}
+      </Avatar>
       <Link
         href={
           props.linkUrl.startsWith('http://') ||
@@ -44,6 +46,14 @@ const ProfileLinksSection = ({
   setModalType: (type: string) => void
   isEditable: boolean
 }) => {
+  const newLinkList: Array<{ linkName: string; linkUrl: string }> = []
+
+  linkList.map((item) => {
+    if (item.linkName === '' || item.linkUrl === '') {
+      return
+    }
+    newLinkList.push({ linkName: item.linkName, linkUrl: item.linkUrl })
+  })
   return (
     <Stack spacing={1}>
       <ProfileSection
@@ -56,8 +66,10 @@ const ProfileLinksSection = ({
         isEditable={isEditable}
       />
       <Stack spacing={0.25}>
-        {linkList?.length ? (
-          linkList.map((item) => <ProfileLink key={item.id} {...item} />)
+        {newLinkList?.length ? (
+          newLinkList.map((item) => (
+            <ProfileLink key={crypto.randomUUID()} {...item} />
+          ))
         ) : (
           <Typography variant={'Caption'} color={'text.alternative'}>
             제공된 링크가 없습니다.

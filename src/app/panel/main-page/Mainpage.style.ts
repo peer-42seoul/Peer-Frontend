@@ -9,12 +9,13 @@ export const sideMenuStyle: SxProps = {
 export const cardStyle: SxProps = {
   height: '21.875rem',
   borderRadius: '0.75rem',
+  width: '100%',
 }
 
 export const floatButtonStyle: SxProps = {
   position: 'fixed',
   right: 20,
-  bottom: 80,
+  bottom: '6.25rem',
 }
 
 export const containerStyle = {

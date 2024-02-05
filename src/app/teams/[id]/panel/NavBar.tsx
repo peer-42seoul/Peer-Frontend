@@ -55,7 +55,8 @@ const TeamSidebar = ({ id }: { id: string }) => {
           onClick: () => router.push(`/teams/${id}/peerlog`),
           value: 'peerlog',
           icon: <PeerlogIcon sx={style.peerlog} />,
-          new: true,
+          isBeta: true,
+          disabled: true,
         },
         {
           label: '쇼케이스',
@@ -63,7 +64,6 @@ const TeamSidebar = ({ id }: { id: string }) => {
           value: 'showcase',
           icon: <ShowcaseIcon sx={style.showcase} />,
           new: true,
-          // disabled: true,
         },
       ]}
     />
