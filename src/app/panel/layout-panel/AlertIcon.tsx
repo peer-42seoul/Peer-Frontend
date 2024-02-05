@@ -1,46 +1,52 @@
 'use client'
 
-import { Badge, Drawer, Tab, Tabs } from '@mui/material'
+// import { Badge, Drawer, Tab, Tabs } from '@mui/material'
+import { Badge } from '@mui/material'
 import { IconButton } from '@mui/material'
-import { SyntheticEvent, useCallback, useState } from 'react'
-import { Box } from '@mui/system'
+// import { SyntheticEvent, useCallback, useState } from 'react'
+// import { Box } from '@mui/system'
 import NotificationIcon from '@/icons/NotificationIcon'
 import useMedia from '@/hook/useMedia'
+import CuModal from '@/components/CuModal'
+import ForbiddenDolphin from '@/components/WorkingDolphin'
+import useModal from '@/hook/useModal'
 
 const AlertIcon = () => {
-  const [tabvalue, setTabValue] = useState(0)
-  const [isAlertComing, setIsAlertComing] = useState(false)
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const isAlertComing = false
+  // const [tabvalue, setTabValue] = useState(0)
+  // const [isAlertComing, setIsAlertComing] = useState(false)
+  // const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   const { isPc } = useMedia()
+  const { isOpen, openModal, closeModal } = useModal()
 
-  const openAlertTab = useCallback(() => {
-    setIsAlertComing(true)
-    setIsDrawerOpen(true)
-  }, [setIsAlertComing, setIsDrawerOpen])
+  // const openAlertTab = useCallback(() => {
+  //   setIsAlertComing(true)
+  //   setIsDrawerOpen(true)
+  // }, [setIsAlertComing, setIsDrawerOpen])
 
-  const toggleDrawer = useCallback(
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return
-      }
+  // const toggleDrawer = useCallback(
+  //   (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+  //     if (
+  //       event.type === 'keydown' &&
+  //       ((event as React.KeyboardEvent).key === 'Tab' ||
+  //         (event as React.KeyboardEvent).key === 'Shift')
+  //     ) {
+  //       return
+  //     }
 
-      setIsDrawerOpen(open)
-    },
-    [setIsDrawerOpen],
-  )
+  //     setIsDrawerOpen(open)
+  //   },
+  //   [setIsDrawerOpen],
+  // )
 
-  const handleChange = (e: SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
-  }
+  // const handleChange = (e: SyntheticEvent, newValue: number) => {
+  //   setTabValue(newValue)
+  // }
 
   return (
     <>
-      <IconButton color="inherit" aria-label="alert_tab" onClick={openAlertTab}>
+      <IconButton color="inherit" aria-label="alert_tab" onClick={openModal}>
         <Badge color="secondary" variant="dot" invisible={isAlertComing}>
           <NotificationIcon
             sx={{
@@ -51,7 +57,10 @@ const AlertIcon = () => {
           />
         </Badge>
       </IconButton>
-      <Drawer
+      <CuModal open={isOpen} onClose={closeModal} title="잠깐!">
+        <ForbiddenDolphin message="알림 기능은 조금만 기다려주세요!!" />
+      </CuModal>
+      {/* <Drawer
         variant="temporary"
         anchor={'right'}
         open={isDrawerOpen}
@@ -68,7 +77,7 @@ const AlertIcon = () => {
             <Tab label="공지" />
           </Tabs>
         </Box>
-      </Drawer>
+      </Drawer> */}
     </>
   )
 }

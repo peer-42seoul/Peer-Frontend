@@ -1,6 +1,6 @@
 'use client'
 
-import { Box } from '@mui/material'
+import { Stack } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import Image from 'next/image'
 import Slider from 'react-slick'
@@ -18,14 +18,14 @@ const MainBanner = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    // autoplay: true,
+    // autoplaySpeed: 3000,
     pauseOnHover: true,
   }
 
   return (
     <Slider {...settings}>
-      <Box height={isPc ? '12rem' : '100%'} p={0} m={0}>
+      <Stack m={0} p={0}>
         <Image
           src={
             !isPc
@@ -33,25 +33,32 @@ const MainBanner = () => {
               : '/images/banners/default-pc.svg'
           }
           alt={'main-banner'}
-          width={0}
-          height={0}
-          style={{ width: '100%', height: 'auto' }}
+          width={isPc ? 850 : 350}
+          height={isPc ? 250 : 150}
         />
-      </Box>
-      <Box height={isPc ? '10rem' : '100%'} p={0} m={0}>
+      </Stack>
+
+      <Stack m={0} p={0}>
         <Image
           src={
             !isPc
               ? '/images/banners/about-mobile.svg'
               : '/images/banners/about-pc.svg'
           }
+          useMap="#about-banner"
           alt={'about-banner'}
-          width={0}
-          height={0}
-          style={{ width: '100%', height: 'auto' }}
-          onClick={() => router.push('/about')}
+          width={isPc ? 850 : 350}
+          height={isPc ? 250 : 150}
         />
-      </Box>
+        <map name="about-banner">
+          <area
+            shape="rect"
+            coords={isPc ? '280,100,350,150' : '120,90,170,130'}
+            alt="about-banner"
+            onClick={() => router.push('/about')}
+          />
+        </map>
+      </Stack>
     </Slider>
   )
 }
