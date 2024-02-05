@@ -15,10 +15,11 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ handleSidebar }: SidebarProps) => {
+  const { isPc } = useMedia()
   return (
-    <Stack>
+    <Stack alignItems={!isPc ? 'center' : ''}>
       <Typography variant="Title1Emphasis">About Us</Typography>
-      <StyledButtonGroup variant="text" orientation="vertical">
+      <StyledButtonGroup variant="text" orientation="vertical" fullWidth>
         <Button onClick={() => handleSidebar(0)}>
           Peer는 어떤 커뮤니티인가
         </Button>
@@ -51,9 +52,9 @@ const AboutPage = (props: AboutPageProps) => {
     setActive(value)
   }
 
-  return (
-    <Stack mx={'5rem'} my={'1rem'}>
-      {isPc ? (
+  if (isPc) {
+    return (
+      <Stack mx={'12rem'} my={'1rem'}>
         <Stack display={'flex'} direction={'row'}>
           <Stack flex={1}>
             <Sidebar handleSidebar={handleSidebar} />
@@ -68,9 +69,22 @@ const AboutPage = (props: AboutPageProps) => {
             {active === 6 && props.service}
           </Stack>
         </Stack>
-      ) : (
-        <Stack></Stack>
-      )}
+      </Stack>
+    )
+  }
+
+  return (
+    <Stack spacing={'2rem'}>
+      <Stack>
+        {active === 0 && props.peer}
+        {active === 1 && props.mind}
+        {active === 2 && props.announce}
+        {active === 3 && props.dictionary}
+        {active === 4 && props.contact}
+        {active === 5 && props.personal}
+        {active === 6 && props.service}
+      </Stack>
+      <Sidebar handleSidebar={handleSidebar} />
     </Stack>
   )
 }
