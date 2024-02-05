@@ -103,7 +103,7 @@ const MainCard = ({
         >
           <Typography
             variant="Body1"
-            color="text.secondary"
+            color="text.normal"
             sx={{
               overflow: 'hidden',
               textOverflow: 'ellipsis',

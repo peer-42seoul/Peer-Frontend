@@ -90,7 +90,13 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
             <RecruitInfo data={data} type={type} pc>
               {isClient && !me && (
                 <Stack display={'flex'} direction={'row'} alignItems={'center'}>
-                  <ApplyFormButton roleList={roleList} id={id} type={type} pc />
+                  <ApplyFormButton
+                    roleList={roleList}
+                    id={id}
+                    type={type}
+                    pc
+                    data={data}
+                  />
                   <Tutorial
                     title="지원 방법"
                     content={<RecruitPageTutorial />}
@@ -124,7 +130,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
         <RecruitDetailContent data={data} type={type} roleList={roleList} />
       </Stack>
       {isClient && !me && (
-        <ApplyFormButton id={id} type={type} roleList={roleList} />
+        <ApplyFormButton id={id} type={type} roleList={roleList} data={data} />
       )}
     </Stack>
   )

@@ -14,20 +14,20 @@ export const navContainerStyle = {
 
 export const navStyle = {
   '& .MuiBottomNavigationAction-label': {
-    color: 'text.normal',
+    color: 'text.alternative',
   },
   '& .MuiTypography-root': {
-    color: 'text.normal',
+    color: 'text.alternative',
   },
   '&.Mui-selected': {
     '& .MuiBottomNavigationAction-label': {
-      color: 'text.primary',
+      color: 'text.normal',
     },
     '& .MuiSvgIcon-root': {
-      color: 'text.primary',
+      color: 'text.normal',
     },
     '& .MuiTypography-root': {
-      color: 'text.primary',
+      color: 'text.normal',
     },
   },
 }

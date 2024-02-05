@@ -38,7 +38,7 @@ const RatioQuestionForm = ({
       defaultValue={value ? value : '0'}
       render={({ field }) => (
         <Stack flexDirection={'row'} alignItems={'center'} gap={2}>
-          <Typography>{optionList?.[1]}</Typography>
+          <Typography variant={'Body1'}>{optionList?.[1]}</Typography>
           <RadioGroup {...field} row>
             {listArray?.map((label: string, index: number) => {
               return (
@@ -53,7 +53,7 @@ const RatioQuestionForm = ({
               )
             })}
           </RadioGroup>
-          <Typography>{optionList?.[2]}</Typography>
+          <Typography variant={'Body1'}>{optionList?.[2]}</Typography>
         </Stack>
       )}
     />
