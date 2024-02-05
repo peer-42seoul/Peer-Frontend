@@ -140,8 +140,8 @@ const Announce = () => {
     axios
       .get(`${API_URL}/api/v1/admin/announcement`, {
         params,
-        // ...config,
-        withCredentials: true,
+        ...config,
+        // withCredentials: true,
         // baseURL: "https://peer-test.co.kr",
         // baseURL: process.env.NEXT_PUBLIC_API_URL
         // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
