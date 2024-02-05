@@ -9,8 +9,9 @@ import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
 import { IPostCardHitchhiking } from '@/types/IPostCard'
 import { BetaIcon } from '@/components/BetaBadge'
-import { ArrowLeft, ArrowRight } from '@mui/icons-material'
 import * as style from '../hitchhiking.style'
+import useMedia from '@/hook/useMedia'
+import { ChevronLeft, ChevronRight } from '@/icons'
 
 const CardContainer = ({
   cardList,
@@ -29,6 +30,7 @@ const CardContainer = ({
   addCard?: () => void
   addDisabled?: boolean
 }) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       justifyContent={'flex-start'}
@@ -94,26 +96,36 @@ const CardContainer = ({
           <Typography variant="CaptionEmphasis">{message}</Typography>
         )}
       </Stack>
-      <Stack direction={'row'} spacing={'0.5rem'}>
-        <IconButton
-          sx={style.buttonStyle}
-          onClick={addCard}
-          disabled={!!addDisabled}
-        >
-          <ArrowLeft
-            sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
-          />
-        </IconButton>
+      <Stack
+        direction={'row'}
+        // spacing={'0.5rem'}
+        justifyContent={'space-evenly'}
+        alignItems={'center'}
+        sx={{ width: '100%' }}
+      >
+        {!isPc && (
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={addCard}
+            disabled={!!addDisabled}
+          >
+            <ChevronLeft
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
+        )}
         <Interest id={cardList[cardList.length - 1]?.recruitId} />
-        <IconButton
-          sx={style.buttonStyle}
-          onClick={() => removeCard(cardList[cardList.length - 1]?.recruitId)}
-          disabled={cardList.length === 0}
-        >
-          <ArrowRight
-            sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
-          />
-        </IconButton>
+        {!isPc && (
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={() => removeCard(cardList[cardList.length - 1]?.recruitId)}
+            disabled={cardList.length === 0}
+          >
+            <ChevronRight
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
+        )}
       </Stack>
     </Stack>
   )
