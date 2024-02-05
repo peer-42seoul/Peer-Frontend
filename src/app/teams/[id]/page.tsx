@@ -1,10 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Typography, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import TeamInfoContainer from './panel/TeamInfoContainer'
 // import TeamDnD from './panel/TeamDnD'
-import Image from 'next/image'
 import CuButton from '@/components/CuButton'
 import ForbiddenDolphin from '@/components/WorkingDolphin'
 
