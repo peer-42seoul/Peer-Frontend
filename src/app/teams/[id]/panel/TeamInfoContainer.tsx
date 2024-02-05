@@ -57,8 +57,8 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
               src={data.teamPicturePath ? data.teamPicturePath : undefined}
             />
             <Stack>
-              <Stack direction={'row'} spacing={'0.5rem'}>
-                <Typography variant="h5">{data.name}</Typography>
+              <Stack alignItems={'center'} direction={'row'} spacing={'0.5rem'}>
+                <Typography variant="Title3">{data.name}</Typography>
                 <StatusIcon status={data.status} />
               </Stack>
               <Stack direction={'row'} spacing={'0.5rem'}>
