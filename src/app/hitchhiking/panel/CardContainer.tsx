@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { FormControlLabel, Stack, Typography } from '@mui/material'
+import { FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import Interest from './Interest'
 import * as cardStyle from './HitchhikingCard.style'
@@ -9,6 +9,9 @@ import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
 import { IPostCardHitchhiking } from '@/types/IPostCard'
 import { BetaIcon } from '@/components/BetaBadge'
+import * as style from '../hitchhiking.style'
+import useMedia from '@/hook/useMedia'
+import { ChevronLeft, ChevronRight } from '@/icons'
 
 const CardContainer = ({
   cardList,
@@ -16,13 +19,18 @@ const CardContainer = ({
   isProject,
   message,
   handleChange,
+  addCard,
+  addDisabled,
 }: {
   cardList: Array<IPostCardHitchhiking>
   removeCard: (recruit_id: number) => void
   isProject: boolean
   message: string
   handleChange: any
+  addCard?: () => void
+  addDisabled?: boolean
 }) => {
+  const { isPc } = useMedia()
   return (
     <Stack
       justifyContent={'flex-start'}
@@ -88,7 +96,37 @@ const CardContainer = ({
           <Typography variant="CaptionEmphasis">{message}</Typography>
         )}
       </Stack>
-      <Interest id={cardList[cardList.length - 1]?.recruitId} />
+      <Stack
+        direction={'row'}
+        // spacing={'0.5rem'}
+        justifyContent={'space-evenly'}
+        alignItems={'center'}
+        sx={{ width: '100%' }}
+      >
+        {!isPc && (
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={addCard}
+            disabled={!!addDisabled}
+          >
+            <ChevronLeft
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
+        )}
+        <Interest id={cardList[cardList.length - 1]?.recruitId} />
+        {!isPc && (
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={() => removeCard(cardList[cardList.length - 1]?.recruitId)}
+            disabled={cardList.length === 0}
+          >
+            <ChevronRight
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
+        )}
+      </Stack>
     </Stack>
   )
 }
