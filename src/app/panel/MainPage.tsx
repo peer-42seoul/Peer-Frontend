@@ -295,7 +295,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           ) : (
             <>
               <Stack alignItems={'center'}>
-                <Stack gap={2}>
+                <Stack gap={2} width={'100%'}>
                   {content?.map((project: IPost) => (
                     <Box key={project.recruit_id}>
                       <MainCard
