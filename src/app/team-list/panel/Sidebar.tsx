@@ -9,7 +9,7 @@ import {
   Typography,
   Stack,
 } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const Sidebar = () => {
   const { isPc } = useMedia()
@@ -23,6 +23,10 @@ const Sidebar = () => {
   const onClickBefore = () => setShowTeams(TeamStatus.BEFORE)
   const onClickProgress = () => setShowTeams(TeamStatus.ONGOING)
   const onClickComplete = () => setShowTeams(TeamStatus.COMPLETE)
+
+  useEffect(() => {
+    setShowTeams(alignment)
+  }, [setShowTeams])
 
   return (
     <>
