@@ -19,6 +19,7 @@ import RecruitPageTutorial from '@/components/tutorialContent/RecruitPageTutoria
 
 const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   const [isClient, setIsClient] = useState(false)
+  const [content, setCotent] = useState<IPostDetail | undefined>(undefined)
   const router = useRouter()
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
   const { isPc } = useMedia()
@@ -42,6 +43,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   useEffect(() => {
     if (data) {
       setHeaderTitle(data.teamName)
+      setCotent(data)
     }
     return () => {
       setHeaderTitle('')
@@ -49,13 +51,13 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   }, [data])
 
   const roleList = useMemo(() => {
-    if (!data) return []
-    return data.roleList.filter((role) => role.name !== 'Leader')
-  }, [data])
+    if (!content) return []
+    return content.roleList.filter((role) => role.name !== 'Leader')
+  }, [content])
 
-  const me = nickname === data?.leader_nickname
+  const me = nickname === content?.leader_nickname
 
-  if (!data) return <Typography>데이터가 없습니다</Typography>
+  if (!content) return <Typography>데이터가 없습니다</Typography>
 
   /** PC 뷰 **/
   if (isPc) {
@@ -78,8 +80,8 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
           <RecruitQuickMenu
             recruit_id={parseInt(id)}
             favorite={favoriteData}
-            title={data?.title}
-            content={data?.content}
+            title={content?.title}
+            content={content?.content}
             me={me}
           />
         </Stack>
@@ -87,7 +89,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
         <Stack direction={'row'}>
           <Stack width={'100%'}>
             {/*이미지, 제목, 프로필 영역*/}
-            <RecruitInfo data={data} type={type} pc>
+            <RecruitInfo data={content} type={type} pc>
               {isClient && !me && (
                 <Stack display={'flex'} direction={'row'} alignItems={'center'}>
                   <ApplyFormButton
@@ -95,7 +97,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
                     id={id}
                     type={type}
                     pc
-                    data={data}
+                    data={content}
                   />
                   <Tutorial
                     title="지원 방법"
@@ -105,7 +107,11 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
               )}
             </RecruitInfo>
             {/* 모집 내용 */}
-            <RecruitDetailContent data={data} type={type} roleList={roleList} />
+            <RecruitDetailContent
+              data={content}
+              type={type}
+              roleList={roleList}
+            />
           </Stack>
         </Stack>
       </Container>
@@ -120,17 +126,22 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
           <RecruitQuickMenu
             recruit_id={parseInt(id)}
             favorite={favoriteData}
-            title={data?.title}
-            content={data?.content}
+            title={content?.title}
+            content={content?.content}
             me={me}
           />
-          <RecruitInfo data={data} type={type} />
+          <RecruitInfo data={content} type={type} />
         </Stack>
         <Divider />
-        <RecruitDetailContent data={data} type={type} roleList={roleList} />
+        <RecruitDetailContent data={content} type={type} roleList={roleList} />
       </Stack>
       {isClient && !me && (
-        <ApplyFormButton id={id} type={type} roleList={roleList} data={data} />
+        <ApplyFormButton
+          id={id}
+          type={type}
+          roleList={roleList}
+          data={content}
+        />
       )}
     </Stack>
   )
