@@ -19,6 +19,10 @@ import * as style from './MessageForm.style'
 const MAX_LENGTH = 300
 
 interface IMessageFormProps {
+  messageSendState: {
+    isMessageSending: boolean
+    setIsMessageSending: (value: boolean) => void
+  }
   targetId: number
   updateTarget?: Dispatch<SetStateAction<IMessageTargetUser | undefined>>
   addNewMessage: (newMessage: IMessage) => void
@@ -29,6 +33,7 @@ interface IMessageFormProps {
 const BorderlessTextField = styled(CuTextField)(style.removeBorder)
 
 const MessageForm = ({
+  messageSendState,
   targetId,
   updateTarget,
   addNewMessage,
@@ -39,7 +44,6 @@ const MessageForm = ({
   const [content, setContent] = useState<string>('')
   const { isPc } = useMedia()
   const { openToast } = useToast()
-  const [isLoading, setIsLoading] = useState(false)
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
@@ -54,7 +58,7 @@ const MessageForm = ({
   ) => {
     e.preventDefault()
     e.stopPropagation()
-    setIsLoading(true)
+    messageSendState.setIsMessageSending(true)
     try {
       if (!content) {
         openToast({
@@ -100,7 +104,7 @@ const MessageForm = ({
         })
       }
     } finally {
-      setIsLoading(false)
+      messageSendState.setIsMessageSending(false)
       handleClose && handleClose()
     }
   }
@@ -138,7 +142,7 @@ const MessageForm = ({
               </Typography>
             </Stack>
             <IconButton
-              disabled={isLoading || disabled}
+              disabled={messageSendState.isMessageSending || disabled}
               type="submit"
               sx={style.pcSendButton}
             >
