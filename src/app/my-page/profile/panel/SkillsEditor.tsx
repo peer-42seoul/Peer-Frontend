@@ -144,10 +144,7 @@ const SkillsEditor = ({
             <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
               나의 스킬
             </Typography>
-            <Tutorial
-              title="기술 스택 추가 방법"
-              content={<SkillsTutorial />}
-            />
+            <Tutorial title="스킬 추가 방법" content={<SkillsTutorial />} />
           </Stack>
           <Autocomplete
             multiple
