@@ -11,7 +11,6 @@ import {
 import { IApplicant } from '../../../types/types'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
-import useMedia from '@/hook/useMedia'
 import FormAnswer from './InterviewAnswerForm'
 import useAxiosWithAuth from '@/api/config'
 import { CloseIcon } from '@/icons'
@@ -28,7 +27,6 @@ const ApplicantList = ({
   close: () => void
   teamId: string
 }) => {
-  const { isPc } = useMedia()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const axiosWithAuth = useAxiosWithAuth()
@@ -172,7 +170,9 @@ const ApplicantList = ({
   }
 
   return (
-    <Card sx={{ p: 3, borderRadius: '1rem', height: '23rem' }}>
+    <Card
+      sx={{ p: 3, borderRadius: '1rem', height: '20rem', overflow: 'auto' }}
+    >
       <Stack
         direction="row"
         display="flex"
@@ -220,20 +220,14 @@ const ApplicantList = ({
         </Button>
       </Stack>
 
-      <Stack p={2}>
+      <Stack p={2} ref={scrollRef}>
         <Typography fontWeight="bold">인터뷰 답변</Typography>
-        <Stack
-          borderRadius={2}
-          p={2}
-          overflow="auto"
-          height={isPc ? 300 : 100}
-          ref={scrollRef}
-        >
-          {!member && <Typography>신청한 대기자가 없습니다.</Typography>}
+        <Stack borderRadius={2} p={2} height={'100%'}>
+          {!member && <Typography>신청한 사람이 없습니다.</Typography>}
           {member && member.answers ? (
             member.answers.map((interview, index) => (
               <Stack key={index} m={1}>
-                <Typography fontWeight="bold">{interview.question}</Typography>
+                <Typography variant="Title2">{interview.question}</Typography>
                 <FormAnswer interview={interview} index={index} />
               </Stack>
             ))
