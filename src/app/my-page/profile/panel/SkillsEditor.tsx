@@ -2,6 +2,8 @@ import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
 import CuTextModal from '@/components/CuTextModal'
 import TagChip from '@/components/TagChip'
+import Tutorial from '@/components/Tutorial'
+import { SkillsTutorial } from '@/components/tutorialContent/SkillsTutorial'
 import useModal from '@/hook/useModal'
 import useToast from '@/states/useToast'
 import { ISkill } from '@/types/IUserProfile'
@@ -138,9 +140,15 @@ const SkillsEditor = ({
     >
       <>
         <Stack direction={'column'} spacing={'1rem'} height={[1, undefined]}>
-          <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-            나의 스킬
-          </Typography>
+          <Stack direction={'row'} spacing={'0.25rem'}>
+            <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
+              나의 스킬
+            </Typography>
+            <Tutorial
+              title="기술 스택 추가 방법"
+              content={<SkillsTutorial />}
+            />
+          </Stack>
           <Autocomplete
             multiple
             sx={{
