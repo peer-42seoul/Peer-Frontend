@@ -11,7 +11,6 @@ import {
 import { IApplicant } from '../../../types/types'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
-import useMedia from '@/hook/useMedia'
 import FormAnswer from './InterviewAnswerForm'
 import useAxiosWithAuth from '@/api/config'
 import { CloseIcon } from '@/icons'
@@ -28,7 +27,6 @@ const ApplicantList = ({
   close: () => void
   teamId: string
 }) => {
-  const { isPc } = useMedia()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const axiosWithAuth = useAxiosWithAuth()
