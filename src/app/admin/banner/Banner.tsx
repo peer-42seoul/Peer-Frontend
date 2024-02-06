@@ -479,24 +479,19 @@ const Banner = () => {
       </Stack>
       {/* 새 글쓰기 모달 */}
       <CuModal
-        title=""
+        title={
+          writeMode === 'write'
+            ? '새 배너 쓰기'
+            : writeMode === 'edit'
+              ? '배너 수정하기'
+              : '배너 보기'
+        }
         open={open}
         onClose={() => setOpen(false)}
         mobileFullSize={false}
       >
         <Container>
-          <Typography variant={'h4'} align="center">
-            {writeMode === 'write'
-              ? '새 배너 쓰기'
-              : writeMode === 'edit'
-                ? '배너 수정하기'
-                : '배너 보기'}
-          </Typography>
-          {/* 배너 이미지 */}
-          <ImageUploadButton
-            setPreviewImage={(image: string) => setValue('previewImage', image)}
-            register={register('image')}
-          >
+          {writeMode === 'view' ? (
             <Box>
               <Image
                 src={previewImage}
@@ -505,7 +500,23 @@ const Banner = () => {
                 alt="Picture of the announcement"
               />
             </Box>
-          </ImageUploadButton>
+          ) : (
+            <ImageUploadButton
+              setPreviewImage={(image: string) =>
+                setValue('previewImage', image)
+              }
+              register={register('image')}
+            >
+              <Box>
+                <Image
+                  src={previewImage}
+                  width={currentBannerType === '작은 배너' ? 251 : 946}
+                  height={currentBannerType === '작은 배너' ? 100 : 200}
+                  alt="Picture of the announcement"
+                />
+              </Box>
+            </ImageUploadButton>
+          )}
           {/* 배너 유형 선택 */}
           <Typography variant={'Title2'}>배너 유형</Typography>
           <Stack direction={'row'} justifyContent={'space-between'}>

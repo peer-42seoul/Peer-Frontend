@@ -285,7 +285,7 @@ const Announce = () => {
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
-            // withCredentials: true,
+            withCredentials: true,
             // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
@@ -480,32 +480,44 @@ const Announce = () => {
       </Stack>
       {/* 새글쓰기 모달 */}
       <CuModal
-        title=""
+        title={
+          writeMode === 'write'
+            ? '새 공지글 쓰기'
+            : writeMode === 'edit'
+              ? '공지글 수정하기'
+              : '공지 글 보기'
+        }
         open={open}
         onClose={() => setOpen(false)}
         mobileFullSize={false}
       >
         <Container>
-          <Typography variant={'h4'} align="center">
-            {writeMode === 'write'
-              ? '새 공지글 쓰기'
-              : writeMode === 'edit'
-                ? '공지글 수정하기'
-                : '공지 글 보기'}
-          </Typography>
-          <ImageUploadButton
-            setPreviewImage={(image: string) => setValue('previewImage', image)}
-            register={register('image')}
-          >
+          {writeMode === 'view' ? (
             <Box>
               <Image
                 src={previewImage}
-                width={240}
+                width={320}
                 height={160}
                 alt="Picture of the announcement"
               />
             </Box>
-          </ImageUploadButton>
+          ) : (
+            <ImageUploadButton
+              setPreviewImage={(image: string) =>
+                setValue('previewImage', image)
+              }
+              register={register('image')}
+            >
+              <Box>
+                <Image
+                  src={previewImage}
+                  width={240}
+                  height={160}
+                  alt="Picture of the announcement"
+                />
+              </Box>
+            </ImageUploadButton>
+          )}
           <Typography variant={'Title2'}>제목</Typography>
           <TextField
             {...register('title', {
@@ -551,21 +563,7 @@ const Announce = () => {
               />
             </>
           ) : null}
-          {/* <Typography variant={'Body1'}>내용</Typography>
-          <TextField
-            multiline
-            disabled={writeMode === 'view'}
-            {...register('content', {
-              required: '내용은 필수 입력 항목입니다.',
-              minLength: {
-                value: 10,
-                message: '내용은 최소 10자 이상 입력해주세요.',
-              },
-            })}
-            error={!!errors.content}
-            helperText={errors.content?.message}
-          /> */}
-          {/* </Stack> */}
+          {/* <Box sx={{ height: '30rem' }}> */}
           {writeMode === 'view' ? (
             <div>
               <DynamicToastViewer
@@ -580,16 +578,15 @@ const Announce = () => {
               />
             </div>
           ) : (
-            <>
-              <DynamicToastEditor
-                initialValue={getValues('content')}
-                initialEditType="wysiwyg"
-                editorRef={editorRef}
-                previewStyle="tab"
-                height={'30rem'}
-              />
-            </>
+            <DynamicToastEditor
+              initialValue={getValues('content')}
+              initialEditType="wysiwyg"
+              editorRef={editorRef}
+              previewStyle="tab"
+              height={'30rem'}
+            />
           )}
+          {/* </Box> */}
           <Stack>
             <Typography variant={'Title2'}>공지 예약 및 알림</Typography>
             <Stack direction={'row'} justifyContent={'space-between'}>
