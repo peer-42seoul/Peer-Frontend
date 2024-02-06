@@ -34,21 +34,7 @@ const MainCarousel = () => {
     <Slider {...settings}>
       <Box sx={BoxStyle}>
         <Image
-          src={'/images/banners/default-banner-1.png'}
-          alt="banner-1"
-          {...imageProps}
-        />
-      </Box>
-      <Box sx={BoxStyle}>
-        <Image
-          src={'/images/banners/default-banner-2.png'}
-          alt="banner-1"
-          {...imageProps}
-        />
-      </Box>
-      <Box sx={BoxStyle}>
-        <Image
-          src={'/images/banners/default-banner-3.png'}
+          src={'/images/banners/default-mobile.svg'}
           alt="banner-1"
           {...imageProps}
         />

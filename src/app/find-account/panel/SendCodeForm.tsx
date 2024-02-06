@@ -19,8 +19,8 @@ const LabelBox = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '8px',
-  fontSize: '14px',
+  gap: '0.5rem',
+  fontSize: '0.875rem',
 }
 
 const Form = {
@@ -28,7 +28,7 @@ const Form = {
   width: '100%',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '24px',
+  gap: '1.5rem',
 }
 
 const SendCodeForm = ({
@@ -42,7 +42,7 @@ const SendCodeForm = ({
   openToast: () => void
   setIsCodeSuccessful: (isCodeSuccessful: boolean) => void
 }) => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const {
     handleSubmit,
     control,

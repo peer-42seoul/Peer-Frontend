@@ -16,6 +16,8 @@ const getTabValue = (path: string) => {
   if (path.includes('/notice')) return 'notice'
   else if (path.includes('/board')) return 'board'
   else if (path.includes('/setting')) return 'setting'
+  else if (path.includes('/peerlog')) return 'peerlog'
+  else if (path.includes('/showcase')) return 'showcase'
   else return 'main'
 }
 
@@ -55,7 +57,8 @@ const TeamSidebar = ({ id }: { id: string }) => {
           onClick: () => router.push(`/teams/${id}/peerlog`),
           value: 'peerlog',
           icon: <PeerlogIcon sx={style.peerlog} />,
-          new: true,
+          isBeta: true,
+          disabled: true,
         },
         {
           label: '쇼케이스',
@@ -63,7 +66,6 @@ const TeamSidebar = ({ id }: { id: string }) => {
           value: 'showcase',
           icon: <ShowcaseIcon sx={style.showcase} />,
           new: true,
-          // disabled: true,
         },
       ]}
     />

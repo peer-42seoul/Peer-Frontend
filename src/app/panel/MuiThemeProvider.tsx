@@ -576,7 +576,8 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (theme.typography) {
-    theme.typography.fontFamily = 'Pretendard Variable, sans-serif'
+    theme.typography.fontFamily =
+      'var(--main-font), Pretendard Variable, sans-serif'
     theme.typography.HeadlineEmphasis = {
       fontSize: '32px',
       fontStyle: 'normal',
@@ -677,7 +678,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       color: theme.palette.text.normal,
     }
     theme.typography.Tag = {
-      fontSize: '12px',
+      fontSize: '11px',
       fontStyle: 'normal',
       fontWeight: 400,
       lineHeight: '150%',

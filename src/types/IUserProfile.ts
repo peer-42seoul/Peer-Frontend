@@ -21,9 +21,13 @@ export interface IUserProfile {
 }
 
 export interface IUserProfileLink {
-  id: number
+  id?: number
   linkName: string
   linkUrl: string
+}
+
+export interface IUserProfileLinkField {
+  linkList: Array<{ linkName: string; linkUrl: string }>
 }
 
 export interface IProfileCard {

@@ -6,15 +6,17 @@ import ShowcaseViewer from './panel/ShowcaseViewer'
 import { IShowcaseViewerFields } from '@/types/IShowcaseEdit'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import useSWR from 'swr'
-import { defaultGetFetcher } from '@/api/fetchers'
+// import { defaultGetFetcher } from '@/api/fetchers'
 import CommentContainer from './panel/CommentContainer'
+import useAxiosWithAuth from '@/api/config'
 
 const ShowcaseDetailPage = ({ params }: { params: { id: number } }) => {
+  const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseViewerFields>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${params.id}`,
-    defaultGetFetcher,
-    { shouldRetryOnError: false },
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/${params.id}`,
+    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
+
   if (isLoading) return <CuCircularProgress color={'secondary'} />
   if (error) {
     if (error.response && error.response.status === 404) {

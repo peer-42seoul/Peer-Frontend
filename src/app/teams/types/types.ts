@@ -25,6 +25,7 @@ export interface IMember {
   name: string
   id: string
   role: TeamGrant
+  image: string
   job: string[]
 }
 
@@ -79,6 +80,7 @@ export interface IApply {
 
 export interface IApplicant {
   name: string
+  image: string
   userId: string
   answers: IInterview[]
   applyId: IApply

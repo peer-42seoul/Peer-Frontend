@@ -8,6 +8,10 @@ import MessageFormModal from './MessageFormModal'
 import * as style from './MobileSendButton.style'
 
 interface IMobileSendButtonProps {
+  messageSendState: {
+    isMessageSending: boolean
+    setIsMessageSending: (value: boolean) => void
+  }
   disabled: boolean
   target: {
     id: number
@@ -21,6 +25,7 @@ const SCROLL_OFFSET = 5 // 버튼이 바뀌는 스크롤 위치 (px)
 const SCROLL_THROTTLE = 500 // 스크롤 감지 주기 (ms) // TODO : 의도한대로 동작하는지 확인 필요함.
 
 const MobileSendButton = ({
+  messageSendState,
   disabled,
   target,
   addNewMessage,
@@ -80,6 +85,7 @@ const MobileSendButton = ({
         </Fab>
       </Fade>
       <MessageFormModal
+        messageSendState={messageSendState}
         isOpen={isOpen}
         target={target}
         addNewMessage={addNewMessage}

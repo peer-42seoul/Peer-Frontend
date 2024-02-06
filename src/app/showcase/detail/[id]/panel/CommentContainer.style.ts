@@ -16,6 +16,8 @@ export const commentListContainer = {
   height: 'auto',
   gap: '1rem',
   justifyContent: 'space-between',
+  overflowWrap: 'anywhere',
+  alignItems: 'center',
 }
 
 export const commenterInfo = {

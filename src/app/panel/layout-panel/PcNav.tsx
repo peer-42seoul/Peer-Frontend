@@ -7,6 +7,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Button,
+  Container,
   IconButton,
   Stack,
   Typography,
@@ -37,7 +38,7 @@ const PcNav = () => {
     : '/login?redirect=/my-page/interests'
 
   const { data: profileData } = useSWR<IUserProfile>(
-    isLogin ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile` : undefined,
+    isLogin ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/profile` : undefined,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
@@ -54,7 +55,7 @@ const PcNav = () => {
   }, [pathname])
 
   return (
-    <Stack sx={navContainerStyle}>
+    <Container sx={navContainerStyle}>
       <Stack
         direction={'row'}
         maxWidth={1280}
@@ -201,7 +202,7 @@ const PcNav = () => {
           </Link>
         </Stack>
       </Stack>
-    </Stack>
+    </Container>
   )
 }
 

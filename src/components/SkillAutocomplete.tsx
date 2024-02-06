@@ -7,6 +7,7 @@ import {
   Button,
   CircularProgress,
   Stack,
+  SxProps,
   TextField,
   Typography,
 } from '@mui/material'
@@ -26,6 +27,7 @@ const SkillAutocomplete = ({
   error,
   trigger,
   placeholder,
+  autocompleteSx,
 }: {
   skillList: Array<ISkill> //  초기 스킬 리스트
   setSkillList: (value: Array<ISkill>) => void // 스킬 리스트 변경 함수
@@ -34,6 +36,7 @@ const SkillAutocomplete = ({
   error?: boolean
   trigger?: UseFormTrigger<any>
   placeholder?: string
+  autocompleteSx?: SxProps
 }) => {
   const [tagList, setTagList] = useState(skillList) // 검색 된 데이터
 
@@ -66,7 +69,7 @@ const SkillAutocomplete = ({
       }
       axiosWithAuth
         .get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/skill/search?keyword=${text}`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/skill/search?keyword=${text}`,
         )
         .then((res) => {
           setTagList((prev) => getUniqueArray(prev.concat(res.data), 'tagId'))
@@ -109,6 +112,7 @@ const SkillAutocomplete = ({
             height: '2.5rem',
           },
         }}
+        disableClearable
         loading={isLoading}
         value={skillList.map((skill) => skill.name) as Array<string>}
         inputValue={text}
@@ -124,7 +128,7 @@ const SkillAutocomplete = ({
             placeholder={
               placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
             }
-            sx={{ position: 'relative', maxWidth: '26rem' }}
+            sx={{ position: 'relative', maxWidth: '26rem', ...autocompleteSx }}
             error={error}
             InputProps={{
               ...params.InputProps,

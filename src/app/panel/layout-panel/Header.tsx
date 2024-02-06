@@ -66,12 +66,13 @@ const Header = ({ pathname }: { pathname?: string }) => {
   const { headerTitle } = useHeaderStore()
 
   // 타이틀만 보여주고 싶은 경우 (뒤로 가기 버튼이 보이지 않았으면 하는 경우)
-  const onlyTitle = title === '마이페이지' || title === '팀페이지'
+  const onlyTitle =
+    title === '마이페이지' || title === '팀페이지' || title === '로그인'
 
   return (
     <AppBar position="fixed" sx={mobileHeader}>
       <Toolbar disableGutters sx={style.mobileHeaderToolbar}>
-        {title === '메인' && keyword === '' ? (
+        {pathname === '/' && keyword === '' ? (
           <Stack sx={style.mobileHeaderStack}>
             <AlertIcon />
             <Box sx={style.mobileHeaderTitle}>

@@ -15,8 +15,7 @@ export const ListBoxContainer = {
   background: (theme: Theme) => theme.palette.background.secondary,
 }
 
-export const PcListStack = {
-  // 페이징 방식이 페이지네이션이 될 경우 수정될 수 있음
+export const ListStack = {
   height: '100%',
   overflowY: 'scroll',
 }

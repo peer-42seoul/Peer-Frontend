@@ -14,7 +14,7 @@ export interface IMember {
 }
 
 export interface ILinkInformation {
-  id: number
+  id: string
   name: string
   link: string
 }

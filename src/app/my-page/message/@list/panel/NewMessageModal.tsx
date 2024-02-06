@@ -133,7 +133,7 @@ const NewMessageModal = ({
               fullWidth
               value={targetUser ? targetUser.targetNickname : keyword}
               disabled={!!targetUser}
-              placeholder={'닉네임 혹은 이메일을 입력하세요.'}
+              placeholder={'검색할 닉네임을 입력해주세요.'}
               sx={style.inputBase}
               onChange={(e) => setKeyword(e.target.value)}
             />

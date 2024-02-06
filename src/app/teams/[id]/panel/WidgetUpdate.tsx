@@ -42,12 +42,12 @@ const WidgetUpdate = ({
       }
       if (isCreate) {
         await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/create`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/dnd-main/create`,
           teamWidgetInfo,
         )
       } else
         await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/update`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/dnd-main/update`,
           teamWidgetInfo,
         )
       alert('저장되었습니다.')

@@ -3,6 +3,7 @@
 import { defaultGetFetcher } from '@/api/fetchers'
 import { ICardData } from '@/app/showcase/panel/types'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import { IPagination } from '@/types/IPagination'
 import { Box, Stack, Typography, Button, Card, Avatar } from '@mui/material'
@@ -14,7 +15,7 @@ import useSWR from 'swr'
 const MainShowcase = () => {
   const router = useRouter()
   const { data, isLoading, error } = useSWR<IPagination<ICardData[]>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=1&pageSize=10`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase?page=1&pageSize=10`,
     defaultGetFetcher,
   )
 
@@ -92,7 +93,7 @@ const MainShowcase = () => {
               textOverflow={'ellipsis'}
               m={'1rem'}
             >
-              <Typography
+              {/* <Typography
                 color={'text'}
                 sx={{
                   wordBreak: 'break-word',
@@ -104,7 +105,8 @@ const MainShowcase = () => {
                 }}
               >
                 {data.content[0].description}
-              </Typography>
+              </Typography> */}
+              <DynamicToastViewer initialValue={data.content[0].description} />
             </Stack>
           </Card>
         </Stack>

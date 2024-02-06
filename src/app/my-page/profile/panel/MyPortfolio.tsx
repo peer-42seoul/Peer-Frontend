@@ -42,7 +42,7 @@ const MyPortfolio = ({
   const axiosWithAuth = useAxiosWithAuth()
 
   const { data, isLoading } = useSWR<Array<IMyPortfolio>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/myPortfolio/list?page=${page}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/myPortfolio/list?page=${page}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 

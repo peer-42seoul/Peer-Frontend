@@ -1,3 +1,5 @@
+'use client'
+
 import useMedia from '@/hook/useMedia'
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -12,7 +14,7 @@ declare global {
 }
 
 const PwaInstallBanner = () => {
-  const [isShowInstall, setIsShowInstall] = useState(true)
+  const [isShowInstall, setIsShowInstall] = useState(false)
   const { isPc } = useMedia()
   const [isSafari, setIsSafari] = useState(false)
   const [deferredPrompt, setDeferredPrompt] =
@@ -36,11 +38,13 @@ const PwaInstallBanner = () => {
   }
 
   useEffect(() => {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    if (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      localStorage.getItem('isShowInstall') === 'false'
+    ) {
       setIsShowInstall(false)
-    }
-    if (localStorage.getItem('isShowInstall') === 'false') {
-      setIsShowInstall(false)
+    } else {
+      setIsShowInstall(true)
     }
 
     const isSafariBrowser =

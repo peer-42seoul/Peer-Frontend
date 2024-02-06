@@ -33,7 +33,9 @@ const CloseQuestionForm = ({
                 disabled={disabled}
                 control={<Radio />}
                 label={
-                  <Typography color={'text.alternative'}>{label}</Typography>
+                  <Typography color={'text.alternative'} variant={'Body1'}>
+                    {label}
+                  </Typography>
                 }
                 value={index}
                 key={index}

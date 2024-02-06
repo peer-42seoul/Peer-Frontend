@@ -27,6 +27,7 @@ const MessageChatPage = () => {
   )
   const axiosWithAuth = useAxiosWithAuth()
   const { isPc } = useMedia()
+  const [isMessageSending, setIsMessageSending] = useState(false)
 
   const fetchMoreData = useCallback(
     async (url: string) => {
@@ -147,6 +148,10 @@ const MessageChatPage = () => {
           </Stack>
           {isPc ? (
             <MessageForm
+              messageSendState={{
+                isMessageSending,
+                setIsMessageSending,
+              }}
               targetId={target.userId}
               updateTarget={setTarget}
               addNewMessage={addNewMessage}
@@ -154,6 +159,10 @@ const MessageChatPage = () => {
             />
           ) : (
             <MobileSendButton
+              messageSendState={{
+                isMessageSending,
+                setIsMessageSending,
+              }}
               disabled={target.deleted}
               target={{ id: target.userId, nickname: target.userNickname }}
               addNewMessage={addNewMessage}

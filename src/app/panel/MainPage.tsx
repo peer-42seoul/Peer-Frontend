@@ -20,9 +20,6 @@ import { IPagination } from '@/types/IPagination'
 import PwaInstallBanner from './PwaInstallBanner'
 import PushAlertBanner from './PushAlertBanner'
 import MainBanner from '@/app/panel/main-page/MainBanner'
-import io from 'socket.io-client'
-import { getCookie } from 'cookies-next'
-import useSocket from '@/states/useSocket'
 import Tutorial from '@/components/Tutorial'
 import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
 import useHeaderStore from '@/states/useHeaderStore'
@@ -61,20 +58,17 @@ export interface IDetailOption {
   tag: string
 }
 
-export const socket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-  transports: ['socket.io', 'polling'],
-  query: {
-    token: getCookie('accessToken') ? getCookie('accessToken') : '',
-  },
-})
-
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
+  const searchParams = useSearchParams()
+  const keyword = searchParams.get('keyword') ?? ''
+  const searchType = searchParams.get('type') === 'STUDY' ? 'STUDY' : 'PROJECT'
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
-  const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
+  const [type, setType] = useState<ProjectType | undefined>(
+    keyword !== '' ? searchType : undefined,
+  ) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
-  const { setSocket } = useSocket()
   const [detailOption, setDetailOption] = useState<IDetailOption>({
     isInit: true,
     due1: 0,
@@ -86,8 +80,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     tag: '',
   })
 
-  const searchParams = useSearchParams()
-  const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
@@ -99,9 +91,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   useEffect(() => {
     if (keyword !== '') {
       setHeaderTitle(keyword + ' 검색 결과')
+      setType(searchType)
       setInit(false)
     } else setHeaderTitle('')
-  }, [keyword])
+  }, [keyword, searchType])
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
 
@@ -129,7 +122,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   const { data: favoriteData } = useSWR<IFavorite[]>(
     isInit && isLogin
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites` + option
+      ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorites` + option
       : null,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
@@ -146,7 +139,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   } = useSWR<IPagination<IPost[]>>(
     isInit
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit` + option,
+      : `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit` + option,
     isLogin
       ? (url: string) =>
           axiosInstance.get(url).then((res) => {
@@ -155,36 +148,21 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       : defaultGetFetcher,
   )
 
-  const [content, setContent] = useState<IPost[]>(initData?.content ?? [])
+  const [content, setContent] = useState<IPost[] | []>([])
 
   useEffect(() => {
-    if (isLogin) {
-      socket.on('connect', () => {
-        console.log('socket connected')
-      })
-      socket.on('disconnect', () => {
-        console.log('socket disconnected')
-      })
-      socket.on('connect_error', (err) => {
-        console.log(err)
-      })
-      socket.on('reconnect', (attemptNumber) => {
-        console.log('reconnect', attemptNumber)
-      })
-      socket.on('reconnect_attempt', (attemptNumber) => {
-        console.log('reconnect_attempt', attemptNumber)
-      })
-      setSocket(socket)
-    }
-  }, [])
+    if (!newData || !newData?.content)
+      return setContent(
+        initData?.content.map((v) => ({
+          ...v,
+          favorite: getFavoriteData(v.recruit_id),
+        })) ?? [],
+      )
 
-  useEffect(() => {
-    if (!newData || !newData?.content) return
     //page가 1일 경우 == initData가 설정되어있을경우, 무한스크롤시 page는 무조건 2부터 시작함.
     //따라서 page가 1일 경우에는 옵션이 달라진 것임. 고로 무조건 새로운 데이터로 setContent를 해준다.
     if (page == 1) {
-      setContent(newData.content)
-      return
+      return setContent(newData.content)
     }
     //여기서부터는 무한스크롤 영역. 길이가 0이면 더해주지 않는다.
     if (newData?.content.length == 0) return
@@ -203,6 +181,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     page,
   )
 
+  const { target: pcTarget, spinner: pcSpinner } = useInfiniteScrollHook(
+    setPage,
+    isLoading,
+    (newData?.last || initData?.last) ?? true, //isEnd
+    page,
+  )
   const handleType = useCallback(
     (value: ProjectType) => {
       setType(value)
@@ -233,30 +217,25 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     setPage(1)
   }, [])
 
-  const noContent =
-    isLoading && page == 1
-      ? '로딩중...'
-      : error
-        ? '에러 발생'
-        : content?.length == 0
-          ? '데이터가 없습니다'
-          : null
+  const noContent = error
+    ? '에러 발생'
+    : content?.length == 0
+      ? '데이터가 없습니다'
+      : null
 
   return (
     <>
       <PushAlertBanner />
       {/* mobile view */}
       <div className="mobile-layout">
-        <Container sx={containerStyle}>
+        <Container sx={{ ...containerStyle, paddingBottom: '1.25rem' }}>
           {keyword === '' ? (
             <>
-              <Stack width={'100%'}>
-                <MainBanner />
-              </Stack>
+              <MainBanner />
+
               <Box marginY={'0.5rem'}>
                 <SelectType type={type} setType={handleType} />
               </Box>
-
               <SearchOptionPanel
                 handleOption={handleOption}
                 type={type}
@@ -285,19 +264,15 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               justifyContent={'center'}
               alignItems={'center'}
             >
-              {isLoading ? (
-                <Typography variant={'Body1'}>{noContent}</Typography>
-              ) : (
-                <NoDataDolphin
-                  message={noContent}
-                  backgroundColor={'background.primary'}
-                />
-              )}
+              <NoDataDolphin
+                message={noContent}
+                backgroundColor={'background.primary'}
+              />
             </Stack>
           ) : (
             <>
               <Stack alignItems={'center'}>
-                <Stack gap={2}>
+                <Stack gap={2} width={'100%'}>
                   {content?.map((project: IPost) => (
                     <Box key={project.recruit_id}>
                       <MainCard
@@ -314,26 +289,31 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   ))}
                 </Stack>
               </Stack>
+              {/* 무한 스크롤 */}
+              <Stack
+                width={'100%'}
+                justifyContent={'center'}
+                alignItems={'center'}
+              >
+                <InfinityScrollPanel target={target} spinner={spinner} />
+              </Stack>
             </>
           )}
           <Box sx={floatButtonStyle}>
             <FloatEditButton />
           </Box>
-          {/* 무한 스크롤 */}
-          <InfinityScrollPanel target={target} spinner={spinner} />
         </Container>
       </div>
 
       {/* pc view */}
       <div className="pc-layout">
-        <Container disableGutters sx={containerStyle}>
+        <Container sx={containerStyle}>
           <Stack direction={'row'} spacing={4}>
             <Stack flex={1} gap={'0.5rem'}>
               {keyword === '' ? (
                 <>
-                  <Stack maxWidth={'56rem'} mx={'auto'}>
-                    <MainBanner />
-                  </Stack>
+                  <MainBanner />
+
                   <Stack direction={'row'} justifyContent={'space-between'}>
                     <SelectType type={type} setType={handleType} />
                     <Tutorial
@@ -370,14 +350,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   justifyContent={'center'}
                   alignItems={'center'}
                 >
-                  {isLoading ? (
-                    <Typography variant={'Body1'}>{noContent}</Typography>
-                  ) : (
-                    <NoDataDolphin
-                      message={noContent}
-                      backgroundColor={'background.primary'}
-                    />
-                  )}
+                  <NoDataDolphin
+                    message={noContent}
+                    backgroundColor={'background.primary'}
+                  />
                 </Stack>
               ) : (
                 <>
@@ -398,7 +374,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                     ))}
                   </Grid>
                   {/* 무한 스크롤 */}
-                  <InfinityScrollPanel target={target} spinner={spinner} />
+                  <InfinityScrollPanel target={pcTarget} spinner={pcSpinner} />
                 </>
               )}
             </Stack>

@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import CreateTeamEditor from './panel/CreateTeamEditor'
 import { Editor } from '@toast-ui/editor'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
@@ -13,6 +13,7 @@ const Page = () => {
   const editorRef = useRef<Editor | null>(null)
   const axiosWithAuth = useAxiosWithAuth()
   const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { openToast, closeToast } = useToast()
 
@@ -23,22 +24,24 @@ const Page = () => {
     name: '',
     due: '',
     type: 'PROJECT',
-    region: ['', ''],
+    region: { large: '', small: '' },
     link: '',
     tagList: [],
     roleList: [{ name: '', number: 0 }],
-    interviewList: [
-      {
-        question: '질문을 입력하세요.',
-        type: 'CLOSE',
-        optionList: [{ option: '답변 1' }],
-      },
-    ],
+    interviewList: [],
     max: '2',
   }
 
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
+    if (String(editorRef.current?.getMarkdown()).length > 2000) {
+      openToast({
+        message: '모집글 내용은 2000자 이하로 작성해주세요.',
+        severity: 'error',
+      })
+      return
+    }
+    setIsSubmitting(true)
     await axiosWithAuth
       .post('/api/v1/recruit/write', {
         image: data.image?.split(',')[1],
@@ -46,7 +49,10 @@ const Page = () => {
         name: data.name,
         due: data.due,
         type: data.type,
-        region: data.place === 'ONLINE' ? null : data.region,
+        region:
+          data.place === 'ONLINE'
+            ? null
+            : [data.region.large, data.region.small],
         tagList: data.tagList.map((tag: ITag) => {
           return tag.tagId
         }),
@@ -62,13 +68,15 @@ const Page = () => {
           message: '모집글이 성공적으로 등록되었습니다.',
           severity: 'success',
         })
-        router.replace(`/recruit/${res.data}`)
+        setIsSubmitting(false)
+        router.push(`/recruit/${res.data}?type=${data.type}`)
       })
       .catch((error) => {
         openToast({
           message: error.data.message ?? '모집글 등록에 실패했습니다.',
           severity: 'error',
         })
+        setIsSubmitting(false)
       })
   }
 
@@ -78,6 +86,7 @@ const Page = () => {
       defaultValues={defaultValues}
       editorType="write"
       submitHandler={handleSubmit}
+      isSubmitting={isSubmitting}
     />
   )
 }

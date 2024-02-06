@@ -4,14 +4,14 @@ import Image from 'next/image'
 const Icons = { width: '40px', height: '40px', backgroundColor: '#EFEFEF' }
 
 const OauthLoginBox = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
 
   return (
     <Box
       sx={{
         display: 'flex',
-        width: '120px',
-        height: '60px',
+        width: '7.5rem',
+        height: '3.75rem',
         justifyContent: 'space-between',
       }}
     >

@@ -20,7 +20,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
   const disperseTeam = () => {
     console.log('exit team')
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/disperse`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/disperse`, {
         teamId: teamId,
       })
       .then((res) => {
@@ -31,6 +31,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
             severity: 'success',
             message: '팀이 해산되었습니다.',
           })
+          router.push('/team-list')
         } else if (res.status === 401) {
           console.log(res)
           router.push('/login')

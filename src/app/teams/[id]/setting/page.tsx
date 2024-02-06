@@ -1,5 +1,6 @@
 'use client'
 
+import { isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { Button, Card, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -12,7 +13,6 @@ import RedirectionRecruit from './panel/RedirectRecruitPage'
 import TeamJobAdd from './panel/SettingTeamJobs'
 import SetupInfo from './panel/SettingTeamInfo'
 import CuCircularProgress from '@/components/CuCircularProgress'
-import useSocket from '@/states/useSocket'
 import Tutorial from '@/components/Tutorial'
 import TeamMemberTutorial from '@/components/tutorialContent/TeamMemberTutorial'
 
@@ -24,36 +24,48 @@ export interface IMyInfo {
 }
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
-  const { socket } = useSocket()
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
-  const [myInfo, setMyInfo] = useState<IMyInfo>()
-  const { data, error, isLoading } = useSWR<ITeam>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
+  // const [myInfo, setMyInfo] = useState<IMyInfo>()
+  const { data, error, isLoading, mutate } = useSWR<ITeam>(
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
   )
   const router = useRouter()
+  const [teams, setTeams] = useState<ITeam>()
+
+  useEffect(() => {
+    if (data) {
+      setTeams(data)
+    }
+  }, [data])
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
-  useEffect(() => {
-    if (!socket) return
-    socket.emit(
-      'whoAmI',
-      {
-        teamId: params.id,
-        teamName: data?.team.name,
-      },
-      (data: any) => {
-        setMyInfo(data)
-      },
-    )
-  }, [])
+  // useEffect(() => {
+  //   if (!socket) return
+
+  //   socket.emit(
+  //     'whoAmI',
+  //     {
+  //       teamId: params.id,
+  //       teamName: data?.team.name,
+  //     },
+  //     (data: any) => {
+  //       setMyInfo(data)
+  //     },
+  //   )
+
+  //   return () => {
+  //     if (!socket) return
+  //     socket.off('whoAmI')
+  //   }
+  // }, [setMyInfo, socket])
 
   if (error) {
-    if (error.status === 403) {
-      alert('팀 페이지에 접근할 권한이 없습니다.')
+    if (isAxiosError(error) && error.response?.status === 403) {
+      alert('팀 설정은 팀 리더만 가능합니다.')
     } else {
       alert('팀 페이지에 접근할 수 없습니다.')
     }
@@ -79,15 +91,15 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       width={'93%'}
     >
       <Typography>설정</Typography>
-      {data ? (
+      {teams ? (
         <>
-          <RedirectionRecruit id={params.id} data={data} />
-          <SetupInfo team={data.team} />
-          {data.team.type === TeamType.PROJECT && (
+          <RedirectionRecruit id={params.id} data={teams} />
+          <SetupInfo team={teams.team} mutate={mutate} />
+          {teams.team.type === TeamType.PROJECT && (
             <TeamJobAdd
               teamId={params.id}
-              jobList={data.job.filter((job) => job.name != 'Leader')}
-              teamStatus={data.team.status}
+              jobList={teams.job.filter((job) => job.name != 'Leader')}
+              teamStatus={teams.team.status}
             />
           )}
           {!showApplicant ? (
@@ -110,7 +122,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 </Stack>
                 <Button
                   disabled={
-                    data.team.status === TeamStatus.COMPLETE ? true : false
+                    teams.team.status === TeamStatus.COMPLETE ? true : false
                   }
                   onClick={openApplicant}
                   sx={{ width: '9rem' }}
@@ -122,15 +134,14 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 </Button>
               </Stack>
               <SetupMember
-                teamStatus={data.team.status}
-                team={data.member}
-                teamId={data.team.id}
-                jobs={data.job}
-                myInfo={myInfo}
+                teamStatus={teams.team.status}
+                team={teams.member}
+                teamId={teams.team.id}
+                jobs={teams.job}
               />
             </Card>
           ) : (
-            <ApplicantList close={closeApplicant} teamId={data.team.id} />
+            <ApplicantList close={closeApplicant} teamId={teams.team.id} />
           )}
         </>
       ) : (

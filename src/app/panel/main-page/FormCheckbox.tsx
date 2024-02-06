@@ -6,11 +6,13 @@ const FormCheckbox = ({
   label,
   control,
   value,
+  variant,
 }: {
   name: string
   label: string
   control: any
   value?: string
+  variant?: any
 }) => {
   return (
     <Stack direction={'row'} alignItems={'center'}>
@@ -25,7 +27,7 @@ const FormCheckbox = ({
           )
         }
       />
-      <Typography variant={'Caption'}>{label}</Typography>
+      <Typography variant={variant ?? 'Caption'}>{label}</Typography>
     </Stack>
   )
 }

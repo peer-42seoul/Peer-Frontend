@@ -20,7 +20,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
   const quitTeam = () => {
     console.log('exit team')
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/quit`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/quit`, {
         teamId: teamId,
       })
       .then((res) => {
@@ -30,6 +30,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
             severity: 'success',
             message: '팀을 나갔습니다.',
           })
+          router.push('/team-list')
         } else if (res.status === 401) {
           console.log(res)
           router.push('/login')

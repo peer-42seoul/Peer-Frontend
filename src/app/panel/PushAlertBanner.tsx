@@ -1,3 +1,5 @@
+'use client'
+
 import useAxiosWithAuth from '@/api/config'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { AxiosInstance } from 'axios'
@@ -6,7 +8,7 @@ import webpush from 'web-push'
 
 const PushAlertBanner = () => {
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-  const [isShowPush, setIsShowPush] = useState<boolean>(true)
+  const [isShowPush, setIsShowPush] = useState<boolean>(false)
   const [isScroll, setIsScroll] = useState<number>(1)
 
   const urlBase64ToUint8Array = (base64String: string) => {
@@ -46,7 +48,7 @@ const PushAlertBanner = () => {
         let newSubString = JSON.stringify(newSubData)
 
         return axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/push`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/push`,
           {
             subscription: newSubString,
           },
@@ -100,6 +102,8 @@ const PushAlertBanner = () => {
   useEffect(() => {
     if (localStorage && localStorage.getItem('isShowPush') === 'false') {
       setIsShowPush(false)
+    } else {
+      setIsShowPush(true)
     }
 
     window.addEventListener('scroll', handleScroll)

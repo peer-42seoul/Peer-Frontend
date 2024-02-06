@@ -16,7 +16,7 @@ const ShowCaseWritePage = () => {
   const axiosWithAuth = useAxiosWithAuth()
 
   const { data, isLoading, error } = useSWR<IShowcaseEditorFields>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write/${teamId}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/write/${teamId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )

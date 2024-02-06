@@ -24,6 +24,7 @@ import { idStyle, statusStyle, titleStyle } from './AnnounceStyles'
 import DynamicToastEditor from '@/components/DynamicToastEditor'
 import { Editor } from '@toast-ui/editor'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
+import { config } from '../panel/AdminAxios'
 
 interface IAnnounceAllContent {
   announcementId: number
@@ -100,7 +101,7 @@ interface IAnnounceContentEdit {
 }
 
 const Announce = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
 
   const [content, setContent] = useState<content[]>([])
   const [open, setOpen] = useState<boolean>(false)
@@ -139,8 +140,7 @@ const Announce = () => {
     axios
       .get(`${API_URL}/api/v1/admin/announcement`, {
         params,
-        // withCredentials: true,
-        // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+        ...config,
       })
       .then((res) => {
         if (isMounted) {
@@ -187,7 +187,6 @@ const Announce = () => {
   }
 
   const onSubmit = async (data: IAnnounceAllContent) => {
-    console.log('onSubmit', data)
     if (data.previewImage === '') {
       alert('이미지를 삽입해주세요')
       return
@@ -195,7 +194,6 @@ const Announce = () => {
     let DateFormed = ''
     if (data.announcementNoticeStatus === '예약') {
       if (data.reservationDate === null) {
-        console.log('there is no reservationDate therefore return')
         return
       }
       DateFormed = formatDate(new Date(data.reservationDate))
@@ -218,15 +216,16 @@ const Announce = () => {
       }
     } else return
     await axios
-      .post(`${API_URL}/api/v1/admin/announcement`, submitData)
+      .post(`${API_URL}/api/v1/admin/announcement`, submitData, {
+        withCredentials: true,
+      })
       .then(() => {
-        console.log('submit success')
         setOpen(false)
         reset()
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
-            // withCredentials: true,
+            withCredentials: true,
             // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
@@ -235,19 +234,15 @@ const Announce = () => {
           })
       })
       .catch((err) => {
-        console.log('submit fail', submitData)
         alert('공지사항 등록 실패 \n사유 : ' + err)
       })
   }
 
   const onSubmitEdit = async (data: IAnnounceAllContent) => {
-    console.log('onSubmitEdit, given data -> ', data, data.image)
-
     let submitData: IAnnounceContentEdit
     let DateFormed = ''
     if (data.announcementNoticeStatus === '예약') {
       if (data.reservationDate === null) {
-        console.log('there is no reservationDate therefore return')
         return
       }
       DateFormed = formatDate(new Date(data.reservationDate))
@@ -265,7 +260,6 @@ const Announce = () => {
         announcementNoticeStatus: data.announcementNoticeStatus, // 'announcementStatus'를 'announcementNoticeStatus'로 매핑합니다.
         reservationDate:
           data.announcementNoticeStatus === '예약' ? DateFormed : null,
-        // content: data.content,
         content: editorRef.current ? editorRef.current.getMarkdown() : '',
       }
     } else return
@@ -273,14 +267,12 @@ const Announce = () => {
     await axios
       .put(`${API_URL}/api/v1/admin/announcement`, submitData)
       .then(() => {
-        console.log('Edit submit success', submitData)
         setOpen(false)
         reset()
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
-            // withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+            withCredentials: true,
           })
           .then((res) => {
             totalPageVar.current = res.data.totalPages
@@ -288,23 +280,22 @@ const Announce = () => {
           })
       })
       .catch((err) => {
-        console.log('submit edit fail', submitData)
         alert('공지사항 수정 실패 \n사유 : ' + err)
       })
   }
 
   const onHandleEdit = async () => {
     setWriteMode('edit')
-    console.log('edit vlaues ,', getValues())
   }
 
   const onHandleView = async (id: number) => {
     setWriteMode('view')
     setOpen(true)
     await axios
-      .get(`${API_URL}/api/v1/admin/announcement/${id}`)
+      .get(`${API_URL}/api/v1/admin/announcement/${id}`, {
+        withCredentials: true,
+      })
       .then((res) => {
-        console.log(res)
         setValue('announcementId', id)
         setValue('writer', res.data.writer)
         setValue('title', res.data.title)
@@ -326,32 +317,31 @@ const Announce = () => {
         setValue('announcementNoticeStatus', noticeStatusValue)
       })
       .catch((err) => {
-        console.log(err)
         alert('공지사항 조회 실패 \n사유 : ' + err)
       })
   }
 
   const onHandleHideOrUnHide = async (mode: string) => {
-    console.log('onHandleHide, ', getValues('announcementId'))
     const announcementId = getValues('announcementId')
     axios
-      .post(`${API_URL}/api/v1/admin/announcement/${mode}`, { announcementId })
+      .post(
+        `${API_URL}/api/v1/admin/announcement/${mode}`,
+        { announcementId },
+        { withCredentials: true },
+      )
       .then(() => {
-        console.log(`${mode} success`)
         setOpen(false)
         reset()
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
-            // withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+            withCredentials: true,
           })
           .then((res) => {
             setContent(res.data.content)
           })
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         alert(`공지사항 ${mode} 처리 실패`)
       })
   }
@@ -360,15 +350,14 @@ const Announce = () => {
     axios
       .delete(`${API_URL}/api/v1/admin/announcement`, {
         data: { announcementId: announcementId },
+        withCredentials: true,
       })
       .then(() => {
-        console.log('delete success')
         setOpen(false)
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
-            // withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+            withCredentials: true,
           })
           .then((res) => {
             setContent(res.data.content)
@@ -381,7 +370,6 @@ const Announce = () => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        // alignItems: 'center',
         width: '80rem',
         height: '30rem',
         paddingTop: '5rem',
@@ -440,7 +428,6 @@ const Announce = () => {
                     alt="Picture of the announcement"
                   />
                 </Box>
-                {/* <Box sx={{ width: '25%' }}> */}
                 <Button
                   onClick={() => onHandleView(item.announcementId)}
                   sx={{ width: '65%' }}
@@ -449,7 +436,6 @@ const Announce = () => {
                     {item.title}
                   </Typography>
                 </Button>
-                {/* </Box> */}
               </Stack>
             ))}
           </Stack>
@@ -467,32 +453,44 @@ const Announce = () => {
       </Stack>
       {/* 새글쓰기 모달 */}
       <CuModal
-        title=""
+        title={
+          writeMode === 'write'
+            ? '새 공지글 쓰기'
+            : writeMode === 'edit'
+              ? '공지글 수정하기'
+              : '공지 글 보기'
+        }
         open={open}
         onClose={() => setOpen(false)}
         mobileFullSize={false}
       >
         <Container>
-          <Typography variant={'h4'} align="center">
-            {writeMode === 'write'
-              ? '새 공지글 쓰기'
-              : writeMode === 'edit'
-                ? '공지글 수정하기'
-                : '공지 글 보기'}
-          </Typography>
-          <ImageUploadButton
-            setPreviewImage={(image: string) => setValue('previewImage', image)}
-            register={register('image')}
-          >
+          {writeMode === 'view' ? (
             <Box>
               <Image
                 src={previewImage}
-                width={240}
+                width={320}
                 height={160}
                 alt="Picture of the announcement"
               />
             </Box>
-          </ImageUploadButton>
+          ) : (
+            <ImageUploadButton
+              setPreviewImage={(image: string) =>
+                setValue('previewImage', image)
+              }
+              register={register('image')}
+            >
+              <Box>
+                <Image
+                  src={previewImage}
+                  width={240}
+                  height={160}
+                  alt="Picture of the announcement"
+                />
+              </Box>
+            </ImageUploadButton>
+          )}
           <Typography variant={'Title2'}>제목</Typography>
           <TextField
             {...register('title', {
@@ -538,23 +536,8 @@ const Announce = () => {
               />
             </>
           ) : null}
-          {/* <Typography variant={'Body1'}>내용</Typography>
-          <TextField
-            multiline
-            disabled={writeMode === 'view'}
-            {...register('content', {
-              required: '내용은 필수 입력 항목입니다.',
-              minLength: {
-                value: 10,
-                message: '내용은 최소 10자 이상 입력해주세요.',
-              },
-            })}
-            error={!!errors.content}
-            helperText={errors.content?.message}
-          /> */}
-          {/* </Stack> */}
           {writeMode === 'view' ? (
-            <div>
+            <Box>
               <DynamicToastViewer
                 initialValue={getValues('content')}
                 sx={{
@@ -565,9 +548,9 @@ const Announce = () => {
                   overflowY: 'auto',
                 }}
               />
-            </div>
+            </Box>
           ) : (
-            <>
+            <Box>
               <DynamicToastEditor
                 initialValue={getValues('content')}
                 initialEditType="wysiwyg"
@@ -575,7 +558,7 @@ const Announce = () => {
                 previewStyle="tab"
                 height={'30rem'}
               />
-            </>
+            </Box>
           )}
           <Stack>
             <Typography variant={'Title2'}>공지 예약 및 알림</Typography>

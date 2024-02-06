@@ -1,5 +1,12 @@
 import { ReactNode, useState } from 'react'
-import { Box, IconButton, Modal, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  IconButton,
+  Modal,
+  Stack,
+  SxProps,
+  Typography,
+} from '@mui/material'
 import { Help } from '@mui/icons-material'
 import useMedia from '@/hook/useMedia'
 import { CloseIcon } from '@/icons'
@@ -8,15 +15,16 @@ import * as style from './Tutorial.style'
 interface ITutorialProps {
   title?: string
   content: ReactNode
+  sx?: SxProps
 }
 
-const Tutorial = ({ title, content }: ITutorialProps) => {
+const Tutorial = ({ title, content, sx }: ITutorialProps) => {
   const [open, setOpen] = useState(false)
   const { isPc } = useMedia()
   return (
     <>
       <IconButton onClick={() => setOpen(true)}>
-        <Help sx={{ color: 'purple.strong' }} />
+        <Help sx={{ color: 'purple.strong', ...sx }} />
       </IconButton>
       <Modal open={open} onClose={() => setOpen(false)} keepMounted>
         <Stack

@@ -24,6 +24,7 @@ const RecruitQuickMenu = ({
   const path = usePathname()
   const type = useSearchParams().get('type')
   const router = useRouter()
+  const currentPageUrl = window?.location.href
 
   return (
     <Stack flexDirection={'row'} justifyContent={'flex-end'}>
@@ -35,9 +36,9 @@ const RecruitQuickMenu = ({
       <DropdownMenu>
         <ShareMenuItem
           title={title}
-          url={`${path}?type=${type}`}
+          url={currentPageUrl}
           content={content}
-          message={`피어에서 동료를 구해보세요! 이런 프로젝트가 있어요!`}
+          message={currentPageUrl}
         />
         {me && (
           <IconMenuItem

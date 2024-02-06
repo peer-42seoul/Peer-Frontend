@@ -19,6 +19,10 @@ import * as style from './MessageForm.style'
 const MAX_LENGTH = 300
 
 interface IMessageFormProps {
+  messageSendState: {
+    isMessageSending: boolean
+    setIsMessageSending: (value: boolean) => void
+  }
   targetId: number
   updateTarget?: Dispatch<SetStateAction<IMessageTargetUser | undefined>>
   addNewMessage: (newMessage: IMessage) => void
@@ -29,6 +33,7 @@ interface IMessageFormProps {
 const BorderlessTextField = styled(CuTextField)(style.removeBorder)
 
 const MessageForm = ({
+  messageSendState,
   targetId,
   updateTarget,
   addNewMessage,
@@ -53,6 +58,7 @@ const MessageForm = ({
   ) => {
     e.preventDefault()
     e.stopPropagation()
+    messageSendState.setIsMessageSending(true)
     try {
       if (!content) {
         openToast({
@@ -98,6 +104,7 @@ const MessageForm = ({
         })
       }
     } finally {
+      messageSendState.setIsMessageSending(false)
       handleClose && handleClose()
     }
   }
@@ -134,7 +141,11 @@ const MessageForm = ({
                 {content.length} / {MAX_LENGTH}
               </Typography>
             </Stack>
-            <IconButton type="submit" sx={style.pcSendButton}>
+            <IconButton
+              disabled={messageSendState.isMessageSending || disabled}
+              type="submit"
+              sx={style.pcSendButton}
+            >
               <SendIcon />
             </IconButton>
           </Stack>

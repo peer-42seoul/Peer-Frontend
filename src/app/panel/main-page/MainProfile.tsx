@@ -9,7 +9,7 @@ const MainProfile = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const { isLogin } = useAuthStore()
   const { data } = useSWR<IUserProfile>(
-    isLogin ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile` : undefined,
+    isLogin ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/profile` : undefined,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const [isClient, setIsClient] = useState(false)
@@ -46,7 +46,7 @@ const MainProfile = () => {
         ) : (
           <Link style={{ textDecoration: 'none' }} href={'/login'}>
             <Typography
-              variant={'Tag'}
+              variant={'Body1'}
               sx={{
                 '&:hover': {
                   textDecoration: 'underline',

@@ -1,5 +1,6 @@
 'use client'
 import { FormEvent, useEffect, useRef, useState } from 'react'
+import { isAxiosError } from 'axios'
 import { Editor } from '@toast-ui/editor'
 import useAxiosWithAuth from '@/api/config'
 import useTeamPageState from '@/states/useTeamPageState'
@@ -36,7 +37,7 @@ const NoticeEditForm = ({
           })
         })
         .catch(() => {
-          alert('게시글을 불러오는데 실패했습니다.')
+          alert('글을 불러오는데 실패했습니다.')
           setNotice('LIST')
         })
         .finally(() => {
@@ -67,11 +68,18 @@ const NoticeEditForm = ({
           alert('공지사항을 수정했습니다.')
           setNotice('DETAIL', postId)
         })
-        .catch(() => {
-          openToast({
-            severity: 'error',
-            message: '공지사항 수정에 실패했습니다.',
-          })
+        .catch((e: unknown) => {
+          if (isAxiosError(e) && e.response?.status === 403) {
+            openToast({
+              severity: 'error',
+              message: '공지사항 수정은 팀 리더와 작성자만 가능합니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: '공지사항 수정에 실패했습니다.',
+            })
+          }
         })
     } else {
       // 글 작성
@@ -84,11 +92,18 @@ const NoticeEditForm = ({
           alert('공지사항이 등록되었습니다.')
           setNotice('DETAIL', res.data.postId)
         })
-        .catch(() => {
-          openToast({
-            severity: 'error',
-            message: '공지사항 수정에 실패했습니다.',
-          })
+        .catch((e: unknown) => {
+          if (isAxiosError(e) && e.response?.status === 403) {
+            openToast({
+              severity: 'error',
+              message: '공지사항 등록은 팀 리더와 작성자만 가능합니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: '공지사항 등록에 실패했습니다.',
+            })
+          }
         })
     }
   }

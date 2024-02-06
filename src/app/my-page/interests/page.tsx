@@ -20,6 +20,7 @@ import * as style from './interests.style'
 import { centeredPosition } from '@/constant/centerdPosition.style'
 import { IPagination } from '@/types/IPagination'
 import { ITag } from '@/types/IPostDetail'
+import { getUniqueArray } from '@/utils/getUniqueArray'
 
 export interface IDefaultPostCard {
   recruit_id: number
@@ -167,6 +168,10 @@ const MyInterests = () => {
       type === 'SHOWCASE' ? '/showcase?' : `?type=${type}&`
     }page=${page}&pageSize=${pagesize}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
   )
 
   const deleteAll = async () => {
@@ -175,7 +180,7 @@ const MyInterests = () => {
     setIsDeleting(true)
     return await axiosWithAuth
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/mypage/favorite?type=${type}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/mypage/favorite?type=${type}`,
       )
       .then(() => {
         openToast({
@@ -204,11 +209,17 @@ const MyInterests = () => {
     if (!isLoading && data) {
       if (type === 'SHOWCASE') {
         setShowcaseList((prev) => {
-          return prev.concat(data.content as Array<IShowcasePostCard>)
+          return getUniqueArray(
+            prev.concat(data.content as Array<IShowcasePostCard>),
+            'showcaseId',
+          )
         })
       } else {
         setPostList((prev) => {
-          return prev.concat(data.content as Array<IDefaultPostCard>)
+          return getUniqueArray(
+            prev.concat(data.content as Array<IDefaultPostCard>),
+            'recruit_id',
+          )
         })
       }
 
@@ -235,7 +246,10 @@ const MyInterests = () => {
   })
 
   const InterestContentsCallback = React.useCallback(() => {
-    if (postList.length || showcaseList) {
+    if (
+      (type !== 'SHOWCASE' && postList.length) ||
+      (type === 'SHOWCASE' && showcaseList.length)
+    ) {
       return (
         <InterestsContents
           postList={postList}
@@ -249,7 +263,11 @@ const MyInterests = () => {
           setShowcaseList={setShowcaseList}
         />
       )
-    } else if (isLoading) {
+    } else if (
+      isLoading &&
+      ((type !== 'SHOWCASE' && !postList.length) ||
+        (type === 'SHOWCASE' && !showcaseList.length))
+    ) {
       return (
         <Box
           width={1}
@@ -280,7 +298,7 @@ const MyInterests = () => {
         </Box>
       )
     }
-  }, [isLoading, postList, showcaseList])
+  }, [isLoading, postList, showcaseList, type])
 
   return (
     <>

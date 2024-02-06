@@ -140,7 +140,7 @@ const HitchhikingCardBack = ({
             </CardContent>
             {/* TODO : 작성자 id 가져오기 */}
             <CardContent sx={{ padding: 0, width: 'auto' }}>
-              <DropdownMenu>
+              <DropdownMenu rotateOn>
                 <ShareMenuItem
                   url={`${currentDomain}/recruit/${postId}`}
                   title={title}

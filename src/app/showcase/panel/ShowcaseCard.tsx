@@ -32,7 +32,6 @@ const ShowcaseCardBack = ({
   title,
   name,
   image,
-  currentDomain,
 }: {
   postId: number
   sx?: SxProps
@@ -47,6 +46,7 @@ const ShowcaseCardBack = ({
 }) => {
   const router = useRouter()
   const { isPc } = useMedia()
+  const currentPageUrl = window?.location.href
 
   const getLineCount = (originHeight: number, lineHeight: number) => {
     const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
@@ -97,10 +97,11 @@ const ShowcaseCardBack = ({
               <DropdownMenu>
                 <ShareMenuItem
                   title={title}
-                  url={`${currentDomain}/recruit/${postId}`}
+                  url={currentPageUrl}
                   content={content}
+                  message={currentPageUrl}
                 />
-                {/* TODO : 모집글 작성자 아이디 가져올 수 있는 방법 찾기 */}
+
                 <ReportMenuItem targetId={postId} />
               </DropdownMenu>
             </CardActionArea>

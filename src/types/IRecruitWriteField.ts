@@ -9,17 +9,15 @@ export interface IFormInterviewField {
 
 export interface IRecruitWriteField {
   place: string
-  image: string | null
+  image: string
   title: string
   name: string
   due: string
   type: string
-  region: Array<string> | null
+  region: { large: string; small: string }
   link: string
   tagList: Array<ISkill>
   roleList: Array<IRoleWrite>
   interviewList: Array<IFormInterviewField>
-  // interviewList: Array<IFormInterview>
-  max: string | undefined
-  // content: string
+  max: string
 }
