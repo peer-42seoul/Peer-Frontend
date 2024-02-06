@@ -102,7 +102,7 @@ const TeamBoard = ({ params }: { params: { id: string } }) => {
                 textAlign={'center'}
               >
                 게시판이 존재하지 않습니다. 게시판 관리에서 게시판을
-                생성해보세요!
+                생성해보세요! (PC에서만 가능)
               </Typography>
             )}
           </ListBoxContainer>
