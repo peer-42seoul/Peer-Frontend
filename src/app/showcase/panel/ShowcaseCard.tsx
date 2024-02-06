@@ -97,10 +97,10 @@ const ShowcaseCardBack = ({
               <DropdownMenu>
                 <ShareMenuItem
                   title={title}
-                  url={`${currentDomain}/recruit/${postId}`}
+                  url={`${currentDomain}/showcase/${postId}`}
                   content={content}
                 />
-                {/* TODO : 모집글 작성자 아이디 가져올 수 있는 방법 찾기 */}
+
                 <ReportMenuItem targetId={postId} />
               </DropdownMenu>
             </CardActionArea>
