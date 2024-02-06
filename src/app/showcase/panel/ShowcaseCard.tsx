@@ -32,7 +32,6 @@ const ShowcaseCardBack = ({
   title,
   name,
   image,
-  currentDomain,
 }: {
   postId: number
   sx?: SxProps
@@ -47,6 +46,7 @@ const ShowcaseCardBack = ({
 }) => {
   const router = useRouter()
   const { isPc } = useMedia()
+  const currentPageUrl = window?.location.href
 
   const getLineCount = (originHeight: number, lineHeight: number) => {
     const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
@@ -97,8 +97,9 @@ const ShowcaseCardBack = ({
               <DropdownMenu>
                 <ShareMenuItem
                   title={title}
-                  url={`${currentDomain}/showcase/${postId}`}
+                  url={currentPageUrl}
                   content={content}
+                  message={currentPageUrl}
                 />
 
                 <ReportMenuItem targetId={postId} />
