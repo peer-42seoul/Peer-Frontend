@@ -59,7 +59,7 @@ const NewTag = ({
     const color = e.target.value
     setTagColor(color)
 
-    if (validateColor(color) || color === '') {
+    if (validateColor(color)) {
       setColorError('')
     } else {
       setColorError('유효하지 않은 색상 코드입니다. 예: #A333D2')
@@ -99,8 +99,8 @@ const NewTag = ({
           sx={{ display: 'flex', justifyContent: 'center' }}
           onChange={handleColorChange}
         />
-        <Box  sx={{ mt: 'auto', display: 'flex', justifyContent: 'flex-end' }}>
-          <Stack direction={'row'} justifyContent={'flex-end'} alignItems={'flex-end'}>
+        <Box>
+          <Stack direction={'row'} justifyContent={'flex-end'}>
             <Button variant={'contained'} onClick={() => setOpen(false)}>
               취소
             </Button>
