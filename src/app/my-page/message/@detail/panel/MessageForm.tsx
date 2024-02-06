@@ -39,6 +39,7 @@ const MessageForm = ({
   const [content, setContent] = useState<string>('')
   const { isPc } = useMedia()
   const { openToast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
@@ -53,6 +54,7 @@ const MessageForm = ({
   ) => {
     e.preventDefault()
     e.stopPropagation()
+    setIsLoading(true)
     try {
       if (!content) {
         openToast({
@@ -98,6 +100,7 @@ const MessageForm = ({
         })
       }
     } finally {
+      setIsLoading(false)
       handleClose && handleClose()
     }
   }
@@ -134,7 +137,11 @@ const MessageForm = ({
                 {content.length} / {MAX_LENGTH}
               </Typography>
             </Stack>
-            <IconButton type="submit" sx={style.pcSendButton}>
+            <IconButton
+              disabled={isLoading || disabled}
+              type="submit"
+              sx={style.pcSendButton}
+            >
               <SendIcon />
             </IconButton>
           </Stack>
