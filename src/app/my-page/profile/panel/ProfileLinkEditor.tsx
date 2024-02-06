@@ -25,6 +25,11 @@ const ProfileLinkEditor = ({
   const defaultValues: IUserProfileLinkField = {
     linkList: links as Array<{ linkName: string; linkUrl: string }>,
   }
+
+  const regex =
+    // eslint-disable-next-line no-useless-escape
+    /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/
+
   const { isPc } = useMedia()
 
   const { openToast, closeToast } = useToast()
@@ -173,7 +178,7 @@ const ProfileLinkEditor = ({
                 <Stack direction={'column'} spacing={'0.5rem'}>
                   <ControlledTextfield
                     control={control}
-                    name={`${index}.linkName`}
+                    name={`linkList.${index}.linkName`}
                     rules={{
                       validate: isLinkNameValid(index),
                     }}
@@ -188,14 +193,15 @@ const ProfileLinkEditor = ({
                   />
                   <ControlledTextfield
                     control={control}
-                    name={`${index}.linkUrl`}
+                    name={`linkList.${index}.linkUrl`}
                     rules={{
                       validate: {
                         pattern: (value) => {
-                          const regex =
-                            // eslint-disable-next-line no-useless-escape
-                            /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/
-                          return regex.test(value) || '유효한 url을 입력하세요.'
+                          return (
+                            regex.test(value) ||
+                            !value ||
+                            '유효한 url을 입력하세요.'
+                          )
                         },
                         validate: isLinkUrlValid(index),
                       },
