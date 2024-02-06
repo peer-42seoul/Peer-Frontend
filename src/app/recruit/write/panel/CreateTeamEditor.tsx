@@ -479,7 +479,6 @@ const CreateTeamEditor = ({
               name="link"
               control={control}
               rules={{
-                required: '필수 입력 항목입니다.',
                 minLength: {
                   value: 2,
                   message: '2자 이상 입력해주세요.',
@@ -487,6 +486,15 @@ const CreateTeamEditor = ({
                 maxLength: {
                   value: 300,
                   message: '300자 이내로 입력해주세요.',
+                },
+                validate: {
+                  pattern: (value) => {
+                    if (!value) return true
+                    const regex =
+                      // eslint-disable-next-line no-useless-escape
+                      /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/
+                    return regex.test(value) || '유효한 url을 입력하세요.'
+                  },
                 },
               }}
             />
