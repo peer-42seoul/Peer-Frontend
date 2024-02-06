@@ -524,6 +524,7 @@ const CreateTeamEditor = ({
                     error={!!errors?.tagList}
                     trigger={trigger}
                     placeholder="프로젝트에 필요한 기술을 입력하세요."
+                    autocompleteSx={{ width: ['100%', '26rem'] }}
                   />
                 )}
                 control={control}

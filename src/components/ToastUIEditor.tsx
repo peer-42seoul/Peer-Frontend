@@ -7,6 +7,7 @@ import { Editor, IToastEditorProps } from '@toast-ui/editor'
 import { Card } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import useAxiosWithAuth from '@/api/config'
+import useMedia from '@/hook/useMedia'
 
 /**
  * WARNING: SSR 환경에서 사용할 경우 충돌이 나기 때문에 실제 사용하기 위해서는 dynamic import로 불러오는 DynamicToastEditor를 사용해야 합니다.
@@ -23,6 +24,9 @@ const ToastEditor = ({
   const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const themed = useTheme()
   const editorElementRef = useRef<HTMLDivElement>(null)
+
+  const { isPc } = useMedia()
+
   const toggleDark = () => {
     const editorEl = editorElementRef.current?.getElementsByClassName(
       'toastui-editor-defaultUI',
@@ -36,6 +40,32 @@ const ToastEditor = ({
       }
     }
   }
+
+  // const [cardWidth, setCardWidth] = useState(0)
+
+  // useEffect(() => {
+  //   setCardWidth(
+  //     isPc
+  //       ? (window.innerWidth * 1152) / 1216
+  //       : (window.innerWidth * 416) / 480,
+  //   )
+  //   // 카드 너비 설정
+
+  //   const handleResize = () => {
+  //     const newCardWidth = isPc
+  //       ? (window.innerWidth * 1152) / 1216
+  //       : (window.innerWidth * 416) / 480
+  //     setCardWidth(newCardWidth)
+  //   }
+
+  //   editorRef.current?.destroy()
+
+  //   window.addEventListener('resize', handleResize)
+
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize)
+  //   }
+  // }, [])
 
   useEffect(() => {
     if (!editorElementRef.current) {
@@ -73,6 +103,13 @@ const ToastEditor = ({
         },
       },
     })
+
+    // setCardWidth(
+    //   isPc
+    //     ? (window.innerWidth * 1152) / 1216 // 피그마의 가로 길이 다시 확인 필요
+    //     : (window.innerWidth * 416) / 480,
+    // )
+
     toggleDark()
 
     // updateContent()
@@ -88,6 +125,10 @@ const ToastEditor = ({
         color: 'black',
         position: 'sticky',
         top: '0',
+        width: isPc
+          ? (window.innerWidth * 1152) / 1920
+          : (window.innerWidth * 416) / 480,
+        maxWidth: isPc ? '72rem' : '26rem',
       }}
       ref={editorElementRef}
     />
