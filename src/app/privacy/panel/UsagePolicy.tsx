@@ -3,7 +3,7 @@ import DynamicToastViewer from '@/components/DynamicToastViewer'
 
 const UsagePolicy = () => {
   const policy: string = `
-  # peer 이용약관 (수정중)
+  # peer 이용약관
 
 > 마지막 업데이트 2024.02.04 
 
