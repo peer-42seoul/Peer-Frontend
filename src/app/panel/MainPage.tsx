@@ -20,9 +20,6 @@ import { IPagination } from '@/types/IPagination'
 import PwaInstallBanner from './PwaInstallBanner'
 import PushAlertBanner from './PushAlertBanner'
 import MainBanner from '@/app/panel/main-page/MainBanner'
-import io from 'socket.io-client'
-import { getCookie } from 'cookies-next'
-import useSocket from '@/states/useSocket'
 import Tutorial from '@/components/Tutorial'
 import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
 import useHeaderStore from '@/states/useHeaderStore'
@@ -61,18 +58,6 @@ export interface IDetailOption {
   tag: string
 }
 
-export const socket = getCookie('accessToken')
-  ? io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-      transports: ['socket.io', 'polling'],
-      query: {
-        token: getCookie('accessToken'),
-      },
-      autoConnect: true,
-      reconnectionAttempts: 5, // 재연결 시도 횟수
-      reconnectionDelay: 3000,
-    })
-  : null
-
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
@@ -84,7 +69,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   ) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
-  const { setSocket } = useSocket()
   const [detailOption, setDetailOption] = useState<IDetailOption>({
     isInit: true,
     due1: 0,
@@ -169,15 +153,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       favorite: getFavoriteData(v.recruit_id),
     })) ?? [],
   )
-
-  useEffect(() => {
-    if (socket && isLogin) {
-      socket.on('connect', () => {
-        console.log('socket connected')
-      })
-      setSocket(socket)
-    }
-  }, [])
 
   useEffect(() => {
     if (!newData || !newData?.content) return
