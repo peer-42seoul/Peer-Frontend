@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material'
 import { IApplicant } from '../../../types/types'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import useMedia from '@/hook/useMedia'
 import FormAnswer from './InterviewAnswerForm'
@@ -18,6 +18,8 @@ import { CloseIcon } from '@/icons'
 import { NextButton, PrevButton } from './Icons'
 import Tutorial from '@/components/Tutorial'
 import TeamApplicantTutorial from '@/components/tutorialContent/TeamApplicantTutorial'
+import useToast from '@/states/useToast'
+import CuCircularProgress from '@/components/CuCircularProgress'
 
 const ApplicantList = ({
   close,
@@ -30,6 +32,7 @@ const ApplicantList = ({
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const axiosWithAuth = useAxiosWithAuth()
+  const { openToast } = useToast()
 
   // TODO: DTO 맞추기
 
@@ -43,7 +46,6 @@ const ApplicantList = ({
   )
 
   useEffect(() => {
-    console.log(data)
     setMember(data ? data[index] : null)
   }, [index, data])
 
@@ -60,8 +62,22 @@ const ApplicantList = ({
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
           setMembers(data)
-
           if (index > 0) setIndex(index - 1)
+          openToast({
+            severity: 'success',
+            message: '신청이 승인되었습니다.',
+          })
+          window.location.reload()
+        } else if (res.status === 403) {
+          openToast({
+            severity: 'error',
+            message: '권한이 없습니다.',
+          })
+        } else {
+          openToast({
+            severity: 'error',
+            message: '승인에 실패했습니다.',
+          })
         }
       })
       .catch((err) => {
@@ -69,7 +85,7 @@ const ApplicantList = ({
       })
   }
 
-  const handleReject = () => {
+  const handleReject = useCallback(() => {
     console.log('reject')
     axiosWithAuth
       .put(
@@ -85,12 +101,27 @@ const ApplicantList = ({
           setMembers(data)
 
           if (index > 0) setIndex(index - 1)
+          openToast({
+            severity: 'success',
+            message: '신청이 거절되었습니다.',
+          })
+          window.location.reload()
+        } else if (res.status === 403) {
+          openToast({
+            severity: 'error',
+            message: '권한이 없습니다.',
+          })
+        } else {
+          openToast({
+            severity: 'error',
+            message: '승인에 실패했습니다.',
+          })
         }
       })
       .catch((err) => {
         console.log(err)
       })
-  }
+  }, [index, member, data, teamId, axiosWithAuth, openToast])
 
   const handleNext = () => {
     if (index < members.length - 1) setIndex(index + 1)
@@ -114,11 +145,7 @@ const ApplicantList = ({
   }, [index, data])
 
   if (isLoading) {
-    return (
-      <Stack border="1px solid" borderRadius={2} height={400}>
-        <Typography>로딩중</Typography>
-      </Stack>
-    )
+    return <CuCircularProgress color="primary" />
   }
 
   if (!data || data.length === 0) {
@@ -171,7 +198,7 @@ const ApplicantList = ({
           <PrevButton />
         </IconButton>
         <Stack alignItems="center" spacing={1}>
-          <Avatar>A</Avatar>
+          <Avatar src={member?.image ? member.image : '/icons/ios/128.png'} />
           {member && <Typography>{member.name}</Typography>}
           {member?.jobName && <Typography>{member.jobName}</Typography>}
         </Stack>

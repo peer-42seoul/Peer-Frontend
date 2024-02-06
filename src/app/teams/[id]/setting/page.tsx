@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { Button, Card, Stack, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import SetupMember from './panel/SettingTeamMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
@@ -12,7 +12,6 @@ import RedirectionRecruit from './panel/RedirectRecruitPage'
 import TeamJobAdd from './panel/SettingTeamJobs'
 import SetupInfo from './panel/SettingTeamInfo'
 import CuCircularProgress from '@/components/CuCircularProgress'
-import useSocket from '@/states/useSocket'
 import Tutorial from '@/components/Tutorial'
 import TeamMemberTutorial from '@/components/tutorialContent/TeamMemberTutorial'
 
@@ -24,10 +23,9 @@ export interface IMyInfo {
 }
 
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
-  const { socket } = useSocket()
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
-  const [myInfo, setMyInfo] = useState<IMyInfo>()
+  // const [myInfo, setMyInfo] = useState<IMyInfo>()
   const { data, error, isLoading } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
@@ -37,19 +35,25 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
-  useEffect(() => {
-    if (!socket) return
-    socket.emit(
-      'whoAmI',
-      {
-        teamId: params.id,
-        teamName: data?.team.name,
-      },
-      (data: any) => {
-        setMyInfo(data)
-      },
-    )
-  }, [])
+  // useEffect(() => {
+  //   if (!socket) return
+
+  //   socket.emit(
+  //     'whoAmI',
+  //     {
+  //       teamId: params.id,
+  //       teamName: data?.team.name,
+  //     },
+  //     (data: any) => {
+  //       setMyInfo(data)
+  //     },
+  //   )
+
+  //   return () => {
+  //     if (!socket) return
+  //     socket.off('whoAmI')
+  //   }
+  // }, [setMyInfo, socket])
 
   if (error) {
     if (error.status === 403) {
@@ -126,7 +130,6 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 team={data.member}
                 teamId={data.team.id}
                 jobs={data.job}
-                myInfo={myInfo}
               />
             </Card>
           ) : (
