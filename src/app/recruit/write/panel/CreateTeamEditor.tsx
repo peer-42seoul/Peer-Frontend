@@ -434,15 +434,12 @@ const CreateTeamEditor = ({
                   />
                 }
                 formHelperText={
-                  errors?.region?.[0]?.message ||
-                  errors?.region?.[1]?.message ||
+                  errors?.region?.large?.message ||
+                  errors?.region?.small?.message ||
                   undefined
                 }
               >
-                <SelectRegion
-                  region={region ?? ([] as string[])}
-                  control={control}
-                />
+                <SelectRegion region={region} control={control} />
               </FieldWithLabel>
             )}
             {/* 커뮤니케이션 링크 등록 */}

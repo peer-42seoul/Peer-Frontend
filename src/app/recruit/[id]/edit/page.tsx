@@ -46,7 +46,8 @@ const Page = ({ params }: { params: { id: string } }) => {
           name: data.name,
           due: data.due,
           type: data.type,
-          region: data.place === 'ONLINE' ? ['', ''] : data.region,
+          region:
+            data.place === 'ONLINE' ? { large: '', small: '' } : data.region,
           link: data.link ?? '',
           tagList: data.tagList,
           roleList:
@@ -81,7 +82,10 @@ const Page = ({ params }: { params: { id: string } }) => {
         due: data.due,
         status: 'ONGOING',
         content: editorRef.current?.getMarkdown(),
-        region: data.place === 'ONLINE' ? null : data.region,
+        region:
+          data.place === 'ONLINE'
+            ? null
+            : [data.region.large, data.region.small],
         link: data.link,
         tagList: data.tagList.map((tag) => {
           return tag.tagId

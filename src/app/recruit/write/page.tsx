@@ -23,7 +23,7 @@ const Page = () => {
     name: '',
     due: '',
     type: 'PROJECT',
-    region: ['', ''],
+    region: { large: '', small: '' },
     link: '',
     tagList: [],
     roleList: [{ name: '', number: 0 }],
@@ -40,7 +40,10 @@ const Page = () => {
         name: data.name,
         due: data.due,
         type: data.type,
-        region: data.place === 'ONLINE' ? null : data.region,
+        region:
+          data.place === 'ONLINE'
+            ? null
+            : [data.region.large, data.region.small],
         tagList: data.tagList.map((tag: ITag) => {
           return tag.tagId
         }),
