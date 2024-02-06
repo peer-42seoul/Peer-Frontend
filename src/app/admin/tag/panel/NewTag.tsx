@@ -1,7 +1,14 @@
 'use client'
 
 import CuModal from '@/components/CuModal'
-import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { ChangeEvent, useState } from 'react'
 
 interface props {
@@ -13,7 +20,6 @@ interface props {
   tagColor: string
   setTagColor: React.Dispatch<React.SetStateAction<string>>
   onHandleSubmit: () => void
-  style: any
 }
 
 const NewTag = ({
@@ -25,7 +31,6 @@ const NewTag = ({
   tagColor,
   setTagColor,
   onHandleSubmit,
-  style,
 }: props) => {
   const [tagNameError, setTagNameError] = useState('')
 
@@ -75,9 +80,6 @@ const NewTag = ({
       onClose={() => setOpen(false)}
     >
       <Container>
-        {/* <Typography variant={'h4'} align="center">
-          {writeMode.current === 'write' ? '새 태그 추가하기' : '태그 수정하기'}
-        </Typography> */}
         <Typography variant={'Body1'} align="center">
           태그 이름
         </Typography>
