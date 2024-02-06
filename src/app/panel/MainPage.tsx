@@ -61,12 +61,14 @@ export interface IDetailOption {
   tag: string
 }
 
-export const socket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-  transports: ['socket.io', 'polling'],
-  query: {
-    token: getCookie('accessToken') ? getCookie('accessToken') : '',
-  },
-})
+export const socket = getCookie('accessToken')
+  ? io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+      transports: ['socket.io', 'polling'],
+      query: {
+        token: getCookie('accessToken'),
+      },
+    })
+  : null
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const router = useRouter()
@@ -163,7 +165,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   )
 
   useEffect(() => {
-    if (isLogin) {
+    if (socket && isLogin) {
       socket.on('connect', () => {
         console.log('socket connected')
       })

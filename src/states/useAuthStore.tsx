@@ -25,7 +25,6 @@ const useAuthStore = create<IAuthStore>((set) => {
     login: (accessToken) => {
       const authDataToSave = { accessToken }
       LocalStorage.setItem('authData', JSON.stringify(authDataToSave))
-      console.log('accessToken', accessToken)
       setCookie('accessToken', accessToken)
       axios
         .get(`${API_URL}/api/v1/profile`, {
