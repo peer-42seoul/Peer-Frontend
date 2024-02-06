@@ -1,5 +1,5 @@
 'use client'
-import { Button, Container, Stack } from '@mui/material'
+import { Box, Button, Container, Stack } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { ILinkInformation, IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
@@ -189,13 +189,15 @@ const ShowcaseEditor = ({
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        <DynamicToastEditor
-          initialValue={data.content}
-          initialEditType="wysiwyg"
-          editorRef={editorRef}
-          previewStyle="tab"
-          height={'30rem'}
-        />
+        <Box>
+          <DynamicToastEditor
+            initialValue={data.content}
+            initialEditType="wysiwyg"
+            editorRef={editorRef}
+            previewStyle="tab"
+            height={'30rem'}
+          />
+        </Box>
         <CuTextModal
           open={alertOpen}
           onClose={closeModal}
