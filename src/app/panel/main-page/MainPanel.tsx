@@ -58,6 +58,7 @@ export const InfinityScrollPanel = ({
       sx={{
         bottom: 0,
         height: '1vh',
+        paddingY: '0.25rem',
       }}
       ref={target}
     />
