@@ -30,6 +30,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
             severity: 'success',
             message: '팀을 나갔습니다.',
           })
+          router.push('/team-list')
         } else if (res.status === 401) {
           console.log(res)
           router.push('/login')

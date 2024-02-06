@@ -9,9 +9,14 @@ import { useRouter } from 'next/navigation'
 interface ITeamCompleteButton {
   teamStatus: TeamStatus
   teamId: string
+  mutate: () => void
 }
 
-const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
+const TeamCompleteButton = ({
+  teamId,
+  teamStatus,
+  mutate,
+}: ITeamCompleteButton) => {
   const router = useRouter()
   const { openToast } = useToast()
   const { isOpen, openModal, closeModal } = useModal()
@@ -29,6 +34,7 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
             severity: 'success',
             message: '팀 활동이 완료되었습니다.',
           })
+          mutate()
         } else if (res.status === 400) {
           openToast({
             severity: 'error',

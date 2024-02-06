@@ -27,7 +27,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   // const [myInfo, setMyInfo] = useState<IMyInfo>()
-  const { data, error, isLoading } = useSWR<ITeam>(
+  const { data, error, isLoading, mutate } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
   )
@@ -94,7 +94,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
       {teams ? (
         <>
           <RedirectionRecruit id={params.id} data={teams} />
-          <SetupInfo team={teams.team} />
+          <SetupInfo team={teams.team} mutate={mutate} />
           {teams.team.type === TeamType.PROJECT && (
             <TeamJobAdd
               teamId={params.id}

@@ -45,7 +45,12 @@ const layoutPcBox = {
   p: '0.5rem',
 }
 
-const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
+interface ISettingTeamJobs {
+  team: ISetupTeam
+  mutate: () => void
+}
+
+const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   const { isPc } = useMedia()
   const {
     isOpen: isConfirmOpen,
@@ -222,7 +227,11 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
           </Stack>
           <TeamQuitButton teamStatus={team.status} teamId={team.id} />
           <TeamDisperseButton teamStatus={team.status} teamId={team.id} />
-          <TeamCompleteButton teamStatus={team.status} teamId={team.id} />
+          <TeamCompleteButton
+            teamStatus={team.status}
+            teamId={team.id}
+            mutate={mutate}
+          />
         </Stack>
       </Card>
 
