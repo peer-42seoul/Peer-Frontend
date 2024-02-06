@@ -61,9 +61,7 @@ export interface IDetailOption {
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
-  console.log('keyword', keyword)
   const searchType = searchParams.get('type') === 'STUDY' ? 'STUDY' : 'PROJECT'
-  console.log('searchType', searchType)
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(
