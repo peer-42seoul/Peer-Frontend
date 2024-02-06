@@ -67,6 +67,9 @@ export const socket = getCookie('accessToken')
       query: {
         token: getCookie('accessToken'),
       },
+      autoConnect: true,
+      reconnectionAttempts: 5, // 재연결 시도 횟수
+      reconnectionDelay: 3000,
     })
   : null
 
@@ -168,18 +171,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     if (socket && isLogin) {
       socket.on('connect', () => {
         console.log('socket connected')
-      })
-      socket.on('disconnect', () => {
-        console.log('socket disconnected')
-      })
-      socket.on('connect_error', (err) => {
-        console.log(err)
-      })
-      socket.on('reconnect', (attemptNumber) => {
-        console.log('reconnect', attemptNumber)
-      })
-      socket.on('reconnect_attempt', (attemptNumber) => {
-        console.log('reconnect_attempt', attemptNumber)
       })
       setSocket(socket)
     }

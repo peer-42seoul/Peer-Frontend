@@ -54,7 +54,11 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
               alt="team logo"
               variant="rounded"
               sx={style.teamAvatar}
-              src={data.teamPicturePath ? data.teamPicturePath : undefined}
+              src={
+                data.teamPicturePath
+                  ? data.teamPicturePath
+                  : '/icons/ios/128.png'
+              }
             />
             <Stack spacing={'1rem'}>
               <Stack alignItems={'center'} direction={'row'} spacing={'0.5rem'}>
