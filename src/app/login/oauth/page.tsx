@@ -1,6 +1,6 @@
 'use client'
 
-import { Typography } from '@mui/material'
+import { Typography, Stack, CircularProgress } from '@mui/material'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import useAuthStore from '@/states/useAuthStore'
@@ -21,7 +21,20 @@ const OauthLogin = () => {
       router.push('/login')
     }
   }, [])
-  return <Typography>로그인 처리중...</Typography>
+  return (
+    <Stack
+      sx={{
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2,
+      }}
+    >
+      <CircularProgress />
+      <Typography>로그인 처리 중...</Typography>
+    </Stack>
+  )
 }
 
 export default OauthLogin
