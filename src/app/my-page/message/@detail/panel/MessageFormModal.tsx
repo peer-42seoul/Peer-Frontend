@@ -4,6 +4,10 @@ import { IMessage } from '@/types/IMessage'
 import MessageForm from './MessageForm'
 
 interface IMessageFormModalProps {
+  messageSendState: {
+    isMessageSending: boolean
+    setIsMessageSending: (value: boolean) => void
+  }
   isOpen: boolean
   target: {
     id: number
@@ -14,6 +18,7 @@ interface IMessageFormModalProps {
 }
 
 const MessageFormModal = ({
+  messageSendState,
   isOpen,
   target,
   addNewMessage,
@@ -26,6 +31,7 @@ const MessageFormModal = ({
       title={target.nickname}
       mobileFullSize
       containedButton={{
+        isLoading: messageSendState.isMessageSending,
         text: '보내기',
         type: 'submit',
         form: 'message-form',
@@ -36,6 +42,7 @@ const MessageFormModal = ({
       }}
     >
       <MessageForm
+        messageSendState={messageSendState}
         targetId={target.id}
         addNewMessage={addNewMessage}
         handleClose={handleClose}
