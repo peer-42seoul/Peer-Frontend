@@ -3,6 +3,7 @@
 import { defaultGetFetcher } from '@/api/fetchers'
 import { ICardData } from '@/app/showcase/panel/types'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import { IPagination } from '@/types/IPagination'
 import { Box, Stack, Typography, Button, Card, Avatar } from '@mui/material'
@@ -92,7 +93,7 @@ const MainShowcase = () => {
               textOverflow={'ellipsis'}
               m={'1rem'}
             >
-              <Typography
+              {/* <Typography
                 color={'text'}
                 sx={{
                   wordBreak: 'break-word',
@@ -104,7 +105,8 @@ const MainShowcase = () => {
                 }}
               >
                 {data.content[0].description}
-              </Typography>
+              </Typography> */}
+              <DynamicToastViewer initialValue={data.content[0].description} />
             </Stack>
           </Card>
         </Stack>
