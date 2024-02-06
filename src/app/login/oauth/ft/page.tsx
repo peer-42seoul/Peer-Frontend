@@ -9,7 +9,7 @@ const OauthFtLogin = () => {
   const searchParams = useSearchParams()
   const code = searchParams.get('code')
   const state = searchParams.get('state')
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const { isLogin, accessToken } = useAuthStore()
 
   const handleConnect = () => {

@@ -30,7 +30,7 @@ const SendEmailForm = ({
 }: {
   setIsCodeSuccessful: (isCodeSuccessful: boolean) => void
 }) => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const [isEmailSuccessful, setIsEmailSuccessful] = useState(false)
 
   const { CuToast, isOpen, openToast, closeToast } = useToast()

@@ -93,7 +93,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
 
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${team.id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${team.id}`,
         data,
       )
       .then((res) => {

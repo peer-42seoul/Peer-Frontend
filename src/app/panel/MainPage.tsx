@@ -131,7 +131,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   const { data: favoriteData } = useSWR<IFavorite[]>(
     isInit && isLogin
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites` + option
+      ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorites` + option
       : null,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
@@ -148,7 +148,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   } = useSWR<IPagination<IPost[]>>(
     isInit
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit` + option,
+      : `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit` + option,
     isLogin
       ? (url: string) =>
           axiosInstance.get(url).then((res) => {

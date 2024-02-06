@@ -97,7 +97,7 @@ const SettingTeamJobs = ({ teamId, jobList, teamStatus }: Props) => {
 
   // const changeJob = () => {
   //   axiosWithAuth.put(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/job/change`,
+  //     `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/job/change`,
   //     job,
   //   )
   // }
@@ -109,7 +109,7 @@ const SettingTeamJobs = ({ teamId, jobList, teamStatus }: Props) => {
     }
     axiosWithAuth
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/change`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/change`,
         editJob,
       )
       .then((res) => {

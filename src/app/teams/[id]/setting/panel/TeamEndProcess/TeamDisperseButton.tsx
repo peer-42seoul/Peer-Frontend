@@ -20,7 +20,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
   const disperseTeam = () => {
     console.log('exit team')
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/disperse`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/disperse`, {
         teamId: teamId,
       })
       .then((res) => {

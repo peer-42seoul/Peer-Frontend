@@ -42,7 +42,7 @@ const SendCodeForm = ({
   openToast: () => void
   setIsCodeSuccessful: (isCodeSuccessful: boolean) => void
 }) => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const {
     handleSubmit,
     control,

@@ -26,7 +26,7 @@ const Hitchhiking = () => {
     IPagination<Array<IPostCardHitchhiking>>
   >(
     `${
-      process.env.NEXT_PUBLIC_API_URL
+      process.env.NEXT_PUBLIC_CSR_API
     }/api/v1/hitch?page=${page}&pageSize=5&type=${
       isProject ? 'PROJECT' : 'STUDY'
     }`,

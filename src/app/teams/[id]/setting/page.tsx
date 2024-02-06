@@ -29,7 +29,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
   const [myInfo, setMyInfo] = useState<IMyInfo>()
   const { data, error, isLoading } = useSWR<ITeam>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${params.id}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
   )
   const router = useRouter()

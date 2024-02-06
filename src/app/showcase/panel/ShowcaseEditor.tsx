@@ -54,7 +54,7 @@ const ShowcaseEditor = ({
     try {
       if (requestMethodType === 'post') {
         await axiosWithAuth.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/write`,
           {
             image: previewImage.split(',')[1],
             content: editorRef.current?.getMarkdown() ?? '',
@@ -65,7 +65,7 @@ const ShowcaseEditor = ({
         router.push(`/teams/${teamId}/showcase`)
       } else if (requestMethodType === 'put') {
         await axiosWithAuth.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${showcaseId}`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/edit/${showcaseId}`,
           {
             image: image.length ? previewImage.split(',')[1] : null,
             content: editorRef.current?.getMarkdown() ?? '',

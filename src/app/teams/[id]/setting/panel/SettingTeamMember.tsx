@@ -75,7 +75,7 @@ const SettingTeamMember = ({
 
   // const changeJob = () => {
   //   axiosWithAuth.put(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/change`,
+  //     `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/change`,
   //     job,
   //   )
   // }
@@ -95,7 +95,7 @@ const SettingTeamMember = ({
     if (member.role === TeamGrant.LEADER) {
       axiosWithAuth
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
         )
         .then((res) => {
           console.log(res)
@@ -113,7 +113,7 @@ const SettingTeamMember = ({
     } else {
       axiosWithAuth
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
         )
         .then((res) => {
           console.log(res)
@@ -142,7 +142,7 @@ const SettingTeamMember = ({
     if (!member) return console.log('팀원이 없습니다.')
     axiosWithAuth
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/delete/${teamId}?userId=${member.id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/delete/${teamId}?userId=${member.id}`,
       )
       .then((res) => {
         if (res.status === 200) {

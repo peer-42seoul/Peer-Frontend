@@ -13,7 +13,7 @@ export const CommentWriter = ({
   mutate,
 }: IPostId & { mutate: typeof mutateType }) => {
   const [content, setContent] = useState<string>('')
-  const commentURL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`
+  const commentURL = `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`
   const axiosWithAuth = useAxiosWithAuth()
   const { openToast } = useToast()
 
@@ -25,7 +25,7 @@ export const CommentWriter = ({
 
     try {
       await axiosWithAuth.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/comment`,
         {
           content: content,
           postId: Number(postId),

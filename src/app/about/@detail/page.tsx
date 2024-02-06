@@ -36,7 +36,7 @@ function formatDate(dateStr: string | null) {
 const DetailPage = () => {
   const { setBoard, announceDetailId } = useAboutLayout()
   const { data, isLoading, error } = useSWR<AnnounceDailProp>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/about/announcement/${announceDetailId}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/about/announcement/${announceDetailId}`,
     defaultGetFetcher,
   )
 

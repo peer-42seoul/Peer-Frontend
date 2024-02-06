@@ -36,7 +36,7 @@ const EncryptedSender = ({
 
     const { initSecret, initCode }: { initSecret: string; initCode: string } =
       await axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/init`)
+        .get(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/main/init`)
         .then((res) => {
           return {
             initSecret: res.data.secret,
@@ -47,7 +47,7 @@ const EncryptedSender = ({
     const initToken = await getToken({ apiType: apiType }, initSecret)
 
     const { verifyCode, verifySeed } = await axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/get`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/main/get`, {
         code: initCode,
         token: initToken,
       })
@@ -63,7 +63,7 @@ const EncryptedSender = ({
     if (!needToken) {
       await axios
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/main/receive`,
           {
             code: verifyCode,
             token: payloadToken,
@@ -76,7 +76,7 @@ const EncryptedSender = ({
     } else {
       await axiosWithAuth
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/main/receive`,
           {
             code: verifyCode,
             token: payloadToken,
