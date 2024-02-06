@@ -83,17 +83,37 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
               severity: 'error',
               message: '이미 존재하는 게시판 이름입니다.',
             })
-            return
+          } else if (e.response?.status === 403) {
+            openToast({
+              severity: 'error',
+              message: '게시판 추가는 팀 리더만 가능합니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: '게시판을 추가하지 못했습니다.',
+            })
           }
+        } else {
+          openToast({
+            severity: 'error',
+            message: '게시판을 추가하지 못했습니다.',
+          })
         }
-        openToast({
-          severity: 'error',
-          message: '게시판을 추가하지 못했습니다.',
-        })
       })
   }
 
-  if (!data || error) {
+  if (error) {
+    if (isAxiosError(error) && error.response?.status === 403) {
+      alert('게시판 관리는 팀 리더만 가능합니다')
+    } else {
+      alert('게시판 목록을 불러오지 못했습니다.')
+    }
+    resetState()
+    return null
+  }
+
+  if (!isLoading && !data) {
     alert('게시판 목록을 불러오지 못했습니다.')
     resetState()
     return null
@@ -158,7 +178,7 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
               }
             >
               <Stack>
-                {data.map((board: ITeamBoard) => (
+                {data?.map((board: ITeamBoard) => (
                   <BoardItem
                     key={crypto.randomUUID()}
                     board={board}

@@ -1,5 +1,6 @@
 'use client'
 
+import { isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { Button, Card, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
@@ -56,8 +57,8 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   // }, [setMyInfo, socket])
 
   if (error) {
-    if (error.status === 403) {
-      alert('팀 페이지에 접근할 권한이 없습니다.')
+    if (isAxiosError(error) && error.response?.status === 403) {
+      alert('팀 설정은 팀 리더만 가능합니다.')
     } else {
       alert('팀 페이지에 접근할 수 없습니다.')
     }
