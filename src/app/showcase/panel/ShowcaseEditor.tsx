@@ -58,6 +58,76 @@ const ShowcaseEditor = ({
     return isInvalid
   }
 
+  const postHandler = async (linksWithoutId: any) => {
+    await axiosWithAuth.post(
+      `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/write`,
+      {
+        content: editorRef.current?.getMarkdown() ?? '',
+        teamId: teamId,
+        links: linksWithoutId,
+        image: image.length ? previewImage.split(',')[1] : null,
+      },
+    )
+  }
+  const putHandler = async (linksWithoutId: any) => {
+    await axiosWithAuth.put(
+      `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/edit/${showcaseId}`,
+      {
+        image: image.length ? previewImage.split(',')[1] : null,
+        content: editorRef.current?.getMarkdown() ?? '',
+        links: linksWithoutId,
+      },
+    )
+  }
+
+  const errorsHandler = (error: any) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 400:
+          openToast({
+            severity: 'error',
+            message: '요청이 올바르지 않습니다.',
+          })
+
+          break
+        case 403:
+          openToast({
+            severity: 'error',
+            message: '접근이 거부되었습니다.',
+          })
+          break
+        case 404:
+          openToast({
+            severity: 'error',
+            message: '페이지를 찾을 수 없습니다.',
+          })
+          break
+        case 409:
+          openToast({
+            severity: 'error',
+            message: '이미 쇼케이스가 존재합니다.',
+          })
+          break
+        default:
+          openToast({
+            severity: 'error',
+            message: '알 수 없는 에러가 발생했습니다.',
+          })
+          break
+      }
+    } else if (error.request) {
+      openToast({
+        severity: 'error',
+        message: '서버에서 응답이 없습니다.',
+      })
+    } else {
+      openToast({
+        severity: 'error',
+        message: '요청을 설정하는 중에 에러가 발생했습니다.',
+      })
+    }
+  }
+
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
     if (validateUrl(linksWithoutId)) {
@@ -70,74 +140,15 @@ const ShowcaseEditor = ({
     }
     try {
       if (requestMethodType === 'post') {
-        await axiosWithAuth.post(
-          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/write`,
-          {
-            image: previewImage.split(',')[1],
-            content: editorRef.current?.getMarkdown() ?? '',
-            teamId: teamId,
-            links: linksWithoutId,
-          },
-        )
+        await postHandler(linksWithoutId)
         router.push(`/teams/${teamId}/showcase`)
       } else if (requestMethodType === 'put') {
-        await axiosWithAuth.put(
-          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/edit/${showcaseId}`,
-          {
-            image: image.length ? previewImage.split(',')[1] : null,
-            content: editorRef.current?.getMarkdown() ?? '',
-            links: linksWithoutId,
-          },
-        )
+        await putHandler(linksWithoutId)
         router.push(`/showcase/detail/${showcaseId}`)
       }
     } catch (error: any) {
       closeModal()
-      if (error.response) {
-        switch (error.response.status) {
-          case 400:
-            openToast({
-              severity: 'error',
-              message: '요청이 올바르지 않습니다.',
-            })
-
-            break
-          case 403:
-            openToast({
-              severity: 'error',
-              message: '접근이 거부되었습니다.',
-            })
-            break
-          case 404:
-            openToast({
-              severity: 'error',
-              message: '페이지를 찾을 수 없습니다.',
-            })
-            break
-          case 409:
-            openToast({
-              severity: 'error',
-              message: '이미 쇼케이스가 존재합니다.',
-            })
-            break
-          default:
-            openToast({
-              severity: 'error',
-              message: '알 수 없는 에러가 발생했습니다.',
-            })
-            break
-        }
-      } else if (error.request) {
-        openToast({
-          severity: 'error',
-          message: '서버에서 응답이 없습니다.',
-        })
-      } else {
-        openToast({
-          severity: 'error',
-          message: '요청을 설정하는 중에 에러가 발생했습니다.',
-        })
-      }
+      errorsHandler(error)
     }
   }
 
