@@ -32,7 +32,6 @@ const ShowcaseCardBack = ({
   title,
   name,
   image,
-  currentDomain,
 }: {
   postId: number
   sx?: SxProps
