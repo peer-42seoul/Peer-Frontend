@@ -36,7 +36,7 @@ const NoticeEditForm = ({
           })
         })
         .catch(() => {
-          alert('게시글을 불러오는데 실패했습니다.')
+          alert('글을 불러오는데 실패했습니다.')
           setNotice('LIST')
         })
         .finally(() => {
