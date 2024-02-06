@@ -72,7 +72,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
   return (
     <AppBar position="fixed" sx={mobileHeader}>
       <Toolbar disableGutters sx={style.mobileHeaderToolbar}>
-        {title === '메인' && keyword === '' ? (
+        {pathname === '/' && keyword === '' ? (
           <Stack sx={style.mobileHeaderStack}>
             <AlertIcon />
             <Box sx={style.mobileHeaderTitle}>
