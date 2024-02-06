@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Box,
@@ -47,6 +47,8 @@ const CreateTeamEditor = ({
   editorType: 'edit' | 'write'
   isAnswered?: boolean
 }) => {
+  const [completedInterview, setCompletedInterview] = useState(false)
+
   const router = useRouter()
 
   const { openToast, closeToast } = useToast()
@@ -555,21 +557,22 @@ const CreateTeamEditor = ({
                 />
               }
             >
-              {dirtyFields.interviewList && (
-                <Typography
-                  variant="Caption"
-                  color={'primary'}
-                  height={'2rem'}
-                  width={'fit-content'}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  인터뷰 작성 완료
-                </Typography>
-              )}
+              {completedInterview ||
+                (defaultValues.interviewList.length && (
+                  <Typography
+                    variant="Caption"
+                    color={'primary'}
+                    height={'2rem'}
+                    width={'fit-content'}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    인터뷰 작성 완료
+                  </Typography>
+                ))}
               <Button
                 sx={{ width: ['100%', '26rem'] }}
                 variant="outlined"
@@ -585,7 +588,10 @@ const CreateTeamEditor = ({
                   )
                 }
               >
-                인터뷰 {dirtyFields.interviewList ? '수정하기 ' : '추가'}
+                인터뷰{' '}
+                {completedInterview || defaultValues.interviewList.length
+                  ? '수정하기 '
+                  : '추가'}
               </Button>
             </FieldWithLabel>
             {/* 등록, 취소 버튼 */}
@@ -665,6 +671,7 @@ const CreateTeamEditor = ({
         isOpen={isInterviewOpen}
         trigger={trigger}
         setFormValue={setValue}
+        setCompletedInterview={setCompletedInterview}
       />
     </>
   )

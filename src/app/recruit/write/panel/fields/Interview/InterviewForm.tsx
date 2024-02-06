@@ -19,12 +19,14 @@ const InterviewForm = ({
   isOpen,
   trigger,
   setFormValue,
+  setCompletedInterview,
 }: {
   control: Control<IRecruitWriteField>
   closeModal: () => void
   isOpen: boolean
   trigger: UseFormTrigger<IRecruitWriteField>
   setFormValue: UseFormSetValue<IRecruitWriteField>
+  setCompletedInterview: (value: boolean) => void
 }) => {
   const {
     openModal: openCancelModal,
@@ -57,6 +59,7 @@ const InterviewForm = ({
   }
 
   const handleCompleteModalConfirm = () => {
+    setCompletedInterview(true)
     closeCompleteModal()
     closeModal()
   }

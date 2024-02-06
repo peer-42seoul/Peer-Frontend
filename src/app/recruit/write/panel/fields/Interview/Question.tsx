@@ -1,7 +1,6 @@
 import ControlledSelect from '@/components/ControlledSelect'
 import { IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import React from 'react'
-// import { IFormInterview } from '@/types/IPostDetail'
 import { Control, UseFieldArrayRemove, useWatch } from 'react-hook-form'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
 import ControlledTextfield from '@/components/ControlledTextfield'

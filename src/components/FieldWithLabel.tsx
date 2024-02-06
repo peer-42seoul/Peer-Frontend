@@ -18,7 +18,11 @@ interface IFieldWithLabelProps {
 
 const FieldWithLabel = (props: IFieldWithLabelProps) => {
   return (
-    <Stack direction={'column'} spacing={'0.5rem'} width={'fit-content'}>
+    <Stack
+      direction={'column'}
+      spacing={'0.5rem'}
+      width={['100%', 'fit-content']}
+    >
       <InputLabel htmlFor={props.id}>
         <Stack
           direction={'row'}
