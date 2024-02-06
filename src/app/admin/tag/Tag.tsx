@@ -50,7 +50,6 @@ const Tag = () => {
   }, [])
 
   const onHandleEdit = (tagId: number) => {
-    console.log(tagId)
     writeMode.current = 'edit'
     const tagid = content.find((item) => item.tagId === tagId)?.tagId
     const tagname = content.find((item) => item.tagId === tagId)?.name
@@ -62,7 +61,6 @@ const Tag = () => {
   }
 
   const onHandleRemove = (tagId: number) => {
-    console.log(tagId)
     axios
       .delete(`${API_URL}/api/v1/admin/tag`, {
         data: { tagId: tagId },
@@ -75,7 +73,6 @@ const Tag = () => {
   }
 
   const onHandleSubmit = () => {
-    console.log('submit')
     if (writeMode.current === 'write') {
       axios
         .post(
