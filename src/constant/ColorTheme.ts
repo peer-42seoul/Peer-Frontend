@@ -56,7 +56,7 @@ export const darkTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Pretendard Variable, sans-serif',
+    fontFamily: 'var(--main-font), Pretendard Variable, sans-serif',
   },
   components: {
     MuiCssBaseline: {
@@ -99,7 +99,7 @@ export const lightTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Pretendard Variable, sans-serif',
+    fontFamily: 'var(--main-font) Pretendard Variable sans-serif',
   },
   components: {
     MuiCssBaseline: {
