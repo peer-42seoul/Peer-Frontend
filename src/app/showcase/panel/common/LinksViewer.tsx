@@ -39,19 +39,17 @@ const LinksViewer = ({ links }: IlinksProps) => {
       <Stack>
         {links?.map((link: ILink) => {
           return (
-            <>
-              <Typography
-                key={crypto.randomUUID()}
-                component="a"
-                color={'text.normal'}
-                variant="Body2"
-                href={convertLink(link.link)}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {link.name}
-              </Typography>
-            </>
+            <Typography
+              key={crypto.randomUUID()}
+              component="a"
+              color={'text.normal'}
+              variant="Body2"
+              href={convertLink(link.link)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {link.name}
+            </Typography>
           )
         })}
       </Stack>
