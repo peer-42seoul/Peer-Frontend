@@ -13,7 +13,6 @@ const LoginForm = () => {
   const { login } = useAdminStore()
 
   function onHandleLogin() {
-    console.log('login')
     axios
       .post(
         `${API_URL}/api/v1/signin/admin`,

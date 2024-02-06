@@ -14,10 +14,8 @@ export const fetchTags = async () => {
       withCredentials: true,
       // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
     })
-    console.log(response)
     return response.data
   } catch (error) {
-    console.error('태그를 불러오는 데 실패했습니다.', error)
     throw error
   }
 }

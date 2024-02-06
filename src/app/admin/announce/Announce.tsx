@@ -191,7 +191,6 @@ const Announce = () => {
   }
 
   const onSubmit = async (data: IAnnounceAllContent) => {
-    console.log('onSubmit', data)
     if (data.previewImage === '') {
       alert('이미지를 삽입해주세요')
       return
@@ -199,7 +198,6 @@ const Announce = () => {
     let DateFormed = ''
     if (data.announcementNoticeStatus === '예약') {
       if (data.reservationDate === null) {
-        console.log('there is no reservationDate therefore return')
         return
       }
       DateFormed = formatDate(new Date(data.reservationDate))
@@ -226,7 +224,6 @@ const Announce = () => {
         withCredentials: true,
       })
       .then(() => {
-        console.log('submit success')
         setOpen(false)
         reset()
         axios
@@ -241,19 +238,16 @@ const Announce = () => {
           })
       })
       .catch((err) => {
-        console.log('submit fail', submitData)
         alert('공지사항 등록 실패 \n사유 : ' + err)
       })
   }
 
   const onSubmitEdit = async (data: IAnnounceAllContent) => {
-    console.log('onSubmitEdit, given data -> ', data, data.image)
 
     let submitData: IAnnounceContentEdit
     let DateFormed = ''
     if (data.announcementNoticeStatus === '예약') {
       if (data.reservationDate === null) {
-        console.log('there is no reservationDate therefore return')
         return
       }
       DateFormed = formatDate(new Date(data.reservationDate))
@@ -279,7 +273,6 @@ const Announce = () => {
     await axios
       .put(`${API_URL}/api/v1/admin/announcement`, submitData)
       .then(() => {
-        console.log('Edit submit success', submitData)
         setOpen(false)
         reset()
         axios
@@ -294,14 +287,12 @@ const Announce = () => {
           })
       })
       .catch((err) => {
-        console.log('submit edit fail', submitData)
         alert('공지사항 수정 실패 \n사유 : ' + err)
       })
   }
 
   const onHandleEdit = async () => {
     setWriteMode('edit')
-    console.log('edit vlaues ,', getValues())
   }
 
   const onHandleView = async (id: number) => {
@@ -312,7 +303,6 @@ const Announce = () => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res)
         setValue('announcementId', id)
         setValue('writer', res.data.writer)
         setValue('title', res.data.title)
@@ -334,13 +324,11 @@ const Announce = () => {
         setValue('announcementNoticeStatus', noticeStatusValue)
       })
       .catch((err) => {
-        console.log(err)
         alert('공지사항 조회 실패 \n사유 : ' + err)
       })
   }
 
   const onHandleHideOrUnHide = async (mode: string) => {
-    console.log('onHandleHide, ', getValues('announcementId'))
     const announcementId = getValues('announcementId')
     axios
       .post(
@@ -349,7 +337,6 @@ const Announce = () => {
         { withCredentials: true },
       )
       .then(() => {
-        console.log(`${mode} success`)
         setOpen(false)
         reset()
         axios
@@ -363,7 +350,6 @@ const Announce = () => {
           })
       })
       .catch((err) => {
-        console.log(err)
         alert(`공지사항 ${mode} 처리 실패`)
       })
   }
@@ -375,13 +361,11 @@ const Announce = () => {
         withCredentials: true,
       })
       .then(() => {
-        console.log('delete success')
         setOpen(false)
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
             withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
             setContent(res.data.content)
@@ -394,7 +378,6 @@ const Announce = () => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        // alignItems: 'center',
         width: '80rem',
         height: '30rem',
         paddingTop: '5rem',
