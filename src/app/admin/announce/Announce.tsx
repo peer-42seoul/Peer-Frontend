@@ -141,10 +141,6 @@ const Announce = () => {
       .get(`${API_URL}/api/v1/admin/announcement`, {
         params,
         ...config,
-        // withCredentials: true,
-        // baseURL: "https://peer-test.co.kr",
-        // baseURL: process.env.NEXT_PUBLIC_CSR_API
-        // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
       })
       .then((res) => {
         if (isMounted) {
@@ -264,7 +260,6 @@ const Announce = () => {
         announcementNoticeStatus: data.announcementNoticeStatus, // 'announcementStatus'를 'announcementNoticeStatus'로 매핑합니다.
         reservationDate:
           data.announcementNoticeStatus === '예약' ? DateFormed : null,
-        // content: data.content,
         content: editorRef.current ? editorRef.current.getMarkdown() : '',
       }
     } else return
@@ -278,7 +273,6 @@ const Announce = () => {
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
             withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
             totalPageVar.current = res.data.totalPages
@@ -342,7 +336,6 @@ const Announce = () => {
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
             withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
             setContent(res.data.content)
@@ -435,7 +428,6 @@ const Announce = () => {
                     alt="Picture of the announcement"
                   />
                 </Box>
-                {/* <Box sx={{ width: '25%' }}> */}
                 <Button
                   onClick={() => onHandleView(item.announcementId)}
                   sx={{ width: '65%' }}
@@ -444,7 +436,6 @@ const Announce = () => {
                     {item.title}
                   </Typography>
                 </Button>
-                {/* </Box> */}
               </Stack>
             ))}
           </Stack>
@@ -545,7 +536,6 @@ const Announce = () => {
               />
             </>
           ) : null}
-          {/* <Box sx={{ height: '30rem' }}> */}
           {writeMode === 'view' ? (
             <Box>
               <DynamicToastViewer
@@ -570,7 +560,6 @@ const Announce = () => {
               />
             </Box>
           )}
-          {/* </Box> */}
           <Stack>
             <Typography variant={'Title2'}>공지 예약 및 알림</Typography>
             <Stack direction={'row'} justifyContent={'space-between'}>
