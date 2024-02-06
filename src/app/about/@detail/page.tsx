@@ -1,9 +1,10 @@
 'use client'
 
 import { defaultGetFetcher } from '@/api/fetchers'
-import useMedia from '@/hook/useMedia'
-import { Avatar, Card, Stack, Typography } from '@mui/material'
-import Image from 'next/image'
+import CuCircularProgress from '@/components/CuCircularProgress'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
+import useAboutLayout from '@/states/useAboutLayout'
+import { Avatar, Button, Card, Stack, Typography } from '@mui/material'
 import useSWR from 'swr'
 
 interface AnnounceDailProp {
@@ -32,19 +33,27 @@ function formatDate(dateStr: string | null) {
   return formattedDate
 }
 
-const DetailPage = ({ params }: { params: { id: string } }) => {
-  const { isPc } = useMedia()
+const DetailPage = () => {
+  const { setBoard, announceDetailId } = useAboutLayout()
   const { data, isLoading, error } = useSWR<AnnounceDailProp>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/about/announcement/${params.id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/about/announcement/${announceDetailId}`,
     defaultGetFetcher,
   )
 
-  if (isLoading) return <Typography>로딩중</Typography>
+  if (isLoading) return <CuCircularProgress color="primary" />
 
   if (error || !data) return <Typography>에러 발생</Typography>
 
   return (
     <Card sx={{ padding: '2rem' }}>
+      <Stack>
+        <Button
+          sx={{ width: 'fit-content' }}
+          onClick={() => setBoard('ANNOUNCE')}
+        >
+          목록으로
+        </Button>
+      </Stack>
       <Stack minHeight={'30rem'} spacing={'2rem'}>
         <Stack>
           <Typography variant="Title2">{data.title}</Typography>
@@ -73,26 +82,12 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
             </Stack>
             <Stack direction={'row'} spacing={'0.5rem'}>
               <Typography variant="Caption">조회수</Typography>
-
               <Typography variant="Caption">{data.view}</Typography>
-            </Stack>
-            <Stack direction={'row'} spacing={'0.5rem'}>
-              <Typography variant="Caption">이메일</Typography>
-              <Typography variant="Caption">이메일</Typography>
             </Stack>
           </Stack>
         </Stack>
         <Stack>
-          <Image
-            src={data.image ? data.image : '/images/banners/default-pc.svg'}
-            alt="이미지"
-            width={0}
-            height={0}
-            sizes="(max-width: 768px) 100vw, 768px"
-            style={{ width: isPc ? '50%' : '100%', height: 'auto' }}
-          />
-          <br />
-          <Typography variant="Body1">{data.content}</Typography>
+          <DynamicToastViewer initialValue={data.content} />
         </Stack>
       </Stack>
     </Card>

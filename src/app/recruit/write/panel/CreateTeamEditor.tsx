@@ -32,6 +32,7 @@ import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
 import useToast from '@/states/useToast'
 import InterviewForm from './fields/Interview/InterviewForm'
+import { SkillsTutorial } from '@/components/tutorialContent/SkillsTutorial'
 
 const CreateTeamEditor = ({
   defaultValues,
@@ -502,6 +503,12 @@ const CreateTeamEditor = ({
               labelIcon={
                 <Icon.TagIcon
                   sx={{ ...style.iconStyleBase, color: 'text.normal' }}
+                />
+              }
+              endIconButton={
+                <Tutorial
+                  title="기술 스택 추가 방법"
+                  content={<SkillsTutorial />}
                 />
               }
             >

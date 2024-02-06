@@ -7,7 +7,9 @@ export const pcBox = {
 
 export const pcMessageContainer = {
   // 메시지 컨테이너
-  width: '49.8rem',
+  boxSizing: 'border-box',
+  width: '100%',
+  // width: '49.8rem',
   height: '48.6rem',
   padding: '2rem 1.5rem 3rem 1.5rem',
   backgroundColor: (theme: Theme) => theme.palette.background.primary,

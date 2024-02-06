@@ -16,6 +16,8 @@ const getTabValue = (path: string) => {
   if (path.includes('/notice')) return 'notice'
   else if (path.includes('/board')) return 'board'
   else if (path.includes('/setting')) return 'setting'
+  else if (path.includes('/peerlog')) return 'peerlog'
+  else if (path.includes('/showcase')) return 'showcase'
   else return 'main'
 }
 
