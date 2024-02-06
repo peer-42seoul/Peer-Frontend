@@ -8,7 +8,7 @@ export default async function Home() {
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit?type=STUDY&sort=latest&page=1&pageSize=6&keyword=&due=1주일&due=12개월 이상&region1=&region2=&place=&status=&tag=`,
       {
         headers: {
-          'Cache-Control': 'no-store',
+          'Cache-Control': 'no-cache',
         },
       },
     )
