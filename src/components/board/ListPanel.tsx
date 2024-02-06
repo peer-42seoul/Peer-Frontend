@@ -168,9 +168,8 @@ export const ListBoxContainer = ({ children }: IChildrenProps) => {
 }
 
 export const ListStack = ({ children }: IChildrenProps) => {
-  const { isPc } = useMedia()
   return (
-    <Stack sx={isPc ? style.PcListStack : undefined} spacing={'1rem'}>
+    <Stack sx={style.ListStack} spacing={'1rem'}>
       {children}
     </Stack>
   )
