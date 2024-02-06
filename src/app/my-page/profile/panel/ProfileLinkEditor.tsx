@@ -195,7 +195,7 @@ const ProfileLinkEditor = ({
                     error={!!errors?.linkList?.[index]?.linkUrl}
                     helperText={
                       <Typography variant="Caption" color={'error'}>
-                        !!errors?.linkList?.[index]?.linkUrl?.message
+                        {errors?.linkList?.[index]?.linkUrl?.message}
                       </Typography>
                     }
                     onBlur={() => isLinkNameRequired(index, field.linkUrl)}
