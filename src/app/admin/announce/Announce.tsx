@@ -243,7 +243,6 @@ const Announce = () => {
   }
 
   const onSubmitEdit = async (data: IAnnounceAllContent) => {
-
     let submitData: IAnnounceContentEdit
     let DateFormed = ''
     if (data.announcementNoticeStatus === '예약') {
@@ -548,7 +547,7 @@ const Announce = () => {
           ) : null}
           {/* <Box sx={{ height: '30rem' }}> */}
           {writeMode === 'view' ? (
-            <div>
+            <Box>
               <DynamicToastViewer
                 initialValue={getValues('content')}
                 sx={{
@@ -559,15 +558,17 @@ const Announce = () => {
                   overflowY: 'auto',
                 }}
               />
-            </div>
+            </Box>
           ) : (
-            <DynamicToastEditor
-              initialValue={getValues('content')}
-              initialEditType="wysiwyg"
-              editorRef={editorRef}
-              previewStyle="tab"
-              height={'30rem'}
-            />
+            <Box>
+              <DynamicToastEditor
+                initialValue={getValues('content')}
+                initialEditType="wysiwyg"
+                editorRef={editorRef}
+                previewStyle="tab"
+                height={'30rem'}
+              />
+            </Box>
           )}
           {/* </Box> */}
           <Stack>
