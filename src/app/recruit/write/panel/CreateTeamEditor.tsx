@@ -40,12 +40,14 @@ const CreateTeamEditor = ({
   editorRef,
   editorType,
   isAnswered,
+  isSubmitting,
 }: {
   defaultValues: IRecruitWriteField
   submitHandler: (data: IRecruitWriteField) => Promise<void>
   editorRef: React.MutableRefObject<Editor | null>
   editorType: 'edit' | 'write'
   isAnswered?: boolean
+  isSubmitting?: boolean
 }) => {
   const [completedInterview, setCompletedInterview] = useState(false)
 
@@ -79,7 +81,7 @@ const CreateTeamEditor = ({
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isValid },
     setValue,
     watch,
     trigger,

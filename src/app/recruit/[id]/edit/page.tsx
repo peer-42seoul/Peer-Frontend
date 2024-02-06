@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import CreateTeamEditor from '@/app/recruit/write/panel/CreateTeamEditor'
 import { Editor } from '@toast-ui/editor'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
@@ -14,6 +14,7 @@ import {
 } from '../../write/panel/fields/Interview/handleInterviewList'
 
 const Page = ({ params }: { params: { id: string } }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const { openToast, closeToast } = useToast()
   const router = useRouter()
   const editorRef = useRef<Editor | null>(null)
@@ -75,7 +76,14 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
-
+    if (String(editorRef.current?.getMarkdown()).length > 2000) {
+      openToast({
+        message: '모집글 내용은 2000자 이하로 작성해주세요.',
+        severity: 'error',
+      })
+      return
+    }
+    setIsSubmitting(true)
     await axiosWithAuth
       .put(`/api/v1/recruit/${params.id}`, {
         name: data.name,
@@ -103,6 +111,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           severity: 'success',
         })
         router.replace(`/recruit/${res.data}?type=${data.type}`)
+        setIsSubmitting(false)
       })
       .catch((error) => {
         openToast({
@@ -120,6 +129,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       editorType="edit"
       submitHandler={handleSubmit}
       isAnswered={data.isAnswered}
+      isSubmitting={isSubmitting}
     />
   )
 }

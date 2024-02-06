@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import CreateTeamEditor from './panel/CreateTeamEditor'
 import { Editor } from '@toast-ui/editor'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
@@ -13,6 +13,7 @@ const Page = () => {
   const editorRef = useRef<Editor | null>(null)
   const axiosWithAuth = useAxiosWithAuth()
   const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { openToast, closeToast } = useToast()
 
@@ -33,6 +34,14 @@ const Page = () => {
 
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
+    if (String(editorRef.current?.getMarkdown()).length > 2000) {
+      openToast({
+        message: '모집글 내용은 2000자 이하로 작성해주세요.',
+        severity: 'error',
+      })
+      return
+    }
+    setIsSubmitting(true)
     await axiosWithAuth
       .post('/api/v1/recruit/write', {
         image: data.image?.split(',')[1],
@@ -59,6 +68,7 @@ const Page = () => {
           message: '모집글이 성공적으로 등록되었습니다.',
           severity: 'success',
         })
+        setIsSubmitting(false)
         router.push(`/recruit/${res.data}?type=${data.type}`)
       })
       .catch((error) => {
@@ -66,6 +76,7 @@ const Page = () => {
           message: error.data.message ?? '모집글 등록에 실패했습니다.',
           severity: 'error',
         })
+        setIsSubmitting(false)
       })
   }
 
@@ -75,6 +86,7 @@ const Page = () => {
       defaultValues={defaultValues}
       editorType="write"
       submitHandler={handleSubmit}
+      isSubmitting={isSubmitting}
     />
   )
 }
