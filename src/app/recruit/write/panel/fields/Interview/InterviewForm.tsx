@@ -4,7 +4,6 @@ import { Button, MenuItem, Select, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import {
   Control,
-  UseFormSetValue,
   UseFormTrigger,
   useFieldArray,
   useFormState,
@@ -12,22 +11,22 @@ import {
 import Question from './Question'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 
 const InterviewForm = ({
   control,
   closeModal,
   isOpen,
   trigger,
-  setFormValue,
   setCompletedInterview,
 }: {
   control: Control<IRecruitWriteField>
   closeModal: () => void
   isOpen: boolean
   trigger: UseFormTrigger<IRecruitWriteField>
-  setFormValue: UseFormSetValue<IRecruitWriteField>
   setCompletedInterview: (value: boolean) => void
 }) => {
+  const { openToast } = useToast()
   const {
     openModal: openCancelModal,
     closeModal: closeCancelModal,
@@ -49,11 +48,25 @@ const InterviewForm = ({
     name: 'interviewList',
   })
 
-  const { isValid } = useFormState({ control, name: 'interviewList' })
+  const { errors } = useFormState({ control, name: 'interviewList' })
 
   const handleComplete = () => {
+    if (fields.length === 0) {
+      openToast({
+        message: '최소 한 개 이상의 질문을 작성하세요.',
+        severity: 'error',
+      })
+      return
+    }
     trigger('interviewList').then(() => {
-      if (!isValid) return
+      if (Object.keys(errors).length) {
+        console.log(errors)
+        openToast({
+          message: '질문과 답변을 모두 작성해주세요.',
+          severity: 'error',
+        })
+        return
+      }
       openCompleteModal()
     })
   }
@@ -65,7 +78,7 @@ const InterviewForm = ({
   }
 
   const handleCancelModalConfirm = () => {
-    setFormValue('interviewList', [])
+    fields.map((_, index) => remove(index))
     closeCancelModal()
     closeModal()
   }
@@ -113,6 +126,7 @@ const InterviewForm = ({
           text: '작성',
           onClick: handleComplete,
         }}
+        mobileFullSize
       >
         <Stack spacing={'1.5rem'}>
           {fields.map((field, index) => {
@@ -165,7 +179,7 @@ const InterviewForm = ({
         title="다음에 할까요?"
         content="인터뷰를 통해 지원자에 대해 더 자세히 알 수 있어요."
         textButton={{
-          text: '닫기',
+          text: '취소',
           onClick: closeCancelModal,
         }}
         containedButton={{
