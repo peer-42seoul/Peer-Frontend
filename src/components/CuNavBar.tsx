@@ -121,6 +121,7 @@ const PcToggleButton = ({
       selected={selected}
     >
       <Stack
+        minWidth={'6rem'}
         direction={'row'}
         spacing={'0.25rem'}
         alignItems={'center'}
