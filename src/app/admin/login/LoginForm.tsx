@@ -3,30 +3,14 @@
 import React, { useState } from 'react'
 import { Button, TextField, Typography, Container, Stack } from '@mui/material'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import useAdminStore from '@/states/useAdminStore'
 import { config } from '../panel/AdminAxios'
-// import { setCookie } from 'cookies-next'
-
-const sheetSytle = {
-  width: 'auto',
-  height: '80vh',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '2rem',
-}
 
 const LoginForm = () => {
   const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const [id, setId] = useState('')
   const [pw, setPw] = useState('')
-  // const [token, setToken] = useState('')
-  const router = useRouter()
   const { login } = useAdminStore()
-
-  let date = new Date()
-  date.setTime(date.getTime() + 1 * 30 * 60 * 1000) // 현재 시간에서 0.5시간 뒤
 
   function onHandleLogin() {
     console.log('login')
@@ -41,7 +25,6 @@ const LoginForm = () => {
       )
       .then(() => {
         login()
-        router.push('/admin')
       })
       .catch((err) => {
         if (
@@ -62,8 +45,21 @@ const LoginForm = () => {
     setPw(e.target.value)
   }
 
+  const onHandleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') onHandleLogin()
+  }
+
   return (
-    <Container sx={sheetSytle}>
+    <Container
+      sx={{
+        width: 'auto',
+        height: '80vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '2rem',
+      }}
+    >
       <Stack
         gap={'1rem'}
         sx={{
@@ -89,7 +85,12 @@ const LoginForm = () => {
               >
                 ID
               </Typography>
-              <TextField value={id} onChange={onHandleChagneId} />
+              <TextField
+                value={id}
+                onChange={onHandleChagneId}
+                autoFocus={true}
+                onKeyDown={onHandleKeyPress}
+              />
             </Stack>
             <Stack
               direction={'row'}
@@ -103,7 +104,11 @@ const LoginForm = () => {
               >
                 PW
               </Typography>
-              <TextField value={pw} onChange={onHandleChangePw} />
+              <TextField
+                value={pw}
+                onChange={onHandleChangePw}
+                onKeyDown={onHandleKeyPress}
+              />
             </Stack>
           </Stack>
           <Button variant="outlined" onClick={onHandleLogin}>
