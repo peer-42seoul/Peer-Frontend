@@ -329,7 +329,7 @@ const Banner = () => {
             setContent(res.data.content)
           })
       })
-      .catch((err) => {
+      .catch(() => {
         alert(`공지사항 ${mode} 처리 실패`)
       })
   }
