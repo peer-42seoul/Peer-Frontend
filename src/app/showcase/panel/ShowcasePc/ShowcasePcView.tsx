@@ -8,7 +8,6 @@ import {
   CardContent,
   IconButton,
   Menu,
-  MenuItem,
   Stack,
   Typography,
 } from '@mui/material'
@@ -22,6 +21,8 @@ import TagChip from '@/components/TagChip'
 import { useRouter } from 'next/navigation'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
+import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
+import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -177,8 +178,13 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                       onClose={handleMenuClose}
                       anchorEl={anchorEl}
                     >
-                      <MenuItem>공유</MenuItem>
-                      <MenuItem>신고</MenuItem>
+                      <ShareMenuItem
+                        title={data.name}
+                        url={`/showcase/${data.id}`}
+                        content={data.description}
+                      />
+
+                      <ReportMenuItem targetId={data.id} />
                     </Menu>
                   </Stack>
                 </Stack>
