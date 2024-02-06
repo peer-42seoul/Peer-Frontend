@@ -4,7 +4,6 @@ import { Button, MenuItem, Select, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import {
   Control,
-  UseFormSetValue,
   UseFormTrigger,
   useFieldArray,
   useFormState,
@@ -19,14 +18,12 @@ const InterviewForm = ({
   closeModal,
   isOpen,
   trigger,
-  setFormValue,
   setCompletedInterview,
 }: {
   control: Control<IRecruitWriteField>
   closeModal: () => void
   isOpen: boolean
   trigger: UseFormTrigger<IRecruitWriteField>
-  setFormValue: UseFormSetValue<IRecruitWriteField>
   setCompletedInterview: (value: boolean) => void
 }) => {
   const { openToast } = useToast()
