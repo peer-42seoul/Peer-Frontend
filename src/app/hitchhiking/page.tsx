@@ -99,6 +99,7 @@ const Hitchhiking = () => {
             isProject={isProject}
             message={message}
             handleChange={handleChange}
+            setCardList={setCardList}
           />
         </Box>
         <Stack
@@ -138,6 +139,7 @@ const Hitchhiking = () => {
       message={message}
       handleChange={handleChange}
       addDisabled={draggedCardList.length === 0}
+      setCardList={setCardList}
     />
   )
 }
