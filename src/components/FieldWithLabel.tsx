@@ -2,6 +2,7 @@ import {
   FormHelperText,
   InputLabel,
   Stack,
+  SxProps,
   Typography,
   TypographyProps,
 } from '@mui/material'
@@ -14,6 +15,7 @@ interface IFieldWithLabelProps {
   labelProps?: TypographyProps
   children: React.ReactNode
   formHelperText?: string
+  sx?: SxProps
 }
 
 const FieldWithLabel = (props: IFieldWithLabelProps) => {
@@ -21,7 +23,10 @@ const FieldWithLabel = (props: IFieldWithLabelProps) => {
     <Stack
       direction={'column'}
       spacing={'0.5rem'}
-      width={['100%', 'fit-content']}
+      sx={{
+        width: ['100%', 'fit-content'],
+        ...props.sx,
+      }}
     >
       <InputLabel htmlFor={props.id}>
         <Stack
