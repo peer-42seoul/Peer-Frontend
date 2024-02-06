@@ -11,8 +11,6 @@ interface BasicSelectProps {
   control: Control<IRecruitWriteField, any>
 }
 
-// 해당 컴포넌트에는 react-hook-form을 제대로 적용하지 않았습니다.
-
 export default function SelectRegion({ region, control }: BasicSelectProps) {
   const { errors } = useFormState<IRecruitWriteField>({ control })
 
