@@ -21,6 +21,7 @@ const CardContainer = ({
   handleChange,
   addCard,
   addDisabled,
+  setCardList,
 }: {
   cardList: Array<IPostCardHitchhiking>
   removeCard: (recruit_id: number) => void
@@ -29,8 +30,21 @@ const CardContainer = ({
   handleChange: any
   addCard?: () => void
   addDisabled?: boolean
+  setCardList: React.Dispatch<React.SetStateAction<IPostCardHitchhiking[]>>
 }) => {
   const { isPc } = useMedia()
+
+  const setFavorite = () => {
+    setCardList((prev) => {
+      const newArray = [...prev]
+      newArray[prev.length - 1].favorite =
+        newArray[prev.length - 1].favorite === undefined
+          ? true
+          : !newArray[prev.length - 1].favorite
+      return newArray
+    })
+  }
+
   return (
     <Stack
       justifyContent={'flex-start'}
@@ -114,7 +128,11 @@ const CardContainer = ({
             />
           </IconButton>
         )}
-        <Interest id={cardList[cardList.length - 1]?.recruitId} />
+        <Interest
+          id={cardList[cardList.length - 1]?.recruitId}
+          favorite={cardList[cardList.length - 1]?.favorite || false}
+          setFavorite={setFavorite}
+        />
         {!isPc && (
           <IconButton
             sx={style.buttonStyle}
