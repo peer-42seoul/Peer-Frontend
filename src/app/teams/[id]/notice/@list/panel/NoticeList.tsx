@@ -1,3 +1,4 @@
+import { isAxiosError } from 'axios'
 import { Fragment, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box } from '@mui/material'
@@ -34,7 +35,7 @@ const NoticeList = ({
   const isEmpty = !data || data.length === 0 || data[0].content.length === 0
 
   if (error) {
-    if (error.status === 403) {
+    if (isAxiosError(error) && error.response?.status === 403) {
       alert('팀 페이지에 접근할 권한이 없습니다.')
     } else {
       alert('팀 페이지에 접근할 수 없습니다.')

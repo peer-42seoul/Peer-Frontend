@@ -9,6 +9,7 @@ import useHeaderStore from '@/states/useHeaderStore'
 import { ITeamInfo } from '@/types/ITeamInfo'
 import { StatusIcon, IconInfo } from './TeamInfoComponent'
 import * as style from './TeamInfoContainer.style'
+import { isAxiosError } from 'axios'
 
 const TeamInfoContainer = ({ id }: { id: number }) => {
   const axiosInstance = useAxiosWithAuth()
@@ -30,8 +31,10 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
   }, [data])
 
   if (error) {
-    if (error.status === 403) alert('팀 페이지에 접근할 권한이 없습니다.')
-    else if (error.status === 404) alert('팀 페이지가 존재하지 않습니다.')
+    if (isAxiosError(error) && error.response?.status === 403)
+      alert('팀 페이지에 접근할 권한이 없습니다.')
+    else if (isAxiosError(error) && error.response?.status === 404)
+      alert('팀 페이지가 존재하지 않습니다.')
     else alert('팀 페이지에 접근할 수 없습니다.')
     router.push('/team-list')
     return <CuCircularProgress color={'primary'} />
