@@ -31,6 +31,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
             severity: 'success',
             message: '팀이 해산되었습니다.',
           })
+          router.push('/team-list')
         } else if (res.status === 401) {
           console.log(res)
           router.push('/login')
