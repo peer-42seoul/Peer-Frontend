@@ -84,7 +84,7 @@ const CreateTeamEditor = ({
     clearErrors,
   } = useForm<IRecruitWriteField>({
     defaultValues: defaultValues,
-    mode: 'onChange',
+    mode: 'all',
   })
 
   const { dirtyFields } = useFormState({ control })
