@@ -82,7 +82,6 @@ const InterviewForm = ({
 
   const handleCancelModalConfirm = () => {
     fields.map((_, index) => remove(index))
-    setFormValue('interviewList', [])
     closeCancelModal()
     closeModal()
   }

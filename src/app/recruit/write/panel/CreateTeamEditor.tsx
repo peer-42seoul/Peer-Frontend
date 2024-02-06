@@ -672,7 +672,6 @@ const CreateTeamEditor = ({
         closeModal={closeInterviewModal}
         isOpen={isInterviewOpen}
         trigger={trigger}
-        setFormValue={setValue}
         setCompletedInterview={setCompletedInterview}
       />
     </>
