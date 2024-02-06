@@ -69,7 +69,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [type, setType] = useState<ProjectType | undefined>(
     keyword !== '' ? searchType : undefined,
   ) //'STUDY'
-  console.log('type', type)
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   const [detailOption, setDetailOption] = useState<IDetailOption>({
