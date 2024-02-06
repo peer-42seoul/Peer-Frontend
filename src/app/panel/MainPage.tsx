@@ -148,20 +148,21 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       : defaultGetFetcher,
   )
 
-  const [content, setContent] = useState<IPost[]>(
-    initData?.content.map((v) => ({
-      ...v,
-      favorite: getFavoriteData(v.recruit_id),
-    })) ?? [],
-  )
+  const [content, setContent] = useState<IPost[] | []>([])
 
   useEffect(() => {
-    if (!newData || !newData?.content) return
+    if (!newData || !newData?.content)
+      return setContent(
+        initData?.content.map((v) => ({
+          ...v,
+          favorite: getFavoriteData(v.recruit_id),
+        })) ?? [],
+      )
+
     //page가 1일 경우 == initData가 설정되어있을경우, 무한스크롤시 page는 무조건 2부터 시작함.
     //따라서 page가 1일 경우에는 옵션이 달라진 것임. 고로 무조건 새로운 데이터로 setContent를 해준다.
     if (page == 1) {
-      setContent(newData.content)
-      return
+      return setContent(newData.content)
     }
     //여기서부터는 무한스크롤 영역. 길이가 0이면 더해주지 않는다.
     if (newData?.content.length == 0) return
