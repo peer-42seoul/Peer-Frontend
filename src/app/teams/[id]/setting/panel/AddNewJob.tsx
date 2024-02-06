@@ -37,7 +37,7 @@ const AddNewJob = ({ onNewJob, teamId, teamStatus }: Props) => {
   const handleAddJob = () => {
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/job/add/${teamId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/job/add/${teamId}`,
         newJob,
       )
       .then((res) => {

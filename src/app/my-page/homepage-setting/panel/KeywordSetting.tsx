@@ -68,7 +68,7 @@ const KeywordAddingField = ({
   const addKeyword = async (trimmed: string) => {
     closeToast()
     await axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/add`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/alarm/add`, {
         newKeyword: trimmed,
       })
       .then(() => {
@@ -213,7 +213,7 @@ const KeywordDisplayBox = ({
   const deleteAll = async () => {
     closeToast()
     await axiosWithAuth
-      .delete(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete/all`)
+      .delete(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/alarm/delete/all`)
       .then(() => {
         closeModal()
         mutate()
@@ -280,7 +280,7 @@ const KeywordSetting = () => {
     })
 
   const { isLoading, data, mutate, error } = useSWR<Array<IChip> | null>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/alarm`,
     getKeywords,
   )
 

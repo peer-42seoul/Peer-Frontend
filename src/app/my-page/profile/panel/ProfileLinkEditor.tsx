@@ -113,7 +113,7 @@ const ProfileLinkEditor = ({
 
     closeToast()
     await axiosWithAuth
-      .put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/link`, {
+      .put(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/profile/link`, {
         linkList: linkList,
       })
       .then(() => {

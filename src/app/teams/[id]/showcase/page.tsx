@@ -14,7 +14,7 @@ const ShowcaseGenerationPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
 
   const { data, isLoading, error } = useSWR<any>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/page/${id}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/page/${id}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )

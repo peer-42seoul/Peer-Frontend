@@ -14,7 +14,7 @@ import useSWR from 'swr'
 const MainShowcase = () => {
   const router = useRouter()
   const { data, isLoading, error } = useSWR<IPagination<ICardData[]>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=1&pageSize=10`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase?page=1&pageSize=10`,
     defaultGetFetcher,
   )
 

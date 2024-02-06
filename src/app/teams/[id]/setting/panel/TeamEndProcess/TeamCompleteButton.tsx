@@ -20,7 +20,7 @@ const TeamCompleteButton = ({ teamId, teamStatus }: ITeamCompleteButton) => {
   const finishTeam = () => {
     console.log('exit team')
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/complete`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/complete`, {
         teamId: teamId,
       })
       .then((res) => {

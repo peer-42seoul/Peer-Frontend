@@ -34,13 +34,13 @@ const PrivacyPage = () => {
           authorized={authenticationFt}
           authenticationTitle="42계정"
           authenticatedContent={authenticationFt}
-          href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/ft`}
+          href={`${process.env.NEXT_PUBLIC_CSR_API}/oauth2/authorization/ft`}
         />
         <AuthSettingSection
           authorized={authenticationGoogle}
           authenticationTitle="구글 계정"
           authenticatedContent={authenticationGoogle}
-          href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`}
+          href={`${process.env.NEXT_PUBLIC_CSR_API}/oauth2/authorization/google`}
         />
         <PasswordChangeSection />
       </TitleBox>

@@ -18,7 +18,7 @@ const sheetSytle = {
 }
 
 const LoginForm = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const [id, setId] = useState('')
   const [pw, setPw] = useState('')
   // const [token, setToken] = useState('')

@@ -13,7 +13,7 @@ import * as style from './TeamInfoContainer.style'
 const TeamInfoContainer = ({ id }: { id: number }) => {
   const axiosInstance = useAxiosWithAuth()
   const { data, error, isLoading } = useSWR<ITeamInfo>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/main/${id}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/main/${id}`,
     (url: string) => axiosInstance(url).then((res) => res.data),
   )
   const { setHeaderTitle } = useHeaderStore()

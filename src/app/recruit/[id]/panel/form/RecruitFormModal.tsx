@@ -39,7 +39,7 @@ const RecruitFormModal = ({
   const { isLogin } = useAuthStore()
   const { data } = useSWR<IInterviewData[]>(
     isLogin
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`
+      ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/interview/${recruit_id}`
       : null,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
@@ -81,7 +81,7 @@ const RecruitFormModal = ({
     try {
       setLoading(true)
       await axiosWithAuth.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/interview/${recruit_id}`,
         value,
       )
       setOpenConfirm(false)

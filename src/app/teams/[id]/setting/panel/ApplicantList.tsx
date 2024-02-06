@@ -34,7 +34,7 @@ const ApplicantList = ({
   // TODO: DTO 맞추기
 
   const { data, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/${teamId}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/applicant/${teamId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const [members, setMembers] = useState<IApplicant[]>([])
@@ -50,7 +50,7 @@ const ApplicantList = ({
   const handleAccept = () => {
     axiosWithAuth
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/accept/${teamId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/applicant/accept/${teamId}`,
         {
           teamJobId: member!.applyId.teamJobId,
           teamUserId: member!.applyId.teamUserId,
@@ -73,7 +73,7 @@ const ApplicantList = ({
     console.log('reject')
     axiosWithAuth
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/reject/${teamId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/applicant/reject/${teamId}`,
         {
           teamJobId: member!.applyId.teamJobId,
           teamUserId: member!.applyId.teamUserId,

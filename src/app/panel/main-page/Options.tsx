@@ -36,7 +36,7 @@ const Options = ({
     },
   })
   const { data: listData } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/tag`,
     defaultGetFetcher,
   )
   const [due, setDue] = useState<number[]>([0, 100])

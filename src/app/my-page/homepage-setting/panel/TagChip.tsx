@@ -32,7 +32,7 @@ const TagChip = ({ chip, mutate }: { chip: IChip; mutate: () => void }) => {
     closeToast()
     await axiosWithAuth
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete?keyword=${chip.label}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/alarm/delete?keyword=${chip.label}`,
       )
       .then(() => {
         openToast({

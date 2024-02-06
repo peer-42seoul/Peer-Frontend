@@ -14,7 +14,7 @@ const ShowCaseEditPage = () => {
   const showcaseId = params.get('showcaseId')
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseData>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${showcaseId}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/${showcaseId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )

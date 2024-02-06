@@ -12,7 +12,7 @@ const OauthGoogleLogin = () => {
   const scope = searchParams.get('scope')
   const authuser = searchParams.get('authuser')
   const prompt = searchParams.get('prompt')
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const { isLogin, accessToken } = useAuthStore()
 
   const handleConnect = () => {
