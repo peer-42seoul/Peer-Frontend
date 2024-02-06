@@ -49,10 +49,6 @@ const InterviewForm = ({
 
   const { isValid } = useFormState({ control, name: 'interviewList' })
 
-  const handleCancel = () => {
-    setFormValue('interviewList', [])
-  }
-
   const handleComplete = () => {
     trigger('interviewList').then(() => {
       if (!isValid) return
@@ -62,6 +58,12 @@ const InterviewForm = ({
 
   const handleCompleteModalConfirm = () => {
     closeCompleteModal()
+    closeModal()
+  }
+
+  const handleCancelModalConfirm = () => {
+    setFormValue('interviewList', [])
+    closeCancelModal()
     closeModal()
   }
 
@@ -98,7 +100,7 @@ const InterviewForm = ({
     <>
       <CuModal
         open={isOpen}
-        onClose={closeModal}
+        onClose={openCancelModal}
         title="인터뷰 작성"
         textButton={{
           text: '취소',
@@ -165,7 +167,7 @@ const InterviewForm = ({
         }}
         containedButton={{
           text: '나가기',
-          onClick: handleCancel,
+          onClick: handleCancelModalConfirm,
         }}
       />
       <CuTextModal
