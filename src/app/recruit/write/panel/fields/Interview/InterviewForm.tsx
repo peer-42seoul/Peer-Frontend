@@ -76,25 +76,25 @@ const InterviewForm = ({
     }
     if (value === 'OPEN')
       append({
-        question: '질문을 입력하세요.',
+        question: '',
         type: 'OPEN',
         optionList: [{ option: '' }],
       })
     else if (value === 'CLOSE')
       append({
-        question: '질문을 입력하세요.',
+        question: '',
         type: 'CLOSE',
         optionList: [{ option: '' }, { option: '' }],
       })
     else if (value === 'CHECK')
       append({
-        question: '질문을 입력하세요.',
+        question: '',
         type: 'CHECK',
         optionList: [{ option: '' }],
       })
     else if (value === 'RATIO')
       append({
-        question: '질문을 입력하세요.',
+        question: '',
         type: 'RATIO',
         optionList: [{ option: '5' }, { option: '' }, { option: '' }],
       })

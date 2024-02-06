@@ -1,7 +1,12 @@
 import ControlledSelect from '@/components/ControlledSelect'
 import { IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { Control, UseFieldArrayRemove, useWatch } from 'react-hook-form'
+import {
+  Control,
+  UseFieldArrayRemove,
+  useFormState,
+  useWatch,
+} from 'react-hook-form'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
 import ControlledTextfield from '@/components/ControlledTextfield'
 import Options from './Options'
@@ -17,6 +22,7 @@ const Question = ({
   remove: UseFieldArrayRemove
 }) => {
   const type = useWatch({ control, name: `interviewList.${index}.type` })
+  const { errors } = useFormState<IRecruitWriteField>({ control })
 
   return (
     <>
@@ -59,11 +65,30 @@ const Question = ({
       <ControlledTextfield
         name={`interviewList.${index}.question`}
         control={control}
-        rules={{ required: '필수 입력 항목입니다.' }}
+        inputProps={{
+          maxLength: 20,
+        }}
+        rules={{
+          required: '필수 입력 항목입니다.',
+          maxLength: {
+            value: 20,
+            message: '최대 20자까지 입력 가능합니다.',
+          },
+          minLength: {
+            value: 2,
+            message: '최소 2자 이상 입력해주세요.',
+          },
+        }}
+        helperText={
+          <Typography variant="Caption" color={'error'}>
+            {errors?.interviewList?.[index]?.message}
+          </Typography>
+        }
         placeholder="질문을 입력해주세요."
         variant="standard"
         sx={{
-          width: '50%',
+          width: '100%',
+          maxWidth: ['100%', '20rem'],
           '& .MuiInputBase-root': {
             fontSize: '15px',
             fontWeight: 400,

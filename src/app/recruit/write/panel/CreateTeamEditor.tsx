@@ -542,11 +542,14 @@ const CreateTeamEditor = ({
                   sx={{ ...style.iconStyleBase, color: 'text.normal' }}
                 />
               }
+              sx={{ width: '100%' }}
             >
-              <DynamicToastEditor
-                initialValue="팀 소개 글 입니다."
-                editorRef={editorRef}
-              />
+              <Box width={'100%'}>
+                <DynamicToastEditor
+                  initialValue="팀 소개 글 입니다."
+                  editorRef={editorRef}
+                />
+              </Box>
             </FieldWithLabel>
             {/* 모집 인터뷰 */}
             <FieldWithLabel
