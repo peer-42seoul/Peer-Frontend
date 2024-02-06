@@ -7,7 +7,6 @@ import { Editor, IToastEditorProps } from '@toast-ui/editor'
 import { Card } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import useAxiosWithAuth from '@/api/config'
-import './ToastUIEditor.css'
 import useMedia from '@/hook/useMedia'
 
 /**
