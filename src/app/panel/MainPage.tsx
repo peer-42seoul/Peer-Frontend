@@ -61,12 +61,15 @@ export interface IDetailOption {
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
+  console.log('keyword', keyword)
   const searchType = searchParams.get('type') === 'STUDY' ? 'STUDY' : 'PROJECT'
+  console.log('searchType', searchType)
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType | undefined>(
     keyword !== '' ? searchType : undefined,
   ) //'STUDY'
+  console.log('type', type)
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   const [detailOption, setDetailOption] = useState<IDetailOption>({
@@ -91,9 +94,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   useEffect(() => {
     if (keyword !== '') {
       setHeaderTitle(keyword + ' 검색 결과')
+      setType(searchType)
       setInit(false)
     } else setHeaderTitle('')
-  }, [keyword])
+  }, [keyword, searchType])
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
 
