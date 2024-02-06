@@ -53,7 +53,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
 
   if (error) {
     if (error.status === 403) {
-      alert('팀 페이지에 접근할 권한이 없습니다.')
+      alert('팀 설정은 팀 리더만 가능합니다.')
     } else {
       alert('팀 페이지에 접근할 수 없습니다.')
     }
