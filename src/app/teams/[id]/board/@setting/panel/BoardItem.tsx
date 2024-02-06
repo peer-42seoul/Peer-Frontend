@@ -1,4 +1,5 @@
 import { useSWRConfig } from 'swr'
+import { isAxiosError } from 'axios'
 import useAxiosWithAuth from '@/api/config'
 import { ITeamBoard } from '@/types/TeamBoardTypes'
 import { IconButton, Stack, Typography } from '@mui/material'
@@ -29,11 +30,25 @@ const BoardItem = ({
         })
         mutate(`/api/v1/team-page/simple/${teamId}`)
       })
-      .catch(() => {
-        openToast({
-          severity: 'error',
-          message: '게시판을 삭제하지 못했습니다.',
-        })
+      .catch((e: unknown) => {
+        if (isAxiosError(e)) {
+          if (e.response?.status === 403) {
+            openToast({
+              severity: 'error',
+              message: '게시판 추가는 팀 리더만 가능합니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: '게시판을 추가하지 못했습니다.',
+            })
+          }
+        } else {
+          openToast({
+            severity: 'error',
+            message: '게시판을 추가하지 못했습니다.',
+          })
+        }
       })
   }
   return (

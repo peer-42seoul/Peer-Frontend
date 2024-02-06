@@ -101,7 +101,7 @@ interface IAnnounceContentEdit {
 }
 
 const Announce = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
 
   const [content, setContent] = useState<content[]>([])
   const [open, setOpen] = useState<boolean>(false)
@@ -143,7 +143,7 @@ const Announce = () => {
         ...config,
         // withCredentials: true,
         // baseURL: "https://peer-test.co.kr",
-        // baseURL: process.env.NEXT_PUBLIC_API_URL
+        // baseURL: process.env.NEXT_PUBLIC_CSR_API
         // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
       })
       .then((res) => {

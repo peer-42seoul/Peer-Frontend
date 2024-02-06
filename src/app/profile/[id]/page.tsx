@@ -19,7 +19,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
     error,
     isLoading,
   } = useSWR<IUserProfile>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/otherUser?userId=${params.id}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/profile/otherUser?userId=${params.id}`,
     (url: string) => axios.get(url).then((res) => res.data),
   )
   const { isPc } = useMedia()

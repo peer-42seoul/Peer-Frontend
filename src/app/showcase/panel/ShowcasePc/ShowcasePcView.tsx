@@ -63,7 +63,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
     if (!data) return alert('로그인이 필요합니다.')
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/like/${data.id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/like/${data.id}`,
       )
       .then((res) => {
         if (res.status === 200) {
@@ -84,7 +84,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
     if (!data) return alert('로그인이 필요합니다.')
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${data.id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/favorite/${data.id}`,
       )
       .then((res) => {
         if (res.status === 200) {

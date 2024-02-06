@@ -92,7 +92,7 @@ interface IBannerContentEdit {
 }
 
 const Banner = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
 
   const [page, setPage] = useState<number>(1)
   const totalPageVar = useRef<number>(1)

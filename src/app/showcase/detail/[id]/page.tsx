@@ -13,7 +13,7 @@ import useAxiosWithAuth from '@/api/config'
 const ShowcaseDetailPage = ({ params }: { params: { id: number } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IShowcaseViewerFields>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${params.id}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/${params.id}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 

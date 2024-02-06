@@ -16,7 +16,7 @@ const PortfolioList = ({ userId }: { userId: string }) => {
   const [pageLimit, setPageLimit] = useState(1)
 
   const { data, isLoading } = useSWR<Array<IMyPortfolio>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/otherPortfolio/list?userId=${userId}&page=${page}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/otherPortfolio/list?userId=${userId}&page=${page}`,
     (url: string) => axios.get(url).then((res) => res.data),
   )
 

@@ -20,7 +20,7 @@ const ToastEditor = ({
   editorRef,
 }: IToastEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const themed = useTheme()
   const editorElementRef = useRef<HTMLDivElement>(null)
   const toggleDark = () => {

@@ -48,7 +48,7 @@ const PushAlertBanner = () => {
         let newSubString = JSON.stringify(newSubData)
 
         return axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/push`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/push`,
           {
             subscription: newSubString,
           },

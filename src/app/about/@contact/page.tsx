@@ -26,7 +26,7 @@ const ContactPage = () => {
 
   const onSubmit = handleSubmit((data) => {
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/about/contact-us`, data)
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/about/contact-us`, data)
       .then((res) => {
         if (res.status === 200) {
           alert('문의사항이 성공적으로 전송되었습니다.')

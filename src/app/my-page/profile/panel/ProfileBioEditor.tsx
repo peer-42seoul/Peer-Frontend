@@ -184,7 +184,7 @@ const ProfileBioEditor = ({
       setIsLoading(true)
       const checkIsNicknameUnique = async () => {
         axiosWithAuth
-          .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/signup/nickname`, {
+          .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/signup/nickname`, {
             nickname,
           })
           .then(() => {
@@ -272,7 +272,7 @@ const ProfileBioEditor = ({
     closeToast()
     await axiosWithAuth
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/introduction/edit`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/profile/introduction/edit`,
         submitData,
         {
           headers: {

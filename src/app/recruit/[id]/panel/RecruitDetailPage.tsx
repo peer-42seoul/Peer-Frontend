@@ -29,7 +29,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
 
   const { data: favoriteData } = useSWR<boolean>(
     isLogin
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${id}`
+      ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorite/${id}`
       : null,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )

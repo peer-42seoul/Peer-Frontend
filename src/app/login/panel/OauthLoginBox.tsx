@@ -4,7 +4,7 @@ import Image from 'next/image'
 const Icons = { width: '40px', height: '40px', backgroundColor: '#EFEFEF' }
 
 const OauthLoginBox = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
 
   return (
     <Box
