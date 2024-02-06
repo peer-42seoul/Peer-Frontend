@@ -74,9 +74,14 @@ export const socket = getCookie('accessToken')
   : null
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
+  const searchParams = useSearchParams()
+  const keyword = searchParams.get('keyword') ?? ''
+  const searchType = searchParams.get('type') === 'STUDY' ? 'STUDY' : 'PROJECT'
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
-  const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
+  const [type, setType] = useState<ProjectType | undefined>(
+    keyword !== '' ? searchType : undefined,
+  ) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   const { setSocket } = useSocket()
@@ -91,8 +96,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     tag: '',
   })
 
-  const searchParams = useSearchParams()
-  const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
