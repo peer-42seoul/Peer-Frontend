@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import CreateTeamEditor from '@/app/recruit/write/panel/CreateTeamEditor'
 import { Editor } from '@toast-ui/editor'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
@@ -18,47 +18,49 @@ const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
   const editorRef = useRef<Editor | null>(null)
 
-  const [isAnswered, setIsAnswered] = useState(false)
-
   const searchParam = useSearchParams()
 
   const type = searchParam.get('type')
 
   const axiosWithAuth = useAxiosWithAuth()
-  const {
-    data: defaultValues,
-    isLoading,
-    error,
-  } = useSWR<IRecruitWriteField>(
+
+  const { data, isLoading, error } = useSWR<{
+    defaultValues: IRecruitWriteField
+    isAnswered: boolean
+  }>(
     `/api/v1/recruit/edit/${params.id}`,
     (url: string) =>
       axiosWithAuth
         .get(url)
         .then((res) => res.data)
-        .then((data) => {
-          setIsAnswered(data.isAnswered)
-          return data
-        })
         .then((data) => ({
-          place: data.place,
-          image: data.image,
-          title: data.title,
-          name: data.name,
-          due: data.due,
-          type: data.type,
-          region: data.place === 'ONLINE' ? ['', ''] : data.region,
-          link: data.link ?? '',
-          tagList: data.tagList,
-          roleList:
-            data.type === 'PROJECT' ? data.roleList : [{ name: '', number: 0 }],
-          interviewList: formToField(data.interviewList),
-          max: data.totalNumber ? `${data.totalNumber}` : `2`,
+          defaultValues: {
+            place: data.place,
+            image: data.image,
+            title: data.title,
+            name: data.name,
+            due: data.due,
+            type: data.type,
+            region:
+              data.place === 'ONLINE'
+                ? { large: '', small: '' }
+                : { large: data.region1, small: data.region2 },
+            link: data.link ?? '',
+            tagList: data.tagList,
+            roleList:
+              data.type === 'PROJECT'
+                ? data.roleList
+                : [{ name: '', number: 0 }],
+            interviewList: formToField(data.interviewList),
+            max: data.totalNumber ? `${data.totalNumber}` : `2`,
+          },
+          isAnswered: data.isAnswered,
         })),
     { revalidateOnFocus: false },
   )
 
   if (isLoading) return <CuCircularProgress color="primary" />
-  else if (error || !defaultValues) {
+  else if (error || !data) {
     if (error?.response?.initData?.message) {
       openToast({ message: error?.response?.data?.message, severity: 'error' })
     } else {
@@ -81,7 +83,10 @@ const Page = ({ params }: { params: { id: string } }) => {
         due: data.due,
         status: 'ONGOING',
         content: editorRef.current?.getMarkdown(),
-        region: data.place === 'ONLINE' ? null : data.region,
+        region:
+          data.place === 'ONLINE'
+            ? null
+            : [data.region.large, data.region.small],
         link: data.link,
         tagList: data.tagList.map((tag) => {
           return tag.tagId
@@ -111,10 +116,10 @@ const Page = ({ params }: { params: { id: string } }) => {
   return (
     <CreateTeamEditor
       editorRef={editorRef}
-      defaultValues={defaultValues}
+      defaultValues={data?.defaultValues}
       editorType="edit"
       submitHandler={handleSubmit}
-      isAnswered={isAnswered}
+      isAnswered={data.isAnswered}
     />
   )
 }

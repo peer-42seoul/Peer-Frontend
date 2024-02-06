@@ -190,7 +190,15 @@ const ProfileLinkEditor = ({
                     control={control}
                     name={`${index}.linkUrl`}
                     rules={{
-                      validate: isLinkUrlValid(index),
+                      validate: {
+                        pattern: (value) => {
+                          const regex =
+                            // eslint-disable-next-line no-useless-escape
+                            /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/
+                          return regex.test(value) || '유효한 url을 입력하세요.'
+                        },
+                        validate: isLinkUrlValid(index),
+                      },
                     }}
                     error={!!errors?.linkList?.[index]?.linkUrl}
                     helperText={

@@ -14,7 +14,7 @@ export interface IRecruitWriteField {
   name: string
   due: string
   type: string
-  region: Array<string>
+  region: { large: string; small: string }
   link: string
   tagList: Array<ISkill>
   roleList: Array<IRoleWrite>

@@ -10,7 +10,7 @@ import {
   useWatch,
 } from 'react-hook-form'
 import ControlledTextfield from '@/components/ControlledTextfield'
-import React, { useState } from 'react'
+import React from 'react'
 import FieldWithLabel from '@/components/FieldWithLabel'
 import { CloseIcon, PlusIcon, UserCheckIcon } from '@/icons'
 import * as style from '../../page.style'
@@ -28,12 +28,37 @@ const SetTeamRole = ({
   editorType: 'write' | 'edit'
 }) => {
   const { isPc } = useMedia()
-  const [leftMember, setLeftMember] = useState(10)
   const { prepend, remove, fields } = useFieldArray({
     control,
     name: 'roleList',
   })
-  const roleData = useWatch({ control, name: 'roleList.0.number' })
+
+  const roleData = useWatch({ control, name: 'roleList' })
+
+  const getAssignedMember = () => {
+    let assignedMember: number = 0
+    roleData.forEach((role) => {
+      assignedMember += parseInt(role.number.toString())
+      // NOTE: number가 자꾸 string으로 들어오기 때문에 둘 다 썼습니다.
+    })
+    return assignedMember
+  }
+
+  const validateMaxNumber = (value: number) => {
+    let assignedMember: number = getAssignedMember()
+    console.log(assignedMember)
+    if (assignedMember > 10) {
+      return `최대 10명 까지만 등록 가능합니다. ${
+        10 - assignedMember > 6
+          ? 6
+          : 10 - assignedMember + parseInt(value.toString())
+      }명 이하로 입력해주세요.`
+    } else if (value <= 0) {
+      return '1명 이상 입력해주세요.'
+    } else if (value > 6) {
+      return '6명 이하로 입력해주세요.'
+    }
+  }
 
   const { errors } = useFormState({ control })
 
@@ -41,7 +66,7 @@ const SetTeamRole = ({
 
   const handlePrepend = () => {
     closeToast()
-    if (leftMember == roleData) {
+    if (getAssignedMember() >= 10) {
       openToast({
         message: '최대 10명 까지만 등록 가능합니다.',
         severity: 'error',
@@ -50,18 +75,12 @@ const SetTeamRole = ({
     }
     trigger('roleList').then(() => {
       if (!errors.roleList) {
-        setLeftMember((prev) => {
-          return prev - roleData
-        })
         prepend({ name: '', number: 1 })
       }
     })
   }
 
   const handleRemove = (index: number) => {
-    setLeftMember((prev) => {
-      return prev + fields[index].number
-    })
     remove(index)
   }
 
@@ -72,7 +91,7 @@ const SetTeamRole = ({
         <UserCheckIcon sx={{ ...style.iconStyleBase, color: 'text.normal' }} />
       }
       endIconButton={
-        <IconButton onClick={handlePrepend} sx={{ justifySelf: 'flex-end' }}>
+        <IconButton onClick={handlePrepend} sx={{ marginLeft: '0.5rem' }}>
           <PlusIcon
             sx={{ ...style.iconStyleBase, color: 'text.alternative' }}
           />
@@ -87,7 +106,7 @@ const SetTeamRole = ({
                 <ControlledTextfield
                   control={control}
                   inputProps={{ maxLength: 20 }}
-                  onBlur={() => {
+                  onChange={() => {
                     trigger([`roleList.${index}.name`])
                   }}
                   name={`roleList.${index}.name`}
@@ -100,22 +119,18 @@ const SetTeamRole = ({
                       ? '찾고있는 역할을 입력하세요, ex) 프론트엔드 개발자, 디자이너'
                       : '찾고있는 역할을 입력하세요.'
                   }
-                  rules={
-                    index === 0
-                      ? {
-                          required: '모집 역할을 입력해주세요.',
-                          minLength: {
-                            value: 2,
-                            message: '2글자 이상 입력해주세요.',
-                          },
-                          maxLength: {
-                            value: 20,
-                            message: '20글자 이하로 입력해주세요.',
-                          },
-                        }
-                      : undefined
-                  }
-                  disabled={editorType === 'edit' || !!index}
+                  rules={{
+                    required: '모집 역할을 입력해주세요.',
+                    minLength: {
+                      value: 2,
+                      message: '2글자 이상 입력해주세요.',
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: '20글자 이하로 입력해주세요.',
+                    },
+                  }}
+                  disabled={editorType === 'edit'}
                   error={!!errors?.roleList?.[index]?.name}
                 />
                 <ControlledTextfield
@@ -129,27 +144,17 @@ const SetTeamRole = ({
                       </Typography>
                     ),
                   }}
-                  onBlur={() => {
-                    trigger([`roleList.${index}.number`])
+                  rules={{
+                    required: '모집 인원을 입력해주세요.',
+                    min: { value: 1, message: '1명 이상 입력해주세요.' },
+                    validate: {
+                      max: validateMaxNumber,
+                    },
                   }}
-                  rules={
-                    index === 0
-                      ? {
-                          required: '모집 인원을 입력해주세요.',
-                          min: { value: 1, message: '1명 이상 입력해주세요.' },
-                          max: {
-                            value: leftMember > 6 ? 6 : leftMember,
-                            message: `${
-                              leftMember > 6 ? 6 : leftMember
-                            }명 이하로 입력해주세요.`,
-                          },
-                        }
-                      : undefined
-                  }
                   sx={{
                     width: '4.5rem',
                   }}
-                  disabled={editorType === 'edit' || !!index}
+                  disabled={editorType === 'edit'}
                   error={!!errors?.roleList?.[index]?.number}
                 />
                 <IconButton
