@@ -10,6 +10,7 @@ import useToast from '@/states/useToast'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
 import {
   Button,
+  FormHelperText,
   IconButton,
   MenuItem,
   Stack,
@@ -26,11 +27,12 @@ const Body2Style = {
     fontWeight: 400,
     lineHeight: '150%',
     color: 'text.alternative',
+    width: '40%',
   },
   '& input': {
     p: 0,
   },
-  width: '40%',
+  width: '100%',
 }
 
 const Options = ({
@@ -84,11 +86,13 @@ const Options = ({
                 sx={Body2Style}
                 error={
                   !!errors?.interviewList?.[firstIndex]?.optionList?.[index]
+                    ?.option?.message
                 }
                 inputProps={{
                   maxLength: 20,
                 }}
                 rules={{
+                  required: '선택지를 입력해주세요.',
                   maxLength: {
                     value: 20,
                     message: '최대 20자까지 입력 가능합니다.',
@@ -114,6 +118,7 @@ const Options = ({
                       severity: 'error',
                       message: '선택지는 최소 1개 이상 입력해야 합니다.',
                     })
+                    return
                   }
                   remove(index)
                 }}
@@ -153,6 +158,7 @@ const Options = ({
               <ControlledTextfield
                 error={
                   !!errors?.interviewList?.[firstIndex]?.optionList?.[index]
+                    ?.option?.message
                 }
                 name={`interviewList.${firstIndex}.optionList.${index}.option`}
                 control={control}
@@ -163,6 +169,7 @@ const Options = ({
                   maxLength: 20,
                 }}
                 rules={{
+                  required: '선택지를 입력해주세요.',
                   maxLength: {
                     value: 20,
                     message: '최대 20자까지 입력 가능합니다.',
@@ -188,6 +195,7 @@ const Options = ({
                       severity: 'error',
                       message: '선택지는 최소 1개 이상 입력해야 합니다.',
                     })
+                    return
                   }
                   remove(index)
                 }}
@@ -250,6 +258,7 @@ const Options = ({
                   }}
                   error={
                     !!errors?.interviewList?.[firstIndex]?.optionList?.[index]
+                      ?.option?.message
                   }
                 >
                   <MenuItem value={'2'}>2</MenuItem>
@@ -261,48 +270,51 @@ const Options = ({
             )
           }
           return (
-            <Stack
-              key={field.id}
-              direction="row"
-              spacing={'0.25rem'}
-              alignItems={'end'}
-            >
-              <Typography variant="Body2" color={'text.alternative'}>
-                {index === 1 ? '1.' : ratioMax + '.'}
-              </Typography>
-              <ControlledTextfield
-                name={`interviewList.${firstIndex}.optionList.${index}.option`}
-                control={control}
-                placeholder="선택지를 입력해주세요."
-                variant="standard"
-                sx={Body2Style}
-                inputProps={{
-                  maxLength: 20,
-                }}
-                rules={{
-                  required:
-                    '선형 배울의 최소 / 최대 값에 이름을 붙여주세요. ex. 매우 그렇지 않다. / 매우 그렇다.',
-                  maxLength: {
-                    value: 20,
-                    message: '최대 20자까지 입력 가능합니다.',
-                  },
-                  minLength: {
-                    value: 2,
-                    message: '최소 2자 이상 입력해주세요.',
-                  },
-                }}
-                helperText={
-                  <Typography variant="Caption" color={'error'}>
-                    {errors?.interviewList?.[firstIndex]?.optionList?.[0]
-                      ?.option?.message ||
-                      errors?.interviewList?.[firstIndex]?.optionList?.[index]
-                        ?.option?.message}
-                  </Typography>
-                }
-                error={
-                  !!errors?.interviewList?.[firstIndex]?.optionList?.[index]
-                }
-              />
+            <Stack direction={'column'} key={field.id}>
+              <Stack
+                key={field.id}
+                direction="row"
+                spacing={'0.25rem'}
+                alignItems={'end'}
+              >
+                <Typography variant="Body2" color={'text.alternative'}>
+                  {index === 1 ? '1.' : ratioMax + '.'}
+                </Typography>
+                <ControlledTextfield
+                  name={`interviewList.${firstIndex}.optionList.${index}.option`}
+                  control={control}
+                  placeholder="선택지를 입력해주세요."
+                  variant="standard"
+                  sx={Body2Style}
+                  inputProps={{
+                    maxLength: 20,
+                  }}
+                  rules={{
+                    required:
+                      '선형 배울의 최소 / 최대 값에 이름을 붙여주세요. ex. 매우 그렇지 않다. / 매우 그렇다.',
+                    maxLength: {
+                      value: 20,
+                      message: '최대 20자까지 입력 가능합니다.',
+                    },
+                    minLength: {
+                      value: 2,
+                      message: '최소 2자 이상 입력해주세요.',
+                    },
+                  }}
+                  error={
+                    !!errors?.interviewList?.[firstIndex]?.optionList?.[index]
+                      ?.option?.message
+                  }
+                />
+              </Stack>
+              <FormHelperText>
+                <Typography variant="Caption" color={'error'}>
+                  {errors?.interviewList?.[firstIndex]?.optionList?.[0]?.option
+                    ?.message ??
+                    errors?.interviewList?.[firstIndex]?.optionList?.[index]
+                      ?.option?.message}
+                </Typography>
+              </FormHelperText>
             </Stack>
           )
         })}
