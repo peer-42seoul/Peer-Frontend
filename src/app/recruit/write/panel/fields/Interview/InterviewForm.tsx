@@ -54,8 +54,8 @@ const InterviewForm = ({
   const handleComplete = () => {
     trigger('interviewList').then(() => {
       if (!isValid) return
+      openCompleteModal()
     })
-    openCompleteModal()
   }
 
   const handleCompleteModalConfirm = () => {

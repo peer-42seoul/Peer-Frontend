@@ -82,6 +82,9 @@ const Options = ({
                 placeholder="선택지를 입력해주세요."
                 variant="standard"
                 sx={Body2Style}
+                error={
+                  !!errors?.interviewList?.[firstIndex]?.optionList?.[index]
+                }
                 inputProps={{
                   maxLength: 20,
                 }}
@@ -148,6 +151,9 @@ const Options = ({
                 sx={{ color: 'text.alternative', width: '0.875rem' }}
               />
               <ControlledTextfield
+                error={
+                  !!errors?.interviewList?.[firstIndex]?.optionList?.[index]
+                }
                 name={`interviewList.${firstIndex}.optionList.${index}.option`}
                 control={control}
                 placeholder="선택지를 입력해주세요."
@@ -242,6 +248,9 @@ const Options = ({
                   rules={{
                     required: '최대 값을 지정해주세요.',
                   }}
+                  error={
+                    !!errors?.interviewList?.[firstIndex]?.optionList?.[index]
+                  }
                 >
                   <MenuItem value={'2'}>2</MenuItem>
                   <MenuItem value={'3'}>3</MenuItem>
@@ -289,6 +298,9 @@ const Options = ({
                       errors?.interviewList?.[firstIndex]?.optionList?.[index]
                         ?.option?.message}
                   </Typography>
+                }
+                error={
+                  !!errors?.interviewList?.[firstIndex]?.optionList?.[index]
                 }
               />
             </Stack>

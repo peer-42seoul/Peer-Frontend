@@ -68,8 +68,9 @@ const Question = ({
         inputProps={{
           maxLength: 20,
         }}
+        error={!!errors?.interviewList?.[index]?.question?.message}
         rules={{
-          required: '필수 입력 항목입니다.',
+          required: '질문을 입력하세요.',
           maxLength: {
             value: 20,
             message: '최대 20자까지 입력 가능합니다.',
@@ -81,7 +82,7 @@ const Question = ({
         }}
         helperText={
           <Typography variant="Caption" color={'error'}>
-            {errors?.interviewList?.[index]?.message}
+            {errors?.interviewList?.[index]?.question?.message}
           </Typography>
         }
         placeholder="질문을 입력해주세요."
