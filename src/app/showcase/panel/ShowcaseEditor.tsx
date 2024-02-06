@@ -1,7 +1,7 @@
 'use client'
 import { Button, Container, Stack } from '@mui/material'
 import React, { useRef, useState } from 'react'
-import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
+import { ILinkInformation, IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
 import SkillInput from '../panel/common/SkillInput'
@@ -40,21 +40,38 @@ const ShowcaseEditor = ({
   )
   const { openToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
-  const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
-    useLinks(data.links ? data.links : [])
+  const { links, addLink, deleteLink, changeLinkName, changeUrl } = useLinks(
+    data.links ? data.links : [],
+  )
   const router = useRouter()
   const { isPc } = useMedia()
   const editorRef = useRef<Editor | null>(null)
 
+  const validateUrl = (links: ILinkInformation[]) => {
+    const regex =
+      /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%+.~#?&//=]*)/
+
+    const validationResult = links.map((obj: ILinkInformation) => {
+      return regex.test(obj.link)
+    })
+    const isInvalid = validationResult.some((result: any) => result === false)
+    return isInvalid
+  }
+
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
-    if (!isValid) {
+    if (validateUrl(linksWithoutId)) {
+      closeModal()
+      openToast({
+        severity: 'error',
+        message: '유효하지 않는 URL이 포함되어 있습니다.',
+      })
       return
     }
     try {
       if (requestMethodType === 'post') {
         await axiosWithAuth.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/write`,
           {
             image: previewImage.split(',')[1],
             content: editorRef.current?.getMarkdown() ?? '',
@@ -65,7 +82,7 @@ const ShowcaseEditor = ({
         router.push(`/teams/${teamId}/showcase`)
       } else if (requestMethodType === 'put') {
         await axiosWithAuth.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${showcaseId}`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/edit/${showcaseId}`,
           {
             image: image.length ? previewImage.split(',')[1] : null,
             content: editorRef.current?.getMarkdown() ?? '',
@@ -168,12 +185,10 @@ const ShowcaseEditor = ({
         <LinkForm
           links={links}
           addLink={addLink}
-          isValid={isValid}
-          setIsValid={setIsValid}
+          deleteLink={deleteLink}
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        {/* <DynamicEditor content={data.content} /> */}
         <DynamicToastEditor
           initialValue={data.content}
           initialEditType="wysiwyg"

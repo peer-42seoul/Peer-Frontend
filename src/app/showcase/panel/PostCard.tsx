@@ -56,7 +56,7 @@ function PostCard({
   const clickFavorite = useCallback(() => {
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${postId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/favorite/${postId}`,
       )
       .then((res) => {
         if (res.status === 200) {
@@ -68,7 +68,7 @@ function PostCard({
 
   const clickLike = useCallback(() => {
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/like/${postId}`)
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/like/${postId}`)
       .then((res) => {
         if (res.status === 200) {
           console.log(res)

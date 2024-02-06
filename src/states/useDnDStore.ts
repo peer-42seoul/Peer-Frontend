@@ -53,7 +53,7 @@ const useDnDStore = create<IStoreDnDState>((set) => {
         //요청
         axios
           .post(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/update`,
+            `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/dnd-main/update`,
             {
               teamId: state.teamId,
               type: 'team',

@@ -36,7 +36,7 @@ export const TypeChip = ({ type }: { type: ProjectType }) => {
       sx={{
         backgroundColor: 'background.tertiary',
         borderRadius: 2,
-        color: 'green.normal',
+        color: type === 'STUDY' ? 'yellow.strong' : 'green.normal',
       }}
     />
   )

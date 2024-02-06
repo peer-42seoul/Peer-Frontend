@@ -69,7 +69,7 @@ const SkillAutocomplete = ({
       }
       axiosWithAuth
         .get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/skill/search?keyword=${text}`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/skill/search?keyword=${text}`,
         )
         .then((res) => {
           setTagList((prev) => getUniqueArray(prev.concat(res.data), 'tagId'))

@@ -20,7 +20,7 @@ import EncryptedSender from '@/components/EncryptedSender'
 import { EApiType } from '@/types/EApiType'
 
 const SignUp = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const router = useRouter()
   const searchParams = useSearchParams()
   const socialEmail = searchParams.get('social-email')

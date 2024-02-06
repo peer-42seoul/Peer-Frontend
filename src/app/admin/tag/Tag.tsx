@@ -36,7 +36,7 @@ const style = {
 }
 
 const Tag = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const [content, setContent] = useState<content[]>([])
   const [tagId, setTagId] = useState<number>(0)
   const [tagName, setTagName] = useState<string>('')

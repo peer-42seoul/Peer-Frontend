@@ -8,7 +8,7 @@ export const config = {
 }
 
 export const fetchTags = async () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   try {
     const response = await axios.get(`${API_URL}/api/v1/tag`, {
       withCredentials: true,

@@ -1,5 +1,5 @@
 import { Box, Button, Card, Stack, Typography } from '@mui/material'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import useModal from '@/hook/useModal'
 import {
   TeamOperationForm,
@@ -55,6 +55,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
   const sendRef = useRef<HTMLFormElement>(null)
   const axiosWithAuth = useAxiosWithAuth()
   const { openToast } = useToast()
+  const [isLogoEdit, setIsLogoEdit] = useState(false)
 
   const {
     register,
@@ -74,7 +75,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
         message: '팀 정보를 확인해주세요.',
       })
 
-    if (isDirty === false) {
+    if (isDirty === false && isLogoEdit === false) {
       closeConfirmModel()
       return openToast({
         severity: 'error',
@@ -93,7 +94,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
 
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/${team.id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${team.id}`,
         data,
       )
       .then((res) => {
@@ -155,6 +156,7 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
               <SettingTeamLogo
                 teamLogoImage={team.teamImage ? team.teamImage : ''}
                 setValue={setValue}
+                setIsLogoEdit={setIsLogoEdit}
               />
               <Stack>
                 <SettingTeamName
@@ -186,7 +188,8 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
             <Tutorial content={<TeamEndingTutorial />} />
             <Button
               disabled={
-                team.status === TeamStatus.COMPLETE || isDirty === false
+                team.status === TeamStatus.COMPLETE ||
+                (isDirty === false && isLogoEdit === false)
                   ? true
                   : false
               }

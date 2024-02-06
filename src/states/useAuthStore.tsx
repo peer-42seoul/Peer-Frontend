@@ -17,7 +17,7 @@ const useAuthStore = create<IAuthStore>((set) => {
     ? JSON.parse(authDataJSON)
     : { accessToken: null }
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
 
   return {
     isLogin: !!authData.accessToken,

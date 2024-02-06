@@ -67,6 +67,9 @@ export const socket = getCookie('accessToken')
       query: {
         token: getCookie('accessToken'),
       },
+      autoConnect: true,
+      reconnectionAttempts: 5, // 재연결 시도 횟수
+      reconnectionDelay: 3000,
     })
   : null
 
@@ -131,7 +134,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   const { data: favoriteData } = useSWR<IFavorite[]>(
     isInit && isLogin
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorites` + option
+      ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorites` + option
       : null,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
@@ -148,7 +151,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   } = useSWR<IPagination<IPost[]>>(
     isInit
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit` + option,
+      : `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit` + option,
     isLogin
       ? (url: string) =>
           axiosInstance.get(url).then((res) => {
@@ -168,18 +171,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     if (socket && isLogin) {
       socket.on('connect', () => {
         console.log('socket connected')
-      })
-      socket.on('disconnect', () => {
-        console.log('socket disconnected')
-      })
-      socket.on('connect_error', (err) => {
-        console.log(err)
-      })
-      socket.on('reconnect', (attemptNumber) => {
-        console.log('reconnect', attemptNumber)
-      })
-      socket.on('reconnect_attempt', (attemptNumber) => {
-        console.log('reconnect_attempt', attemptNumber)
       })
       setSocket(socket)
     }
@@ -210,6 +201,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     page,
   )
 
+  const { target: pcTarget, spinner: pcSpinner } = useInfiniteScrollHook(
+    setPage,
+    isLoading,
+    (newData?.last || initData?.last) ?? true, //isEnd
+    page,
+  )
   const handleType = useCallback(
     (value: ProjectType) => {
       setType(value)
@@ -251,7 +248,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       <PushAlertBanner />
       {/* mobile view */}
       <div className="mobile-layout">
-        <Container sx={containerStyle}>
+        <Container sx={{ ...containerStyle, paddingBottom: '1.25rem' }}>
           {keyword === '' ? (
             <>
               <MainBanner />
@@ -259,7 +256,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               <Box marginY={'0.5rem'}>
                 <SelectType type={type} setType={handleType} />
               </Box>
-
               <SearchOptionPanel
                 handleOption={handleOption}
                 type={type}
@@ -313,13 +309,19 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   ))}
                 </Stack>
               </Stack>
+              {/* 무한 스크롤 */}
+              <Stack
+                width={'100%'}
+                justifyContent={'center'}
+                alignItems={'center'}
+              >
+                <InfinityScrollPanel target={target} spinner={spinner} />
+              </Stack>
             </>
           )}
           <Box sx={floatButtonStyle}>
             <FloatEditButton />
           </Box>
-          {/* 무한 스크롤 */}
-          <InfinityScrollPanel target={target} spinner={spinner} />
         </Container>
       </div>
 
@@ -392,7 +394,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                     ))}
                   </Grid>
                   {/* 무한 스크롤 */}
-                  <InfinityScrollPanel target={target} spinner={spinner} />
+                  <InfinityScrollPanel target={pcTarget} spinner={pcSpinner} />
                 </>
               )}
             </Stack>

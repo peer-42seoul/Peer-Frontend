@@ -30,7 +30,7 @@ const IntersectionSection = ({
     try {
       setIsShow(!isShow)
       await axiosWithAuth.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/public/${showcaseId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/public/${showcaseId}`,
       )
     } catch (error: any) {
       if (error.response) {
@@ -67,7 +67,7 @@ const IntersectionSection = ({
 
   const deleteShowcase = () => {
     axiosWithAuth.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/${showcaseId}`,
+      `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/${showcaseId}`,
     )
     closeModal()
   }

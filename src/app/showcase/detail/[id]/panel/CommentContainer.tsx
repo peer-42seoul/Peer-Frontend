@@ -29,11 +29,11 @@ const Comment = ({ data, postId }: CommentProps) => {
   const onDeleteComment = async () => {
     try {
       await axiosWithAuth.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${data.commentId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/comment/${data.commentId}`,
       )
       closeToast()
       mutate(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
       )
     } catch (error: any) {
       switch (error.response.status) {
@@ -135,7 +135,7 @@ const Comment = ({ data, postId }: CommentProps) => {
 const CommentContainer = ({ postId }: IPostId) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IComment[]>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )
