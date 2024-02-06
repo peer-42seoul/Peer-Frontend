@@ -109,6 +109,7 @@ const SkillAutocomplete = ({
             height: '2.5rem',
           },
         }}
+        disableClearable
         loading={isLoading}
         value={skillList.map((skill) => skill.name) as Array<string>}
         inputValue={text}

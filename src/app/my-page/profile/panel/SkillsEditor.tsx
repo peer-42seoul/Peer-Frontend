@@ -148,6 +148,7 @@ const SkillsEditor = ({
                 height: '2.5rem',
               },
             }}
+            disableClearable
             loading={isLoading}
             value={selected}
             options={tagList.map((tag) => tag.name)}
