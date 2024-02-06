@@ -63,17 +63,41 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
     handleSubmit,
     formState: { errors, isDirty },
     control,
+    watch,
   } = useForm<ISetupTeam>({
     defaultValues: team,
     mode: 'onChange',
   })
 
+  const region = watch('region')
+  const dueTo = watch('dueTo')
+  const operationForm = watch('operationForm')
+  const status = watch('status')
+
+  /**id: string
+  type: TeamType
+  name: string
+  maxMember: String
+  status: TeamStatus
+  dueTo: string
+  operationForm: TeamOperationForm
+  region: string[]
+  teamImage: string | null */
+
   const handleEditModal = () => {
-    if (errors.name || errors.dueTo || errors.region || errors.operationForm)
+    if (errors.name || errors.dueTo || errors.operationForm)
       return openToast({
         severity: 'error',
         message: '팀 정보를 확인해주세요.',
       })
+
+    if (operationForm !== TeamOperationForm.ONLINE && region.length === 0) {
+      openToast({
+        severity: 'error',
+        message: '활동지역을 선택해주세요.',
+      })
+      return
+    }
 
     if (isDirty === false && isLogoEdit === false) {
       closeConfirmModel()
@@ -86,12 +110,6 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
   }
 
   const onSubmit = handleSubmit((data) => {
-    if (errors.name || errors.dueTo || errors.region || errors.operationForm)
-      return openToast({
-        severity: 'error',
-        message: '팀 정보를 확인해주세요.',
-      })
-
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${team.id}`,
@@ -164,14 +182,15 @@ const SettingTeamJobs = ({ team }: { team: ISetupTeam }) => {
                   errors={errors}
                   register={register}
                 />
-                <SettingTeamStatus teamStatus={team.status} control={control} />
-                <SettingTeamTime teamTime={team.dueTo} control={control} />
+                <SettingTeamStatus teamStatus={status} control={control} />
+                <SettingTeamTime teamTime={dueTo} control={control} />
                 <SettingTeamActivity
-                  teamActivity={team.operationForm}
+                  teamActivity={operationForm}
                   control={control}
                 />
                 <SettingTeamLocation
-                  teamLocation={team.region}
+                  teamLocation={region}
+                  teamActivity={operationForm}
                   control={control}
                 />
               </Stack>
