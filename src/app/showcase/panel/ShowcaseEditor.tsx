@@ -73,10 +73,10 @@ const ShowcaseEditor = ({
         await axiosWithAuth.post(
           `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/write`,
           {
-            image: previewImage.split(',')[1],
             content: editorRef.current?.getMarkdown() ?? '',
             teamId: teamId,
             links: linksWithoutId,
+            image: image.length ? previewImage.split(',')[1] : null,
           },
         )
         router.push(`/teams/${teamId}/showcase`)
