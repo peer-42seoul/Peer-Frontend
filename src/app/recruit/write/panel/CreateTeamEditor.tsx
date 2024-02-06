@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Box,
@@ -40,13 +40,17 @@ const CreateTeamEditor = ({
   editorRef,
   editorType,
   isAnswered,
+  isSubmitting,
 }: {
   defaultValues: IRecruitWriteField
   submitHandler: (data: IRecruitWriteField) => Promise<void>
   editorRef: React.MutableRefObject<Editor | null>
   editorType: 'edit' | 'write'
   isAnswered?: boolean
+  isSubmitting?: boolean
 }) => {
+  const [completedInterview, setCompletedInterview] = useState(false)
+
   const router = useRouter()
 
   const { openToast, closeToast } = useToast()
@@ -77,7 +81,7 @@ const CreateTeamEditor = ({
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isValid },
     setValue,
     watch,
     trigger,
@@ -524,6 +528,7 @@ const CreateTeamEditor = ({
                     error={!!errors?.tagList}
                     trigger={trigger}
                     placeholder="프로젝트에 필요한 기술을 입력하세요."
+                    autocompleteSx={{ width: ['100%', '26rem'] }}
                   />
                 )}
                 control={control}
@@ -539,11 +544,14 @@ const CreateTeamEditor = ({
                   sx={{ ...style.iconStyleBase, color: 'text.normal' }}
                 />
               }
+              sx={{ width: '100%' }}
             >
-              <DynamicToastEditor
-                initialValue="팀 소개 글 입니다."
-                editorRef={editorRef}
-              />
+              <Box width={'100%'}>
+                <DynamicToastEditor
+                  initialValue="팀 소개 글 입니다."
+                  editorRef={editorRef}
+                />
+              </Box>
             </FieldWithLabel>
             {/* 모집 인터뷰 */}
             <FieldWithLabel
@@ -554,21 +562,22 @@ const CreateTeamEditor = ({
                 />
               }
             >
-              {dirtyFields.interviewList && (
-                <Typography
-                  variant="Caption"
-                  color={'primary'}
-                  height={'2rem'}
-                  width={'fit-content'}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  인터뷰 작성 완료
-                </Typography>
-              )}
+              {completedInterview ||
+                (defaultValues.interviewList.length && (
+                  <Typography
+                    variant="Caption"
+                    color={'primary'}
+                    height={'2rem'}
+                    width={'fit-content'}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    인터뷰 작성 완료
+                  </Typography>
+                ))}
               <Button
                 sx={{ width: ['100%', '26rem'] }}
                 variant="outlined"
@@ -584,7 +593,10 @@ const CreateTeamEditor = ({
                   )
                 }
               >
-                인터뷰 {dirtyFields.interviewList ? '수정하기 ' : '추가'}
+                인터뷰{' '}
+                {completedInterview || defaultValues.interviewList.length
+                  ? '수정하기 '
+                  : '추가'}
               </Button>
             </FieldWithLabel>
             {/* 등록, 취소 버튼 */}
@@ -664,6 +676,7 @@ const CreateTeamEditor = ({
         isOpen={isInterviewOpen}
         trigger={trigger}
         setFormValue={setValue}
+        setCompletedInterview={setCompletedInterview}
       />
     </>
   )

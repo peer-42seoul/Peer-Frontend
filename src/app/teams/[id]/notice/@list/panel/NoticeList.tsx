@@ -52,31 +52,32 @@ const NoticeList = ({
 
   if (isLoading) return <StatusMessage message="로딩중입니다..." />
 
+  if (isEmpty)
+    return (
+      <StatusMessage message="등록된 공지사항이 없습니다. 팀 리더라면 새로운 공지사항을 작성해보세요!" />
+    )
+
   return (
     <ListStack>
-      {isEmpty ? (
-        <StatusMessage message="등록된 공지사항이 없습니다. 팀 리더라면 새로운 공지사항을 작성해보세요!" />
-      ) : (
-        data?.map((page, index) => {
-          return (
-            <Fragment key={index}>
-              {page.content.map((notice: ITeamNotice) => {
-                return (
-                  <ListItem
-                    key={notice.postId}
-                    title={notice.title}
-                    authorNickname={notice.nickname}
-                    createdAt={notice.createdAt}
-                    onClick={() => {
-                      setNotice('DETAIL', notice.postId)
-                    }}
-                  />
-                )
-              })}
-            </Fragment>
-          )
-        })
-      )}
+      {data?.map((page, index) => {
+        return (
+          <Fragment key={index}>
+            {page.content.map((notice: ITeamNotice) => {
+              return (
+                <ListItem
+                  key={notice.postId}
+                  title={notice.title}
+                  authorNickname={notice.nickname}
+                  createdAt={notice.createdAt}
+                  onClick={() => {
+                    setNotice('DETAIL', notice.postId)
+                  }}
+                />
+              )
+            })}
+          </Fragment>
+        )
+      })}
       <Box ref={targetRef}>{isLoading && '로딩중입니다...'}</Box>
     </ListStack>
   )

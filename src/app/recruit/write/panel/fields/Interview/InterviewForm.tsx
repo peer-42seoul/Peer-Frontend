@@ -19,12 +19,14 @@ const InterviewForm = ({
   isOpen,
   trigger,
   setFormValue,
+  setCompletedInterview,
 }: {
   control: Control<IRecruitWriteField>
   closeModal: () => void
   isOpen: boolean
   trigger: UseFormTrigger<IRecruitWriteField>
   setFormValue: UseFormSetValue<IRecruitWriteField>
+  setCompletedInterview: (value: boolean) => void
 }) => {
   const {
     openModal: openCancelModal,
@@ -52,11 +54,12 @@ const InterviewForm = ({
   const handleComplete = () => {
     trigger('interviewList').then(() => {
       if (!isValid) return
+      openCompleteModal()
     })
-    openCompleteModal()
   }
 
   const handleCompleteModalConfirm = () => {
+    setCompletedInterview(true)
     closeCompleteModal()
     closeModal()
   }
@@ -73,25 +76,25 @@ const InterviewForm = ({
     }
     if (value === 'OPEN')
       append({
-        question: '질문을 입력하세요.',
+        question: '',
         type: 'OPEN',
         optionList: [{ option: '' }],
       })
     else if (value === 'CLOSE')
       append({
-        question: '질문을 입력하세요.',
+        question: '',
         type: 'CLOSE',
         optionList: [{ option: '' }, { option: '' }],
       })
     else if (value === 'CHECK')
       append({
-        question: '질문을 입력하세요.',
+        question: '',
         type: 'CHECK',
         optionList: [{ option: '' }],
       })
     else if (value === 'RATIO')
       append({
-        question: '질문을 입력하세요.',
+        question: '',
         type: 'RATIO',
         optionList: [{ option: '5' }, { option: '' }, { option: '' }],
       })

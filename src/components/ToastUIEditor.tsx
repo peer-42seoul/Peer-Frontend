@@ -23,6 +23,7 @@ const ToastEditor = ({
   const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const themed = useTheme()
   const editorElementRef = useRef<HTMLDivElement>(null)
+
   const toggleDark = () => {
     const editorEl = editorElementRef.current?.getElementsByClassName(
       'toastui-editor-defaultUI',
@@ -73,6 +74,7 @@ const ToastEditor = ({
         },
       },
     })
+
     toggleDark()
 
     // updateContent()
@@ -88,6 +90,7 @@ const ToastEditor = ({
         color: 'black',
         position: 'sticky',
         top: '0',
+        width: '100%',
       }}
       ref={editorElementRef}
     />

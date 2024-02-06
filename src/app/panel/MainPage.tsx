@@ -59,9 +59,14 @@ export interface IDetailOption {
 }
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
+  const searchParams = useSearchParams()
+  const keyword = searchParams.get('keyword') ?? ''
+  const searchType = searchParams.get('type') === 'STUDY' ? 'STUDY' : 'PROJECT'
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
-  const [type, setType] = useState<ProjectType | undefined>(undefined) //'STUDY'
+  const [type, setType] = useState<ProjectType | undefined>(
+    keyword !== '' ? searchType : undefined,
+  ) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   const [detailOption, setDetailOption] = useState<IDetailOption>({
@@ -75,8 +80,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     tag: '',
   })
 
-  const searchParams = useSearchParams()
-  const keyword = searchParams.get('keyword') ?? ''
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
@@ -88,9 +91,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   useEffect(() => {
     if (keyword !== '') {
       setHeaderTitle(keyword + ' 검색 결과')
+      setType(searchType)
       setInit(false)
     } else setHeaderTitle('')
-  }, [keyword])
+  }, [keyword, searchType])
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
 

@@ -576,7 +576,8 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (theme.typography) {
-    theme.typography.fontFamily = 'Pretendard Variable, sans-serif'
+    theme.typography.fontFamily =
+      'var(--main-font), Pretendard Variable, sans-serif'
     theme.typography.HeadlineEmphasis = {
       fontSize: '32px',
       fontStyle: 'normal',

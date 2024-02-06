@@ -27,6 +27,7 @@ const NewMessageForm = ({
   const axiosInstance = useAxiosWithAuth()
   const { isOpen: modalOpen, openModal, closeModal } = useModal()
   const { openToast } = useToast()
+  const [isMessageSending, setIsMessageSending] = useState(false)
 
   const messageSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -51,6 +52,7 @@ const NewMessageForm = ({
   const sendMessage = useCallback(
     async (targetId?: number, content?: string) => {
       try {
+        setIsMessageSending(true)
         if (!targetId || !content) throw new Error()
         const reqBody: IMessageData = {
           targetId: targetId,
@@ -70,6 +72,8 @@ const NewMessageForm = ({
           severity: 'error',
           message: '쪽지 보내기에 실패했습니다. 다시 시도해주세요.',
         })
+      } finally {
+        setIsMessageSending(false)
       }
     },
     [],
@@ -97,6 +101,7 @@ const NewMessageForm = ({
           onClick: () => {
             sendMessage(userInfo?.targetId, content)
           },
+          isLoading: isMessageSending,
         }}
         textButton={{
           text: '취소',

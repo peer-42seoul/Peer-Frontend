@@ -52,7 +52,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" />
         <meta name="theme-color" content="#010456" />
       </head>
-      <body className={Pretendard.className}>
+      <body className={Pretendard.variable}>
         <AppRouterCacheProvider>
           <CuSWRConfig>
             <MuiThemeProvider>
