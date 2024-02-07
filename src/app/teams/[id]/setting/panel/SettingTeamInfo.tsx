@@ -1,4 +1,4 @@
-import { Box, Button, Card, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import useModal from '@/hook/useModal'
 import {
@@ -165,7 +165,13 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
 
   return (
     <>
-      <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
+      <Stack
+        sx={{
+          p: '1.5rem',
+          borderRadius: '1rem',
+          backgroundColor: 'background.secondary',
+        }}
+      >
         <Stack direction={'row'} display={'flex'} alignItems={'center'}>
           <Typography fontWeight="bold">팀 상태</Typography>
           <Tutorial content={<TeamStatusTutorial />} />
@@ -233,7 +239,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
             mutate={mutate}
           />
         </Stack>
-      </Card>
+      </Stack>
 
       <CuTextModal
         open={isConfirmOpen}

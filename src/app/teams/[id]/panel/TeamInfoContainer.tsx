@@ -48,7 +48,7 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
 
   return (
     <>
-      <Stack direction={'row'} spacing={'1rem'}>
+      <Stack direction={'row'} spacing={'1rem'} >
         {isLoading || !data ? (
           <CuCircularProgress color={'primary'} />
         ) : (
