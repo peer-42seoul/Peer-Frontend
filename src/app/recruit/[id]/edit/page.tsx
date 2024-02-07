@@ -71,9 +71,9 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
-    if (String(editorRef.current?.getMarkdown()).length > 2000) {
+    if (String(editorRef.current?.getMarkdown()).length > 20000) {
       openToast({
-        message: '모집글 내용은 2000자 이하로 작성해주세요.',
+        message: '모집글 내용은 20000자 이하로 작성해주세요.',
         severity: 'error',
       })
       return
