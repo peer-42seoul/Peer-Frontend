@@ -11,7 +11,6 @@ interface ISettingTeamStatus {
 }
 
 const SettingTeamStatus = ({ teamStatus, control }: ISettingTeamStatus) => {
-  const { isPc } = useMedia()
   return (
     <Stack
       direction={'row'}
