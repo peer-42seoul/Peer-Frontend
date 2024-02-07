@@ -115,11 +115,12 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
           height: '37rem',
           backgroundColor: 'background.tertiary',
           width: '30rem',
+          py: '1rem',
         }}
       >
         {data !== undefined ? (
           <CardActions onClick={handleCardClick}>
-            <CardContent>
+            <CardContent sx={{ margin: 'auto', padding: 0 }}>
               <Stack spacing={'1.5rem'}>
                 <Stack
                   direction={'row'}
@@ -212,6 +213,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                       width: '100%',
                       wordBreak: 'break-word',
                       height: '20rem',
+                      boxSizing: 'border-box',
                     }}
                   />
                 </Stack>

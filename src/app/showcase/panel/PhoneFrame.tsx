@@ -35,7 +35,8 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
               src={imageUrl}
               sx={{
                 width: '22.5rem',
-                height: '50rem',
+                height: '40rem',
+                objectFit: 'contain',
               }}
             />
           ) : (
