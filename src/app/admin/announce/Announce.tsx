@@ -650,17 +650,20 @@ const Announce = () => {
                 {errors.announcementNoticeStatus.message}
               </Typography>
             )}
+            {/* 예약 날짜 선택 */}
             <Controller
               name="reservationDate"
               control={control}
               render={({ field: { onChange } }) => (
                 <DateTimePicker
-                  value={dayjs(
-                    getValues('date') ?? new Date(Date.now() + 3600000),
+                  defaultValue={dayjs(
+                    getValues('date') === null
+                      ? new Date(Date.now() + 3600000)
+                      : getValues('date'),
                   )}
                   onChange={onChange}
                   ampm={false}
-                  format="YYYY-MM-DD hh:mm"
+                  format="YYYY-MM-DD HH:mm"
                   disabled={
                     writeMode === 'view' || currentNoticeStatus !== '예약'
                   }

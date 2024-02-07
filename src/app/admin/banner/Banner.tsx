@@ -644,7 +644,7 @@ const Banner = () => {
                   )}
                   onChange={onChange}
                   ampm={false}
-                  format="YYYY-MM-DD hh:mm"
+                  format="YYYY-MM-DD HH:mm"
                   disabled={
                     writeMode === 'view' || currentReservationType !== '예약'
                   }
