@@ -1,9 +1,57 @@
-import { Box, Card, Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import Image from 'next/image'
 
 const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
   return (
-    <Card
+    <Stack alignItems={'center'} justifyContent={'center'}>
+      <Box
+        position={'relative'}
+        component={'img'}
+        src="/images/iPhoneMock.svg"
+        sx={{
+          width: '22.5rem',
+          height: '40rem',
+        }}
+      />
+      <Stack
+        alignItems={'center'}
+        justifyContent={'center'}
+        position={'absolute'}
+      >
+        {imageUrl != undefined ? (
+          <Box
+            component="img"
+            src={imageUrl}
+            sx={{
+              width: '16rem',
+              height: '40rem',
+              objectFit: 'contain',
+            }}
+          />
+        ) : (
+          <Box
+            display={'flex'}
+            sx={{
+              width: '22.5rem',
+              height: '40rem',
+            }}
+            alignItems={'center'}
+            justifyContent={'center'}
+          >
+            <Image
+              src={'/icons/ios/1024.png'}
+              alt="logo"
+              width={200}
+              height={200}
+            />
+          </Box>
+        )}
+      </Stack>
+    </Stack>
+  )
+}
+
+/**<Card
       sx={{
         borderRadius: '3rem',
         p: 1,
@@ -59,8 +107,6 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
           )}
         </Stack>
       </Card>
-    </Card>
-  )
-}
+    </Card> */
 
 export default PhoneFrame

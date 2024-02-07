@@ -129,7 +129,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                 >
                   <Stack direction={'row'} spacing={'0.5rem'}>
                     <Avatar
-                      src={data.image!}
+                      src={data.teamLogo!}
                       sx={{ width: '1.5rem', height: '1.5rem' }}
                     />
                     <Typography color={'text.alternative'} width={'11rem'}>
