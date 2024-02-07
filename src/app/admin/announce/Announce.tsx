@@ -286,7 +286,9 @@ const Announce = () => {
     } else return
 
     await axios
-      .put(`${API_URL}/api/v1/admin/announcement`, submitData)
+      .put(`${API_URL}/api/v1/admin/announcement`, submitData, {
+        withCredentials: true,
+      })
       .then(() => {
         openToast({
           message: '공지 글이 성공적으로 수정되었습니다.',
