@@ -85,7 +85,7 @@ const TeamCompleteButton = ({
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Typography>팀 활동을 완료하겠습니까?</Typography>
+        <Typography variant="Body2">팀 활동을 완료하겠습니까?</Typography>
         <Button
           disabled={
             teamStatus === TeamStatus.RECRUITING ||
@@ -96,7 +96,7 @@ const TeamCompleteButton = ({
           variant="contained"
           onClick={openModal}
         >
-          <Typography>완료하기</Typography>
+          <Typography variant="Body2">완료하기</Typography>
         </Button>
       </Stack>
 

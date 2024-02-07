@@ -23,7 +23,7 @@ const ImageInput = ({
         svgIcon={<ImageIcon sx={Style.IconStyle} />}
         message={'쇼케이스 대표 이미지'}
       />
-      <Stack sx={{ display: 'flex', alignItems: 'center' }}>
+      <Stack sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
         {previewImage && (
           <Box
             style={{

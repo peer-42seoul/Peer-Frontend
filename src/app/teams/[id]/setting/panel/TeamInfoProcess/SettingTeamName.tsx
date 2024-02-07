@@ -20,8 +20,12 @@ const SettingTeamName = ({ teamType, errors, register }: ISettingTeamName) => {
         spacing={'0.5rem'}
         height={'4.5rem'}
       >
-        {teamType === TeamType.PROJECT && <Typography>프로젝트명</Typography>}
-        {teamType === TeamType.STUDY && <Typography>스터디명</Typography>}
+        {teamType === TeamType.PROJECT && (
+          <Typography variant="Body2Emphasis">프로젝트명</Typography>
+        )}
+        {teamType === TeamType.STUDY && (
+          <Typography variant="Body2Emphasis">스터디명</Typography>
+        )}
 
         <TextField
           error={errors.name?.message ? true : false}
@@ -34,7 +38,7 @@ const SettingTeamName = ({ teamType, errors, register }: ISettingTeamName) => {
           }}
           {...register('name', {
             required: '필수 입력사항입니다.',
-            maxLength: 10,
+            maxLength: 40,
             minLength: {
               value: 2,
               message: '2글자 이상 입력해주세요.',

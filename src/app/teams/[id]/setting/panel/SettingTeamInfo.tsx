@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography, Card } from '@mui/material'
 import { useRef, useState } from 'react'
 import useModal from '@/hook/useModal'
 import {
@@ -40,18 +40,13 @@ export interface ISetupTeam {
   // job: Job[] | null
 }
 
-const layoutPcBox = {
-  m: '0.5rem',
-  p: '0.5rem',
-}
-
 interface ISettingTeamJobs {
   team: ISetupTeam
   mutate: () => void
 }
 
 const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
-  const { isPc } = useMedia()
+  const { isTablet, isPc } = useMedia()
   const {
     isOpen: isConfirmOpen,
     openModal: openConfirmModel,
@@ -65,7 +60,6 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   const {
     register,
     setValue,
-    handleSubmit,
     formState: { errors, isDirty },
     control,
     watch,
@@ -75,9 +69,11 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   })
 
   const region = watch('region')
+  const name = watch('name')
   const dueTo = watch('dueTo')
   const operationForm = watch('operationForm')
   const status = watch('status')
+  const image = watch('teamImage')
 
   /**id: string
   type: TeamType
@@ -105,7 +101,6 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
     }
 
     if (isDirty === false && isLogoEdit === false) {
-      closeConfirmModel()
       return openToast({
         severity: 'error',
         message: '변경된 사항이 없습니다.',
@@ -114,7 +109,18 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
     openConfirmModel()
   }
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = () => {
+    const data: ISetupTeam = {
+      id: team.id,
+      type: team.type,
+      name: name,
+      maxMember: team.maxMember,
+      status: status,
+      dueTo: dueTo,
+      operationForm: operationForm,
+      region: region,
+      teamImage: image,
+    }
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${team.id}`,
@@ -123,7 +129,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       .then((res) => {
         if (res.status == 200) {
           console.log('서버에 저장 완료')
-          location.reload()
+          mutate()
           openToast({
             severity: 'success',
             message: '팀 정보 수정이 완료되었습니다.',
@@ -146,7 +152,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       .finally(() => {
         closeConfirmModel()
       })
-  })
+  }
 
   // useEffect(() => {
   //   window.history.pushState(null, '', location.href)
@@ -165,22 +171,24 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
 
   return (
     <>
-      <Stack
+      <Card
         sx={{
           p: '1.5rem',
           borderRadius: '1rem',
           backgroundColor: 'background.secondary',
+          backgroundImage: 'none',
         }}
       >
         <Stack direction={'row'} display={'flex'} alignItems={'center'}>
-          <Typography fontWeight="bold">팀 상태</Typography>
+          <Typography variant="Body2Emphasis">팀 상태</Typography>
           <Tutorial content={<TeamStatusTutorial />} />
         </Stack>
         <form ref={sendRef} onSubmit={onSubmit}>
-          <Box sx={isPc ? layoutPcBox : {}}>
+          <Box>
             <Stack
-              direction={isPc ? 'row' : 'column'}
+              direction={!isPc || isTablet ? 'column' : 'row'}
               alignItems={isPc ? 'center' : ''}
+              justifyContent={!isPc || isTablet ? '' : 'center'}
             >
               <SettingTeamLogo
                 teamLogoImage={team.teamImage ? team.teamImage : ''}
@@ -228,7 +236,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
               type="button"
               onClick={handleEditModal}
             >
-              <Typography>저장</Typography>
+              <Typography variant="Body2">저장</Typography>
             </Button>
           </Stack>
           <TeamQuitButton teamStatus={team.status} teamId={team.id} />
@@ -239,7 +247,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
             mutate={mutate}
           />
         </Stack>
-      </Stack>
+      </Card>
 
       <CuTextModal
         open={isConfirmOpen}

@@ -704,7 +704,13 @@ const Banner = () => {
               </Button>
             ) : null}
             {writeMode === 'view' ? (
-              <Button variant={'contained'} onClick={() => onHandleEdit()}>
+              <Button
+                variant={'contained'}
+                onClick={() => onHandleEdit()}
+                disabled={
+                  getValues('bannerStatus') !== '예약 중' ? true : false
+                }
+              >
                 수정
               </Button>
             ) : writeMode === 'edit' ? (

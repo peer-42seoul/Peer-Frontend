@@ -43,7 +43,7 @@ const MainCard = ({
   if (statusLabel === '모집완료') {
     sx = {
       ...sx,
-      filter: 'grayscale(120%) brightness(1.3)',
+      filter: 'grayscale(120%)',
     }
   }
 

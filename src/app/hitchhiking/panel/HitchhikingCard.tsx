@@ -179,10 +179,23 @@ const HitchhikingCardBack = ({
                   fontSize: '0.75rem',
                   color: 'text.alternative',
                   margin: 0,
+                  lineHeight: '1.125rem',
+                  marginBlockStart: '0',
+                  marginBlockEnd: '0',
+                  marginTop: 0,
                 }}
                 sx={{
                   ...style.cardContentStyleBase,
                   WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
+                  '& .toastui-editor-contents > h1:first-of-type': {
+                    marginTop: 0,
+                  },
+                  '.toastui-editor-contents h1': {
+                    paddingBottom: 0,
+                  },
+                  '.toastui-editor-contents h2': {
+                    paddingBottom: 0,
+                  },
                 }}
               />
             </Box>

@@ -170,6 +170,11 @@ const SettingTeamMember = ({
             message: '팀원이 삭제되었습니다.',
           })
           window.location.reload()
+        } else if (res.status === 403) {
+          openToast({
+            severity: 'error',
+            message: '자기 자신은 삭제시킬 수 없습니다.',
+          })
         } else {
           openToast({
             severity: 'error',

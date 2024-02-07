@@ -76,7 +76,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Typography>팀을 나가겠습니까?</Typography>
+        <Typography variant="Body2">팀을 나가겠습니까?</Typography>
         <Button
           disabled={
             teamStatus === TeamStatus.RECRUITING ||
@@ -87,7 +87,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
           variant="contained"
           onClick={openModal}
         >
-          <Typography>팀 나가기</Typography>
+          <Typography variant="Body2">팀 나가기</Typography>
         </Button>
       </Stack>
 

@@ -42,7 +42,7 @@ const CardStack = ({
     // 위로 조금만 움직였을 때 카드가 사라지지 않도록 처리
     if (
       Math.abs(info.offset.y) < 150 ||
-      checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
+      checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.down
     ) {
       setDragged(false)
 
