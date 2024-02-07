@@ -2,7 +2,7 @@
 
 import { isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography, Card } from '@mui/material'
 import { useEffect, useState } from 'react'
 import SetupMember from './panel/SettingTeamMember'
 import ApplicantList from './panel/ApplicantList'
@@ -96,12 +96,13 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
             />
           )}
           {!showApplicant ? (
-            <Stack
+            <Card
               sx={{
                 borderRadius: '1rem',
                 p: '1.5rem',
                 height: '20rem',
                 backgroundColor: 'background.secondary',
+                backgroundImage: 'none',
               }}
             >
               <Stack
@@ -133,7 +134,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 teamId={teams.team.id}
                 jobs={teams.job}
               />
-            </Stack>
+            </Card>
           ) : (
             <ApplicantList close={closeApplicant} teamId={teams.team.id} />
           )}

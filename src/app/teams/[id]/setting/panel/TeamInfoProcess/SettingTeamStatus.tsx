@@ -16,13 +16,12 @@ const SettingTeamStatus = ({ teamStatus, control }: ISettingTeamStatus) => {
     <Stack
       direction={'row'}
       alignItems={'center'}
-      mx={isPc ? '0.5rem' : ''}
       mb={'1.2rem'}
       spacing={'0.25rem'}
     >
       <TargetClearIcon />
       <Stack direction={'row'} alignItems={'center'} spacing={'0.5rem'}>
-        <Typography>상태</Typography>
+        <Typography variant="CaptionEmphasis">상태</Typography>
         <Controller
           name="status"
           control={control}
@@ -43,14 +42,22 @@ const SettingTeamStatus = ({ teamStatus, control }: ISettingTeamStatus) => {
                     TeamStatus.ONGOING,
                   ].map((status) => (
                     <MenuItem key={status} value={status}>
-                      {status === TeamStatus.RECRUITING && '모집 중'}
-                      {status === TeamStatus.BEFORE && '모집 완료'}
-                      {status === TeamStatus.ONGOING && '활동 중'}
+                      {status === TeamStatus.RECRUITING && (
+                        <Typography variant="Body2">모집 중</Typography>
+                      )}
+                      {status === TeamStatus.BEFORE && (
+                        <Typography variant="Body2">모집 완료</Typography>
+                      )}
+                      {status === TeamStatus.ONGOING && (
+                        <Typography variant="Body2">활동중</Typography>
+                      )}
                     </MenuItem>
                   ))
                 : [TeamStatus.COMPLETE].map((status) => (
                     <MenuItem key={status} value={status}>
-                      {status === TeamStatus.COMPLETE && '완료'}
+                      {status === TeamStatus.COMPLETE && (
+                        <Typography variant="Body2">완료</Typography>
+                      )}
                     </MenuItem>
                   ))}
             </Select>

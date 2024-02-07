@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography, Card } from '@mui/material'
 import { useRef, useState } from 'react'
 import useModal from '@/hook/useModal'
 import {
@@ -40,18 +40,13 @@ export interface ISetupTeam {
   // job: Job[] | null
 }
 
-const layoutPcBox = {
-  m: '0.5rem',
-  p: '0.5rem',
-}
-
 interface ISettingTeamJobs {
   team: ISetupTeam
   mutate: () => void
 }
 
 const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
-  const { isPc } = useMedia()
+  const { isTablet, isPc } = useMedia()
   const {
     isOpen: isConfirmOpen,
     openModal: openConfirmModel,
@@ -165,29 +160,31 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
 
   return (
     <>
-      <Stack
+      <Card
         sx={{
           p: '1.5rem',
           borderRadius: '1rem',
           backgroundColor: 'background.secondary',
+          backgroundImage: 'none',
         }}
       >
         <Stack direction={'row'} display={'flex'} alignItems={'center'}>
-          <Typography fontWeight="bold">팀 상태</Typography>
+          <Typography variant="Body2Emphasis">팀 상태</Typography>
           <Tutorial content={<TeamStatusTutorial />} />
         </Stack>
         <form ref={sendRef} onSubmit={onSubmit}>
-          <Box sx={isPc ? layoutPcBox : {}}>
+          <Box>
             <Stack
-              direction={isPc ? 'row' : 'column'}
+              direction={!isPc || isTablet ? 'column' : 'row'}
               alignItems={isPc ? 'center' : ''}
+              justifyContent={!isPc || isTablet ? '' : 'center'}
             >
               <SettingTeamLogo
                 teamLogoImage={team.teamImage ? team.teamImage : ''}
                 setValue={setValue}
                 setIsLogoEdit={setIsLogoEdit}
               />
-              <Stack>
+              <Stack sx={{}}>
                 <SettingTeamName
                   teamType={team.type}
                   errors={errors}
@@ -228,7 +225,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
               type="button"
               onClick={handleEditModal}
             >
-              <Typography>저장</Typography>
+              <Typography variant="Body2">저장</Typography>
             </Button>
           </Stack>
           <TeamQuitButton teamStatus={team.status} teamId={team.id} />
@@ -239,7 +236,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
             mutate={mutate}
           />
         </Stack>
-      </Stack>
+      </Card>
 
       <CuTextModal
         open={isConfirmOpen}
