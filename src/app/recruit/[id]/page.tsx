@@ -2,6 +2,8 @@ import React from 'react'
 import axios from 'axios'
 import RecruitDetailPage from '@/app/recruit/[id]/panel/RecruitDetailPage'
 
+export const dynamic = 'force-dynamic'
+
 export default async function RecruitDetailIndex({
   params,
 }: {
@@ -22,5 +24,5 @@ export default async function RecruitDetailIndex({
     console.log(e)
   }
 
-  return <RecruitDetailPage data={data} id={params.id} />
+  return <RecruitDetailPage data={data} id={params.id} key={data?.updatedAt} />
 }
