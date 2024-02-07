@@ -5,6 +5,7 @@ export const cardContainerStyle: SxProps = {
   overflow: 'hidden',
   bottom: 0,
   height: ['90svh', '100%'],
+  // height: '100%',
   position: ['static', 'absolute'],
   top: [0, '2.75rem'],
   left: 0,

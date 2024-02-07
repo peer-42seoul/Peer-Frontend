@@ -4,7 +4,6 @@ import React from 'react'
 import { FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import Interest from './Interest'
-import * as cardStyle from './HitchhikingCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
 import { IPostCardHitchhiking } from '@/types/IPostCard'
@@ -94,10 +93,10 @@ const CardContainer = ({
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          ...cardStyle.cardSize,
           mb: '0.875rem',
           position: 'relative',
           zIndex: 100,
+          flexGrow: 1,
         }}
       >
         {!message ? (
