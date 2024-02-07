@@ -123,13 +123,13 @@ const HitchhikingCardBack = ({
           width={'100%'}
           spacing={'1rem'}
         >
-          <Stack
-            direction="row"
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            sx={style.cardHeaderStyleBase}
-          >
-            <CardContent sx={{ padding: 0 }} onClick={onClick}>
+          <CardContent sx={{ padding: 0 }} onClick={onClick}>
+            <Stack
+              direction="row"
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              sx={style.cardHeaderStyleBase}
+            >
               <Chip
                 label={
                   <Typography variant="Tag" color={'green.normal'}>
@@ -138,9 +138,6 @@ const HitchhikingCardBack = ({
                 }
                 sx={style.cardChipStyleBase}
               />
-            </CardContent>
-            {/* TODO : 작성자 id 가져오기 */}
-            <CardContent sx={{ padding: 0, width: 'auto' }}>
               <DropdownMenu rotateOn>
                 <ShareMenuItem
                   url={`${currentDomain}/recruit/${postId}`}
@@ -150,8 +147,8 @@ const HitchhikingCardBack = ({
                 />
                 <ReportMenuItem targetId={authorId} />
               </DropdownMenu>
-            </CardContent>
-          </Stack>
+            </Stack>
+          </CardContent>
           <CardHeader
             title={
               <Typography
