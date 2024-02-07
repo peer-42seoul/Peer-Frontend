@@ -669,7 +669,6 @@ const Banner = () => {
             {writeMode === 'view' ? (
               <Button
                 variant={'contained'}
-                // onClick={() => onHandleDelete(getValues('bannerId'))}
                 onClick={() => {
                   currentId.current = getValues('bannerId')
                   openRemoveModal()

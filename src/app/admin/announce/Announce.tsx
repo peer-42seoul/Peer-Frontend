@@ -522,8 +522,8 @@ const Announce = () => {
                 message: '글쓴이는 10자 이내로 입력해주세요.',
               },
             })}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+            error={!!errors.writer}
+            helperText={errors.writer?.message}
             disabled={writeMode === 'view'}
           />
           {writeMode === 'view' ? (
@@ -678,7 +678,6 @@ const Announce = () => {
             {writeMode === 'view' ? (
               <Button
                 variant={'contained'}
-                // onClick={() => onHandleDelete(getValues('announcementId'))}
                 onClick={() => {
                   currentId.current = getValues('announcementId')
                   openRemoveModal()
