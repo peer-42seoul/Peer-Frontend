@@ -7,7 +7,6 @@ import {
   UseFormTrigger,
   useFieldArray,
   useFormState,
-  useWatch,
 } from 'react-hook-form'
 import ControlledTextfield from '@/components/ControlledTextfield'
 import React from 'react'
@@ -15,7 +14,6 @@ import FieldWithLabel from '@/components/FieldWithLabel'
 import { CloseIcon, PlusIcon, UserCheckIcon } from '@/icons'
 import * as style from '../../page.style'
 import { IconButton } from '@mui/material'
-import useToast from '@/states/useToast'
 
 // 해당 컴포넌트는 react-hook-form에 최적화되어있습니다.
 const SetTeamRole = ({
@@ -33,51 +31,10 @@ const SetTeamRole = ({
     name: 'roleList',
   })
 
-  const roleData = useWatch({ control, name: 'roleList' })
-
-  const getAssignedMember = () => {
-    let assignedMember: number = 0
-    roleData.forEach((role) => {
-      assignedMember += parseInt(role.number.toString())
-      // NOTE: number가 자꾸 string으로 들어오기 때문에 둘 다 썼습니다.
-    })
-    return assignedMember
-  }
-
-  const validateMaxNumber = (value: number) => {
-    let assignedMember: number = getAssignedMember()
-    console.log(assignedMember)
-    if (assignedMember > 10) {
-      return `최대 10명 까지만 등록 가능합니다. ${
-        10 - assignedMember > 6
-          ? 6
-          : 10 - assignedMember + parseInt(value.toString())
-      }명 이하로 입력해주세요.`
-    } else if (value <= 0) {
-      return '1명 이상 입력해주세요.'
-    } else if (value > 6) {
-      return '6명 이하로 입력해주세요.'
-    }
-  }
-
-  const { errors } = useFormState({ control })
-
-  const { closeToast, openToast } = useToast()
+  const { errors } = useFormState({ control, name: 'roleList' })
 
   const handlePrepend = () => {
-    closeToast()
-    if (getAssignedMember() >= 10) {
-      openToast({
-        message: '최대 10명 까지만 등록 가능합니다.',
-        severity: 'error',
-      })
-      return
-    }
-    trigger('roleList').then(() => {
-      if (!errors.roleList) {
-        prepend({ name: '', number: 1 })
-      }
-    })
+    prepend({ name: '', number: 1 })
   }
 
   const handleRemove = (index: number) => {
@@ -121,10 +78,6 @@ const SetTeamRole = ({
                   }
                   rules={{
                     required: '모집 역할을 입력해주세요.',
-                    minLength: {
-                      value: 2,
-                      message: '2글자 이상 입력해주세요.',
-                    },
                     maxLength: {
                       value: 20,
                       message: '20글자 이하로 입력해주세요.',
@@ -147,9 +100,7 @@ const SetTeamRole = ({
                   rules={{
                     required: '모집 인원을 입력해주세요.',
                     min: { value: 1, message: '1명 이상 입력해주세요.' },
-                    validate: {
-                      max: validateMaxNumber,
-                    },
+                    max: { value: 6, message: '6명 이하로 입력해주세요.' },
                   }}
                   sx={{
                     width: '4.5rem',

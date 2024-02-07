@@ -69,7 +69,9 @@ const SkillAutocomplete = ({
       }
       axiosWithAuth
         .get(
-          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/skill/search?keyword=${text}`,
+          `${
+            process.env.NEXT_PUBLIC_CSR_API
+          }/api/v1/skill/search?keyword=${convertNonAlphabeticToHex(text)}`,
         )
         .then((res) => {
           setTagList((prev) => getUniqueArray(prev.concat(res.data), 'tagId'))
@@ -102,6 +104,21 @@ const SkillAutocomplete = ({
     setSkillList(newSkillList)
     if (trigger) trigger('tagList')
   }
+
+  const convertNonAlphabeticToHex = (inputString: string): string => {
+    let result = ''
+    for (let i = 0; i < inputString.length; i++) {
+      const char = inputString[i]
+      if (/[^a-zA-Z\s]/.test(char)) {
+        const hexCode = char.charCodeAt(0).toString(16)
+        result += '%' + hexCode.padStart(2, '0')
+      } else {
+        result += char
+      }
+    }
+    return result
+  }
+
   return (
     <>
       <Autocomplete
