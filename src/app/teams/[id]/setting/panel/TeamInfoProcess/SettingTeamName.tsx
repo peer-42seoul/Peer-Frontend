@@ -34,7 +34,7 @@ const SettingTeamName = ({ teamType, errors, register }: ISettingTeamName) => {
           }}
           {...register('name', {
             required: '필수 입력사항입니다.',
-            maxLength: 10,
+            maxLength: 40,
             minLength: {
               value: 2,
               message: '2글자 이상 입력해주세요.',

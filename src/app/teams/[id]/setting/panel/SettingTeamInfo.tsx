@@ -65,7 +65,6 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   const {
     register,
     setValue,
-    handleSubmit,
     formState: { errors, isDirty },
     control,
     watch,
@@ -75,9 +74,11 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   })
 
   const region = watch('region')
+  const name = watch('name')
   const dueTo = watch('dueTo')
   const operationForm = watch('operationForm')
   const status = watch('status')
+  const image = watch('teamImage')
 
   /**id: string
   type: TeamType
@@ -105,7 +106,6 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
     }
 
     if (isDirty === false && isLogoEdit === false) {
-      closeConfirmModel()
       return openToast({
         severity: 'error',
         message: '변경된 사항이 없습니다.',
@@ -114,7 +114,18 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
     openConfirmModel()
   }
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = () => {
+    const data: ISetupTeam = {
+      id: team.id,
+      type: team.type,
+      name: name,
+      maxMember: team.maxMember,
+      status: status,
+      dueTo: dueTo,
+      operationForm: operationForm,
+      region: region,
+      teamImage: image,
+    }
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${team.id}`,
@@ -123,7 +134,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       .then((res) => {
         if (res.status == 200) {
           console.log('서버에 저장 완료')
-          location.reload()
+          mutate()
           openToast({
             severity: 'success',
             message: '팀 정보 수정이 완료되었습니다.',
@@ -146,7 +157,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       .finally(() => {
         closeConfirmModel()
       })
-  })
+  }
 
   // useEffect(() => {
   //   window.history.pushState(null, '', location.href)

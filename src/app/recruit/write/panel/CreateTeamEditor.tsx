@@ -213,21 +213,6 @@ const CreateTeamEditor = ({
                   <RadioGroup {...field} row>
                     <Stack spacing={'0.5rem'} direction={'row'}>
                       <FormControlLabel
-                        value="PROJECT"
-                        control={
-                          <Radio sx={style.radioButtonStyle} size="small" />
-                        }
-                        label={
-                          <Typography
-                            variant={'Caption'}
-                            color={'text.alternative'}
-                          >
-                            프로젝트
-                          </Typography>
-                        }
-                        disabled={editorType === 'edit'}
-                      />
-                      <FormControlLabel
                         value="STUDY"
                         control={
                           <Radio sx={style.radioButtonStyle} size="small" />
@@ -238,6 +223,21 @@ const CreateTeamEditor = ({
                             color={'text.alternative'}
                           >
                             스터디
+                          </Typography>
+                        }
+                        disabled={editorType === 'edit'}
+                      />
+                      <FormControlLabel
+                        value="PROJECT"
+                        control={
+                          <Radio sx={style.radioButtonStyle} size="small" />
+                        }
+                        label={
+                          <Typography
+                            variant={'Caption'}
+                            color={'text.alternative'}
+                          >
+                            프로젝트
                           </Typography>
                         }
                         disabled={editorType === 'edit'}

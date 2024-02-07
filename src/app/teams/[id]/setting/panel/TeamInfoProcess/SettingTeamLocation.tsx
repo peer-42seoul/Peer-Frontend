@@ -9,7 +9,7 @@ import useMedia from '@/hook/useMedia'
 import { TeamOperationForm } from '@/app/teams/types/types'
 
 interface ISettingTeamLocation {
-  teamLocation: string[]
+  teamLocation: Array<string>
   teamActivity: TeamOperationForm
   control: Control<ISetupTeam, any>
 }
@@ -34,44 +34,28 @@ const SettingTeamLocation = ({
           <Typography>활동지역</Typography>
         </Stack>
         <Stack direction={'row'} spacing={1}>
-          <Controller
-            name="region.0"
-            control={control}
+          <Select
+            size="small"
+            variant="outlined"
             defaultValue={teamLocation[0]}
-            render={({ field }) => (
-              <Select
-                size="small"
-                variant="outlined"
-                defaultValue={teamLocation[0]}
-                sx={{
-                  m: 0,
-                  minWidth: '8rem',
-                }}
-                {...field}
-              >
-                <MenuItem key={'region'} value={''}></MenuItem>
-              </Select>
-            )}
-          />
-          <Controller
-            name="region.1"
-            control={control}
+            sx={{
+              m: 0,
+              minWidth: '8rem',
+            }}
+          >
+            <MenuItem key={'region'} value={''}></MenuItem>
+          </Select>
+          <Select
+            size="small"
+            variant="outlined"
             defaultValue={teamLocation[1]}
-            render={({ field }) => (
-              <Select
-                size="small"
-                variant="outlined"
-                defaultValue={teamLocation[1]}
-                sx={{
-                  m: 0,
-                  minWidth: '8rem',
-                }}
-                {...field}
-              >
-                <MenuItem key={'region'} value={''}></MenuItem>
-              </Select>
-            )}
-          />
+            sx={{
+              m: 0,
+              minWidth: '8rem',
+            }}
+          >
+            <MenuItem key={'region'} value={''}></MenuItem>
+          </Select>
         </Stack>
       </Stack>
     )
