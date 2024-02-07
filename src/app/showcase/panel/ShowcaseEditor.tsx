@@ -35,9 +35,7 @@ const ShowcaseEditor = ({
 }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [image, setImage] = useState<File[]>([])
-  const [previewImage, setPreviewImage] = useState<string>(
-    data.image ?? '/images/defaultImage.png',
-  )
+  const [previewImage, setPreviewImage] = useState<string>(data.image || '')
   const { openToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
   const { links, addLink, deleteLink, changeLinkName, changeUrl } = useLinks(
