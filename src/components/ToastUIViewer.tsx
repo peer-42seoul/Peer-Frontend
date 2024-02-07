@@ -15,6 +15,7 @@ const ToastViewer = ({
   initialValue = '',
   height = '30rem',
   sx,
+  typographySx,
 }: IViewerOptions) => {
   const viewerRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -32,10 +33,10 @@ const ToastViewer = ({
       viewer.destroy()
     }
   }, [initialValue, viewerRef])
+
   return (
     <Box
       sx={{
-        ...sx,
         fontSize: '0.9375rem',
         backgroundColor: 'background.secondary',
         padding: '0.5rem 1rem',
@@ -45,8 +46,10 @@ const ToastViewer = ({
           '& span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite,  del, dfn, em,  ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, section, summary, time, mark':
             {
               color: 'text.normal',
+              ...(typographySx as React.CSSProperties),
             },
         },
+        ...sx,
       }}
       ref={viewerRef}
     />

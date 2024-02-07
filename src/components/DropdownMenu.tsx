@@ -23,7 +23,8 @@ const DropdownMenu = ({
     setAnchorEl(event.currentTarget)
   }
 
-  const handleClose = () => {
+  const handleClose = (e: React.MouseEvent) => {
+    e.stopPropagation()
     setAnchorEl(null)
   }
 
@@ -76,7 +77,10 @@ const DropdownMenu = ({
               ...style.dropdownMenuIconStyleBase,
               position: 'absolute',
               right: '0.6rem',
-              transform: isPc || anchorEl ? 'rotate(0deg)' : 'rotate(90deg)',
+              transform:
+                isPc || anchorEl || !rotateOn
+                  ? 'rotate(0deg)'
+                  : 'rotate(90deg)',
               color: 'text.alternative',
             }}
           />

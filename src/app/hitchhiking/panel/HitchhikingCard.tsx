@@ -12,6 +12,7 @@ import {
   Chip,
   Stack,
   CircularProgress,
+  Box,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -122,13 +123,13 @@ const HitchhikingCardBack = ({
           width={'100%'}
           spacing={'1rem'}
         >
-          <Stack
-            direction="row"
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            sx={style.cardHeaderStyleBase}
-          >
-            <CardContent sx={{ padding: 0 }} onClick={onClick}>
+          <CardContent sx={{ padding: 0 }} onClick={onClick}>
+            <Stack
+              direction="row"
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              sx={style.cardHeaderStyleBase}
+            >
               <Chip
                 label={
                   <Typography variant="Tag" color={'green.normal'}>
@@ -137,9 +138,6 @@ const HitchhikingCardBack = ({
                 }
                 sx={style.cardChipStyleBase}
               />
-            </CardContent>
-            {/* TODO : 작성자 id 가져오기 */}
-            <CardContent sx={{ padding: 0, width: 'auto' }}>
               <DropdownMenu rotateOn>
                 <ShareMenuItem
                   url={`${currentDomain}/recruit/${postId}`}
@@ -149,8 +147,8 @@ const HitchhikingCardBack = ({
                 />
                 <ReportMenuItem targetId={authorId} />
               </DropdownMenu>
-            </CardContent>
-          </Stack>
+            </Stack>
+          </CardContent>
           <CardHeader
             title={
               <Typography
@@ -174,13 +172,20 @@ const HitchhikingCardBack = ({
             }}
             onClick={onClick}
           >
-            <DynamicToastViewer
-              initialValue={data.content}
-              sx={{
-                ...style.cardContentStyleBase,
-                WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
-              }}
-            />
+            <Box width={1}>
+              <DynamicToastViewer
+                initialValue={data.content}
+                typographySx={{
+                  fontSize: '0.75rem',
+                  color: 'text.alternative',
+                  margin: 0,
+                }}
+                sx={{
+                  ...style.cardContentStyleBase,
+                  WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
+                }}
+              />
+            </Box>
           </CardContent>
           <CardContent sx={{ padding: 0 }} onClick={onClick}>
             <Members
@@ -254,8 +259,11 @@ const HitchhikingCard = ({
     setCurrentDomain(window.location.origin)
 
     // 카드 너비 설정
+    // calc(90svh * 328 / 800)
     setCardWidth(
-      isPc ? (window.innerHeight * 0.8 * 328) / 800 : window.innerWidth * 0.9,
+      isPc
+        ? (window.innerHeight * 0.8 * 328) / 800
+        : (window.innerHeight * 328) / 800,
     )
     const handleResize = () => {
       const newCardWidth = isPc
