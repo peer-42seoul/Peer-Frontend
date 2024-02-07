@@ -25,6 +25,8 @@ import DynamicToastEditor from '@/components/DynamicToastEditor'
 import { Editor } from '@toast-ui/editor'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
 import { config } from '../panel/AdminAxios'
+import CuTextModal from '@/components/CuTextModal'
+import useModal from '@/hook/useModal'
 
 interface IAnnounceAllContent {
   announcementId: number
@@ -132,6 +134,13 @@ const Announce = () => {
   }
   // 백엔드 API에서는 page가 0부터 시작하므로 page - 1로 설정
 
+  const currentId = useRef<number>(-1)
+  const {
+    openModal: openRemoveModal,
+    closeModal: closeRemoveModal,
+    isOpen: isRemoveModalOpen,
+  } = useModal()
+
   const [currentNoticeStatus, setCurrentNoticeStatus] = useState('없음')
 
   // 초기 페이지 진입시 공지사항 목록 불러오기
@@ -211,7 +220,6 @@ const Announce = () => {
         announcementNoticeStatus: data.announcementNoticeStatus, // 'announcementStatus'를 'announcementNoticeStatus'로 매핑합니다.
         reservationDate:
           data.announcementNoticeStatus === '예약' ? DateFormed : null,
-        // content: data.content,
         content: editorRef.current ? editorRef.current.getMarkdown() : '',
       }
     } else return
@@ -226,7 +234,6 @@ const Announce = () => {
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
             withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
           })
           .then((res) => {
             totalPageVar.current = res.data.totalPages
@@ -354,6 +361,8 @@ const Announce = () => {
       })
       .then(() => {
         setOpen(false)
+        alert(announcementId + '번 공지가 삭제되었습니다.')
+        closeRemoveModal()
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
             params,
@@ -669,7 +678,11 @@ const Announce = () => {
             {writeMode === 'view' ? (
               <Button
                 variant={'contained'}
-                onClick={() => onHandleDelete(getValues('announcementId'))}
+                // onClick={() => onHandleDelete(getValues('announcementId'))}
+                onClick={() => {
+                  currentId.current = getValues('announcementId')
+                  openRemoveModal()
+                }}
               >
                 삭제
               </Button>
@@ -691,6 +704,20 @@ const Announce = () => {
               </Button>
             )}
           </Stack>
+          <CuTextModal
+            title="태그 삭제하기"
+            open={isRemoveModalOpen}
+            onClose={closeRemoveModal}
+            content="정말 태그를 삭제하시겠습니까?"
+            textButton={{
+              text: '취소',
+              onClick: closeRemoveModal,
+            }}
+            containedButton={{
+              text: '삭제',
+              onClick: () => onHandleDelete(currentId.current),
+            }}
+          />
         </Container>
       </CuModal>
     </Container>

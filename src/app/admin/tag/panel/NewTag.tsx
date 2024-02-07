@@ -32,6 +32,8 @@ const NewTag = ({
   setTagColor,
   onHandleSubmit,
 }: props) => {
+
+  // 태그 이름 유효성검사
   const [tagNameError, setTagNameError] = useState('')
 
   const validateTagName = (name: string) => {
@@ -40,6 +42,9 @@ const NewTag = ({
       return false
     } else if (name.length > 10) {
       setTagNameError('태그 이름은 10자를 초과할 수 없습니다.')
+      return false
+    } else if (/['"\\;% ]/.test(name)) {
+      setTagNameError('태그 이름에 유효하지 않은 문자가 포함되어 있습니다.')
       return false
     }
     setTagNameError('')
@@ -88,7 +93,6 @@ const NewTag = ({
           error={!!tagNameError}
           helperText={tagNameError}
           sx={{ display: 'flex', justifyContent: 'center' }}
-          // onChange={(e) => setTagName(e.target.value)}
           onChange={handleNameChange}
         />
         <Typography variant={'Body1'} align="center">

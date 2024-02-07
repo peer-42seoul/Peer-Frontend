@@ -6,6 +6,8 @@ import { Button, Container, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import NewTag from './panel/NewTag'
 import { fetchTags } from '../panel/AdminAxios'
+import CuTextModal from '@/components/CuTextModal'
+import useModal from '@/hook/useModal'
 
 interface content {
   tagId: number
@@ -29,6 +31,14 @@ const Tag = () => {
   const [tagColor, setTagColor] = useState<string>('#000000')
   const [open, setOpen] = useState<boolean>(false)
   const writeMode = useRef<string>('')
+  const currentId = useRef<number>(-1)
+
+  const {
+    openModal: openRemoveModal,
+    closeModal: closeRemoveModal,
+    isOpen: isRemoveModalOpen,
+  } = useModal()
+
   useEffect(() => {
     fetchTags()
       .then((data) => setContent(data))
@@ -53,6 +63,7 @@ const Tag = () => {
         withCredentials: true,
       })
       .then(() => {
+        closeRemoveModal()
         alert(tagId + '번 태그가 삭제되었습니다.')
         fetchTags().then((data) => setContent(data))
       })
@@ -162,7 +173,12 @@ const Tag = () => {
                       수정
                     </Typography>
                   </Button>
-                  <Button onClick={() => onHandleRemove(item.tagId)}>
+                  <Button
+                    onClick={() => {
+                      currentId.current = item.tagId
+                      openRemoveModal()
+                    }}
+                  >
                     <Typography variant={'Body1'} sx={alignCenter}>
                       삭제
                     </Typography>
@@ -183,6 +199,20 @@ const Tag = () => {
             onHandleSubmit={onHandleSubmit}
           />
         </Stack>
+        <CuTextModal
+          title="태그 삭제하기"
+          open={isRemoveModalOpen}
+          onClose={closeRemoveModal}
+          content="정말 태그를 삭제하시겠습니까?"
+          textButton={{
+            text: '취소',
+            onClick: closeRemoveModal,
+          }}
+          containedButton={{
+            text: '삭제',
+            onClick: () => onHandleRemove(currentId.current),
+          }}
+        />
       </Container>
     </>
   )
