@@ -24,6 +24,8 @@ export interface IMainCard {
   href?: string
   onFavorite?: () => void
   sx?: SxProps
+  titleMaxLine?: number
+  tagMaxLine?: number
 }
 
 export interface IPost {
@@ -35,7 +37,7 @@ export interface IPost {
   user_thumbnail: string
   status: string
   tagList: ITag[]
-  favorite: boolean
+  favorite: boolean | undefined
 }
 
 export interface IPostDetail {
@@ -54,14 +56,15 @@ export interface IPostDetail {
   place: string
   image: string
   totalNumber: number
+  current?: number
   favorite: boolean
   teamName: string
 }
 
 export interface IFormInterview {
   question: string
-  type: string
-  optionList: string[] | null
+  type: 'OPEN' | 'CLOSE' | 'CHECK' | 'RATIO'
+  optionList: string[]
 }
 
 export interface IRole {
@@ -81,4 +84,9 @@ export enum statusEnum {
   BEFORE,
   ONGOING,
   AFTER,
+}
+
+export type IFavorite = {
+  recruit_id: number
+  favorite: boolean
 }

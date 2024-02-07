@@ -1,21 +1,54 @@
+import { useSWRConfig } from 'swr'
+import { isAxiosError } from 'axios'
 import useAxiosWithAuth from '@/api/config'
 import { ITeamBoard } from '@/types/TeamBoardTypes'
 import { IconButton, Stack, Typography } from '@mui/material'
 import { TrashLineIcon } from '@/icons'
 import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 import CuTextModal from '@/components/CuTextModal'
 
-const BoardItem = ({ board }: { board: ITeamBoard }) => {
+const BoardItem = ({
+  board,
+  teamId,
+}: {
+  board: ITeamBoard
+  teamId: string
+}) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { isOpen, closeModal, openModal } = useModal()
+  const { openToast } = useToast()
+  const { mutate } = useSWRConfig()
+
   const handleDeleteBoard = (boardId: number) => {
     axiosWithAuth
       .delete(`/api/v1/team/board/${boardId}`)
       .then(() => {
-        alert('게시판을 삭제했습니다.')
+        openToast({
+          severity: 'success',
+          message: '게시판을 삭제했습니다.',
+        })
+        mutate(`/api/v1/team-page/simple/${teamId}`)
       })
-      .catch(() => {
-        alert('게시판 삭제에 실패했습니다.')
+      .catch((e: unknown) => {
+        if (isAxiosError(e)) {
+          if (e.response?.status === 403) {
+            openToast({
+              severity: 'error',
+              message: '게시판 추가는 팀 리더만 가능합니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: '게시판을 추가하지 못했습니다.',
+            })
+          }
+        } else {
+          openToast({
+            severity: 'error',
+            message: '게시판을 추가하지 못했습니다.',
+          })
+        }
       })
   }
   return (

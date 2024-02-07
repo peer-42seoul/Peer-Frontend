@@ -1,4 +1,4 @@
-import { useState, ReactElement, useEffect } from 'react'
+import { useState, ReactElement, useEffect, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import {
   Box,
@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import { ChevronLeft } from '@/icons'
+import { BetaIcon } from '@/components/BetaBadge'
 import * as style from './CuNavBar.style'
 
 interface ITabInfo {
@@ -21,6 +22,7 @@ interface ITabInfo {
   icon: ReactElement
   disabled?: boolean
   new?: boolean
+  isBeta?: boolean
 }
 
 interface ICuNavBarProps {
@@ -40,9 +42,13 @@ const CuNavBar = ({
   const [value, setValue] = useState<string | undefined>(undefined)
   const { isPc } = useMedia()
 
-  useEffect(() => {
+  const setTabValue = useCallback(() => {
     setValue(getTabValue(pathName))
-  }, [pathName])
+  }, [pathName, getTabValue])
+
+  useEffect(() => {
+    setTabValue()
+  }, [setTabValue])
 
   return (
     <Box sx={isPc ? style.pcNavBar : style.mobileNavBar}>
@@ -68,7 +74,7 @@ const CuNavBar = ({
         sx={style.tabs}
         exclusive
         onChange={(_event, newValue) => {
-          setValue(newValue)
+          if (newValue) setValue(newValue)
         }}
       >
         {isPc
@@ -95,13 +101,6 @@ const CuNavBar = ({
     </Box>
   )
 }
-
-const getTextColor = (selected: boolean, disabled?: boolean) => {
-  if (selected) return 'purple.strong'
-  if (disabled) return 'text.disable'
-  return 'text.assistive'
-}
-
 const PcToggleButton = ({
   tab,
   selected,
@@ -116,29 +115,25 @@ const PcToggleButton = ({
       onClick={tab.onClick}
       sx={{
         ...style.pcTab,
-        ...(isNewTab ? style.newTab : undefined),
+        ...(isNewTab || tab.isBeta ? style.newTab : undefined),
       }}
       disabled={tab.disabled}
       selected={selected}
     >
       <Stack
+        minWidth={'6rem'}
         direction={'row'}
         spacing={'0.25rem'}
         alignItems={'center'}
         justifyContent={'center'}
       >
-        <Box sx={style.iconBoxBase}>{tab.icon}</Box>
-        <Typography
-          color={getTextColor(selected, tab.disabled)}
-          variant={'Caption'}
-        >
-          {tab.label}
-        </Typography>
+        <Typography variant={'Caption'}>{tab.label}</Typography>
         {isNewTab && (
           <Typography sx={style.newTextBadge} variant={'Caption'}>
             NEW
           </Typography>
         )}
+        {tab.isBeta && <BetaIcon sx={{ paddingLeft: '0.5rem' }} />}
       </Stack>
     </ToggleButton>
   )
@@ -162,15 +157,14 @@ const MobileToggleButton = ({
       selected={selected}
     >
       <Stack direction={'column'} spacing={'0.12rem'} alignItems={'center'}>
-        <Badge sx={style.newBadge} variant={'dot'} invisible={!isNewTab}>
+        <Badge
+          sx={isNewTab ? style.newBadge : style.betaBadge}
+          variant={'dot'}
+          invisible={!isNewTab && !tab.isBeta}
+        >
           <Box sx={style.iconBoxBase}>{tab.icon}</Box>
         </Badge>
-        <Typography
-          variant={'Tag'}
-          color={getTextColor(selected, tab.disabled)}
-        >
-          {tab.mobileLabel ?? tab.label}
-        </Typography>
+        <Typography variant={'Tag'}>{tab.mobileLabel ?? tab.label}</Typography>
       </Stack>
     </ToggleButton>
   )

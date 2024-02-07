@@ -5,6 +5,7 @@ import { Box, Button, Popover, Typography } from '@mui/material'
 import { MouseEvent, ReactNode, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import useNicknameStore from '@/states/useNicknameStore'
+import ExternalMessageModal from './ExternalMessageModal'
 
 interface IOthersProfile {
   name: string
@@ -47,6 +48,9 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
   const goMypage = () => {
     router.push('/my-page')
   }
+
+  // 유령회원일 경우
+  if (Number(userId) === -1) return <>{children}</>
 
   return (
     <div>
@@ -92,6 +96,12 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
         isModalOpen={modalType === 'report'}
         handleClose={handleModalClose}
         targetId={userId}
+      />
+      <ExternalMessageModal
+        targetId={Number(userId)}
+        targetNickname={name}
+        isOpen={modalType === 'message'}
+        handleClose={handleModalClose}
       />
     </div>
   )

@@ -1,6 +1,5 @@
 'use client'
 
-import useToast from '@/hook/useToast'
 import { Box, Button, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -13,6 +12,8 @@ import useSWR from 'swr'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
 import CuTextField from '@/components/CuTextField'
+import useToast from '@/states/useToast'
+import { ProjectType } from '@/types/IPostDetail'
 
 interface IInterviewData {
   question: string
@@ -25,18 +26,20 @@ const RecruitFormModal = ({
   setOpen,
   recruit_id,
   role,
+  type,
 }: {
   open: boolean
   setOpen: any
   recruit_id: string
   role: string | null
+  type: ProjectType
 }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [isLoading, setLoading] = useState(false)
   const { isLogin } = useAuthStore()
   const { data } = useSWR<IInterviewData[]>(
     isLogin
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`
+      ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/interview/${recruit_id}`
       : null,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
@@ -47,18 +50,7 @@ const RecruitFormModal = ({
     control,
     formState: { errors },
   } = useForm()
-  const {
-    CuToast: CuSuccessToast,
-    isOpen: isSuccessOpen,
-    openToast: openSuccessToast,
-    closeToast: closeSuccessToast,
-  } = useToast()
-  const {
-    CuToast: CuFailedToast,
-    isOpen: isFailedOpen,
-    openToast: openFailedToast,
-    closeToast: closeFailedToast,
-  } = useToast()
+  const { openToast } = useToast()
 
   const submitForm = () => {
     handleSubmit(onSubmit)()
@@ -67,7 +59,8 @@ const RecruitFormModal = ({
   const onSubmit = async (values: any) => {
     let value
 
-    if (!data?.length) value = { role, answerList: [] }
+    if (!data?.length)
+      value = { role: type === 'STUDY' ? 'STUDY' : role, answerList: [] }
     else {
       const array = Object.values(values)
       const answerList = array?.map((res: any) => {
@@ -80,7 +73,7 @@ const RecruitFormModal = ({
         } else return res
       })
       value = {
-        role,
+        role: role ? role : 'STUDY',
         answerList,
       }
     }
@@ -88,16 +81,23 @@ const RecruitFormModal = ({
     try {
       setLoading(true)
       await axiosWithAuth.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/interview/${recruit_id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/interview/${recruit_id}`,
         value,
       )
       setOpenConfirm(false)
-      openSuccessToast()
+      openToast({
+        severity: 'success',
+        message: '제출에 성공하였습니다.',
+      })
       router.push(`/recruit/${recruit_id}`)
       setOpen(false)
-    } catch (e) {
+    } catch (e: any) {
+      console.log('e', e)
       setOpenConfirm(false)
-      openFailedToast()
+      openToast({
+        severity: 'error',
+        message: e?.response?.data?.message ?? '제출에 실패하였습니다.',
+      })
       console.log('e', e)
     } finally {
       setLoading(false)
@@ -106,20 +106,6 @@ const RecruitFormModal = ({
 
   return (data?.length ?? 0) > 0 ? (
     <>
-      <CuSuccessToast
-        open={isSuccessOpen}
-        onClose={closeSuccessToast}
-        severity="success"
-      >
-        <Typography>제출에 성공하였습니다.</Typography>
-      </CuSuccessToast>
-      <CuFailedToast
-        open={isFailedOpen}
-        onClose={closeFailedToast}
-        severity="error"
-      >
-        <Typography>제출에 실패하였습니다.</Typography>
-      </CuFailedToast>
       <form>
         <ConfirmModal
           isLoading={isLoading}
@@ -148,9 +134,7 @@ const RecruitFormModal = ({
               backgroundColor: 'background.primary',
             }}
           >
-            <Typography color={'text.strong'} fontWeight={600}>
-              인터뷰 작성
-            </Typography>
+            <Typography variant={'Body1Emphasis'}>인터뷰 작성</Typography>
             <Stack gap={'1rem'}>
               {data?.map((quest, idx) => (
                 <Box
@@ -172,11 +156,18 @@ const RecruitFormModal = ({
                       defaultValue=""
                       render={({ field }) => (
                         <CuTextField
+                          fullWidth
+                          multiline
                           {...field}
-                          placeholder={'텍스트로 답변을 입력할 수 있습니다.'}
+                          placeholder={
+                            '텍스트로 답변을 입력할 수 있습니다. (공백포함 1000자 제한)'
+                          }
                           variant="standard"
                           error={!!errors[idx]}
                           helperText={errors[idx]?.message as string}
+                          inputProps={{
+                            maxLength: 1000,
+                          }}
                         />
                       )}
                     />

@@ -4,9 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import useSWRMutation from 'swr/mutation'
 import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
-import CuToast from '@/components/CuToast'
 import useMedia from '@/hook/useMedia'
-import useToast from '@/hook/useToast'
 import { useMessageInfiniteScroll } from '@/hook/useInfiniteScroll'
 import useMessagePageState from '@/states/useMessagePageState'
 import { IMessage, IMessageUser, IMessageTargetUser } from '@/types/IMessage'
@@ -29,7 +27,7 @@ const MessageChatPage = () => {
   )
   const axiosWithAuth = useAxiosWithAuth()
   const { isPc } = useMedia()
-  const { isOpen, toastMessage, openToast, setToastMessage } = useToast()
+  const [isMessageSending, setIsMessageSending] = useState(false)
 
   const fetchMoreData = useCallback(
     async (url: string) => {
@@ -42,9 +40,8 @@ const MessageChatPage = () => {
         })
         return response.data.msgList
       } catch {
-        // TODO : 에러 구체화
-        setToastMessage('쪽지를 불러오는데 실패하였습니다.')
-        openToast()
+        alert('쪽지를 불러오는데 실패하였습니다.')
+        setListPage()
       }
     },
     [conversationId, targetId, updatedData],
@@ -82,8 +79,8 @@ const MessageChatPage = () => {
         setIsEnd(response.data.msgList[0].isEnd)
       })
       .catch(() => {
-        setToastMessage('쪽지를 불러오는데 실패하였습니다.')
-        openToast()
+        alert('쪽지를 불러오는데 실패하였습니다.')
+        setListPage()
       })
       .finally(() => {
         setIsLoading(false)
@@ -103,7 +100,6 @@ const MessageChatPage = () => {
   }, [data])
 
   useEffect(() => {
-    // FIXME : 깜빡임 현상 해결 필요할듯...
     if (!scrollRef.current) return
     if (prevScrollHeight) {
       scrollTo(scrollRef.current.scrollHeight - prevScrollHeight)
@@ -152,6 +148,10 @@ const MessageChatPage = () => {
           </Stack>
           {isPc ? (
             <MessageForm
+              messageSendState={{
+                isMessageSending,
+                setIsMessageSending,
+              }}
               targetId={target.userId}
               updateTarget={setTarget}
               addNewMessage={addNewMessage}
@@ -159,6 +159,10 @@ const MessageChatPage = () => {
             />
           ) : (
             <MobileSendButton
+              messageSendState={{
+                isMessageSending,
+                setIsMessageSending,
+              }}
               disabled={target.deleted}
               target={{ id: target.userId, nickname: target.userNickname }}
               addNewMessage={addNewMessage}
@@ -167,9 +171,6 @@ const MessageChatPage = () => {
           )}
         </>
       )}
-      <CuToast open={isOpen} onClose={setListPage} severity="error">
-        {toastMessage}
-      </CuToast>
     </MessageContainer>
   )
 }

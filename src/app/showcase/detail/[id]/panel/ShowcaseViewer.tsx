@@ -9,13 +9,14 @@ import ToastViewer from '@/components/ToastUIViewer'
 import LinksViewer from '../../../panel/common/LinksViewer'
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 import * as style from './ShowcaseViewer.style'
-import LabelWithIcon from '@/app/showcase/panel/LabelWithIcon'
+import LabelWithIcon from '@/components/LabelWithIcon'
 import { FileIcon } from '@/icons'
 import * as Style from '../../../panel/common/SkillInput.style'
 import useMedia from '@/hook/useMedia'
 
 interface IShowcaseViewerProps {
-  data: IShowcaseViewerFields // IShowcase 타입을 import 해야 합니다.
+  data: IShowcaseViewerFields
+  postId: number
 }
 
 const CoverImage = ({ image }: { image: string }) => {
@@ -31,7 +32,7 @@ const CoverImage = ({ image }: { image: string }) => {
 
 const InformationViewer = ({ data }: any) => {
   return (
-    <Stack spacing={'2rem'} sx={style.InformationViewer}>
+    <Stack spacing={'0.5rem'} sx={style.InformationViewer}>
       <StartEndDateViewer start={data?.start} end={data?.end} />
       <SkillInput skills={data?.skills} />
       <TeamMembers members={data?.member} />
@@ -57,21 +58,26 @@ const ContentViewer = ({ content }: { content: string }) => {
   )
 }
 
-const ShowcaseViewer = ({ data }: IShowcaseViewerProps) => {
+const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
   const { isPc } = useMedia()
   return (
     <>
       {isPc ? (
         <Container sx={style.pcViewer}>
           <Stack>
-            <TeamName teamName={data?.name} />
+            <TeamName
+              teamName={data?.name}
+              author={data.author}
+              postId={postId}
+              editMode={false}
+            />
             <Stack sx={style.InformationViewerBox}>
               <InformationViewer data={data} />
               <Stack
-                spacing={'1rem'}
+                spacing={'0.5rem'}
                 display={'flex'}
                 width={'30%'}
-                marginBottom={'1rem'}
+                marginBottom={'0.5rem'}
               >
                 <CoverImage image={data.image} />
               </Stack>
@@ -82,12 +88,17 @@ const ShowcaseViewer = ({ data }: IShowcaseViewerProps) => {
       ) : (
         <Container sx={style.mobileViewer}>
           <Stack
-            spacing={'1rem'}
+            spacing={'0.5rem'}
             display={'flex'}
             width={'100%'}
-            marginBottom={'1rem'}
+            marginBottom={'0.5rem'}
           >
-            <TeamName teamName={data?.name} />
+            <TeamName
+              editMode={false}
+              teamName={data?.name}
+              author={data.author}
+              postId={postId}
+            />
             <CoverImage image={data.image} />
           </Stack>
           <InformationViewer data={data} />

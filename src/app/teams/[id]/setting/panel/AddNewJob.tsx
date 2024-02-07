@@ -4,7 +4,7 @@ import { IconButton, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
-import { Job } from '@/app/teams/types/types'
+import { Job, TeamStatus } from '@/app/teams/types/types'
 import useAxiosWithAuth from '@/api/config'
 
 interface NewJob {
@@ -15,9 +15,10 @@ interface NewJob {
 interface Props {
   onNewJob: (newJob: Job) => void
   teamId: string
+  teamStatus: TeamStatus
 }
 
-const AddNewJob = ({ onNewJob, teamId }: Props) => {
+const AddNewJob = ({ onNewJob, teamId, teamStatus }: Props) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [newJob, setNewJob] = useState<NewJob>({
     name: '',
@@ -36,7 +37,7 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
   const handleAddJob = () => {
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/job/add/${teamId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/job/add/${teamId}`,
         newJob,
       )
       .then((res) => {
@@ -60,22 +61,32 @@ const AddNewJob = ({ onNewJob, teamId }: Props) => {
       paddingTop={'1rem'}
     >
       <TextField
+        disabled={teamStatus === TeamStatus.COMPLETE ? true : false}
         value={newJob.name}
         onChange={(e) => setNewJob({ ...newJob, name: e.target.value })}
         placeholder="추가할 직업군을 입력하세요."
         sx={{ width: '20rem' }}
       />
       <Stack direction={'row'} alignItems={'center'}>
-        <IconButton onClick={decreaseNumber}>
+        <IconButton
+          onClick={decreaseNumber}
+          disabled={teamStatus === TeamStatus.COMPLETE ? true : false}
+        >
           <RemoveIcon color="primary" />
         </IconButton>
         <Typography>{newJob.max}</Typography>
-        <IconButton onClick={increaseNumber}>
+        <IconButton
+          onClick={increaseNumber}
+          disabled={teamStatus === TeamStatus.COMPLETE ? true : false}
+        >
           <AddIcon color="primary" />
         </IconButton>
       </Stack>
       <Stack direction={'row'} alignItems={'center'}>
-        <IconButton onClick={handleAddJob}>
+        <IconButton
+          onClick={handleAddJob}
+          disabled={teamStatus === TeamStatus.COMPLETE ? true : false}
+        >
           <Typography>추가</Typography>
         </IconButton>
       </Stack>

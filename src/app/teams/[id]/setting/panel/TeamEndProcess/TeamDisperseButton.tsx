@@ -20,7 +20,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
   const disperseTeam = () => {
     console.log('exit team')
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/disperse`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/disperse`, {
         teamId: teamId,
       })
       .then((res) => {
@@ -31,6 +31,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
             severity: 'success',
             message: '팀이 해산되었습니다.',
           })
+          router.push('/team-list')
         } else if (res.status === 401) {
           console.log(res)
           router.push('/login')
@@ -72,6 +73,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
           message: '팀 해산에 실패하였습니다.',
         })
       })
+    closeModal()
   }
 
   return (
@@ -81,13 +83,18 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Typography>팀을 해산시겠습니까?</Typography>
+        <Typography variant="Body2">팀을 해산시겠습니까?</Typography>
         <Button
-          disabled={teamStatus === TeamStatus.RECRUITING ? true : false}
+          disabled={
+            teamStatus === TeamStatus.RECRUITING ||
+            teamStatus === TeamStatus.COMPLETE
+              ? true
+              : false
+          }
           variant="contained"
           onClick={openModal}
         >
-          <Typography>해산하기</Typography>
+          <Typography variant="Body2">해산하기</Typography>
         </Button>
       </Stack>
 

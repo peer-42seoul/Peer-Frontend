@@ -60,7 +60,6 @@ export const useInfiniteSWRScroll = (
     fetcher,
   )
   const targetRef = useRef<HTMLDivElement>(null)
-  // NOTE : 필요한 경우 scrollTo 함수를 추가할 수 있습니다.
   const isLoadMore = !!(
     !isLoading &&
     data &&

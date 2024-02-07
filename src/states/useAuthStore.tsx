@@ -17,7 +17,7 @@ const useAuthStore = create<IAuthStore>((set) => {
     ? JSON.parse(authDataJSON)
     : { accessToken: null }
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
 
   return {
     isLogin: !!authData.accessToken,
@@ -25,7 +25,6 @@ const useAuthStore = create<IAuthStore>((set) => {
     login: (accessToken) => {
       const authDataToSave = { accessToken }
       LocalStorage.setItem('authData', JSON.stringify(authDataToSave))
-      console.log('accessToken', accessToken)
       setCookie('accessToken', accessToken)
       axios
         .get(`${API_URL}/api/v1/profile`, {

@@ -9,13 +9,16 @@ import {
   Typography,
 } from '@mui/material'
 import { IApplicant } from '../../../types/types'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
-import useMedia from '@/hook/useMedia'
 import FormAnswer from './InterviewAnswerForm'
 import useAxiosWithAuth from '@/api/config'
 import { CloseIcon } from '@/icons'
 import { NextButton, PrevButton } from './Icons'
+import Tutorial from '@/components/Tutorial'
+import TeamApplicantTutorial from '@/components/tutorialContent/TeamApplicantTutorial'
+import useToast from '@/states/useToast'
+import CuCircularProgress from '@/components/CuCircularProgress'
 
 const ApplicantList = ({
   close,
@@ -24,15 +27,15 @@ const ApplicantList = ({
   close: () => void
   teamId: string
 }) => {
-  const { isPc } = useMedia()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const axiosWithAuth = useAxiosWithAuth()
+  const { openToast } = useToast()
 
   // TODO: DTO 맞추기
 
   const { data, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/${teamId}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/applicant/${teamId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const [members, setMembers] = useState<IApplicant[]>([])
@@ -41,14 +44,13 @@ const ApplicantList = ({
   )
 
   useEffect(() => {
-    console.log(data)
     setMember(data ? data[index] : null)
   }, [index, data])
 
   const handleAccept = () => {
     axiosWithAuth
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/accept/${teamId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/applicant/accept/${teamId}`,
         {
           teamJobId: member!.applyId.teamJobId,
           teamUserId: member!.applyId.teamUserId,
@@ -58,8 +60,22 @@ const ApplicantList = ({
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
           setMembers(data)
-
           if (index > 0) setIndex(index - 1)
+          openToast({
+            severity: 'success',
+            message: '신청이 승인되었습니다.',
+          })
+          window.location.reload()
+        } else if (res.status === 403) {
+          openToast({
+            severity: 'error',
+            message: '권한이 없습니다.',
+          })
+        } else {
+          openToast({
+            severity: 'error',
+            message: '승인에 실패했습니다.',
+          })
         }
       })
       .catch((err) => {
@@ -67,11 +83,11 @@ const ApplicantList = ({
       })
   }
 
-  const handleReject = () => {
+  const handleReject = useCallback(() => {
     console.log('reject')
     axiosWithAuth
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/applicant/reject/${teamId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/applicant/reject/${teamId}`,
         {
           teamJobId: member!.applyId.teamJobId,
           teamUserId: member!.applyId.teamUserId,
@@ -83,12 +99,27 @@ const ApplicantList = ({
           setMembers(data)
 
           if (index > 0) setIndex(index - 1)
+          openToast({
+            severity: 'success',
+            message: '신청이 거절되었습니다.',
+          })
+          window.location.reload()
+        } else if (res.status === 403) {
+          openToast({
+            severity: 'error',
+            message: '권한이 없습니다.',
+          })
+        } else {
+          openToast({
+            severity: 'error',
+            message: '승인에 실패했습니다.',
+          })
         }
       })
       .catch((err) => {
         console.log(err)
       })
-  }
+  }, [index, member, data, teamId, axiosWithAuth, openToast])
 
   const handleNext = () => {
     if (index < members.length - 1) setIndex(index + 1)
@@ -112,11 +143,7 @@ const ApplicantList = ({
   }, [index, data])
 
   if (isLoading) {
-    return (
-      <Stack border="1px solid" borderRadius={2} height={400}>
-        <Typography>로딩중</Typography>
-      </Stack>
-    )
+    return <CuCircularProgress color="primary" />
   }
 
   if (!data || data.length === 0) {
@@ -129,7 +156,10 @@ const ApplicantList = ({
           alignItems={'center'}
           mb={3}
         >
-          <Typography fontWeight="bold">신청 대기자</Typography>
+          <Stack direction="row" alignItems="center">
+            <Typography fontWeight="bold">신청 대기자</Typography>
+            <Tutorial content={<TeamApplicantTutorial />} />
+          </Stack>
           <IconButton onClick={close} size="small">
             <CloseIcon />
           </IconButton>
@@ -140,7 +170,9 @@ const ApplicantList = ({
   }
 
   return (
-    <Card sx={{ p: 3, borderRadius: '1rem', height: '23rem' }}>
+    <Card
+      sx={{ p: 3, borderRadius: '1rem', height: '20rem', overflow: 'auto' }}
+    >
       <Stack
         direction="row"
         display="flex"
@@ -166,7 +198,7 @@ const ApplicantList = ({
           <PrevButton />
         </IconButton>
         <Stack alignItems="center" spacing={1}>
-          <Avatar>A</Avatar>
+          <Avatar src={member?.image ? member.image : '/icons/ios/128.png'} />
           {member && <Typography>{member.name}</Typography>}
           {member?.jobName && <Typography>{member.jobName}</Typography>}
         </Stack>
@@ -188,20 +220,14 @@ const ApplicantList = ({
         </Button>
       </Stack>
 
-      <Stack p={2}>
+      <Stack p={2} ref={scrollRef}>
         <Typography fontWeight="bold">인터뷰 답변</Typography>
-        <Stack
-          borderRadius={2}
-          p={2}
-          overflow="auto"
-          height={isPc ? 300 : 100}
-          ref={scrollRef}
-        >
-          {!member && <Typography>신청한 대기자가 없습니다.</Typography>}
+        <Stack borderRadius={2} p={2} height={'100%'}>
+          {!member && <Typography>신청한 사람이 없습니다.</Typography>}
           {member && member.answers ? (
             member.answers.map((interview, index) => (
               <Stack key={index} m={1}>
-                <Typography fontWeight="bold">{interview.question}</Typography>
+                <Typography variant="Title2">{interview.question}</Typography>
                 <FormAnswer interview={interview} index={index} />
               </Stack>
             ))

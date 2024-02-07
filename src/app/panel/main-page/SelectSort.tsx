@@ -1,5 +1,6 @@
-import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { MenuItem, Typography } from '@mui/material'
 import { ProjectSort } from '../MainPage'
+import CuSelect from '@/components/CuSelect'
 
 interface ISelectSortProps {
   sort: ProjectSort | undefined
@@ -7,17 +8,15 @@ interface ISelectSortProps {
 }
 
 const SelectSort = ({ sort, setSort }: ISelectSortProps) => {
-  const handleChange = (event: SelectChangeEvent) => {
-    setSort(event.target.value as ProjectSort)
-  }
-
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <Select value={sort ?? 'latest'} onChange={handleChange}>
-        <MenuItem value={'latest'}>최신순</MenuItem>
-        <MenuItem value={'hit'}>인기순</MenuItem>
-      </Select>
-    </FormControl>
+    <CuSelect value={sort ?? 'latest'} setValue={setSort}>
+      <MenuItem value={'latest'}>
+        <Typography variant={'Caption'}>최신순</Typography>
+      </MenuItem>
+      <MenuItem value={'hit'}>
+        <Typography variant={'Caption'}>인기순</Typography>
+      </MenuItem>
+    </CuSelect>
   )
 }
 

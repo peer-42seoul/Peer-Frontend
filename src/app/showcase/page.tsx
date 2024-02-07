@@ -15,19 +15,17 @@ import ShowcasePCLayout from './panel/ShowcasePc/ShowcasePcLayout'
 const Showcase = () => {
   const [page, setPage] = useState<number>(1)
   const [cardList, setCardList] = useState<Array<ICardData>>([])
-  const [draggedCardList, setDraggedCardList] = useState<ICardData[]>([])
   const { isPc } = useMedia()
   const { isLogin } = useAuthStore()
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IPagination<ICardData[]>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase?page=${page}&pageSize=10`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase?page=${page}&pageSize=10`,
     isLogin
       ? (url: string) => axiosWithAuth.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
 
   useEffect(() => {
-    console.log('draggedCardList', draggedCardList)
     if (!isLoading && data?.content) {
       setCardList((prev) => {
         const newArray = [...data.content].reverse().concat(prev)
@@ -38,10 +36,6 @@ const Showcase = () => {
   }, [isLoading, data?.content])
 
   const removeCard = (recruit_id: number) => {
-    setDraggedCardList((prev: ICardData[]) => {
-      prev.push(cardList[cardList.length - 1])
-      return prev
-    })
     setCardList((prev: ICardData[]) => {
       return prev.filter((card) => card.id !== recruit_id)
     })

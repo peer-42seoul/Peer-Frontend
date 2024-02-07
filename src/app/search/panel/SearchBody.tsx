@@ -1,10 +1,7 @@
 import useMedia from '@/hook/useMedia'
 import SearchHistory from './SearchHistory'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import {
   TextField,
-  AppBar,
-  Toolbar,
   Typography,
   Button,
   Box,
@@ -16,6 +13,7 @@ import { MouseEvent, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import SearchIcon from '@mui/icons-material/Search'
+import Header from '@/app/panel/layout-panel/Header'
 
 const SearchButton = () => {
   return (
@@ -66,7 +64,10 @@ const StyleSeachPc = {
 }
 
 const StyleSeachMobile = {
-  width: '100%',
+  width: '90%',
+  ml: 'auto',
+  mr: 'auto',
+  mt: '5rem',
 }
 
 export default function SearchBody({ onClose }: SearchBodyProps) {
@@ -96,8 +97,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
       Math.max(...storedKeywords.map((key) => Number(key.split('_')[1])), 0) + 1
     const newKeywordKey = `searchWord_${newKeywordIndex}`
     localStorage.setItem(newKeywordKey, keyword)
-
-    router.push(`?keyword=${data.searchWord}`)
+    router.push(`/?keyword=${data.searchWord}&type=${type}`)
     onClose()
   }
 
@@ -112,22 +112,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
   return (
     <>
       <Stack sx={{ m: 0, p: 0 }}>
-        <AppBar position="static">
-          <Toolbar
-            sx={{
-              justifyContent: 'space-between',
-              margin: 'dense',
-              padding: 0,
-            }}
-          >
-            <Button sx={{ border: 'none', color: 'normal' }} onClick={onClose}>
-              <ArrowBackIosNewIcon />
-            </Button>
-            <Typography>검색</Typography>
-            <Button disabled />
-          </Toolbar>
-        </AppBar>
-
+        {!isPc && <Header />}
         <Box sx={isPc ? StyleSeachPc : StyleSeachMobile}>
           <ToggleButtonGroup onChange={handleChanged} exclusive value={type}>
             <ToggleButton
@@ -135,14 +120,28 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
               sx={ToggleButtonStyle}
               value={SearchType.STUDY}
             >
-              스터디
+              <Typography
+                variant="Title1"
+                color={
+                  type === SearchType.STUDY ? 'text.normal' : 'text.assistive'
+                }
+              >
+                스터디
+              </Typography>
             </ToggleButton>
             <ToggleButton
               size="large"
               sx={ToggleButtonStyle}
               value={SearchType.PROJECT}
             >
-              프로젝트
+              <Typography
+                variant="Title1"
+                color={
+                  type === SearchType.PROJECT ? 'text.normal' : 'text.assistive'
+                }
+              >
+                프로젝트
+              </Typography>
             </ToggleButton>
           </ToggleButtonGroup>
 

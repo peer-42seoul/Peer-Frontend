@@ -19,6 +19,8 @@ import CuTextModal from '@/components/CuTextModal'
 import * as style from './interests.style'
 import { centeredPosition } from '@/constant/centerdPosition.style'
 import { IPagination } from '@/types/IPagination'
+import { ITag } from '@/types/IPostDetail'
+import { getUniqueArray } from '@/utils/getUniqueArray'
 
 export interface IDefaultPostCard {
   recruit_id: number
@@ -42,10 +44,7 @@ export interface IShowcasePostCard {
   teamLogo: string
   teamName: string
   content: string
-  tags: Array<{
-    name: string
-    color: string
-  }>
+  tags: Array<ITag>
 }
 
 const TypeTabs = ({
@@ -140,8 +139,6 @@ const AlertModal = ({
 }
 
 const MyInterests = () => {
-  const { isPc } = useMedia()
-
   const [type, setType] = useState('STUDY')
   const [page, setPage] = useState<number>(1)
   const [pageLimit, setPageLimit] = useState<number>(1)
@@ -157,8 +154,6 @@ const MyInterests = () => {
   const { openToast, closeToast } = useToast()
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
-    console.log('newValue: ', newValue)
-    console.log('11', event.currentTarget, event.target)
     setType(newValue as string)
     setPostList([])
     setShowcaseList([])
@@ -173,6 +168,10 @@ const MyInterests = () => {
       type === 'SHOWCASE' ? '/showcase?' : `?type=${type}&`
     }page=${page}&pageSize=${pagesize}`,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
   )
 
   const deleteAll = async () => {
@@ -181,7 +180,7 @@ const MyInterests = () => {
     setIsDeleting(true)
     return await axiosWithAuth
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/mypage/favorite?type=${type}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/mypage/favorite?type=${type}`,
       )
       .then(() => {
         openToast({
@@ -210,11 +209,17 @@ const MyInterests = () => {
     if (!isLoading && data) {
       if (type === 'SHOWCASE') {
         setShowcaseList((prev) => {
-          return prev.concat(data.content as Array<IShowcasePostCard>)
+          return getUniqueArray(
+            prev.concat(data.content as Array<IShowcasePostCard>),
+            'showcaseId',
+          )
         })
       } else {
         setPostList((prev) => {
-          return prev.concat(data.content as Array<IDefaultPostCard>)
+          return getUniqueArray(
+            prev.concat(data.content as Array<IDefaultPostCard>),
+            'recruit_id',
+          )
         })
       }
 
@@ -240,6 +245,61 @@ const MyInterests = () => {
     page,
   })
 
+  const InterestContentsCallback = React.useCallback(() => {
+    if (
+      (type !== 'SHOWCASE' && postList.length) ||
+      (type === 'SHOWCASE' && showcaseList.length)
+    ) {
+      return (
+        <InterestsContents
+          postList={postList}
+          showcaseList={showcaseList}
+          spinner={spinner}
+          target={target}
+          removeAll={openModal}
+          isDeleting={isDeleting}
+          type={type}
+          setPostList={setPostList}
+          setShowcaseList={setShowcaseList}
+        />
+      )
+    } else if (
+      isLoading &&
+      ((type !== 'SHOWCASE' && !postList.length) ||
+        (type === 'SHOWCASE' && !showcaseList.length))
+    ) {
+      return (
+        <Box
+          width={1}
+          height={1}
+          sx={{
+            backgroundColor: ['transparent', 'background.secondary'],
+            borderRadius: '1rem',
+          }}
+          position={'relative'}
+        >
+          <CircularProgress sx={centeredPosition} />
+        </Box>
+      )
+    } else {
+      return (
+        <Box
+          width={1}
+          height={1}
+          sx={{
+            backgroundColor: ['transparent', 'background.secondary'],
+            borderRadius: '1rem',
+          }}
+          position={'relative'}
+        >
+          <Typography sx={centeredPosition} variant="Caption">
+            관심있다고 표시한 페이지가 없습니다.
+          </Typography>
+        </Box>
+      )
+    }
+  }, [isLoading, postList, showcaseList, type])
+
   return (
     <>
       <AlertModal
@@ -255,38 +315,7 @@ const MyInterests = () => {
         height={1}
       >
         <TypeTabs type={type} handleChange={handleTabChange} />
-
-        {postList.length ? (
-          <InterestsContents
-            postList={postList}
-            showcaseList={showcaseList}
-            spinner={spinner}
-            target={target}
-            removeAll={openModal}
-            isDeleting={isDeleting}
-            type={type}
-            setPostList={setPostList}
-            setShowcaseList={setShowcaseList}
-          />
-        ) : (
-          <Box
-            width={1}
-            height={1}
-            sx={{
-              backgroundColor: isPc ? 'background.secondary' : 'transparent',
-              borderRadius: '1rem',
-            }}
-            position={'relative'}
-          >
-            {isLoading ? (
-              <CircularProgress sx={centeredPosition} />
-            ) : (
-              <Typography sx={centeredPosition} variant="Caption">
-                관심있다고 표시한 페이지가 없습니다.
-              </Typography>
-            )}
-          </Box>
-        )}
+        <InterestContentsCallback />
       </Stack>
     </>
   )

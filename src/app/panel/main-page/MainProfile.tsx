@@ -9,7 +9,7 @@ const MainProfile = () => {
   const axiosWithAuth = useAxiosWithAuth()
   const { isLogin } = useAuthStore()
   const { data } = useSWR<IUserProfile>(
-    isLogin ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile` : undefined,
+    isLogin ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/profile` : undefined,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
   const [isClient, setIsClient] = useState(false)
@@ -44,7 +44,18 @@ const MainProfile = () => {
             </Link>
           </>
         ) : (
-          <Typography variant={'Body1'}>로그인이 필요합니다</Typography>
+          <Link style={{ textDecoration: 'none' }} href={'/login'}>
+            <Typography
+              variant={'Body1'}
+              sx={{
+                '&:hover': {
+                  textDecoration: 'underline',
+                },
+              }}
+            >
+              로그인이 필요합니다
+            </Typography>
+          </Link>
         )}
         {/* 업적은 2step이라 주석처리 */}
         {/* <Stack direction="row">

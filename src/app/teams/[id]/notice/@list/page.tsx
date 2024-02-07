@@ -11,6 +11,8 @@ import {
 import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
 import NoticeList from './panel/NoticeList'
+import Tutorial from '@/components/Tutorial'
+import TeamAnnounceTutorial from '@/components/tutorialContent/TeamAnnounceTutorial'
 
 const TeamNotice = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
@@ -29,9 +31,12 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
           alignItems={'center'}
           justifyContent={'space-between'}
         >
-          <Typography variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}>
-            공지사항
-          </Typography>
+          <Stack direction={'row'} display={'flex'} alignItems={'center'}>
+            <Typography variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}>
+              공지사항
+            </Typography>
+            <Tutorial content={<TeamAnnounceTutorial />} />
+          </Stack>
           <IconButtonContainer
             setKeyword={setKeyword}
             onClickPlus={() => {

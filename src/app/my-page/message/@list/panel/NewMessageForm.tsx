@@ -2,10 +2,9 @@ import { FormEvent, useCallback, useState } from 'react'
 import { Box, InputBase } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import useModal from '@/hook/useModal'
-import useToast from '@/hook/useToast'
 import { IMessageListData, IMessageTarget } from '@/types/IMessage'
 import CuTextModal from '@/components/CuTextModal'
-import CuToast from '@/components/CuToast'
+import useToast from '@/states/useToast'
 import * as style from './NewMessageForm.style'
 
 interface INewMessageFormProps {
@@ -27,31 +26,23 @@ const NewMessageForm = ({
   const [content, setContent] = useState('')
   const axiosInstance = useAxiosWithAuth()
   const { isOpen: modalOpen, openModal, closeModal } = useModal()
-  const {
-    isOpen: toastOpen,
-    openToast,
-    closeToast,
-    setToastMessage,
-    toastMessage,
-  } = useToast()
-
-  const setToast = useCallback(
-    (message: string) => {
-      setToastMessage(message)
-      openToast()
-    },
-    [openToast, setToastMessage],
-  )
+  const { openToast } = useToast()
+  const [isMessageSending, setIsMessageSending] = useState(false)
 
   const messageSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    // TODO : state 대신 formdata 사용할 수 있도록 수정
     e.preventDefault()
     if (!content) {
-      setToast('내용을 입력하세요.')
+      openToast({
+        severity: 'error',
+        message: '내용을 입력해주세요.',
+      })
       return
     }
     if (!userInfo) {
-      setToast('받는 이를 선택하세요.')
+      openToast({
+        severity: 'error',
+        message: '쪽지를 보낼 상대를 선택해주세요.',
+      })
       return
     }
     // confirm modal
@@ -61,6 +52,7 @@ const NewMessageForm = ({
   const sendMessage = useCallback(
     async (targetId?: number, content?: string) => {
       try {
+        setIsMessageSending(true)
         if (!targetId || !content) throw new Error()
         const reqBody: IMessageData = {
           targetId: targetId,
@@ -72,9 +64,16 @@ const NewMessageForm = ({
         )
         setContent('')
         setMessageData(response.data)
+        closeModal() // close confirm modal
         handleClose()
       } catch (error) {
-        setToast('쪽지 전송에 실패했어요. 다시 시도해주세요.')
+        closeModal() // close confirm modal
+        openToast({
+          severity: 'error',
+          message: '쪽지 보내기에 실패했습니다. 다시 시도해주세요.',
+        })
+      } finally {
+        setIsMessageSending(false)
       }
     },
     [],
@@ -102,6 +101,7 @@ const NewMessageForm = ({
           onClick: () => {
             sendMessage(userInfo?.targetId, content)
           },
+          isLoading: isMessageSending,
         }}
         textButton={{
           text: '취소',
@@ -111,9 +111,6 @@ const NewMessageForm = ({
         }}
         content={`${userInfo?.targetNickname}에게 쪽지를 보내시겠습니까?`}
       />
-      <CuToast open={toastOpen} onClose={closeToast} severity={'error'}>
-        {toastMessage}
-      </CuToast>
     </>
   )
 }

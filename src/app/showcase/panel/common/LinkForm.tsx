@@ -1,40 +1,28 @@
-import { IconButton, Stack, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import { IconButton, Stack, TextField } from '@mui/material'
+import React from 'react'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import LinkIcon from '@/icons/LinkIcon'
 import * as Style from './SkillInput.style'
 import PlusIcon from '@/icons/PlusIcon'
 import { ILinkInformation } from '@/types/IShowcaseEdit'
+import { TrashIcon } from '@/icons'
 
 interface ILinkFormProps {
   links: ILinkInformation[]
-  addLink: (linkName: string, linkUrl: string) => void
-  isValid: boolean
-  setIsValid: (isValid: boolean) => void
-  changeLinkName: (id: number, content: string) => void
-  changeUrl: (id: number, content: string) => void
+  addLink: (linkName: string, linkUrl: string, id: string) => void
+  deleteLink: (id: string) => void
+  changeLinkName: (id: string, content: string) => void
+  changeUrl: (id: string, content: string) => void
 }
 
 const LinkForm = ({
   links,
   addLink,
-  // isValid,
-  setIsValid,
+  deleteLink,
   changeLinkName,
   changeUrl,
 }: ILinkFormProps) => {
-  const [checker, setChecker] = useState<boolean>(true)
-  const validateUrl = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const completedUrl = e.target.value
-    const regex =
-      // eslint-disable-next-line no-useless-escape
-      /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#?&//=]*)/ // eslint-disable-next-line no-useless-escape
-    setChecker(regex.test(completedUrl))
-    setIsValid(checker)
-  }
-
+  console.log('컨버팅 이전 ', links)
   return (
     <Stack width={'100%'} spacing={'0.5rem'}>
       <Stack
@@ -45,12 +33,12 @@ const LinkForm = ({
       >
         <LabelWithIcon
           svgIcon={<LinkIcon sx={Style.IconStyle} />}
-          message={'링크'}
+          message={'링크모음'}
         />
         <IconButton
           onClick={() => {
             if (links.length >= 5) return
-            addLink('', '')
+            addLink('', '', crypto.randomUUID())
           }}
         >
           <PlusIcon sx={Style.IconStyle} />
@@ -59,7 +47,6 @@ const LinkForm = ({
       {links.map((link, index) => (
         <Stack key={index} direction={'row'} spacing={'0.5rem'}>
           <TextField
-            key={index}
             name="name"
             placeholder={'링크 이름'}
             sx={{ width: '12.8rem', height: '2rem' }}
@@ -73,15 +60,16 @@ const LinkForm = ({
             autoComplete="off"
             value={link.link}
             onChange={(e) => changeUrl(link.id, e.target.value)}
-            onBlur={(e) => validateUrl(e)}
           />
+          <IconButton
+            onClick={() => {
+              deleteLink(link.id)
+            }}
+          >
+            <TrashIcon sx={Style.IconStyle} />
+          </IconButton>
         </Stack>
       ))}
-      {!checker && (
-        <Typography color="error">
-          유효하지 않는 URL이 포함되어 있습니다.
-        </Typography>
-      )}
     </Stack>
   )
 }

@@ -10,17 +10,23 @@ import ClearIcon from '@mui/icons-material/Clear'
 interface ISettingTeamLogo {
   teamLogoImage: string
   setValue: UseFormSetValue<ISetupTeam>
+  setIsLogoEdit: (isLogoEdit: boolean) => void
 }
 
-const SettingTeamLogo = ({ teamLogoImage, setValue }: ISettingTeamLogo) => {
+const SettingTeamLogo = ({
+  teamLogoImage,
+  setValue,
+  setIsLogoEdit,
+}: ISettingTeamLogo) => {
   const { isOpen, openModal, closeModal } = useModal()
   const [preview, setPreview] = useState<string>(
-    teamLogoImage.length !== 0 ? teamLogoImage : '/images/teamLogo.png',
+    teamLogoImage.length !== 0 ? teamLogoImage : '/icons/ios/128.png',
   )
 
   const deleteImage = () => {
-    setPreview('/images/teamLogo.png')
-    setValue('teamImage', '')
+    setPreview('/icons/ios/128.png')
+    setValue('teamImage', null)
+    setIsLogoEdit(true)
     closeModal()
   }
 
@@ -33,6 +39,7 @@ const SettingTeamLogo = ({ teamLogoImage, setValue }: ISettingTeamLogo) => {
       reader.onload = () => {
         setPreview(reader.result as string)
         setValue('teamImage', reader.result as string)
+        setIsLogoEdit(true)
       }
       reader.readAsDataURL(file!)
     }
@@ -40,12 +47,7 @@ const SettingTeamLogo = ({ teamLogoImage, setValue }: ISettingTeamLogo) => {
 
   return (
     <>
-      <Stack
-        direction={'row'}
-        alignItems={'center'}
-        spacing={'0.5rem'}
-        p={'0.5rem'}
-      >
+      <Stack direction={'row'} alignItems={'center'} spacing={'0.5rem'}>
         <Box
           width={['100%', '10rem']}
           height={['100%', '10rem']}
@@ -62,7 +64,7 @@ const SettingTeamLogo = ({ teamLogoImage, setValue }: ISettingTeamLogo) => {
               variant="rounded"
               src={preview}
               alt="teamLogo"
-              sx={{ width: '10rem', height: '10rem' }}
+              sx={{ width: '8rem', height: '8rem' }}
             />
             <input
               type="file"

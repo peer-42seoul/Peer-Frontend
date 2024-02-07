@@ -7,14 +7,15 @@
 //   content: string
 // }
 export interface IMember {
-  nickname: string
+  id: string
+  nickname?: string
   isLeader?: boolean
-  role: string
-  image: string
+  role?: string
+  image?: string
 }
 
 export interface ILinkInformation {
-  id: number
+  id: string
   name: string
   link: string
 }
@@ -45,6 +46,7 @@ export interface IShowcaseEditorFields {
 
 // /[id] 디렉토리 interface
 export interface IShowcaseViewerFields {
+  author: boolean
   name: string
   skills: ISkill[]
   start: string

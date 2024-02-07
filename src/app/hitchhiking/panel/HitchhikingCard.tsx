@@ -12,7 +12,7 @@ import {
   Chip,
   Stack,
   CircularProgress,
-  CardActionArea,
+  Box,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -23,6 +23,7 @@ import * as style from './HitchhikingCard.style'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
 import useToast from '@/states/useToast'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
 
 interface IHitchhikingCardBack {
   content: string
@@ -111,6 +112,7 @@ const HitchhikingCardBack = ({
         backfaceVisibility: 'hidden',
         padding: '1rem',
       }}
+      key={crypto.randomUUID()}
     >
       {data ? (
         <Stack
@@ -121,13 +123,13 @@ const HitchhikingCardBack = ({
           width={'100%'}
           spacing={'1rem'}
         >
-          <Stack
-            direction="row"
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            sx={style.cardHeaderStyleBase}
-          >
-            <CardContent sx={{ padding: 0 }} onClick={onClick}>
+          <CardContent sx={{ padding: 0 }} onClick={onClick}>
+            <Stack
+              direction="row"
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              sx={style.cardHeaderStyleBase}
+            >
               <Chip
                 label={
                   <Typography variant="Tag" color={'green.normal'}>
@@ -136,10 +138,7 @@ const HitchhikingCardBack = ({
                 }
                 sx={style.cardChipStyleBase}
               />
-            </CardContent>
-            {/* TODO : 작성자 id 가져오기 */}
-            <CardActionArea sx={{ padding: 0, width: 'auto' }}>
-              <DropdownMenu>
+              <DropdownMenu rotateOn>
                 <ShareMenuItem
                   url={`${currentDomain}/recruit/${postId}`}
                   title={title}
@@ -148,8 +147,8 @@ const HitchhikingCardBack = ({
                 />
                 <ReportMenuItem targetId={authorId} />
               </DropdownMenu>
-            </CardActionArea>
-          </Stack>
+            </Stack>
+          </CardContent>
           <CardHeader
             title={
               <Typography
@@ -173,23 +172,33 @@ const HitchhikingCardBack = ({
             }}
             onClick={onClick}
           >
-            <Typography
-              variant="Caption"
-              color={'text.alternative'}
-              sx={{
-                ...style.cardContentStyleBase,
-                WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
-              }}
-            >
-              {data.content.split('\n').map((line) => {
-                return (
-                  <>
-                    {line}
-                    <br />
-                  </>
-                )
-              })}
-            </Typography>
+            <Box width={1}>
+              <DynamicToastViewer
+                initialValue={data.content}
+                typographySx={{
+                  fontSize: '0.75rem',
+                  color: 'text.alternative',
+                  margin: 0,
+                  lineHeight: '1.125rem',
+                  marginBlockStart: '0',
+                  marginBlockEnd: '0',
+                  marginTop: 0,
+                }}
+                sx={{
+                  ...style.cardContentStyleBase,
+                  WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
+                  '& .toastui-editor-contents > h1:first-of-type': {
+                    marginTop: 0,
+                  },
+                  '.toastui-editor-contents h1': {
+                    paddingBottom: 0,
+                  },
+                  '.toastui-editor-contents h2': {
+                    paddingBottom: 0,
+                  },
+                }}
+              />
+            </Box>
           </CardContent>
           <CardContent sx={{ padding: 0 }} onClick={onClick}>
             <Members
@@ -263,8 +272,11 @@ const HitchhikingCard = ({
     setCurrentDomain(window.location.origin)
 
     // 카드 너비 설정
+    // calc(90svh * 328 / 800)
     setCardWidth(
-      isPc ? (window.innerHeight * 0.8 * 328) / 800 : window.innerWidth * 0.9,
+      isPc
+        ? (window.innerHeight * 0.8 * 328) / 800
+        : (window.innerHeight * 328) / 800,
     )
     const handleResize = () => {
       const newCardWidth = isPc

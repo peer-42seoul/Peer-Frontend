@@ -1,14 +1,12 @@
 'use client'
-import { Stack, Box, Typography } from '@mui/material'
+import { Stack, Box, Button } from '@mui/material'
 import React from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import ImageIcon from '@/icons/ImageIcon'
 import ImageUploadButton from '@/components/ImageUploadButton'
 import * as Style from './SkillInput.style'
-import useMedia from '@/hook/useMedia'
 import Image from 'next/image'
 
-/* eslint-disable no-unused-vars */
 const ImageInput = ({
   previewImage,
   setPreviewImage, // setImage,
@@ -19,48 +17,54 @@ const ImageInput = ({
   image: File[]
   setImage: (image: File[]) => void
 }) => {
-  const { isPc } = useMedia()
-
   return (
     <Stack direction={'column'} spacing={'0.5rem'} alignItems={'flex-start'}>
       <LabelWithIcon
         svgIcon={<ImageIcon sx={Style.IconStyle} />}
         message={'쇼케이스 대표 이미지'}
       />
-      <ImageUploadButton
-        setImage={(image: File[]) => {
-          setImage(image)
-        }}
-        setPreviewImage={setPreviewImage}
-      >
-        {previewImage ? (
-          <Image src={previewImage} alt="쇼케이스 대표 이미지" fill={true} />
-        ) : (
+      <Stack sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+        {previewImage && (
           <Box
-            sx={{
-              ...Style.ShowcaseImageStyle(isPc),
+            style={{
               position: 'relative',
-              backgroundColor: 'background.tertiary',
+              maxWidth: '26rem',
+              width: '100%',
+              height: 300,
+              margin: 0,
             }}
           >
-            <Typography
-              variant={'Body1'}
-              sx={{
-                color: 'text.normal',
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 'auto',
-              }}
-            >
-              클릭해서 이미지를
-              <br />
-              업로드하세요
-            </Typography>
+            <Image
+              src={previewImage}
+              alt="쇼케이스 대표 이미지"
+              layout="fill"
+            />
           </Box>
         )}
-      </ImageUploadButton>
+        <ImageUploadButton
+          setImage={(image: File[]) => {
+            setImage(image)
+          }}
+          setPreviewImage={setPreviewImage}
+          sx={{ color: 'primary' }}
+        >
+          <Stack
+            direction={'column'}
+            spacing={'0.5rem'}
+            sx={{ width: ['100%', '26rem'] }}
+          >
+            <Button
+              component="div"
+              variant="outlined"
+              // startIcon={<Icon.PlusIcon color={'primary'} />}
+              sx={{ width: ['100%', '26rem'] }}
+              color={'primary'}
+            >
+              대표이미지 등록
+            </Button>
+          </Stack>
+        </ImageUploadButton>
+      </Stack>
     </Stack>
   )
 }

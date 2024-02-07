@@ -3,13 +3,11 @@
 import useTeamPageState from '@/states/useTeamPageState'
 import { EditPage, EditBox } from '@/components/board/EditPanel'
 import NoticeEditForm from './panel/NoticeEditForm'
-import NoticeEditButton from './panel/NoticeEditButton'
-import useMedia from '@/hook/useMedia'
 
 const NoticeEdit = ({ params }: { params: { id: string } }) => {
   const { postId, setNotice } = useTeamPageState()
-  const { isPc } = useMedia()
   const { id } = params
+  const type = postId ? 'edit' : 'new'
   const handleGoBack = () => {
     if (postId) {
       setNotice('DETAIL', postId)
@@ -19,13 +17,17 @@ const NoticeEdit = ({ params }: { params: { id: string } }) => {
   }
   return (
     <EditPage
-      type={postId ? 'edit' : 'new'}
+      type={type}
       handleGoBack={handleGoBack}
       title={postId ? '공지사항 수정' : '공지사항 작성'}
     >
       <EditBox>
-        <NoticeEditForm teamId={id} />
-        {isPc && <NoticeEditButton />}
+        <NoticeEditForm
+          teamId={id}
+          postId={postId}
+          type={type}
+          handleGoBack={handleGoBack}
+        />
       </EditBox>
     </EditPage>
   )

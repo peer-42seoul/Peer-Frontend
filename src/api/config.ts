@@ -7,7 +7,7 @@ const useAxiosWithAuth = () => {
   const router = useRouter()
 
   const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: process.env.NEXT_PUBLIC_CSR_API,
   })
 
   //무한 요청 방지 flag

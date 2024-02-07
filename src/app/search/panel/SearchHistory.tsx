@@ -56,7 +56,7 @@ export default function SearchHistory({
           최근 검색어
         </Typography>
         <Stack mx={'1rem'}>
-          {searchKeywords.length &&
+          {searchKeywords.length !== 0 &&
             searchKeywords.map((keyword, index) => (
               <ListItem
                 sx={{

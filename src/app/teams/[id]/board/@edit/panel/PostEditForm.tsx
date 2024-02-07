@@ -1,17 +1,18 @@
 'use client'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
+import { Editor } from '@toast-ui/editor'
 import useAxiosWithAuth from '@/api/config'
 import useTeamPageState from '@/states/useTeamPageState'
-import useEditorState from '@/states/useEditorState'
+import useToast from '@/states/useToast'
 import { EditForm } from '@/components/board/EditPanel'
+import { IBoardEditFormType } from '@/types/TeamBoardTypes'
 
-interface IPostEditFormProps {
-  boardId: number
-  // teamId: string
-  postId?: string
-}
-
-const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
+const PostEditForm = ({
+  postId,
+  boardId,
+  type,
+  handleGoBack,
+}: IBoardEditFormType) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { setBoard } = useTeamPageState()
   const [previousData, setPreviousData] = useState({
@@ -19,7 +20,9 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
     content: '',
   })
   const [isLoading, setIsLoading] = useState(false)
-  const { editor } = useEditorState()
+  const { openToast } = useToast()
+  const titleRef = useRef<HTMLInputElement | null>(null)
+  const editorRef = useRef<Editor | null>(null)
   useEffect(() => {
     if (postId) {
       setIsLoading(true)
@@ -43,52 +46,63 @@ const PostEditForm = ({ postId, boardId }: IPostEditFormProps) => {
   }, [postId])
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!editor) return
-    const formData = new FormData(event.currentTarget)
-    console.log(formData.keys())
+    if (!editorRef.current || !titleRef.current) return
     const form = {
-      title: formData.get('post-title') as string,
-      content: editor.getMarkdown(),
+      title: titleRef.current.value,
+      content: editorRef.current.getMarkdown(),
+      image: null,
     }
-    if (!form.title) {
-      alert('제목을 입력해주세요.')
+    if (!form.title || !form.content) {
+      openToast({
+        severity: 'error',
+        message: '제목과 내용을 입력해주세요.',
+      })
       return
     }
     if (postId) {
       // 글 수정
       axiosWithAuth
-        .put(`/api/v1/team/board/post/${postId}`, form)
+        .put(`/api/v1/team/post/${postId}`, form)
         .then(() => {
           alert('게시글을 수정했습니다.')
-          setBoard('DETAIL', boardId, parseInt(postId))
+          setBoard('DETAIL', boardId, postId)
         })
         .catch(() => {
-          alert('게시글 수정에 실패했습니다.')
+          openToast({
+            severity: 'error',
+            message: '게시글 수정에 실패했습니다.',
+          })
+        })
+    } else {
+      // 글 작성
+      axiosWithAuth
+        .post(`/api/v1/team-page/posts/create`, {
+          ...form,
+          boardId,
+          image: null,
+        })
+        .then((res) => {
+          alert('게시글이 등록되었습니다.')
+          setBoard('DETAIL', res.data.boardId, res.data.postId)
+        })
+        .catch(() => {
+          openToast({
+            severity: 'error',
+            message: '게시글 작성에 실패했습니다.',
+          })
         })
     }
-    // 글 작성
-    axiosWithAuth
-      .post(`/api/v1/team-page/posts/create`, {
-        ...form,
-        boardId,
-        image: null,
-      })
-      .then((res) => {
-        alert('게시글이 등록되었습니다.')
-        setBoard('DETAIL', boardId, res.data.postId)
-      })
-      .catch(() => {
-        alert('게시글 작성에 실패했습니다.')
-      })
   }
 
   return (
     <EditForm
-      formId={'post-edit-form'}
       isLoading={isLoading}
       onSubmit={handleSubmit}
-      initialTitle={previousData.title || ''}
-      initialContent={previousData.content || ''}
+      titleRef={titleRef}
+      editorRef={editorRef}
+      initialData={previousData}
+      type={type}
+      handleGoBack={handleGoBack}
     />
   )
 }

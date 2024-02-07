@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import React from 'react'
 import { SxProps } from '@mui/system'
 import { Theme } from '@mui/material/styles'
@@ -20,7 +20,9 @@ const ApplyDefaultButton = ({
       sx={sx}
       disabled={disabled}
     >
-      지원하기
+      <Typography variant={'Body1'} color={'white'}>
+        지원하기
+      </Typography>
     </Button>
   )
 }

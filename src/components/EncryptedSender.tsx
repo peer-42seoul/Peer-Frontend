@@ -18,7 +18,7 @@ const EncryptedSender = ({
 }: {
   children: React.ReactNode
   payload: any
-  setData?: (data: { code: string }) => void
+  setData?: (data: any) => void
   apiType: EApiType
   setPayload: (payload: any) => void
   setIsLoading?: (isLoading: boolean) => void
@@ -36,7 +36,7 @@ const EncryptedSender = ({
 
     const { initSecret, initCode }: { initSecret: string; initCode: string } =
       await axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/init`)
+        .get(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/main/init`)
         .then((res) => {
           return {
             initSecret: res.data.secret,
@@ -47,7 +47,7 @@ const EncryptedSender = ({
     const initToken = await getToken({ apiType: apiType }, initSecret)
 
     const { verifyCode, verifySeed } = await axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/get`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/main/get`, {
         code: initCode,
         token: initToken,
       })
@@ -63,7 +63,7 @@ const EncryptedSender = ({
     if (!needToken) {
       await axios
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/main/receive`,
           {
             code: verifyCode,
             token: payloadToken,
@@ -71,12 +71,12 @@ const EncryptedSender = ({
           axiosOption,
         )
         .then((res) => {
-          if (setData) setData(res.data)
+          if (setData) setData(res.data ?? null)
         })
     } else {
       await axiosWithAuth
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/main/receive`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/main/receive`,
           {
             code: verifyCode,
             token: payloadToken,
@@ -84,7 +84,7 @@ const EncryptedSender = ({
           axiosOption,
         )
         .then((res) => {
-          if (setData) setData(res.data)
+          if (setData) setData(res.data ?? null)
         })
     }
   }
@@ -100,8 +100,9 @@ const EncryptedSender = ({
       if (setIsLoading) setIsLoading(false)
     } catch (e: any) {
       console.log(e)
-      if (onError)
+      if (onError) {
         onError(e?.response?.data?.message ?? '알 수 없는 오류가 발생했습니다.')
+      }
       if (setIsLoading) setIsLoading(false)
       setPayload(null)
     }
@@ -109,6 +110,11 @@ const EncryptedSender = ({
 
   useEffect(() => {
     apiSend()
+
+    return () => {
+      setPayload(null)
+      if (setData) setData(null)
+    }
   }, [apiSend])
 
   return <>{children}</>

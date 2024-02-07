@@ -1,17 +1,29 @@
 import TeamTypeCard from '@/app/team-list/panel/TeamTypeCard'
 import { ITeam } from '@/app/teams/types/types'
-import { Button, Card, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography, Card } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
 const RedirectRecruitPage = ({ id, data }: { id: string; data: ITeam }) => {
   const router = useRouter()
   return (
-    <Card sx={{ p: '1.5rem', borderRadius: '1rem' }}>
-      <Stack direction={'row'} justifyContent={'space-between'}>
+    <Card
+      sx={{
+        p: '1.5rem',
+        borderRadius: '1rem',
+        backgroundColor: 'background.secondary',
+        gap: '0.5rem',
+        backgroundImage: 'none',
+      }}
+    >
+      <Stack
+        direction={'row'}
+        justifyContent={'space-between'}
+        alignItems={'center'}
+      >
         <Typography>모집글</Typography>
         <Button
           variant="outlined"
-          onClick={() => router.push(`/recruit/${id}`)}
+          onClick={() => router.push(`/recruit/${id}?type=${data.team.type}`)}
         >
           모집 글 보기
         </Button>

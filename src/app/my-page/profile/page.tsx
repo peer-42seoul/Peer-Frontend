@@ -31,7 +31,7 @@ const MyProfile = () => {
     isLoading,
     mutate,
   } = useSWR<IUserProfile>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/profile`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
 
@@ -59,8 +59,6 @@ const MyProfile = () => {
       newModalOpen.skills = true
     } else if (modalType === 'links') {
       newModalOpen.links = true
-    } else if (modalType === '') {
-      console.log('API GET request!')
     }
 
     setModalOpen(newModalOpen)
