@@ -94,6 +94,12 @@ const ToastEditor = ({
           height: ['fit-content', undefined],
           flexWrap: 'wrap',
         },
+        '& .toastui-editor-popup': {
+          position: 'absolute',
+          top: ' 0 !important',
+          right: 0,
+          left: 'auto !important',
+        },
       }}
       ref={editorElementRef}
     />
