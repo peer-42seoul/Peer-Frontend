@@ -6,6 +6,7 @@ import * as cardStyle from './ShowcaseCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
 import { ICardData } from '@/app/showcase/panel/types'
+import { BetaIcon } from '@/components/BetaBadge'
 
 const CardContainer = ({
   cardList,
@@ -30,13 +31,16 @@ const CardContainer = ({
       spacing={'2rem'}
     >
       <Stack
+        direction={'row'}
         justifyContent={'center'}
         alignItems={'center'}
+        spacing={'0.25rem'}
         sx={containerStyle.gnbContainerStyle}
       >
         <Typography component={'h4'} sx={containerStyle.gnbTypographyStyle}>
           쇼케이스
         </Typography>
+        <BetaIcon />
       </Stack>
       <Stack
         justifyContent={'center'}
