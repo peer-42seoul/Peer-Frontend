@@ -63,10 +63,6 @@ const SkillAutocomplete = ({
 
   useEffect(() => {
     if (timeOut === 0 && text !== '' && isLoading) {
-      if (text.length < 2) {
-        setTimeOut(TIMEOUT)
-        return
-      }
       axiosWithAuth
         .get(
           `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/skill/search?keyword=${text}`,
@@ -81,9 +77,12 @@ const SkillAutocomplete = ({
     }
   }, [timeOut])
 
-  const handleTextFieldChange = (e: any) => {
-    setText(e.target.value)
-    if (e.target.value === '') {
+  const handleTextFieldChange = (
+    event: React.SyntheticEvent,
+    value: string,
+  ) => {
+    setText(value)
+    if (value) {
       setIsLoading(false)
       return
     } else if (isLoading === false) {
@@ -99,6 +98,7 @@ const SkillAutocomplete = ({
         tagList.find((skill) => newValue === skill.name) as ISkill,
       )
     })
+    console.log(newSkillList)
     setSkillList(newSkillList)
     if (trigger) trigger('tagList')
   }
@@ -114,16 +114,17 @@ const SkillAutocomplete = ({
         }}
         disableClearable
         loading={isLoading}
-        value={skillList.map((skill) => skill.name) as Array<string>}
+        value={skillList.map((skill) => skill.name)}
         inputValue={text}
         options={tagList.map((tag) => tag.name)}
         onChange={handleInput}
+        onInputChange={handleTextFieldChange}
         renderTags={() => <></>}
         renderInput={(params) => (
           <TextField
             {...params}
             disabled={skillList?.length >= 10}
-            onChange={handleTextFieldChange}
+            // onChange={handleTextFieldChange}
             size="small"
             placeholder={
               placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
