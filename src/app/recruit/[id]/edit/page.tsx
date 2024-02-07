@@ -28,6 +28,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data, isLoading, error } = useSWR<{
     defaultValues: IRecruitWriteField
     isAnswered: boolean
+    content: string
   }>(`/api/v1/recruit/edit/${params.id}`, (url: string) =>
     axiosWithAuth
       .get(url)
@@ -52,6 +53,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           max: data.totalNumber ? `${data.totalNumber}` : `2`,
         },
         isAnswered: data.isAnswered,
+        content: data.content,
       })),
   )
 
@@ -129,6 +131,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       submitHandler={handleSubmit}
       isAnswered={data.isAnswered}
       isSubmitting={isSubmitting}
+      content={data.content}
     />
   )
 }
