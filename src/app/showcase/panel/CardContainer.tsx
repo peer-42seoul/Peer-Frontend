@@ -20,7 +20,7 @@ const CardContainer = ({
   const { isPc } = useMedia()
   return (
     <Stack
-      justifyContent={'flex-start'}
+      justifyContent={'center'}
       alignItems={'center'}
       sx={
         isPc
