@@ -199,6 +199,13 @@ const Announce = () => {
   }
 
   const onSubmit = async (data: IAnnounceAllContent) => {
+    if (
+      editorRef.current?.getMarkdown()?.length &&
+      editorRef.current?.getMarkdown()?.length > 10000
+    ) {
+      alert('본문의 글이 너무 깁니다!')
+      return
+    }
     if (data.previewImage === '') {
       alert('이미지를 삽입해주세요')
       return
