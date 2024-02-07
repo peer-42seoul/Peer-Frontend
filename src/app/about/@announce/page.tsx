@@ -48,8 +48,9 @@ const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
     <CardActions
       sx={{
         boxShadow: 'none',
-        backgroundColor: 'background.tertiary',
+        backgroundColor: 'background.secondary',
         padding: '0.5rem',
+        borderRadius: '0.5rem',
       }}
     >
       <CardActionArea

@@ -40,7 +40,7 @@ const ContactPage = () => {
   return (
     <Card sx={{ padding: '2rem' }}>
       <Stack>
-        <Typography variant="Title1Emphasis">Contact us</Typography>
+        <Typography variant="Title1Emphasis">Contact Us</Typography>
       </Stack>
       <Stack my={'2rem'}>
         <Card
@@ -88,7 +88,17 @@ const ContactPage = () => {
                   type="text"
                   error={errors.firstName?.message ? true : false}
                   helperText={errors.firstName?.message}
-                  sx={{ width: '100%' }}
+                  sx={{
+                    width: '100%',
+                    '& input': {
+                      '&::placeholder': {
+                        color: 'white',
+                      },
+                    },
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#515169',
+                    },
+                  }}
                   {...register('firstName', {
                     required: '필수 입력 내용입니다.',
                     maxLength: 20,
@@ -107,7 +117,17 @@ const ContactPage = () => {
                   type="text"
                   error={errors.lastName?.message ? true : false}
                   helperText={errors.lastName?.message}
-                  sx={{ width: '100%' }}
+                  sx={{
+                    width: '100%',
+                    '& input': {
+                      '&::placeholder': {
+                        color: 'white',
+                      },
+                    },
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#515169',
+                    },
+                  }}
                   {...register('lastName', {
                     required: '필수 입력 내용입니다.',
                     maxLength: 10,
@@ -124,7 +144,17 @@ const ContactPage = () => {
                 autoComplete="off"
                 placeholder="이메일 주소"
                 variant="outlined"
-                sx={{ width: '100%' }}
+                sx={{
+                  width: '100%',
+                  '& input': {
+                    '&::placeholder': {
+                      color: 'white',
+                    },
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#515169',
+                  },
+                }}
                 type="email"
                 error={errors.email?.message ? true : false}
                 helperText={errors.email?.message}
@@ -141,7 +171,17 @@ const ContactPage = () => {
                   autoComplete="off"
                   placeholder="(선택사항) 조직명"
                   variant="outlined"
-                  sx={{ width: '100%' }}
+                  sx={{
+                    width: '100%',
+                    '& input': {
+                      '&::placeholder': {
+                        color: 'white',
+                      },
+                    },
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#515169',
+                    },
+                  }}
                   {...register('company', {
                     maxLength: 20,
                   })}
@@ -150,7 +190,17 @@ const ContactPage = () => {
                   autoComplete="off"
                   placeholder="(선택사항) 조직 웹사이트"
                   variant="outlined"
-                  sx={{ width: '100%' }}
+                  sx={{
+                    width: '100%',
+                    '& input': {
+                      '&::placeholder': {
+                        color: 'white',
+                      },
+                    },
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#515169',
+                    },
+                  }}
                   {...register('companySite', {
                     maxLength: 30,
                   })}
@@ -164,7 +214,17 @@ const ContactPage = () => {
                 autoComplete="off"
                 placeholder="문의사항을 기록해주세요."
                 variant="outlined"
-                sx={{ width: '100%' }}
+                sx={{
+                  width: '100%',
+                  '& input': {
+                    '&::placeholder': {
+                      color: 'white',
+                    },
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#515169',
+                  },
+                }}
                 {...register('text', {
                   required: '필수 입력 내용입니다.',
                   maxLength: 300,
