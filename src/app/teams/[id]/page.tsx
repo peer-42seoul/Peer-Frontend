@@ -15,10 +15,10 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
     <Stack spacing={'1.5rem'} width={'100%'}>
       <CuButton
         action={() => router.push('/team-list')}
-        message={'팀리스트로 돌아가기'}
+        message={'팀 리스트로 돌아가기'}
         TypographyProps={{
-          color: 'text.normal',
-          variant: 'Title3',
+          color: 'text.alternative',
+          variant: 'Caption',
         }}
         variant="text"
         style={{ width: 'fit-content' }}
