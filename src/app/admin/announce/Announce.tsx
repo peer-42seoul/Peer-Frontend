@@ -656,9 +656,6 @@ const Announce = () => {
               control={control}
               render={({ field: { onChange } }) => (
                 <DateTimePicker
-                  // value={dayjs(
-                  //   getValues('date') ?? new Date(Date.now() + 3600000),
-                  // )}
                   defaultValue={dayjs(
                     getValues('date') === null
                       ? new Date(Date.now() + 3600000)
