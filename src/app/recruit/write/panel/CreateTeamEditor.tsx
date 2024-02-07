@@ -256,7 +256,7 @@ const CreateTeamEditor = ({
                 <TextFieldWithLabel
                   {...field}
                   inputProps={{
-                    maxLength: 20,
+                    maxLength: 40,
                   }}
                   label_icon={
                     <Icon.EditIcon
@@ -284,8 +284,8 @@ const CreateTeamEditor = ({
               rules={{
                 required: '필수 입력 항목입니다.',
                 maxLength: {
-                  value: 20,
-                  message: '20자 이내로 입력해주세요.',
+                  value: 40,
+                  message: '40자 이내로 입력해주세요.',
                 },
                 minLength: {
                   value: 2,
@@ -321,7 +321,7 @@ const CreateTeamEditor = ({
                     </Typography>
                   }
                   inputProps={{
-                    maxLength: 20,
+                    maxLength: 40,
                   }}
                 />
               )}
@@ -330,7 +330,7 @@ const CreateTeamEditor = ({
               rules={{
                 required: '필수 입력 항목입니다.',
                 maxLength: {
-                  value: 20,
+                  value: 40,
                   message: '20자 이내로 입력해주세요.',
                 },
                 minLength: {
@@ -560,7 +560,8 @@ const CreateTeamEditor = ({
                 />
               }
             >
-              {(completedInterview || defaultValues.interviewList.length) && (
+              {(completedInterview ||
+                defaultValues.interviewList.length > 0) && (
                 <Typography
                   variant="Caption"
                   color={'primary'}
@@ -591,7 +592,7 @@ const CreateTeamEditor = ({
                 }
               >
                 인터뷰{' '}
-                {completedInterview || defaultValues.interviewList.length
+                {completedInterview || defaultValues.interviewList.length > 0
                   ? '수정하기 '
                   : '추가'}
               </Button>

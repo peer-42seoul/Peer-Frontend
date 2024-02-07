@@ -46,7 +46,12 @@ const ShowcaseCardBack = ({
 }) => {
   const router = useRouter()
   const { isPc } = useMedia()
-  const currentPageUrl = window?.location.href
+  const [currentPageUrl, setCurrentPageUrl] = useState('')
+
+  //window is not defined 에러 방지
+  useEffect(() => {
+    setCurrentPageUrl(window.location.href)
+  }, [])
 
   const getLineCount = (originHeight: number, lineHeight: number) => {
     const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)

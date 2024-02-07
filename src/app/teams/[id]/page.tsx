@@ -30,6 +30,10 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
         height={'100%'}
         alignItems={'center'}
         justifyContent={'center'}
+        sx={{
+          borderRadius: '1rem',
+          backgroundColor: 'background.secondary',
+        }}
       >
         <ForbiddenDolphin message="메인 팀페이지는 준비중입니다!" />
       </Stack>

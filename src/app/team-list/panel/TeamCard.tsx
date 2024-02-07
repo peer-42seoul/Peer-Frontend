@@ -7,12 +7,20 @@ import { GeoIcon, TargetIcon, WifiIcon } from './Icons'
 
 const TeamType = (type: string) => {
   return (
-    <Box width={60} sx={{ margin: 0, backgroundColor: 'background.tertiary' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        margin: 0,
+        backgroundColor: 'background.tertiary',
+        borderRadius: '0.25rem',
+        padding: '0.25rem 0.5rem',
+        alignItems: 'center',
+      }}
+    >
       <Typography
         textAlign={'center'}
         color={type === 'STUDY' ? 'yellow.strong' : 'green.strong'}
         fontWeight={'bold'}
-        height={'fit-content'}
       >
         {type === 'STUDY' ? '스터디' : '프로젝트'}
       </Typography>
@@ -30,10 +38,13 @@ const ApproveChip = ({
   const isLeader = job === 'L' ? 'LEADER' : 'MEMBER'
   return (
     <Box
-      width={80}
       sx={{
         margin: 0,
         backgroundColor: isApproved ? 'text.alternative' : 'red.strong',
+        borderRadius: '0.25rem',
+        padding: '0.25rem 0.5rem',
+        height: 'fit-content',
+        alignItems: 'center',
       }}
     >
       <Typography textAlign={'center'} color={'white'} fontWeight={'bold'}>
@@ -57,6 +68,7 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
         boxShadow: 'none',
         borderRadius: '1.5rem',
         backgroundColor: 'background.secondary',
+        backgroundImage: 'none',
       }}
     >
       <CardActionArea
@@ -74,10 +86,10 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
           my={'0.5rem'}
           justifyContent={'space-between'}
         >
-          <Stack direction={'row'} spacing={'0.5rem'}>
+          <Stack direction={'row'} spacing={'0.5rem'} alignItems={'center'}>
             {TeamType(team.type)}
             <Typography
-              sx={isPc ? undefined : { height: '4rem', overflow: 'hidden' }}
+              sx={isPc ? undefined : { display: 'center', height: '4rem', overflow: 'hidden', alignItems: 'center' }}
             >
               {team.name}
             </Typography>

@@ -199,6 +199,13 @@ const Announce = () => {
   }
 
   const onSubmit = async (data: IAnnounceAllContent) => {
+    if (
+      editorRef.current?.getMarkdown()?.length &&
+      editorRef.current?.getMarkdown()?.length > 10000
+    ) {
+      alert('본문의 글이 너무 깁니다!')
+      return
+    }
     if (data.previewImage === '') {
       alert('이미지를 삽입해주세요')
       return
@@ -650,17 +657,20 @@ const Announce = () => {
                 {errors.announcementNoticeStatus.message}
               </Typography>
             )}
+            {/* 예약 날짜 선택 */}
             <Controller
               name="reservationDate"
               control={control}
               render={({ field: { onChange } }) => (
                 <DateTimePicker
-                  value={dayjs(
-                    getValues('date') ?? new Date(Date.now() + 3600000),
+                  defaultValue={dayjs(
+                    getValues('date') === null
+                      ? new Date(Date.now() + 3600000)
+                      : getValues('date'),
                   )}
                   onChange={onChange}
                   ampm={false}
-                  format="YYYY-MM-DD hh:mm"
+                  format="YYYY-MM-DD HH:mm"
                   disabled={
                     writeMode === 'view' || currentNoticeStatus !== '예약'
                   }

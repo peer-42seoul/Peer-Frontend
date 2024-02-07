@@ -575,6 +575,10 @@ const Banner = () => {
             disabled={writeMode === 'view'}
             {...register('announcementUrl', {
               required: 'url은 필수 입력 항목입니다.',
+              maxLength: {
+                value: 1000,
+                message: 'URL은 1000자를 초과할 수 없습니다.',
+              },
               pattern: {
                 value:
                   /^(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})$/,
@@ -644,7 +648,7 @@ const Banner = () => {
                   )}
                   onChange={onChange}
                   ampm={false}
-                  format="YYYY-MM-DD hh:mm"
+                  format="YYYY-MM-DD HH:mm"
                   disabled={
                     writeMode === 'view' || currentReservationType !== '예약'
                   }
