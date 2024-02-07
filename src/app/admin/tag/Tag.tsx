@@ -67,7 +67,7 @@ const Tag = () => {
         alert(tagId + '번 태그가 삭제되었습니다.')
         fetchTags().then((data) => setContent(data))
       })
-      .catch(() => {
+      .catch((err) => {
         alert('태그 삭제 실패 \n 사유: ' + err)
       })
   }
