@@ -4,7 +4,7 @@ export const cardContainerStyle: SxProps = {
   width: '100%',
   overflow: 'hidden',
   bottom: 0,
-  height: ['100svh', '100%'],
+  height: ['90svh', '100%'],
   position: ['static', 'absolute'],
   top: [0, '2.75rem'],
   left: 0,

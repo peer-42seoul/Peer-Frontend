@@ -178,6 +178,7 @@ const HitchhikingCardBack = ({
                 typographySx={{
                   fontSize: '0.75rem',
                   color: 'text.alternative',
+                  margin: 0,
                 }}
                 sx={{
                   ...style.cardContentStyleBase,
@@ -258,7 +259,7 @@ const HitchhikingCard = ({
     setCurrentDomain(window.location.origin)
 
     // 카드 너비 설정
-    // calc(100svh * 328 / 800)
+    // calc(90svh * 328 / 800)
     setCardWidth(
       isPc
         ? (window.innerHeight * 0.8 * 328) / 800

@@ -5,8 +5,8 @@ export const cardSize: SxProps = {
   maxHeight: '441px',
   maxWidth: '20.5rem',
   borderRadius: '0.75rem',
-  width: ['calc(100svh * 328 / 800)', 'calc(80svh * 328 /800)'],
-  height: ['calc(100svh * 441 / 800)', 'calc(80svh * 441 /800)'],
+  width: ['calc(90svh * 328 / 800)', 'calc(80svh * 328 /800)'],
+  height: ['calc(90svh * 441 / 800)', 'calc(80svh * 441 /800)'],
 }
 
 export const cardStyleBase: SxProps = {
@@ -33,7 +33,7 @@ export const cardChipStyleBase: SxProps = {
   padding: '0 6px',
   backgroundColor: 'background.tertiary',
   borderRadius: '2px',
-  height: 'calc(100svh * 24 / 800)',
+  height: 'calc(90svh * 24 / 800)',
   maxHeight: '1.5rem',
   '& .MuiChip-label': {
     padding: '0px',
