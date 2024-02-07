@@ -19,7 +19,7 @@ import RecruitPageTutorial from '@/components/tutorialContent/RecruitPageTutoria
 
 const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   const [isClient, setIsClient] = useState(false)
-  const [content, setCotent] = useState<IPostDetail | undefined>(undefined)
+  const [content, setCotent] = useState<IPostDetail | undefined>(data)
   const router = useRouter()
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
   const { isPc } = useMedia()

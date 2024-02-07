@@ -123,3 +123,18 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+/* 모든 웹킷(WebKit) 기반 브라우저에서 스크롤바 숨기기 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* 파이어폭스(Firefox)에서 스크롤바 숨기기 */
+* {
+  scrollbar-width: none;
+}
+
+/* IE 및 엣지(Edge)에서 스크롤바 숨기기 */
+* {
+  -ms-overflow-style: none;
+}

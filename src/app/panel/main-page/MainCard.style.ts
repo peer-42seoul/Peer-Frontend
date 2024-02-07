@@ -19,7 +19,7 @@ export const ChipStyle: SxProps = {
   top: 16,
   left: 16,
   borderRadius: 1,
-  backgroundColor: 'background.tertiary',
+  // backgroundColor: 'background.tertiary',
   color: 'text.normal',
   height: '1.25rem',
   '& .MuiChip-label': {

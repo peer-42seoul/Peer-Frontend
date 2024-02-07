@@ -88,6 +88,7 @@ export const profileCardMobileStyle: SxProps = {
 
 export const profileImageModalStyle: SxProps = {
   width: '80%',
+  height: '80%',
   position: 'absolute',
   top: '50%',
   left: '50%',

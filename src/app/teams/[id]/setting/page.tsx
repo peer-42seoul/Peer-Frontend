@@ -2,7 +2,7 @@
 
 import { isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
-import { Button, Card, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography, Card } from '@mui/material'
 import { useEffect, useState } from 'react'
 import SetupMember from './panel/SettingTeamMember'
 import ApplicantList from './panel/ApplicantList'
@@ -82,14 +82,7 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   if (isLoading) return <CuCircularProgress color="primary" />
 
   return (
-    <Stack
-      margin={4}
-      spacing={2}
-      direction={'column'}
-      borderRadius={2}
-      padding={2}
-      width={'93%'}
-    >
+    <Stack spacing={2} direction={'column'} borderRadius={2} padding={2}>
       <Typography>설정</Typography>
       {teams ? (
         <>
@@ -108,6 +101,8 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 borderRadius: '1rem',
                 p: '1.5rem',
                 height: '20rem',
+                backgroundColor: 'background.secondary',
+                backgroundImage: 'none',
               }}
             >
               <Stack

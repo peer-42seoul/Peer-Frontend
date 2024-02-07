@@ -25,7 +25,7 @@ const SettingTeamLogo = ({
 
   const deleteImage = () => {
     setPreview('/icons/ios/128.png')
-    setValue('teamImage', '')
+    setValue('teamImage', null)
     setIsLogoEdit(true)
     closeModal()
   }
@@ -47,12 +47,7 @@ const SettingTeamLogo = ({
 
   return (
     <>
-      <Stack
-        direction={'row'}
-        alignItems={'center'}
-        spacing={'0.5rem'}
-        p={'0.5rem'}
-      >
+      <Stack direction={'row'} alignItems={'center'} spacing={'0.5rem'}>
         <Box
           width={['100%', '10rem']}
           height={['100%', '10rem']}
@@ -69,7 +64,7 @@ const SettingTeamLogo = ({
               variant="rounded"
               src={preview}
               alt="teamLogo"
-              sx={{ width: '10rem', height: '10rem' }}
+              sx={{ width: '8rem', height: '8rem' }}
             />
             <input
               type="file"

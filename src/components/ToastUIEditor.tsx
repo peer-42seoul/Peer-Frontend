@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react'
 import '@toast-ui/editor/dist/toastui-editor.css'
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css'
 import { Editor, IToastEditorProps } from '@toast-ui/editor'
-import { Card } from '@mui/material'
+import { Box } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import useAxiosWithAuth from '@/api/config'
 
@@ -66,7 +66,6 @@ const ToastEditor = ({
                 },
               },
             )
-            console.log('data', response.data)
             callback(response.data, '이미지 대체 텍스트')
           } catch (error) {
             console.error('이미지 업로드 실패', error)
@@ -84,13 +83,23 @@ const ToastEditor = ({
   }, [initialValue])
 
   return (
-    <Card
+    <Box
       sx={{
         backgroundColor: 'white',
         color: 'black',
         position: 'sticky',
         top: '0',
         width: '100%',
+        '& .toastui-editor-dropdown-toolbar': {
+          height: ['fit-content', undefined],
+          flexWrap: 'wrap',
+        },
+        '& .toastui-editor-popup': {
+          position: 'absolute',
+          top: ' 0 !important',
+          right: 0,
+          left: 'auto !important',
+        },
       }}
       ref={editorElementRef}
     />

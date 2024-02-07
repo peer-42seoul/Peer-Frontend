@@ -51,13 +51,15 @@ const ShowcasePCLayout = ({
                 onClick={handlePrevClick}
                 disabled={index === 0 ? true : false}
               >
-                <ExpandLessIcon color="primary" />
+                <ExpandLessIcon color={index === 0 ? undefined : 'primary'} />
               </IconButton>
               <IconButton
                 onClick={handleNextClick}
                 disabled={cardList.length - 1 === index ? true : false}
               >
-                <ExpandMoreIcon color="primary" />
+                <ExpandMoreIcon
+                  color={cardList.length - 1 === index ? undefined : 'primary'}
+                />
               </IconButton>
             </Stack>
           </Stack>

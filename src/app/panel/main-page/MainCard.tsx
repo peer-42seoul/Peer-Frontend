@@ -40,8 +40,24 @@ const MainCard = ({
         ? '모집전'
         : '모집완료'
 
+  if (statusLabel === '모집완료') {
+    sx = {
+      ...sx,
+      filter: 'grayscale(120%)',
+    }
+  }
+
   return (
-    <Card sx={sx}>
+    <Card
+      sx={{
+        borderRadius: '0.75rem',
+        borderWidth: '2px',
+        borderStyle: 'solid',
+        borderColor: 'background.tertiary',
+        boxShadow: 'none',
+        ...sx,
+      }}
+    >
       <Link
         href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}
@@ -52,10 +68,28 @@ const MainCard = ({
             height="194"
             image={image}
             alt="userImage"
+            sx={{
+              position: 'relative',
+              left: '-2px',
+              top: '-2px',
+              border: '2px solid',
+              borderColor: 'background.tertiary',
+              borderBottomLeftRadius: '0.75rem',
+              borderBottomRightRadius: '0.75rem',
+              filter:
+                statusLabel === '모집완료'
+                  ? 'grayscale(150%) brightness(0.7)'
+                  : '',
+            }}
           />
           {status && (
             <Chip
-              label={<Typography variant="Tag">{statusLabel}</Typography>}
+              label={
+                <Typography color={'white'} variant="Tag">
+                  {statusLabel}
+                </Typography>
+              }
+              color={statusLabel === '모집중' ? 'green' : 'error'}
               sx={ChipStyle}
               size="medium"
             />
@@ -84,7 +118,17 @@ const MainCard = ({
           />
         }
         title={
-          <Typography variant="Body2" color="text.alternative">
+          <Typography
+            variant="Body2"
+            color="text.alternative"
+            sx={{
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {user_nickname}
           </Typography>
         }

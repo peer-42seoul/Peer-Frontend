@@ -83,7 +83,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Typography>팀을 해산시겠습니까?</Typography>
+        <Typography variant="Body2">팀을 해산시겠습니까?</Typography>
         <Button
           disabled={
             teamStatus === TeamStatus.RECRUITING ||
@@ -94,7 +94,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
           variant="contained"
           onClick={openModal}
         >
-          <Typography>해산하기</Typography>
+          <Typography variant="Body2">해산하기</Typography>
         </Button>
       </Stack>
 

@@ -9,7 +9,7 @@ import useMedia from '@/hook/useMedia'
 import { TeamOperationForm } from '@/app/teams/types/types'
 
 interface ISettingTeamLocation {
-  teamLocation: string[]
+  teamLocation: Array<string>
   teamActivity: TeamOperationForm
   control: Control<ISetupTeam, any>
 }
@@ -29,49 +29,33 @@ const SettingTeamLocation = ({
         spacing={'0.5rem'}
         mx={!isPc ? '0.5rem' : ''}
       >
-        <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.35rem'}>
+        <Stack direction={'row'} alignItems={'center'} spacing={'0.35rem'}>
           <GeoClearIcon />
-          <Typography>활동지역</Typography>
+          <Typography variant="Body2Emphasis">활동지역</Typography>
         </Stack>
         <Stack direction={'row'} spacing={1}>
-          <Controller
-            name="region.0"
-            control={control}
+          <Select
+            size="small"
+            variant="outlined"
             defaultValue={teamLocation[0]}
-            render={({ field }) => (
-              <Select
-                size="small"
-                variant="outlined"
-                defaultValue={teamLocation[0]}
-                sx={{
-                  m: 0,
-                  minWidth: '8rem',
-                }}
-                {...field}
-              >
-                <MenuItem key={'region'} value={''}></MenuItem>
-              </Select>
-            )}
-          />
-          <Controller
-            name="region.1"
-            control={control}
+            sx={{
+              m: 0,
+              minWidth: '8rem',
+            }}
+          >
+            <MenuItem key={'region'} value={''}></MenuItem>
+          </Select>
+          <Select
+            size="small"
+            variant="outlined"
             defaultValue={teamLocation[1]}
-            render={({ field }) => (
-              <Select
-                size="small"
-                variant="outlined"
-                defaultValue={teamLocation[1]}
-                sx={{
-                  m: 0,
-                  minWidth: '8rem',
-                }}
-                {...field}
-              >
-                <MenuItem key={'region'} value={''}></MenuItem>
-              </Select>
-            )}
-          />
+            sx={{
+              m: 0,
+              minWidth: '8rem',
+            }}
+          >
+            <MenuItem key={'region'} value={''}></MenuItem>
+          </Select>
         </Stack>
       </Stack>
     )
@@ -83,9 +67,9 @@ const SettingTeamLocation = ({
       spacing={'0.5rem'}
       mx={!isPc ? '0.5rem' : ''}
     >
-      <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.35rem'}>
+      <Stack direction={'row'} alignItems={'center'} spacing={'0.35rem'}>
         <GeoClearIcon />
-        <Typography>활동지역</Typography>
+        <Typography variant="Body2">활동지역</Typography>
       </Stack>
       <Stack direction={'row'} spacing={1}>
         <Controller

@@ -41,6 +41,7 @@ const CreateTeamEditor = ({
   editorType,
   isAnswered,
   isSubmitting,
+  content,
 }: {
   defaultValues: IRecruitWriteField
   submitHandler: (data: IRecruitWriteField) => Promise<void>
@@ -48,6 +49,7 @@ const CreateTeamEditor = ({
   editorType: 'edit' | 'write'
   isAnswered?: boolean
   isSubmitting?: boolean
+  content?: string
 }) => {
   const [completedInterview, setCompletedInterview] = useState(false)
 
@@ -211,21 +213,6 @@ const CreateTeamEditor = ({
                   <RadioGroup {...field} row>
                     <Stack spacing={'0.5rem'} direction={'row'}>
                       <FormControlLabel
-                        value="PROJECT"
-                        control={
-                          <Radio sx={style.radioButtonStyle} size="small" />
-                        }
-                        label={
-                          <Typography
-                            variant={'Caption'}
-                            color={'text.alternative'}
-                          >
-                            프로젝트
-                          </Typography>
-                        }
-                        disabled={editorType === 'edit'}
-                      />
-                      <FormControlLabel
                         value="STUDY"
                         control={
                           <Radio sx={style.radioButtonStyle} size="small" />
@@ -236,6 +223,21 @@ const CreateTeamEditor = ({
                             color={'text.alternative'}
                           >
                             스터디
+                          </Typography>
+                        }
+                        disabled={editorType === 'edit'}
+                      />
+                      <FormControlLabel
+                        value="PROJECT"
+                        control={
+                          <Radio sx={style.radioButtonStyle} size="small" />
+                        }
+                        label={
+                          <Typography
+                            variant={'Caption'}
+                            color={'text.alternative'}
+                          >
+                            프로젝트
                           </Typography>
                         }
                         disabled={editorType === 'edit'}
@@ -256,7 +258,7 @@ const CreateTeamEditor = ({
                 <TextFieldWithLabel
                   {...field}
                   inputProps={{
-                    maxLength: 20,
+                    maxLength: 40,
                   }}
                   label_icon={
                     <Icon.EditIcon
@@ -284,8 +286,8 @@ const CreateTeamEditor = ({
               rules={{
                 required: '필수 입력 항목입니다.',
                 maxLength: {
-                  value: 20,
-                  message: '20자 이내로 입력해주세요.',
+                  value: 40,
+                  message: '40자 이내로 입력해주세요.',
                 },
                 minLength: {
                   value: 2,
@@ -321,7 +323,7 @@ const CreateTeamEditor = ({
                     </Typography>
                   }
                   inputProps={{
-                    maxLength: 20,
+                    maxLength: 40,
                   }}
                 />
               )}
@@ -330,7 +332,7 @@ const CreateTeamEditor = ({
               rules={{
                 required: '필수 입력 항목입니다.',
                 maxLength: {
-                  value: 20,
+                  value: 40,
                   message: '20자 이내로 입력해주세요.',
                 },
                 minLength: {
@@ -546,7 +548,7 @@ const CreateTeamEditor = ({
             >
               <Box width={'100%'}>
                 <DynamicToastEditor
-                  initialValue="팀 소개 글 입니다."
+                  initialValue={content ?? '팀 소개 글 입니다.'}
                   editorRef={editorRef}
                 />
               </Box>
@@ -560,7 +562,8 @@ const CreateTeamEditor = ({
                 />
               }
             >
-              {(completedInterview || defaultValues.interviewList.length) && (
+              {(completedInterview ||
+                defaultValues.interviewList.length > 0) && (
                 <Typography
                   variant="Caption"
                   color={'primary'}
@@ -591,7 +594,7 @@ const CreateTeamEditor = ({
                 }
               >
                 인터뷰{' '}
-                {completedInterview || defaultValues.interviewList.length
+                {completedInterview || defaultValues.interviewList.length > 0
                   ? '수정하기 '
                   : '추가'}
               </Button>

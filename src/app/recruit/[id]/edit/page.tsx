@@ -28,36 +28,33 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { data, isLoading, error } = useSWR<{
     defaultValues: IRecruitWriteField
     isAnswered: boolean
-  }>(
-    `/api/v1/recruit/edit/${params.id}`,
-    (url: string) =>
-      axiosWithAuth
-        .get(url)
-        .then((res) => res.data)
-        .then((data) => ({
-          defaultValues: {
-            place: data.place,
-            image: data.image,
-            title: data.title,
-            name: data.name,
-            due: data.due,
-            type: data.type,
-            region:
-              data.place === 'ONLINE'
-                ? { large: '', small: '' }
-                : { large: data.region1, small: data.region2 },
-            link: data.link ?? '',
-            tagList: data.tagList,
-            roleList:
-              data.type === 'PROJECT'
-                ? data.roleList
-                : [{ name: '', number: 0 }],
-            interviewList: formToField(data.interviewList),
-            max: data.totalNumber ? `${data.totalNumber}` : `2`,
-          },
-          isAnswered: data.isAnswered,
-        })),
-    { revalidateOnFocus: false },
+    content: string
+  }>(`/api/v1/recruit/edit/${params.id}`, (url: string) =>
+    axiosWithAuth
+      .get(url)
+      .then((res) => res.data)
+      .then((data) => ({
+        defaultValues: {
+          place: data.place,
+          image: data.image,
+          title: data.title,
+          name: data.name,
+          due: data.due,
+          type: data.type,
+          region:
+            data.place === 'ONLINE'
+              ? { large: '', small: '' }
+              : { large: data.region1, small: data.region2 },
+          link: data.link ?? '',
+          tagList: data.tagList,
+          roleList:
+            data.type === 'PROJECT' ? data.roleList : [{ name: '', number: 0 }],
+          interviewList: formToField(data.interviewList),
+          max: data.totalNumber ? `${data.totalNumber}` : `2`,
+        },
+        isAnswered: data.isAnswered,
+        content: data.content,
+      })),
   )
 
   if (isLoading) return <CuCircularProgress color="primary" />
@@ -76,9 +73,9 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
-    if (String(editorRef.current?.getMarkdown()).length > 2000) {
+    if (String(editorRef.current?.getMarkdown()).length > 20000) {
       openToast({
-        message: '모집글 내용은 2000자 이하로 작성해주세요.',
+        message: '모집글 내용은 20000자 이하로 작성해주세요.',
         severity: 'error',
       })
       return
@@ -110,7 +107,11 @@ const Page = ({ params }: { params: { id: string } }) => {
           message: '모집글이 성공적으로 수정되었습니다.',
           severity: 'success',
         })
-        router.replace(`/recruit/${res.data}?type=${data.type}`)
+        // router.replace(`/recruit/${res.data}?type=${data.type}`)
+
+        //ssr시 router.push로 하면 새로운 데이터를 패칭하지 않아서 window.location.href로 대체
+        if (window)
+          window.location.href = `/recruit/${res.data}?type=${data.type}`
         setIsSubmitting(false)
       })
       .catch((error) => {
@@ -130,6 +131,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       submitHandler={handleSubmit}
       isAnswered={data.isAnswered}
       isSubmitting={isSubmitting}
+      content={data.content}
     />
   )
 }

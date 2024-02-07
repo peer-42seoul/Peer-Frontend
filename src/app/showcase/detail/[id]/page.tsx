@@ -1,6 +1,6 @@
 'use client'
 
-import { Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import ShowcaseViewer from './panel/ShowcaseViewer'
 import { IShowcaseViewerFields } from '@/types/IShowcaseEdit'
@@ -29,10 +29,10 @@ const ShowcaseDetailPage = ({ params }: { params: { id: number } }) => {
 
   return (
     data && (
-      <>
+      <Stack gap={'2rem'}>
         <ShowcaseViewer data={data} postId={params.id} />
         <CommentContainer postId={params.id} />
-      </>
+      </Stack>
     )
   )
 }

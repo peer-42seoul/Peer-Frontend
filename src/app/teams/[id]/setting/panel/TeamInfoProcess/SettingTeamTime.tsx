@@ -20,9 +20,11 @@ const SettingTeamTime = ({ teamTime, control }: ISettingTeamTime) => {
       mb={'1.2rem'}
       spacing={'0.5rem'}
     >
-      <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.25rem'}>
+      <Stack direction={'row'} alignItems={'center'} spacing={'0.25rem'}>
         <PieClearIcon />
-        <Typography textOverflow={'ellipsis'}>목표기간</Typography>
+        <Typography textOverflow={'ellipsis'} variant="Body2Emphasis">
+          목표기간
+        </Typography>
       </Stack>
 
       <Controller
@@ -36,13 +38,13 @@ const SettingTeamTime = ({ teamTime, control }: ISettingTeamTime) => {
             variant="outlined"
             sx={{
               m: 0,
-              minWidth: '8rem',
+              minWidth: '5rem',
             }}
             {...field}
           >
             {dueList.map((dueTo) => (
               <MenuItem key={dueTo} value={dueTo}>
-                {dueTo}
+                <Typography variant="Body2">{dueTo}</Typography>
               </MenuItem>
             ))}
           </Select>

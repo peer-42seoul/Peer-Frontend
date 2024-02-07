@@ -34,6 +34,7 @@ const DisplaySetting = () => {
           sx={{
             opacity: useSystemTheme ? 0 : 1,
             transition: 'opacity 0.5s ease',
+            display: useSystemTheme ? 'none' : undefined,
           }}
           control={
             <CuToggle

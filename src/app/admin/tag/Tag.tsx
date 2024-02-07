@@ -6,6 +6,9 @@ import { Button, Container, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import NewTag from './panel/NewTag'
 import { fetchTags } from '../panel/AdminAxios'
+import CuTextModal from '@/components/CuTextModal'
+import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 
 interface content {
   tagId: number
@@ -29,6 +32,16 @@ const Tag = () => {
   const [tagColor, setTagColor] = useState<string>('#000000')
   const [open, setOpen] = useState<boolean>(false)
   const writeMode = useRef<string>('')
+  const currentId = useRef<number>(-1)
+
+  const { openToast } = useToast()
+
+  const {
+    openModal: openRemoveModal,
+    closeModal: closeRemoveModal,
+    isOpen: isRemoveModalOpen,
+  } = useModal()
+
   useEffect(() => {
     fetchTags()
       .then((data) => setContent(data))
@@ -53,8 +66,15 @@ const Tag = () => {
         withCredentials: true,
       })
       .then(() => {
-        alert(tagId + '번 태그가 삭제되었습니다.')
+        closeRemoveModal()
+        openToast({
+          message: '태그가 성공적으로 삭제되었습니다.',
+          severity: 'success',
+        })
         fetchTags().then((data) => setContent(data))
+      })
+      .catch((err) => {
+        alert('태그 삭제 실패 \n 사유: ' + err)
       })
   }
 
@@ -70,7 +90,10 @@ const Tag = () => {
           { withCredentials: true },
         )
         .then(() => {
-          alert('새로운 태그가 등록되었습니다.')
+          openToast({
+            message: '태그가 성공적으로 등록되었습니다.',
+            severity: 'success',
+          })
           fetchTags().then((data) => setContent(data))
         })
         .catch(() => {
@@ -88,7 +111,10 @@ const Tag = () => {
           { withCredentials: true },
         )
         .then(() => {
-          alert('태그가 수정되었습니다.')
+          openToast({
+            message: '태그가 성공적으로 수정되었습니다.',
+            severity: 'success',
+          })
           fetchTags().then((data) => setContent(data))
         })
         .catch(() => {
@@ -162,7 +188,12 @@ const Tag = () => {
                       수정
                     </Typography>
                   </Button>
-                  <Button onClick={() => onHandleRemove(item.tagId)}>
+                  <Button
+                    onClick={() => {
+                      currentId.current = item.tagId
+                      openRemoveModal()
+                    }}
+                  >
                     <Typography variant={'Body1'} sx={alignCenter}>
                       삭제
                     </Typography>
@@ -183,6 +214,20 @@ const Tag = () => {
             onHandleSubmit={onHandleSubmit}
           />
         </Stack>
+        <CuTextModal
+          title="태그 삭제하기"
+          open={isRemoveModalOpen}
+          onClose={closeRemoveModal}
+          content="정말 태그를 삭제하시겠습니까?"
+          textButton={{
+            text: '취소',
+            onClick: closeRemoveModal,
+          }}
+          containedButton={{
+            text: '삭제',
+            onClick: () => onHandleRemove(currentId.current),
+          }}
+        />
       </Container>
     </>
   )
