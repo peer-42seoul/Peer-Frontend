@@ -1,5 +1,5 @@
 'use client'
-import { Box, Modal, Stack, Typography } from '@mui/material'
+import { Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import ProfileSection from './ProfileSection'
 import * as style from './Profile.style'
@@ -27,11 +27,10 @@ const ProfileImageModal = ({
       keepMounted
       sx={{ border: 'none', outline: 'none' }}
     >
-      <Box
-        component={'img'}
+      <CuAvatar
         sx={style.profileImageModalStyle}
         alt="profile image"
-        src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
+        src={profileImageUrl ?? ''}
       />
     </Modal>
   )
