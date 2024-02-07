@@ -76,10 +76,10 @@ const MainCard = ({
               borderColor: 'background.tertiary',
               borderBottomLeftRadius: '0.75rem',
               borderBottomRightRadius: '0.75rem',
-              // filter:
-              //   statusLabel === '모집완료'
-              //     ? 'grayscale(150%) brightness(0.7)'
-              //     : '',
+              filter:
+                statusLabel === '모집완료'
+                  ? 'grayscale(150%) brightness(0.7)'
+                  : '',
             }}
           />
           {status && (

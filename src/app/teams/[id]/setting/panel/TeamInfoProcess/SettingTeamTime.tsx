@@ -20,9 +20,9 @@ const SettingTeamTime = ({ teamTime, control }: ISettingTeamTime) => {
       mb={'1.2rem'}
       spacing={'0.5rem'}
     >
-      <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.25rem'}>
+      <Stack direction={'row'} alignItems={'center'} spacing={'0.25rem'}>
         <PieClearIcon />
-        <Typography textOverflow={'ellipsis'} variant="CaptionEmphasis">
+        <Typography textOverflow={'ellipsis'} variant="Body2Emphasis">
           목표기간
         </Typography>
       </Stack>

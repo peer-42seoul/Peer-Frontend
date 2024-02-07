@@ -21,7 +21,7 @@ const SettingTeamStatus = ({ teamStatus, control }: ISettingTeamStatus) => {
     >
       <TargetClearIcon />
       <Stack direction={'row'} alignItems={'center'} spacing={'0.5rem'}>
-        <Typography variant="CaptionEmphasis">상태</Typography>
+        <Typography variant="Body2Emphasis">상태</Typography>
         <Controller
           name="status"
           control={control}

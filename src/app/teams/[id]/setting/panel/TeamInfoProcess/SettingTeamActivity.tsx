@@ -24,9 +24,9 @@ const SettingTeamActivity = ({
       mx={!isPc ? '0.5rem' : ''}
       spacing={'0.5rem'}
     >
-      <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.35rem'}>
+      <Stack direction={'row'} alignItems={'center'} spacing={'0.35rem'}>
         <WifiClearIcon />
-        <Typography variant="CaptionEmphasis">활동방식</Typography>
+        <Typography variant="Body2Emphasis">활동방식</Typography>
       </Stack>
       <Controller
         name="operationForm"

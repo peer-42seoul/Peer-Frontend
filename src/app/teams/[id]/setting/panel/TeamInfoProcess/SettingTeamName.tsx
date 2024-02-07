@@ -21,10 +21,10 @@ const SettingTeamName = ({ teamType, errors, register }: ISettingTeamName) => {
         height={'4.5rem'}
       >
         {teamType === TeamType.PROJECT && (
-          <Typography variant="CaptionEmphasis">프로젝트명</Typography>
+          <Typography variant="Body2Emphasis">프로젝트명</Typography>
         )}
         {teamType === TeamType.STUDY && (
-          <Typography variant="CaptionEmphasis">스터디명</Typography>
+          <Typography variant="Body2Emphasis">스터디명</Typography>
         )}
 
         <TextField

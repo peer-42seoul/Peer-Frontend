@@ -184,7 +184,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
                 setValue={setValue}
                 setIsLogoEdit={setIsLogoEdit}
               />
-              <Stack sx={{}}>
+              <Stack>
                 <SettingTeamName
                   teamType={team.type}
                   errors={errors}
