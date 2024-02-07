@@ -41,6 +41,7 @@ const CreateTeamEditor = ({
   editorType,
   isAnswered,
   isSubmitting,
+  content,
 }: {
   defaultValues: IRecruitWriteField
   submitHandler: (data: IRecruitWriteField) => Promise<void>
@@ -48,6 +49,7 @@ const CreateTeamEditor = ({
   editorType: 'edit' | 'write'
   isAnswered?: boolean
   isSubmitting?: boolean
+  content?: string
 }) => {
   const [completedInterview, setCompletedInterview] = useState(false)
 
@@ -546,7 +548,7 @@ const CreateTeamEditor = ({
             >
               <Box width={'100%'}>
                 <DynamicToastEditor
-                  initialValue="팀 소개 글 입니다."
+                  initialValue={content ?? '팀 소개 글 입니다.'}
                   editorRef={editorRef}
                 />
               </Box>
