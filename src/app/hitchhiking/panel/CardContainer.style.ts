@@ -4,7 +4,7 @@ export const cardContainerStyle: SxProps = {
   width: '100%',
   overflow: 'hidden',
   bottom: 0,
-  height: ['80svh', '100%'],
+  height: ['100svh', '100%'],
   position: ['static', 'absolute'],
   top: [0, '2.75rem'],
   left: 0,
@@ -14,6 +14,7 @@ export const gnbContainerStyle: SxProps = {
   height: '2.5rem',
   py: '0.38rem',
 }
+
 export const gnbTypographyStyle: SxProps = {
   color: 'text.normal',
   textAlign: 'center',
