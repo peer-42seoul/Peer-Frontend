@@ -9,7 +9,7 @@ import useMedia from '@/hook/useMedia'
 import { TeamOperationForm } from '@/app/teams/types/types'
 
 interface ISettingTeamLocation {
-  teamLocation: Array<string | null>
+  teamLocation: Array<string>
   teamActivity: TeamOperationForm
   control: Control<ISetupTeam, any>
 }
