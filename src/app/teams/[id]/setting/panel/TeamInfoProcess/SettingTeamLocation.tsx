@@ -6,15 +6,17 @@ import { Control, Controller } from 'react-hook-form'
 import { locationData } from '@/api/location'
 import { ISetupTeam } from '../SettingTeamInfo'
 import useMedia from '@/hook/useMedia'
-import { TeamOperationForm } from '@/app/teams/types/types'
+import { TeamOperationForm, TeamStatus } from '@/app/teams/types/types'
 
 interface ISettingTeamLocation {
+  teamStatus: TeamStatus
   teamLocation: Array<string>
   teamActivity: TeamOperationForm
   control: Control<ISetupTeam, any>
 }
 
 const SettingTeamLocation = ({
+  teamStatus,
   teamLocation,
   teamActivity,
   control,
@@ -35,6 +37,7 @@ const SettingTeamLocation = ({
         </Stack>
         <Stack direction={'row'} spacing={1}>
           <Select
+            disabled={teamStatus === TeamStatus.COMPLETE}
             size="small"
             variant="outlined"
             defaultValue={teamLocation[0]}
@@ -46,6 +49,7 @@ const SettingTeamLocation = ({
             <MenuItem key={'region'} value={''}></MenuItem>
           </Select>
           <Select
+            disabled={teamStatus === TeamStatus.COMPLETE}
             size="small"
             variant="outlined"
             defaultValue={teamLocation[1]}
@@ -78,6 +82,7 @@ const SettingTeamLocation = ({
           defaultValue={teamLocation[0]}
           render={({ field }) => (
             <Select
+              disabled={teamStatus === TeamStatus.COMPLETE}
               size="small"
               variant="outlined"
               defaultValue={teamLocation[0]}
@@ -101,6 +106,7 @@ const SettingTeamLocation = ({
           defaultValue={teamLocation[1]}
           render={({ field }) => (
             <Select
+              disabled={teamStatus === TeamStatus.COMPLETE}
               size="small"
               variant="outlined"
               defaultValue={teamLocation[1]}

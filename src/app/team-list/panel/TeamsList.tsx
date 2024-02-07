@@ -36,6 +36,9 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
         maxHeight={'55vh'}
         flex={'2rem'}
       >
+        {/* {isNoDataDolphin && (
+          <NoDataDolphin message="아직 참가한 팀이 없습니다." />
+        )} */}
         {prop.length ? (
           prop.map((team, index) => <TeamCard key={index} team={team} />)
         ) : (
