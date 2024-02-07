@@ -79,12 +79,26 @@ const SkillAutocomplete = ({
     }
   }, [timeOut])
 
-  const handleTextFieldChange = (
-    event: React.SyntheticEvent,
-    value: string,
-  ) => {
-    setText(value)
-    if (value) {
+  // const handleTextFieldChange = (
+  //   event: React.SyntheticEvent,
+  //   value: string,
+  //   reason: string,
+  // ) => {
+  //   if (reason === 'input') {
+  //     setText(value)
+  //     if (value) {
+  //       setIsLoading(false)
+  //       return
+  //     } else if (isLoading === false) {
+  //       setIsLoading(true)
+  //     }
+  //     setTimeOut(TIMEOUT)
+  //   }
+  // }
+
+  const handleTextFieldChange = (e: any) => {
+    setText(e.target.value)
+    if (e.target.value === '') {
       setIsLoading(false)
       return
     } else if (isLoading === false) {
@@ -136,13 +150,13 @@ const SkillAutocomplete = ({
         inputValue={text}
         options={tagList.map((tag) => tag.name)}
         onChange={handleInput}
-        onInputChange={handleTextFieldChange}
+        // onInputChange={handleTextFieldChange}
         renderTags={() => <></>}
         renderInput={(params) => (
           <TextField
             {...params}
             disabled={skillList?.length >= 10}
-            // onChange={handleTextFieldChange}
+            onChange={handleTextFieldChange}
             size="small"
             placeholder={
               placeholder ?? '프레임워크 또는 개발언어를 입력해주세요.'
