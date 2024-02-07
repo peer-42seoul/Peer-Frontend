@@ -41,7 +41,16 @@ const MainCard = ({
         : '모집완료'
 
   return (
-    <Card sx={sx}>
+    <Card
+      sx={{
+        borderRadius: '0.75rem',
+        borderWidth: '2px',
+        borderStyle: 'solid',
+        borderColor: 'background.tertiary',
+        boxShadow: 'none',
+        ...sx,
+      }}
+    >
       <Link
         href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}
@@ -52,6 +61,15 @@ const MainCard = ({
             height="194"
             image={image}
             alt="userImage"
+            sx={{
+              position: 'relative',
+              left: '-2px',
+              top: '-2px',
+              border: '2px solid',
+              borderColor: 'background.tertiary',
+              borderBottomLeftRadius: '0.75rem',
+              borderBottomRightRadius: '0.75rem',
+            }}
           />
           {status && (
             <Chip
@@ -84,7 +102,17 @@ const MainCard = ({
           />
         }
         title={
-          <Typography variant="Body2" color="text.alternative">
+          <Typography
+            variant="Body2"
+            color="text.alternative"
+            sx={{
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {user_nickname}
           </Typography>
         }
