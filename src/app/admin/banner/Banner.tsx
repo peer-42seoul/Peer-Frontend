@@ -21,6 +21,9 @@ import { DateTimePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import CuModal from '@/components/CuModal'
 import { idStyle, statusStyle, titleStyle } from './BannerStyles'
+import CuTextModal from '@/components/CuTextModal'
+import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 
 interface IBannerAllContent {
   bannerId: number
@@ -121,6 +124,15 @@ const Banner = () => {
   }
   // 백엔드 API에서는 page가 0부터 시작하므로 page - 1로 설정
 
+  const { openToast } = useToast()
+
+  const currentId = useRef<number>(-1)
+  const {
+    openModal: openRemoveModal,
+    closeModal: closeRemoveModal,
+    isOpen: isRemoveModalOpen,
+  } = useModal()
+
   const [currentReservationType, setCurrentReservationType] = useState('없음')
   const [currentBannerType, setCurrentBannerType] = useState('')
 
@@ -218,6 +230,10 @@ const Banner = () => {
           .then((res) => {
             totalPageVar.current = res.data.totalPages
             setContent(res.data.content)
+            openToast({
+              message: '배너 글을 성공적으로 등록하였습니다.',
+              severity: 'success',
+            })
           })
       })
       .catch((err) => {
@@ -267,6 +283,10 @@ const Banner = () => {
           .then((res) => {
             totalPageVar.current = res.data.totalPages
             setContent(res.data.content)
+            openToast({
+              message: '배너 글을 성공적으로 수정하였습니다.',
+              severity: 'success',
+            })
           })
       })
       .catch((err) => {
@@ -327,6 +347,10 @@ const Banner = () => {
           })
           .then((res) => {
             setContent(res.data.content)
+            openToast({
+              message: `배너를 ${mode}처리 하였습니다.`,
+              severity: 'success',
+            })
           })
       })
       .catch(() => {
@@ -342,6 +366,8 @@ const Banner = () => {
       })
       .then(() => {
         setOpen(false)
+        alert(bannerId + '번 배너가 삭제되었습니다.')
+        closeRemoveModal()
         axios
           .get(`${API_URL}/api/v1/admin/banner`, {
             params,
@@ -349,7 +375,14 @@ const Banner = () => {
           })
           .then((res) => {
             setContent(res.data.content)
+            openToast({
+              message: '배너 글을 성공적으로 삭제하였습니다.',
+              severity: 'success',
+            })
           })
+      })
+      .catch((err) => {
+        alert('배너 삭제 실패 \n 사유: ' + err)
       })
   }
 
@@ -658,7 +691,10 @@ const Banner = () => {
             {writeMode === 'view' ? (
               <Button
                 variant={'contained'}
-                onClick={() => onHandleDelete(getValues('bannerId'))}
+                onClick={() => {
+                  currentId.current = getValues('bannerId')
+                  openRemoveModal()
+                }}
               >
                 삭제
               </Button>
@@ -680,6 +716,20 @@ const Banner = () => {
               </Button>
             )}
           </Stack>
+          <CuTextModal
+            title="태그 삭제하기"
+            open={isRemoveModalOpen}
+            onClose={closeRemoveModal}
+            content="정말 태그를 삭제하시겠습니까?"
+            textButton={{
+              text: '취소',
+              onClick: closeRemoveModal,
+            }}
+            containedButton={{
+              text: '삭제',
+              onClick: () => onHandleDelete(currentId.current),
+            }}
+          />
         </Container>
       </CuModal>
     </Container>
