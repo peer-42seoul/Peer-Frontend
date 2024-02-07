@@ -25,7 +25,7 @@ const SettingTeamLogo = ({
 
   const deleteImage = () => {
     setPreview('/icons/ios/128.png')
-    setValue('teamImage', '')
+    setValue('teamImage', null)
     setIsLogoEdit(true)
     closeModal()
   }

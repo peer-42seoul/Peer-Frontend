@@ -78,6 +78,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   const dueTo = watch('dueTo')
   const operationForm = watch('operationForm')
   const status = watch('status')
+  const image = watch('teamImage')
 
   /**id: string
   type: TeamType
@@ -123,9 +124,8 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       dueTo: dueTo,
       operationForm: operationForm,
       region: region,
-      teamImage: team.teamImage,
+      teamImage: image,
     }
-    console.log('data', data)
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${team.id}`,
