@@ -24,5 +24,5 @@ export default async function RecruitDetailIndex({
     console.log(e)
   }
 
-  return <RecruitDetailPage data={data} id={params.id} key={data?.updatedAt} />
+  return <RecruitDetailPage data={data} id={params.id} />
 }
