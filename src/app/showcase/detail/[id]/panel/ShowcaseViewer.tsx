@@ -32,7 +32,7 @@ const CoverImage = ({ image }: { image: string }) => {
 
 const InformationViewer = ({ data }: any) => {
   return (
-    <Stack spacing={'2rem'} sx={style.InformationViewer}>
+    <Stack spacing={'0.5rem'} sx={style.InformationViewer}>
       <StartEndDateViewer start={data?.start} end={data?.end} />
       <SkillInput skills={data?.skills} />
       <TeamMembers members={data?.member} />
@@ -74,10 +74,10 @@ const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
             <Stack sx={style.InformationViewerBox}>
               <InformationViewer data={data} />
               <Stack
-                spacing={'1rem'}
+                spacing={'0.5rem'}
                 display={'flex'}
                 width={'30%'}
-                marginBottom={'1rem'}
+                marginBottom={'0.5rem'}
               >
                 <CoverImage image={data.image} />
               </Stack>
@@ -88,10 +88,10 @@ const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
       ) : (
         <Container sx={style.mobileViewer}>
           <Stack
-            spacing={'1rem'}
+            spacing={'0.5rem'}
             display={'flex'}
             width={'100%'}
-            marginBottom={'1rem'}
+            marginBottom={'0.5rem'}
           >
             <TeamName
               editMode={false}

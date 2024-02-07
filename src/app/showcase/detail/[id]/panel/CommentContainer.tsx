@@ -151,7 +151,7 @@ const CommentContainer = ({ postId }: IPostId) => {
         <Container sx={style.containerWrapper}>
           <Stack sx={style.CommentContainer}>
             <Typography
-              variant={'Title1'}
+              variant={'Title3'}
               color={'text.normal'}
               marginBottom={'1rem'}
             >
@@ -168,7 +168,7 @@ const CommentContainer = ({ postId }: IPostId) => {
       <Container sx={style.containerWrapper}>
         <Stack sx={style.CommentContainer}>
           <Typography
-            variant={'Title1'}
+            variant={'Title3'}
             color={'text.normal'}
             marginBottom={'1rem'}
           >
