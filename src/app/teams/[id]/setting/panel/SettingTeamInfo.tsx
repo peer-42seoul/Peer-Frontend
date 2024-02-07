@@ -35,7 +35,7 @@ export interface ISetupTeam {
   status: TeamStatus
   dueTo: string
   operationForm: TeamOperationForm
-  region: string[]
+  region: Array<string | null>
   teamImage: string | null
   // job: Job[] | null
 }
@@ -65,7 +65,6 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   const {
     register,
     setValue,
-    handleSubmit,
     formState: { errors, isDirty },
     control,
     watch,
@@ -78,6 +77,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   const dueTo = watch('dueTo')
   const operationForm = watch('operationForm')
   const status = watch('status')
+  const all = watch()
 
   /**id: string
   type: TeamType
@@ -105,7 +105,6 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
     }
 
     if (isDirty === false && isLogoEdit === false) {
-      closeConfirmModel()
       return openToast({
         severity: 'error',
         message: '변경된 사항이 없습니다.',
@@ -114,16 +113,16 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
     openConfirmModel()
   }
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = () => {
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${team.id}`,
-        data,
+        all,
       )
       .then((res) => {
         if (res.status == 200) {
           console.log('서버에 저장 완료')
-          location.reload()
+          mutate()
           openToast({
             severity: 'success',
             message: '팀 정보 수정이 완료되었습니다.',
@@ -146,7 +145,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       .finally(() => {
         closeConfirmModel()
       })
-  })
+  }
 
   // useEffect(() => {
   //   window.history.pushState(null, '', location.href)
