@@ -361,6 +361,8 @@ const Banner = () => {
           .then((res) => {
             setContent(res.data.content)
           })
+      }).catch((err) => {
+        alert('배너 삭제 실패 \n 사유: ' + err)
       })
   }
 

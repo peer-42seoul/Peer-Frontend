@@ -372,6 +372,9 @@ const Announce = () => {
             setContent(res.data.content)
           })
       })
+      .catch((err) => {
+        alert('공지글 삭제 실패 \n 사유: ' + err)
+      })
   }
 
   return (
