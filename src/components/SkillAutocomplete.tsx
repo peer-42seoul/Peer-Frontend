@@ -79,23 +79,6 @@ const SkillAutocomplete = ({
     }
   }, [timeOut])
 
-  // const handleTextFieldChange = (
-  //   event: React.SyntheticEvent,
-  //   value: string,
-  //   reason: string,
-  // ) => {
-  //   if (reason === 'input') {
-  //     setText(value)
-  //     if (value) {
-  //       setIsLoading(false)
-  //       return
-  //     } else if (isLoading === false) {
-  //       setIsLoading(true)
-  //     }
-  //     setTimeOut(TIMEOUT)
-  //   }
-  // }
-
   const handleTextFieldChange = (e: any) => {
     setText(e.target.value)
     if (e.target.value === '') {
@@ -108,6 +91,9 @@ const SkillAutocomplete = ({
   }
 
   const handleInput = (_: any, value: string[]) => {
+    if (value.length < skillList.length) {
+      return
+    }
     const newSkillList: ISkill[] = []
     value.map((newValue) => {
       newSkillList.push(
