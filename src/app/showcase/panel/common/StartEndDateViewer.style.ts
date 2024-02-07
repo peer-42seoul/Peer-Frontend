@@ -6,5 +6,5 @@ export const StartEndDateViewerBox = (isPc?: boolean) => ({
   gridArea: 'startEndDateViewer',
   width: '100%',
   height: isPc ? '6.25rem' : '3.375rem',
-  marginTop: isPc ? '0' : '1.25rem',
+  paddingTop: isPc ? '0' : '1.25rem',
 })
