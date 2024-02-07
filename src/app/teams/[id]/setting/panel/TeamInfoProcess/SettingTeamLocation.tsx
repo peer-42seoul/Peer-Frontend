@@ -29,9 +29,9 @@ const SettingTeamLocation = ({
         spacing={'0.5rem'}
         mx={!isPc ? '0.5rem' : ''}
       >
-        <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.35rem'}>
+        <Stack direction={'row'} alignItems={'center'} spacing={'0.35rem'}>
           <GeoClearIcon />
-          <Typography>활동지역</Typography>
+          <Typography variant="Body2Emphasis">활동지역</Typography>
         </Stack>
         <Stack direction={'row'} spacing={1}>
           <Select
@@ -67,9 +67,9 @@ const SettingTeamLocation = ({
       spacing={'0.5rem'}
       mx={!isPc ? '0.5rem' : ''}
     >
-      <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.35rem'}>
+      <Stack direction={'row'} alignItems={'center'} spacing={'0.35rem'}>
         <GeoClearIcon />
-        <Typography>활동지역</Typography>
+        <Typography variant="Body2">활동지역</Typography>
       </Stack>
       <Stack direction={'row'} spacing={1}>
         <Controller

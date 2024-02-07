@@ -49,6 +49,9 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
     router.push('/my-page')
   }
 
+  // 유령회원일 경우
+  if (Number(userId) === -1) return <>{children}</>
+
   return (
     <div>
       {children && (
