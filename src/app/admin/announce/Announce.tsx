@@ -27,6 +27,7 @@ import DynamicToastViewer from '@/components/DynamicToastViewer'
 import { config } from '../panel/AdminAxios'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 
 interface IAnnounceAllContent {
   announcementId: number
@@ -134,6 +135,8 @@ const Announce = () => {
   }
   // 백엔드 API에서는 page가 0부터 시작하므로 page - 1로 설정
 
+  const { openToast } = useToast()
+
   const currentId = useRef<number>(-1)
   const {
     openModal: openRemoveModal,
@@ -229,6 +232,10 @@ const Announce = () => {
       })
       .then(() => {
         setOpen(false)
+        openToast({
+          message: '공지 글을 성공적으로 등록하였습니다.',
+          severity: 'success',
+        })
         reset()
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
@@ -274,6 +281,10 @@ const Announce = () => {
     await axios
       .put(`${API_URL}/api/v1/admin/announcement`, submitData)
       .then(() => {
+        openToast({
+          message: '공지 글이 성공적으로 수정되었습니다.',
+          severity: 'success',
+        })
         setOpen(false)
         reset()
         axios
@@ -338,6 +349,10 @@ const Announce = () => {
       )
       .then(() => {
         setOpen(false)
+        openToast({
+          message: `공지글이 ${mode}처리 되었습니다.`,
+          severity: 'success',
+        })
         reset()
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {
@@ -361,7 +376,10 @@ const Announce = () => {
       })
       .then(() => {
         setOpen(false)
-        alert(announcementId + '번 공지가 삭제되었습니다.')
+        openToast({
+          message: `${announcementId}번 공지 글이 성공적으로 삭제되었습니다.`,
+          severity: 'success',
+        })
         closeRemoveModal()
         axios
           .get(`${API_URL}/api/v1/admin/announcement`, {

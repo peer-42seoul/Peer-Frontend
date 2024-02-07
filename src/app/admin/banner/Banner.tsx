@@ -23,6 +23,7 @@ import CuModal from '@/components/CuModal'
 import { idStyle, statusStyle, titleStyle } from './BannerStyles'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 
 interface IBannerAllContent {
   bannerId: number
@@ -122,6 +123,8 @@ const Banner = () => {
     size: 5,
   }
   // 백엔드 API에서는 page가 0부터 시작하므로 page - 1로 설정
+
+  const { openToast } = useToast()
 
   const currentId = useRef<number>(-1)
   const {
@@ -227,6 +230,10 @@ const Banner = () => {
           .then((res) => {
             totalPageVar.current = res.data.totalPages
             setContent(res.data.content)
+            openToast({
+              message: '배너 글을 성공적으로 등록하였습니다.',
+              severity: 'success',
+            })
           })
       })
       .catch((err) => {
@@ -276,6 +283,10 @@ const Banner = () => {
           .then((res) => {
             totalPageVar.current = res.data.totalPages
             setContent(res.data.content)
+            openToast({
+              message: '배너 글을 성공적으로 수정하였습니다.',
+              severity: 'success',
+            })
           })
       })
       .catch((err) => {
@@ -336,6 +347,10 @@ const Banner = () => {
           })
           .then((res) => {
             setContent(res.data.content)
+            openToast({
+              message: `배너를 ${mode}처리 하였습니다.`,
+              severity: 'success',
+            })
           })
       })
       .catch(() => {
@@ -360,8 +375,13 @@ const Banner = () => {
           })
           .then((res) => {
             setContent(res.data.content)
+            openToast({
+              message: '배너 글을 성공적으로 삭제하였습니다.',
+              severity: 'success',
+            })
           })
-      }).catch((err) => {
+      })
+      .catch((err) => {
         alert('배너 삭제 실패 \n 사유: ' + err)
       })
   }

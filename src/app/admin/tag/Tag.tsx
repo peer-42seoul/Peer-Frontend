@@ -8,6 +8,7 @@ import NewTag from './panel/NewTag'
 import { fetchTags } from '../panel/AdminAxios'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 
 interface content {
   tagId: number
@@ -32,6 +33,8 @@ const Tag = () => {
   const [open, setOpen] = useState<boolean>(false)
   const writeMode = useRef<string>('')
   const currentId = useRef<number>(-1)
+
+  const { openToast } = useToast()
 
   const {
     openModal: openRemoveModal,
@@ -64,7 +67,10 @@ const Tag = () => {
       })
       .then(() => {
         closeRemoveModal()
-        alert(tagId + '번 태그가 삭제되었습니다.')
+        openToast({
+          message: '태그가 성공적으로 삭제되었습니다.',
+          severity: 'success',
+        })
         fetchTags().then((data) => setContent(data))
       })
       .catch((err) => {
@@ -84,7 +90,10 @@ const Tag = () => {
           { withCredentials: true },
         )
         .then(() => {
-          alert('새로운 태그가 등록되었습니다.')
+          openToast({
+            message: '태그가 성공적으로 등록되었습니다.',
+            severity: 'success',
+          })
           fetchTags().then((data) => setContent(data))
         })
         .catch(() => {
@@ -102,7 +111,10 @@ const Tag = () => {
           { withCredentials: true },
         )
         .then(() => {
-          alert('태그가 수정되었습니다.')
+          openToast({
+            message: '태그가 성공적으로 수정되었습니다.',
+            severity: 'success',
+          })
           fetchTags().then((data) => setContent(data))
         })
         .catch(() => {
