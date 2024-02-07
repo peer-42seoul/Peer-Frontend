@@ -35,7 +35,7 @@ export interface ISetupTeam {
   status: TeamStatus
   dueTo: string
   operationForm: TeamOperationForm
-  region: Array<string | null>
+  region: string[]
   teamImage: string | null
   // job: Job[] | null
 }
@@ -74,10 +74,10 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   })
 
   const region = watch('region')
+  const name = watch('name')
   const dueTo = watch('dueTo')
   const operationForm = watch('operationForm')
   const status = watch('status')
-  const all = watch()
 
   /**id: string
   type: TeamType
@@ -114,10 +114,22 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
   }
 
   const onSubmit = () => {
+    const data: ISetupTeam = {
+      id: team.id,
+      type: team.type,
+      name: name,
+      maxMember: team.maxMember,
+      status: status,
+      dueTo: dueTo,
+      operationForm: operationForm,
+      region: region,
+      teamImage: team.teamImage,
+    }
+    console.log('data', data)
     axiosWithAuth
       .post(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${team.id}`,
-        all,
+        data,
       )
       .then((res) => {
         if (res.status == 200) {

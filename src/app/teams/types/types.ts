@@ -46,7 +46,7 @@ export interface ITeam {
     status: TeamStatus
     dueTo: string
     operationForm: TeamOperationForm
-    region: Array<string | null>
+    region: string[]
     teamImage: string | null
   }
   member: IMember[]

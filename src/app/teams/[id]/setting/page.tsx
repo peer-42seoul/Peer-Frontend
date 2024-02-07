@@ -36,9 +36,6 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (data) {
-      if (data.team.region[0] === null) {
-        data.team.region = [``, ``]
-      }
       setTeams(data)
     }
   }, [data])
