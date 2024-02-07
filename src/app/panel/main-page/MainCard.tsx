@@ -40,6 +40,13 @@ const MainCard = ({
         ? '모집전'
         : '모집완료'
 
+  if (statusLabel === '모집완료') {
+    sx = {
+      ...sx,
+      filter: 'grayscale(120%) brightness(1.3)',
+    }
+  }
+
   return (
     <Card sx={sx}>
       <Link
@@ -52,10 +59,21 @@ const MainCard = ({
             height="194"
             image={image}
             alt="userImage"
+            sx={{
+              filter:
+                statusLabel === '모집완료'
+                  ? 'grayscale(150%) brightness(0.7)'
+                  : '',
+            }}
           />
           {status && (
             <Chip
-              label={<Typography variant="Tag">{statusLabel}</Typography>}
+              label={
+                <Typography color={'white'} variant="Tag">
+                  {statusLabel}
+                </Typography>
+              }
+              color={statusLabel === '모집중' ? 'green' : 'error'}
               sx={ChipStyle}
               size="medium"
             />
