@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material'
 import FavoriteButton from '@/components/FavoriteButton'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import DropdownMenu from '@/components/DropdownMenu'
@@ -24,7 +24,12 @@ const RecruitQuickMenu = ({
   const path = usePathname()
   const type = useSearchParams().get('type')
   const router = useRouter()
-  const currentPageUrl = window?.location.href
+  const [currentPageUrl, setCurrentPageUrl] = useState('')
+
+  //window is not defined 에러 방지
+  useEffect(() => {
+    setCurrentPageUrl(window.location.href)
+  }, [])
 
   return (
     <Stack flexDirection={'row'} justifyContent={'flex-end'}>
