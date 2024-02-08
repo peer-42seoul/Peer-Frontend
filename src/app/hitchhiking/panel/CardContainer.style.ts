@@ -1,4 +1,10 @@
 import { SxProps } from '@mui/material'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const cardContainerStyle: SxProps = {
   width: '100%',
@@ -19,7 +25,7 @@ export const gnbContainerStyle: SxProps = {
 export const gnbTypographyStyle: SxProps = {
   color: 'text.normal',
   textAlign: 'center',
-  fontFamily: 'Inter',
+  fontFamily: `${inter.style.fontFamily} !important` as string,
   fontSize: '13px',
   fontStyle: 'normal',
   fontWeight: 700,
