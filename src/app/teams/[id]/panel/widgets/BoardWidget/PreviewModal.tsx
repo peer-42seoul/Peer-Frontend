@@ -25,7 +25,7 @@ const PreviewModal = ({ open, onClose, data, teamId }: IPreviewModalProps) => {
             <ListItem
               key={crypto.randomUUID()}
               title={item.title}
-              authorNickname={item.authorNickname}
+              authorNickname={item.nickname}
               createdAt={item.createdAt}
             />
           ))}

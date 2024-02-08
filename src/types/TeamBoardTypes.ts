@@ -21,15 +21,15 @@ export interface ITeamBoardListData extends IPagination<ITeamPost[]> {}
 
 export interface ITeamPostDetail extends ITeamPostBase {
   content: string
-  isAuthor: boolean // TODO : 아직 구현 안됨.
+  isAuthor: boolean
 }
 
 // Notice
 
 export interface ITeamNoticeBase {
   title: string
-  authorNickname: string
-  createdAt: Date // TODO : 확인 필요함.
+  nickname: string
+  createdAt: Date
 }
 
 export interface ITeamNotice extends ITeamNoticeBase {
@@ -58,4 +58,15 @@ export interface ITeamComment {
   content: string
   createdAt: Date
   isAuthor: boolean
+}
+
+export interface IEditFormType {
+  teamId: string
+  postId?: number
+  type: 'edit' | 'new' // 수정 | 새로 작성
+  handleGoBack: () => void // 취소 버튼
+}
+
+export interface IBoardEditFormType extends IEditFormType {
+  boardId: number
 }

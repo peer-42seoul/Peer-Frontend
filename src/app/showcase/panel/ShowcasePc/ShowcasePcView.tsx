@@ -8,7 +8,6 @@ import {
   CardContent,
   IconButton,
   Menu,
-  MenuItem,
   Stack,
   Typography,
 } from '@mui/material'
@@ -21,6 +20,9 @@ import useAxiosWithAuth from '@/api/config'
 import TagChip from '@/components/TagChip'
 import { useRouter } from 'next/navigation'
 import NoDataDolphin from '@/components/NoDataDolphin'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
+import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
+import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -62,7 +64,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
     if (!data) return alert('로그인이 필요합니다.')
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/like/${data.id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/like/${data.id}`,
       )
       .then((res) => {
         if (res.status === 200) {
@@ -83,7 +85,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
     if (!data) return alert('로그인이 필요합니다.')
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${data.id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/favorite/${data.id}`,
       )
       .then((res) => {
         if (res.status === 200) {
@@ -112,12 +114,13 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
         sx={{
           height: '37rem',
           backgroundColor: 'background.tertiary',
-          width: '25rem',
+          width: '30rem',
+          py: '1rem',
         }}
       >
         {data !== undefined ? (
           <CardActions onClick={handleCardClick}>
-            <CardContent>
+            <CardContent sx={{ margin: 'auto', padding: 0 }}>
               <Stack spacing={'1.5rem'}>
                 <Stack
                   direction={'row'}
@@ -126,7 +129,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                 >
                   <Stack direction={'row'} spacing={'0.5rem'}>
                     <Avatar
-                      src={data.image!}
+                      src={data.teamLogo!}
                       sx={{ width: '1.5rem', height: '1.5rem' }}
                     />
                     <Typography color={'text.alternative'} width={'11rem'}>
@@ -176,14 +179,19 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                       onClose={handleMenuClose}
                       anchorEl={anchorEl}
                     >
-                      <MenuItem>공유</MenuItem>
-                      <MenuItem>신고</MenuItem>
+                      <ShareMenuItem
+                        title={data.name}
+                        url={`/showcase/${data.id}`}
+                        content={data.description}
+                      />
+
+                      <ReportMenuItem targetId={data.id} />
                     </Menu>
                   </Stack>
                 </Stack>
-                <Stack
+                {/* <Stack
                   height={'20rem'}
-                  width={'22rem'}
+                  width={'28rem'}
                   whiteSpace={'normal'}
                   overflow={'hidden'}
                   textOverflow={'ellipsis'}
@@ -191,6 +199,23 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                   <Typography sx={{ wordBreak: 'break-word' }}>
                     {data.description}
                   </Typography>
+                </Stack> */}
+                <Stack
+                  height={'20rem'}
+                  width={'28rem'}
+                  whiteSpace={'normal'}
+                  overflow={'hidden'}
+                  textOverflow={'ellipsis'}
+                >
+                  <DynamicToastViewer
+                    initialValue={data.description}
+                    sx={{
+                      width: '100%',
+                      wordBreak: 'break-word',
+                      height: '20rem',
+                      boxSizing: 'border-box',
+                    }}
+                  />
                 </Stack>
                 <Stack alignItems={'center'}>
                   <Button
@@ -235,14 +260,15 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                       <Typography color={'text.alternative'}>
                         기술스택
                       </Typography>
+
+                      {data.skill.map((skill, index) => (
+                        <TagChip
+                          key={index}
+                          name={skill.name}
+                          color={skill.color}
+                        />
+                      ))}
                     </Stack>
-                    {data.skill.map((skill, index) => (
-                      <TagChip
-                        key={index}
-                        name={skill.name}
-                        color={skill.color}
-                      />
-                    ))}
                   </Stack>
                 </Stack>
               </Stack>

@@ -27,6 +27,10 @@ export const searchInput = {
   },
 }
 
+export const searchButton = {
+  minWidth: '4rem',
+}
+
 export const manageBarStack = {
   height: '2rem',
 }

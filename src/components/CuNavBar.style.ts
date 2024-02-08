@@ -1,4 +1,4 @@
-import { Theme } from '@mui/material'
+import { SxProps, Theme } from '@mui/material'
 
 export const pcNavBar = {
   boxSizing: 'border-box',
@@ -16,6 +16,9 @@ export const tabs = {
   justifyContent: 'space-between',
   width: '100%',
   padding: 0,
+  '& .MuiToggleButtonGroup-grouped': {
+    borderRadius: '0.5rem',
+  },
 }
 
 const tabBase = {
@@ -27,7 +30,10 @@ const tabBase = {
 
 const selectedTab = {
   '&.Mui-selected': {
-    backgroundColor: 'purple.tinted',
+    backgroundColor: ['purple.tinted', 'background.tertiary'],
+    '& span': {
+      color: ['purple.strong', 'text.normal'],
+    },
     '& svg': {
       fill: (theme: Theme) => theme.palette.purple.strong,
     },
@@ -45,12 +51,16 @@ const disabledTab = {
   },
 }
 
-export const pcTab = {
+export const pcTab: SxProps = {
+  borderRadius: '0.5rem',
   height: '2rem',
   maxWidth: '15.3rem',
   width: '100%',
   padding: '0 1.5rem',
   margin: '0.25rem 0',
+  '& span': {
+    color: 'text.assistive',
+  },
   ...tabBase,
   ...selectedTab,
   ...disabledTab,
@@ -70,6 +80,9 @@ export const mobileTab = {
   ...tabBase,
   ...selectedTab,
   ...disabledTab,
+  '& span': {
+    color: 'text.assistive',
+  },
 }
 
 export const iconBoxBase = {
@@ -88,7 +101,7 @@ export const newTextBadge = {
 
 const BADGE_TRANSLATE = 'translate(130%, -50%)'
 
-export const newBadge = {
+export const badgeBase = {
   '& .MuiBadge-badge': {
     width: '3px',
     minWidth: '3px', // mui 기본 설정 디자인 오버라이딩
@@ -105,5 +118,17 @@ export const newBadge = {
       msTransform: `scale(0) ${BADGE_TRANSLATE}`,
       MozTransform: `scale(0) ${BADGE_TRANSLATE}`,
     },
+  },
+}
+
+export const newBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: (theme: Theme) => theme.palette.yellow.strong,
+  },
+}
+
+export const betaBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: (theme: Theme) => theme.palette.red.strong,
   },
 }

@@ -8,6 +8,8 @@ import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import { useRouter, useSearchParams } from 'next/navigation'
+import NoDataDolphin from '@/components/NoDataDolphin'
+import Link from 'next/link'
 
 const ShowCaseWritePage = () => {
   const router = useRouter()
@@ -16,7 +18,7 @@ const ShowCaseWritePage = () => {
   const axiosWithAuth = useAxiosWithAuth()
 
   const { data, isLoading, error } = useSWR<IShowcaseEditorFields>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write/${teamId}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/write/${teamId}`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )
@@ -25,7 +27,17 @@ const ShowCaseWritePage = () => {
   if (error) {
     if (error.response && error.response.status === 409) {
       return (
-        <Typography color={'error'}>{error.response.data.message}</Typography>
+        <Stack
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            height: '90vh',
+          }}
+        >
+          <NoDataDolphin message={error.response.data.message} />
+          <Link href={`../teams/${teamId}/setting`}>팀설정으로 돌아가기</Link>
+        </Stack>
       )
     }
     return <Typography color={'error'}>에러가 발생했습니다.</Typography>

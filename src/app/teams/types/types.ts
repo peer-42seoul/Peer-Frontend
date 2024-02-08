@@ -25,6 +25,7 @@ export interface IMember {
   name: string
   id: string
   role: TeamGrant
+  image: string
   job: string[]
 }
 
@@ -61,11 +62,7 @@ export enum EInterviewType {
 //TODO: 타입 묶기
 export type CloseQuestionList = string[]
 
-export type RatioQuestionList = {
-  number: string
-  option1: string
-  option2: string
-}
+export type RatioQuestionList = string[]
 
 export type CheckQuestionList = string[]
 
@@ -83,6 +80,7 @@ export interface IApply {
 
 export interface IApplicant {
   name: string
+  image: string
   userId: string
   answers: IInterview[]
   applyId: IApply

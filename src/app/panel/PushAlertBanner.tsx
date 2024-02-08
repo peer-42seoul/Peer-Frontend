@@ -1,3 +1,5 @@
+'use client'
+
 import useAxiosWithAuth from '@/api/config'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { AxiosInstance } from 'axios'
@@ -6,7 +8,7 @@ import webpush from 'web-push'
 
 const PushAlertBanner = () => {
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-  const [isShowPush, setIsShowPush] = useState<boolean>(true)
+  const [isShowPush, setIsShowPush] = useState<boolean>(false)
   const [isScroll, setIsScroll] = useState<number>(1)
 
   const urlBase64ToUint8Array = (base64String: string) => {
@@ -46,7 +48,7 @@ const PushAlertBanner = () => {
         let newSubString = JSON.stringify(newSubData)
 
         return axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/push`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/push`,
           {
             subscription: newSubString,
           },
@@ -100,6 +102,8 @@ const PushAlertBanner = () => {
   useEffect(() => {
     if (localStorage && localStorage.getItem('isShowPush') === 'false') {
       setIsShowPush(false)
+    } else {
+      setIsShowPush(true)
     }
 
     window.addEventListener('scroll', handleScroll)
@@ -107,7 +111,7 @@ const PushAlertBanner = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [])
+  }, [setIsShowPush])
 
   return (
     <>
@@ -116,23 +120,26 @@ const PushAlertBanner = () => {
           position={'fixed'}
           top={isScroll ? 0 : 57}
           width={'100%'}
-          border="1px solid black"
           sx={{
             backgroundColor: 'primary.main',
-            zIndex: 9999,
+            zIndex: 3000,
           }}
         >
           <Stack margin={1}>
-            <Typography>
+            <Typography color={'white'} variant="Caption">
               사용하시는 브라우저는 알림 기능을 사용할 수 있습니다.
               사용하시겠습니까?
             </Typography>
             <Stack direction="row">
               <Button onClick={handlePush}>
-                <Typography>네</Typography>
+                <Typography color={'white'} variant="Caption">
+                  네
+                </Typography>
               </Button>
               <Button onClick={() => setIsShowPush(false)}>
-                <Typography>다음에</Typography>
+                <Typography color={'white'} variant="Caption">
+                  다음에
+                </Typography>
               </Button>
               <Button
                 onClick={() => {
@@ -140,7 +147,9 @@ const PushAlertBanner = () => {
                   localStorage.setItem('isShowPush', 'false')
                 }}
               >
-                <Typography>아니요</Typography>
+                <Typography color={'white'} variant="Caption">
+                  아니요
+                </Typography>
               </Button>
             </Stack>
           </Stack>

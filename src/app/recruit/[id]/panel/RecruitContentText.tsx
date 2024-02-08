@@ -20,7 +20,7 @@ const RecruitContentText = ({
       >
         {icon}
       </Stack>
-      <Typography color={'text.strong'} fontSize={'0.75rem'}>
+      <Typography color={'text.strong'} variant="CaptionEmphasis">
         {label}
       </Typography>
     </Stack>

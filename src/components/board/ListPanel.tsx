@@ -168,9 +168,8 @@ export const ListBoxContainer = ({ children }: IChildrenProps) => {
 }
 
 export const ListStack = ({ children }: IChildrenProps) => {
-  const { isPc } = useMedia()
   return (
-    <Stack sx={isPc ? style.PcListStack : undefined} spacing={'1rem'}>
+    <Stack sx={style.ListStack} spacing={'1rem'}>
       {children}
     </Stack>
   )
@@ -214,7 +213,7 @@ export const ListItem = ({
         <Typography variant={'Caption'} color={'text.alternative'}>
           {dayjs(createdAt).format('MM월 DD일')}
         </Typography>
-        {hit && (
+        {hit !== undefined && (
           <Typography variant={'Caption'} color={'text.alternative'}>
             조회수 {hit}
           </Typography>

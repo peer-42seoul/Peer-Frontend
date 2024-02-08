@@ -11,7 +11,7 @@ import { Stack, Typography, IconButton, styled, Box } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuTextField from '@/components/CuTextField'
 import useMedia from '@/hook/useMedia'
-import useToast from '@/hook/useToast'
+import useToast from '@/states/useToast'
 import SendIcon from '@/icons/SendIcon'
 import { IMessage, IMessageTargetUser } from '@/types/IMessage'
 import * as style from './MessageForm.style'
@@ -19,6 +19,10 @@ import * as style from './MessageForm.style'
 const MAX_LENGTH = 300
 
 interface IMessageFormProps {
+  messageSendState: {
+    isMessageSending: boolean
+    setIsMessageSending: (value: boolean) => void
+  }
   targetId: number
   updateTarget?: Dispatch<SetStateAction<IMessageTargetUser | undefined>>
   addNewMessage: (newMessage: IMessage) => void
@@ -29,6 +33,7 @@ interface IMessageFormProps {
 const BorderlessTextField = styled(CuTextField)(style.removeBorder)
 
 const MessageForm = ({
+  messageSendState,
   targetId,
   updateTarget,
   addNewMessage,
@@ -37,28 +42,8 @@ const MessageForm = ({
 }: IMessageFormProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [content, setContent] = useState<string>('')
-  const {
-    CuToast,
-    isOpen,
-    openToast,
-    closeToast,
-    toastMessage,
-    setToastMessage,
-  } = useToast()
   const { isPc } = useMedia()
-
-  const resetToast = useCallback(() => {
-    setToastMessage('')
-    closeToast()
-  }, [closeToast, setToastMessage])
-
-  const setToast = useCallback(
-    (message: string) => {
-      setToastMessage(message)
-      openToast()
-    },
-    [openToast, setToastMessage],
-  )
+  const { openToast } = useToast()
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
@@ -73,9 +58,13 @@ const MessageForm = ({
   ) => {
     e.preventDefault()
     e.stopPropagation()
+    messageSendState.setIsMessageSending(true)
     try {
       if (!content) {
-        setToast('빈 메시지는 전송할 수 없습니다.')
+        openToast({
+          severity: 'error',
+          message: '내용을 입력해주세요.',
+        })
         return
       }
       const messageData = {
@@ -89,7 +78,6 @@ const MessageForm = ({
       if (response.status === 201) {
         addNewMessage(response.data)
         setContent('')
-        resetToast()
       }
     } catch (error) {
       if (isAxiosError(error) && error.response?.status === 410) {
@@ -104,9 +92,19 @@ const MessageForm = ({
             }
             return prev
           })
-        setToast('상대가 쪽지를 삭제했습니다.') // NOTE : 안내 문구가 괜찮은지 모르겠음.
-      } else setToast('쪽지 전송에 실패했습니다. 다시 시도해주세요.') // NOTE : 안내 문구가 괜찮은지 모르겠음.
+        openToast({
+          severity: 'error',
+          message:
+            '상대가 쪽지를 삭제했습니다. 새 쪽지 보내기를 통해 다시 대화를 시작해주세요.',
+        })
+      } else {
+        openToast({
+          severity: 'error',
+          message: '쪽지 보내기에 실패했습니다. 다시 시도해주세요.',
+        })
+      }
     } finally {
+      messageSendState.setIsMessageSending(false)
       handleClose && handleClose()
     }
   }
@@ -143,7 +141,11 @@ const MessageForm = ({
                 {content.length} / {MAX_LENGTH}
               </Typography>
             </Stack>
-            <IconButton type="submit" sx={style.pcSendButton}>
+            <IconButton
+              disabled={messageSendState.isMessageSending || disabled}
+              type="submit"
+              sx={style.pcSendButton}
+            >
               <SendIcon />
             </IconButton>
           </Stack>
@@ -159,9 +161,6 @@ const MessageForm = ({
           />
         )}
       </form>
-      <CuToast open={isOpen} onClose={closeToast} severity="error">
-        {toastMessage}
-      </CuToast>
     </Box>
   )
 }

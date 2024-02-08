@@ -11,11 +11,12 @@ import {
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import useTeamPageState from '@/states/useTeamPageState'
+import useToast from '@/states/useToast'
 import { ITeamPostDetail } from '@/types/TeamBoardTypes'
-import CommentList from './panel/CommentList'
-import { CommentForm } from './panel/CommentForm'
 import CuTextModal from '@/components/CuTextModal'
 import useModal from '@/hook/useModal'
+import { CommentForm } from '@/components/board/CommentForm'
+import CommentList from '@/components/board/CommentList'
 
 const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   const { id: teamId } = params
@@ -27,17 +28,21 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   )
   const { isPc } = useMedia()
   const { openModal, isOpen, closeModal } = useModal()
+  const { openToast } = useToast()
 
   const handleDelete = () => {
     if (!boardId) return
     axiosWithAuth
-      .delete(`/api/v1/team/board/post/${postId}`)
+      .delete(`/api/v1/team/post/${postId}`)
       .then(() => {
         alert('게시글을 삭제했습니다.')
         setBoard('LIST', boardId)
       })
       .catch(() => {
-        alert('게시글 삭제에 실패했습니다.')
+        openToast({
+          severity: 'error',
+          message: '게시글을 삭제하지 못했습니다.',
+        })
       })
   }
 

@@ -1,14 +1,20 @@
 import { Stack, Typography, IconButton } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import useAxiosWithAuth from '@/api/config'
 import Favorite from '@mui/icons-material/Favorite'
 import { motion, useAnimationControls } from 'framer-motion'
 import useToast from '@/states/useToast'
 import * as style from './Interest.style'
 
-const Interest = ({ id }: { id?: number }) => {
-  const [favorite, setFavorite] = useState(false)
-
+const Interest = ({
+  id,
+  favorite,
+  setFavorite,
+}: {
+  id?: number
+  favorite: boolean
+  setFavorite: () => void
+}) => {
   const { openToast, closeToast } = useToast()
 
   const axiosInstance = useAxiosWithAuth()
@@ -29,13 +35,11 @@ const Interest = ({ id }: { id?: number }) => {
     closeToast()
     try {
       await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorite/${id}`,
       )
-      setFavorite((prev) => {
-        if (!prev) control.start(variants.favorite)
-        else control.start(variants.unfavorite)
-        return !prev
-      })
+      setFavorite()
+      if (favorite) control.start(variants.favorite)
+      else control.start(variants.unfavorite)
     } catch (e) {
       openToast({
         severity: 'error',
@@ -44,17 +48,13 @@ const Interest = ({ id }: { id?: number }) => {
     }
   }
 
-  useEffect(() => {
-    setFavorite(false)
-  }, [id])
-
   return (
     <Stack
       direction={'column'}
       justifyContent={'center'}
       alignItems={'center'}
       spacing={1}
-      sx={{ p: '1rem 0 1.5rem 0', width: '100%' }}
+      sx={{ p: '1rem 0 1.5rem 0', width: 'fit-content' }}
     >
       <IconButton
         aria-label="add to favorites"

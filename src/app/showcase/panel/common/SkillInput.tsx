@@ -1,7 +1,7 @@
 import React from 'react'
 import { Stack } from '@mui/material'
 import TagIcon from '@/icons/TagIcon'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import * as style from './SkillInput.style'
 import TagChip from '@/components/TagChip'
 import { ISkill } from '@/types/IShowcaseEdit'
@@ -15,7 +15,7 @@ const SkillInput = ({ skills }: ISkillProps) => {
     <Stack spacing={'0.75rem'} sx={style.skillInputViewer}>
       <LabelWithIcon
         svgIcon={<TagIcon sx={style.IconStyle} />}
-        message="기술 스택"
+        message="기술스택"
         color="text.alternative"
       />
       <Stack spacing={'0.75rem'} py={1} direction={'row'} useFlexGap>

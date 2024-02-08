@@ -1,10 +1,11 @@
 'use client'
 
 import { ReactNode, useEffect } from 'react'
-import { Stack } from '@mui/material'
+import { Stack, Container, Box } from '@mui/material'
 import useTeamPageState from '@/states/useTeamPageState'
-import useMedia from '@/hook/useMedia'
+
 import TeamSidebar from './panel/NavBar'
+import * as style from './layout.style'
 
 const TeamLayout = ({
   params,
@@ -13,7 +14,6 @@ const TeamLayout = ({
   params: { id: string }
   children: ReactNode
 }) => {
-  const { isPc } = useMedia()
   const { layout, resetState } = useTeamPageState()
   const id = params.id
 
@@ -24,29 +24,16 @@ const TeamLayout = ({
   }, [])
 
   return (
-    <Stack display="flex" padding={1} spacing={2} px={isPc ? 10 : 1}>
+    <Container sx={style.container}>
       <Stack
-        spacing={'0.5rem'}
-        direction={isPc ? 'row' : 'column'}
-        justifyContent={'center'}
+        justifyContent={'space-between'}
+        direction={['column', 'row']}
+        sx={style.stack}
       >
-        {layout === 'SIDEBAR' && (
-          <Stack borderRadius={2}>
-            <TeamSidebar id={id} />
-          </Stack>
-        )}
-        <Stack
-          spacing={2}
-          direction={isPc ? 'row' : 'column'}
-          flex={4}
-          borderRadius={2}
-          width={'100%'}
-          maxWidth="56.75rem"
-        >
-          {children}
-        </Stack>
+        {layout === 'SIDEBAR' && <TeamSidebar id={id} />}
+        <Box sx={style.contentBox}>{children}</Box>
       </Stack>
-    </Stack>
+    </Container>
   )
 }
 

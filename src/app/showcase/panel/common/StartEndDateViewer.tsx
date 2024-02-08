@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import * as Style from './SkillInput.style'
 import { CalendarIcon } from '@/app/showcase/panel/icons'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import useMedia from '@/hook/useMedia'
 import * as style from './StartEndDateViewer.style'
 interface Idate {
@@ -21,7 +21,7 @@ const StartEndDateViewer = ({ start, end }: Idate) => {
           message="시작일"
           color="text.alternative"
         />
-        <Typography variant={'Caption'} sx={{ color: 'text.normal' }}>
+        <Typography variant={'Body2'} sx={{ color: 'text.normal' }}>
           {start.split('T')[0]} (모집글 게시일)
         </Typography>
       </Stack>
@@ -31,7 +31,7 @@ const StartEndDateViewer = ({ start, end }: Idate) => {
           message="종료일"
           color="text.alternative"
         />
-        <Typography variant={'Caption'} sx={{ color: 'text.normal' }}>
+        <Typography variant={'Body2'} sx={{ color: 'text.normal' }}>
           {end.split('T')[0]} (진행 완료일)
         </Typography>
       </Stack>

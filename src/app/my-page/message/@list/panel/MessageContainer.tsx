@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { AxiosResponse } from 'axios'
-import { Stack, Typography } from '@mui/material'
+import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import { IMessageListData } from '@/types/IMessage'
 import useSelectCheckBox from '@/hook/useSelectCheckbox'
 import useMedia from '@/hook/useMedia'
-import useToast from '@/hook/useToast'
+import useToast from '@/states/useToast'
 import MessageList from './MessageList'
 import useMessageListState from '@/states/useMessageListState'
 import { SearchBar, ManageBar, ContainerHeader } from './MessageBar'
@@ -26,7 +26,6 @@ const MessageContainer = ({
   isLoading,
   openNewMessageModal,
 }: IMessageContainerProps) => {
-  const { CuToast, isOpen, openToast, closeToast } = useToast()
   const [isManageMode, setIsManageMode] = useState(false)
   const [searchKeyword, setSearchKeyword] = useState('')
   const {
@@ -40,6 +39,7 @@ const MessageContainer = ({
   const axiosInstance = useAxiosWithAuth()
   const { messageList, setMessageList } = useMessageListState()
   const { isPc } = useMedia()
+  const { openToast } = useToast()
 
   useEffect(() => {
     if (isManageMode) unselectAll()
@@ -53,7 +53,6 @@ const MessageContainer = ({
   // event handler
 
   const handleMessageSearch = useCallback(() => {
-    // NOTE : 검색어가 없는 경우에는 모든 메시지를 보여준다?
     if (!originalMessageData) return
     if (!searchKeyword) setMessageList(originalMessageData)
     else
@@ -79,7 +78,10 @@ const MessageContainer = ({
         setIsManageMode(false)
       })
       .catch(() => {
-        openToast()
+        openToast({
+          severity: 'error',
+          message: '삭제 중 오류가 발생했습니다. 다시 시도해주세요.',
+        })
       })
   }
 
@@ -114,9 +116,6 @@ const MessageContainer = ({
           selectedUsers={selectedUsers}
           toggleSelectUser={toggleSelect}
         />
-        <CuToast open={isOpen} onClose={closeToast} severity="error">
-          <Typography>삭제에 실패하였습니다.</Typography>
-        </CuToast>
       </Stack>
     </>
   )

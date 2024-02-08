@@ -1,10 +1,6 @@
 'use client'
 import { useDarkMode } from '@/states/useDarkMode'
-import {
-  ThemeProvider,
-  createTheme,
-  StyledEngineProvider,
-} from '@mui/material/styles'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { useEffect } from 'react'
 
 declare module '@mui/material/styles' {
@@ -361,15 +357,11 @@ declare module '@mui/material/Chip' {
 }
 
 const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  let theme = createTheme()
-
-  const { theme: colorTheme, getModeFromLocalStorage } = useDarkMode()
+  const { theme, getModeFromLocalStorage } = useDarkMode()
 
   useEffect(() => {
     getModeFromLocalStorage()
   }, [])
-
-  theme = createTheme(theme, colorTheme)
 
   if (theme.palette) {
     theme.palette.red = theme.palette.augmentColor({
@@ -552,6 +544,20 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       },
     }
 
+    theme.components.MuiSelect = {
+      styleOverrides: {
+        root: {
+          boxShadow: 'none',
+          '.MuiOutlinedInput-notchedOutline': { border: 0 },
+          '.MuiSelect-outlined': {
+            '& fieldset': {
+              backgroundColor: theme.palette.background.tertiary,
+            },
+          },
+        },
+      },
+    }
+
     theme.components.MuiAutocomplete = {
       styleOverrides: {
         root: {
@@ -570,7 +576,8 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (theme.typography) {
-    theme.typography.fontFamily = 'Pretendard Variable, sans-serif'
+    theme.typography.fontFamily =
+      'var(--main-font), Pretendard Variable, sans-serif'
     theme.typography.HeadlineEmphasis = {
       fontSize: '32px',
       fontStyle: 'normal',
@@ -671,7 +678,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       color: theme.palette.text.normal,
     }
     theme.typography.Tag = {
-      fontSize: '12px',
+      fontSize: '11px',
       fontStyle: 'normal',
       fontWeight: 400,
       lineHeight: '150%',

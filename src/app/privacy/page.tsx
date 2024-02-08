@@ -1,5 +1,4 @@
 'use client'
-
 import CuButton from '@/components/CuButton'
 import useMedia from '@/hook/useMedia'
 import {
@@ -14,25 +13,8 @@ import { useEffect, useState } from 'react'
 import useAuthStore from '@/states/useAuthStore'
 import BoxBase from '@/components/BoxBase'
 import PrivacyPolicy from './panel/PrivacyPolicy'
-
-const PCSignupBox = {
-  display: 'flex',
-  position: 'relative',
-  width: '544px',
-  padding: '40px 64px',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '48px',
-}
-
-const MobileSignupBox = {
-  display: 'flex',
-  width: '100%',
-  flexDirection: 'column',
-  alignItems: 'center',
-  padding: '40px 16px',
-  gap: '24px',
-}
+import UsagePolicy from './panel/UsagePolicy'
+import { PCLoginBox, MobileLoginBox } from '../login/login.style'
 
 const PCPaper = {
   width: 'calc(100%-16px)',
@@ -57,9 +39,6 @@ const MobilePaper = {
   padding: '8px',
   backgroundColor: 'background.secondary',
 }
-
-const Policy1 =
-  '이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다. 이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다.이 부분은 테스트 약관입니다. 자세한 내용은 추후에 업데이트 될 예정입니다.'
 
 const Privacy = () => {
   const { isPc } = useMedia()
@@ -107,7 +86,7 @@ const Privacy = () => {
 
   return (
     <>
-      <BoxBase pcSx={PCSignupBox} mobileSx={MobileSignupBox}>
+      <BoxBase pcSx={PCLoginBox} mobileSx={MobileLoginBox}>
         <Typography variant="Title3Emphasis">회원가입</Typography>
         <Stack gap={'16px'}>
           <Stack>
@@ -142,9 +121,7 @@ const Privacy = () => {
               checked={checkStatus[0]}
             />
             <Paper sx={isPc ? PCPaper : MobilePaper}>
-              <Typography variant="Caption" color={'text.alternative'}>
-                {Policy1}
-              </Typography>
+              <UsagePolicy />
             </Paper>
           </Stack>
           <Stack>

@@ -1,7 +1,7 @@
 'use client'
-import { Button, Container, Stack } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { IShowcaseEditorFields } from '@/types/IShowcaseEdit'
+import { Box, Button, Container, Stack } from '@mui/material'
+import React, { useRef, useState } from 'react'
+import { ILinkInformation, IShowcaseEditorFields } from '@/types/IShowcaseEdit'
 import ImageInput from '../panel/common/ImageInput'
 import TeamName from '../panel/common/TeamName'
 import SkillInput from '../panel/common/SkillInput'
@@ -12,12 +12,12 @@ import CuTextModal from '@/components/CuTextModal'
 import useAxiosWithAuth from '@/api/config'
 import StartEndDateViewer from '../panel/common/StartEndDateViewer'
 import TeamMembers from '../panel/common/TeamMembers'
-import dynamic from 'next/dynamic'
 import * as style from './ShowcaseEditor.style'
 import { useLinks } from '@/hook/useLinks'
-import useShowCaseState from '@/states/useShowCaseState'
 import { useRouter } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
+import DynamicToastEditor from '@/components/DynamicToastEditor'
+import { Editor } from '@toast-ui/editor'
 
 interface IShowcaseEditorProps {
   data: IShowcaseEditorFields // IShowcase 타입을 import 해야 합니다.
@@ -27,10 +27,6 @@ interface IShowcaseEditorProps {
   router: any | undefined
 }
 
-const DynamicEditor = dynamic(() => import('../panel/common/FormUIEditor'), {
-  ssr: false,
-})
-
 const ShowcaseEditor = ({
   data,
   teamId,
@@ -39,98 +35,118 @@ const ShowcaseEditor = ({
 }: IShowcaseEditorProps) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [image, setImage] = useState<File[]>([])
-  const [previewImage, setPreviewImage] = useState<string>(
-    data.image ?? '/images/defaultImage.png',
-  )
+  const [previewImage, setPreviewImage] = useState<string>(data.image || '')
   const { openToast } = useToast()
   const { isOpen: alertOpen, closeModal, openModal } = useModal()
-  const { links, addLink, isValid, setIsValid, changeLinkName, changeUrl } =
-    useLinks(data.links ? data.links : [])
-  const { content, setContent } = useShowCaseState()
+  const { links, addLink, deleteLink, changeLinkName, changeUrl } = useLinks(
+    data.links ? data.links : [],
+  )
   const router = useRouter()
   const { isPc } = useMedia()
+  const editorRef = useRef<Editor | null>(null)
 
-  useEffect(() => {
-    if (requestMethodType === 'put') {
-      setContent(data?.content)
+  const validateUrl = (links: ILinkInformation[]) => {
+    const regex =
+      /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%.+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%+.~#?&//=]*)/
+
+    const validationResult = links.map((obj: ILinkInformation) => {
+      return regex.test(obj.link)
+    })
+    const isInvalid = validationResult.some((result: any) => result === false)
+    return isInvalid
+  }
+
+  const postHandler = async (linksWithoutId: any) => {
+    await axiosWithAuth.post(
+      `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/write`,
+      {
+        content: editorRef.current?.getMarkdown() ?? '',
+        teamId: teamId,
+        links: linksWithoutId,
+        image: image.length ? previewImage.split(',')[1] : null,
+      },
+    )
+  }
+  const putHandler = async (linksWithoutId: any) => {
+    await axiosWithAuth.put(
+      `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/edit/${showcaseId}`,
+      {
+        image: image.length ? previewImage.split(',')[1] : null,
+        content: editorRef.current?.getMarkdown() ?? '',
+        links: linksWithoutId,
+      },
+    )
+  }
+
+  const errorsHandler = (error: any) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 400:
+          openToast({
+            severity: 'error',
+            message: '요청이 올바르지 않습니다.',
+          })
+
+          break
+        case 403:
+          openToast({
+            severity: 'error',
+            message: '접근이 거부되었습니다.',
+          })
+          break
+        case 404:
+          openToast({
+            severity: 'error',
+            message: '페이지를 찾을 수 없습니다.',
+          })
+          break
+        case 409:
+          openToast({
+            severity: 'error',
+            message: '이미 쇼케이스가 존재합니다.',
+          })
+          break
+        default:
+          openToast({
+            severity: 'error',
+            message: '알 수 없는 에러가 발생했습니다.',
+          })
+          break
+      }
+    } else if (error.request) {
+      openToast({
+        severity: 'error',
+        message: '서버에서 응답이 없습니다.',
+      })
+    } else {
+      openToast({
+        severity: 'error',
+        message: '요청을 설정하는 중에 에러가 발생했습니다.',
+      })
     }
-  }, [requestMethodType, data?.content])
+  }
 
   const submitHandler = async () => {
     const linksWithoutId = links.map(({ ...rest }) => rest)
-    if (!isValid) {
+    if (validateUrl(linksWithoutId)) {
+      closeModal()
+      openToast({
+        severity: 'error',
+        message: '유효하지 않는 URL이 포함되어 있습니다.',
+      })
       return
     }
     try {
       if (requestMethodType === 'post') {
-        await axiosWithAuth.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/write`,
-          {
-            image: previewImage.split(',')[1],
-            content: content,
-            teamId: teamId,
-            links: linksWithoutId,
-          },
-        )
+        await postHandler(linksWithoutId)
         router.push(`/teams/${teamId}/showcase`)
       } else if (requestMethodType === 'put') {
-        await axiosWithAuth.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/edit/${showcaseId}`,
-          {
-            image: image.length ? previewImage.split(',')[1] : null,
-            content: content,
-            links: linksWithoutId,
-          },
-        )
+        await putHandler(linksWithoutId)
         router.push(`/showcase/detail/${showcaseId}`)
       }
     } catch (error: any) {
       closeModal()
-      if (error.response) {
-        switch (error.response.status) {
-          case 400:
-            openToast({
-              severity: 'error',
-              message: '요청이 올바르지 않습니다.',
-            })
-
-            break
-          case 403:
-            openToast({
-              severity: 'error',
-              message: '접근이 거부되었습니다.',
-            })
-            break
-          case 404:
-            openToast({
-              severity: 'error',
-              message: '페이지를 찾을 수 없습니다.',
-            })
-            break
-          case 409:
-            openToast({
-              severity: 'error',
-              message: '이미 쇼케이스가 존재합니다.',
-            })
-            break
-          default:
-            openToast({
-              severity: 'error',
-              message: '알 수 없는 에러가 발생했습니다.',
-            })
-            break
-        }
-      } else if (error.request) {
-        openToast({
-          severity: 'error',
-          message: '서버에서 응답이 없습니다.',
-        })
-      } else {
-        openToast({
-          severity: 'error',
-          message: '요청을 설정하는 중에 에러가 발생했습니다.',
-        })
-      }
+      errorsHandler(error)
     }
   }
 
@@ -167,7 +183,7 @@ const ShowcaseEditor = ({
           setImage={setImage}
           setPreviewImage={setPreviewImage}
         />
-        <TeamName teamName={data.name} />
+        <TeamName teamName={data.name} editMode={true} />
         <SkillInput skills={data.skills} />
         <StartEndDateViewer start={data.start} end={data.end} />
         <TeamMembers
@@ -178,13 +194,19 @@ const ShowcaseEditor = ({
         <LinkForm
           links={links}
           addLink={addLink}
-          isValid={isValid}
-          setIsValid={setIsValid}
+          deleteLink={deleteLink}
           changeLinkName={changeLinkName}
           changeUrl={changeUrl}
         />
-        <DynamicEditor content={data.content} />
-
+        <Box>
+          <DynamicToastEditor
+            initialValue={data.content}
+            initialEditType="wysiwyg"
+            editorRef={editorRef}
+            previewStyle="tab"
+            height={'30rem'}
+          />
+        </Box>
         <CuTextModal
           open={alertOpen}
           onClose={closeModal}

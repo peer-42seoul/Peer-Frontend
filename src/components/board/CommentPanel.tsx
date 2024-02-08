@@ -1,4 +1,4 @@
-import { FormEvent, useState, MouseEvent } from 'react'
+import { FormEvent, useState, MouseEvent, MutableRefObject } from 'react'
 import dayjs from 'dayjs'
 import {
   Box,
@@ -6,13 +6,13 @@ import {
   Menu,
   MenuItem,
   Stack,
+  TextField,
   Typography,
 } from '@mui/material'
 import { TrashIcon, EditIcon, SendIcon, MoreHorizontalIcon } from '@/icons'
 import useMedia from '@/hook/useMedia'
 import { ITeamComment } from '@/types/TeamBoardTypes'
 import CuAvatar from '../CuAvatar'
-import CuTextField from '../CuTextField'
 import CuButton from '../CuButton'
 import * as style from './CommentPanel.style'
 
@@ -40,6 +40,7 @@ interface ICommentMoreDropdownMenuProps {
 }
 
 interface ICommentFormContainerProps {
+  textRef: MutableRefObject<HTMLInputElement | undefined>
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void
   isLoading: boolean
 }
@@ -195,7 +196,7 @@ export const CommentItem = ({
         {isEditMode ? (
           <form onSubmit={handleEdit}>
             <Stack spacing={1} alignItems={'flex-end'}>
-              <CuTextField
+              <TextField
                 placeholder={'댓글을 작성해주세요.'}
                 fullWidth
                 name={'content'}
@@ -231,6 +232,7 @@ export const CommentItem = ({
 }
 
 export const CommentFormContainer = ({
+  textRef,
   handleSubmit,
   isLoading,
 }: ICommentFormContainerProps) => {
@@ -246,11 +248,13 @@ export const CommentFormContainer = ({
         spacing={'1rem'}
         alignItems={'center'}
       >
-        <CuTextField
+        <TextField
+          inputRef={textRef}
           placeholder={'댓글을 작성해주세요.'}
           fullWidth
           name={'new-content'}
           id={'new-content'}
+          inputProps={{ maxLength: 150 }}
         />
         <IconButton sx={style.IconButton} disabled={isLoading} type={'submit'}>
           <SendIcon sx={style.SendIcon} />

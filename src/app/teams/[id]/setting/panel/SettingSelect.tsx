@@ -1,12 +1,7 @@
 import { locationData } from '@/api/location'
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material'
+import { FormControl, MenuItem, Typography } from '@mui/material'
 import { TeamOperationForm } from '../../../types/types'
+import CuSelect from '@/components/CuSelect'
 
 export const dueList = [
   '1주일',
@@ -36,24 +31,16 @@ export const SettingSelect = ({
   type: string
   value: string
   parentLocation?: string
-  setValue: (event: SelectChangeEvent) => void
+  setValue: (value: any) => void
 }) => {
   if (type === 'location') {
     return (
       <FormControl sx={{ m: 0, minWidth: 80 }} size="small">
-        <InputLabel id="demo-select-small-label">지역</InputLabel>
-        <Select
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          value={value}
-          label="지역"
-          onChange={setValue}
-          sx={{ backgroundColor: 'background.tertiary' }}
-        >
+        <CuSelect value={value} setValue={setValue}>
           {!parentLocation &&
             locationData.map((region, idx) => (
               <MenuItem key={'region' + idx} value={region.name}>
-                {region.name}
+                <Typography variant={'Caption'}>{region.name}</Typography>
               </MenuItem>
             ))}
           {parentLocation &&
@@ -61,76 +48,56 @@ export const SettingSelect = ({
               .find((region) => region.name === parentLocation)
               ?.subArea?.map((region, idx) => (
                 <MenuItem key={'region' + idx} value={region}>
-                  {region}
+                  <Typography variant={'Caption'}>{region}</Typography>
                 </MenuItem>
               ))}
-        </Select>
+        </CuSelect>
       </FormControl>
     )
   } else if (type === 'operationForm') {
     return (
       <FormControl sx={{ m: 0, minWidth: 80 }} size="small">
-        <InputLabel id="demo-select-small-label">활동 방식</InputLabel>
-        <Select
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          value={value}
-          label="활동 방식"
-          onChange={setValue}
-        >
+        <CuSelect value={value} setValue={setValue}>
           {[
             TeamOperationForm.OFFLINE,
             TeamOperationForm.ONLINE,
             TeamOperationForm.MIX,
           ].map((operation, idx) => (
             <MenuItem key={'operation' + idx} value={operation}>
-              {operation === TeamOperationForm.OFFLINE && '오프라인'}
-              {operation === TeamOperationForm.ONLINE && '온라인'}
-              {operation === TeamOperationForm.MIX && '온/오프라인'}
+              <Typography variant={'Caption'}>
+                {operation === TeamOperationForm.OFFLINE && '오프라인'}
+                {operation === TeamOperationForm.ONLINE && '온라인'}
+                {operation === TeamOperationForm.MIX && '온/오프라인'}
+              </Typography>
             </MenuItem>
           ))}
-        </Select>
+        </CuSelect>
       </FormControl>
     )
   } else if (type === 'dueTo') {
     return (
       <FormControl sx={{ m: 0, minWidth: 80 }} size="small">
-        <InputLabel id="demo-select-small-label">목표 기간</InputLabel>
-        <Select
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          value={value}
-          label="목표 기간"
-          onChange={setValue}
-        >
+        <CuSelect value={value} setValue={setValue}>
           {dueList.map((dueTo, idx) => (
             <MenuItem key={'dueTo' + idx} value={dueTo}>
-              {dueTo}
+              <Typography variant={'Caption'}>{dueTo}</Typography>
             </MenuItem>
           ))}
-        </Select>
+        </CuSelect>
       </FormControl>
     )
   } else if (type == 'dueToSearch') {
     {
       return (
         <FormControl sx={{ m: 0, minWidth: 80 }} size="small">
-          <InputLabel id="demo-select-small-label">목표 기간</InputLabel>
-          <Select
-            labelId="demo-select-small-label"
-            id="demo-select-small"
-            value={value}
-            label="목표 기간"
-            onChange={setValue}
-            defaultValue={'선택안함'}
-          >
+          <CuSelect value={value ?? '선택안함'} setValue={setValue}>
             <MenuItem value={'선택안함'}>선택안함</MenuItem>
             {dueList.map((dueTo, idx) => (
               <MenuItem key={'dueTo' + idx} value={dueTo}>
-                {dueTo}
+                <Typography variant={'Caption'}>{dueTo}</Typography>
               </MenuItem>
             ))}
-          </Select>
+          </CuSelect>
         </FormControl>
       )
     }

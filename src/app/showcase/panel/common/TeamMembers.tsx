@@ -1,10 +1,11 @@
 import { Stack, Typography } from '@mui/material'
 import React from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import ListIcon from '@/icons/ListIcon'
 import * as Style from './SkillInput.style'
 import { IMember } from '@/types/IShowcaseEdit'
 import CuAvatar from '@/components/CuAvatar'
+import OthersProfile from '@/app/panel/OthersProfile'
 
 const MemberInformation = ({ member }: { member: IMember }) => {
   return (
@@ -15,12 +16,33 @@ const MemberInformation = ({ member }: { member: IMember }) => {
       width={'auto'}
       height={'auto'}
     >
-      <CuAvatar
-        src={member.image}
-        sx={{ width: '1.75rem', height: '1.75rem', border: '1px solid 2C2E35' }}
-      />
+      {member.nickname ? (
+        <OthersProfile userId={member.id} name={member.nickname}>
+          <CuAvatar
+            src={member.image ?? undefined}
+            alt="프로필 이미지"
+            sx={{
+              width: '1.75rem',
+              height: '1.75rem',
+              border: '1px solid 2C2E35',
+            }}
+          />
+        </OthersProfile>
+      ) : (
+        <CuAvatar
+          src={member.image ?? undefined}
+          alt="프로필 이미지"
+          sx={{
+            width: '1.75rem',
+            height: '1.75rem',
+            border: '1px solid 2C2E35',
+          }}
+        />
+      )}
+
       <Typography variant={'Body2'} sx={{ color: 'text.normal' }}>
-        {member.nickname}
+        {/* /탈퇴한 유저의 경우 image = null, nickname = 탈퇴한 유저, role = null */}
+        {member.nickname ?? '탈퇴한 유저'}
       </Typography>
       {member.isLeader && (
         <Typography variant={'Body2'} sx={{ color: 'purple.strong' }}>

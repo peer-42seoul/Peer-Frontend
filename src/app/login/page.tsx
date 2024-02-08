@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import useAuthStore from '@/states/useAuthStore'
 import { Box, Button, InputAdornment, Typography } from '@mui/material'
@@ -36,10 +36,6 @@ const Login = () => {
   const [payload, setPayload] = useState<any>(null)
   const [data, setData] = useState<any>(null)
 
-  const onSuccess = () => {
-    login(data.accessToken)
-  }
-
   const onError = (message: string) => {
     openToast({
       message,
@@ -61,19 +57,31 @@ const Login = () => {
     })
   }
 
-  useEffect(() => {
-    if (isLogin) {
+  const handleLogin = useCallback(() => {
+    if (data) {
+      login(data.accessToken)
       if (redirect) {
-        console.log('redirect in login', redirect)
         router.push(redirect)
       } else router.push('/')
-    } else if (redirect) {
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (data) {
+      handleLogin()
+    }
+  }, [handleLogin])
+
+  useEffect(() => {
+    if (redirect) {
       openToast({
         message: '로그인이 필요한 서비스입니다.',
         severity: 'error',
       })
+    } else if (isLogin) {
+      router.push('/')
     }
-  }, [isLogin, redirect])
+  }, [])
 
   return (
     <>
@@ -87,7 +95,6 @@ const Login = () => {
           payload={payload}
           setPayload={setPayload}
           setData={setData}
-          onSuccess={onSuccess}
           onError={onError}
           axiosOption={{ withCredentials: true }}
           setIsLoading={setIsLoading}
@@ -173,7 +180,7 @@ const Login = () => {
             display: 'flex',
             flexDirection: 'column',
             width: '100%',
-            gap: '16px',
+            gap: '1rem',
             alignItems: 'flex-end',
           }}
         >

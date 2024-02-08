@@ -1,4 +1,10 @@
 declare module '@toast-ui/editor' {
+  interface IToastEditorProps extends IEditorOptions {
+    // editor 인스턴스를 외부에서 참조하기 위한 ref
+    // editorRef.current.getMarkdown() 등으로 사용 가능
+    editorRef: MutableRefObject<Editor | null>
+  }
+
   /**
    * @property el 에디터를 렌더링할 DOM 요소
    * @property initialValue 초기값
@@ -12,6 +18,8 @@ declare module '@toast-ui/editor' {
     initialEditType?: 'markdown' | 'wysiwyg'
     previewStyle?: 'tab' | 'vertical'
     height?: string
+    hooks?: any
+
   }
 
   export class Editor {
@@ -23,5 +31,7 @@ declare module '@toast-ui/editor' {
     setHtml(html: string): void
     on(event: string, callback: Function): void
     destroy(): void
+    hooks(): any
+
   }
 }

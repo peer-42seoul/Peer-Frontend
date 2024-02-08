@@ -2,31 +2,31 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
   // FormControl,
   Grid,
-  Modal,
   // NativeSelect,
   Stack,
   Switch,
   Theme,
   Typography,
 } from '@mui/material'
-import { IMember, Job, TeamGrant } from '../../../types/types'
+import { IMember, Job, TeamGrant, TeamStatus } from '../../../types/types'
 import useModal from '@/hook/useModal'
 import { useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
-import { comfirmModalStyle } from './styles'
 import { IMyInfo } from '../page'
-import CloseButton from '@/components/CloseButton'
+import useToast from '@/states/useToast'
+import CuTextModal from '@/components/CuTextModal'
+import CloseIcon from '@mui/icons-material/Close'
 
 interface ISetupMember {
   team: IMember[]
   teamId: string
   jobs: Job[]
   myInfo?: IMyInfo
+  teamStatus: TeamStatus
 }
 
 // interface ICurrentJobCard {
@@ -52,7 +52,13 @@ interface ISetupMember {
 //   )
 // }
 
-const SettingTeamMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
+const SettingTeamMember = ({
+  team,
+  teamId,
+  jobs,
+  myInfo,
+  teamStatus,
+}: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   // const {
@@ -62,43 +68,54 @@ const SettingTeamMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
   // } = useModal()
   const [members, setMembers] = useState<IMember[]>(team)
   const [member, setMember] = useState<IMember>()
-  const [job, setJob] = useState<Job[]>(jobs)
+  // const [job, setJob] = useState<Job[]>(jobs)
   // const [selectedJobs, setSelectedJobs] = useState<Job[]>([])
   const axiosWithAuth = useAxiosWithAuth()
+  const [canChangeLeader, setCanChangeLeader] = useState(false)
+  const { openToast } = useToast()
 
   // const changeJob = () => {
   //   axiosWithAuth.put(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/change`,
+  //     `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/change`,
   //     job,
   //   )
   // }
 
   useEffect(() => {
-    setJob(jobs)
-    console.log(job)
-    console.log(myInfo)
-    console.log(member?.id)
+    if (team.length > 2) {
+      setCanChangeLeader(true)
+    }
+
+    // setJob(jobs)
     // if (selectedJobs.length > 0) {
     //   changeJob()
     // }
-  }, [setJob, jobs, myInfo])
+  }, [jobs, myInfo])
 
   const handleGrant = (member: IMember) => {
     console.log('리더 권한 변경')
     if (member.role === TeamGrant.LEADER) {
       axiosWithAuth
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
         )
         .then((res) => {
-          console.log(res)
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
                 m.id === member.id ? { ...m, grant: TeamGrant.MEMBER } : m,
               ),
             )
-          } else console.log(res.status)
+            openToast({
+              severity: 'success',
+              message: '리더 권한이 박탈되었습니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: '리더 권한 부여에 실패했습니다.',
+            })
+          }
         })
         .catch((err) => {
           console.log(err)
@@ -106,17 +123,25 @@ const SettingTeamMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
     } else {
       axiosWithAuth
         .post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
         )
         .then((res) => {
-          console.log(res)
           if (res.status === 200) {
             setMembers(
               members.map((m) =>
                 m.id === member.id ? { ...m, grant: TeamGrant.LEADER } : m,
               ),
             )
-          } else console.log(res.status)
+            openToast({
+              severity: 'success',
+              message: '리더 권한이 부여되었습니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: '리더 권한 부여에 실패했습니다.',
+            })
+          }
         })
         .catch((err) => {
           console.log(err)
@@ -135,13 +160,27 @@ const SettingTeamMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
     if (!member) return console.log('팀원이 없습니다.')
     axiosWithAuth
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/delete/${teamId}?userId=${member.id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/delete/${teamId}?userId=${member.id}`,
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log('삭제 완료')
-          team = res.data
-        } else console.log(res.status)
+          setMembers(members.filter((m) => m.id !== member.id))
+          openToast({
+            severity: 'success',
+            message: '팀원이 삭제되었습니다.',
+          })
+          window.location.reload()
+        } else if (res.status === 403) {
+          openToast({
+            severity: 'error',
+            message: '자기 자신은 삭제시킬 수 없습니다.',
+          })
+        } else {
+          openToast({
+            severity: 'error',
+            message: '팀원 삭제에 실패했습니다.',
+          })
+        }
 
         closeModal()
       })
@@ -212,29 +251,43 @@ const SettingTeamMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
                 borderRadius={'0.5rem'}
               >
                 {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
-                {myInfo && member.id.toString() !== myInfo.userId && (
-                  <CloseButton
-                    action={() => handleOpenDelete(member)}
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      padding: 0,
-                      minWidth: 0.2,
-                    }}
-                  />
-                )}
+
+                <Button
+                  disabled={teamStatus === TeamStatus.COMPLETE}
+                  onClick={() => handleOpenDelete(member)}
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    padding: 0,
+                    minWidth: 0.2,
+                  }}
+                >
+                  <CloseIcon />
+                </Button>
+
                 <OthersProfile name={member.name} userId={member.id}>
-                  <Avatar sx={{ margin: 'auto' }}>A</Avatar>
+                  <Avatar src={member.image} sx={{ margin: 'auto' }} />
                 </OthersProfile>
                 <Typography fontWeight="bold">{member.name}</Typography>
                 <Stack direction="row" sx={{ justifyContent: 'center' }}>
-                  <Typography variant="Body2">리더 권한</Typography>
-                  <Switch
-                    size="small"
-                    onChange={() => handleGrant(member)}
-                    checked={member.role === TeamGrant.LEADER ? true : false}
-                  />
+                  {canChangeLeader ? (
+                    <>
+                      <Typography variant="Body2">리더 권한</Typography>
+                      <Switch
+                        disabled={
+                          teamStatus === TeamStatus.COMPLETE ? true : false
+                        }
+                        size="small"
+                        onChange={() => handleGrant(member)}
+                        checked={
+                          member.role === TeamGrant.LEADER ? true : false
+                        }
+                      />
+                    </>
+                  ) : (
+                    <br />
+                  )}
                 </Stack>
                 {/* 역할이 있을 때만 버튼이 보이게끔 */}
                 {/* {member.job && (
@@ -299,15 +352,20 @@ const SettingTeamMember = ({ team, teamId, jobs, myInfo }: ISetupMember) => {
         </Box>
       </Modal> */}
 
-      <Modal open={isOpen} onClose={closeModal}>
-        <Box sx={comfirmModalStyle}>
-          <Card>
-            <Typography>정말 팀원을 내보내시겠습니까?</Typography>
-            <Button onClick={closeModal}>취소</Button>
-            <Button onClick={handleDelete}>확인</Button>
-          </Card>
-        </Box>
-      </Modal>
+      <CuTextModal
+        open={isOpen}
+        onClose={closeModal}
+        title={'팀원 내보내기'}
+        content={'정말 팀원을 내보내시겠습니까?'}
+        containedButton={{
+          text: '내보내기',
+          onClick: handleDelete,
+        }}
+        textButton={{
+          text: '취소',
+          onClick: closeModal,
+        }}
+      />
     </>
   )
 }

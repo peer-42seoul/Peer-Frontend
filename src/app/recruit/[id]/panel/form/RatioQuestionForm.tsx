@@ -1,11 +1,14 @@
-import { Box, FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import {
+  Box,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+  Typography,
+} from '@mui/material'
 import { Controller } from 'react-hook-form'
 
-export type RatioQuestionList = {
-  number: string
-  option1: string
-  option2: string
-}
+export type RatioQuestionList = string[]
 
 const RatioQuestionForm = ({
   optionList,
@@ -20,7 +23,7 @@ const RatioQuestionForm = ({
   value?: string
   disabled: boolean
 }) => {
-  const number = parseInt(optionList?.number)
+  const number = parseInt(optionList?.[0])
   const listArray = Array.from({ length: number }, (_, index) =>
     index.toString(),
   )
@@ -34,20 +37,24 @@ const RatioQuestionForm = ({
       }}
       defaultValue={value ? value : '0'}
       render={({ field }) => (
-        <RadioGroup {...field}>
-          {listArray?.map((label: string, index: number) => {
-            return (
-              <Box key={index}>
-                <FormControlLabel
-                  disabled={disabled}
-                  control={<Radio />}
-                  label={label}
-                  value={index}
-                />
-              </Box>
-            )
-          })}
-        </RadioGroup>
+        <Stack flexDirection={'row'} alignItems={'center'} gap={2}>
+          <Typography variant={'Body1'}>{optionList?.[1]}</Typography>
+          <RadioGroup {...field} row>
+            {listArray?.map((label: string, index: number) => {
+              return (
+                <Box key={index}>
+                  <FormControlLabel
+                    disabled={disabled}
+                    control={<Radio />}
+                    label={label}
+                    value={index}
+                  />
+                </Box>
+              )
+            })}
+          </RadioGroup>
+          <Typography variant={'Body1'}>{optionList?.[2]}</Typography>
+        </Stack>
       )}
     />
   )

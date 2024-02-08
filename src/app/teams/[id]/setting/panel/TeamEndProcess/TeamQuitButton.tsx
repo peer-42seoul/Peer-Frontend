@@ -20,7 +20,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
   const quitTeam = () => {
     console.log('exit team')
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/quit`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/quit`, {
         teamId: teamId,
       })
       .then((res) => {
@@ -30,6 +30,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
             severity: 'success',
             message: '팀을 나갔습니다.',
           })
+          router.push('/team-list')
         } else if (res.status === 401) {
           console.log(res)
           router.push('/login')
@@ -65,6 +66,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
           message: '팀 나가기에 실패하였습니다.',
         })
       })
+    closeModal()
   }
 
   return (
@@ -74,13 +76,18 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Typography>팀을 나가겠습니까?</Typography>
+        <Typography variant="Body2">팀을 나가겠습니까?</Typography>
         <Button
-          disabled={teamStatus === TeamStatus.RECRUITING ? true : false}
+          disabled={
+            teamStatus === TeamStatus.RECRUITING ||
+            teamStatus === TeamStatus.COMPLETE
+              ? true
+              : false
+          }
           variant="contained"
           onClick={openModal}
         >
-          <Typography>팀 나가기</Typography>
+          <Typography variant="Body2">팀 나가기</Typography>
         </Button>
       </Stack>
 

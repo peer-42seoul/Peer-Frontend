@@ -32,10 +32,9 @@ const TagChip = ({ chip, mutate }: { chip: IChip; mutate: () => void }) => {
     closeToast()
     await axiosWithAuth
       .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alarm/delete?keyword=${chip.label}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/alarm/delete?keyword=${chip.label}`,
       )
       .then(() => {
-        console.log(chip.label)
         openToast({
           severity: 'success',
           message: `'${chip.label}'를 알림 키워드 목록에서 삭제했습니다.`,
@@ -45,11 +44,17 @@ const TagChip = ({ chip, mutate }: { chip: IChip; mutate: () => void }) => {
         mutate()
       })
       .catch((error) => {
-        console.log(error)
-        openToast({
-          severity: 'error',
-          message: `'${chip.label}'를 알림 키워드 목록에서 삭제하지 못했습니다`,
-        })
+        if (error.data.message) {
+          openToast({
+            severity: 'error',
+            message: error.data.message,
+          })
+        } else {
+          openToast({
+            severity: 'error',
+            message: `'${chip.label}'를 알림 키워드 목록에서 삭제하지 못했습니다`,
+          })
+        }
       })
   }
 

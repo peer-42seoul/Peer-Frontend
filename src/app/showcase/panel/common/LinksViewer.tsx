@@ -1,13 +1,16 @@
 import { Stack, Typography } from '@mui/material'
 import React from 'react'
-import LabelWithIcon from '../LabelWithIcon'
+import LabelWithIcon from '../../../../components/LabelWithIcon'
 import { TagIcon } from '@/icons'
 import * as Style from './SkillInput.style'
 
 interface IlinksProps {
-  links: string[] | undefined
+  links: ILink[] | undefined
 }
-
+interface ILink {
+  link: string
+  name: string
+}
 const LinksViewer = ({ links }: IlinksProps) => {
   const convertLink = (link: string) => {
     const httpPattern = /^https?:\/\//i
@@ -34,20 +37,19 @@ const LinksViewer = ({ links }: IlinksProps) => {
         />
       </Stack>
       <Stack>
-        {links?.map((link: any) => {
+        {links?.map((link: ILink) => {
           return (
-            <>
-              <Typography
-                component="a"
-                color={'text.normal'}
-                variant="Body2"
-                href={convertLink(link.link)}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {link.name}
-              </Typography>
-            </>
+            <Typography
+              key={crypto.randomUUID()}
+              component="a"
+              color={'text.normal'}
+              variant="Body2"
+              href={convertLink(link.link)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {link.name}
+            </Typography>
           )
         })}
       </Stack>

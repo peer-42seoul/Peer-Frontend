@@ -22,7 +22,7 @@ const Interest = ({ id }: { id?: number }) => {
     if (!id) return
     try {
       await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorite/${id}`,
       )
       setFavorite((prev) => {
         if (!prev) control.start(variants.favorite)

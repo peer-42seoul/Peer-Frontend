@@ -21,15 +21,13 @@ interface ITeamPageState {
   postId: number | undefined
   resetState: () => void
   setNotice: (boardType: TboardType, postId?: number) => void
-  setBoard: (boardType: TboardType, boardId: number, postId?: number) => void
+  setBoard: (boardType: TboardType, boardId?: number, postId?: number) => void
 }
 
 const useTeamPageState = create<ITeamPageState>((set) => ({
   layout: 'SIDEBAR',
-  // boardType: 'NOTICE',
   boardType: 'LIST',
-  // boardId: undefined,
-  boardId: 1,
+  boardId: undefined,
   postId: undefined,
   resetState: () =>
     set({

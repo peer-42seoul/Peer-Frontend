@@ -48,7 +48,7 @@ const useToast = create<IToastState>((set, get) => {
 
   const defaultToastProps: IToastProps = {
     open: false,
-    autoHideDuration: 10000,
+    autoHideDuration: 3000,
     onClose: closeToast,
     severity: undefined,
     message: '',
@@ -62,7 +62,7 @@ const useToast = create<IToastState>((set, get) => {
   return {
     toastProps: {
       open: false,
-      autoHideDuration: 10000,
+      autoHideDuration: 3000,
       onClose: closeToast,
       severity: undefined,
       message: '',

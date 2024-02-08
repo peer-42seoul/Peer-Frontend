@@ -7,7 +7,6 @@ import useMedia from '@/hook/useMedia'
 import { Box, IconButton, Stack } from '@mui/material'
 import CardContainer from './panel/CardContainer'
 import ArrowUp from '@/icons/ArrowUp'
-// import CuButton from '@/components/CuButton'
 import * as style from './hitchhiking.style'
 import ArrowDown from '@/icons/ArrowDown'
 import useAxiosWithAuth from '@/api/config'
@@ -27,7 +26,7 @@ const Hitchhiking = () => {
     IPagination<Array<IPostCardHitchhiking>>
   >(
     `${
-      process.env.NEXT_PUBLIC_API_URL
+      process.env.NEXT_PUBLIC_CSR_API
     }/api/v1/hitch?page=${page}&pageSize=5&type=${
       isProject ? 'PROJECT' : 'STUDY'
     }`,
@@ -100,6 +99,7 @@ const Hitchhiking = () => {
             isProject={isProject}
             message={message}
             handleChange={handleChange}
+            setCardList={setCardList}
           />
         </Box>
         <Stack
@@ -133,10 +133,13 @@ const Hitchhiking = () => {
   return (
     <CardContainer
       cardList={cardList}
+      addCard={addCard}
       removeCard={removeCard}
       isProject={isProject}
       message={message}
       handleChange={handleChange}
+      addDisabled={draggedCardList.length === 0}
+      setCardList={setCardList}
     />
   )
 }
