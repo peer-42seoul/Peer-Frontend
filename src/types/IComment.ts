@@ -13,4 +13,5 @@ export interface IComment {
   content: string
   createAt: string
   isAuthor: boolean
+  id: number
 }

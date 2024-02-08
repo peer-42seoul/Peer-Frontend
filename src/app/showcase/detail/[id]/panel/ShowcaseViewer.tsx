@@ -1,4 +1,4 @@
-import { Box, Container, Stack } from '@mui/material'
+import { Container, Stack } from '@mui/material'
 import React from 'react'
 import TeamName from '../../../panel/common/TeamName'
 import SkillInput from '../../../panel/common/SkillInput'
@@ -13,6 +13,7 @@ import { FileIcon } from '@/icons'
 import * as Style from '../../../panel/common/SkillInput.style'
 import useMedia from '@/hook/useMedia'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 interface IShowcaseViewerProps {
   data: IShowcaseViewerFields
@@ -21,11 +22,16 @@ interface IShowcaseViewerProps {
 
 const CoverImage = ({ image }: { image: string }) => {
   return (
-    <Box
-      component="img"
+    <CuPhotoBox
+      style={{
+        position: 'relative',
+        maxWidth: '100%',
+        width: '100%',
+        height: '13.6rem',
+        margin: 0,
+      }}
       src={image}
-      alt="쇼케이스 이미지"
-      sx={style.imageViewer}
+      alt="이미지"
     />
   )
 }
