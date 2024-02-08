@@ -1,7 +1,7 @@
 import { Box, Card, CardActionArea, Stack, Typography } from '@mui/material'
 import { ITeamInfo } from '../page'
 import { useRouter } from 'next/navigation'
-import { TeamOperationForm } from '@/app/teams/types/types'
+import { TeamOperationForm, TeamStatus } from '@/app/teams/types/types'
 import useMedia from '@/hook/useMedia'
 import { GeoIcon, TargetIcon, WifiIcon } from './Icons'
 
@@ -54,9 +54,17 @@ const ApproveChip = ({
   )
 }
 
-const TeamCard = ({ team }: { team: ITeamInfo }) => {
+interface ITeamCard {
+  team: ITeamInfo
+}
+
+const TeamCard = ({ team }: ITeamCard) => {
   const { isPc } = useMedia()
   const router = useRouter()
+
+  if (team.isApproved === false && team.status !== TeamStatus.RECRUITING) {
+    return <></>
+  }
 
   return (
     <Card
@@ -89,7 +97,16 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
           <Stack direction={'row'} spacing={'0.5rem'} alignItems={'center'}>
             {TeamType(team.type)}
             <Typography
-              sx={isPc ? undefined : { display: 'center', height: '4rem', overflow: 'hidden', alignItems: 'center' }}
+              sx={
+                isPc
+                  ? undefined
+                  : {
+                      display: 'center',
+                      height: '4rem',
+                      overflow: 'hidden',
+                      alignItems: 'center',
+                    }
+              }
             >
               {team.name}
             </Typography>

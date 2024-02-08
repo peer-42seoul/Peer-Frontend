@@ -4,13 +4,19 @@ import { Control, Controller } from 'react-hook-form'
 import { dueList } from '../SettingSelect'
 import { ISetupTeam } from '../SettingTeamInfo'
 import useMedia from '@/hook/useMedia'
+import { TeamStatus } from '@/app/teams/types/types'
 
 interface ISettingTeamTime {
+  teamStatus: TeamStatus
   teamTime: string
   control: Control<ISetupTeam, any>
 }
 
-const SettingTeamTime = ({ teamTime, control }: ISettingTeamTime) => {
+const SettingTeamTime = ({
+  teamTime,
+  control,
+  teamStatus,
+}: ISettingTeamTime) => {
   const isPc = useMedia()
   return (
     <Stack
@@ -33,6 +39,7 @@ const SettingTeamTime = ({ teamTime, control }: ISettingTeamTime) => {
         defaultValue={teamTime}
         render={({ field }) => (
           <Select
+            disabled={teamStatus === TeamStatus.COMPLETE}
             size="small"
             defaultValue={teamTime}
             variant="outlined"

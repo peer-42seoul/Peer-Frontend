@@ -188,26 +188,34 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
             <Stack
               direction={!isPc || isTablet ? 'column' : 'row'}
               alignItems={isPc ? 'center' : ''}
-              justifyContent={!isPc || isTablet ? '' : 'center'}
+              justifyContent={!isPc || isTablet ? '' : 'space-evenly'}
             >
               <SettingTeamLogo
                 teamLogoImage={team.teamImage ? team.teamImage : ''}
+                teamStatus={status}
                 setValue={setValue}
                 setIsLogoEdit={setIsLogoEdit}
               />
               <Stack>
                 <SettingTeamName
                   teamType={team.type}
+                  teamStatus={status}
                   errors={errors}
                   register={register}
                 />
                 <SettingTeamStatus teamStatus={status} control={control} />
-                <SettingTeamTime teamTime={dueTo} control={control} />
+                <SettingTeamTime
+                  teamTime={dueTo}
+                  teamStatus={status}
+                  control={control}
+                />
                 <SettingTeamActivity
+                  teamStatus={status}
                   teamActivity={operationForm}
                   control={control}
                 />
                 <SettingTeamLocation
+                  teamStatus={status}
                   teamLocation={region}
                   teamActivity={operationForm}
                   control={control}
