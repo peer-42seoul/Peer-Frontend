@@ -13,6 +13,7 @@ import LabelWithIcon from '@/components/LabelWithIcon'
 import { FileIcon } from '@/icons'
 import * as Style from '../../../panel/common/SkillInput.style'
 import useMedia from '@/hook/useMedia'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
 
 interface IShowcaseViewerProps {
   data: IShowcaseViewerFields
@@ -49,11 +50,7 @@ const ContentViewer = ({ content }: { content: string }) => {
         message="내용"
         color="text.alternative"
       />
-      <ToastViewer
-        initialValue={content}
-        height="30rem"
-        sx={{ width: '100%', boxSizing: 'border-box' }}
-      />
+      <DynamicToastViewer initialValue={content} />
     </Stack>
   )
 }
