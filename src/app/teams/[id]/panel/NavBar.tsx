@@ -26,7 +26,7 @@ const TeamSidebar = ({ id }: { id: string }) => {
   return (
     <CuNavBar
       getTabValue={getTabValue}
-      title={'나의 팀페이지'}
+      title={'나의 팀들'}
       tabData={[
         {
           label: '메인',

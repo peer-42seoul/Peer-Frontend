@@ -90,7 +90,7 @@ const MobileNav = () => {
         />
         <BottomNavigationAction
           sx={bottomNavStyle}
-          label={<Typography fontSize={'0.6875rem'}>팀페이지</Typography>}
+          label={<Typography fontSize={'0.6875rem'}>나의 팀</Typography>}
           value={'team-list'}
           onClick={() => {
             router.push('/team-list')

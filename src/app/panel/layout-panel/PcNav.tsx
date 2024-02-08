@@ -118,7 +118,7 @@ const PcNav = () => {
                   color={value === 'team-list' ? 'primary' : 'text.normal'}
                   variant="Caption"
                 >
-                  팀페이지
+                  나의 팀
                 </Typography>
               }
               onClick={() => {
