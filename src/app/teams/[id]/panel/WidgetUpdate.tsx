@@ -74,7 +74,7 @@ const WidgetUpdate = ({
           text: '취소',
           onClick: () => setModalOpen(false),
         }}
-        content={'팀 페이지를 저장하시겠습니까?'}
+        content={'팀페이지를 저장하시겠습니까?'}
       />
       <BrowserView>
         {/* 팀페이지 수정 버튼 */}
