@@ -49,17 +49,24 @@ const NotifSetting = () => {
     <TitleBox
       title="알림 설정"
       titleComponent={
-        <Stack direction="row" spacing={1} alignItems={'baseline'}>
-          <Typography
-            variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}
-            component={'h3'}
+        <Stack direction="row" alignItems={'center'} height={'2.5rem'}>
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems={'baseline'}
+            height={'fit-content'}
           >
-            알림 설정
-          </Typography>
-          <BetaBadge sx={{ height: '0.75rem' }} />
-          <Typography variant="Caption" color={'text.assistive'}>
-            아직 개발 중인 기능입니다.
-          </Typography>
+            <Typography
+              variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}
+              component={'h3'}
+            >
+              알림 설정
+            </Typography>
+            <BetaBadge sx={{ height: '0.75rem' }} />
+            <Typography variant="Caption" color={'text.assistive'}>
+              아직 개발 중인 기능입니다.
+            </Typography>
+          </Stack>
         </Stack>
       }
     >

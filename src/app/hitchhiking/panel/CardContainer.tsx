@@ -96,7 +96,7 @@ const CardContainer = ({
           mb: '0.875rem',
           position: 'relative',
           zIndex: 100,
-          flexGrow: 1,
+          flexGrow: [1, 0],
         }}
       >
         {!message ? (
