@@ -1,7 +1,18 @@
+import { io } from 'socket.io-client'
 import MainPage from './panel/MainPage'
 import axios from 'axios'
+import { getCookie } from 'cookies-next'
 
 export const dynamic = 'force-dynamic'
+
+export const socket = getCookie('accessToken')
+  ? io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+      transports: ['websocket', 'socket.io'],
+      query: {
+        token: getCookie('accessToken'),
+      },
+    })
+  : null
 
 export default async function Home() {
   let data

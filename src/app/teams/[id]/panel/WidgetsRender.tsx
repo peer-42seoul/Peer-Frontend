@@ -1,6 +1,6 @@
-import { Box, IconButton, useMediaQuery } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import GridLayout, { Layout } from 'react-grid-layout'
+import { Layout } from 'react-grid-layout'
 import {
   ITeamDnDLayout,
   IWidget,
@@ -10,6 +10,7 @@ import {
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import WidgetUpdate from '@/app/teams/[id]/panel/WidgetUpdate'
 import SelectedWidget from './SelectedWidget'
+import { Responsive as ResponsiveGridLayout } from 'react-grid-layout'
 
 interface IWidgetsRenderProps {
   data: ITeamDnDLayout | undefined
@@ -56,8 +57,18 @@ const WidgetsRender = ({
   const [layouts, setLayouts] = useState<IWidget[]>(setInitLayouts)
   const [prevLayouts, setPrevLayouts] = useState<IWidget[] | null>(null)
 
+  const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('xs')
+  const [toolbox, setToolbox] = useState<{ [index: string]: IWidget[] }>({
+    xs: [],
+    sm: [],
+    md: [],
+    lg: [],
+    xl: [],
+  })
+
   /* tablet 보다 크면 4개, 작으면 2개 */
-  const isFourRow = useMediaQuery('(min-width:900px)')
+  // const isFourRow = useMediaQuery('(min-width:900px)')
+  const isFourRow = currentBreakpoint !== 'xxs'
 
   /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
   const isValidLayout = useCallback((newLayout: Layout[]) => {
@@ -74,6 +85,7 @@ const WidgetsRender = ({
    * 따라서 최대 높이를 제한하기 위해 위젯이 추가될 때마다 height를 계산하여 height가 제한 값을 넘은 경우 다시 재조정해줘야함
    */
   useEffect(() => {
+    console.log(data)
     if (prevLayouts) {
       setLayouts(prevLayouts)
     }
@@ -131,6 +143,10 @@ const WidgetsRender = ({
         }),
       )
       setLayouts(updatedCurrentWidget)
+      setToolbox({
+        ...toolbox,
+        [currentBreakpoint]: updatedCurrentWidget,
+      })
     },
     [isDropping, isValidLayout, layouts],
   )
@@ -150,6 +166,14 @@ const WidgetsRender = ({
     return isFourRow ? width / 4 : width / 2
   }, [isFourRow, layoutRef?.current?.clientWidth])
 
+  const widgetHeight = useMemo(() => {
+    const height = layoutRef?.current?.clientHeight
+    if (!height) return 0
+    return isFourRow ? height / 4 : height / 8
+  }, [isFourRow, layoutRef?.current?.clientHeight])
+
+  const cols = { lg: 4, md: 4, sm: 4, xs: 4, xxs: 2 }
+
   return (
     <Box>
       <WidgetUpdate
@@ -163,15 +187,35 @@ const WidgetsRender = ({
       {children}
       {/* react-grid-layout 영역 */}
       <Box bgcolor="background.secondary" ref={layoutRef} width={'100%'}>
-        <GridLayout
+        <ResponsiveGridLayout
           width={isFourRow ? widgetWidth * 4 : widgetWidth * 2}
           className="layout"
           margin={[12, 12]}
-          cols={isFourRow ? 4 : 2} //그리드의 열 수. pc면 4, 모바일이면 2
-          rowHeight={widgetWidth} //그리드 항목의 높이
+          cols={cols}
+          // cols={isFourRow ? 4 : 2} //그리드의 열 수. pc면 4, 모바일이면 2
+          rowHeight={widgetHeight} //그리드 항목의 높이
           onDrop={onDrop}
           isDroppable={true} //true면 draggable={true}인 요소를 드래그 가능
           onLayoutChange={onLayoutChange}
+          onBreakpointChange={(breakpoint) => {
+            setCurrentBreakpoint(breakpoint)
+            setToolbox({
+              ...toolbox,
+              [breakpoint]:
+                toolbox[breakpoint] || toolbox[currentBreakpoint] || [],
+            })
+            console.log('layout', layouts)
+            console.log(breakpoint, toolbox[breakpoint])
+            if (toolbox[breakpoint].length > 0) {
+              setLayouts(toolbox[breakpoint])
+            } else {
+              console.log('layouts', 'save')
+              setToolbox({
+                ...toolbox,
+                [breakpoint]: layouts,
+              })
+            }
+          }}
           isResizable={false}
           droppingItem={droppingItem}
           style={{
@@ -224,7 +268,7 @@ const WidgetsRender = ({
               </Box>
             )
           })}
-        </GridLayout>
+        </ResponsiveGridLayout>
       </Box>
     </Box>
   )

@@ -15,6 +15,7 @@ import SetupInfo from './panel/SettingTeamInfo'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import Tutorial from '@/components/Tutorial'
 import TeamMemberTutorial from '@/components/tutorialContent/TeamMemberTutorial'
+import { socket } from '@/app/page'
 
 export interface IMyInfo {
   userId: string
@@ -26,7 +27,7 @@ export interface IMyInfo {
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
-  // const [myInfo, setMyInfo] = useState<IMyInfo>()
+  const [myInfo, setMyInfo] = useState<IMyInfo>()
   const { data, error, isLoading, mutate } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
@@ -43,25 +44,27 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
-  // useEffect(() => {
-  //   if (!socket) return
+  useEffect(() => {
+    if (!socket) return
+    console.log('socket', socket)
 
-  //   socket.emit(
-  //     'whoAmI',
-  //     {
-  //       teamId: params.id,
-  //       teamName: data?.team.name,
-  //     },
-  //     (data: any) => {
-  //       setMyInfo(data)
-  //     },
-  //   )
+    socket.emit(
+      'whoAmI',
+      {
+        teamId: params.id,
+        teamName: data?.team.name,
+      },
+      (data: any) => {
+        console.log('socket', data)
+        setMyInfo(data)
+      },
+    )
 
-  //   return () => {
-  //     if (!socket) return
-  //     socket.off('whoAmI')
-  //   }
-  // }, [setMyInfo, socket])
+    return () => {
+      if (!socket) return
+      socket.off('whoAmI')
+    }
+  }, [setMyInfo, socket])
 
   if (error) {
     if (isAxiosError(error) && error.response?.status === 403) {

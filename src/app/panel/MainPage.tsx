@@ -34,6 +34,7 @@ import SearchOptionPanel, {
   InfinityScrollPanel,
 } from '@/app/panel/main-page/MainPanel'
 import SelectSort from '@/app/panel/main-page/SelectSort'
+import { socket } from '../page'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -87,6 +88,14 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   )
   const { headerTitle, setHeaderTitle } = useHeaderStore()
   const [init, setInit] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('connect', () => {
+        console.log('socket connected')
+      })
+    }
+  }, [])
 
   useEffect(() => {
     if (keyword !== '') {
