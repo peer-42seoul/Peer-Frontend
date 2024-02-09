@@ -34,6 +34,7 @@ const SetTeamRole = ({
   const { errors } = useFormState({ control, name: 'roleList' })
 
   const handlePrepend = () => {
+    if (fields.length >= 10) return
     prepend({ name: '', number: 1 })
   }
 
