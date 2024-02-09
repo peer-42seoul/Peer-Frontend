@@ -36,7 +36,8 @@ const SetTeamRole = ({
 
   const { openToast, closeToast } = useToast()
 
-  const handlePrepend = () => {
+  const handlePrepend = (event: React.MouseEvent) => {
+    event.stopPropagation()
     closeToast()
     if (fields.length >= 10) {
       return openToast({

@@ -28,13 +28,13 @@ const FieldWithLabel = (props: IFieldWithLabelProps) => {
         ...props.sx,
       }}
     >
-      <InputLabel htmlFor={props.id}>
-        <Stack
-          direction={'row'}
-          alignItems={'center'}
-          justifyContent={'space-between'}
-          sx={{ width: '100%', maxWidth: '26rem', height: '1.5rem' }}
-        >
+      <Stack
+        direction={'row'}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+        sx={{ width: '100%', maxWidth: '26rem', height: '1.5rem' }}
+      >
+        <InputLabel htmlFor={props.id}>
           <Stack
             direction={'row'}
             spacing={'0.25rem'}
@@ -51,9 +51,9 @@ const FieldWithLabel = (props: IFieldWithLabelProps) => {
               {props.label}
             </Typography>
           </Stack>
-          {props.endIconButton}
-        </Stack>
-      </InputLabel>
+        </InputLabel>
+        {props.endIconButton}
+      </Stack>
       {props.children}
       <FormHelperText>
         <Typography variant={'Caption'} color={'error'} height={'1.125rem'}>
