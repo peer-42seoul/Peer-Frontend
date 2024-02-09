@@ -283,19 +283,20 @@ const MyInterests = () => {
       )
     } else {
       return (
-        <Box
+        <Stack
           width={1}
           height={1}
           sx={{
             backgroundColor: ['transparent', 'background.secondary'],
             borderRadius: '1rem',
           }}
-          position={'relative'}
+          justifyContent={'center'}
+          alignItems={'center'}
         >
-          <Typography sx={centeredPosition} variant="Caption">
+          <Typography variant="Caption">
             관심있다고 표시한 페이지가 없습니다.
           </Typography>
-        </Box>
+        </Stack>
       )
     }
   }, [isLoading, postList, showcaseList, type])

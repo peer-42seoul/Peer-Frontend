@@ -10,6 +10,7 @@ import ArrowUp from '@/icons/ArrowUp'
 import * as style from './hitchhiking.style'
 import ArrowDown from '@/icons/ArrowDown'
 import useAxiosWithAuth from '@/api/config'
+import { getUniqueArray } from '@/utils/getUniqueArray'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
@@ -44,7 +45,7 @@ const Hitchhiking = () => {
     if (!isLoading && data?.content) {
       setCardList((prev) => {
         const newArray = [...data.content].reverse().concat(prev)
-        return newArray
+        return getUniqueArray(newArray, 'recruitId')
       })
     }
   }, [isLoading, data?.content])
@@ -54,6 +55,7 @@ const Hitchhiking = () => {
       prev.push(cardList[cardList.length - 1])
       return prev
     })
+    draggedCardList[draggedCardList.length - 1].hasBeenRemoved = true
     setCardList((prev: IPostCardHitchhiking[]) => {
       return prev.filter((card) => card.recruitId !== recruitId)
     })
@@ -65,6 +67,7 @@ const Hitchhiking = () => {
   const addCard = () => {
     setCardList((prev: IPostCardHitchhiking[]) => {
       prev.push(draggedCardList[draggedCardList.length - 1])
+      if (cardList.length > 1) prev[prev.length - 2].hasBeenRemoved = false
       return prev
     })
     setDraggedCardList((prev: IPostCardHitchhiking[]) => {
