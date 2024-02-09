@@ -1,11 +1,14 @@
 'use client'
 
 import { TeamStatus } from '@/app/teams/types/types'
+import { Box } from '@mui/material'
 import CuNavBar from '@/components/CuNavBar'
 import useShowTeams from '@/states/useShowTeams'
 import { useEffect, useState } from 'react'
+import useMedia from '@/hook/useMedia'
 
 const Sidebar = () => {
+  const { isPc } = useMedia()
   const [alignment, setAlignment] = useState(TeamStatus.RECRUITING)
   const { setShowTeams } = useShowTeams()
 
@@ -39,36 +42,44 @@ const Sidebar = () => {
   const getTabValue = () => alignment
 
   return (
-    <CuNavBar
-      getTabValue={getTabValue}
-      title={'나의 팀리스트'}
-      tabData={[
-        {
-          label: '모집 중',
-          value: TeamStatus.RECRUITING,
-          onClick: onClickGather,
-          icon: <></>,
-        },
-        {
-          label: '시작 전',
-          value: TeamStatus.BEFORE,
-          onClick: onClickBefore,
-          icon: <></>,
-        },
-        {
-          label: '진행 중',
-          value: TeamStatus.ONGOING,
-          onClick: onClickProgress,
-          icon: <></>,
-        },
-        {
-          label: '진행 완료',
-          value: TeamStatus.COMPLETE,
-          onClick: onClickComplete,
-          icon: <></>,
-        },
-      ]}
-    />
+    <Box
+      sx={
+        isPc
+          ? { width: '30%', maxWidth: '19.25rem', height: 'content-fit' }
+          : { width: '100%', height: 'content-fit' }
+      }
+    >
+      <CuNavBar
+        getTabValue={getTabValue}
+        title={'나의 팀리스트'}
+        tabData={[
+          {
+            label: '모집 중',
+            value: TeamStatus.RECRUITING,
+            onClick: onClickGather,
+            icon: <></>,
+          },
+          {
+            label: '시작 전',
+            value: TeamStatus.BEFORE,
+            onClick: onClickBefore,
+            icon: <></>,
+          },
+          {
+            label: '진행 중',
+            value: TeamStatus.ONGOING,
+            onClick: onClickProgress,
+            icon: <></>,
+          },
+          {
+            label: '진행 완료',
+            value: TeamStatus.COMPLETE,
+            onClick: onClickComplete,
+            icon: <></>,
+          },
+        ]}
+      />
+    </Box>
   )
 }
 
