@@ -200,21 +200,26 @@ const ProfileBioEditor = ({
           })
           .catch((error) => {
             setIsNicknameUnique(false)
-            if (error?.data?.message) {
+            console.log(error)
+            if (error?.response.data?.message) {
               openToast({
                 severity: 'error',
-                message: error.data.message,
+                message: error.response.data.message,
+              })
+              setError('nickname', {
+                type: 'notUnique',
+                message: error.response.data.message,
               })
             } else {
               openToast({
                 severity: 'error',
                 message: '중복된 닉네임 입니다.',
               })
+              setError('nickname', {
+                type: 'notUnique',
+                message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
+              })
             }
-            setError('nickname', {
-              type: 'notUnique',
-              message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
-            })
             setIsLoading(false)
           })
       }
@@ -262,7 +267,7 @@ const ProfileBioEditor = ({
     }
     submitData.append('imageChange', imageChanged.toString().toUpperCase())
 
-    if (!isNicknameUnique) {
+    if (!isNicknameUnique && nickname !== data.nickname) {
       setError('nickname', {
         type: 'notUnique',
         message: '닉네임 중복확인이 필요합니다.',
@@ -434,7 +439,13 @@ const ProfileBioEditor = ({
                   value: 2,
                   message: '닉네임은 최소 두 글자 이상 작성해야 합니다.',
                 },
-                validate: isValidNickname,
+                validate: {
+                  isValidNickname,
+                  pattern: (value) =>
+                    /^([가-힣a-zA-Z0-9]+)$/.test(value) ||
+                    value === '' ||
+                    '닉네임은 한글, 영문, 숫자만 입력 가능합니다.',
+                },
               }}
             />
             {/* 소개 수정 */}
