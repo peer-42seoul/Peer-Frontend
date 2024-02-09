@@ -14,7 +14,9 @@ const NameField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="name">이름</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="name" >
+       <Typography variant="Caption">이름</Typography>
+        </CuTextFieldLabel>
       <CuTextField
         {...field}
         autoComplete="name"
@@ -24,6 +26,7 @@ const NameField = ({
         inputProps={{
           maxLength: 5,
         }}
+        sx={{ width: '100%' }}
       />
       <Typography color="error" variant="Caption">
         {error?.message || '\u00A0'}

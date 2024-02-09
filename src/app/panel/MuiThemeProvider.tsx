@@ -482,15 +482,30 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
     theme.components.MuiTextField = {
       styleOverrides: {
         root: {
-          '& textarea': {
-            rows: '1',
+          ':not(. MuiSelect-select)': {
+            transform: 'scale(0.75)',
+            transformOrigin: 'top left',
+            marginBottom: '-10px',
+            marginRight: '-33.333333333%',
+            '& .MuiOutlinedInput-root': {
+              ':not(. MuiSelect-select)': {
+                width: '133.333333333%',
+                fontSize: '1rem',
+              },
+            },
           },
           '& input': {
-            height: '32px',
+            ':not(. MuiSelect-select)': {
+              padding: '5px 12px',
+            },
             padding: '0px 12px',
+            height: '32px',
             '&::placeholder': {
+              // ':not(. MuiSelect-select)': {
+              //   fontSize: '16px',
+              // },
+              // fontSize: '12px',
               color: theme.palette.text.alternative,
-              fontSize: '12px',
               fontWeight: 400,
               lineHeight: '150%',
             },
@@ -499,22 +514,18 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
             },
           },
           '& .MuiOutlinedInput-root': {
-            padding: '0px',
+            padding: '0',
             borderRadius: '4px',
             height: 'auto',
             backgroundColor: theme.palette.background.tertiary,
-            fontSize: '12px',
+            fontSize: '0.75rem',
             fontWeight: 400,
             color: theme.palette.text.normal,
             lineHeight: '150%',
             '& fieldset': {
-              height: '100%',
               borderColor: 'transparent',
             },
-            '&:hover fieldset': {
-              borderColor: theme.palette.purple.normal,
-            },
-            '&.Mui-focused fieldset': {
+            '&:hover fieldset, &.Mui-focused fieldset': {
               borderColor: theme.palette.purple.normal,
             },
             '&.Mui-disabled': {
@@ -533,12 +544,23 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
             margin: 0,
             marginTop: '0.5rem',
           },
-          '.MuiFormHelperText-root': {
+          '.MuiFormHelperText-root:not(. MuiSelect-select)': {
             margin: 0,
             marginTop: '0.5rem',
           },
           '.MuiInputBase-inputMultiline': {
             padding: '1rem',
+          },
+          '& .MuiInputAdornment-root': {
+            ':not(. MuiSelect-select)': {
+              position: 'relative',
+              transform: 'scale(1.3333333)',
+              transformOrigin: 'top right',
+              marginLeft: '0px',
+            },
+          },
+          '& .MuiIconButton-root': {
+            padding: '0px 4px',
           },
         },
       },
