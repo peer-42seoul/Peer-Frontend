@@ -30,6 +30,7 @@ const CodeField = ({
         inputProps={{
           maxLength: 10,
         }}
+        sx={{ width: '100%' }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

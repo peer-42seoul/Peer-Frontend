@@ -479,6 +479,25 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
       },
     }
 
+    theme.components.MuiOutlinedInput = {
+      styleOverrides: {
+        root: {
+          '& input': {
+            fontSize: '16px',
+            transform: 'scale(0.75)',
+            transformOrigin: 'top left',
+            marginBottom: '-10px',
+            marginRight: '-33.333333333%',
+            width: '133.333333333%',
+            lineHeight: '150%',
+          },
+          '& .MuiOutlinedInput-notchedOutline': {
+            height: '100%',
+          },
+        },
+      },
+    }
+
     theme.components.MuiTextField = {
       styleOverrides: {
         root: {
@@ -487,11 +506,9 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
           },
           '& input': {
             height: '32px',
-            padding: '0px 12px',
+            padding: '0px 16px',
             '&::placeholder': {
               color: theme.palette.text.alternative,
-              fontSize: '12px',
-              fontWeight: 400,
               lineHeight: '150%',
             },
             ':-webkit-autofill': {
@@ -501,10 +518,8 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
           '& .MuiOutlinedInput-root': {
             padding: '0px',
             borderRadius: '4px',
-            height: 'auto',
+            height: '32px',
             backgroundColor: theme.palette.background.tertiary,
-            fontSize: '12px',
-            fontWeight: 400,
             color: theme.palette.text.normal,
             lineHeight: '150%',
             '& fieldset': {
@@ -527,7 +542,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
           },
           '& .MuiInputBase-inputMultiline': {
             height: 'auto',
-            padding: '12px',
+            padding: '16px',
           },
           '.MuiFormHelperText-filled': {
             margin: 0,
