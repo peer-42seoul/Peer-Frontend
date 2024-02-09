@@ -275,7 +275,12 @@ const KeywordDisplayBox = ({
         <Typography variant="CaptionEmphasis" color={'text.normal'}>
           등록된 키워드
         </Typography>
-        <Button variant="text" onClick={openModal} sx={{ padding: '0px 4px' }}>
+        <Button
+          variant="text"
+          onClick={openModal}
+          sx={{ padding: '0px 4px' }}
+          disabled={!data.length}
+        >
           <Typography variant="CaptionEmphasis" color={'text.alternative'}>
             전체 삭제
           </Typography>
