@@ -6,6 +6,7 @@ import CuNavBar from '@/components/CuNavBar'
 import useShowTeams from '@/states/useShowTeams'
 import { useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
+import * as style from '@/components/NavBarBox.style'
 
 const Sidebar = () => {
   const { isPc } = useMedia()
@@ -42,13 +43,7 @@ const Sidebar = () => {
   const getTabValue = () => alignment
 
   return (
-    <Box
-      sx={
-        isPc
-          ? { width: '30%', maxWidth: '19.25rem', height: 'content-fit' }
-          : { width: '100%', height: 'content-fit' }
-      }
-    >
+    <Box sx={isPc ? style.pcNavBar : style.mobileNavBar}>
       <CuNavBar
         getTabValue={getTabValue}
         title={'나의 팀리스트'}

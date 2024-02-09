@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Stack, Box } from '@mui/material'
-import * as style from '../../my-page/layout.style'
+import * as style from '@/components/NavBarLayout.style'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (

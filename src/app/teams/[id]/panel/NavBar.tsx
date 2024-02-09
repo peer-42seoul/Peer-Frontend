@@ -12,6 +12,7 @@ import {
   ShowcaseIcon,
 } from '@/icons/TeamPage'
 import * as style from './NavBar.style'
+import * as navStyle from '@/components/NavBarBox.style'
 import useMedia from '@/hook/useMedia'
 
 const getTabValue = (path: string) => {
@@ -28,13 +29,7 @@ const TeamSidebar = ({ id }: { id: string }) => {
   const { isPc } = useMedia()
 
   return (
-    <Box
-      sx={
-        isPc
-          ? { width: '30%', maxWidth: '19.25rem', height: 'content-fit' }
-          : { width: '100%', height: 'content-fit' }
-      }
-    >
+    <Box sx={isPc ? navStyle.pcNavBar : navStyle.mobileNavBar}>
       <CuNavBar
         getTabValue={getTabValue}
         title={'나의 팀페이지'}
