@@ -490,7 +490,6 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
             marginRight: '-33.333333333%',
             width: '133.333333333%',
             lineHeight: '150%',
-            alignSelf: 'center',
           },
           '& .MuiOutlinedInput-notchedOutline': {
             height: '100%',
