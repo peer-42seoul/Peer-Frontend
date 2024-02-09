@@ -18,10 +18,19 @@ const TeamLayout = ({
   const id = params.id
 
   useEffect(() => {
+    resetState()
     return () => {
       resetState()
     }
   }, [])
+
+  if (layout === 'FULLPAGE') {
+    return (
+      <Container sx={style.container}>
+        <Box sx={style.fullPageContentBox}>{children}</Box>
+      </Container>
+    )
+  }
 
   return (
     <Container sx={style.container}>
@@ -30,7 +39,7 @@ const TeamLayout = ({
         direction={['column', 'row']}
         sx={style.stack}
       >
-        {layout === 'SIDEBAR' && <TeamSidebar id={id} />}
+        <TeamSidebar id={id} />
         <Box sx={style.contentBox}>{children}</Box>
       </Stack>
     </Container>
