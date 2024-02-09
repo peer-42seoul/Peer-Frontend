@@ -35,7 +35,7 @@ const SetTeamRole = ({
 
   const handlePrepend = () => {
     if (fields.length >= 10) return
-    prepend({ name: '', number: 1 })
+    prepend({ name: '', number: 0 })
   }
 
   const handleRemove = (index: number) => {
