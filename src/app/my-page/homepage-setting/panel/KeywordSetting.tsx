@@ -4,22 +4,17 @@ import CuButton from '@/components/CuButton'
 import CuTextField from '@/components/CuTextField'
 import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useModal from '@/hook/useModal'
-import {
-  AlertColor,
-  Box,
-  Button,
-  Grid,
-  InputAdornment,
-  Stack,
-  Typography,
-} from '@mui/material'
-import React, { useRef, useState } from 'react'
-import useSWR from 'swr'
-import TagChip from './TagChip'
+import { Box, Button, InputAdornment, Stack, Typography } from '@mui/material'
+import Grid from '@mui/material/Unstable_Grid2'
+import React, { useEffect, useRef, useState } from 'react'
 import CuTextModal from '@/components/CuTextModal'
 import TitleBox from '@/components/TitleBox'
 import useMedia from '@/hook/useMedia'
 import useToast from '@/states/useToast'
+import { motion, AnimatePresence } from 'framer-motion'
+import TagChip from '@/components/TagChip'
+import { useTheme } from '@mui/material'
+import { convertNonAlphabeticToHex } from '@/utils/convertNonAlpbabetToHex'
 
 interface IChip {
   key: number
@@ -27,25 +22,17 @@ interface IChip {
 }
 
 const KeywordAddingField = ({
-  mutate,
-  openToast,
-  closeToast,
   keywordList,
+  setData,
 }: {
-  mutate: () => void
-  openToast: ({
-    severity,
-    message,
-  }: {
-    severity: AlertColor
-    message: React.ReactNode
-  }) => void
-  closeToast: () => void
   keywordList: Array<IChip> | undefined | null
+  setData: React.Dispatch<React.SetStateAction<Array<IChip>>>
 }) => {
   const [inputValue, setInputValue] = useState<string>('' as string)
   const textFieldRef = useRef<HTMLInputElement | null>(null)
   const axiosWithAuth = useAxiosWithAuth()
+
+  const { openToast, closeToast } = useToast()
 
   const validateData = (trimmed: string) => {
     closeToast()
@@ -80,7 +67,15 @@ const KeywordAddingField = ({
             </>
           ),
         })
-        mutate()
+      })
+      .then(() => {
+        setData((prev) => [
+          ...prev,
+          {
+            key: new Date().getTime(),
+            label: trimmed,
+          },
+        ])
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -155,60 +150,111 @@ const KeywordAddingField = ({
 
 const ChipsArray = ({
   data,
-  mutate,
   isLoading,
+  setData,
 }: {
-  mutate: () => void
-  data: Array<IChip> | undefined | null
+  data: Array<IChip>
   isLoading: boolean
+  setData: React.Dispatch<React.SetStateAction<Array<IChip>>>
 }) => {
+  const theme = useTheme()
+
+  const { openToast } = useToast()
+
+  const axiosWithAuth = useAxiosWithAuth()
+  const handleDelete = (label: string) => {
+    // closeToast()
+    return () =>
+      axiosWithAuth
+        .delete(
+          `${
+            process.env.NEXT_PUBLIC_CSR_API
+          }/api/v1/alarm/delete?keyword=${convertNonAlphabeticToHex(label)}`,
+        )
+        .then(() => {
+          openToast({
+            severity: 'success',
+            message: `'${label}'를 알림 키워드 목록에서 삭제했습니다.`,
+          })
+        })
+        .then(() => {
+          setData((prev) => prev.filter((keyword) => keyword.label !== label))
+        })
+        .catch((error) => {
+          if (error.data.message) {
+            openToast({
+              severity: 'error',
+              message: error.data.message,
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: (
+                <>
+                  <b>{label}</b>를 알림 키워드 목록에서 삭제하지 못했습니다,
+                </>
+              ),
+            })
+          }
+        })
+  }
+
   return (
-    <Grid container columnSpacing={0.75} rowSpacing={1} py={1}>
-      {!data &&
-        (isLoading ? (
-          <Grid item py={1}>
-            <Typography variant="Caption" color={'text.alternative'}>
-              로딩 중 입니다.
-            </Typography>
-          </Grid>
-        ) : (
-          <Grid item py={1}>
-            <Typography variant="Caption" color={'text.alternative'}>
-              등록한 알림 키워드가 없습니다.
-            </Typography>
-          </Grid>
-        ))}
-      {data &&
-        data.map((chip) => {
-          return <TagChip key={chip.key} mutate={mutate} chip={chip} />
-        })}
-    </Grid>
+    <AnimatePresence>
+      <Grid container columnSpacing={0.75} rowSpacing={1} py={1}>
+        {data?.length === 0 &&
+          (isLoading ? (
+            <Grid py={1}>
+              <Typography variant="Caption" color={'text.alternative'}>
+                로딩 중...
+              </Typography>
+            </Grid>
+          ) : (
+            <Grid py={1}>
+              <Typography variant="Caption" color={'text.alternative'}>
+                등록한 알림 키워드가 없어요.
+              </Typography>
+            </Grid>
+          ))}
+        {data.length > 0 &&
+          data.map((chip) => {
+            return (
+              <Grid key={chip.key}>
+                <motion.div
+                  initial={{ scale: 1 }}
+                  animate={{ scale: [1.2, 1], opacity: 1 }}
+                  exit={{ scale: [1, 0], opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <TagChip
+                    name={chip.label}
+                    color={`${theme.palette.purple.strong}`}
+                    onDelete={handleDelete(chip.label)}
+                  />
+                </motion.div>
+              </Grid>
+            )
+          })}
+      </Grid>
+    </AnimatePresence>
   )
 }
 
 const KeywordDisplayBox = ({
-  mutate,
   data,
   isLoading,
   error,
-  openToast,
-  closeToast,
+  setData,
 }: {
-  mutate: () => void
-  data: Array<IChip> | undefined | null
+  data: Array<IChip>
   isLoading: boolean
   error: any
-  openToast: ({
-    severity,
-    message,
-  }: {
-    severity: AlertColor
-    message: React.ReactNode
-  }) => void
-  closeToast: () => void
+  setData: React.Dispatch<React.SetStateAction<Array<IChip>>>
 }) => {
   const { isOpen, closeModal, openModal } = useModal()
   const axiosWithAuth = useAxiosWithAuth()
+
+  const { openToast, closeToast } = useToast()
 
   const deleteAll = async () => {
     closeToast()
@@ -216,7 +262,6 @@ const KeywordDisplayBox = ({
       .delete(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/alarm/delete/all`)
       .then(() => {
         closeModal()
-        mutate()
         openToast({
           severity: 'success',
           message: '모든 키워드를 삭제하였습니다.',
@@ -230,16 +275,23 @@ const KeywordDisplayBox = ({
         <Typography variant="CaptionEmphasis" color={'text.normal'}>
           등록된 키워드
         </Typography>
-        <Button variant="text" onClick={openModal} sx={{ padding: '0px 4px' }}>
+        <Button
+          variant="text"
+          onClick={openModal}
+          sx={{ padding: '0px 4px' }}
+          disabled={!data.length}
+        >
           <Typography variant="CaptionEmphasis" color={'text.alternative'}>
             전체 삭제
           </Typography>
         </Button>
       </Stack>
       {error ? (
-        <Typography>데이터를 가져오지 못했습니다.</Typography>
+        <Typography variant="Caption" color={'text.assistive'}>
+          데이터를 가져오지 못했습니다.
+        </Typography>
       ) : (
-        <ChipsArray mutate={mutate} data={data} isLoading={isLoading} />
+        <ChipsArray data={data} isLoading={isLoading} setData={setData} />
       )}
       <CuTextModal
         open={isOpen}
@@ -261,8 +313,9 @@ const KeywordDisplayBox = ({
 
 const KeywordSetting = () => {
   const { isPc } = useMedia()
-
-  const { openToast, closeToast } = useToast()
+  const [data, setData] = useState<Array<IChip>>([] as Array<IChip>)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -276,13 +329,24 @@ const KeywordSetting = () => {
         )
         return newChipData
       }
-      return null
+      return [] as Array<IChip>
     })
 
-  const { isLoading, data, mutate, error } = useSWR<Array<IChip> | null>(
-    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/alarm`,
-    getKeywords,
-  )
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true)
+      try {
+        const result = await getKeywords(
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/alarm`,
+        )
+        setData(result)
+      } catch (error) {
+        setError(error as any)
+      }
+      setIsLoading(false)
+    }
+    fetchData()
+  }, [])
 
   return (
     <TitleBox
@@ -306,19 +370,12 @@ const KeywordSetting = () => {
         </Stack>
       }
     >
-      <KeywordAddingField
-        openToast={openToast}
-        closeToast={closeToast}
-        mutate={mutate}
-        keywordList={data}
-      />
+      <KeywordAddingField keywordList={data} setData={setData} />
       <KeywordDisplayBox
-        openToast={openToast}
-        closeToast={closeToast}
-        mutate={mutate}
         data={data}
         isLoading={isLoading}
         error={error}
+        setData={setData}
       />
     </TitleBox>
   )
