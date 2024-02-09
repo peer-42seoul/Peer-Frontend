@@ -5,11 +5,20 @@ import { Stack } from '@mui/material'
 import TeamInfoContainer from './panel/TeamInfoContainer'
 import TeamDnD from './panel/TeamDnD'
 import CuButton from '@/components/CuButton'
+import { useEffect, useState } from 'react'
+import CuCircularProgress from '@/components/CuCircularProgress'
 // import ForbiddenDolphin from '@/components/WorkingDolphin'
 
 const TeamsPage = ({ params }: { params: { id: string } }) => {
+  const [isClient, setIsClient] = useState(false)
   const router = useRouter()
   const { id } = params
+
+  useEffect(() => {
+    setIsClient(true) // 모바일 환경에서 hydration을 막기 위한 변수
+  }, [])
+
+  if (!isClient) return <CuCircularProgress color="primary" />
 
   return (
     <Stack spacing={'1.5rem'} width={'100%'}>

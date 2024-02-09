@@ -22,6 +22,7 @@ import {
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 import { ToggleButtonGroup } from '@mui/material'
 import * as CuStyle from '../../../../components/CuNavBar.style'
+import useMedia from '@/hook/useMedia'
 
 const getTabValue = (path: string) => {
   if (path.includes('/notice')) return 'notice'
@@ -129,8 +130,9 @@ const MobileToggleButton = ({
 
 const TeamSidebar = ({ id }: { id: string }) => {
   const router = useRouter()
-  const isPC = useMediaQuery('(min-width: 997px)')
-  if (!isPC) {
+  const isTablet = useMediaQuery('(min-width: 997px)')
+  const { isPc } = useMedia()
+  if (!isTablet && isPc) {
     return (
       <MobileSidebar
         getTabValue={getTabValue}

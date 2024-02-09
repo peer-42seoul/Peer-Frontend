@@ -1,3 +1,5 @@
+'use client'
+
 import { Box, IconButton, useMediaQuery } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Layout } from 'react-grid-layout'
