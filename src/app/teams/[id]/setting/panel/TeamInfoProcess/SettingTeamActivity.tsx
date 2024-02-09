@@ -2,16 +2,18 @@ import { MenuItem, Stack, Typography } from '@mui/material'
 import { WifiClearIcon } from '../Icons'
 import { Control, Controller } from 'react-hook-form'
 import { Select } from '@mui/material'
-import { TeamOperationForm } from '@/app/teams/types/types'
+import { TeamOperationForm, TeamStatus } from '@/app/teams/types/types'
 import { ISetupTeam } from '../SettingTeamInfo'
 import useMedia from '@/hook/useMedia'
 
 interface ISettingTeamActivity {
+  teamStatus: TeamStatus
   teamActivity: TeamOperationForm
   control: Control<ISetupTeam, any>
 }
 
 const SettingTeamActivity = ({
+  teamStatus,
   teamActivity,
   control,
 }: ISettingTeamActivity) => {
@@ -35,6 +37,7 @@ const SettingTeamActivity = ({
         render={({ field }) => (
           <Select
             size="small"
+            disabled={teamStatus === TeamStatus.COMPLETE}
             variant="outlined"
             defaultValue={teamActivity}
             sx={{

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import Viewer, {
   IViewerOptions,
 } from '@toast-ui/editor/dist/toastui-editor-viewer'
@@ -18,6 +18,8 @@ const ToastViewer = ({
   typographySx,
 }: IViewerOptions) => {
   const viewerRef = useRef<HTMLDivElement>(null)
+  const theme = useTheme()
+
   useEffect(() => {
     if (!viewerRef.current) {
       return
@@ -48,6 +50,10 @@ const ToastViewer = ({
               color: 'text.normal',
               ...(typographySx as React.CSSProperties),
             },
+          '& pre': {
+            backgroundColor:
+              theme.palette.mode === 'dark' ? '#1E1E1E' : '#FBFCFD',
+          },
         },
         ...sx,
       }}

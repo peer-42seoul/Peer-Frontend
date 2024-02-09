@@ -10,6 +10,14 @@ import NoDataDolphin from '@/components/NoDataDolphin'
 const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
   const { showTeams } = useShowTeams()
 
+  console.log(
+    'TeamsList',
+    prop.filter(
+      (team) =>
+        team.isApproved === true || team.status === TeamStatus.RECRUITING,
+    ),
+  )
+
   return (
     <Stack
       spacing={'0.2rem'}
@@ -36,8 +44,18 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
         maxHeight={'55vh'}
         flex={'2rem'}
       >
-        {prop.length ? (
-          prop.map((team, index) => <TeamCard key={index} team={team} />)
+        {prop.length &&
+        prop.filter(
+          (team) =>
+            team.isApproved === true || team.status === TeamStatus.RECRUITING,
+        ).length !== 0 ? (
+          prop
+            .filter(
+              (team) =>
+                team.isApproved === true ||
+                team.status === TeamStatus.RECRUITING,
+            )
+            .map((team, index) => <TeamCard key={index} team={team} />)
         ) : (
           <NoDataDolphin message="아직 참가한 팀이 없습니다." />
         )}

@@ -1,9 +1,9 @@
 import {
   Avatar,
   Box,
+  Button,
   // FormControl,
   Grid,
-
   // NativeSelect,
   Stack,
   Switch,
@@ -17,9 +17,9 @@ import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
 import { IMyInfo } from '../page'
-import CloseButton from '@/components/CloseButton'
 import useToast from '@/states/useToast'
 import CuTextModal from '@/components/CuTextModal'
+import CloseIcon from '@mui/icons-material/Close'
 
 interface ISetupMember {
   team: IMember[]
@@ -252,16 +252,19 @@ const SettingTeamMember = ({
               >
                 {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
 
-                <CloseButton
-                  action={() => handleOpenDelete(member)}
-                  style={{
+                <Button
+                  disabled={teamStatus === TeamStatus.COMPLETE}
+                  onClick={() => handleOpenDelete(member)}
+                  sx={{
                     position: 'absolute',
                     top: 0,
                     right: 0,
                     padding: 0,
                     minWidth: 0.2,
                   }}
-                />
+                >
+                  <CloseIcon />
+                </Button>
 
                 <OthersProfile name={member.name} userId={member.id}>
                   <Avatar src={member.image} sx={{ margin: 'auto' }} />

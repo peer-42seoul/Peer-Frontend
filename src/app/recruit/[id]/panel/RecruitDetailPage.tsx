@@ -98,6 +98,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
                     type={type}
                     pc
                     data={content}
+                    status={content.status}
                   />
                   <Tutorial
                     title="지원 방법"
@@ -141,6 +142,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
           type={type}
           roleList={roleList}
           data={content}
+          status={content.status}
         />
       )}
     </Stack>

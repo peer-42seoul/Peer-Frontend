@@ -21,6 +21,7 @@ export interface IPostCardHitchhiking {
   tagList: ITag[]
   image: string // 글 대표 이미지 (썸네일)
   favorite?: boolean
+  hasBeenRemoved?: boolean
 }
 
 export interface IPostCardShowcase {

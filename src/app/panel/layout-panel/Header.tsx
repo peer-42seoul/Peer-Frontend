@@ -54,7 +54,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
     } else if (pathname.startsWith('/team-list')) {
       if (!isLogin) {
         router.push('/login?redirect=/team-list')
-      } else setTitle('팀페이지')
+      } else setTitle('나의 팀')
     } else if (pathname.startsWith('/my-page')) {
       if (!isLogin) {
         router.push('/login?redirect=/my-page')
@@ -67,7 +67,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
 
   // 타이틀만 보여주고 싶은 경우 (뒤로 가기 버튼이 보이지 않았으면 하는 경우)
   const onlyTitle =
-    title === '마이페이지' || title === '팀페이지' || title === '로그인'
+    title === '마이페이지' || title === '나의 팀' || title === '로그인'
 
   return (
     <AppBar position="fixed" sx={mobileHeader}>
@@ -97,7 +97,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
               <BackIcon />
             </IconButton>
             <Box sx={style.mobileHeaderTitle}>
-              {/* headerTitle이 있는 경우: 페이지안에서 header를 설정하는 경우 (ex 모집글뷰, 팀페이지) */}
+              {/* headerTitle이 있는 경우: 페이지안에서 header를 설정하는 경우 (ex 모집글뷰, 나의 팀) */}
               <Typography fontSize={'0.8125rem'} fontWeight={700}>
                 {headerTitle === '' ? title : headerTitle}
               </Typography>
