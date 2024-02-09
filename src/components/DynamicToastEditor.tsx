@@ -18,8 +18,12 @@ const ToastEditor = dynamic(
  */
 const DynamicToastEditor = (props: Props) => {
   return (
-    <Box>
-      <ToastEditor {...props} />
+    <Box sx={{
+      '.toastui-editor-contents': {
+        fontSize: '16px',
+      },
+    }}>
+      <ToastEditor {...props}/>
     </Box>
   )
 }
