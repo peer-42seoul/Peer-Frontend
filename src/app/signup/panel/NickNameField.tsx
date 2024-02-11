@@ -24,7 +24,9 @@ const NickNameField = ({
 }) => {
   return (
     <>
-      <CuTextFieldLabel htmlFor="nickName">닉네임</CuTextFieldLabel>
+      <CuTextFieldLabel htmlFor="nickName">
+        <Typography variant="Caption">닉네임</Typography>
+      </CuTextFieldLabel>
       <CuTextField
         {...field}
         onChange={(e) => {
@@ -35,6 +37,7 @@ const NickNameField = ({
         error={nickNameSendStatus === 'error'}
         type="text"
         placeholder="닉네임을 입력하세요."
+        sx={{ width: '100%' }}
         inputProps={{
           minLength: 2,
           maxLength: 30,

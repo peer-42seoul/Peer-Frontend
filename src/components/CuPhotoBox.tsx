@@ -6,9 +6,15 @@ interface ICuPhotoBoxProps {
   style?: React.CSSProperties
   src: string
   alt: string
+  objectStyle?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down' | 'false'
 }
 
-const CuPhotoBox = ({ style, src, alt }: ICuPhotoBoxProps) => {
+const CuPhotoBox = ({
+  style,
+  src,
+  alt,
+  objectStyle = 'cover',
+}: ICuPhotoBoxProps) => {
   return (
     <Box
       style={{
@@ -17,7 +23,7 @@ const CuPhotoBox = ({ style, src, alt }: ICuPhotoBoxProps) => {
         margin: 0,
       }}
     >
-      <Image src={src} alt={alt} layout="fill" objectFit="cover" />
+      <Image src={src} alt={alt} layout="fill" objectFit={objectStyle} />
     </Box>
   )
 }

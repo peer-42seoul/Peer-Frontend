@@ -27,7 +27,6 @@ export interface IMyInfo {
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
-  // const [myInfo, setMyInfo] = useState<IMyInfo>()
   const { data, error, isLoading, mutate } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),

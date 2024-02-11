@@ -5,10 +5,12 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: false,
+  disable: process.env.NODE_ENV === 'development',
   // disable: prod ? false : true, 나중에 true로 바꿔야함
   // runtimeCaching,
 })
+
+const WorkboxPlugin = require('workbox-webpack-plugin')
 
 const nextConfig = withPWA({
   reactStrictMode: false,
@@ -27,6 +29,12 @@ const nextConfig = withPWA({
       'kr1-api-object-storage.nhncloudservice.com',
     ],
   },
+  plugins: [
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+    }),
+  ],
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
@@ -38,7 +46,14 @@ const nextConfig = withPWA({
   },
 })
 
-// module.exports = nextConfig
+const runtimeCaching = {
+  plugins: [
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+    }),
+  ],
+}
 
 module.exports = nextConfig
 

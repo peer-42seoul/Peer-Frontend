@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import { useRouter } from 'next/navigation'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 const MainBanner = () => {
   const { isPc } = useMedia()
@@ -18,19 +19,27 @@ const MainBanner = () => {
   // }
 
   return (
-    <Box height={isPc ? '12.5rem' : '100px'} p={0} m={0}>
-      <img
+    <Box
+      height={isPc ? '12.5rem' : '100px'}
+      p={0}
+      m={0}
+      onClick={() => router.push('/about')}
+      onMouseUp={() => {}}
+    >
+      <CuPhotoBox
+        style={{
+          height: isPc ? '12.5rem' : '100px',
+          cursor: 'pointer',
+          fill: 'none',
+          // objectFit: 'none',
+        }}
+        objectStyle="false"
         src={
           !isPc
             ? '/images/banners/about-mobile.svg'
             : '/images/banners/about-pc.svg'
         }
-        alt={'main-banner'}
-        width={'100%'}
-        height={'100%'}
-        style={{ cursor: 'pointer' }}
-        onClick={() => router.push('/about')}
-        onMouseUp={() => {}}
+        alt="main-banner"
       />
     </Box>
   )
