@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect } from 'react'
-import { Stack, Container, Box } from '@mui/material'
+import { Stack, Container, Box, useMediaQuery } from '@mui/material'
 import useTeamPageState from '@/states/useTeamPageState'
 
 import TeamSidebar from './panel/NavBar'
@@ -23,11 +23,14 @@ const TeamLayout = ({
     }
   }, [])
 
+  const isFourRow = useMediaQuery('(min-width:997px)')
+
   return (
     <Container sx={style.container}>
       <Stack
         justifyContent={'space-between'}
-        direction={['column', 'row']}
+        direction={isFourRow ? 'row' : 'column'}
+        alignItems={isFourRow ? 'flex-start' : 'center'}
         sx={style.stack}
       >
         {layout === 'SIDEBAR' && <TeamSidebar id={id} />}
