@@ -40,13 +40,6 @@ const MainCard = ({
         ? '모집전'
         : '모집완료'
 
-  if (statusLabel === '모집완료') {
-    sx = {
-      ...sx,
-      filter: 'grayscale(120%)',
-    }
-  }
-
   return (
     <Card
       sx={{
