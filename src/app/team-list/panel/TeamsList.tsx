@@ -6,17 +6,11 @@ import { TeamStatus } from '@/app/teams/types/types'
 import useShowTeams from '@/states/useShowTeams'
 import TeamCard from './TeamCard'
 import NoDataDolphin from '@/components/NoDataDolphin'
+import ForceTutorial from '@/components/ForceTutorial'
+import { TeamListTutorial } from '@/components/tutorialContent/TeamListTutorial'
 
 const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
   const { showTeams } = useShowTeams()
-
-  console.log(
-    'TeamsList',
-    prop.filter(
-      (team) =>
-        team.isApproved === true || team.status === TeamStatus.RECRUITING,
-    ),
-  )
 
   return (
     <Stack
@@ -25,7 +19,7 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
       height={'75vh'}
       flex={'2rem'}
     >
-      <Stack>
+      <Stack direction={'row'}>
         <Typography fontWeight={'bold'} my={'1rem'}>
           {showTeams === TeamStatus.RECRUITING
             ? '모집 중'
@@ -35,6 +29,10 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
                 ? '진행 중'
                 : '모집 완료'}
         </Typography>
+        <ForceTutorial
+          title={'팀 설정 튜토리얼'}
+          content={<TeamListTutorial />}
+        />
       </Stack>
       <Stack
         spacing={'0.5rem'}
