@@ -185,6 +185,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   }, [newData])
 
   useEffect(() => {
+    console.log('socket', socket)
     if (!socket) return
     socket.on('connect', () => {
       console.log('socket connected')
