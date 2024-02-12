@@ -177,7 +177,7 @@ const MainCard = ({
             mt={1}
             direction={'row'}
             sx={{
-              height: `${1.5 * tagMaxLine + 0.5}rem`,
+              height: `${1.5 * tagMaxLine + 0.25}rem`,
               overflow: 'auto',
               flexWrap: 'wrap',
               '&::-webkit-scrollbar': {
