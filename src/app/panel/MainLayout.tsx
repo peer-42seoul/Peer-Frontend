@@ -37,14 +37,14 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         {isPc ? (
-          <div className="mobile-layout">
-            <Box sx={{ marginBottom: '64px' }}>{children}</Box>
-            <MobileNav />
-          </div>
-        ) : (
           <div className="pc-layout">
             <PcNav />
             <Box sx={{ marginY: '64px' }}>{children}</Box>
+          </div>
+        ) : (
+          <div className="mobile-layout">
+            <Box sx={{ marginBottom: '64px' }}>{children}</Box>
+            <MobileNav />
           </div>
         )}
       </Box>
