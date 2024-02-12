@@ -77,20 +77,17 @@ const ApplicantList = ({
             severity: 'error',
             message: '권한이 없습니다.',
           })
-        } else {
-          openToast({
-            severity: 'error',
-            message: '승인에 실패했습니다.',
-          })
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        openToast({
+          severity: 'error',
+          message: '승인에 실패했습니다.',
+        })
       })
   }, [index, member, data, mutate])
 
   const handleReject = useCallback(() => {
-    console.log('reject')
     axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/applicant/reject/${teamId}`,
@@ -119,15 +116,13 @@ const ApplicantList = ({
             severity: 'error',
             message: '권한이 없습니다.',
           })
-        } else {
-          openToast({
-            severity: 'error',
-            message: '승인에 실패했습니다.',
-          })
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        openToast({
+          severity: 'error',
+          message: '승인에 실패했습니다.',
+        })
       })
   }, [index, member, data, mutate])
 

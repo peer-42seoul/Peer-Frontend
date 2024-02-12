@@ -83,7 +83,6 @@ const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
 
   const handleGrant = useCallback(
     (member: IMember) => {
-      console.log('리더 권한 변경')
       if (member.role === TeamGrant.LEADER) {
         axiosWithAuth
           .post(
@@ -99,15 +98,13 @@ const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
                 severity: 'success',
                 message: '리더 권한이 박탈되었습니다.',
               })
-            } else {
-              openToast({
-                severity: 'error',
-                message: '리더 권한 부여에 실패했습니다.',
-              })
             }
           })
-          .catch((err) => {
-            console.log(err)
+          .catch(() => {
+            openToast({
+              severity: 'error',
+              message: '리더 권한 부여에 실패했습니다.',
+            })
           })
       } else {
         axiosWithAuth
@@ -125,15 +122,13 @@ const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
                 severity: 'success',
                 message: '리더 권한이 부여되었습니다.',
               })
-            } else {
-              openToast({
-                severity: 'error',
-                message: '리더 권한 부여에 실패했습니다.',
-              })
             }
           })
-          .catch((err) => {
-            console.log(err)
+          .catch(() => {
+            openToast({
+              severity: 'error',
+              message: '리더 권한 부여에 실패했습니다.',
+            })
           })
       }
     },
@@ -141,14 +136,16 @@ const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
   )
 
   const handleOpenDelete = (member: IMember) => {
-    console.log('팀원 삭제 모달 오픈')
     setMember(member)
     openModal()
   }
 
   const handleDelete = () => {
-    console.log('팀원 삭제')
-    if (!member) return console.log('팀원이 없습니다.')
+    if (!member)
+      return openToast({
+        severity: 'error',
+        message: '팀원이 없습니다.',
+      })
     axiosWithAuth
       .delete(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/delete/${teamId}?userId=${member.id}`,
@@ -165,17 +162,15 @@ const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
             severity: 'error',
             message: '자기 자신은 삭제시킬 수 없습니다.',
           })
-        } else {
-          openToast({
-            severity: 'error',
-            message: '팀원 삭제에 실패했습니다.',
-          })
         }
 
         closeModal()
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        openToast({
+          severity: 'error',
+          message: '팀원 삭제에 실패했습니다.',
+        })
 
         closeModal()
       })
