@@ -40,7 +40,6 @@ const Header = ({ pathname }: { pathname?: string }) => {
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
   const type = searchParams.get('type') ?? 'STUDY'
-  console.log('type', type)
   const regex = /^\/recruit\/\d+\/edit$/
 
   useEffect(() => {
