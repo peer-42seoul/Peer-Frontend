@@ -20,6 +20,7 @@ import { IMyInfo } from '../page'
 import useToast from '@/states/useToast'
 import CuTextModal from '@/components/CuTextModal'
 import CloseIcon from '@mui/icons-material/Close'
+import useNicknameStore from '@/states/useNicknameStore'
 
 interface ISetupMember {
   team: IMember[]
@@ -73,6 +74,7 @@ const SettingTeamMember = ({
   const axiosWithAuth = useAxiosWithAuth()
   const [canChangeLeader, setCanChangeLeader] = useState(false)
   const { openToast } = useToast()
+  const { nickname } = useNicknameStore()
 
   // const changeJob = () => {
   //   axiosWithAuth.put(
@@ -252,19 +254,21 @@ const SettingTeamMember = ({
               >
                 {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
 
-                <Button
-                  disabled={teamStatus === TeamStatus.COMPLETE}
-                  onClick={() => handleOpenDelete(member)}
-                  sx={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    padding: 0,
-                    minWidth: 0.2,
-                  }}
-                >
-                  <CloseIcon />
-                </Button>
+                {nickname !== member.name && (
+                  <Button
+                    disabled={teamStatus === TeamStatus.COMPLETE}
+                    onClick={() => handleOpenDelete(member)}
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      padding: 0,
+                      minWidth: 0.2,
+                    }}
+                  >
+                    <CloseIcon />
+                  </Button>
+                )}
 
                 <OthersProfile name={member.name} userId={member.id}>
                   <Avatar src={member.image} sx={{ margin: 'auto' }} />
