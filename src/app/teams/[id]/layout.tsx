@@ -25,7 +25,7 @@ const TeamLayout = ({
   }, [])
 
   const isFourRow = useMediaQuery('(min-width:997px)')
-  
+
   if (layout === 'FULLPAGE') {
     return (
       <Container sx={style.container}>
