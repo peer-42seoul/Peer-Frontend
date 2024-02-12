@@ -18,12 +18,21 @@ const TeamLayout = ({
   const id = params.id
 
   useEffect(() => {
+    resetState()
     return () => {
       resetState()
     }
   }, [])
 
   const isFourRow = useMediaQuery('(min-width:997px)')
+  
+  if (layout === 'FULLPAGE') {
+    return (
+      <Container sx={style.container}>
+        <Box sx={style.fullPageContentBox}>{children}</Box>
+      </Container>
+    )
+  }
 
   return (
     <Container sx={style.container}>
@@ -33,7 +42,7 @@ const TeamLayout = ({
         alignItems={isFourRow ? 'flex-start' : 'center'}
         sx={style.stack}
       >
-        {layout === 'SIDEBAR' && <TeamSidebar id={id} />}
+        <TeamSidebar id={id} />
         <Box sx={style.contentBox}>{children}</Box>
       </Stack>
     </Container>
