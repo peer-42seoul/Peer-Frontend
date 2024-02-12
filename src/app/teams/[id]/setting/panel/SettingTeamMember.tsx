@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { IMember, Job, TeamGrant, TeamStatus } from '../../../types/types'
 import useModal from '@/hook/useModal'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
@@ -84,7 +84,11 @@ const SettingTeamMember = ({
   // }
 
   useEffect(() => {
-    if (team.length > 2) {
+    setMembers(team)
+  }, [team])
+
+  useEffect(() => {
+    if (team.length > 1) {
       setCanChangeLeader(true)
     }
 
@@ -94,62 +98,64 @@ const SettingTeamMember = ({
     // }
   }, [jobs, myInfo])
 
-  const handleGrant = (member: IMember) => {
-    console.log('리더 권한 변경')
-    if (member.role === TeamGrant.LEADER) {
-      axiosWithAuth
-        .post(
-          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            setMembers(
-              members.map((m) =>
-                m.id === member.id ? { ...m, grant: TeamGrant.MEMBER } : m,
-              ),
-            )
-            openToast({
-              severity: 'success',
-              message: '리더 권한이 박탈되었습니다.',
-            })
-          } else {
-            openToast({
-              severity: 'error',
-              message: '리더 권한 부여에 실패했습니다.',
-            })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    } else {
-      axiosWithAuth
-        .post(
-          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            setMembers(
-              members.map((m) =>
-                m.id === member.id ? { ...m, grant: TeamGrant.LEADER } : m,
-              ),
-            )
-            openToast({
-              severity: 'success',
-              message: '리더 권한이 부여되었습니다.',
-            })
-          } else {
-            openToast({
-              severity: 'error',
-              message: '리더 권한 부여에 실패했습니다.',
-            })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-  }
+  const handleGrant = useCallback(
+    (member: IMember) => {
+      console.log('리더 권한 변경')
+      if (member.role === TeamGrant.LEADER) {
+        axiosWithAuth
+          .post(
+            `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              const changedMembers = members.map((m) =>
+                m.id === member.id ? { ...m, role: TeamGrant.MEMBER } : m,
+              )
+              setMembers(changedMembers)
+              openToast({
+                severity: 'success',
+                message: '리더 권한이 박탈되었습니다.',
+              })
+            } else {
+              openToast({
+                severity: 'error',
+                message: '리더 권한 부여에 실패했습니다.',
+              })
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      } else {
+        axiosWithAuth
+          .post(
+            `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              const changedMembers = members.map((m) =>
+                m.id === member.id ? { ...m, role: TeamGrant.LEADER } : m,
+              )
+              setMembers(changedMembers)
+
+              openToast({
+                severity: 'success',
+                message: '리더 권한이 부여되었습니다.',
+              })
+            } else {
+              openToast({
+                severity: 'error',
+                message: '리더 권한 부여에 실패했습니다.',
+              })
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+    },
+    [members, setMembers],
+  )
 
   const handleOpenDelete = (member: IMember) => {
     console.log('팀원 삭제 모달 오픈')
@@ -171,7 +177,6 @@ const SettingTeamMember = ({
             severity: 'success',
             message: '팀원이 삭제되었습니다.',
           })
-          window.location.reload()
         } else if (res.status === 403) {
           openToast({
             severity: 'error',

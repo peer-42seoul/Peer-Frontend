@@ -21,9 +21,11 @@ import useToast from '@/states/useToast'
 import CuCircularProgress from '@/components/CuCircularProgress'
 
 const ApplicantList = ({
+  mutate,
   close,
   teamId,
 }: {
+  mutate: () => void
   close: () => void
   teamId: string
 }) => {
@@ -47,7 +49,7 @@ const ApplicantList = ({
     setMember(data ? data[index] : null)
   }, [index, data])
 
-  const handleAccept = () => {
+  const handleAccept = useCallback(() => {
     axiosWithAuth
       .put(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/applicant/accept/${teamId}`,
@@ -59,13 +61,17 @@ const ApplicantList = ({
       .then((res) => {
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
-          setMembers(data)
-          if (index > 0) setIndex(index - 1)
+          setMembers(res.data)
+          if (index > 0) {
+            setIndex(index - 1)
+          } else {
+            close()
+          }
+          mutate()
           openToast({
             severity: 'success',
             message: '신청이 승인되었습니다.',
           })
-          window.location.reload()
         } else if (res.status === 403) {
           openToast({
             severity: 'error',
@@ -81,7 +87,7 @@ const ApplicantList = ({
       .catch((err) => {
         console.log(err)
       })
-  }
+  }, [index, member, data, mutate])
 
   const handleReject = useCallback(() => {
     console.log('reject')
@@ -96,14 +102,18 @@ const ApplicantList = ({
       .then((res) => {
         if (res.status === 200) {
           // TODO:백엔드에서 제외 시키는 걸 생각
-          setMembers(data)
+          setMembers(res.data)
 
-          if (index > 0) setIndex(index - 1)
+          if (index > 0) {
+            setIndex(index - 1)
+          } else {
+            close()
+          }
+          mutate()
           openToast({
             severity: 'success',
             message: '신청이 거절되었습니다.',
           })
-          window.location.reload()
         } else if (res.status === 403) {
           openToast({
             severity: 'error',
@@ -119,7 +129,7 @@ const ApplicantList = ({
       .catch((err) => {
         console.log(err)
       })
-  }, [index, member, data, teamId, axiosWithAuth, openToast])
+  }, [index, member, data, mutate])
 
   const handleNext = () => {
     if (index < members.length - 1) setIndex(index + 1)

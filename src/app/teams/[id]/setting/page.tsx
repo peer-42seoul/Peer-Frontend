@@ -115,7 +115,11 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
               />
             </Card>
           ) : (
-            <ApplicantList close={closeApplicant} teamId={teams.team.id} />
+            <ApplicantList
+              mutate={mutate}
+              close={closeApplicant}
+              teamId={teams.team.id}
+            />
           )}
         </>
       ) : (
