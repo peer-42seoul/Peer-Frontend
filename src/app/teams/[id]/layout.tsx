@@ -3,9 +3,8 @@
 import { ReactNode, useEffect } from 'react'
 import { Stack, Container, Box, useMediaQuery } from '@mui/material'
 import useTeamPageState from '@/states/useTeamPageState'
-
 import TeamSidebar from './panel/NavBar'
-import * as style from './layout.style'
+import * as style from '@/components/NavBarLayout.style'
 
 const TeamLayout = ({
   params,

@@ -10,7 +10,6 @@ import {
   SettingIcon,
   ShowcaseIcon,
 } from '@/icons/TeamPage'
-import * as style from './NavBar.style'
 import {
   Badge,
   Box,
@@ -21,8 +20,10 @@ import {
 } from '@mui/material'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 import { ToggleButtonGroup } from '@mui/material'
-import * as CuStyle from '../../../../components/CuNavBar.style'
 import useMedia from '@/hook/useMedia'
+import * as style from './NavBar.style'
+import * as navStyle from '@/components/NavBarBox.style'
+import * as CuStyle from '@/components/CuNavBar.style'
 
 const getTabValue = (path: string) => {
   if (path.includes('/notice')) return 'notice'
@@ -132,6 +133,7 @@ const TeamSidebar = ({ id }: { id: string }) => {
   const router = useRouter()
   const isTablet = useMediaQuery('(min-width: 997px)')
   const { isPc } = useMedia()
+
   if (!isTablet && isPc) {
     return (
       <MobileSidebar
@@ -182,51 +184,53 @@ const TeamSidebar = ({ id }: { id: string }) => {
   }
 
   return (
-    <CuNavBar
-      getTabValue={getTabValue}
-      title={'나의 팀들'}
-      tabData={[
-        {
-          label: '메인',
-          onClick: () => router.push(`/teams/${id}`),
-          value: 'main',
-          icon: <MainIcon sx={style.main} />,
-        },
-        {
-          label: '공지사항',
-          onClick: () => router.push(`/teams/${id}/notice`),
-          value: 'notice',
-          icon: <NoticeIcon sx={style.notice} />,
-        },
-        {
-          label: '게시판',
-          onClick: () => router.push(`/teams/${id}/board`),
-          value: 'board',
-          icon: <BoardIcon sx={style.board} />,
-        },
-        {
-          label: '팀설정',
-          onClick: () => router.push(`/teams/${id}/setting`),
-          value: 'setting',
-          icon: <SettingIcon sx={style.setting} />,
-        },
-        {
-          label: '피어로그',
-          onClick: () => router.push(`/teams/${id}/peerlog`),
-          value: 'peerlog',
-          icon: <PeerlogIcon sx={style.peerlog} />,
-          isBeta: true,
-          disabled: true,
-        },
-        {
-          label: '쇼케이스',
-          onClick: () => router.push(`/teams/${id}/showcase`),
-          value: 'showcase',
-          icon: <ShowcaseIcon sx={style.showcase} />,
-          new: true,
-        },
-      ]}
-    />
+    <Box sx={isPc ? navStyle.pcNavBar : navStyle.mobileNavBar}>
+      <CuNavBar
+        getTabValue={getTabValue}
+        title={'나의 팀들'}
+        tabData={[
+          {
+            label: '메인',
+            onClick: () => router.push(`/teams/${id}`),
+            value: 'main',
+            icon: <MainIcon sx={style.main} />,
+          },
+          {
+            label: '공지사항',
+            onClick: () => router.push(`/teams/${id}/notice`),
+            value: 'notice',
+            icon: <NoticeIcon sx={style.notice} />,
+          },
+          {
+            label: '게시판',
+            onClick: () => router.push(`/teams/${id}/board`),
+            value: 'board',
+            icon: <BoardIcon sx={style.board} />,
+          },
+          {
+            label: '팀설정',
+            onClick: () => router.push(`/teams/${id}/setting`),
+            value: 'setting',
+            icon: <SettingIcon sx={style.setting} />,
+          },
+          {
+            label: '피어로그',
+            onClick: () => router.push(`/teams/${id}/peerlog`),
+            value: 'peerlog',
+            icon: <PeerlogIcon sx={style.peerlog} />,
+            isBeta: true,
+            disabled: true,
+          },
+          {
+            label: '쇼케이스',
+            onClick: () => router.push(`/teams/${id}/showcase`),
+            value: 'showcase',
+            icon: <ShowcaseIcon sx={style.showcase} />,
+            new: true,
+          },
+        ]}
+      />
+    </Box>
   )
 }
 

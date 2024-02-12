@@ -3,7 +3,7 @@
 import { Container, Stack, Box } from '@mui/material'
 import { ReactNode, useEffect } from 'react'
 import Sidebar from './panel/Sidebar'
-import * as style from './layout.style'
+import * as style from '@/components/NavBarLayout.style'
 
 const TeamsLayout = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
