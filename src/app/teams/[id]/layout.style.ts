@@ -24,6 +24,7 @@ export const contentBox: SxProps = {
 
 export const fullPageContentBox: SxProps = {
   ...contentBox,
+  marginTop: ['1rem', undefined],
   maxWidth: [undefined, '100%'],
   width: [undefined, '100%'],
 }
