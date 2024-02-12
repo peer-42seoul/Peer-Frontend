@@ -23,7 +23,6 @@ const ForceTutorial = ({ title, content, sx }: ITutorialProps) => {
   const [open, setOpen] = useState(false)
   const [checked, setChecked] = useState(false)
   const { isPc } = useMedia()
-
   const handleCheck = () => {
     setChecked(!checked)
   }

@@ -73,38 +73,38 @@ const mockData = [
     content: '알림3 내용',
   },
   {
-    id: 1,
+    id: 7,
     type: AlertType.MESSAGE,
     title: '알림1',
     content:
       '알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용',
   },
   {
-    id: 2,
+    id: 8,
     type: AlertType.TEAM,
     title: '알림2',
     content: '알림2 내용',
   },
   {
-    id: 3,
+    id: 9,
     type: AlertType.TEAM,
     title: '알림2',
     content: '알림2 내용',
   },
   {
-    id: 4,
+    id: 10,
     type: AlertType.TEAM,
     title: '알림2',
     content: '알림2 내용',
   },
   {
-    id: 5,
+    id: 11,
     type: AlertType.TEAM,
     title: '알림2',
     content: '알림2 내용',
   },
   {
-    id: 6,
+    id: 12,
     type: AlertType.NOTICE,
     title: '알림3',
     content: '알림3 내용',
@@ -295,7 +295,7 @@ const AlertIcon = () => {
                 <Stack height={'100%'}>
                   {showAlert.map((item) => (
                     <Card
-                      key={item.id}
+                      key={item.type + item.id}
                       sx={{
                         m: 2,
                         height: '4rem',

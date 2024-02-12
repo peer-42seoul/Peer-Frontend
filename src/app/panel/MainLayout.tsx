@@ -5,9 +5,11 @@ import Header from './layout-panel/Header'
 import { usePathname } from 'next/navigation'
 import MobileNav from './layout-panel/MobileNav'
 import PcNav from './layout-panel/PcNav'
+import useMedia from '@/hook/useMedia'
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
+  const { isPc } = useMedia()
 
   // if (
   //   pathname === '/login' ||
@@ -34,14 +36,17 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
           minHeight: '100dvh',
         }}
       >
-        <div className="mobile-layout">
-          <Box sx={{ marginBottom: '64px' }}>{children}</Box>
-          <MobileNav />
-        </div>
-        <div className="pc-layout">
-          <PcNav />
-          <Box sx={{ marginY: '64px' }}>{children}</Box>
-        </div>
+        {isPc ? (
+          <div className="mobile-layout">
+            <Box sx={{ marginBottom: '64px' }}>{children}</Box>
+            <MobileNav />
+          </div>
+        ) : (
+          <div className="pc-layout">
+            <PcNav />
+            <Box sx={{ marginY: '64px' }}>{children}</Box>
+          </div>
+        )}
       </Box>
     )
   }
@@ -54,18 +59,20 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         minHeight: '100dvh',
       }}
     >
-      <div className="mobile-layout">
-        <Header pathname={pathname} />
-        {/* margin은 header와 bottom appbar의 크기 */}
-        <Box sx={{ marginTop: '3.375rem', marginBottom: '64px' }}>
-          {children}
-        </Box>
-        <MobileNav />
-      </div>
-      <div className="pc-layout">
-        <PcNav />
-        <Box sx={{ marginY: '64px' }}>{children}</Box>
-      </div>
+      {isPc ? (
+        <div className="pc-layout">
+          <PcNav />
+          <Box sx={{ marginY: '64px' }}>{children}</Box>
+        </div>
+      ) : (
+        <div className="mobile-layout">
+          <Header pathname={pathname} />
+          <Box sx={{ marginTop: '3.375rem', marginBottom: '64px' }}>
+            {children}
+          </Box>
+          <MobileNav />
+        </div>
+      )}
     </Box>
   )
 }
