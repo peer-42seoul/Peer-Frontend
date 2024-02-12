@@ -55,6 +55,8 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
     return content.roleList.filter((role) => role.name !== 'Leader')
   }, [content])
 
+  // FIXME : 리더가 여러명인 경우에 대한 처리 필요
+  // FIXME : 변수명 변경 필요
   const me = nickname === content?.leader_nickname
 
   if (!content) return <Typography>데이터가 없습니다</Typography>
