@@ -22,3 +22,10 @@ export const contentBox: SxProps = {
   boxSizing: [undefined, 'border-box'],
   mb: '2rem',
 }
+
+export const fullPageContentBox: SxProps = {
+  ...contentBox,
+  marginTop: ['1rem', undefined],
+  maxWidth: [undefined, '100%'],
+  width: [undefined, '100%'],
+}

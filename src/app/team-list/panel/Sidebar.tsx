@@ -46,7 +46,7 @@ const Sidebar = () => {
     <Box sx={isPc ? style.pcNavBar : style.mobileNavBar}>
       <CuNavBar
         getTabValue={getTabValue}
-        title={'나의 팀리스트'}
+        title={'나의 팀'}
         tabData={[
           {
             label: '모집 중',
@@ -55,7 +55,7 @@ const Sidebar = () => {
             icon: <></>,
           },
           {
-            label: '시작 전',
+            label: '모집 완료',
             value: TeamStatus.BEFORE,
             onClick: onClickBefore,
             icon: <></>,
