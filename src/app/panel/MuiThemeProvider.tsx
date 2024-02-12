@@ -518,7 +518,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
           '& .MuiOutlinedInput-root': {
             padding: '0px',
             borderRadius: '4px',
-            height: '32px',
+            height: 'auto',
             backgroundColor: theme.palette.background.tertiary,
             color: theme.palette.text.normal,
             lineHeight: '150%',
