@@ -1,4 +1,6 @@
-import { Stack, Typography } from '@mui/material'
+'use client'
+
+import { Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import 'react-grid-layout/css/styles.css'
 import { ITeamDnDLayout, SizeType, WidgetType } from '@/types/ITeamDnDLayout'
@@ -9,6 +11,8 @@ import WidgetsRender from './WidgetsRender'
 import WidgetList from '@/app/teams/[id]/panel/WidgetList'
 import useDnDStore from '@/states/useDnDStore'
 import { useParams } from 'next/navigation'
+import CuCircularProgress from '@/components/CuCircularProgress'
+import NoDataDolphin from '@/components/NoDataDolphin'
 
 export const sizeRatio = {
   S: { w: 1, h: 1 },
@@ -50,8 +54,10 @@ const TeamDnD = ({ id }: { id: string }) => {
   }, [data])
 
   // api 에러 생길 시 주석 처리 필요
-  if (!data && isMutating) return <Typography>로딩중입니다...</Typography>
-  if (!data && error) return <Typography>에러 발생</Typography>
+  if (!data && isMutating) return <CuCircularProgress color="primary" />
+
+  if (!data && error)
+    return <NoDataDolphin message="데이터를 불러오지 못했습니다." />
 
   return (
     <Stack

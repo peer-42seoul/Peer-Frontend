@@ -48,11 +48,13 @@ interface AboutPageProps {
 
 const AboutPage = (props: AboutPageProps) => {
   const { boardType } = useAboutLayout()
-  const { isPc } = useMedia()
+  const { isPc, isTablet } = useMedia()
+
+  console.log(isPc)
 
   if (isPc) {
     return (
-      <Stack mx={'12rem'} my={'1rem'}>
+      <Stack mx={isTablet ? '4rem' : '8rem'} my={'1rem'}>
         <Stack display={'flex'} direction={'row'}>
           <Stack flex={1}>
             <Sidebar />

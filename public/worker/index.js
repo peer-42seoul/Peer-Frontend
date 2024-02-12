@@ -7,8 +7,8 @@ self.addEventListener('push', (event) => {
   const title = data.title
   const options = {
     body: data.body,
-    icon: '/images/icons/icon-192x192.png',
-    link: '/', // 추후 변경
+    icon: '/images/icons/icon-192x192.png', // TODO: 추후 변경
+    link: '/', // TODO: 추후 변경
   }
 
   event.waitUntil(registration.showNotification(title, options))
