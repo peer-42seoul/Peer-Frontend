@@ -10,13 +10,12 @@ import {
   Theme,
   Typography,
 } from '@mui/material'
-import { IMember, Job, TeamGrant, TeamStatus } from '../../../types/types'
+import { IMember, TeamGrant, TeamStatus } from '../../../types/types'
 import useModal from '@/hook/useModal'
 import { useCallback, useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
-import { IMyInfo } from '../page'
 import useToast from '@/states/useToast'
 import CuTextModal from '@/components/CuTextModal'
 import CloseIcon from '@mui/icons-material/Close'
@@ -25,8 +24,6 @@ import useNicknameStore from '@/states/useNicknameStore'
 interface ISetupMember {
   team: IMember[]
   teamId: string
-  jobs: Job[]
-  myInfo?: IMyInfo
   teamStatus: TeamStatus
 }
 
@@ -53,13 +50,7 @@ interface ISetupMember {
 //   )
 // }
 
-const SettingTeamMember = ({
-  team,
-  teamId,
-  jobs,
-  myInfo,
-  teamStatus,
-}: ISetupMember) => {
+const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
   const { isPc } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   // const {
@@ -85,18 +76,10 @@ const SettingTeamMember = ({
 
   useEffect(() => {
     setMembers(team)
-  }, [team])
-
-  useEffect(() => {
     if (team.length > 1) {
       setCanChangeLeader(true)
     }
-
-    // setJob(jobs)
-    // if (selectedJobs.length > 0) {
-    //   changeJob()
-    // }
-  }, [jobs, myInfo])
+  }, [team])
 
   const handleGrant = useCallback(
     (member: IMember) => {
