@@ -39,12 +39,14 @@ const Header = ({ pathname }: { pathname?: string }) => {
   const [title, setTitle] = useState('')
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
+  const type = searchParams.get('type') ?? 'STUDY'
   const regex = /^\/recruit\/\d+\/edit$/
 
   useEffect(() => {
     if (!pathname) return setTitle('')
     if (pathname === '/') {
-      setTitle('메인')
+      if (keyword !== '') setTitle('검색 결과')
+      else setTitle('메인')
     } else if (pathname.startsWith('/login')) {
       setTitle('로그인')
     } else if (pathname === '/recruit/write') {
@@ -67,7 +69,9 @@ const Header = ({ pathname }: { pathname?: string }) => {
 
   // 타이틀만 보여주고 싶은 경우 (뒤로 가기 버튼이 보이지 않았으면 하는 경우)
   const onlyTitle =
-    title === '마이페이지' || title === '나의 팀' || title === '로그인'
+    pathname?.startsWith('/my-page') ||
+    pathname?.startsWith('/team-list') ||
+    pathname?.startsWith('/login')
 
   return (
     <AppBar position="fixed" sx={mobileHeader}>
@@ -89,7 +93,11 @@ const Header = ({ pathname }: { pathname?: string }) => {
         ) : (
           <Stack sx={style.mobileHeaderStack}>
             <IconButton
-              onClick={() => router.back()}
+              onClick={() => {
+                if (pathname === '/' && keyword !== '') {
+                  router.replace(`?type=${type}`)
+                } else router.back()
+              }}
               sx={{
                 visibility: onlyTitle ? 'hidden' : 'visible',
               }}

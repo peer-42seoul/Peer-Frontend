@@ -9,7 +9,7 @@ interface ISearchOptionPanel {
   openOption: boolean
   setOpenOption: (value: boolean) => void
   handleOption: (value: IDetailOption) => void
-  type: ProjectType | undefined
+  type: ProjectType
   sort: ProjectSort | undefined
   handleSort: (value: ProjectSort) => void
   isPc?: boolean
