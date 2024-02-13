@@ -10,7 +10,7 @@ import {
   SettingIcon,
   ShowcaseIcon,
 } from '@/icons/TeamPage'
-import { Box, useMediaQuery } from '@mui/material'
+import { Box } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import * as style from './NavBar.style'
 import * as navStyle from '@/components/NavBarBox.style'
@@ -26,11 +26,10 @@ const getTabValue = (path: string) => {
 
 const TeamSidebar = ({ id }: { id: string }) => {
   const router = useRouter()
-  const isTablet = useMediaQuery('(min-width:480px) and (max-width:997px)') // TODO : useMedia에 추가하는 방안 고려해보기
-  const { isPc } = useMedia()
+  const { isPc, isLargeTablet } = useMedia()
 
   return (
-    <Box sx={getNavStyle(isTablet, isPc)}>
+    <Box sx={getNavStyle(isLargeTablet, isPc)}>
       <CuNavBar
         getTabValue={getTabValue}
         title={'나의 팀들'}

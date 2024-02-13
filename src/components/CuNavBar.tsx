@@ -8,7 +8,6 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Badge,
-  useMediaQuery,
 } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import { ChevronLeft } from '@/icons'
@@ -51,8 +50,7 @@ const CuNavBar = ({
 }: ICuNavBarProps) => {
   const pathName = usePathname()
   const [value, setValue] = useState<string | undefined>(undefined)
-  const { isPc } = useMedia()
-  const isTablet = useMediaQuery('(min-width:480px) and (max-width:997px)') // TODO : useMedia에 추가하는 방안 고려해보기
+  const { isPc, isLargeTablet } = useMedia()
   const [isPcSidebar, setIsPcSidebar] = useState<boolean>(false)
 
   const setTabValue = useCallback(() => {
@@ -65,11 +63,11 @@ const CuNavBar = ({
 
   useEffect(() => {
     if (tabletMode) {
-      setIsPcSidebar(!isTablet && isPc)
+      setIsPcSidebar(!isLargeTablet && isPc)
     } else {
       setIsPcSidebar(isPc)
     }
-  }, [isPc, isTablet, tabletMode])
+  }, [isPc, isLargeTablet, tabletMode])
 
   return (
     <Box sx={isPcSidebar ? style.pcNavBar : style.mobileNavBar}>
