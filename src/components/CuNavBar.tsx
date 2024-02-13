@@ -8,27 +8,37 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Badge,
+  useMediaQuery,
 } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import { ChevronLeft } from '@/icons'
 import { BetaIcon } from '@/components/BetaBadge'
 import * as style from './CuNavBar.style'
 
-interface ITabInfo {
+interface IBadgeInfo {
+  isNew?: boolean
+  isBeta?: boolean
+  isSoon?: boolean
+}
+
+interface IButtonBadgeProps extends IBadgeInfo {
+  disabled?: boolean
+}
+
+interface ITabInfo extends IBadgeInfo {
   label: string
   mobileLabel?: string
   onClick: () => void
   value: string
   icon: ReactElement
   disabled?: boolean
-  new?: boolean
-  isBeta?: boolean
 }
 
 interface ICuNavBarProps {
   getTabValue: (path: string) => string
   title: string
   prevButtonAction?: () => void
+  tabletMode?: boolean // 팀 페이지 navBar와 같이 태블릿 사이즈에서도 모바일 sidebar 형태로 보여줄 때 사용
   tabData: ITabInfo[]
 }
 
@@ -37,10 +47,13 @@ const CuNavBar = ({
   title,
   prevButtonAction,
   tabData,
+  tabletMode,
 }: ICuNavBarProps) => {
   const pathName = usePathname()
   const [value, setValue] = useState<string | undefined>(undefined)
   const { isPc } = useMedia()
+  const isTablet = useMediaQuery('(min-width:480px) and (max-width:997px)') // TODO : useMedia에 추가하는 방안 고려해보기
+  const [isPcSidebar, setIsPcSidebar] = useState<boolean>(false)
 
   const setTabValue = useCallback(() => {
     setValue(getTabValue(pathName))
@@ -50,9 +63,17 @@ const CuNavBar = ({
     setTabValue()
   }, [setTabValue])
 
+  useEffect(() => {
+    if (tabletMode) {
+      setIsPcSidebar(!isTablet && isPc)
+    } else {
+      setIsPcSidebar(isPc)
+    }
+  }, [isPc, isTablet, tabletMode])
+
   return (
-    <Box sx={isPc ? style.pcNavBar : style.mobileNavBar}>
-      {isPc && (
+    <Box sx={isPcSidebar ? style.pcNavBar : style.mobileNavBar}>
+      {isPcSidebar && (
         <Stack
           direction={'row'}
           justifyContent={'flex-start'}
@@ -68,7 +89,7 @@ const CuNavBar = ({
         </Stack>
       )}
       <ToggleButtonGroup
-        orientation={isPc ? 'vertical' : 'horizontal'}
+        orientation={isPcSidebar ? 'vertical' : 'horizontal'}
         fullWidth={false}
         value={value}
         sx={style.tabs}
@@ -77,7 +98,7 @@ const CuNavBar = ({
           if (newValue) setValue(newValue)
         }}
       >
-        {isPc
+        {isPcSidebar
           ? [
               tabData.map((tab) => (
                 <PcToggleButton
@@ -93,7 +114,7 @@ const CuNavBar = ({
                   key={crypto.randomUUID()}
                   tab={tab}
                   selected={value === tab.value}
-                  width={90 / tabData.length}
+                  width={(tabletMode ? 180 : 90) / tabData.length}
                 />
               )),
             ]}
@@ -101,6 +122,7 @@ const CuNavBar = ({
     </Box>
   )
 }
+
 const PcToggleButton = ({
   tab,
   selected,
@@ -108,14 +130,15 @@ const PcToggleButton = ({
   tab: ITabInfo
   selected: boolean
 }) => {
-  const isNewTab = tab.new && !tab.disabled
   return (
     <ToggleButton
       value={tab.value}
       onClick={tab.onClick}
       sx={{
         ...style.pcTab,
-        ...(isNewTab || tab.isBeta ? style.newTab : undefined),
+        ...(tab.isNew || tab.isBeta || tab.isSoon
+          ? style.tabWithBadge
+          : undefined),
       }}
       disabled={tab.disabled}
       selected={selected}
@@ -128,16 +151,17 @@ const PcToggleButton = ({
         justifyContent={'center'}
       >
         <Typography variant={'Caption'}>{tab.label}</Typography>
-        {isNewTab && (
-          <Typography sx={style.newTextBadge} variant={'Caption'}>
-            NEW
-          </Typography>
-        )}
-        {tab.isBeta && <BetaIcon sx={{ paddingLeft: '0.5rem' }} />}
+        <PcButtonBadge
+          isNew={tab.isNew}
+          isBeta={tab.isBeta}
+          isSoon={tab.isSoon}
+          disabled={tab.disabled}
+        />
       </Stack>
     </ToggleButton>
   )
 }
+
 const MobileToggleButton = ({
   tab,
   selected,
@@ -147,7 +171,6 @@ const MobileToggleButton = ({
   selected: boolean
   width: number
 }) => {
-  const isNewTab = tab.new && !tab.disabled
   return (
     <ToggleButton
       value={tab.value}
@@ -157,16 +180,87 @@ const MobileToggleButton = ({
       selected={selected}
     >
       <Stack direction={'column'} spacing={'0.12rem'} alignItems={'center'}>
-        <Badge
-          sx={isNewTab ? style.newBadge : style.betaBadge}
-          variant={'dot'}
-          invisible={!isNewTab && !tab.isBeta}
+        <MobileButtonBadge
+          isNew={tab.isNew}
+          isBeta={tab.isBeta}
+          isSoon={tab.isSoon}
+          disabled={tab.disabled}
         >
           <Box sx={style.iconBoxBase}>{tab.icon}</Box>
-        </Badge>
+        </MobileButtonBadge>
         <Typography variant={'Tag'}>{tab.mobileLabel ?? tab.label}</Typography>
       </Stack>
     </ToggleButton>
+  )
+}
+
+const PcButtonBadge = ({
+  isNew,
+  isBeta,
+  isSoon,
+  disabled,
+}: IButtonBadgeProps) => {
+  if (isNew) {
+    return (
+      <Typography
+        color={disabled ? 'text.disable' : 'yellow.strong'}
+        variant={'Caption'}
+        sx={style.textBadge}
+      >
+        NEW
+      </Typography>
+    )
+  }
+  if (isBeta) {
+    return <BetaIcon sx={{ paddingLeft: '0.5rem' }} />
+  }
+  if (isSoon) {
+    return (
+      <Typography
+        color={'text.disable'}
+        variant={'Caption'}
+        sx={style.textBadge}
+      >
+        SOON
+      </Typography>
+    )
+  }
+  return null
+}
+
+const getBadgeStyle = (
+  isNew?: boolean,
+  isBeta?: boolean,
+  isSoon?: boolean,
+  disabled?: boolean,
+) => {
+  if (disabled) return style.disabledBadge
+  if (isNew) return style.newBadge
+  if (isBeta) return style.betaBadge
+  if (isSoon) return style.soonBadge
+  return undefined
+}
+
+const MobileButtonBadge = ({
+  isNew,
+  isBeta,
+  isSoon,
+  disabled,
+  children,
+}: IButtonBadgeProps & {
+  children: ReactElement
+}) => {
+  const badgeStyle = getBadgeStyle(isNew, isBeta, isSoon, disabled)
+  const isInvisible = !isNew && !isBeta && !isSoon
+  return (
+    <Badge
+      sx={badgeStyle}
+      variant={'dot'}
+      invisible={isInvisible}
+      color={'primary'}
+    >
+      {children}
+    </Badge>
   )
 }
 

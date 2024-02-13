@@ -66,7 +66,7 @@ export const pcTab: SxProps = {
   ...disabledTab,
 }
 
-export const newTab = {
+export const tabWithBadge = {
   padding: '0 1.5rem 0 4.06rem',
 }
 
@@ -93,10 +93,9 @@ export const iconBoxBase = {
   },
 }
 
-export const newTextBadge = {
+export const textBadge = {
   display: 'float',
   marginLeft: '1rem !important', // stack의 spacing을 덮어씌우기 위해 !important 사용
-  color: 'yellow.strong',
 }
 
 const BADGE_TRANSLATE = 'translate(130%, -50%)'
@@ -130,5 +129,17 @@ export const newBadge = {
 export const betaBadge = {
   '& .MuiBadge-badge': {
     backgroundColor: (theme: Theme) => theme.palette.red.strong,
+  },
+}
+
+export const soonBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: (theme: Theme) => theme.palette.text.disable,
+  },
+}
+
+export const disabledBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: (theme: Theme) => theme.palette.text.disable,
   },
 }
