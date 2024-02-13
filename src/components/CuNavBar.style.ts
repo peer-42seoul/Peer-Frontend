@@ -30,12 +30,12 @@ const tabBase = {
 
 const selectedTab = {
   '&.Mui-selected': {
-    backgroundColor: ['purple.tinted', 'background.tertiary'],
+    backgroundColor: 'purple.tinted',
     '& span': {
-      color: ['purple.strong', 'text.normal'],
+      color: 'purple.normal',
     },
     '& svg': {
-      fill: (theme: Theme) => theme.palette.purple.strong,
+      fill: (theme: Theme) => theme.palette.purple.normal,
     },
   },
 }
@@ -120,7 +120,6 @@ export const badgeBase = {
     width: '3px',
     minWidth: '3px', // mui 기본 설정 디자인 오버라이딩
     height: '3px',
-    backgroundColor: (theme: Theme) => theme.palette.yellow.strong,
     // mui 기본 설정 디자인 오버라이딩
     transform: `scale(1) ${BADGE_TRANSLATE}`,
     WebkitTransform: `scale(1) ${BADGE_TRANSLATE}`,
