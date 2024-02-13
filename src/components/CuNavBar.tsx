@@ -148,6 +148,7 @@ const PcToggleButton = ({
         alignItems={'center'}
         justifyContent={'center'}
       >
+        <Box sx={style.iconBoxBase}>{tab.icon}</Box>
         <Typography variant={'Caption'}>{tab.label}</Typography>
         <PcButtonBadge
           isNew={tab.isNew}

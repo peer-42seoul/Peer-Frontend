@@ -1,4 +1,4 @@
-import { SxProps } from '@mui/material'
+import { SxProps, Theme } from '@mui/material'
 
 export const pcNavBar = {
   boxSizing: 'border-box',
@@ -24,7 +24,7 @@ export const tabs = {
 const tabBase = {
   border: 'none',
   svg: {
-    fill: 'text.assistive',
+    fill: (theme: Theme) => theme.palette.text.assistive,
   },
 }
 
@@ -35,7 +35,7 @@ const selectedTab = {
       color: 'purple.normal',
     },
     '& svg': {
-      fill: 'purple.normal',
+      fill: (theme: Theme) => theme.palette.purple.normal,
     },
   },
 }
@@ -48,7 +48,7 @@ const disabledTab = {
       color: 'text.disable',
     },
     '& svg': {
-      fill: 'text.disable',
+      fill: (theme: Theme) => theme.palette.text.disable,
     },
   },
 }
@@ -60,12 +60,12 @@ export const pcTab: SxProps = {
   width: '100%',
   padding: '0 1.5rem',
   margin: '0.25rem 0',
-  '& span': {
-    color: 'text.assistive',
-  },
   ...tabBase,
   ...selectedTab,
   ...disabledTab,
+  '& span': {
+    color: 'text.assistive',
+  },
 }
 
 export const tabWithBadge = {
@@ -102,17 +102,17 @@ const textBadge = {
 
 export const disabledTextBadge = {
   ...textBadge,
-  color: 'text.disable' + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+  color: (theme: Theme) => theme.palette.text.disable + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
 }
 
 export const newTextBadge = {
   ...textBadge,
-  color: 'yellow.strong' + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+  color: (theme: Theme) => theme.palette.yellow.strong + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
 }
 
 export const soonTextBadge = {
   ...textBadge,
-  color: 'text.disable' + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+  color: (theme: Theme) => theme.palette.text.disable + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
 }
 
 const BADGE_TRANSLATE = 'translate(130%, -50%)'
