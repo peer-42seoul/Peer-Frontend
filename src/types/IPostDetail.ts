@@ -20,7 +20,7 @@ export interface IMainCard {
   tagList: ITag[]
   favorite?: boolean
   recruit_id: number
-  type: ProjectType | undefined
+  type: ProjectType
   href?: string
   onFavorite?: () => void
   sx?: SxProps

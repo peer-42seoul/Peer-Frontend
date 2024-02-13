@@ -62,7 +62,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const keyword = searchParams.get('keyword') ?? ''
   const searchType =
     searchParams.get('type') === 'PROJECT' ? 'PROJECT' : 'STUDY'
-  console.log('searchType', searchType)
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType>(searchType) //'STUDY'
