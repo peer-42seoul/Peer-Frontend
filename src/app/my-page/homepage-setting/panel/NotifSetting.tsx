@@ -27,7 +27,11 @@ const Notif = ({
           />
         }
         label={
-          <Typography variant="CaptionEmphasis" color={'text.strong'}>
+          <Typography
+            variant="CaptionEmphasis"
+            color={'text.strong'}
+            marginRight={'1rem'}
+          >
             {type}
           </Typography>
         }
