@@ -46,9 +46,11 @@ export const RecruitImage = ({
   image,
   width,
   height,
+  maxWidth,
 }: {
   image: string
   width: string
+  maxWidth?: string
   height: string
 }) => {
   return (
@@ -57,6 +59,7 @@ export const RecruitImage = ({
       alt="main_image"
       width={width}
       height={height}
+      maxWidth={maxWidth}
       component={'img'}
       borderRadius={'0.13rem'}
       sx={{

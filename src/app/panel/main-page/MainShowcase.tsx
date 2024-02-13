@@ -3,11 +3,11 @@
 import { defaultGetFetcher } from '@/api/fetchers'
 import { ICardData } from '@/app/showcase/panel/types'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import CuPhotoBox from '@/components/CuPhotoBox'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import { IPagination } from '@/types/IPagination'
 import { Box, Stack, Typography, Button, Card, Avatar } from '@mui/material'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import useSWR from 'swr'
@@ -54,16 +54,15 @@ const MainShowcase = () => {
 
       {data && data.content[0] && (
         <Stack alignItems={'center'} position={'relative'}>
-          <Image
-            width={300}
-            height={350}
+          <CuPhotoBox
+            style={{ width: '300px', height: '350px', borderRadius: '0.75rem' }}
             src={
               data?.content[0].image
                 ? data?.content[0].image
                 : '/icons/ios/256.png'
             }
             alt="main-showcase-image"
-            style={{ borderRadius: '0.75rem' }}
+            priorityOption={true}
           />
           <Card
             sx={{

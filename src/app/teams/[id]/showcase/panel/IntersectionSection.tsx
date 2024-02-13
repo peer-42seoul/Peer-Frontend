@@ -110,7 +110,7 @@ const IntersectionSection = ({
           style={{
             width: '8.65rem',
             height: '2rem',
-            padding: '0 0.25rem 0 0.25rem',
+            padding: '0.5rem 0.5rem',
           }}
           TypographyProps={style.textInButton}
           message="쇼케이스 작성하기"

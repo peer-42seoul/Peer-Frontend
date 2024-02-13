@@ -34,7 +34,7 @@ const useAxiosWithAuth = () => {
       if (error.response?.status === 401) {
         if (!accessToken || isRefreshing) {
           // 로그아웃 후 리디렉션
-          useAuthStore.getState().logout()
+          useAuthStore.getState().logout(isRefreshing)
           router.push('/login?redirect=' + currentPageUrl)
         } else {
           isRefreshing = true
@@ -51,7 +51,7 @@ const useAxiosWithAuth = () => {
           } catch (refreshError) {
             // 로그아웃 후 리디렉션
             isRefreshing = true
-            useAuthStore.getState().logout()
+            useAuthStore.getState().logout(isRefreshing)
             router.push('/login?redirect=' + currentPageUrl)
           }
         }

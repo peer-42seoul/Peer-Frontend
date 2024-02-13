@@ -1,5 +1,5 @@
 'use client'
-import { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 import useTeamPageState from '@/states/useTeamPageState'
 
 interface ITeamLayoutProps {
@@ -10,12 +10,7 @@ interface ITeamLayoutProps {
 }
 
 const TeamBoardMain = ({ list, detail, edit, setting }: ITeamLayoutProps) => {
-  const { boardType, resetState } = useTeamPageState()
-  useEffect(() => {
-    return () => {
-      resetState()
-    }
-  }, [])
+  const { boardType } = useTeamPageState()
   if (boardType === 'EDIT') {
     return edit
   }

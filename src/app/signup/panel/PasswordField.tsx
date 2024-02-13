@@ -50,6 +50,7 @@ const PasswordField = ({
           pattern: '[A-Za-z0-9!@#$%^&*]*',
           type: showPassword,
         }}
+        sx={{ width: '100%' }}
         onFocus={() => {
           setShowValidating(true)
         }}

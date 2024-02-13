@@ -12,3 +12,9 @@ export const menuItemIconStyleBase: SxProps = {
   height: '1.5rem',
   boxSizing: 'border-box',
 }
+
+export const recruitMenuIcon: SxProps = {
+  ...menuItemIconStyleBase,
+  padding: '0.125rem',
+  color: 'text.alternative',
+}
