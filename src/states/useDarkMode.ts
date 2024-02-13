@@ -74,7 +74,7 @@ export const useDarkMode = create<DarkModeState>((set, get) => {
 
   return {
     darkMode: EDisplayMode.dark,
-    useSystemTheme: true,
+    useSystemTheme: false,
     theme: darkTheme,
     isLightMode,
     toggleDarkMode,
