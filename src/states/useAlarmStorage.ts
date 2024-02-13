@@ -22,9 +22,12 @@ export interface IAlarm {
 
 interface IStoreAlarmState {
   isNew: boolean
+
   isNewAlarm: (isLogin: boolean) => void
+  checkNewAlarm: () => void
   alarms: IAlarm[]
-  getAlarms: () => void
+  resetAlarms: () => void
+  getAlarms: (page: number, tabvalue: number) => void
   deleteAlarm: (id: number) => void
   deleteAllAlarms: (tabvalue: number) => void
 }
@@ -45,28 +48,46 @@ const useAlarmStorage = create<IStoreAlarmState>((set) => {
         .then((res) => {
           if (res.status === 200) {
             const newValue = res.data > 0 ? true : false
-            console.log('isNewAlarm', newValue)
             set(() => ({ isNew: newValue }))
           } else if (res.status === 204) {
             set(() => ({ isNew: false }))
           }
         })
     },
+    checkNewAlarm: () => {
+      set(() => ({ isNew: false }))
+    },
     alarms: [],
-    getAlarms: async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/noti/spring?type=ALL&pgIdx=1&size=5`,
+    resetAlarms: () => {
+      set(() => ({ alarms: [] }))
+    },
+    getAlarms: (page: number, tabvalue: number) => {
+      const type =
+        tabvalue === 0
+          ? AlarmType.ALL
+          : tabvalue === 1
+            ? AlarmType.MESSAGE
+            : tabvalue === 2
+              ? AlarmType.TEAM
+              : AlarmType.SYSTEM
+
+      axios
+        .get(
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/noti/spring?type=${type}&pgIdx=${page}&size=10`,
           {
             headers: { Authorization: `Bearer ${accessToken}` },
           },
         )
-        if (res.status === 200) {
-          set(() => ({ alarms: res.data }))
-        }
-      } catch (error) {
-        console.error(error)
-      }
+        .then((res) => {
+          if (res.status === 200) {
+            set((state) => ({ alarms: [...state.alarms, ...res.data] }))
+          } else if (res.status === 400) {
+            set((state) => ({ alarms: state.alarms }))
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     },
     deleteAlarm: (id: number) => {
       axios
@@ -77,7 +98,6 @@ const useAlarmStorage = create<IStoreAlarmState>((set) => {
           },
         )
         .then((res) => {
-          console.log('deleteAlarm', res)
           if (res.status === 200) {
             set((state) => ({
               alarms: state.alarms.filter(
@@ -105,7 +125,6 @@ const useAlarmStorage = create<IStoreAlarmState>((set) => {
           },
         )
         .then((res) => {
-          console.log('deleteAllAlarms', res)
           if (res.status === 200) {
             set(() => ({ alarms: [] }))
           }
