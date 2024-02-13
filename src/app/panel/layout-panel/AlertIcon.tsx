@@ -16,110 +16,20 @@ import useMedia from '@/hook/useMedia'
 import {
   Badge,
   Button,
-  Card,
   Drawer,
   Stack,
   Tab,
   Tabs,
   Typography,
 } from '@mui/material'
-import { SyntheticEvent, useCallback, useState } from 'react'
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
 import { Box } from '@mui/system'
 import { CloseIcon } from '@/icons'
 import useAuthStore from '@/states/useAuthStore'
-import { SystemIcon, TeamIcon, MessageIcon } from './alert-panel/Icons'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import { useRouter } from 'next/navigation'
-
-enum AlertType {
-  MESSAGE = '쪽지',
-  TEAM = '팀',
-  NOTICE = '공지',
-}
-
-interface IAlert {
-  id: number
-  type: AlertType
-  title: string
-  content: string
-}
-
-const mockData = [
-  {
-    id: 1,
-    type: AlertType.MESSAGE,
-    title: '알림1',
-    content:
-      '알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용',
-  },
-  {
-    id: 2,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 3,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 4,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 5,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 6,
-    type: AlertType.NOTICE,
-    title: '알림3',
-    content: '알림3 내용',
-  },
-  {
-    id: 7,
-    type: AlertType.MESSAGE,
-    title: '알림1',
-    content:
-      '알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용',
-  },
-  {
-    id: 8,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 9,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 10,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 11,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 12,
-    type: AlertType.NOTICE,
-    title: '알림3',
-    content: '알림3 내용',
-  },
-]
+import useAlarmStorage, { AlarmType, IAlarm } from '@/states/useAlarmStorage'
+import AlertCard from './alert-panel/AlertCard'
 
 const AlertIcon = () => {
   // const isAlertComing = false
@@ -127,13 +37,26 @@ const AlertIcon = () => {
   // const { isOpen, openModal, closeModal } = useModal()
 
   // 알림 탭 관련
-  const [alertData, setAlertData] = useState<IAlert[]>(mockData)
-  const [showAlert, setShowAlert] = useState<IAlert[]>(alertData)
+  const { isNewAlarm, isNew, getAlarms, alarms, deleteAlarm, deleteAllAlarms } =
+    useAlarmStorage()
   const [tabvalue, setTabValue] = useState(0)
   const [isAlertComing, setIsAlertComing] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { isLogin } = useAuthStore()
   const router = useRouter()
+
+  useEffect(() => {
+    isNewAlarm(isLogin)
+  }, [])
+
+  useEffect(() => {
+    if (isDrawerOpen) {
+      getAlarms()
+      if (isAlertComing) {
+        setIsAlertComing(false)
+      }
+    }
+  }, [isDrawerOpen, isAlertComing])
 
   const openAlertTab = useCallback(() => {
     setIsAlertComing(true)
@@ -155,47 +78,8 @@ const AlertIcon = () => {
     [setIsDrawerOpen],
   )
 
-  const handleChange = useCallback(
-    (e: SyntheticEvent, newValue: number) => {
-      setTabValue(newValue)
-      switch (newValue) {
-        case 0:
-          setShowAlert(alertData)
-          break
-        case 1: {
-          const message = alertData.filter(
-            (item) => item.type === AlertType.MESSAGE,
-          )
-          setShowAlert(message)
-          break
-        }
-        case 2: {
-          const team = alertData.filter((item) => item.type === AlertType.TEAM)
-          setShowAlert(team)
-          break
-        }
-        case 3: {
-          const notice = alertData.filter(
-            (item) => item.type === AlertType.NOTICE,
-          )
-          setShowAlert(notice)
-          break
-        }
-        default:
-          break
-      }
-    },
-    [setTabValue, setAlertData, alertData],
-  )
-
-  const handleDelete = (id: number) => {
-    setAlertData(alertData.filter((item) => item.id !== id))
-    setShowAlert(showAlert.filter((item) => item.id !== id))
-  }
-
-  const handleDeleteAll = () => {
-    setAlertData([])
-    setShowAlert([])
+  const handleChange = (e: SyntheticEvent, newValue: number) => {
+    setTabValue(newValue)
   }
 
   const handleClose = () => {
@@ -210,7 +94,7 @@ const AlertIcon = () => {
   return (
     <>
       <IconButton color="inherit" aria-label="alert_tab" onClick={openAlertTab}>
-        <Badge color="secondary" variant="dot" invisible={isAlertComing}>
+        <Badge color="secondary" variant="dot" invisible={!isNew}>
           <NotificationIcon
             sx={{
               color: isPc ? 'text.alternative' : 'text.normal',
@@ -266,7 +150,10 @@ const AlertIcon = () => {
           </Stack>
           {!isLogin ? (
             <Stack justifyContent={'center'} height={'50svh'}>
-              <NoDataDolphin message="로그인이 필요합니다." />
+              <NoDataDolphin
+                message="로그인이 필요합니다."
+                backgroundColor="transparent"
+              />
               <Stack alignItems={'center'}>
                 <Button
                   variant="contained"
@@ -298,7 +185,7 @@ const AlertIcon = () => {
                   variant="text"
                   color="primary"
                   sx={{ width: 'fit-content', borderRadius: 0 }}
-                  onClick={handleDeleteAll}
+                  onClick={() => deleteAllAlarms(tabvalue)}
                 >
                   전체 삭제
                 </Button>
@@ -306,52 +193,54 @@ const AlertIcon = () => {
 
               <Stack sx={{ overflowY: 'auto' }}>
                 <Stack height={'100%'}>
-                  {showAlert.map((item) => (
-                    <Card
-                      key={item.type + item.id}
-                      sx={{
-                        m: 2,
-                        height: '4rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Stack p={'0.5rem'} flex={1}>
-                        {item.type === '쪽지' && (
-                          <SystemIcon fontSize="large" />
-                        )}
-                        {item.type === '팀' && <TeamIcon fontSize="large" />}
-                        {item.type === '공지' && (
-                          <MessageIcon fontSize="large" />
-                        )}
-                      </Stack>
-                      <Stack
-                        direction={'row'}
-                        spacing={1}
-                        display={'flex'}
-                        alignItems={'center'}
-                        flex={8}
-                      >
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: '-webkit-box',
-                            WebkitLineClamp: '1',
-                            WebkitBoxOrient: 'vertical',
-                          }}
-                        >
-                          {item.content}
-                        </Typography>
-                      </Stack>
-                      <Stack flex={1}>
-                        <IconButton onClick={() => handleDelete(item.id)}>
-                          <CloseIcon />
-                        </IconButton>
-                      </Stack>
-                    </Card>
-                  ))}
+                  {alarms.length === 0 && (
+                    <NoDataDolphin
+                      backgroundColor="transparent"
+                      message="알림이 없습니다."
+                    />
+                  )}
+                  {alarms.length > 0 &&
+                    tabvalue === 0 &&
+                    alarms.map((item: IAlarm) => (
+                      <AlertCard
+                        key={'alarm' + item.notificationId}
+                        handleDelete={() => deleteAlarm(item.notificationId)}
+                        alert={item}
+                      />
+                    ))}
+                  {alarms.length > 0 &&
+                    tabvalue === 1 &&
+                    alarms
+                      .filter((item) => item.type === AlarmType.MESSAGE)
+                      .map((item: IAlarm) => (
+                        <AlertCard
+                          key={'alarm' + item.notificationId}
+                          handleDelete={() => deleteAlarm(item.notificationId)}
+                          alert={item}
+                        />
+                      ))}
+                  {alarms.length > 0 &&
+                    tabvalue === 2 &&
+                    alarms
+                      .filter((item) => item.type === AlarmType.TEAM)
+                      .map((item: IAlarm) => (
+                        <AlertCard
+                          key={'alarm' + item.notificationId}
+                          handleDelete={() => deleteAlarm(item.notificationId)}
+                          alert={item}
+                        />
+                      ))}
+                  {alarms.length > 0 &&
+                    tabvalue === 3 &&
+                    alarms
+                      .filter((item) => item.type === AlarmType.SYSTEM)
+                      .map((item: IAlarm) => (
+                        <AlertCard
+                          key={'alarm' + item.notificationId}
+                          handleDelete={() => deleteAlarm(item.notificationId)}
+                          alert={item}
+                        />
+                      ))}
                 </Stack>
               </Stack>
             </>

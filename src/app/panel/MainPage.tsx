@@ -62,7 +62,7 @@ export interface IDetailOption {
 
 export const socket = getCookie('accessToken')
   ? io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-      transports: ['polling', 'socket.io'],
+      transports: ['socket.io', 'websocket'],
       query: {
         accessToken: getCookie('accessToken'),
       },
@@ -185,7 +185,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   }, [newData])
 
   useEffect(() => {
-    console.log('socket', socket)
     if (!socket) return
     socket.on('connect', () => {
       console.log('socket connected')
