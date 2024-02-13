@@ -10,6 +10,7 @@ import {
   WhaleIcon,
 } from '@/icons/MyPage'
 import * as style from './NavBar.style'
+import * as navStyle from '@/components/NavBarBox.style'
 import { Box } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 
@@ -27,7 +28,7 @@ const NavBar = () => {
   const router = useRouter()
   const { isPc } = useMedia()
   return (
-    <Box sx={isPc ? style.pcNavBar : style.mobileNavBar}>
+    <Box sx={isPc ? navStyle.pcNavBar : navStyle.mobileNavBar}>
       <CuNavBar
         getTabValue={getTabValue}
         title={'마이페이지'}

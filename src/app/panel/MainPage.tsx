@@ -18,7 +18,7 @@ import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
 import PwaInstallBanner from './PwaInstallBanner'
-import PushAlertBanner from './PushAlertBanner'
+// import PushAlertBanner from './PushAlertBanner'
 import MainBanner from '@/app/panel/main-page/MainBanner'
 import Tutorial from '@/components/Tutorial'
 import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
@@ -243,7 +243,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   return (
     <>
-      <PushAlertBanner />
+      {/* <PushAlertBanner /> */}
       {/* mobile view */}
       <div className="mobile-layout">
         <Container sx={{ ...containerStyle, paddingBottom: '1.25rem' }}>
