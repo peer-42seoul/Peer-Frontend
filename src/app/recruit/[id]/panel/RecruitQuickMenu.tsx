@@ -50,15 +50,28 @@ const RecruitQuickMenu = ({
         router.push('/') // 모집글을 삭제한 뒤 메인으로 이동.
       })
       .catch((error: unknown) => {
-        if (
-          isAxiosError(error) &&
-          error.response?.status === 400 &&
-          error.response.data.message
-        ) {
-          openToast({
-            severity: 'error',
-            message: error.response.data.message,
-          })
+        if (isAxiosError(error)) {
+          if (error.response?.status === 400 && error.response.data.message) {
+            openToast({
+              severity: 'error',
+              message: error.response.data.message,
+            })
+          } else if (error.response?.status === 403) {
+            openToast({
+              severity: 'error',
+              message: '모집글 작성자만 삭제할 수 있습니다.',
+            })
+          } else if (error.response?.status === 404) {
+            openToast({
+              severity: 'error',
+              message: '존재하지 않는 모집글입니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: '모집글 삭제에 실패했습니다.',
+            })
+          }
         } else {
           openToast({
             severity: 'error',
