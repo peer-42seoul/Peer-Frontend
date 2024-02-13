@@ -1,210 +1,215 @@
 'use client'
 
-import { Badge } from '@mui/material'
 import { IconButton } from '@mui/material'
 import NotificationIcon from '@/icons/NotificationIcon'
 import useMedia from '@/hook/useMedia'
-import ForbiddenDolphin from '@/components/WorkingDolphin'
-import CuModal from '@/components/CuModal'
-import useModal from '@/hook/useModal'
 
-// import {
-//   Badge,
-//   Button,
-//   Card,
-//   Drawer,
-//   Stack,
-//   Tab,
-//   Tabs,
-//   Typography,
-// } from '@mui/material'
-// import { SyntheticEvent, useCallback, useState } from 'react'
-// import { Box } from '@mui/system'
-// import { CloseIcon } from '@/icons'
-// import useAuthStore from '@/states/useAuthStore'
-// import { SystemIcon, TeamIcon, MessageIcon } from './alert-panel/Icons'
-// import NoDataDolphin from '@/components/NoDataDolphin'
-// import { useRouter } from 'next/navigation'
+// 알림 잠그기
 
-// enum AlertType {
-//   MESSAGE = '쪽지',
-//   TEAM = '팀',
-//   NOTICE = '공지',
-// }
+// import { Badge } from '@mui/material'
+// import ForbiddenDolphin from '@/components/WorkingDolphin'
+// import CuModal from '@/components/CuModal'
+// import useModal from '@/hook/useModal'
 
-// interface IAlert {
-//   id: number
-//   type: AlertType
-//   title: string
-//   content: string
-// }
+// 알림탭 관련
 
-// const mockData = [
-//   {
-//     id: 1,
-//     type: AlertType.MESSAGE,
-//     title: '알림1',
-//     content:
-//       '알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용',
-//   },
-//   {
-//     id: 2,
-//     type: AlertType.TEAM,
-//     title: '알림2',
-//     content: '알림2 내용',
-//   },
-//   {
-//     id: 3,
-//     type: AlertType.TEAM,
-//     title: '알림2',
-//     content: '알림2 내용',
-//   },
-//   {
-//     id: 4,
-//     type: AlertType.TEAM,
-//     title: '알림2',
-//     content: '알림2 내용',
-//   },
-//   {
-//     id: 5,
-//     type: AlertType.TEAM,
-//     title: '알림2',
-//     content: '알림2 내용',
-//   },
-//   {
-//     id: 6,
-//     type: AlertType.NOTICE,
-//     title: '알림3',
-//     content: '알림3 내용',
-//   },
-//   {
-//     id: 7,
-//     type: AlertType.MESSAGE,
-//     title: '알림1',
-//     content:
-//       '알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용',
-//   },
-//   {
-//     id: 8,
-//     type: AlertType.TEAM,
-//     title: '알림2',
-//     content: '알림2 내용',
-//   },
-//   {
-//     id: 9,
-//     type: AlertType.TEAM,
-//     title: '알림2',
-//     content: '알림2 내용',
-//   },
-//   {
-//     id: 10,
-//     type: AlertType.TEAM,
-//     title: '알림2',
-//     content: '알림2 내용',
-//   },
-//   {
-//     id: 11,
-//     type: AlertType.TEAM,
-//     title: '알림2',
-//     content: '알림2 내용',
-//   },
-//   {
-//     id: 12,
-//     type: AlertType.NOTICE,
-//     title: '알림3',
-//     content: '알림3 내용',
-//   },
-// ]
+import {
+  Badge,
+  Button,
+  Card,
+  Drawer,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material'
+import { SyntheticEvent, useCallback, useState } from 'react'
+import { Box } from '@mui/system'
+import { CloseIcon } from '@/icons'
+import useAuthStore from '@/states/useAuthStore'
+import { SystemIcon, TeamIcon, MessageIcon } from './alert-panel/Icons'
+import NoDataDolphin from '@/components/NoDataDolphin'
+import { useRouter } from 'next/navigation'
+
+enum AlertType {
+  MESSAGE = '쪽지',
+  TEAM = '팀',
+  NOTICE = '공지',
+}
+
+interface IAlert {
+  id: number
+  type: AlertType
+  title: string
+  content: string
+}
+
+const mockData = [
+  {
+    id: 1,
+    type: AlertType.MESSAGE,
+    title: '알림1',
+    content:
+      '알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용',
+  },
+  {
+    id: 2,
+    type: AlertType.TEAM,
+    title: '알림2',
+    content: '알림2 내용',
+  },
+  {
+    id: 3,
+    type: AlertType.TEAM,
+    title: '알림2',
+    content: '알림2 내용',
+  },
+  {
+    id: 4,
+    type: AlertType.TEAM,
+    title: '알림2',
+    content: '알림2 내용',
+  },
+  {
+    id: 5,
+    type: AlertType.TEAM,
+    title: '알림2',
+    content: '알림2 내용',
+  },
+  {
+    id: 6,
+    type: AlertType.NOTICE,
+    title: '알림3',
+    content: '알림3 내용',
+  },
+  {
+    id: 7,
+    type: AlertType.MESSAGE,
+    title: '알림1',
+    content:
+      '알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용',
+  },
+  {
+    id: 8,
+    type: AlertType.TEAM,
+    title: '알림2',
+    content: '알림2 내용',
+  },
+  {
+    id: 9,
+    type: AlertType.TEAM,
+    title: '알림2',
+    content: '알림2 내용',
+  },
+  {
+    id: 10,
+    type: AlertType.TEAM,
+    title: '알림2',
+    content: '알림2 내용',
+  },
+  {
+    id: 11,
+    type: AlertType.TEAM,
+    title: '알림2',
+    content: '알림2 내용',
+  },
+  {
+    id: 12,
+    type: AlertType.NOTICE,
+    title: '알림3',
+    content: '알림3 내용',
+  },
+]
 
 const AlertIcon = () => {
-  const isAlertComing = false
+  // const isAlertComing = false
   const { isPc } = useMedia()
-  const { isOpen, openModal, closeModal } = useModal()
+  // const { isOpen, openModal, closeModal } = useModal()
 
   // 알림 탭 관련
-  // const [alertData, setAlertData] = useState<IAlert[]>(mockData)
-  // const [showAlert, setShowAlert] = useState<IAlert[]>(alertData)
-  // const [tabvalue, setTabValue] = useState(0)
-  // const [isAlertComing, setIsAlertComing] = useState(false)
-  // const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  // const { isLogin } = useAuthStore()
-  // const router = useRouter()
+  const [alertData, setAlertData] = useState<IAlert[]>(mockData)
+  const [showAlert, setShowAlert] = useState<IAlert[]>(alertData)
+  const [tabvalue, setTabValue] = useState(0)
+  const [isAlertComing, setIsAlertComing] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const { isLogin } = useAuthStore()
+  const router = useRouter()
 
-  // const openAlertTab = useCallback(() => {
-  //   setIsAlertComing(true)
-  //   setIsDrawerOpen(true)
-  // }, [setIsAlertComing, setIsDrawerOpen])
+  const openAlertTab = useCallback(() => {
+    setIsAlertComing(true)
+    setIsDrawerOpen(true)
+  }, [setIsAlertComing, setIsDrawerOpen])
 
-  // const toggleDrawer = useCallback(
-  //   (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-  //     if (
-  //       event.type === 'keydown' &&
-  //       ((event as React.KeyboardEvent).key === 'Tab' ||
-  //         (event as React.KeyboardEvent).key === 'Shift')
-  //     ) {
-  //       return
-  //     }
+  const toggleDrawer = useCallback(
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return
+      }
 
-  //     setIsDrawerOpen(open)
-  //   },
-  //   [setIsDrawerOpen],
-  // )
+      setIsDrawerOpen(open)
+    },
+    [setIsDrawerOpen],
+  )
 
-  // const handleChange = useCallback(
-  //   (e: SyntheticEvent, newValue: number) => {
-  //     setTabValue(newValue)
-  //     switch (newValue) {
-  //       case 0:
-  //         setShowAlert(alertData)
-  //         break
-  //       case 1: {
-  //         const message = alertData.filter(
-  //           (item) => item.type === AlertType.MESSAGE,
-  //         )
-  //         setShowAlert(message)
-  //         break
-  //       }
-  //       case 2: {
-  //         const team = alertData.filter((item) => item.type === AlertType.TEAM)
-  //         setShowAlert(team)
-  //         break
-  //       }
-  //       case 3: {
-  //         const notice = alertData.filter(
-  //           (item) => item.type === AlertType.NOTICE,
-  //         )
-  //         setShowAlert(notice)
-  //         break
-  //       }
-  //       default:
-  //         break
-  //     }
-  //   },
-  //   [setTabValue, setAlertData, alertData],
-  // )
+  const handleChange = useCallback(
+    (e: SyntheticEvent, newValue: number) => {
+      setTabValue(newValue)
+      switch (newValue) {
+        case 0:
+          setShowAlert(alertData)
+          break
+        case 1: {
+          const message = alertData.filter(
+            (item) => item.type === AlertType.MESSAGE,
+          )
+          setShowAlert(message)
+          break
+        }
+        case 2: {
+          const team = alertData.filter((item) => item.type === AlertType.TEAM)
+          setShowAlert(team)
+          break
+        }
+        case 3: {
+          const notice = alertData.filter(
+            (item) => item.type === AlertType.NOTICE,
+          )
+          setShowAlert(notice)
+          break
+        }
+        default:
+          break
+      }
+    },
+    [setTabValue, setAlertData, alertData],
+  )
 
-  // const handleDelete = (id: number) => {
-  //   setAlertData(alertData.filter((item) => item.id !== id))
-  //   setShowAlert(showAlert.filter((item) => item.id !== id))
-  // }
+  const handleDelete = (id: number) => {
+    setAlertData(alertData.filter((item) => item.id !== id))
+    setShowAlert(showAlert.filter((item) => item.id !== id))
+  }
 
-  // const handleDeleteAll = () => {
-  //   setAlertData([])
-  //   setShowAlert([])
-  // }
+  const handleDeleteAll = () => {
+    setAlertData([])
+    setShowAlert([])
+  }
 
-  // const handleClose = () => {
-  //   setIsDrawerOpen(false)
-  // }
+  const handleClose = () => {
+    setIsDrawerOpen(false)
+  }
 
-  // const handleLogin = () => {
-  //   setIsDrawerOpen(false)
-  //   router.push('/login')
-  // }
+  const handleLogin = () => {
+    setIsDrawerOpen(false)
+    router.push('/login')
+  }
 
   return (
     <>
-      <IconButton color="inherit" aria-label="alert_tab" onClick={openModal}>
+      <IconButton color="inherit" aria-label="alert_tab" onClick={openAlertTab}>
         <Badge color="secondary" variant="dot" invisible={isAlertComing}>
           <NotificationIcon
             sx={{
@@ -215,10 +220,10 @@ const AlertIcon = () => {
           />
         </Badge>
       </IconButton>
-      <CuModal open={isOpen} onClose={closeModal} title="잠깐!">
+      {/* <CuModal open={isOpen} onClose={closeModal} title="잠깐!">
         <ForbiddenDolphin message="알림 기능은 조금만 기다려주세요!!" />
-      </CuModal>
-      {/* <Drawer
+      </CuModal> */}
+      <Drawer
         PaperProps={{
           sx: {
             height: '100%',
@@ -352,7 +357,7 @@ const AlertIcon = () => {
             </>
           )}
         </Box>
-      </Drawer> */}
+      </Drawer>
     </>
   )
 }
