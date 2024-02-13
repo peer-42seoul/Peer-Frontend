@@ -28,7 +28,13 @@ import useAuthStore from '@/states/useAuthStore'
  * - 오른쪽 아이콘 (있을 수도 있고 없을 수도 있음)
  */
 
-const Header = ({ pathname }: { pathname?: string }) => {
+const Header = ({
+  pathname,
+  backAction,
+}: {
+  pathname?: string
+  backAction?: () => void
+}) => {
   const theme = useTheme()
   const mobileHeader = {
     ...style.mobileHeader,
@@ -64,7 +70,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
     } else {
       setTitle('')
     }
-  }, [pathname])
+  }, [keyword, pathname])
   const { headerTitle } = useHeaderStore()
 
   // 타이틀만 보여주고 싶은 경우 (뒤로 가기 버튼이 보이지 않았으면 하는 경우)
@@ -94,7 +100,8 @@ const Header = ({ pathname }: { pathname?: string }) => {
           <Stack sx={style.mobileHeaderStack}>
             <IconButton
               onClick={() => {
-                if (pathname === '/' && keyword !== '') {
+                if (backAction) backAction()
+                else if (pathname === '/' && keyword !== '') {
                   router.replace(`?type=${type}`)
                 } else router.back()
               }}
