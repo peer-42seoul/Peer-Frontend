@@ -181,7 +181,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       >
         <Stack direction={'row'} display={'flex'} alignItems={'center'}>
           <Typography variant="Body2Emphasis">팀 상태</Typography>
-          <Tutorial content={<TeamStatusTutorial />} />
+          <Tutorial title={'팀 설정 페이지'} content={<TeamStatusTutorial />} />
         </Stack>
         <form ref={sendRef} onSubmit={onSubmit}>
           <Box>
