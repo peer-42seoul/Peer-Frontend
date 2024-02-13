@@ -21,8 +21,7 @@ export default async function RecruitDetailIndex({
     )
     data = response.data
   } catch (e) {
-    // FIXME : 에러 처리 필요
-    console.log(e)
+    // console.error(e)
   }
 
   return <RecruitDetailPage data={data} id={params.id} />
