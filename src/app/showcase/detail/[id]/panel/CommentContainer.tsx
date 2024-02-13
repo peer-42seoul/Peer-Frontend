@@ -19,6 +19,7 @@ import useSWR, { mutate } from 'swr'
 import { CommentWriter } from './CommentWriter'
 import useToast from '@/states/useToast'
 import * as style from './CommentContainer.style'
+import OthersProfile from '@/app/panel/OthersProfile'
 // import OthersProfile from '@/app/panel/OthersProfile'
 
 const Comment = ({ data, postId }: CommentProps) => {
@@ -68,20 +69,23 @@ const Comment = ({ data, postId }: CommentProps) => {
       }
     }
   }
-
+  console.log('userId:,', data)
   return (
     <>
       <Stack sx={style.commentListContainer}>
         <Box>
           <Box sx={style.commenterInfo}>
             {/* TODO : OthersProfile 컴포넌트로 감싸기 */}
-            {/* <OthersProfile userId={data.id} name={data.authorNickname}> */}
-            <CuAvatar
-              key={data.commentId}
-              src={data.authorImage ?? undefined}
-              sx={style.avatarStyle}
-            />
-            {/* </OthersProfile> */}
+            <OthersProfile
+              userId={data.authorId.toString()}
+              name={data.authorNickname}
+            >
+              <CuAvatar
+                key={data.commentId}
+                src={data.authorImage ?? undefined}
+                sx={style.avatarStyle}
+              />
+            </OthersProfile>
             <Typography variant="Caption" color={'text.alternative'}>
               {data.authorNickname}
             </Typography>
