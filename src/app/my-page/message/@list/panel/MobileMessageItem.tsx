@@ -1,4 +1,5 @@
 import { TouchEvent, useState, ReactNode, useRef } from 'react'
+import { useSWRConfig } from 'swr'
 import { Box, ListItem, ListItemButton, Stack } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuButton from '@/components/CuButton'
@@ -112,11 +113,15 @@ const MobileMessageListItem = ({ message }: IMobileMessageListItemProps) => {
   const { targetId, conversationId } = message
   const listItemRef = useRef(null)
   const { openToast } = useToast()
+  const { mutate } = useSWRConfig()
 
   const deleteOneMessage = () => {
     axiosWithAuth
       .delete('/api/v1/message/delete-message', {
-        data: { target: [{ targetId }] },
+        data: { target: [{ conversationId }] },
+      })
+      .then(() => {
+        mutate('/api/v1/message/list')
       })
       .catch(() => {
         openToast({
