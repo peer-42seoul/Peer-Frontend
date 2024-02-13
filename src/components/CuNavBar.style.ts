@@ -1,4 +1,4 @@
-import { SxProps, Theme } from '@mui/material'
+import { SxProps } from '@mui/material'
 
 export const pcNavBar = {
   boxSizing: 'border-box',
@@ -24,7 +24,7 @@ export const tabs = {
 const tabBase = {
   border: 'none',
   svg: {
-    fill: (theme: Theme) => theme.palette.text.assistive,
+    fill: 'text.assistive',
   },
 }
 
@@ -35,7 +35,7 @@ const selectedTab = {
       color: 'purple.normal',
     },
     '& svg': {
-      fill: (theme: Theme) => theme.palette.purple.normal,
+      fill: 'purple.normal',
     },
   },
 }
@@ -48,7 +48,7 @@ const disabledTab = {
       color: 'text.disable',
     },
     '& svg': {
-      fill: (theme: Theme) => theme.palette.text.disable,
+      fill: 'text.disable',
     },
   },
 }
@@ -102,17 +102,17 @@ const textBadge = {
 
 export const disabledTextBadge = {
   ...textBadge,
-  color: (theme: Theme) => theme.palette.text.disable + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+  color: 'text.disable' + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
 }
 
 export const newTextBadge = {
   ...textBadge,
-  color: (theme: Theme) => theme.palette.yellow.strong + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+  color: 'yellow.strong' + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
 }
 
 export const soonTextBadge = {
   ...textBadge,
-  color: (theme: Theme) => theme.palette.text.disable + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+  color: 'text.disable' + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
 }
 
 const BADGE_TRANSLATE = 'translate(130%, -50%)'
@@ -138,24 +138,24 @@ export const badgeBase = {
 
 export const newBadge = {
   '& .MuiBadge-badge': {
-    backgroundColor: (theme: Theme) => theme.palette.yellow.strong,
+    backgroundColor: 'yellow.strong',
   },
 }
 
 export const betaBadge = {
   '& .MuiBadge-badge': {
-    backgroundColor: (theme: Theme) => theme.palette.red.strong,
+    backgroundColor: 'red.strong',
   },
 }
 
 export const soonBadge = {
   '& .MuiBadge-badge': {
-    backgroundColor: (theme: Theme) => theme.palette.text.disable,
+    backgroundColor: 'text.disable',
   },
 }
 
 export const disabledBadge = {
   '& .MuiBadge-badge': {
-    backgroundColor: (theme: Theme) => theme.palette.text.disable,
+    backgroundColor: 'text.disable',
   },
 }
