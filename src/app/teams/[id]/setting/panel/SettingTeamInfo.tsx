@@ -231,10 +231,6 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
             display={'flex'}
             flexDirection={'row-reverse'}
           >
-            <Tutorial
-              title={'팀 활동 종료하기'}
-              content={<TeamEndingTutorial />}
-            />
             <Button
               disabled={
                 team.status === TeamStatus.COMPLETE ||
@@ -249,6 +245,16 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
             >
               <Typography variant="Body2">저장</Typography>
             </Button>
+          </Stack>
+          <Stack
+            direction={'row'}
+            justifyContent={'flex-end'}
+            alignItems={'center'}
+          >
+            <Tutorial
+              title={'팀 활동 종료하기'}
+              content={<TeamEndingTutorial />}
+            />
           </Stack>
           <TeamQuitButton teamStatus={team.status} teamId={team.id} />
           <TeamDisperseButton teamStatus={team.status} teamId={team.id} />
