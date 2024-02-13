@@ -5,6 +5,7 @@ import { Stack, Container, Box, useMediaQuery } from '@mui/material'
 import useTeamPageState from '@/states/useTeamPageState'
 import TeamSidebar from './panel/NavBar'
 import * as style from '@/components/NavBarLayout.style'
+import useMedia from '@/hook/useMedia'
 
 const TeamLayout = ({
   params,
@@ -24,7 +25,8 @@ const TeamLayout = ({
   }, [])
 
   const isFourRow = useMediaQuery('(min-width:997px)')
-  
+  const { isPc } = useMedia()
+
   if (layout === 'FULLPAGE') {
     return (
       <Container sx={style.container}>
@@ -42,7 +44,9 @@ const TeamLayout = ({
         sx={style.stack}
       >
         <TeamSidebar id={id} />
-        <Box sx={style.contentBox}>{children}</Box>
+        <Box sx={{ ...style.contentBox, width: isPc ? undefined : '100%' }}>
+          {children}
+        </Box>
       </Stack>
     </Container>
   )

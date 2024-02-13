@@ -18,6 +18,8 @@ const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
       sx={{ p: '0.25rem' }}
       height={'75vh'}
       flex={'2rem'}
+      className="layout-container"
+      key={showTeams}
     >
       <Stack direction={'row'}>
         <Typography fontWeight={'bold'} my={'1rem'}>
