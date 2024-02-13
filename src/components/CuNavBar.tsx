@@ -201,9 +201,8 @@ const PcButtonBadge = ({
   if (isNew) {
     return (
       <Typography
-        color={disabled ? 'text.disable' : 'yellow.strong'}
         variant={'Caption'}
-        sx={style.textBadge}
+        sx={disabled ? style.disabledTextBadge : style.newTextBadge}
       >
         NEW
       </Typography>
@@ -215,9 +214,8 @@ const PcButtonBadge = ({
   if (isSoon) {
     return (
       <Typography
-        color={'text.disable'}
         variant={'Caption'}
-        sx={style.textBadge}
+        sx={disabled ? style.disabledTextBadge : style.soonTextBadge}
       >
         SOON
       </Typography>

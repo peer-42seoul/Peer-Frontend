@@ -93,9 +93,24 @@ export const iconBoxBase = {
   },
 }
 
-export const textBadge = {
+const textBadge = {
   display: 'float',
   marginLeft: '1rem !important', // stack의 spacing을 덮어씌우기 위해 !important 사용
+}
+
+export const disabledTextBadge = {
+  ...textBadge,
+  color: (theme: Theme) => theme.palette.text.disable + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+}
+
+export const newTextBadge = {
+  ...textBadge,
+  color: (theme: Theme) => theme.palette.yellow.strong + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+}
+
+export const soonTextBadge = {
+  ...textBadge,
+  color: (theme: Theme) => theme.palette.text.disable + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
 }
 
 const BADGE_TRANSLATE = 'translate(130%, -50%)'
