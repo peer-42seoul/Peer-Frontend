@@ -13,7 +13,7 @@ const SearchOption = ({
   openOption: boolean
   setOpenOption: any
   setDetailOption: any
-  type: ProjectType | undefined
+  type: ProjectType
 }) => {
   const { isPc } = useMedia()
   const typeTitle = type === 'PROJECT' ? '프로젝트' : '스터디'

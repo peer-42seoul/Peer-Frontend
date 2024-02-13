@@ -1,5 +1,18 @@
 'use client'
 
+import { IconButton } from '@mui/material'
+import NotificationIcon from '@/icons/NotificationIcon'
+import useMedia from '@/hook/useMedia'
+
+// 알림 잠그기
+
+// import { Badge } from '@mui/material'
+// import ForbiddenDolphin from '@/components/WorkingDolphin'
+// import CuModal from '@/components/CuModal'
+// import useModal from '@/hook/useModal'
+
+// 알림탭 관련
+
 import {
   Badge,
   Button,
@@ -10,11 +23,8 @@ import {
   Tabs,
   Typography,
 } from '@mui/material'
-import { IconButton } from '@mui/material'
 import { SyntheticEvent, useCallback, useState } from 'react'
 import { Box } from '@mui/system'
-import NotificationIcon from '@/icons/NotificationIcon'
-import useMedia from '@/hook/useMedia'
 import { CloseIcon } from '@/icons'
 import useAuthStore from '@/states/useAuthStore'
 import { SystemIcon, TeamIcon, MessageIcon } from './alert-panel/Icons'
@@ -112,15 +122,18 @@ const mockData = [
 ]
 
 const AlertIcon = () => {
+  // const isAlertComing = false
+  const { isPc } = useMedia()
+  // const { isOpen, openModal, closeModal } = useModal()
+
+  // 알림 탭 관련
   const [alertData, setAlertData] = useState<IAlert[]>(mockData)
   const [showAlert, setShowAlert] = useState<IAlert[]>(alertData)
   const [tabvalue, setTabValue] = useState(0)
   const [isAlertComing, setIsAlertComing] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { isLogin } = useAuthStore()
-  const { isPc } = useMedia()
   const router = useRouter()
-  // const { isOpen, openModal, closeModal } = useModal()
 
   const openAlertTab = useCallback(() => {
     setIsAlertComing(true)

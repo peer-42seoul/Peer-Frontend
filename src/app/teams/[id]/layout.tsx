@@ -44,7 +44,12 @@ const TeamLayout = ({
         sx={style.stack}
       >
         <TeamSidebar id={id} />
-        <Box sx={{ ...style.contentBox, width: isPc ? undefined : '100%' }}>
+        <Box
+          sx={{
+            ...style.contentBox,
+            width: isFourRow ? undefined : isPc ? '70%' : '100%',
+          }}
+        >
           {children}
         </Box>
       </Stack>
