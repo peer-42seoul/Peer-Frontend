@@ -201,14 +201,14 @@ const ProfileBioEditor = ({
           .catch((error) => {
             setIsNicknameUnique(false)
             console.log(error)
-            if (error?.response.data?.message) {
+            if (error?.response.data?.messages) {
               openToast({
                 severity: 'error',
-                message: error.response.data.message,
+                message: String(error.response.data.messages[0]).split(': ')[1],
               })
               setError('nickname', {
                 type: 'notUnique',
-                message: error.response.data.message,
+                message: String(error.response.data.messages[0]).split(': ')[1],
               })
             } else {
               openToast({
