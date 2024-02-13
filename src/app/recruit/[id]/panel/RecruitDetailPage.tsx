@@ -82,6 +82,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
             favorite={favoriteData}
             title={content?.title}
             content={content?.content}
+            status={content?.status}
             me={me}
           />
         </Stack>
@@ -121,7 +122,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
 
   /** 모바일 뷰 **/
   return (
-    <Stack height={'100%'} padding={'2.5rem'}>
+    <Stack height={'100%'} padding={'2.25rem'}>
       <Stack gap={'1.5rem'} width={'100%'}>
         <Stack>
           <RecruitQuickMenu
@@ -130,21 +131,22 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
             title={content?.title}
             content={content?.content}
             me={me}
+            status={content?.status}
           />
           <RecruitInfo data={content} type={type} />
         </Stack>
         <Divider />
         <RecruitDetailContent data={content} type={type} roleList={roleList} />
+        {isClient && !me && (
+          <ApplyFormButton
+            id={id}
+            type={type}
+            roleList={roleList}
+            data={content}
+            status={content.status}
+          />
+        )}
       </Stack>
-      {isClient && !me && (
-        <ApplyFormButton
-          id={id}
-          type={type}
-          roleList={roleList}
-          data={content}
-          status={content.status}
-        />
-      )}
     </Stack>
   )
 }

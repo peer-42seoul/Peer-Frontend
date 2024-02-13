@@ -4,6 +4,7 @@ import { useMediaQuery, IconButton, Modal, Box } from '@mui/material'
 import useModal from '@/hook/useModal'
 import SearchBody from '../../search/panel/SearchBody'
 import { SearchIcon } from '@/icons'
+import Header from '@/app/panel/layout-panel/Header'
 
 const StyleMobileSearch = {
   position: 'absolute' as 'absolute',
@@ -58,6 +59,7 @@ const SearchMobile = () => {
         aria-describedby="modal-description"
       >
         <Box sx={StyleMobileSearch}>
+          <Header backAction={closeModal} />
           <SearchBody onClose={closeModal} />
         </Box>
       </Modal>

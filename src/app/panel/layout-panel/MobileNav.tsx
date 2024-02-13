@@ -27,7 +27,10 @@ const MobileNav = () => {
   useEffect(() => {
     if (pathname === '/') {
       setValue('home')
-    } else if (pathname.startsWith('/team-list')) {
+    } else if (
+      pathname.startsWith('/team-list') ||
+      pathname.startsWith('/teams')
+    ) {
       setValue('team-list')
     } else if (pathname.startsWith('/hitchhiking')) {
       setValue('hitchhiking')
