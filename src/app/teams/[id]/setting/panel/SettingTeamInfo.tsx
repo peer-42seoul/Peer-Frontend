@@ -231,7 +231,10 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
             display={'flex'}
             flexDirection={'row-reverse'}
           >
-            <Tutorial content={<TeamEndingTutorial />} />
+            <Tutorial
+              title={'팀 활동 종료하기'}
+              content={<TeamEndingTutorial />}
+            />
             <Button
               disabled={
                 team.status === TeamStatus.COMPLETE ||
