@@ -62,6 +62,7 @@ const MainShowcase = () => {
                 : '/icons/ios/256.png'
             }
             alt="main-showcase-image"
+            priorityOption={true}
           />
           <Card
             sx={{
