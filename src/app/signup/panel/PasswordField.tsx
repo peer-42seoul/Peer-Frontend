@@ -61,7 +61,11 @@ const PasswordField = ({
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
               />
-              <IconButton onClick={deletePassword} size="small">
+              <IconButton
+                onClick={deletePassword}
+                size="small"
+                sx={{ paddingY: 0 }}
+              >
                 <HighlightOffIcon sx={{ color: 'text.alternative' }} />
               </IconButton>
             </>

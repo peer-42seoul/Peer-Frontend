@@ -35,7 +35,7 @@ export const ListPageContainer = ({ children }: IChildrenProps) => {
   const { isPc } = useMedia()
   return (
     <Stack
-      sx={{ ...style.ListPageContainer, padding: isPc ? '2rem' : '0' }}
+      sx={{ ...style.ListPageContainer, padding: isPc ? '2rem' : '1rem' }}
       spacing={'2rem'}
     >
       {children}
