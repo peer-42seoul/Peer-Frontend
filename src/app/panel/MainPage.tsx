@@ -22,7 +22,6 @@ import PwaInstallBanner from './PwaInstallBanner'
 import MainBanner from '@/app/panel/main-page/MainBanner'
 import Tutorial from '@/components/Tutorial'
 import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
-import useHeaderStore from '@/states/useHeaderStore'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import {
   cardStyle,
@@ -72,12 +71,11 @@ export const socket = getCookie('accessToken')
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
-  const searchType = searchParams.get('type') === 'STUDY' ? 'STUDY' : 'PROJECT'
+  const searchType =
+    searchParams.get('type') === 'PROJECT' ? 'PROJECT' : 'STUDY'
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
-  const [type, setType] = useState<ProjectType | undefined>(
-    keyword !== '' ? searchType : undefined,
-  ) //'STUDY'
+  const [type, setType] = useState<ProjectType>(searchType) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   const [detailOption, setDetailOption] = useState<IDetailOption>({
@@ -96,15 +94,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
   )
-  const { headerTitle, setHeaderTitle } = useHeaderStore()
   const [init, setInit] = useState<boolean>(true)
 
   useEffect(() => {
     if (keyword !== '') {
-      setHeaderTitle(keyword + ' 검색 결과')
       setType(searchType)
       setInit(false)
-    } else setHeaderTitle('')
+    }
   }, [keyword, searchType])
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
@@ -129,7 +125,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   }&tag=${detailOption.tag}`
 
   const isInit =
-    page == 1 && !type && !sort && detailOption.isInit && keyword == '' && init
+    page == 1 &&
+    type === 'STUDY' &&
+    !sort &&
+    detailOption.isInit &&
+    keyword == '' &&
+    init
 
   const { data: favoriteData } = useSWR<IFavorite[]>(
     isInit && isLogin
@@ -204,6 +205,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     (newData?.last || initData?.last) ?? true, //isEnd
     page,
   )
+
   const handleType = useCallback(
     (value: ProjectType) => {
       setType(value)
@@ -219,7 +221,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         tag: '',
       })
       setSort('latest')
-      router.push('/')
+      router.replace(`?type=${value}`)
     },
     [router],
   )
@@ -269,7 +271,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               justifyContent={'space-between'}
               my={'0.75rem'}
             >
-              <Typography variant={'Body1'}>{headerTitle}</Typography>
+              <Stack direction="row" gap={'0.25rem'}>
+                <Typography variant={'Body1Emphasis'}>{keyword}</Typography>
+                <Typography variant={'Body1'}>검색 결과</Typography>
+              </Stack>
               <SelectSort sort={sort} setSort={handleSort} />
             </Stack>
           )}
@@ -355,7 +360,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   justifyContent={'space-between'}
                   mb={'0.75rem'}
                 >
-                  <Typography variant={'Body1'}>{headerTitle}</Typography>
+                  <Stack direction="row" gap={'0.25rem'}>
+                    <Typography variant={'Body1Emphasis'}>{keyword}</Typography>
+                    <Typography variant={'Body1'}>검색 결과 </Typography>
+                  </Stack>
                   <SelectSort sort={sort} setSort={handleSort} />
                 </Stack>
               )}
