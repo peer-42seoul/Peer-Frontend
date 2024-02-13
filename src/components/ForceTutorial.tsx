@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode, useEffect, useState } from 'react'
 import {
   Box,
@@ -27,6 +29,10 @@ const ForceTutorial = ({ title, content, sx }: ITutorialProps) => {
     setChecked(!checked)
   }
 
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
   const handleClose = () => {
     if (checked) {
       localStorage.setItem('teamListTutorial', 'true')
@@ -43,7 +49,7 @@ const ForceTutorial = ({ title, content, sx }: ITutorialProps) => {
 
   return (
     <>
-      <IconButton onClick={() => setOpen(true)}>
+      <IconButton onClick={handleOpen}>
         <Help sx={{ color: 'purple.strong', ...sx }} />
       </IconButton>
       <Modal open={open} onClose={handleClose} keepMounted>

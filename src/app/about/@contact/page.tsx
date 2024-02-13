@@ -90,14 +90,6 @@ const ContactPage = () => {
                   helperText={errors.firstName?.message}
                   sx={{
                     width: '100%',
-                    '& input': {
-                      '&::placeholder': {
-                        color: 'white',
-                      },
-                    },
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#515169',
-                    },
                   }}
                   {...register('firstName', {
                     required: '필수 입력 내용입니다.',
@@ -119,14 +111,6 @@ const ContactPage = () => {
                   helperText={errors.lastName?.message}
                   sx={{
                     width: '100%',
-                    '& input': {
-                      '&::placeholder': {
-                        color: 'white',
-                      },
-                    },
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#515169',
-                    },
                   }}
                   {...register('lastName', {
                     required: '필수 입력 내용입니다.',
@@ -146,14 +130,6 @@ const ContactPage = () => {
                 variant="outlined"
                 sx={{
                   width: '100%',
-                  '& input': {
-                    '&::placeholder': {
-                      color: 'white',
-                    },
-                  },
-                  '& .MuiOutlinedInput-root': {
-                    backgroundColor: '#515169',
-                  },
                 }}
                 type="email"
                 error={errors.email?.message ? true : false}
@@ -173,14 +149,6 @@ const ContactPage = () => {
                   variant="outlined"
                   sx={{
                     width: '100%',
-                    '& input': {
-                      '&::placeholder': {
-                        color: 'white',
-                      },
-                    },
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#515169',
-                    },
                   }}
                   {...register('company', {
                     maxLength: 20,
@@ -192,14 +160,6 @@ const ContactPage = () => {
                   variant="outlined"
                   sx={{
                     width: '100%',
-                    '& input': {
-                      '&::placeholder': {
-                        color: 'white',
-                      },
-                    },
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#515169',
-                    },
                   }}
                   {...register('companySite', {
                     maxLength: 30,
@@ -216,14 +176,6 @@ const ContactPage = () => {
                 variant="outlined"
                 sx={{
                   width: '100%',
-                  '& input': {
-                    '&::placeholder': {
-                      color: 'white',
-                    },
-                  },
-                  '& .MuiOutlinedInput-root': {
-                    backgroundColor: '#515169',
-                  },
                 }}
                 {...register('text', {
                   required: '필수 입력 내용입니다.',

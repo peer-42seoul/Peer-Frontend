@@ -1,39 +1,21 @@
-import { Stack, Typography } from '@mui/material'
+import { Stack } from '@mui/material'
 import { ITeamInfo } from '../page'
 import { TeamStatus } from '@/app/teams/types/types'
 
 //icons
-import useShowTeams from '@/states/useShowTeams'
+
 import TeamCard from './TeamCard'
 import NoDataDolphin from '@/components/NoDataDolphin'
-import ForceTutorial from '@/components/ForceTutorial'
-import { TeamListTutorial } from '@/components/tutorialContent/TeamListTutorial'
 
 const TeamsList = ({ prop }: { prop: ITeamInfo[] }) => {
-  const { showTeams } = useShowTeams()
-
   return (
     <Stack
       spacing={'0.2rem'}
       sx={{ p: '0.25rem' }}
       height={'75vh'}
       flex={'2rem'}
+      minWidth={'53svw'}
     >
-      <Stack direction={'row'}>
-        <Typography fontWeight={'bold'} my={'1rem'}>
-          {showTeams === TeamStatus.RECRUITING
-            ? '모집 중'
-            : showTeams === TeamStatus.COMPLETE
-              ? '진행 완료'
-              : showTeams === TeamStatus.ONGOING
-                ? '진행 중'
-                : '모집 완료'}
-        </Typography>
-        <ForceTutorial
-          title={'나의 팀 확인하기'}
-          content={<TeamListTutorial />}
-        />
-      </Stack>
       <Stack
         spacing={'0.5rem'}
         overflow={'auto'}
