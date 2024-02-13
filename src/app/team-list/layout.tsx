@@ -42,7 +42,9 @@ const TeamsLayout = ({ children }: { children: ReactNode }) => {
               content={<TeamListTutorial />}
             />
           </Stack>
-          <Box id={showTeams}>{children}</Box>
+          <Box key={showTeams} className="layout-container">
+            {children}
+          </Box>
         </Stack>
       </Stack>
     </Container>
