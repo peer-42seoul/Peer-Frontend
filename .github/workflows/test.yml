@@ -1,11 +1,13 @@
 name: Test server CI/CD
 
 on:
-  push:
-    branches: ['develop', 'release-**']
-  pull_request:
-    branches: ['develop', 'release-**']
-    types: ['opened', 'reopened', 'synchronize', 'closed']
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - develop
+  #     - release/*
+  # pull_request:
+  #   types: [opened, synchronize, reopened, closed]
 
 jobs:
   CI:
