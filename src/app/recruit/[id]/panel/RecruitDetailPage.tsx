@@ -1,6 +1,6 @@
 'use client'
 
-import { Typography, Stack, Container, Divider } from '@mui/material'
+import { Typography, Stack, Container, Divider, Box } from '@mui/material'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -17,7 +17,13 @@ import useAxiosWithAuth from '@/api/config'
 import Tutorial from '@/components/Tutorial'
 import RecruitPageTutorial from '@/components/tutorialContent/RecruitPageTutorial'
 
-const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
+const RecruitDetailPage = ({
+  data,
+  id,
+}: {
+  data?: IPostDetail
+  id: string
+}) => {
   const [isClient, setIsClient] = useState(false)
   const [content, setCotent] = useState<IPostDetail | undefined>(data)
   const router = useRouter()
@@ -101,10 +107,12 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
                     data={content}
                     status={content.status}
                   />
-                  <Tutorial
-                    title="지원 방법"
-                    content={<RecruitPageTutorial />}
-                  />
+                  <Box sx={{ marginTop: '2rem' }}>
+                    <Tutorial
+                      title="지원 방법"
+                      content={<RecruitPageTutorial />}
+                    />
+                  </Box>
                 </Stack>
               )}
             </RecruitInfo>

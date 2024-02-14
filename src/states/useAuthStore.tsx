@@ -44,12 +44,16 @@ const useAuthStore = create<IAuthStore>((set) => {
       }))
     },
     logout: (isRefreshing) => {
-      if (authData.accessToken && !isRefreshing) {
-        axios.get(`${API_URL}/api/v1/logout`, {
-          headers: {
-            Authorization: `Bearer ${authData.accessToken}`,
-          },
-        })
+      if (authData.accessToken && isRefreshing === undefined) {
+        axios
+          .get(`${API_URL}/api/v1/logout`, {
+            headers: {
+              Authorization: `Bearer ${authData.accessToken}`,
+            },
+          })
+          .catch(() => {
+            // console.log('만료된 토큰') -- do nothing
+          })
       }
       LocalStorage.removeItem('authData')
       set(() => ({

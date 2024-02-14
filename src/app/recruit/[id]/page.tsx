@@ -21,7 +21,7 @@ export default async function RecruitDetailIndex({
     )
     data = response.data
   } catch (e) {
-    console.log(e)
+    // console.error(e)
   }
 
   return <RecruitDetailPage data={data} id={params.id} />

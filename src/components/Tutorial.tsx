@@ -13,7 +13,7 @@ import { CloseIcon } from '@/icons'
 import * as style from './Tutorial.style'
 
 interface ITutorialProps {
-  title?: string
+  title: string
   content: ReactNode
   sx?: SxProps
 }
