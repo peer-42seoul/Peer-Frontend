@@ -26,17 +26,13 @@ const CardStack = ({
   const [dragged, setDragged] = useState(false)
 
   const checkDragDirection = (x: number, y: number) => {
-    if (Math.abs(x) > Math.abs(y)) {
-      return x < 0 ? ESwipeDirection.left : ESwipeDirection.right
-    } else {
-      return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
-    }
+    return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
   }
 
   const handleDragEnd = (e: any, info: any, recruit_id: number) => {
     // COMMENT : 위로 조금만 움직였을 때 카드가 사라지지 않도록 처리
     if (
-      Math.abs(info.offset.y) < 150 ||
+      Math.abs(info.offset.y) < 50 ||
       checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
     ) {
       setDragged(false)

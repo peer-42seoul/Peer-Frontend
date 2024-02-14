@@ -26,17 +26,13 @@ const CardStack = ({
   const { isPc } = useMedia()
 
   const checkDragDirection = (x: number, y: number) => {
-    if (Math.abs(x) > Math.abs(y)) {
-      return x < 0 ? ESwipeDirection.left : ESwipeDirection.right
-    } else {
-      return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
-    }
+    return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
   }
 
   const handleDragEnd = (e: any, info: any, recruit_id: number) => {
     // 위로 조금만 움직였을 때 카드가 사라지지 않도록 처리
     if (
-      Math.abs(info.offset.y) < 150 ||
+      Math.abs(info.offset.y) < 100 ||
       checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
     ) {
       setDragged(false)
@@ -98,8 +94,9 @@ const CardStack = ({
                 animate={{
                   scale: i === cardList.length - 1 ? 1 : 0.8,
                   opacity: i === cardList.length - 1 ? 1 : 0,
+                  y: 0,
                 }}
-                exit={{ opacity: 0 }}
+                exit={{ opacity: 0, y: -500 }}
                 drag
                 dragSnapToOrigin
                 whileDrag={{ scale: 1.2 }}
