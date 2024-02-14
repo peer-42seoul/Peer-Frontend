@@ -25,17 +25,13 @@ export const handleShare = (
         url: url,
         text: content,
       })
-      .catch((e) => {
-        console.error(e)
-      })
+      .catch(() => {})
   } else {
     if (navigator.clipboard) {
       navigator.clipboard
         .writeText(message || url)
         .then(() => alert('클립보드에 복사되었습니다.'))
-        .catch((e) => {
-          console.error(e)
-        })
+        .catch(() => {})
     } else {
       const textarea = document.createElement('textarea')
       textarea.value = message || url

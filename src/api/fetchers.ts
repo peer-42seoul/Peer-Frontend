@@ -37,7 +37,7 @@ export const fetchServerData = async (url: string) => {
     })
     return response.data
   } catch (e) {
-    console.error(e)
+    console.error('fetchServerData error')
   }
 }
 
