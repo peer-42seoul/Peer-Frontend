@@ -62,6 +62,7 @@ const ToastEditorAdmin = ({
               `${API_URL}/api/v1/admin/editor/image`,
               formData,
               {
+                withCredentials: true,
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
