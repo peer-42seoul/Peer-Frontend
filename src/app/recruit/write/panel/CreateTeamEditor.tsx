@@ -533,7 +533,7 @@ const CreateTeamEditor = ({
                 )}
                 control={control}
                 name="tagList"
-                rules={{ required: true }}
+                // rules={{ required: true }}
               />
             </FieldWithLabel>
             {/* 팀 소개 글 작성 (커스텀에디터 적용되어야 할 부분) */}
