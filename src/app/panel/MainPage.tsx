@@ -33,8 +33,6 @@ import SearchOptionPanel, {
   InfinityScrollPanel,
 } from '@/app/panel/main-page/MainPanel'
 import SelectSort from '@/app/panel/main-page/SelectSort'
-import { getCookie } from 'cookies-next'
-import { io } from 'socket.io-client'
 import useMedia from '@/hook/useMedia'
 
 export interface BeforeInstallPromptEvent extends Event {
@@ -59,15 +57,6 @@ export interface IDetailOption {
   status: string
   tag: string
 }
-
-export const socket = getCookie('accessToken')
-  ? io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-      transports: ['socket.io', 'websocket'],
-      query: {
-        accessToken: getCookie('accessToken'),
-      },
-    })
-  : null
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const searchParams = useSearchParams()
@@ -182,13 +171,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       scrollTo(target.current.scrollHeight - prevScrollHeight)
   }, [newData])
 
-  useEffect(() => {
-    if (!socket) return
-    socket.on('connect', () => {
-      console.log('socket connected')
-    })
-  }, [])
-
   const { target, spinner, scrollTo } = useInfiniteScrollHook(
     setPage,
     isLoading,
@@ -250,7 +232,9 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         <Container sx={{ ...containerStyle, paddingBottom: '1.25rem' }}>
           {keyword === '' ? (
             <>
-              <MainBanner />
+              <Box width={'100%'}>
+                <MainBanner />
+              </Box>
               <Box marginY={'0.5rem'}>
                 <SelectType type={type} setType={handleType} />
               </Box>
@@ -333,7 +317,9 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <Stack flex={1} gap={'0.5rem'}>
               {keyword === '' ? (
                 <>
-                  <MainBanner />
+                  <Box width={'100%'}>
+                    <MainBanner />
+                  </Box>
                   <Stack direction={'row'} justifyContent={'space-between'}>
                     <SelectType type={type} setType={handleType} />
                     <Tutorial

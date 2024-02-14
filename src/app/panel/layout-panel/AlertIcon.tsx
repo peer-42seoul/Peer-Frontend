@@ -3,6 +3,7 @@
 import { CircularProgress, IconButton } from '@mui/material'
 import NotificationIcon from '@/icons/NotificationIcon'
 import useMedia from '@/hook/useMedia'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 // 알림 잠그기
 
@@ -117,6 +118,8 @@ const AlertIcon = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { isLogin } = useAuthStore()
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const { target, spinner } = useInfiniteScroll({
     setPage,
@@ -129,7 +132,7 @@ const AlertIcon = () => {
 
   useEffect(() => {
     isNewAlarm(isLogin)
-  }, [])
+  }, [pathname, searchParams, isLogin, isNewAlarm])
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -141,6 +144,9 @@ const AlertIcon = () => {
       if (isAlertComing) {
         setIsAlertComing(false)
       }
+    } else {
+      resetAlarms()
+      setPage(1)
     }
   }, [isDrawerOpen, setIsAlertComing, tabvalue])
 

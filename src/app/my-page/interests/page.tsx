@@ -286,6 +286,7 @@ const MyInterests = () => {
         <Stack
           width={1}
           height={1}
+          minHeight={'4.5rem'}
           sx={{
             backgroundColor: ['transparent', 'background.secondary'],
             borderRadius: '1rem',

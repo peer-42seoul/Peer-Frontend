@@ -145,6 +145,8 @@ const Announce = () => {
   } = useModal()
 
   const [currentNoticeStatus, setCurrentNoticeStatus] = useState('없음')
+  const [currentContent, setCurrentContent] = useState('')
+  const [currentDate, setCurrentDate] = useState('')
 
   // 초기 페이지 진입시 공지사항 목록 불러오기
   useEffect(() => {
@@ -331,7 +333,8 @@ const Announce = () => {
         setValue('content', res.data.content)
         setValue('date', res.data.date)
         setValue('announcementStatus', res.data.announcementStatus)
-
+        setCurrentDate(res.data.date)
+        setCurrentContent(res.data.content)
         let noticeStatusValue = '없음' // 기본값
         if (
           res.data.announcementStatus === '게제' ||
@@ -566,10 +569,15 @@ const Announce = () => {
                   : '게제된 시간'}
               </Typography>
               <TextField
+                // value={
+                //   getValues('date')?.split('T')[0] +
+                //   ' ' +
+                //   getValues('date')?.split('T')[1]
+                // }
                 value={
-                  getValues('date')?.split('T')[0] +
+                  currentDate?.split('T')[0] +
                   ' ' +
-                  getValues('date')?.split('T')[1]
+                  currentDate?.split('T')[1]
                 }
                 disabled={true}
               />
@@ -578,7 +586,8 @@ const Announce = () => {
           {writeMode === 'view' ? (
             <Box>
               <DynamicToastViewer
-                initialValue={getValues('content')}
+                // initialValue={getValues('content')}
+                initialValue={currentContent}
                 sx={{
                   width: '100%',
                   wordBreak: 'break-word',

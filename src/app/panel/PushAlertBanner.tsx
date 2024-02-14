@@ -39,8 +39,8 @@ const PushAlertBanner = () => {
                 message: '푸시 알림 테스트 메시지입니다.',
               },
             )
-            .then((res) => {
-              console.log(res)
+            .then(() => {
+              console.log('푸시 알림 전송 성공')
             })
         } else {
           console.log(
@@ -48,12 +48,12 @@ const PushAlertBanner = () => {
           )
         }
       })
-      .catch((err: any) => {
-        console.log('An error occurred while retrieving token. ', err)
+      .catch(() => {
+        console.log('An error occurred while retrieving token. ')
       })
 
-    onMessage(messaging, (payload: any) => {
-      console.log('Message received. ', payload)
+    onMessage(messaging, () => {
+      console.log('Message received. ')
     })
   }
 

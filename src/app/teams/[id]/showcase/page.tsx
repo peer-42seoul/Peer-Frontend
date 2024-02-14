@@ -18,7 +18,7 @@ const ShowcaseGenerationPage = ({ params }: { params: { id: string } }) => {
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )
-  console.log('에러', error?.response.data.message)
+
   if (isLoading) return <CuCircularProgress color={'secondary'} />
   if (error)
     return (

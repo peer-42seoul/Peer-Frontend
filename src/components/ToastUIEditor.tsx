@@ -69,7 +69,7 @@ const ToastEditor = ({
             )
             callback(response.data, '이미지 대체 텍스트')
           } catch (error) {
-            console.error('이미지 업로드 실패', error)
+            console.error('이미지 업로드 실패')
           }
         },
       },
