@@ -13,15 +13,15 @@ import {
 } from '@mui/material'
 import PageButton from '../panel/PageButton'
 import axios from 'axios'
-import ImageUploadButton from '@/components/ImageUploadButton'
-import Image from 'next/image'
+// import ImageUploadButton from '@/components/ImageUploadButton'
+// import Image from 'next/image'
 import { Controller, useForm } from 'react-hook-form'
 import { Radio } from '@mui/material'
 import { DateTimePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import CuModal from '@/components/CuModal'
 import { idStyle, statusStyle, titleStyle } from './AnnounceStyles'
-import DynamicToastEditor from '@/components/DynamicToastEditor'
+import DynamicToastEditorAdmin from '@/components/DynamicToastEditorAdmin'
 import { Editor } from '@toast-ui/editor'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
 import { config } from '../panel/AdminAxios'
@@ -31,8 +31,8 @@ import useToast from '@/states/useToast'
 
 interface IAnnounceAllContent {
   announcementId: number
-  previewImage: string
-  image: string
+  // previewImage: string
+  // image: string
   title: string
   writer: string
   view: number
@@ -45,8 +45,8 @@ interface IAnnounceAllContent {
 
 const defaultValues: IAnnounceAllContent = {
   announcementId: -1,
-  previewImage: '/images/defaultImage.png',
-  image: '',
+  // previewImage: '/images/defaultImage.png',
+  // image: '',
   title: '',
   writer: '',
   view: -1,
@@ -60,7 +60,7 @@ const defaultValues: IAnnounceAllContent = {
 interface content {
   announcementId: number
   announcementStatus: string
-  image: string
+  // image: string
   title: string
 }
 
@@ -85,7 +85,7 @@ interface content {
 // }
 
 interface IAnnounceContentWrite {
-  image: string
+  // image: string
   writer: string
   title: string
   announcementNoticeStatus: string // enum
@@ -95,7 +95,7 @@ interface IAnnounceContentWrite {
 
 interface IAnnounceContentEdit {
   announcementId: number
-  image: string | null
+  // image: string | null
   writer: string
   title: string
   announcementNoticeStatus: string // enum
@@ -112,7 +112,7 @@ const Announce = () => {
     register,
     handleSubmit,
     control,
-    watch,
+    // watch,
     setValue,
     reset,
     getValues,
@@ -121,7 +121,7 @@ const Announce = () => {
     defaultValues: defaultValues,
     mode: 'onChange',
   })
-  let previewImage = watch('previewImage')
+  // let previewImage = watch('previewImage')
   const editorRef = useRef<Editor | null>(null)
   const [writeMode, setWriteMode] = useState<string>('')
 
@@ -206,10 +206,10 @@ const Announce = () => {
       alert('본문의 글이 너무 깁니다!')
       return
     }
-    if (data.previewImage === '') {
-      alert('이미지를 삽입해주세요')
-      return
-    }
+    // if (data.previewImage === '') {
+    //   alert('이미지를 삽입해주세요')
+    //   return
+    // }
     let DateFormed = ''
     if (data.announcementNoticeStatus === '예약') {
       if (data.reservationDate === null) {
@@ -224,7 +224,7 @@ const Announce = () => {
     let submitData: IAnnounceContentWrite
     if ('announcementId' in data && 'reservationDate' in data) {
       submitData = {
-        image: data.previewImage.split(',')[1],
+        // image: data.previewImage.split(',')[1],
         writer: data.writer,
         title: data.title,
         announcementNoticeStatus: data.announcementNoticeStatus, // 'announcementStatus'를 'announcementNoticeStatus'로 매핑합니다.
@@ -275,7 +275,7 @@ const Announce = () => {
     if ('announcementId' in data && 'reservationDate' in data) {
       submitData = {
         announcementId: data.announcementId,
-        image: data.image === '' ? null : data.previewImage.split(',')[1],
+        // image: data.image === '' ? null : data.previewImage.split(',')[1],
         writer: data.writer,
         title: data.title,
         announcementNoticeStatus: data.announcementNoticeStatus, // 'announcementStatus'를 'announcementNoticeStatus'로 매핑합니다.
@@ -327,7 +327,7 @@ const Announce = () => {
         setValue('writer', res.data.writer)
         setValue('title', res.data.title)
         setValue('view', res.data.view)
-        setValue('previewImage', res.data.image)
+        // setValue('previewImage', res.data.image)
         setValue('content', res.data.content)
         setValue('date', res.data.date)
         setValue('announcementStatus', res.data.announcementStatus)
@@ -426,7 +426,7 @@ const Announce = () => {
               variant={'contained'}
               onClick={() => {
                 setWriteMode('write')
-                previewImage = watch('previewImage')
+                // previewImage = watch('previewImage')
                 setOpen(true)
               }}
             >
@@ -459,17 +459,17 @@ const Announce = () => {
                     {item.announcementStatus}
                   </Typography>
                 </Box>
-                <Box sx={{ width: '20%' }}>
+                {/* <Box sx={{ width: '20%' }}>
                   <Image
                     src={item.image}
                     width={150}
                     height={75}
                     alt="Picture of the announcement"
                   />
-                </Box>
+                </Box> */}
                 <Button
                   onClick={() => onHandleView(item.announcementId)}
-                  sx={{ width: '65%' }}
+                  sx={{ width: '85%' }}
                 >
                   <Typography variant={'body1'} sx={titleStyle}>
                     {item.title}
@@ -504,7 +504,7 @@ const Announce = () => {
         mobileFullSize={false}
       >
         <Container>
-          {writeMode === 'view' ? (
+          {/* {writeMode === 'view' ? (
             <Box>
               <Image
                 src={previewImage}
@@ -529,7 +529,7 @@ const Announce = () => {
                 />
               </Box>
             </ImageUploadButton>
-          )}
+          )} */}
           <Typography variant={'Title2'}>제목</Typography>
           <TextField
             {...register('title', {
@@ -590,7 +590,7 @@ const Announce = () => {
             </Box>
           ) : (
             <Box>
-              <DynamicToastEditor
+              <DynamicToastEditorAdmin
                 initialValue={getValues('content')}
                 initialEditType="wysiwyg"
                 editorRef={editorRef}
@@ -720,7 +720,11 @@ const Announce = () => {
               </Button>
             ) : null}
             {writeMode === 'view' ? (
-              <Button variant={'contained'} onClick={() => onHandleEdit()}>
+              <Button
+                variant={'contained'}
+                onClick={() => onHandleEdit()}
+                disabled={getValues('announcementStatus') !== '예약' ? true : false}
+              >
                 수정
               </Button>
             ) : writeMode === 'edit' ? (

@@ -708,7 +708,7 @@ const Banner = () => {
                 variant={'contained'}
                 onClick={() => onHandleEdit()}
                 disabled={
-                  getValues('bannerStatus') !== '예약 중' ? true : false
+                  getValues('bannerStatus') !== '예약' ? true : false
                 }
               >
                 수정
