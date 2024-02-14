@@ -25,7 +25,6 @@ const PwaInstallBanner = () => {
       deferredPrompt.prompt()
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt')
           setIsShowInstall(false)
           localStorage.setItem('isShowInstall', 'false')
         } else {

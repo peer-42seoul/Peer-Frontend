@@ -39,7 +39,6 @@ const FavoriteButton = ({
         )
       }
     } catch (e) {
-      console.log('error', e)
       setIsFavorite(!isFavorite)
     }
   }, [

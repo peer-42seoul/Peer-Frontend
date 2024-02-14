@@ -54,12 +54,11 @@ const PushAlertBanner = () => {
           },
         )
       })
-      .then((res) => {
-        console.log(res)
+      .then(() => {
         displayNotification()
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        setIsShowPush(false)
       })
   }
 
@@ -76,6 +75,9 @@ const PushAlertBanner = () => {
           if (subscription === null) {
             createPushSubscription(reg)
           }
+        })
+        .catch(() => {
+          setIsShowPush(false)
         })
     }
   }

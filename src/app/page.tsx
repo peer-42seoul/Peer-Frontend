@@ -15,8 +15,8 @@ export default async function Home() {
       },
     )
     data = response.data
-  } catch (e) {
-    console.log(e)
+  } catch (err) {
+    console.error('데이터를 불러오는데 실패했습니다.')
   }
 
   return <MainPage initData={data} />

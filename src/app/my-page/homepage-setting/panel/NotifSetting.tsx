@@ -107,7 +107,6 @@ const NotifSetting = () => {
     name: string
     checked: boolean
   }) => {
-    console.log(name, checked)
     // axiosWithAuth
     //   .get(
     //     `/api/v1/noti/alarm-setting?alarmType=${name}&value=${checked}`,
