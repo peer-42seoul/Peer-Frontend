@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write '**/*.{js,ts,tsx,jsx}'"
+    "format": "prettier --write '**/*.{js,ts,tsx,jsx}'",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^9.7.2",
@@ -63,6 +65,15 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.6.13",
+    "@storybook/addon-interactions": "^7.6.13",
+    "@storybook/addon-links": "^7.6.13",
+    "@storybook/addon-mdx-gfm": "^7.6.15",
+    "@storybook/addon-onboarding": "^1.0.11",
+    "@storybook/blocks": "^7.6.13",
+    "@storybook/nextjs": "^7.6.13",
+    "@storybook/react": "^7.6.13",
+    "@storybook/test": "^7.6.13",
     "@svgr/webpack": "^8.1.0",
     "@types/lodash": "^4.14.199",
     "@types/react-big-calendar": "^1.8.4",
@@ -81,9 +92,11 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-storybook": "^0.6.15",
     "lodash": "^4.17.21",
     "prettier": "^3.0.2",
     "sass": "^1.69.5",
+    "storybook": "^7.6.13",
     "typescript": "^5.1.6"
   }
 }
