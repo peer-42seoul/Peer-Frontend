@@ -27,7 +27,7 @@ const AuthSettingSection = ({
             {authenticationTitle}
           </Typography>
           <Button variant="contained" href={href} sx={style.buttonStyleBase}>
-            <Typography variant="CaptionEmphasis" color="text.strong">
+            <Typography variant="CaptionEmphasis" color="#ffffff">
               인증하기
             </Typography>
           </Button>

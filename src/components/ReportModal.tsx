@@ -155,7 +155,7 @@ const ReportModal = ({
       </CuModal>
       <CuTextModal
         open={isOpen}
-        title={'쪽지 보내기'}
+        title={'신고하기'}
         onClose={closeModal}
         containedButton={{
           text: isSubmitting ? '제출 중' : '완료',
