@@ -10,7 +10,6 @@ import RatioQuestionForm, { RatioQuestionList } from './RatioQuestionForm'
 import useAxiosWithAuth from '@/api/config'
 import useSWR from 'swr'
 import useAuthStore from '@/states/useAuthStore'
-import { useRouter } from 'next/navigation'
 import CuTextField from '@/components/CuTextField'
 import useToast from '@/states/useToast'
 import { ProjectType } from '@/types/IPostDetail'
@@ -43,7 +42,7 @@ const RecruitFormModal = ({
       : null,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
-  const router = useRouter()
+
   const [openConfirm, setOpenConfirm] = useState(false)
   const {
     handleSubmit,
@@ -89,7 +88,6 @@ const RecruitFormModal = ({
         severity: 'success',
         message: '제출에 성공하였습니다.',
       })
-      router.push(`/recruit/${recruit_id}`)
       setOpen(false)
     } catch (e: any) {
       setOpenConfirm(false)
