@@ -103,7 +103,7 @@ interface IAnnounceContentEdit {
   content: string
 }
 
-const Announce = () => {
+const Announces = () => {
   const API_URL = process.env.NEXT_PUBLIC_CSR_API
 
   const [content, setContent] = useState<content[]>([])
@@ -199,6 +199,8 @@ const Announce = () => {
   }
 
   const onSubmit = async (data: IAnnounceAllContent) => {
+    console.log('on submit')
+
     if (
       editorRef.current?.getMarkdown()?.length &&
       editorRef.current?.getMarkdown()?.length > 10000
@@ -212,7 +214,10 @@ const Announce = () => {
     // }
     let DateFormed = ''
     if (data.announcementNoticeStatus === '예약') {
+      console.log('reservation in')
+
       if (data.reservationDate === null) {
+        console.log('reservation null')
         return
       }
       DateFormed = formatDate(new Date(data.reservationDate))
@@ -233,11 +238,13 @@ const Announce = () => {
         content: editorRef.current ? editorRef.current.getMarkdown() : '',
       }
     } else return
+    console.log('before axios')
     await axios
       .post(`${API_URL}/api/v1/admin/announcement`, submitData, {
         withCredentials: true,
       })
       .then(() => {
+        console.log('then')
         setOpen(false)
         openToast({
           message: '공지 글을 성공적으로 등록하였습니다.',
@@ -723,7 +730,9 @@ const Announce = () => {
               <Button
                 variant={'contained'}
                 onClick={() => onHandleEdit()}
-                disabled={getValues('announcementStatus') !== '예약' ? true : false}
+                disabled={
+                  getValues('announcementStatus') !== '예약' ? true : false
+                }
               >
                 수정
               </Button>
@@ -760,4 +769,4 @@ const Announce = () => {
   )
 }
 
-export default Announce
+export default Announces

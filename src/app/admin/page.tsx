@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Tabs, Tab, Stack } from '@mui/material'
-import Announce from './announce/Announce'
+import Announces from './announce/Announces'
 import Tag from './tag/Tag'
 import Banner from './banner/Banner'
 import useAdminStore from '@/states/useAdminStore'
@@ -31,7 +31,7 @@ const AdminLayout = () => {
             <Tab label="Banner" />
             <Tab label="Tag" />
           </Tabs>
-          {value === 0 && <Announce />}
+          {value === 0 && <Announces />}
           {value === 1 && <Banner />}
           {value === 2 && <Tag />}
         </Stack>
