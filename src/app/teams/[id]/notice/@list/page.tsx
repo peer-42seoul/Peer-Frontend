@@ -35,7 +35,10 @@ const TeamNotice = ({ params }: { params: { id: string } }) => {
             <Typography variant={isPc ? 'Title3Emphasis' : 'Body1Emphasis'}>
               공지사항
             </Typography>
-            <Tutorial content={<TeamAnnounceTutorial />} />
+            <Tutorial
+              title={'팀 공지사항'}
+              content={<TeamAnnounceTutorial />}
+            />
           </Stack>
           <IconButtonContainer
             setKeyword={setKeyword}

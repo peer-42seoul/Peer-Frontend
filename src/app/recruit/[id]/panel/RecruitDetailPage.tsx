@@ -1,6 +1,6 @@
 'use client'
 
-import { Typography, Stack, Container, Divider } from '@mui/material'
+import { Typography, Stack, Container, Divider, Box } from '@mui/material'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -107,10 +107,12 @@ const RecruitDetailPage = ({
                     data={content}
                     status={content.status}
                   />
-                  <Tutorial
-                    title="지원 방법"
-                    content={<RecruitPageTutorial />}
-                  />
+                  <Box sx={{ marginTop: '2rem' }}>
+                    <Tutorial
+                      title="지원 방법"
+                      content={<RecruitPageTutorial />}
+                    />
+                  </Box>
                 </Stack>
               )}
             </RecruitInfo>
