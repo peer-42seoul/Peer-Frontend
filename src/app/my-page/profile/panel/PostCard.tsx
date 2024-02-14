@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardMedia,
   Stack,
   SxProps,
   Typography,
