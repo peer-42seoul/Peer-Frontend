@@ -23,11 +23,11 @@ const SettingTeamLogo = ({
 }: ISettingTeamLogo) => {
   const { isOpen, openModal, closeModal } = useModal()
   const [preview, setPreview] = useState<string>(
-    teamLogoImage.length !== 0 ? teamLogoImage : '/icons/ios/128.png',
+    teamLogoImage.length !== 0 ? teamLogoImage : '',
   )
 
   const deleteImage = () => {
-    setPreview('/icons/ios/128.png')
+    setPreview('')
     setValue('teamImage', null)
     setIsLogoEdit(true)
     closeModal()

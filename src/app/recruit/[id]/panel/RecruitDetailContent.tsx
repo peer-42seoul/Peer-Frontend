@@ -88,7 +88,7 @@ const RecruitDetailContent = ({
         )}
       </RecruitContentText>
       <RecruitContentText
-        label="기술스택"
+        label="관련 태그"
         icon={
           <Icon.TagIcon sx={{ ...style.iconStyleBase, color: 'text.normal' }} />
         }

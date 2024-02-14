@@ -153,7 +153,14 @@ const ApplicantList = ({
 
   if (!data || data.length === 0) {
     return (
-      <Card sx={{ p: '1.5rem', borderRadius: '1rem', height: '23rem' }}>
+      <Card
+        sx={{
+          p: '1.5rem',
+          borderRadius: '1rem',
+          height: '23rem',
+          backgroundColor: 'background.secondary',
+        }}
+      >
         <Stack
           direction="row"
           display="flex"
@@ -241,7 +248,7 @@ const ApplicantList = ({
           {member && member.answers ? (
             member.answers.map((interview, index) => (
               <Stack key={index} m={1}>
-                <Typography variant="Title2">{interview.question}</Typography>
+                <Typography>{interview.question}</Typography>
                 <FormAnswer interview={interview} index={index} />
               </Stack>
             ))

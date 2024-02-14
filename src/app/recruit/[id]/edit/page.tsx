@@ -99,7 +99,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         roleList: data.type === 'PROJECT' ? data.roleList : null,
         interviewList: fieldToForm(data.interviewList),
         place: data.place,
-        max: data.type === 'PROJECT' ? null : Number(data.max),
+        max: data.type === 'PROJECT' ? null : Number(data.max) - 1,
         type: data.type,
       })
       .then((res) => {
