@@ -101,7 +101,7 @@ const HitchhikingCardBack = ({
 
   const handleSeeAll = (e: React.MouseEvent) => {
     e.stopPropagation()
-    router.push(`/recruit/${postId}`)
+    router.push(`/recruit/${postId}?type=${isProject ? 'PROJECT' : 'STUDY'}`)
   }
 
   return (
