@@ -6,6 +6,7 @@ import {
   Avatar,
   BottomNavigation,
   BottomNavigationAction,
+  Box,
   Button,
   Container,
   IconButton,
@@ -45,22 +46,28 @@ const PcNav = () => {
   useEffect(() => {
     if (pathname === '/') {
       setValue('home')
-    } else if (pathname.includes('/team-list')) {
+    } else if (
+      pathname.startsWith('/team-list') ||
+      pathname.startsWith('/teams')
+    ) {
       setValue('team-list')
-    } else if (pathname.includes('/hitchhiking')) {
+    } else if (pathname.startsWith('/hitchhiking')) {
       setValue('hitchhiking')
-    } else if (pathname.includes('/showcase')) {
+    } else if (pathname.startsWith('/showcase')) {
       setValue('showcase')
     }
   }, [pathname])
 
   return (
-    <Container sx={navContainerStyle}>
-      <Stack
-        direction={'row'}
-        maxWidth={1280}
-        width="100%"
-        justifyContent={'space-between'}
+    <Box sx={navContainerStyle}>
+      <Container
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+        }}
+        component={'nav'}
       >
         <Stack direction={'row'} gap={'1.25rem'}>
           <Stack alignItems={'center'} justifyContent={'center'}>
@@ -201,8 +208,8 @@ const PcNav = () => {
             )}
           </Link>
         </Stack>
-      </Stack>
-    </Container>
+      </Container>
+    </Box>
   )
 }
 

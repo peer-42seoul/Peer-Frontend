@@ -220,7 +220,7 @@ const AlertIcon = () => {
             height: '100dvh',
             pt: 7,
             backgroundColor: 'background.primary',
-            overflowY: 'auto',
+            // overflowY: 'auto',
           }}
         >
           <Stack direction={'row'} mb={'0.25rem'}>
@@ -283,27 +283,29 @@ const AlertIcon = () => {
                 </Button>
               </Stack>
 
-              <Stack>
-                {alarms.length === 0 ? (
-                  <NoDataDolphin
-                    backgroundColor="transparent"
-                    message="알림이 없습니다."
-                  />
-                ) : (
-                  <>
-                    {alarms.map((item: IAlarm) => (
-                      <AlertCard
-                        key={'alarm' + item.notificationId}
-                        handleDelete={() => deleteAlarm(item.notificationId)}
-                        alert={item}
-                      />
-                    ))}
-                    <Box position={'relative'} ref={target} height={1}>
-                      {spinner && <CircularProgress />}
-                    </Box>
-                  </>
-                )}
-              </Stack>
+              <Box sx={{ overflowY: 'auto', height: '75svh' }}>
+                <Stack height={'fit-content'}>
+                  {alarms.length === 0 ? (
+                    <NoDataDolphin
+                      backgroundColor="transparent"
+                      message="알림이 없습니다."
+                    />
+                  ) : (
+                    <>
+                      {alarms.map((item: IAlarm) => (
+                        <AlertCard
+                          key={'alarm' + item.notificationId}
+                          handleDelete={() => deleteAlarm(item.notificationId)}
+                          alert={item}
+                        />
+                      ))}
+                      <Box position={'relative'} ref={target} height={1}>
+                        {spinner && <CircularProgress />}
+                      </Box>
+                    </>
+                  )}
+                </Stack>
+              </Box>
             </Stack>
           )}
         </Box>

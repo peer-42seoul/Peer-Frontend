@@ -11,4 +11,5 @@ export const mobilePage = {
 export const inputContainer = {
   background: (theme: Theme) => theme.palette.background.tertiary,
   padding: '0rem 0.75rem',
+  alignItems: 'center',
 }

@@ -45,12 +45,11 @@ const useAuthStore = create<IAuthStore>((set) => {
     },
     logout: (isRefreshing) => {
       if (authData.accessToken && !isRefreshing) {
-        axios
-          .get(`${API_URL}/api/v1/logout`, {
-            headers: {
-              Authorization: `Bearer ${authData.accessToken}`,
-            },
-          })
+        axios.get(`${API_URL}/api/v1/logout`, {
+          headers: {
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+        })
       }
       LocalStorage.removeItem('authData')
       set(() => ({

@@ -35,6 +35,7 @@ import SearchOptionPanel, {
 import SelectSort from '@/app/panel/main-page/SelectSort'
 import { getCookie } from 'cookies-next'
 import { io } from 'socket.io-client'
+import useMedia from '@/hook/useMedia'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -95,6 +96,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     undefined,
   )
   const [init, setInit] = useState<boolean>(true)
+  const { isTablet } = useMedia()
 
   useEffect(() => {
     if (keyword !== '') {
@@ -125,12 +127,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   }&tag=${detailOption.tag}`
 
   const isInit =
-    page == 1 &&
-    type === 'STUDY' &&
-    !sort &&
-    detailOption.isInit &&
-    keyword == '' &&
-    init
+    page == 1 && !sort && detailOption.isInit && keyword == '' && init
 
   const { data: favoriteData } = useSWR<IFavorite[]>(
     isInit && isLogin
@@ -208,6 +205,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   const handleType = useCallback(
     (value: ProjectType) => {
+      setInit(false)
       setType(value)
       //type이 변경될 경우 초기화
       setPage(1)
@@ -236,11 +234,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     setPage(1)
   }, [])
 
-  const noContent = error
-    ? '에러 발생'
-    : content?.length == 0
-      ? '데이터가 없습니다'
-      : null
+  const noContent = !isLoading
+    ? error
+      ? '에러 발생'
+      : content?.length == 0
+        ? '데이터가 없습니다'
+        : null
+    : null
 
   return (
     <>
@@ -251,7 +251,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           {keyword === '' ? (
             <>
               <MainBanner />
-
               <Box marginY={'0.5rem'}>
                 <SelectType type={type} setType={handleType} />
               </Box>
@@ -335,7 +334,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               {keyword === '' ? (
                 <>
                   <MainBanner />
-
                   <Stack direction={'row'} justifyContent={'space-between'}>
                     <SelectType type={type} setType={handleType} />
                     <Tutorial
@@ -403,11 +401,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 </>
               )}
             </Stack>
-            <Stack sx={sideMenuStyle}>
-              <MainProfile />
-              <MainShowcase />
-              <MainCarousel />
-            </Stack>
+            {!isTablet && (
+              <Stack sx={sideMenuStyle}>
+                <MainProfile />
+                <MainShowcase />
+                <MainCarousel />
+              </Stack>
+            )}
           </Stack>
         </Container>
       </div>

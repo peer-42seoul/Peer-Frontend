@@ -53,6 +53,7 @@ const useAlarmStorage = create<IStoreAlarmState>((set) => {
             set(() => ({ isNew: false }))
           }
         })
+        .catch(() => {})
     },
     checkNewAlarm: () => {
       set(() => ({ isNew: false }))
@@ -85,9 +86,7 @@ const useAlarmStorage = create<IStoreAlarmState>((set) => {
             set((state) => ({ alarms: state.alarms }))
           }
         })
-        .catch((err) => {
-          console.error(err)
-        })
+        .catch(() => {})
     },
     deleteAlarm: (id: number) => {
       axios
@@ -106,6 +105,7 @@ const useAlarmStorage = create<IStoreAlarmState>((set) => {
             }))
           }
         })
+        .catch(() => {})
     },
     deleteAllAlarms: (tabvalue) => {
       const type =
@@ -129,6 +129,7 @@ const useAlarmStorage = create<IStoreAlarmState>((set) => {
             set(() => ({ alarms: [] }))
           }
         })
+        .catch(() => {})
     },
   }
 })

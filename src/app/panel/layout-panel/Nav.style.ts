@@ -7,7 +7,7 @@ export const navContainerStyle = {
   overflow: 'hidden',
   zIndex: 1300,
   backgroundColor: 'background.primary',
-  flexDirection: 'column',
+  flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
   width: '100%',

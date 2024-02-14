@@ -26,7 +26,7 @@ const TeamsLayout = ({ children }: { children: ReactNode }) => {
         sx={style.stack}
       >
         <Sidebar />
-        <Stack>
+        <Stack sx={style.contentBox}>
           <Stack direction={'row'}>
             <Typography fontWeight={'bold'} my={'1rem'}>
               {showTeams === TeamStatus.RECRUITING
@@ -42,7 +42,9 @@ const TeamsLayout = ({ children }: { children: ReactNode }) => {
               content={<TeamListTutorial />}
             />
           </Stack>
-          <Box sx={style.contentBox}>{children}</Box>
+          <Box key={showTeams} className="layout-container">
+            {children}
+          </Box>
         </Stack>
       </Stack>
     </Container>

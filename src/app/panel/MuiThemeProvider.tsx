@@ -519,6 +519,7 @@ const MuiThemeProvider = ({ children }: { children: React.ReactNode }) => {
             padding: '0px',
             borderRadius: '4px',
             height: 'auto',
+            minHeight: '32px',
             backgroundColor: theme.palette.background.tertiary,
             color: theme.palette.text.normal,
             lineHeight: '150%',

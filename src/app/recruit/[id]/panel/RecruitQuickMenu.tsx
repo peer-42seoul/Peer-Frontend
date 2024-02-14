@@ -20,12 +20,14 @@ const RecruitQuickMenu = ({
   title,
   content,
   me,
+  status,
 }: {
   favorite: boolean | undefined
   recruit_id: number
   title: string
   content: string
   me?: boolean
+  status: string
 }) => {
   const path = usePathname()
   const type = useSearchParams().get('type')
@@ -92,6 +94,7 @@ const RecruitQuickMenu = ({
               action={() => router.push(`/recruit/${recruit_id}/edit`)}
               icon={<WriteIcon sx={style.recruitMenuIcon} />}
               text={'수정'}
+              disabled={status === 'DONE'}
             />
           )}
           {me && (

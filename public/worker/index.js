@@ -43,7 +43,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title
   const notificationOptions = {
     body: payload.notification.body,
-    icon: '/images/icons/icon-192x192.png',
+    icon: '/icons/ios/192.png',
     link: '/', // 추후 변경
   }
 
