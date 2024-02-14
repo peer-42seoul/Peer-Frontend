@@ -44,6 +44,7 @@ function formatDate(dateStr: string | null) {
 
 const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
   const { setAnnounceDetail } = useAboutLayout()
+
   return (
     <CardActions
       sx={{
@@ -88,7 +89,7 @@ const AnnouncePage = () => {
   if (error) return <NoDataDolphin message="문제가 있나봐요 ㅠㅠ" />
 
   return (
-    <Card sx={{ padding: '2rem', backgroundColor: 'background.secondary' }}>
+    <Card sx={{ padding: '2rem', backgroundColor: 'background.primary' }}>
       <Stack>
         <Typography variant="Title2">공지사항</Typography>
       </Stack>

@@ -8,9 +8,11 @@ export interface CommentProps {
 }
 export interface IComment {
   authorImage: string
+  authorId: number
   authorNickname: string
   commentId: number
   content: string
   createAt: string
   isAuthor: boolean
+  id: number
 }

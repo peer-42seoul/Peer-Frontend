@@ -5,7 +5,7 @@ const SelectType = ({
   type,
   setType,
 }: {
-  type: ProjectType | undefined
+  type: ProjectType
   setType: (value: ProjectType) => void
 }) => {
   {
@@ -14,7 +14,7 @@ const SelectType = ({
   return (
     <Stack flexDirection={'row'} gap={'0.75rem'} alignItems={'center'}>
       <Typography
-        color={!type || type === 'STUDY' ? 'text.strong' : 'text.assistive'}
+        color={type === 'STUDY' ? 'text.strong' : 'text.assistive'}
         variant={'Title1'}
         onClick={() => {
           setType('STUDY')

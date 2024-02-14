@@ -33,6 +33,7 @@ const EmailField = ({
         inputProps={{
           maxLength: 30,
         }}
+        sx={{ width: '100%' }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

@@ -1,11 +1,11 @@
 import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
+import FieldWithLabel from '@/components/FieldWithLabel'
 import SkillAutocomplete from '@/components/SkillAutocomplete'
 import Tutorial from '@/components/Tutorial'
 import { SkillsTutorial } from '@/components/tutorialContent/SkillsTutorial'
 import useToast from '@/states/useToast'
 import { ISkill } from '@/types/IUserProfile'
-import { Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
 const SkillsEditor = ({
@@ -65,22 +65,19 @@ const SkillsEditor = ({
         onClick: handleCancelClose,
       }}
     >
-      <>
-        <Stack direction={'column'} spacing={'1rem'} height={[1, undefined]}>
-          <Stack direction={'row'} spacing={'0.25rem'}>
-            <Typography variant={'CaptionEmphasis'} color={'text.strong'}>
-              나의 스킬
-            </Typography>
-            <Tutorial title="스킬 추가 방법" content={<SkillsTutorial />} />
-          </Stack>
-          <SkillAutocomplete
-            skillList={selected}
-            setSkillList={setSelected}
-            type="SKILL"
-            placeholder="스킬을 입력해주세요"
-          />
-        </Stack>
-      </>
+      <FieldWithLabel
+        label={'나의 스킬'}
+        endIconButton={
+          <Tutorial title="스킬 추가 방법" content={<SkillsTutorial />} />
+        }
+      >
+        <SkillAutocomplete
+          skillList={selected}
+          setSkillList={setSelected}
+          type="SKILL"
+          placeholder="스킬을 입력해주세요"
+        />
+      </FieldWithLabel>
     </CuModal>
   )
 }

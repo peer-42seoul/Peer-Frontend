@@ -64,7 +64,7 @@ const ApplyDrawerButton = ({
         }}
       >
         <Typography variant={'Body1'} color={'white'}>
-          지원하기
+          {disabled ? '마감' : '지원하기'}
         </Typography>
       </Button>
     </>

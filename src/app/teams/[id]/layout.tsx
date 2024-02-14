@@ -1,11 +1,11 @@
 'use client'
 
 import { ReactNode, useEffect } from 'react'
-import { Stack, Container, Box } from '@mui/material'
+import { Stack, Container, Box, useMediaQuery } from '@mui/material'
 import useTeamPageState from '@/states/useTeamPageState'
-
 import TeamSidebar from './panel/NavBar'
-import * as style from './layout.style'
+import * as style from '@/components/NavBarLayout.style'
+import useMedia from '@/hook/useMedia'
 
 const TeamLayout = ({
   params,
@@ -18,20 +18,40 @@ const TeamLayout = ({
   const id = params.id
 
   useEffect(() => {
+    resetState()
     return () => {
       resetState()
     }
   }, [])
 
+  const isFourRow = useMediaQuery('(min-width:997px)')
+  const { isPc } = useMedia()
+
+  if (layout === 'FULLPAGE') {
+    return (
+      <Container sx={style.container}>
+        <Box sx={style.fullPageContentBox}>{children}</Box>
+      </Container>
+    )
+  }
+
   return (
     <Container sx={style.container}>
       <Stack
         justifyContent={'space-between'}
-        direction={['column', 'row']}
+        direction={isFourRow ? 'row' : 'column'}
+        alignItems={isFourRow ? 'flex-start' : 'center'}
         sx={style.stack}
       >
-        {layout === 'SIDEBAR' && <TeamSidebar id={id} />}
-        <Box sx={style.contentBox}>{children}</Box>
+        <TeamSidebar id={id} />
+        <Box
+          sx={{
+            ...style.contentBox,
+            width: isFourRow ? undefined : isPc ? '70%' : '100%',
+          }}
+        >
+          {children}
+        </Box>
       </Stack>
     </Container>
   )

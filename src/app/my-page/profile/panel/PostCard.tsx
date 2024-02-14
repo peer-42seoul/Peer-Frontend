@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardMedia,
   Stack,
   SxProps,
   Typography,
@@ -16,6 +15,7 @@ import CuAvatar from '@/components/CuAvatar'
 import * as style from './PostCard.style'
 import { useRouter } from 'next/navigation'
 import SplitButton from '@/components/SplitButton'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 interface IPostCard {
   teamLogo: string // 팀 로고
@@ -76,15 +76,18 @@ function PostCard({
       }}
       onClick={gotoTeamPage}
     >
-      <CardMedia
-        component="img"
-        image={image}
-        alt="post thumbnail"
+      <CardContent
         sx={{
           ...style.cardMediaStyleBase,
           height: '10rem',
         }}
-      />
+      >
+        <CuPhotoBox
+          src={image}
+          alt="post thumbnail"
+          style={{ width: '100%', height: '100%' }}
+        />
+      </CardContent>
       <Stack
         sx={{
           p: '1rem',

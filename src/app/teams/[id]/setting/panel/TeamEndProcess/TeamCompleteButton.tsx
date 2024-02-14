@@ -23,7 +23,6 @@ const TeamCompleteButton = ({
   const axiosWithAuth = useAxiosWithAuth()
 
   const finishTeam = () => {
-    console.log('exit team')
     axiosWithAuth
       .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/complete`, {
         teamId: teamId,
@@ -96,7 +95,7 @@ const TeamCompleteButton = ({
           variant="contained"
           onClick={openModal}
         >
-          <Typography variant="Body2">완료하기</Typography>
+          <Typography variant="Body2" color="#ffffff">완료하기</Typography>
         </Button>
       </Stack>
 

@@ -14,6 +14,7 @@ import FieldWithLabel from '@/components/FieldWithLabel'
 import { CloseIcon, PlusIcon, UserCheckIcon } from '@/icons'
 import * as style from '../../page.style'
 import { IconButton } from '@mui/material'
+import useToast from '@/states/useToast'
 
 // 해당 컴포넌트는 react-hook-form에 최적화되어있습니다.
 const SetTeamRole = ({
@@ -33,11 +34,28 @@ const SetTeamRole = ({
 
   const { errors } = useFormState({ control, name: 'roleList' })
 
-  const handlePrepend = () => {
-    prepend({ name: '', number: 1 })
+  const { openToast, closeToast } = useToast()
+
+  const handlePrepend = (event: React.MouseEvent) => {
+    event.stopPropagation()
+    closeToast()
+    if (fields.length >= 10) {
+      return openToast({
+        message: '최대 10개의 역할까지 모집 가능해요.',
+        severity: 'error',
+      })
+    }
+    prepend({ name: '', number: 0 })
   }
 
   const handleRemove = (index: number) => {
+    closeToast()
+    if (fields.length <= 1) {
+      return openToast({
+        message: '최소 1개의 역할은 입력해주세요.',
+        severity: 'error',
+      })
+    }
     remove(index)
   }
 
@@ -111,7 +129,6 @@ const SetTeamRole = ({
                 <IconButton
                   onClick={() => handleRemove(index)}
                   sx={{ height: '1.5rem' }}
-                  disabled={fields.length === 1}
                 >
                   <CloseIcon
                     sx={{ ...style.iconStyleBase, color: 'text.alternative' }}

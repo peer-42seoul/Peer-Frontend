@@ -6,14 +6,17 @@ import { UseFormSetValue } from 'react-hook-form'
 import { ISetupTeam } from '../SettingTeamInfo'
 import { ChangeEvent, useState } from 'react'
 import ClearIcon from '@mui/icons-material/Clear'
+import { TeamStatus } from '@/app/teams/types/types'
 
 interface ISettingTeamLogo {
+  teamStatus: TeamStatus
   teamLogoImage: string
   setValue: UseFormSetValue<ISetupTeam>
   setIsLogoEdit: (isLogoEdit: boolean) => void
 }
 
 const SettingTeamLogo = ({
+  teamStatus,
   teamLogoImage,
   setValue,
   setIsLogoEdit,
@@ -53,10 +56,15 @@ const SettingTeamLogo = ({
           height={['100%', '10rem']}
           sx={{ position: 'relative' }}
         >
-          <IconButton sx={styles.closeButtonStyle} onClick={openModal}>
+          <IconButton
+            sx={styles.closeButtonStyle}
+            disabled={teamStatus === TeamStatus.COMPLETE}
+            onClick={openModal}
+          >
             <ClearIcon />
           </IconButton>
           <Button
+            disabled={teamStatus === TeamStatus.COMPLETE}
             component="label"
             sx={{ position: 'relative', width: '100%', height: '100%' }}
           >
@@ -67,6 +75,7 @@ const SettingTeamLogo = ({
               sx={{ width: '8rem', height: '8rem' }}
             />
             <input
+              disabled={teamStatus === TeamStatus.COMPLETE}
               type="file"
               accept={'image/*'}
               style={{ display: 'none' }}

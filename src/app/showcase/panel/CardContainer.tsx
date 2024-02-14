@@ -12,10 +12,12 @@ const CardContainer = ({
   cardList,
   removeCard,
   message,
+  addCard,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
   message: string
+  addCard?: () => void
 }) => {
   const { isPc } = useMedia()
   return (
@@ -51,7 +53,11 @@ const CardContainer = ({
         }}
       >
         {!message ? (
-          <CardStack cardList={cardList} removeCard={removeCard} />
+          <CardStack
+            cardList={cardList}
+            removeCard={removeCard}
+            addCard={addCard}
+          />
         ) : (
           <Typography variant="CaptionEmphasis">{message}</Typography>
         )}

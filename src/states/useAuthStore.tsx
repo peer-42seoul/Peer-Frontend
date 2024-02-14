@@ -1,14 +1,13 @@
 import { create } from 'zustand'
 import LocalStorage from './localStorage'
 import axios from 'axios'
-import { setCookie } from 'cookies-next'
 import useNicknameStore from './useNicknameStore'
 
 interface IAuthStore {
   isLogin: boolean
   accessToken: string | null
   login: (accessToken: string) => void
-  logout: () => void
+  logout: (isRefreshing?: boolean) => void
 }
 
 const useAuthStore = create<IAuthStore>((set) => {
@@ -25,7 +24,6 @@ const useAuthStore = create<IAuthStore>((set) => {
     login: (accessToken) => {
       const authDataToSave = { accessToken }
       LocalStorage.setItem('authData', JSON.stringify(authDataToSave))
-      setCookie('accessToken', accessToken)
       axios
         .get(`${API_URL}/api/v1/profile`, {
           headers: {
@@ -36,19 +34,26 @@ const useAuthStore = create<IAuthStore>((set) => {
           const nickname = res.data.nickname
           useNicknameStore.getState().setNickname(nickname)
         })
+        .catch((err) => {
+          console.error(err)
+        })
       // set state
       set(() => ({
         isLogin: true,
         accessToken,
       }))
     },
-    logout: () => {
-      if (authData.accessToken) {
-        axios.get(`${API_URL}/api/v1/logout`, {
-          headers: {
-            Authorization: `Bearer ${authData.accessToken}`,
-          },
-        })
+    logout: (isRefreshing) => {
+      if (authData.accessToken && isRefreshing === undefined) {
+        axios
+          .get(`${API_URL}/api/v1/logout`, {
+            headers: {
+              Authorization: `Bearer ${authData.accessToken}`,
+            },
+          })
+          .catch(() => {
+            // console.log('만료된 토큰') -- do nothing
+          })
       }
       LocalStorage.removeItem('authData')
       set(() => ({

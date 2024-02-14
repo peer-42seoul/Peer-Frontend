@@ -253,7 +253,7 @@ const ShowcaseCard = ({
     >
       <PostCard
         postId={data.id}
-        authorImage={data.image}
+        authorImage={data.teamLogo}
         title={data.name}
         teamName={data.name}
         tagList={data.skill}

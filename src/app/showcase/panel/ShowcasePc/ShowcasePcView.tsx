@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Avatar,
   Button,
   Card,
   CardActions,
@@ -23,6 +22,7 @@ import NoDataDolphin from '@/components/NoDataDolphin'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
+import CuAvatar from '@/components/CuAvatar'
 
 function leftPad(value: number) {
   if (value >= 10) {
@@ -128,8 +128,8 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                   justifyContent={'space-between'}
                 >
                   <Stack direction={'row'} spacing={'0.5rem'}>
-                    <Avatar
-                      src={data.teamLogo!}
+                    <CuAvatar
+                      src={data.teamLogo ?? undefined}
                       sx={{ width: '1.5rem', height: '1.5rem' }}
                     />
                     <Typography color={'text.alternative'} width={'11rem'}>
@@ -258,7 +258,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                     <Stack direction={'row'} spacing={'0.5rem'}>
                       <TagIcon />
                       <Typography color={'text.alternative'}>
-                        기술스택
+                        관련 태그
                       </Typography>
 
                       {data.skill.map((skill, index) => (

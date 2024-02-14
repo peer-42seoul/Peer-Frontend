@@ -10,6 +10,8 @@ import ArrowUp from '@/icons/ArrowUp'
 import * as style from './hitchhiking.style'
 import ArrowDown from '@/icons/ArrowDown'
 import useAxiosWithAuth from '@/api/config'
+import { getUniqueArray } from '@/utils/getUniqueArray'
+import useToast from '@/states/useToast'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
@@ -18,6 +20,8 @@ const Hitchhiking = () => {
   const [draggedCardList, setDraggedCardList] = useState<
     IPostCardHitchhiking[]
   >([])
+
+  const { openToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -44,27 +48,43 @@ const Hitchhiking = () => {
     if (!isLoading && data?.content) {
       setCardList((prev) => {
         const newArray = [...data.content].reverse().concat(prev)
-        return newArray
+        return getUniqueArray(newArray, 'recruitId')
       })
     }
   }, [isLoading, data?.content])
 
   const removeCard = (recruitId: number) => {
-    setDraggedCardList((prev: IPostCardHitchhiking[]) => {
-      prev.push(cardList[cardList.length - 1])
-      return prev
-    })
-    setCardList((prev: IPostCardHitchhiking[]) => {
-      return prev.filter((card) => card.recruitId !== recruitId)
-    })
+    if (cardList.length > 1) {
+      setDraggedCardList((prev: IPostCardHitchhiking[]) => {
+        prev.push(cardList[cardList.length - 1])
+        return prev
+      })
+      draggedCardList[draggedCardList.length - 1].hasBeenRemoved = true
+      setCardList((prev: IPostCardHitchhiking[]) => {
+        return prev.filter((card) => card.recruitId !== recruitId)
+      })
+    } else if (cardList.length === 1) {
+      openToast({
+        message: '넘길 수 있는 마지막 카드예요.',
+        severity: 'info',
+      })
+    }
     if (cardList.length === 2) {
       setPage((prev) => (!data?.last ? prev + 1 : prev))
     }
   }
 
   const addCard = () => {
+    if (draggedCardList.length === 0) {
+      openToast({
+        message: '되돌아 갈 수 있는 마지막 카드예요.',
+        severity: 'info',
+      })
+      return
+    }
     setCardList((prev: IPostCardHitchhiking[]) => {
       prev.push(draggedCardList[draggedCardList.length - 1])
+      if (cardList.length > 1) prev[prev.length - 2].hasBeenRemoved = false
       return prev
     })
     setDraggedCardList((prev: IPostCardHitchhiking[]) => {

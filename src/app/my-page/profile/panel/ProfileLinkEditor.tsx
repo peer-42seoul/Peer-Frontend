@@ -1,10 +1,9 @@
 import React from 'react'
 import { IUserProfileLink, IUserProfileLinkField } from '@/types/IUserProfile'
 import { useFieldArray, useForm } from 'react-hook-form'
-import CuTextFieldLabel from '@/components/CuTextFieldLabel'
 import useAxiosWithAuth from '@/api/config'
 import CuModal from '@/components/CuModal'
-import { Stack, Typography } from '@mui/material'
+import { InputLabel, Stack, Typography } from '@mui/material'
 import useMedia from '@/hook/useMedia'
 import * as style from './Profile.style'
 import useToast from '@/states/useToast'
@@ -169,54 +168,56 @@ const ProfileLinkEditor = ({
         <Stack direction={'column'} spacing={'1rem'}>
           {fields.map((field, index) => {
             return (
-              <Stack direction={'column'} spacing={'1rem'} key={field.id}>
-                <CuTextFieldLabel htmlFor={`linkList.${index}.linkName`}>
-                  <Typography variant="CaptionEmphasis">
-                    {`링크 ${index + 1}`}
-                  </Typography>
-                </CuTextFieldLabel>
-                <Stack direction={'column'} spacing={'0.5rem'}>
-                  <ControlledTextfield
-                    control={control}
-                    name={`linkList.${index}.linkName`}
-                    rules={{
-                      validate: isLinkNameValid(index),
-                    }}
-                    error={!!errors?.linkList?.[index]?.linkName}
-                    helperText={
-                      <Typography variant="Caption" color={'error'}>
-                        {errors?.linkList?.[index]?.linkName?.message}
-                      </Typography>
-                    }
-                    onBlur={() => isLinkUrlRequired(index, field.linkName)}
-                    placeholder="링크 제목을 입력해주세요."
-                  />
-                  <ControlledTextfield
-                    control={control}
-                    name={`linkList.${index}.linkUrl`}
-                    rules={{
-                      validate: {
-                        pattern: (value) => {
-                          return (
-                            regex.test(value) ||
-                            !value ||
-                            '유효한 url을 입력하세요.'
-                          )
+              <fieldset key={field.id}>
+                <Stack direction={'column'} spacing={'1rem'}>
+                  <InputLabel component={'legend'}>
+                    <Typography variant="CaptionEmphasis">
+                      {`링크 ${index + 1}`}
+                    </Typography>
+                  </InputLabel>
+                  <Stack direction={'column'} spacing={'0.5rem'}>
+                    <ControlledTextfield
+                      control={control}
+                      name={`linkList.${index}.linkName`}
+                      rules={{
+                        validate: isLinkNameValid(index),
+                      }}
+                      error={!!errors?.linkList?.[index]?.linkName}
+                      helperText={
+                        <Typography variant="Caption" color={'error'}>
+                          {errors?.linkList?.[index]?.linkName?.message}
+                        </Typography>
+                      }
+                      onBlur={() => isLinkUrlRequired(index, field.linkName)}
+                      placeholder="링크 제목을 입력해주세요."
+                    />
+                    <ControlledTextfield
+                      control={control}
+                      name={`linkList.${index}.linkUrl`}
+                      rules={{
+                        validate: {
+                          pattern: (value) => {
+                            return (
+                              regex.test(value) ||
+                              !value ||
+                              '유효한 url을 입력하세요.'
+                            )
+                          },
+                          validate: isLinkUrlValid(index),
                         },
-                        validate: isLinkUrlValid(index),
-                      },
-                    }}
-                    error={!!errors?.linkList?.[index]?.linkUrl}
-                    helperText={
-                      <Typography variant="Caption" color={'error'}>
-                        {errors?.linkList?.[index]?.linkUrl?.message}
-                      </Typography>
-                    }
-                    onBlur={() => isLinkNameRequired(index, field.linkUrl)}
-                    placeholder="링크 주소(URL)를 입력해주세요."
-                  />
+                      }}
+                      error={!!errors?.linkList?.[index]?.linkUrl}
+                      helperText={
+                        <Typography variant="Caption" color={'error'}>
+                          {errors?.linkList?.[index]?.linkUrl?.message}
+                        </Typography>
+                      }
+                      onBlur={() => isLinkNameRequired(index, field.linkUrl)}
+                      placeholder="링크 주소(URL)를 입력해주세요."
+                    />
+                  </Stack>
                 </Stack>
-              </Stack>
+              </fieldset>
             )
           })}
         </Stack>

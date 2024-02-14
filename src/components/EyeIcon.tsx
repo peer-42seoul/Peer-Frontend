@@ -18,6 +18,7 @@ const EyeIcon = ({
         onClick={() => {
           setShowPassword(showPassword === 'password' ? 'text' : 'password')
         }}
+        sx={{ paddingY: 0 }}
       >
         {showPassword === 'password' ? (
           <VisibilityIcon sx={{ color: 'text.alternative' }} />

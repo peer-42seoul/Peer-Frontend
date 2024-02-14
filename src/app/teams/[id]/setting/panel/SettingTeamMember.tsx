@@ -1,31 +1,29 @@
 import {
   Avatar,
   Box,
+  Button,
   // FormControl,
   Grid,
-
   // NativeSelect,
   Stack,
   Switch,
   Theme,
   Typography,
 } from '@mui/material'
-import { IMember, Job, TeamGrant, TeamStatus } from '../../../types/types'
+import { IMember, TeamGrant, TeamStatus } from '../../../types/types'
 import useModal from '@/hook/useModal'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useMedia from '@/hook/useMedia'
 import useAxiosWithAuth from '@/api/config'
 import OthersProfile from '@/app/panel/OthersProfile'
-import { IMyInfo } from '../page'
-import CloseButton from '@/components/CloseButton'
 import useToast from '@/states/useToast'
 import CuTextModal from '@/components/CuTextModal'
+import CloseIcon from '@mui/icons-material/Close'
+import useNicknameStore from '@/states/useNicknameStore'
 
 interface ISetupMember {
   team: IMember[]
   teamId: string
-  jobs: Job[]
-  myInfo?: IMyInfo
   teamStatus: TeamStatus
 }
 
@@ -52,14 +50,8 @@ interface ISetupMember {
 //   )
 // }
 
-const SettingTeamMember = ({
-  team,
-  teamId,
-  jobs,
-  myInfo,
-  teamStatus,
-}: ISetupMember) => {
-  const { isPc } = useMedia()
+const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
+  const { isPc, isTablet } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   // const {
   //   isOpen: isChangeOpen,
@@ -73,6 +65,7 @@ const SettingTeamMember = ({
   const axiosWithAuth = useAxiosWithAuth()
   const [canChangeLeader, setCanChangeLeader] = useState(false)
   const { openToast } = useToast()
+  const { nickname } = useNicknameStore()
 
   // const changeJob = () => {
   //   axiosWithAuth.put(
@@ -82,82 +75,77 @@ const SettingTeamMember = ({
   // }
 
   useEffect(() => {
-    if (team.length > 2) {
+    setMembers(team)
+    if (team.length > 1) {
       setCanChangeLeader(true)
     }
+  }, [team])
 
-    // setJob(jobs)
-    // if (selectedJobs.length > 0) {
-    //   changeJob()
-    // }
-  }, [jobs, myInfo])
-
-  const handleGrant = (member: IMember) => {
-    console.log('리더 권한 변경')
-    if (member.role === TeamGrant.LEADER) {
-      axiosWithAuth
-        .post(
-          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            setMembers(
-              members.map((m) =>
-                m.id === member.id ? { ...m, grant: TeamGrant.MEMBER } : m,
-              ),
-            )
-            openToast({
-              severity: 'success',
-              message: '리더 권한이 박탈되었습니다.',
-            })
-          } else {
+  const handleGrant = useCallback(
+    (member: IMember) => {
+      if (member.role === TeamGrant.LEADER) {
+        axiosWithAuth
+          .post(
+            `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=member`,
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              const changedMembers = members.map((m) =>
+                m.id === member.id ? { ...m, role: TeamGrant.MEMBER } : m,
+              )
+              setMembers(changedMembers)
+              openToast({
+                severity: 'success',
+                message: '리더 권한이 박탈되었습니다.',
+              })
+            }
+          })
+          .catch(() => {
             openToast({
               severity: 'error',
               message: '리더 권한 부여에 실패했습니다.',
             })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    } else {
-      axiosWithAuth
-        .post(
-          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            setMembers(
-              members.map((m) =>
-                m.id === member.id ? { ...m, grant: TeamGrant.LEADER } : m,
-              ),
-            )
-            openToast({
-              severity: 'success',
-              message: '리더 권한이 부여되었습니다.',
-            })
-          } else {
+          })
+      } else {
+        axiosWithAuth
+          .post(
+            `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/grant/${teamId}?userId=${member.id}&role=leader`,
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              const changedMembers = members.map((m) =>
+                m.id === member.id ? { ...m, role: TeamGrant.LEADER } : m,
+              )
+              setMembers(changedMembers)
+
+              openToast({
+                severity: 'success',
+                message: '리더 권한이 부여되었습니다.',
+              })
+            }
+          })
+          .catch(() => {
             openToast({
               severity: 'error',
               message: '리더 권한 부여에 실패했습니다.',
             })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-  }
+          })
+      }
+    },
+    [members, setMembers],
+  )
 
   const handleOpenDelete = (member: IMember) => {
-    console.log('팀원 삭제 모달 오픈')
     setMember(member)
     openModal()
   }
 
   const handleDelete = () => {
-    console.log('팀원 삭제')
-    if (!member) return console.log('팀원이 없습니다.')
+    if (!member)
+      return openToast({
+        severity: 'error',
+        message: '팀원이 없습니다.',
+      })
     axiosWithAuth
       .delete(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/delete/${teamId}?userId=${member.id}`,
@@ -169,23 +157,20 @@ const SettingTeamMember = ({
             severity: 'success',
             message: '팀원이 삭제되었습니다.',
           })
-          window.location.reload()
         } else if (res.status === 403) {
           openToast({
             severity: 'error',
             message: '자기 자신은 삭제시킬 수 없습니다.',
           })
-        } else {
-          openToast({
-            severity: 'error',
-            message: '팀원 삭제에 실패했습니다.',
-          })
         }
 
         closeModal()
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        openToast({
+          severity: 'error',
+          message: '팀원 삭제에 실패했습니다.',
+        })
 
         closeModal()
       })
@@ -237,7 +222,7 @@ const SettingTeamMember = ({
               component="div"
               key={index}
               item
-              xs={isPc ? 3 : 6}
+              xs={isPc && !isTablet ? 3 : 6}
               textAlign="center"
             >
               <Box
@@ -252,24 +237,43 @@ const SettingTeamMember = ({
               >
                 {/** TODO: 내가 누구인지를 알게 서버에서 받아야 함**/}
 
-                <CloseButton
-                  action={() => handleOpenDelete(member)}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    padding: 0,
-                    minWidth: 0.2,
-                  }}
-                />
+                {nickname !== member.name && (
+                  <Button
+                    disabled={teamStatus === TeamStatus.COMPLETE}
+                    onClick={() => handleOpenDelete(member)}
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      padding: 0,
+                      minWidth: 0.2,
+                    }}
+                  >
+                    <CloseIcon />
+                  </Button>
+                )}
 
                 <OthersProfile name={member.name} userId={member.id}>
                   <Avatar src={member.image} sx={{ margin: 'auto' }} />
                 </OthersProfile>
-                <Typography fontWeight="bold">{member.name}</Typography>
+                <Typography
+                  fontWeight="bold"
+                  sx={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 1,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {member.name}
+                </Typography>
                 <Stack direction="row" sx={{ justifyContent: 'center' }}>
                   {canChangeLeader ? (
-                    <>
+                    <Stack
+                      direction={isPc && !isTablet ? 'row' : 'column'}
+                      alignItems={'center'}
+                    >
                       <Typography variant="Body2">리더 권한</Typography>
                       <Switch
                         disabled={
@@ -281,7 +285,7 @@ const SettingTeamMember = ({
                           member.role === TeamGrant.LEADER ? true : false
                         }
                       />
-                    </>
+                    </Stack>
                   ) : (
                     <br />
                   )}

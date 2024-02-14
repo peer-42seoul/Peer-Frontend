@@ -54,7 +54,6 @@ const WidgetUpdate = ({
       setModalOpen(false)
       setEdit(false)
     } catch (e) {
-      console.log('e', e)
       alert('저장에 실패하였습니다.')
     }
   }, [teamId, layouts, isCreate, axiosInstance, setEdit])
@@ -74,7 +73,7 @@ const WidgetUpdate = ({
           text: '취소',
           onClick: () => setModalOpen(false),
         }}
-        content={'팀 페이지를 저장하시겠습니까?'}
+        content={'팀페이지를 저장하시겠습니까?'}
       />
       <BrowserView>
         {/* 팀페이지 수정 버튼 */}

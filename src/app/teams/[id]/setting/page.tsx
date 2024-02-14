@@ -8,13 +8,15 @@ import SetupMember from './panel/SettingTeamMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
-import { ITeam, TeamStatus, TeamType } from '../../types/types'
+import { ITeam, TeamStatus } from '../../types/types'
+// import { ITeam, TeamStatus, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectRecruitPage'
-import TeamJobAdd from './panel/SettingTeamJobs'
+// import TeamJobAdd from './panel/SettingTeamJobs'
 import SetupInfo from './panel/SettingTeamInfo'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import Tutorial from '@/components/Tutorial'
 import TeamMemberTutorial from '@/components/tutorialContent/TeamMemberTutorial'
+import { socket } from '@/app/panel/MainPage'
 
 export interface IMyInfo {
   userId: string
@@ -26,7 +28,6 @@ export interface IMyInfo {
 const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const axiosWithAuth = useAxiosWithAuth()
   const [showApplicant, setShowApplicant] = useState<boolean>(false)
-  // const [myInfo, setMyInfo] = useState<IMyInfo>()
   const { data, error, isLoading, mutate } = useSWR<ITeam>(
     `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/${params.id}`,
     (url: string) => axiosWithAuth(url).then((res) => res.data),
@@ -43,25 +44,27 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
 
-  // useEffect(() => {
-  //   if (!socket) return
+  useEffect(() => {
+    if (!socket) return
 
-  //   socket.emit(
-  //     'whoAmI',
-  //     {
-  //       teamId: params.id,
-  //       teamName: data?.team.name,
-  //     },
-  //     (data: any) => {
-  //       setMyInfo(data)
-  //     },
-  //   )
+    console.log('socket', socket.connected, socket.id)
 
-  //   return () => {
-  //     if (!socket) return
-  //     socket.off('whoAmI')
-  //   }
-  // }, [setMyInfo, socket])
+    socket.emit(
+      'whoAmI',
+      {
+        teamId: params.id,
+        teamName: data?.team.name,
+      },
+      (data: any) => {
+        console.log('whoAmI', data)
+      },
+    )
+
+    return () => {
+      if (!socket) return
+      socket.off('whoAmI')
+    }
+  }, [])
 
   if (error) {
     if (isAxiosError(error) && error.response?.status === 403) {
@@ -88,13 +91,13 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         <>
           <RedirectionRecruit id={params.id} data={teams} />
           <SetupInfo team={teams.team} mutate={mutate} />
-          {teams.team.type === TeamType.PROJECT && (
+          {/* {teams.team.type === TeamType.PROJECT && (
             <TeamJobAdd
               teamId={params.id}
               jobList={teams.job.filter((job) => job.name != 'Leader')}
               teamStatus={teams.team.status}
             />
-          )}
+          )} */}
           {!showApplicant ? (
             <Card
               sx={{
@@ -113,7 +116,10 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
               >
                 <Stack direction={'row'} display={'flex'} alignItems={'center'}>
                   <Typography fontWeight="bold">팀원 목록</Typography>
-                  <Tutorial content={<TeamMemberTutorial />} />
+                  <Tutorial
+                    title={'팀원 목록'}
+                    content={<TeamMemberTutorial />}
+                  />
                 </Stack>
                 <Button
                   disabled={
@@ -132,11 +138,14 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 teamStatus={teams.team.status}
                 team={teams.member}
                 teamId={teams.team.id}
-                jobs={teams.job}
               />
             </Card>
           ) : (
-            <ApplicantList close={closeApplicant} teamId={teams.team.id} />
+            <ApplicantList
+              mutate={mutate}
+              close={closeApplicant}
+              teamId={teams.team.id}
+            />
           )}
         </>
       ) : (

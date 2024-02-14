@@ -20,7 +20,7 @@ const FloatEditButton = () => {
         >
           <WriteIcon
             sx={{
-              color: 'text.normal',
+              color: '#ffffff',
             }}
           />
         </Stack>

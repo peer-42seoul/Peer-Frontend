@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import Favorite from '@mui/icons-material/Favorite'
 import { motion, useAnimationControls } from 'framer-motion'
+import useToast from '@/states/useToast'
 
 const Interest = ({ id }: { id?: number }) => {
   const [favorite, setFavorite] = useState(false)
   const axiosInstance = useAxiosWithAuth()
   const control = useAnimationControls()
+  const { openToast } = useToast()
 
   const variants = {
     favorite: {
@@ -30,7 +32,10 @@ const Interest = ({ id }: { id?: number }) => {
         return !prev
       })
     } catch (e) {
-      console.log('error', e)
+      openToast({
+        severity: 'error',
+        message: '관심 등록에 실패했습니다.',
+      })
       // TODO: error handling
     }
   }

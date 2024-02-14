@@ -22,7 +22,6 @@ const LinkForm = ({
   changeLinkName,
   changeUrl,
 }: ILinkFormProps) => {
-  console.log('컨버팅 이전 ', links)
   return (
     <Stack width={'100%'} spacing={'0.5rem'}>
       <Stack

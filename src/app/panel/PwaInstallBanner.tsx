@@ -25,7 +25,6 @@ const PwaInstallBanner = () => {
       deferredPrompt.prompt()
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt')
           setIsShowInstall(false)
           localStorage.setItem('isShowInstall', 'false')
         } else {
@@ -33,7 +32,10 @@ const PwaInstallBanner = () => {
         }
       })
     } else {
-      console.log('not install')
+      console.log(
+        '[Error] PWA install banner is not working. Maybe already installed?',
+      )
+      setIsShowInstall(false)
     }
   }
 
@@ -81,10 +83,14 @@ const PwaInstallBanner = () => {
       <>
         {isShowInstall && (
           <Box
-            position={'fixed'}
-            bottom={0}
+            position={'sticky'}
+            bottom={isPc ? '0' : '76px'}
             width={'100%'}
-            sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
+            sx={{
+              backgroundColor: 'primary.main',
+              zIndex: 9999,
+              paddingBottom: 0.2,
+            }}
           >
             <Stack
               margin={1}
@@ -115,10 +121,14 @@ const PwaInstallBanner = () => {
     <>
       {isShowInstall && (
         <Box
-          position={'fixed'}
-          bottom={0}
+          position={'sticky'}
+          bottom={isPc ? '0' : '76px'}
           width={'100%'}
-          sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
+          sx={{
+            backgroundColor: 'primary.main',
+            zIndex: 9999,
+            paddingBottom: 0.2,
+          }}
         >
           <Stack margin={1}>
             <Typography color={'white'} variant="Caption">

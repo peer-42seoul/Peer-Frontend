@@ -1,7 +1,7 @@
 import { Box, Card, CardActionArea, Stack, Typography } from '@mui/material'
 import { ITeamInfo } from '../page'
 import { useRouter } from 'next/navigation'
-import { TeamOperationForm } from '@/app/teams/types/types'
+import { TeamOperationForm, TeamStatus } from '@/app/teams/types/types'
 import useMedia from '@/hook/useMedia'
 import { GeoIcon, TargetIcon, WifiIcon } from './Icons'
 
@@ -40,7 +40,11 @@ const ApproveChip = ({
     <Box
       sx={{
         margin: 0,
-        backgroundColor: isApproved ? 'text.alternative' : 'red.strong',
+        backgroundColor: !isApproved
+          ? 'red.strong'
+          : isLeader === 'LEADER'
+            ? (theme) => theme.palette.purple.main
+            : (theme) => theme.palette.pink.main,
         borderRadius: '0.25rem',
         padding: '0.25rem 0.5rem',
         height: 'fit-content',
@@ -54,9 +58,27 @@ const ApproveChip = ({
   )
 }
 
-const TeamCard = ({ team }: { team: ITeamInfo }) => {
+interface ITeamCard {
+  team: ITeamInfo
+}
+
+const TeamCard = ({ team }: ITeamCard) => {
   const { isPc } = useMedia()
   const router = useRouter()
+
+  if (team.isApproved === false && team.status !== TeamStatus.RECRUITING) {
+    return <></>
+  }
+
+  const handleTeam = () => {
+    if (!team.isApproved) return
+    router.push(`/teams/${team.id}`)
+  }
+
+  const handleRecruit = () => {
+    if (team.isApproved) return
+    router.push(`/recruit/${team.id}?type=${team.type}`)
+  }
 
   return (
     <Card
@@ -72,13 +94,13 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
       }}
     >
       <CardActionArea
-        disabled={!team.isApproved}
+        // disabled={!team.isApproved}
         sx={{
           '.MuiCardActionArea-focusHighlight': {
             background: 'transparent',
           },
         }}
-        onClick={() => router.push(`/teams/${team.id}`)}
+        onClick={team.isApproved ? handleTeam : handleRecruit}
       >
         <Stack
           direction={isPc ? 'row' : 'column'}
@@ -89,7 +111,16 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
           <Stack direction={'row'} spacing={'0.5rem'} alignItems={'center'}>
             {TeamType(team.type)}
             <Typography
-              sx={isPc ? undefined : { display: 'center', height: '4rem', overflow: 'hidden', alignItems: 'center' }}
+              sx={
+                isPc
+                  ? undefined
+                  : {
+                      display: 'center',
+                      height: '4rem',
+                      overflow: 'hidden',
+                      alignItems: 'center',
+                    }
+              }
             >
               {team.name}
             </Typography>

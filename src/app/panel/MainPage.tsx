@@ -18,11 +18,10 @@ import useAxiosWithAuth from '@/api/config'
 import { AxiosInstance } from 'axios'
 import { IPagination } from '@/types/IPagination'
 import PwaInstallBanner from './PwaInstallBanner'
-import PushAlertBanner from './PushAlertBanner'
+// import PushAlertBanner from './PushAlertBanner'
 import MainBanner from '@/app/panel/main-page/MainBanner'
 import Tutorial from '@/components/Tutorial'
 import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
-import useHeaderStore from '@/states/useHeaderStore'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import {
   cardStyle,
@@ -34,6 +33,9 @@ import SearchOptionPanel, {
   InfinityScrollPanel,
 } from '@/app/panel/main-page/MainPanel'
 import SelectSort from '@/app/panel/main-page/SelectSort'
+import { getCookie } from 'cookies-next'
+import { io } from 'socket.io-client'
+import useMedia from '@/hook/useMedia'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -58,15 +60,23 @@ export interface IDetailOption {
   tag: string
 }
 
+export const socket = getCookie('accessToken')
+  ? io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+      transports: ['socket.io', 'websocket'],
+      query: {
+        accessToken: getCookie('accessToken'),
+      },
+    })
+  : null
+
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
-  const searchType = searchParams.get('type') === 'STUDY' ? 'STUDY' : 'PROJECT'
+  const searchType =
+    searchParams.get('type') === 'PROJECT' ? 'PROJECT' : 'STUDY'
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
-  const [type, setType] = useState<ProjectType | undefined>(
-    keyword !== '' ? searchType : undefined,
-  ) //'STUDY'
+  const [type, setType] = useState<ProjectType>(searchType) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
   const [detailOption, setDetailOption] = useState<IDetailOption>({
@@ -85,15 +95,14 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
     undefined,
   )
-  const { headerTitle, setHeaderTitle } = useHeaderStore()
   const [init, setInit] = useState<boolean>(true)
+  const { isTablet } = useMedia()
 
   useEffect(() => {
     if (keyword !== '') {
-      setHeaderTitle(keyword + ' 검색 결과')
       setType(searchType)
       setInit(false)
-    } else setHeaderTitle('')
+    }
   }, [keyword, searchType])
 
   /* page가 1이면 서버가 가져온 데이터(initData)로 렌더링 */
@@ -118,7 +127,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   }&tag=${detailOption.tag}`
 
   const isInit =
-    page == 1 && !type && !sort && detailOption.isInit && keyword == '' && init
+    page == 1 && !sort && detailOption.isInit && keyword == '' && init
 
   const { data: favoriteData } = useSWR<IFavorite[]>(
     isInit && isLogin
@@ -173,6 +182,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       scrollTo(target.current.scrollHeight - prevScrollHeight)
   }, [newData])
 
+  useEffect(() => {
+    if (!socket) return
+    socket.on('connect', () => {
+      console.log('socket connected')
+    })
+  }, [])
+
   const { target, spinner, scrollTo } = useInfiniteScrollHook(
     setPage,
     isLoading,
@@ -186,8 +202,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     (newData?.last || initData?.last) ?? true, //isEnd
     page,
   )
+
   const handleType = useCallback(
     (value: ProjectType) => {
+      setInit(false)
       setType(value)
       //type이 변경될 경우 초기화
       setPage(1)
@@ -201,7 +219,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
         tag: '',
       })
       setSort('latest')
-      router.push('/')
+      router.replace(`?type=${value}`)
     },
     [router],
   )
@@ -216,22 +234,23 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     setPage(1)
   }, [])
 
-  const noContent = error
-    ? '에러 발생'
-    : content?.length == 0
-      ? '데이터가 없습니다'
-      : null
+  const noContent = !isLoading
+    ? error
+      ? '에러 발생'
+      : content?.length == 0
+        ? '데이터가 없습니다'
+        : null
+    : null
 
   return (
     <>
-      <PushAlertBanner />
+      {/* <PushAlertBanner /> */}
       {/* mobile view */}
       <div className="mobile-layout">
         <Container sx={{ ...containerStyle, paddingBottom: '1.25rem' }}>
           {keyword === '' ? (
             <>
               <MainBanner />
-
               <Box marginY={'0.5rem'}>
                 <SelectType type={type} setType={handleType} />
               </Box>
@@ -251,7 +270,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               justifyContent={'space-between'}
               my={'0.75rem'}
             >
-              <Typography variant={'Body1'}>{headerTitle}</Typography>
+              <Stack direction="row" gap={'0.25rem'}>
+                <Typography variant={'Body1Emphasis'}>{keyword}</Typography>
+                <Typography variant={'Body1'}>검색 결과</Typography>
+              </Stack>
               <SelectSort sort={sort} setSort={handleSort} />
             </Stack>
           )}
@@ -312,7 +334,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               {keyword === '' ? (
                 <>
                   <MainBanner />
-
                   <Stack direction={'row'} justifyContent={'space-between'}>
                     <SelectType type={type} setType={handleType} />
                     <Tutorial
@@ -337,7 +358,10 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   justifyContent={'space-between'}
                   mb={'0.75rem'}
                 >
-                  <Typography variant={'Body1'}>{headerTitle}</Typography>
+                  <Stack direction="row" gap={'0.25rem'}>
+                    <Typography variant={'Body1Emphasis'}>{keyword}</Typography>
+                    <Typography variant={'Body1'}>검색 결과 </Typography>
+                  </Stack>
                   <SelectSort sort={sort} setSort={handleSort} />
                 </Stack>
               )}
@@ -377,11 +401,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 </>
               )}
             </Stack>
-            <Stack sx={sideMenuStyle}>
-              <MainProfile />
-              <MainShowcase />
-              <MainCarousel />
-            </Stack>
+            {!isTablet && (
+              <Stack sx={sideMenuStyle}>
+                <MainProfile />
+                <MainShowcase />
+                <MainCarousel />
+              </Stack>
+            )}
           </Stack>
         </Container>
       </div>

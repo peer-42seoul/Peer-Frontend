@@ -1,9 +1,10 @@
 export const contentBox = (isPc: boolean) => ({
   display: 'flex',
-  flexDirection: isPc ? 'row' : 'column',
+  flexDirection: 'column',
   justifyContent: 'space-evenly',
   width: '100%',
   height: isPc ? 'auto' : '20.75rem',
+  gap: '1rem',
   backgroundColor: 'background.secondary',
 })
 

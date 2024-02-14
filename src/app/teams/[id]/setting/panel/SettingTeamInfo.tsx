@@ -128,22 +128,19 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       )
       .then((res) => {
         if (res.status == 200) {
-          console.log('서버에 저장 완료')
           mutate()
           openToast({
             severity: 'success',
             message: '팀 정보 수정이 완료되었습니다.',
           })
         } else {
-          console.log('서버에 저장 실패')
           openToast({
             severity: 'error',
             message: '팀 정보 수정에 실패하였습니다.',
           })
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         openToast({
           severity: 'error',
           message: '팀 정보 수정에 실패하였습니다.',
@@ -181,37 +178,47 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       >
         <Stack direction={'row'} display={'flex'} alignItems={'center'}>
           <Typography variant="Body2Emphasis">팀 상태</Typography>
-          <Tutorial content={<TeamStatusTutorial />} />
+          <Tutorial title={'팀 설정 페이지'} content={<TeamStatusTutorial />} />
         </Stack>
         <form ref={sendRef} onSubmit={onSubmit}>
           <Box>
             <Stack
               direction={!isPc || isTablet ? 'column' : 'row'}
               alignItems={isPc ? 'center' : ''}
-              justifyContent={!isPc || isTablet ? '' : 'center'}
+              justifyContent={!isPc || isTablet ? '' : 'space-evenly'}
             >
               <SettingTeamLogo
                 teamLogoImage={team.teamImage ? team.teamImage : ''}
+                teamStatus={status}
                 setValue={setValue}
                 setIsLogoEdit={setIsLogoEdit}
               />
               <Stack>
                 <SettingTeamName
                   teamType={team.type}
+                  teamStatus={status}
                   errors={errors}
                   register={register}
                 />
                 <SettingTeamStatus teamStatus={status} control={control} />
-                <SettingTeamTime teamTime={dueTo} control={control} />
+                <SettingTeamTime
+                  teamTime={dueTo}
+                  teamStatus={status}
+                  control={control}
+                />
                 <SettingTeamActivity
+                  teamStatus={status}
                   teamActivity={operationForm}
                   control={control}
                 />
-                <SettingTeamLocation
-                  teamLocation={region}
-                  teamActivity={operationForm}
-                  control={control}
-                />
+                {team.operationForm !== TeamOperationForm.ONLINE && (
+                  <SettingTeamLocation
+                    teamStatus={status}
+                    teamLocation={region}
+                    teamActivity={operationForm}
+                    control={control}
+                  />
+                )}
               </Stack>
             </Stack>
           </Box>
@@ -223,7 +230,6 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
             display={'flex'}
             flexDirection={'row-reverse'}
           >
-            <Tutorial content={<TeamEndingTutorial />} />
             <Button
               disabled={
                 team.status === TeamStatus.COMPLETE ||
@@ -236,8 +242,20 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
               type="button"
               onClick={handleEditModal}
             >
-              <Typography variant="Body2">저장</Typography>
+              <Typography variant="Body2" color="#ffffff">
+                저장
+              </Typography>
             </Button>
+          </Stack>
+          <Stack
+            direction={'row'}
+            justifyContent={'flex-end'}
+            alignItems={'center'}
+          >
+            <Tutorial
+              title={'팀 활동 종료하기'}
+              content={<TeamEndingTutorial />}
+            />
           </Stack>
           <TeamQuitButton teamStatus={team.status} teamId={team.id} />
           <TeamDisperseButton teamStatus={team.status} teamId={team.id} />

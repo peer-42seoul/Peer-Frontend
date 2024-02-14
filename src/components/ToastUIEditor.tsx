@@ -49,6 +49,7 @@ const ToastEditor = ({
       previewStyle: previewStyle,
       height: height,
       initialValue: initialValue,
+
       hooks: {
         addImageBlobHook: async (
           blob: Blob,

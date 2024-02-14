@@ -4,7 +4,6 @@ import React from 'react'
 import { FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import CuTypeToggle from '@/components/CuTypeToggle'
 import Interest from './Interest'
-import * as cardStyle from './HitchhikingCard.style'
 import * as containerStyle from './CardContainer.style'
 import CardStack from './CardStack'
 import { IPostCardHitchhiking } from '@/types/IPostCard'
@@ -94,10 +93,10 @@ const CardContainer = ({
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          ...cardStyle.cardSize,
           mb: '0.875rem',
           position: 'relative',
           zIndex: 100,
+          flexGrow: [1, 0],
         }}
       >
         {!message ? (
@@ -105,6 +104,7 @@ const CardContainer = ({
             cardList={cardList}
             removeCard={removeCard}
             isProject={isProject}
+            addCard={addCard}
           />
         ) : (
           <Typography variant="CaptionEmphasis">{message}</Typography>
@@ -137,7 +137,7 @@ const CardContainer = ({
           <IconButton
             sx={style.buttonStyle}
             onClick={() => removeCard(cardList[cardList.length - 1]?.recruitId)}
-            disabled={cardList.length === 0}
+            disabled={cardList.length === 1}
           >
             <ChevronRight
               sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}

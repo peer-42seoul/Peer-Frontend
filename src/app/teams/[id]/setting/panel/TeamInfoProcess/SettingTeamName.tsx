@@ -1,16 +1,22 @@
 import { Stack, TextField, Typography } from '@mui/material'
 import { PencilClearIcon } from '../Icons'
-import { TeamType } from '@/app/teams/types/types'
+import { TeamStatus, TeamType } from '@/app/teams/types/types'
 import { FieldErrors, UseFormRegister } from 'react-hook-form'
 import { ISetupTeam } from '../SettingTeamInfo'
 
 interface ISettingTeamName {
+  teamStatus: TeamStatus
   teamType: TeamType
   errors: FieldErrors<ISetupTeam>
   register: UseFormRegister<ISetupTeam>
 }
 
-const SettingTeamName = ({ teamType, errors, register }: ISettingTeamName) => {
+const SettingTeamName = ({
+  teamStatus,
+  teamType,
+  errors,
+  register,
+}: ISettingTeamName) => {
   return (
     <Stack direction={'row'} alignItems={'center'} spacing={'0.25rem'}>
       <PencilClearIcon />
@@ -28,6 +34,7 @@ const SettingTeamName = ({ teamType, errors, register }: ISettingTeamName) => {
         )}
 
         <TextField
+          disabled={teamStatus === TeamStatus.COMPLETE}
           error={errors.name?.message ? true : false}
           helperText={errors.name?.message}
           maxRows={1}
@@ -46,6 +53,9 @@ const SettingTeamName = ({ teamType, errors, register }: ISettingTeamName) => {
           })}
           type="text"
           variant="outlined"
+          sx={{
+            width: '10rem',
+          }}
         />
       </Stack>
     </Stack>

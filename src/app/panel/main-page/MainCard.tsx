@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardMedia,
   Chip,
   Typography,
   Stack,
@@ -15,6 +14,7 @@ import OthersProfile from '../OthersProfile'
 import TagChip from '@/components/TagChip'
 import FavoriteButton from '@/components/FavoriteButton'
 import { ChipStyle } from '@/app/panel/main-page/MainCard.style'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 const MainCard = ({
   title,
@@ -40,13 +40,6 @@ const MainCard = ({
         ? '모집전'
         : '모집완료'
 
-  if (statusLabel === '모집완료') {
-    sx = {
-      ...sx,
-      filter: 'grayscale(120%)',
-    }
-  }
-
   return (
     <Card
       sx={{
@@ -63,7 +56,7 @@ const MainCard = ({
         style={{ textDecoration: 'none' }}
       >
         <Box sx={{ position: 'relative' }}>
-          <CardMedia
+          {/* <CardMedia
             component="img"
             height="194"
             image={image}
@@ -81,6 +74,26 @@ const MainCard = ({
                   ? 'grayscale(150%) brightness(0.7)'
                   : '',
             }}
+          /> */}
+          <CuPhotoBox
+            style={{
+              width: '100%',
+              height: '194px',
+              position: 'relative',
+              left: '-2px',
+              top: '-2px',
+              border: '2px solid',
+              borderBottom: 'none',
+              borderColor: 'background.tertiary',
+              borderBottomLeftRadius: '0.75rem',
+              borderBottomRightRadius: '0.75rem',
+              filter:
+                statusLabel === '모집완료'
+                  ? 'grayscale(150%) brightness(0.7)'
+                  : '',
+            }}
+            src={image}
+            alt="userImage"
           />
           {status && (
             <Chip
@@ -164,7 +177,7 @@ const MainCard = ({
             mt={1}
             direction={'row'}
             sx={{
-              height: `${1.5 * tagMaxLine + 0.5}rem`,
+              height: `${1.5 * tagMaxLine + 0.25}rem`,
               overflow: 'auto',
               flexWrap: 'wrap',
               '&::-webkit-scrollbar': {

@@ -92,5 +92,5 @@ export const containedButton = {
 
 export const containedButtonTypo = {
   ...modalButtonTypoBase,
-  color: (theme: Theme) => theme.palette.text.normal,
+  color: "#ffffff",
 }
