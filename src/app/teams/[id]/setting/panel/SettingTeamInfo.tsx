@@ -242,7 +242,9 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
               type="button"
               onClick={handleEditModal}
             >
-              <Typography variant="Body2">저장</Typography>
+              <Typography variant="Body2" color="#ffffff">
+                저장
+              </Typography>
             </Button>
           </Stack>
           <Stack

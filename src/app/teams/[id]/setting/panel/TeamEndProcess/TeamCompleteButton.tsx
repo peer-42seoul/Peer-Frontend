@@ -95,7 +95,7 @@ const TeamCompleteButton = ({
           variant="contained"
           onClick={openModal}
         >
-          <Typography variant="Body2">완료하기</Typography>
+          <Typography variant="Body2" color="#ffffff">완료하기</Typography>
         </Button>
       </Stack>
 

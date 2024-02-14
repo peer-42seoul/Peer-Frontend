@@ -19,7 +19,7 @@ const PasswordChangeSection = () => {
           sx={style.buttonStyleBase}
           onClick={openModal}
         >
-          <Typography variant="CaptionEmphasis" color="text.strong">
+          <Typography variant="CaptionEmphasis" color="#ffffff">
             변경하기
           </Typography>
         </Button>

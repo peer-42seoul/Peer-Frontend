@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useState } from 'react'
-import { Box, InputBase } from '@mui/material'
+import { Box, TextField } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import useModal from '@/hook/useModal'
 import { IMessageListData, IMessageTarget } from '@/types/IMessage'
@@ -83,12 +83,17 @@ const NewMessageForm = ({
     <>
       <form onSubmit={messageSubmitHandler} id={'new-message-form'}>
         <Box sx={style.form}>
-          <InputBase
+          <TextField
+            multiline
             fullWidth
             placeholder="내용을 입력하세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
             sx={style.input}
+            inputProps={{
+              minLength: 2,
+              maxLength: 300,
+            }}
           />
         </Box>
       </form>
