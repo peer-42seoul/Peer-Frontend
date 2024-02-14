@@ -153,7 +153,14 @@ const ApplicantList = ({
 
   if (!data || data.length === 0) {
     return (
-      <Card sx={{ p: '1.5rem', borderRadius: '1rem', height: '23rem' }}>
+      <Card
+        sx={{
+          p: '1.5rem',
+          borderRadius: '1rem',
+          height: '23rem',
+          backgroundColor: 'background.secondary',
+        }}
+      >
         <Stack
           direction="row"
           display="flex"
