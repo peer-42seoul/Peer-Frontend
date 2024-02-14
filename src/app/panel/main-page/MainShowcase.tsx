@@ -89,6 +89,7 @@ const MainShowcase = () => {
               overflow={'hidden'}
               textOverflow={'ellipsis'}
               m={'1rem'}
+              height={'5rem'}
             >
               {/* <Typography
                 color={'text'}
@@ -103,7 +104,10 @@ const MainShowcase = () => {
               >
                 {data.content[0].description}
               </Typography> */}
-              <DynamicToastViewer initialValue={data.content[0].description} />
+              <DynamicToastViewer
+                sx={{ height: '100%' }}
+                initialValue={data.content[0].description}
+              />
             </Stack>
           </Card>
         </Stack>
