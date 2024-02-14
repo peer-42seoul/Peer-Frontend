@@ -213,12 +213,14 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
                   teamActivity={operationForm}
                   control={control}
                 />
-                <SettingTeamLocation
-                  teamStatus={status}
-                  teamLocation={region}
-                  teamActivity={operationForm}
-                  control={control}
-                />
+                {team.operationForm !== TeamOperationForm.ONLINE && (
+                  <SettingTeamLocation
+                    teamStatus={status}
+                    teamLocation={region}
+                    teamActivity={operationForm}
+                    control={control}
+                  />
+                )}
               </Stack>
             </Stack>
           </Box>
