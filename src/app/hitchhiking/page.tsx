@@ -11,6 +11,7 @@ import * as style from './hitchhiking.style'
 import ArrowDown from '@/icons/ArrowDown'
 import useAxiosWithAuth from '@/api/config'
 import { getUniqueArray } from '@/utils/getUniqueArray'
+import useToast from '@/states/useToast'
 
 const Hitchhiking = () => {
   const [page, setPage] = useState<number>(1)
@@ -19,6 +20,8 @@ const Hitchhiking = () => {
   const [draggedCardList, setDraggedCardList] = useState<
     IPostCardHitchhiking[]
   >([])
+
+  const { openToast } = useToast()
 
   const axiosWithAuth = useAxiosWithAuth()
 
@@ -65,6 +68,13 @@ const Hitchhiking = () => {
   }
 
   const addCard = () => {
+    if (draggedCardList.length === 0) {
+      openToast({
+        message: '되돌아 갈 수 있는 마지막 카드예요.',
+        severity: 'info',
+      })
+      return
+    }
     setCardList((prev: IPostCardHitchhiking[]) => {
       prev.push(draggedCardList[draggedCardList.length - 1])
       if (cardList.length > 1) prev[prev.length - 2].hasBeenRemoved = false

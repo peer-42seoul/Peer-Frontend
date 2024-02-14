@@ -16,4 +16,5 @@ export interface ICardData {
   teamLogo: string | null
   start: Date
   end: Date
+  hasBeenRemoved?: boolean
 }
