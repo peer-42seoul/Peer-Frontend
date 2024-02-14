@@ -248,7 +248,7 @@ const ApplicantList = ({
           {member && member.answers ? (
             member.answers.map((interview, index) => (
               <Stack key={index} m={1}>
-                <Typography variant="Title2">{interview.question}</Typography>
+                <Typography>{interview.question}</Typography>
                 <FormAnswer interview={interview} index={index} />
               </Stack>
             ))
