@@ -55,6 +55,8 @@ const PcNav = () => {
       setValue('hitchhiking')
     } else if (pathname.startsWith('/showcase')) {
       setValue('showcase')
+    } else {
+      setValue('home')
     }
   }, [pathname])
 
