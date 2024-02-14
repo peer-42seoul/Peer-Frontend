@@ -15,6 +15,7 @@ import SetupInfo from './panel/SettingTeamInfo'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import Tutorial from '@/components/Tutorial'
 import TeamMemberTutorial from '@/components/tutorialContent/TeamMemberTutorial'
+import { socket } from '@/app/panel/MainPage'
 
 export interface IMyInfo {
   userId: string
@@ -41,6 +42,28 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
 
   const openApplicant = () => setShowApplicant(true)
   const closeApplicant = () => setShowApplicant(false)
+
+  useEffect(() => {
+    if (!socket) return
+
+    console.log('socket', socket.connected, socket.id)
+
+    socket.emit(
+      'whoAmI',
+      {
+        teamId: params.id,
+        teamName: data?.team.name,
+      },
+      (data: any) => {
+        console.log('whoAmI', data)
+      },
+    )
+
+    return () => {
+      if (!socket) return
+      socket.off('whoAmI')
+    }
+  }, [])
 
   if (error) {
     if (isAxiosError(error) && error.response?.status === 403) {

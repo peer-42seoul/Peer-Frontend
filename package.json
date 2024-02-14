@@ -37,6 +37,7 @@
     "dayjs": "^1.11.5",
     "eslint-config-next": "13.4.19",
     "eslint-config-prettier": "^9.0.0",
+    "firebase": "^10.8.0",
     "framer-motion": "^10.16.5",
     "jose": "^5.2.0",
     "lodash": "^4.17.21",
@@ -62,6 +63,7 @@
     "tls": "^0.0.1",
     "utf-8-validate": "^5.0.10",
     "web-push": "^3.6.6",
+    "workbox-webpack-plugin": "^7.0.0",
     "zustand": "^4.4.1"
   },
   "devDependencies": {

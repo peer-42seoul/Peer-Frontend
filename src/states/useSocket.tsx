@@ -3,14 +3,19 @@ import { create } from 'zustand'
 
 interface ISocket {
   socket: Socket | null
-  setSocket: (socket: Socket) => void
+  initSocket: () => void
   resetSocket: () => void
+  resetEvent: () => void
 }
 
 const useSocket = create<ISocket>((set) => ({
   socket: null,
-  setSocket: (socket: Socket) => set({ socket: socket }),
+  initSocket: () => {
+    console.log('initSocket')
+    set({ socket: null })
+  },
   resetSocket: () => set({ socket: null }),
+  resetEvent: () => set({ socket: null }),
 }))
 
 export default useSocket

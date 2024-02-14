@@ -33,7 +33,10 @@ const PwaInstallBanner = () => {
         }
       })
     } else {
-      console.log('not install')
+      console.log(
+        '[Error] PWA install banner is not working. Maybe already installed?',
+      )
+      setIsShowInstall(false)
     }
   }
 

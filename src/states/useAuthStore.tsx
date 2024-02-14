@@ -34,6 +34,9 @@ const useAuthStore = create<IAuthStore>((set) => {
           const nickname = res.data.nickname
           useNicknameStore.getState().setNickname(nickname)
         })
+        .catch((err) => {
+          console.error(err)
+        })
       // set state
       set(() => ({
         isLogin: true,

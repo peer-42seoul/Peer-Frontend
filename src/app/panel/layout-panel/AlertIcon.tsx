@@ -1,6 +1,6 @@
 'use client'
 
-import { IconButton } from '@mui/material'
+import { CircularProgress, IconButton } from '@mui/material'
 import NotificationIcon from '@/icons/NotificationIcon'
 import useMedia from '@/hook/useMedia'
 
@@ -16,110 +16,84 @@ import useMedia from '@/hook/useMedia'
 import {
   Badge,
   Button,
-  Card,
   Drawer,
   Stack,
   Tab,
   Tabs,
   Typography,
 } from '@mui/material'
-import { SyntheticEvent, useCallback, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { Box } from '@mui/system'
 import { CloseIcon } from '@/icons'
 import useAuthStore from '@/states/useAuthStore'
-import { SystemIcon, TeamIcon, MessageIcon } from './alert-panel/Icons'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import { useRouter } from 'next/navigation'
+import useAlarmStorage, { IAlarm } from '@/states/useAlarmStorage'
+import AlertCard from './alert-panel/AlertCard'
+import { debounce } from 'lodash'
 
-enum AlertType {
-  MESSAGE = '쪽지',
-  TEAM = '팀',
-  NOTICE = '공지',
+const useInfiniteScroll = ({
+  setPage,
+  mutate,
+  isEnd,
+  page,
+  isDrawerOpen,
+  tabvalue,
+}: {
+  setPage: Dispatch<SetStateAction<number>>
+  mutate: any
+  isEnd: boolean
+  page: number
+  isDrawerOpen: boolean
+  tabvalue: number
+}) => {
+  const [spinner, setSpinner] = useState(false)
+  const target = useRef(null)
+
+  const debouncedFetchData = debounce(async () => {
+    // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
+    setSpinner(true)
+    await mutate(page, tabvalue)
+    setPage(page + 1)
+    setSpinner(false)
+  }, 1000)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          if (!spinner && isEnd === false && isDrawerOpen) {
+            // 스피너를 표시하고 페이지 번호를 증가시킨 후 디바운스된 데이터 가져오기 함수 호출
+            // 가능한 페이지 양을 도달했다면 더이상 로딩하지 않는다.
+            debouncedFetchData()
+          }
+        }
+      },
+      { threshold: 0.8 },
+    )
+
+    const currentTarget = target.current
+
+    if (currentTarget) {
+      observer.observe(currentTarget)
+    }
+
+    // 컴포넌트가 언마운트되면 IntersectionObserver 해제
+    return () => {
+      if (currentTarget) observer.unobserve(currentTarget)
+    }
+  }, [target, spinner, debouncedFetchData, page, isEnd, isDrawerOpen, tabvalue])
+
+  return { target, spinner }
 }
-
-interface IAlert {
-  id: number
-  type: AlertType
-  title: string
-  content: string
-}
-
-const mockData = [
-  {
-    id: 1,
-    type: AlertType.MESSAGE,
-    title: '알림1',
-    content:
-      '알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용',
-  },
-  {
-    id: 2,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 3,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 4,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 5,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 6,
-    type: AlertType.NOTICE,
-    title: '알림3',
-    content: '알림3 내용',
-  },
-  {
-    id: 7,
-    type: AlertType.MESSAGE,
-    title: '알림1',
-    content:
-      '알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용알림1 내용',
-  },
-  {
-    id: 8,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 9,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 10,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 11,
-    type: AlertType.TEAM,
-    title: '알림2',
-    content: '알림2 내용',
-  },
-  {
-    id: 12,
-    type: AlertType.NOTICE,
-    title: '알림3',
-    content: '알림3 내용',
-  },
-]
 
 const AlertIcon = () => {
   // const isAlertComing = false
@@ -127,13 +101,48 @@ const AlertIcon = () => {
   // const { isOpen, openModal, closeModal } = useModal()
 
   // 알림 탭 관련
-  const [alertData, setAlertData] = useState<IAlert[]>(mockData)
-  const [showAlert, setShowAlert] = useState<IAlert[]>(alertData)
+  const {
+    isNewAlarm,
+    isNew,
+    getAlarms,
+    alarms,
+    deleteAlarm,
+    deleteAllAlarms,
+    checkNewAlarm,
+    resetAlarms,
+  } = useAlarmStorage()
   const [tabvalue, setTabValue] = useState(0)
+  const [page, setPage] = useState(1)
   const [isAlertComing, setIsAlertComing] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const { isLogin } = useAuthStore()
   const router = useRouter()
+
+  const { target, spinner } = useInfiniteScroll({
+    setPage,
+    mutate: getAlarms,
+    isEnd: alarms[alarms.length - 1]?.isEnd || false,
+    page,
+    isDrawerOpen,
+    tabvalue,
+  })
+
+  useEffect(() => {
+    isNewAlarm(isLogin)
+  }, [])
+
+  useEffect(() => {
+    if (isDrawerOpen) {
+      checkNewAlarm()
+      if (page === 1) {
+        getAlarms(page, tabvalue)
+        setPage(page + 1)
+      }
+      if (isAlertComing) {
+        setIsAlertComing(false)
+      }
+    }
+  }, [isDrawerOpen, setIsAlertComing, tabvalue])
 
   const openAlertTab = useCallback(() => {
     setIsAlertComing(true)
@@ -158,45 +167,11 @@ const AlertIcon = () => {
   const handleChange = useCallback(
     (e: SyntheticEvent, newValue: number) => {
       setTabValue(newValue)
-      switch (newValue) {
-        case 0:
-          setShowAlert(alertData)
-          break
-        case 1: {
-          const message = alertData.filter(
-            (item) => item.type === AlertType.MESSAGE,
-          )
-          setShowAlert(message)
-          break
-        }
-        case 2: {
-          const team = alertData.filter((item) => item.type === AlertType.TEAM)
-          setShowAlert(team)
-          break
-        }
-        case 3: {
-          const notice = alertData.filter(
-            (item) => item.type === AlertType.NOTICE,
-          )
-          setShowAlert(notice)
-          break
-        }
-        default:
-          break
-      }
+      setPage(1)
+      resetAlarms()
     },
-    [setTabValue, setAlertData, alertData],
+    [tabvalue, setPage, resetAlarms],
   )
-
-  const handleDelete = (id: number) => {
-    setAlertData(alertData.filter((item) => item.id !== id))
-    setShowAlert(showAlert.filter((item) => item.id !== id))
-  }
-
-  const handleDeleteAll = () => {
-    setAlertData([])
-    setShowAlert([])
-  }
 
   const handleClose = () => {
     setIsDrawerOpen(false)
@@ -210,7 +185,7 @@ const AlertIcon = () => {
   return (
     <>
       <IconButton color="inherit" aria-label="alert_tab" onClick={openAlertTab}>
-        <Badge color="secondary" variant="dot" invisible={isAlertComing}>
+        <Badge color="secondary" variant="dot" invisible={!isNew}>
           <NotificationIcon
             sx={{
               color: isPc ? 'text.alternative' : 'text.normal',
@@ -242,9 +217,10 @@ const AlertIcon = () => {
         <Box
           sx={{
             width: isPc ? 400 : '100dvw',
-            height: '100svh',
+            height: '100dvh',
             pt: 7,
             backgroundColor: 'background.primary',
+            // overflowY: 'auto',
           }}
         >
           <Stack direction={'row'} mb={'0.25rem'}>
@@ -266,7 +242,10 @@ const AlertIcon = () => {
           </Stack>
           {!isLogin ? (
             <Stack justifyContent={'center'} height={'50svh'}>
-              <NoDataDolphin message="로그인이 필요합니다." />
+              <NoDataDolphin
+                message="로그인이 필요합니다."
+                backgroundColor="transparent"
+              />
               <Stack alignItems={'center'}>
                 <Button
                   variant="contained"
@@ -279,7 +258,7 @@ const AlertIcon = () => {
               </Stack>
             </Stack>
           ) : (
-            <>
+            <Stack height={'fit-content'}>
               <Tabs
                 variant="fullWidth"
                 value={tabvalue}
@@ -288,73 +267,46 @@ const AlertIcon = () => {
                   style: { display: 'none' },
                 }}
               >
-                <Tab label="전체" />
-                <Tab label="쪽지" />
-                <Tab label="팀" />
-                <Tab label="공지" />
+                <Tab value={0} label="전체" />
+                <Tab value={1} label="쪽지" />
+                <Tab value={2} label="팀" />
+                <Tab value={3} label="공지" />
               </Tabs>
               <Stack sx={{ alignItems: 'end', mx: '1rem' }}>
                 <Button
                   variant="text"
                   color="primary"
                   sx={{ width: 'fit-content', borderRadius: 0 }}
-                  onClick={handleDeleteAll}
+                  onClick={() => deleteAllAlarms(tabvalue)}
                 >
                   전체 삭제
                 </Button>
               </Stack>
 
-              <Stack sx={{ overflowY: 'auto' }}>
-                <Stack height={'100%'}>
-                  {showAlert.map((item) => (
-                    <Card
-                      key={item.type + item.id}
-                      sx={{
-                        m: 2,
-                        height: '4rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Stack p={'0.5rem'} flex={1}>
-                        {item.type === '쪽지' && (
-                          <SystemIcon fontSize="large" />
-                        )}
-                        {item.type === '팀' && <TeamIcon fontSize="large" />}
-                        {item.type === '공지' && (
-                          <MessageIcon fontSize="large" />
-                        )}
-                      </Stack>
-                      <Stack
-                        direction={'row'}
-                        spacing={1}
-                        display={'flex'}
-                        alignItems={'center'}
-                        flex={8}
-                      >
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: '-webkit-box',
-                            WebkitLineClamp: '1',
-                            WebkitBoxOrient: 'vertical',
-                          }}
-                        >
-                          {item.content}
-                        </Typography>
-                      </Stack>
-                      <Stack flex={1}>
-                        <IconButton onClick={() => handleDelete(item.id)}>
-                          <CloseIcon />
-                        </IconButton>
-                      </Stack>
-                    </Card>
-                  ))}
+              <Box sx={{ overflowY: 'auto', height: '75svh' }}>
+                <Stack height={'fit-content'}>
+                  {alarms.length === 0 ? (
+                    <NoDataDolphin
+                      backgroundColor="transparent"
+                      message="알림이 없습니다."
+                    />
+                  ) : (
+                    <>
+                      {alarms.map((item: IAlarm) => (
+                        <AlertCard
+                          key={'alarm' + item.notificationId}
+                          handleDelete={() => deleteAlarm(item.notificationId)}
+                          alert={item}
+                        />
+                      ))}
+                      <Box position={'relative'} ref={target} height={1}>
+                        {spinner && <CircularProgress />}
+                      </Box>
+                    </>
+                  )}
                 </Stack>
-              </Stack>
-            </>
+              </Box>
+            </Stack>
           )}
         </Box>
       </Drawer>
