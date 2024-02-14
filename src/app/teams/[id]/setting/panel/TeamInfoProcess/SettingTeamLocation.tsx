@@ -37,7 +37,7 @@ const SettingTeamLocation = ({
         </Stack>
         <Stack direction={'row'} spacing={1}>
           <Select
-            disabled={teamStatus === TeamStatus.COMPLETE}
+            disabled={true}
             size="small"
             variant="outlined"
             defaultValue={teamLocation[0]}
@@ -49,7 +49,7 @@ const SettingTeamLocation = ({
             <MenuItem key={'region'} value={''}></MenuItem>
           </Select>
           <Select
-            disabled={teamStatus === TeamStatus.COMPLETE}
+            disabled={true}
             size="small"
             variant="outlined"
             defaultValue={teamLocation[1]}

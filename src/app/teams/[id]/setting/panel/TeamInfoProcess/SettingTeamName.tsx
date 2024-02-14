@@ -53,6 +53,9 @@ const SettingTeamName = ({
           })}
           type="text"
           variant="outlined"
+          sx={{
+            width: '10rem',
+          }}
         />
       </Stack>
     </Stack>

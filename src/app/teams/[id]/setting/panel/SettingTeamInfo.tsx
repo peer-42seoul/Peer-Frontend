@@ -142,8 +142,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
           })
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         openToast({
           severity: 'error',
           message: '팀 정보 수정에 실패하였습니다.',
@@ -214,12 +213,14 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
                   teamActivity={operationForm}
                   control={control}
                 />
-                <SettingTeamLocation
-                  teamStatus={status}
-                  teamLocation={region}
-                  teamActivity={operationForm}
-                  control={control}
-                />
+                {team.operationForm !== TeamOperationForm.ONLINE && (
+                  <SettingTeamLocation
+                    teamStatus={status}
+                    teamLocation={region}
+                    teamActivity={operationForm}
+                    control={control}
+                  />
+                )}
               </Stack>
             </Stack>
           </Box>
