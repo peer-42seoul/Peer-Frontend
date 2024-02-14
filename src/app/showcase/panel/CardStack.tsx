@@ -18,9 +18,11 @@ enum ESwipeDirection {
 const CardStack = ({
   cardList,
   removeCard,
+  addCard,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
+  addCard?: () => void
 }) => {
   const [dragged, setDragged] = useState(false)
   const { isPc } = useMedia()
@@ -36,7 +38,9 @@ const CardStack = ({
       checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
     ) {
       setDragged(false)
-
+      if (addCard) {
+        addCard()
+      }
       return
     }
     removeCard(recruit_id)
@@ -90,6 +94,9 @@ const CardStack = ({
                 initial={{
                   scale: 0.8,
                   opacity: 0,
+                  ...(card.hasBeenRemoved && {
+                    y: -500,
+                  }),
                 }}
                 animate={{
                   scale: i === cardList.length - 1 ? 1 : 0.8,
@@ -99,14 +106,14 @@ const CardStack = ({
                 exit={{ opacity: 0, y: -500 }}
                 drag
                 dragSnapToOrigin
-                whileDrag={{ scale: 1.2 }}
-                dragElastic={1}
+                dragElastic={0.5}
                 dragConstraints={{
-                  left: 0,
+                  top: 0,
                   right: 0,
+                  left: 0,
                   bottom: 0,
                 }}
-                dragTransition={{ bounceStiffness: 300, bounceDamping: 50 }}
+                dragTransition={{ bounceStiffness: 250, bounceDamping: 50 }}
                 onDragStart={() => setDragged(true)}
                 onDragEnd={(e: any, info: any) =>
                   handleDragEnd(e, info, card.id)

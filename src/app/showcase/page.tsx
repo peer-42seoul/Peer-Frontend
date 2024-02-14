@@ -15,6 +15,7 @@ import ShowcasePCLayout from './panel/ShowcasePc/ShowcasePcLayout'
 const Showcase = () => {
   const [page, setPage] = useState<number>(1)
   const [cardList, setCardList] = useState<Array<ICardData>>([])
+  const [draggedCardList, setDraggedCardList] = useState<ICardData[]>([])
   const { isPc } = useMedia()
   const { isLogin } = useAuthStore()
   const axiosWithAuth = useAxiosWithAuth()
@@ -35,12 +36,31 @@ const Showcase = () => {
   }, [isLoading, data?.content])
 
   const removeCard = (recruit_id: number) => {
+    setDraggedCardList((prev: ICardData[]) => {
+      prev.push(cardList[cardList.length - 1])
+      return prev
+    })
+    draggedCardList[draggedCardList.length - 1].hasBeenRemoved = true
     setCardList((prev: ICardData[]) => {
       return prev.filter((card) => card.id !== recruit_id)
     })
     if (cardList.length === 2) {
       setPage((prev) => (!data?.last ? prev + 1 : prev))
     }
+  }
+
+  const addCard = () => {
+    if (draggedCardList.length === 0) return
+    setCardList((prev: ICardData[]) => {
+      prev.push(draggedCardList[draggedCardList.length - 1])
+      if (cardList.length > 1) prev[prev.length - 2].hasBeenRemoved = false
+      return prev
+    })
+    setDraggedCardList((prev: ICardData[]) => {
+      return prev.filter(
+        (card) => card.id !== draggedCardList[draggedCardList.length - 1].id,
+      )
+    })
   }
 
   let message: string = ''
@@ -66,6 +86,7 @@ const Showcase = () => {
       cardList={cardList}
       removeCard={removeCard}
       message={message}
+      addCard={addCard}
     />
   )
 }
