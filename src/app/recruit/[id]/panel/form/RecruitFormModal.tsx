@@ -92,13 +92,11 @@ const RecruitFormModal = ({
       router.push(`/recruit/${recruit_id}`)
       setOpen(false)
     } catch (e: any) {
-      console.log('e', e)
       setOpenConfirm(false)
       openToast({
         severity: 'error',
         message: e?.response?.data?.message ?? '제출에 실패하였습니다.',
       })
-      console.log('e', e)
     } finally {
       setLoading(false)
     }

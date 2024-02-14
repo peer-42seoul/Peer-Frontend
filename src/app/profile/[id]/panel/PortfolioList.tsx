@@ -30,7 +30,7 @@ const PortfolioList = ({ userId }: { userId: string }) => {
   useEffect(() => {
     if (data) {
       setPostList((prev) => getUniqueArray(prev.concat(data), 'redirectionIds'))
-      console.log(data)
+
       if (data.length && !data[data.length - 1]?.isEnd) {
         setPageLimit((prev) => prev + 1)
       }

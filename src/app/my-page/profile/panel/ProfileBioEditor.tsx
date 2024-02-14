@@ -200,8 +200,8 @@ const ProfileBioEditor = ({
           })
           .catch((error) => {
             setIsNicknameUnique(false)
-            console.log(error)
-            if (error?.response.data?.messages) {
+
+            if (error?.response.data?.message) {
               openToast({
                 severity: 'error',
                 message: String(error.response.data.messages[0]).split(': ')[1],

@@ -54,7 +54,6 @@ const WidgetUpdate = ({
       setModalOpen(false)
       setEdit(false)
     } catch (e) {
-      console.log('e', e)
       alert('저장에 실패하였습니다.')
     }
   }, [teamId, layouts, isCreate, axiosInstance, setEdit])

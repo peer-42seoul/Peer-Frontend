@@ -26,6 +26,7 @@ import { SettingIcon } from '@/icons/TeamPage'
 import useAxiosWithAuth from '@/api/config'
 import Tutorial from '@/components/Tutorial'
 import TeamJobsTutorial from '@/components/tutorialContent/TeamJobsTutorial'
+import useToast from '@/states/useToast'
 
 interface TableColumn {
   id: string
@@ -56,6 +57,7 @@ const SettingTeamJobs = ({ teamId, jobList, teamStatus }: Props) => {
     max: 0,
     current: 0,
   })
+  const { openToast } = useToast()
 
   useEffect(() => {
     setJobs(jobList)
@@ -114,7 +116,6 @@ const SettingTeamJobs = ({ teamId, jobList, teamStatus }: Props) => {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log('역할 변경 완료')
           setJobs(
             jobs.map((job) =>
               job.id === editJob.id
@@ -124,10 +125,13 @@ const SettingTeamJobs = ({ teamId, jobList, teamStatus }: Props) => {
           )
           setIsSettingButton('')
           setEditJob({ id: 0, name: '', max: 0, current: 0 })
-        } else console.log(res.status)
+        }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        openToast({
+          severity: 'error',
+          message: '역할 수정에 실패했습니다.',
+        })
       })
   }
 

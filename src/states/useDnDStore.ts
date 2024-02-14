@@ -65,8 +65,7 @@ const useDnDStore = create<IStoreDnDState>((set) => {
             alert('수정되었습니다.')
             return { storedWidgets: updatedWidgets }
           })
-          .catch((err) => {
-            console.log(err)
+          .catch(() => {
             alert('수정에 실패하였습니다.')
           })
         return state
