@@ -24,6 +24,7 @@ const NewMessageButton = ({ openModal }: { openModal: () => void }) => {
         variant={'contained'}
         startIcon={<PlusIcon width={'1.25rem'} height={'1.25rem'} />}
         style={style.pcSendButton}
+        TypographyProps={{ color: '#ffffff' }}
       />
     </Stack>
   )

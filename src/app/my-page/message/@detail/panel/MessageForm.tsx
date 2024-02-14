@@ -130,12 +130,19 @@ const MessageForm = ({
                 id="message"
                 multiline
                 value={content}
-                placeholder="내용을 입력하세요"
+                placeholder={
+                  disabled ? '채팅방이 삭제되었습니다' : '내용을 입력하세요'
+                }
                 onChange={(e) =>
                   setContent(e.target.value.slice(0, MAX_LENGTH))
                 }
                 onKeyDown={handleKeyDown}
                 disabled={disabled}
+                sx={{
+                  '.MuiOutlinedInput-root.Mui-disabled': {
+                    opacity: 1,
+                  },
+                }}
               />
               <Typography color={'text.assistive'} sx={style.messageLength}>
                 {content.length} / {MAX_LENGTH}

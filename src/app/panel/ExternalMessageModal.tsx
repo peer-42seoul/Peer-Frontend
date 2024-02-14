@@ -1,5 +1,5 @@
 import React, { useState, ReactNode } from 'react'
-import { Box, Stack, InputBase, Typography } from '@mui/material'
+import { Box, Stack, InputBase, Typography, TextField } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import useModal from '@/hook/useModal'
 import useToast from '@/states/useToast'
@@ -139,7 +139,7 @@ const ExternalMessageModal = ({
                       required: '내용을 입력해주세요.',
                     }}
                     render={({ field }) => (
-                      <InputBase
+                      <TextField
                         fullWidth
                         placeholder="내용을 입력하세요."
                         {...field}
@@ -147,6 +147,11 @@ const ExternalMessageModal = ({
                         onChange={(e) => {
                           field.onChange(e.target.value)
                           trigger('content')
+                        }}
+                        multiline
+                        inputProps={{
+                          minLength: 2,
+                          maxLength: 300,
                         }}
                       />
                     )}

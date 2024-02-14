@@ -80,7 +80,7 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
           variant="contained"
           onClick={openModal}
         >
-          <Typography variant="Body2">팀 나가기</Typography>
+          <Typography variant="Body2" color="#ffffff">팀 나가기</Typography>
         </Button>
       </Stack>
 

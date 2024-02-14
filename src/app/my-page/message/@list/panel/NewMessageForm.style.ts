@@ -1,7 +1,6 @@
 import { Theme } from '@mui/material'
 
 export const form = {
-  padding: '1rem',
   borderRadius: '0.25rem',
   background: (theme: Theme) => theme.palette.background.tertiary,
 }
@@ -15,4 +14,13 @@ export const input = {
     fontWeight: (theme: Theme) => theme.typography.Caption.fontWeight,
     lineHeight: (theme: Theme) => theme.typography.Caption.lineHeight,
   },
+  '& .MuiOutlinedInput-notchedOutline': {
+    border: 'none',
+  },
+  '&.Mui-focused': {
+    '& .MuiOutlinedInput-notchedOutline': {
+      border: 'none',
+    },
+  },
+  overflow: 'scroll',
 }
