@@ -145,6 +145,8 @@ const Announces = () => {
   } = useModal()
 
   const [currentNoticeStatus, setCurrentNoticeStatus] = useState('없음')
+  const [currentDate, setCurrentDate] = useState<string>('')
+  const [currentContent, setCurrentContent] = useState<string>('')
 
   // 초기 페이지 진입시 공지사항 목록 불러오기
   useEffect(() => {
@@ -338,7 +340,8 @@ const Announces = () => {
         setValue('content', res.data.content)
         setValue('date', res.data.date)
         setValue('announcementStatus', res.data.announcementStatus)
-
+        setCurrentContent(res.data.content)
+        setCurrentDate(res.data.date)
         let noticeStatusValue = '없음' // 기본값
         if (
           res.data.announcementStatus === '게제' ||
@@ -573,10 +576,15 @@ const Announces = () => {
                   : '게제된 시간'}
               </Typography>
               <TextField
+                // value={
+                //   getValues('date')?.split('T')[0] +
+                //   ' ' +
+                //   getValues('date')?.split('T')[1]
+                // }
                 value={
-                  getValues('date')?.split('T')[0] +
+                  currentDate?.split('T')[0] +
                   ' ' +
-                  getValues('date')?.split('T')[1]
+                  currentDate?.split('T')[1]
                 }
                 disabled={true}
               />
@@ -585,7 +593,8 @@ const Announces = () => {
           {writeMode === 'view' ? (
             <Box>
               <DynamicToastViewer
-                initialValue={getValues('content')}
+                // initialValue={getValues('content')}
+                initialValue={currentContent}
                 sx={{
                   width: '100%',
                   wordBreak: 'break-word',
@@ -667,31 +676,33 @@ const Announces = () => {
               </Typography>
             )}
             {/* 예약 날짜 선택 */}
-            <Controller
-              name="reservationDate"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <DateTimePicker
-                  defaultValue={dayjs(
-                    getValues('date') === null
-                      ? new Date(Date.now() + 3600000)
-                      : getValues('date'),
-                  )}
-                  onChange={onChange}
-                  ampm={false}
-                  format="YYYY-MM-DD HH:mm"
-                  disabled={
-                    writeMode === 'view' || currentNoticeStatus !== '예약'
-                  }
-                  sx={{ width: '12rem' }}
-                />
-              )}
-              rules={
-                getValues('announcementNoticeStatus') === '예약'
-                  ? { required: 'Date and Time required' }
-                  : undefined
-              }
-            />
+            {currentNoticeStatus === '예약' ? (
+              <Controller
+                name="reservationDate"
+                control={control}
+                render={({ field: { onChange } }) => (
+                  <DateTimePicker
+                    defaultValue={dayjs(
+                      getValues('date') === null
+                        ? new Date(Date.now() + 3600000)
+                        : getValues('date'),
+                    )}
+                    onChange={onChange}
+                    ampm={false}
+                    format="YYYY-MM-DD HH:mm"
+                    disabled={
+                      writeMode === 'view' || currentNoticeStatus !== '예약'
+                    }
+                    sx={{ width: '12rem' }}
+                  />
+                )}
+                rules={
+                  getValues('announcementNoticeStatus') === '예약'
+                    ? { required: 'Date and Time required' }
+                    : undefined
+                }
+              />
+            ) : null}
           </Stack>
           <Stack direction={'row'} justifyContent={'flex-end'}>
             <Button variant={'contained'} onClick={() => setOpen(false)}>

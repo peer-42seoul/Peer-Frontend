@@ -636,31 +636,33 @@ const Banner = () => {
               </Typography>
             )}
             {/* 예약 날짜 선택 */}
-            <Controller
-              name="reservationDate"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <DateTimePicker
-                  defaultValue={dayjs(
-                    getValues('date') === null
-                      ? new Date(Date.now() + 3600000)
-                      : getValues('date'),
-                  )}
-                  onChange={onChange}
-                  ampm={false}
-                  format="YYYY-MM-DD HH:mm"
-                  disabled={
-                    writeMode === 'view' || currentReservationType !== '예약'
-                  }
-                  sx={{ width: '12rem' }}
-                />
-              )}
-              rules={
-                getValues('bannerReservationType') === '예약'
-                  ? { required: 'Date and Time required' }
-                  : undefined
-              }
-            />
+            {currentBannerType === '예약' ? (
+              <Controller
+                name="reservationDate"
+                control={control}
+                render={({ field: { onChange } }) => (
+                  <DateTimePicker
+                    defaultValue={dayjs(
+                      getValues('date') === null
+                        ? new Date(Date.now() + 3600000)
+                        : getValues('date'),
+                    )}
+                    onChange={onChange}
+                    ampm={false}
+                    format="YYYY-MM-DD HH:mm"
+                    disabled={
+                      writeMode === 'view' || currentReservationType !== '예약'
+                    }
+                    sx={{ width: '12rem' }}
+                  />
+                )}
+                rules={
+                  getValues('bannerReservationType') === '예약'
+                    ? { required: 'Date and Time required' }
+                    : undefined
+                }
+              />
+            ) : null}
           </Stack>
           {/* 버튼 */}
           <Stack direction={'row'} justifyContent={'flex-end'}>
@@ -707,9 +709,7 @@ const Banner = () => {
               <Button
                 variant={'contained'}
                 onClick={() => onHandleEdit()}
-                disabled={
-                  getValues('bannerStatus') !== '예약' ? true : false
-                }
+                disabled={getValues('bannerStatus') !== '예약' ? true : false}
               >
                 수정
               </Button>
