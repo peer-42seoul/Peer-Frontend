@@ -1,6 +1,7 @@
-import { Box, Chip, Stack, Typography } from '@mui/material'
+import { Chip, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { ProjectType, TPostStatus } from '@/types/IPostDetail'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 export const RecruitTitle = ({
   title,
@@ -54,16 +55,14 @@ export const RecruitImage = ({
   height: string
 }) => {
   return (
-    <Box
+    <CuPhotoBox
       src={image}
       alt="main_image"
-      width={width}
-      height={height}
-      maxWidth={maxWidth}
-      component={'img'}
-      borderRadius={'0.13rem'}
-      sx={{
-        objectFit: 'cover',
+      style={{
+        width,
+        height,
+        maxWidth,
+        borderRadius: '0.13rem',
       }}
     />
   )
