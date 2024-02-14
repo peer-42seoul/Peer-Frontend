@@ -51,7 +51,12 @@ export const OwnerMessageItem = ({
       sx={style[`contentMargin${messageOption}`]}
     >
       <MessageDate date={message.date} />
-      <Box sx={isPc ? style.ownerPc : style.ownerMobile}>
+      <Box
+        sx={{
+          ...(isPc ? style.ownerPc : style.ownerMobile),
+          wordBreak: 'break-all',
+        }}
+      >
         <Typography variant={'Body1'}>{message.content}</Typography>
       </Box>
     </Stack>
@@ -81,7 +86,12 @@ export const TargetMessageItem = ({
           sx={style.targetAvatar}
         />
       )}
-      <Box sx={isPc ? style.targetPc : style.targetMobile}>
+      <Box
+        sx={{
+          ...(isPc ? style.targetPc : style.targetMobile),
+          wordBreak: 'break-all',
+        }}
+      >
         <Typography variant={'Body1'}>{message.content}</Typography>
       </Box>
       <MessageDate date={message.date} />
