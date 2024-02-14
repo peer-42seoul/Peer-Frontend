@@ -256,7 +256,16 @@ const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
                 <OthersProfile name={member.name} userId={member.id}>
                   <Avatar src={member.image} sx={{ margin: 'auto' }} />
                 </OthersProfile>
-                <Typography textOverflow={'ellipsis'} fontWeight="bold">
+                <Typography
+                  fontWeight="bold"
+                  sx={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 1,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
                   {member.name}
                 </Typography>
                 <Stack direction="row" sx={{ justifyContent: 'center' }}>

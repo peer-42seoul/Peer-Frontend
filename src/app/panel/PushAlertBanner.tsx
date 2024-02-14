@@ -94,7 +94,7 @@ const PushAlertBanner = () => {
     <>
       {isShowPush && (
         <Box
-          position={'fixed'}
+          position={'sticky'}
           top={isScroll ? 0 : 57}
           width={'100%'}
           sx={{

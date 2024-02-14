@@ -83,10 +83,14 @@ const PwaInstallBanner = () => {
       <>
         {isShowInstall && (
           <Box
-            position={'fixed'}
-            bottom={0}
+            position={'sticky'}
+            bottom={isPc ? '0' : '76px'}
             width={'100%'}
-            sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
+            sx={{
+              backgroundColor: 'primary.main',
+              zIndex: 9999,
+              paddingBottom: 0.2,
+            }}
           >
             <Stack
               margin={1}
@@ -117,10 +121,14 @@ const PwaInstallBanner = () => {
     <>
       {isShowInstall && (
         <Box
-          position={'fixed'}
-          bottom={0}
+          position={'sticky'}
+          bottom={isPc ? '0' : '76px'}
           width={'100%'}
-          sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
+          sx={{
+            backgroundColor: 'primary.main',
+            zIndex: 9999,
+            paddingBottom: 0.2,
+          }}
         >
           <Stack margin={1}>
             <Typography color={'white'} variant="Caption">
