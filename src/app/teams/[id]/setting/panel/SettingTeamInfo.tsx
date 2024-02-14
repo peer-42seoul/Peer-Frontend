@@ -142,8 +142,7 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
           })
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         openToast({
           severity: 'error',
           message: '팀 정보 수정에 실패하였습니다.',

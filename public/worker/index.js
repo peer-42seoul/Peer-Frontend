@@ -7,7 +7,7 @@ self.addEventListener('push', (event) => {
   const title = data.title
   const options = {
     body: data.body,
-    icon: '/images/icons/icon-192x192.png', // TODO: 추후 변경
+    icon: '/icons/ios/192.png', // TODO: 추후 변경
     link: '/', // TODO: 추후 변경
   }
 

@@ -8,9 +8,10 @@ import SetupMember from './panel/SettingTeamMember'
 import ApplicantList from './panel/ApplicantList'
 import useSWR from 'swr'
 import useAxiosWithAuth from '@/api/config'
-import { ITeam, TeamStatus, TeamType } from '../../types/types'
+import { ITeam, TeamStatus } from '../../types/types'
+// import { ITeam, TeamStatus, TeamType } from '../../types/types'
 import RedirectionRecruit from './panel/RedirectRecruitPage'
-import TeamJobAdd from './panel/SettingTeamJobs'
+// import TeamJobAdd from './panel/SettingTeamJobs'
 import SetupInfo from './panel/SettingTeamInfo'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import Tutorial from '@/components/Tutorial'
@@ -67,13 +68,13 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
         <>
           <RedirectionRecruit id={params.id} data={teams} />
           <SetupInfo team={teams.team} mutate={mutate} />
-          {teams.team.type === TeamType.PROJECT && (
+          {/* {teams.team.type === TeamType.PROJECT && (
             <TeamJobAdd
               teamId={params.id}
               jobList={teams.job.filter((job) => job.name != 'Leader')}
               teamStatus={teams.team.status}
             />
-          )}
+          )} */}
           {!showApplicant ? (
             <Card
               sx={{
