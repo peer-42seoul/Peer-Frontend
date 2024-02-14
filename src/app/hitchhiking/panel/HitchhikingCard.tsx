@@ -15,10 +15,9 @@ import {
   Box,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Members from './Members'
 import DropdownMenu from '@/components/DropdownMenu'
-import useMedia from '@/hook/useMedia'
 import * as style from './HitchhikingCard.style'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
@@ -37,7 +36,6 @@ const HitchhikingCardBack = ({
   onClick,
   flipped,
   isProject,
-  cardWidth,
   title,
   currentDomain,
   authorId,
@@ -48,28 +46,57 @@ const HitchhikingCardBack = ({
   flipped?: boolean
   isProject?: boolean
   title: string
-  cardWidth: number
   currentDomain: string
   authorId: number
 }) => {
   const [data, setData] = useState<IHitchhikingCardBack | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [lineCount, setLineCount] = useState({
+    title: 1,
+    content: 1,
+  })
   const router = useRouter()
+  const card = useRef<HTMLDivElement>(null)
 
   const { openToast, closeToast } = useToast()
 
+  useEffect(() => {
+    setLineCount({
+      title: getLineCount(46, 22.5, 2),
+      content: getLineCount(191, 18, 8),
+    })
+  }, [card])
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (card.current) {
+        setLineCount({
+          title: getLineCount(46, 22.5, 2),
+          content: getLineCount(191, 18, 8),
+        })
+      }
+    }
+
+    addEventListener('resize', handleResize)
+    return () => {
+      removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   const getLineCount = (
-    otherOriginHeight: number,
+    originHeight: number,
     lineHeight: number,
     maxLine: number,
   ) => {
+    const removeCount = card.current?.clientHeight ?? 0 < 441 ? 2 : 1
     const lineCount = Math.floor(
-      ((cardWidth * 441) / 328 - (otherOriginHeight + 204)) / lineHeight,
+      ((card.current?.clientHeight ?? 0) * originHeight) / lineHeight / 441,
     )
     if (lineCount > maxLine) return maxLine
-    else if (lineCount < 1) return 1
-    else return lineCount
+    else if (lineCount < 1 + removeCount) return 1
+    else return lineCount - removeCount
   }
+
   const axiosInstance = useAxiosWithAuth()
 
   useEffect(() => {
@@ -113,6 +140,7 @@ const HitchhikingCardBack = ({
         padding: '1rem',
       }}
       key={crypto.randomUUID()}
+      ref={card}
     >
       {data ? (
         <Stack
@@ -156,7 +184,7 @@ const HitchhikingCardBack = ({
                 color={'text.normal'}
                 sx={{
                   ...style.cardTitleStyleBase,
-                  WebkitLineClamp: getLineCount(191, 22.5, 2) /* 라인수 */,
+                  WebkitLineClamp: lineCount.title,
                 }}
               >
                 {title}
@@ -172,7 +200,7 @@ const HitchhikingCardBack = ({
             }}
             onClick={onClick}
           >
-            <Box width={1}>
+            <Box width={1} height={'fit-content'}>
               <DynamicToastViewer
                 initialValue={data.content}
                 typographySx={{
@@ -186,7 +214,7 @@ const HitchhikingCardBack = ({
                 }}
                 sx={{
                   ...style.cardContentStyleBase,
-                  WebkitLineClamp: getLineCount(46, 18, 10) /* 라인수 */,
+                  WebkitLineClamp: lineCount.content,
                   '& .toastui-editor-contents > h1:first-of-type': {
                     marginTop: 0,
                   },
@@ -263,33 +291,11 @@ const HitchhikingCard = ({
   isProject?: boolean
 }) => {
   const [isFlipped, setIsFlipped] = useState(false)
-  const [cardWidth, setCardWidth] = useState(0)
   const [currentDomain, setCurrentDomain] = useState('')
-  const { isPc } = useMedia()
 
   useEffect(() => {
     // 현재 도메인 설정
     setCurrentDomain(window.location.origin)
-
-    // 카드 너비 설정
-    // calc(90svh * 328 / 800)
-    setCardWidth(
-      isPc
-        ? (window.innerHeight * 0.8 * 328) / 800
-        : (window.innerHeight * 328) / 800,
-    )
-    const handleResize = () => {
-      const newCardWidth = isPc
-        ? (window.innerHeight * 0.8 * 328) / 800
-        : window.innerWidth * 0.9
-      setCardWidth(newCardWidth)
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
   }, [])
 
   const handleMouseUp = (e: React.MouseEvent) => {
@@ -332,7 +338,6 @@ const HitchhikingCard = ({
         flipped={isFlipped}
         isProject={isProject}
         title={title}
-        cardWidth={cardWidth}
         currentDomain={currentDomain}
       />
     </div>
