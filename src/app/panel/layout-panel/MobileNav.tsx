@@ -39,7 +39,7 @@ const MobileNav = () => {
       else setValue('my-page')
     } else if (pathname.startsWith('/showcase')) {
       setValue('showcase')
-    } else if (pathname.startsWith('/login')) {
+    } else {
       setValue('')
     }
   }, [pathname])

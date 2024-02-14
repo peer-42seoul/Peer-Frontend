@@ -32,7 +32,7 @@ const TeamSidebar = ({ id }: { id: string }) => {
     <Box sx={getNavStyle(isLargeTablet, isPc)}>
       <CuNavBar
         getTabValue={getTabValue}
-        title={'나의 팀들'}
+        title={'나의 팀'}
         tabletMode
         tabData={[
           {
