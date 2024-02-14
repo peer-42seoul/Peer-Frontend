@@ -28,9 +28,11 @@ const CuPhotoBox = ({
         ...style,
         position: 'relative',
         margin: 0,
-        backgroundColor: '#ffffff',
-        border: '1px solid',
-        borderColor: 'line.alternative',
+        ...(error && {
+          backgroundColor: '#ffffff',
+          border: '1px solid',
+          borderColor: 'line.alternative',
+        }),
       }}
     >
       {src && !error && (
