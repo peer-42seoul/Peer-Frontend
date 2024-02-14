@@ -53,7 +53,8 @@ const MainShowcase = () => {
       {data && data.content[0] && (
         <Stack alignItems={'center'} position={'relative'}>
           <CuPhotoBox
-            style={{ width: '300px', height: '350px', borderRadius: '0.75rem' }}
+            imgStyle={{ borderRadius: '0.75rem' }}
+            style={{ width: '300px', height: '350px' }}
             src={
               data?.content[0].image
                 ? data?.content[0].image

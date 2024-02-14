@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 interface ICuPhotoBoxProps {
   onClick?: () => void
   style?: React.CSSProperties
+  imgStyle?: React.CSSProperties
   src: string
   alt: string
   objectStyle?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
@@ -19,6 +20,7 @@ const CuPhotoBox = ({
   priorityOption,
   objectStyle = 'cover',
   onClick,
+  imgStyle,
 }: ICuPhotoBoxProps) => {
   const [error, setError] = useState(false)
   return (
@@ -40,7 +42,7 @@ const CuPhotoBox = ({
           src={src}
           alt={alt}
           fill
-          style={{ objectFit: objectStyle }}
+          style={{ ...imgStyle, objectFit: objectStyle }}
           sizes="100%"
           priority={priorityOption}
           onError={() => setError(true)}
