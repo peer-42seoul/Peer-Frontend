@@ -21,7 +21,7 @@ import { DateTimePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import CuModal from '@/components/CuModal'
 import { idStyle, statusStyle, titleStyle } from './AnnounceStyles'
-import DynamicToastEditor from '@/components/DynamicToastEditor'
+import DynamicToastEditorAdmin from '@/components/DynamicToastEditorAdmin'
 import { Editor } from '@toast-ui/editor'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
 import { config } from '../panel/AdminAxios'
@@ -590,7 +590,7 @@ const Announce = () => {
             </Box>
           ) : (
             <Box>
-              <DynamicToastEditor
+              <DynamicToastEditorAdmin
                 initialValue={getValues('content')}
                 initialEditType="wysiwyg"
                 editorRef={editorRef}
