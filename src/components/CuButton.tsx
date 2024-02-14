@@ -43,7 +43,12 @@ const CuButton = ({
       disabled={disabled}
       form={form}
     >
-      <Typography {...TypographyProps}>{message}</Typography>
+      <Typography
+        {...TypographyProps}
+        color={variant === 'contained' ? '#ffffff' : ''}
+      >
+        {message}
+      </Typography>
     </Button>
   )
 }
