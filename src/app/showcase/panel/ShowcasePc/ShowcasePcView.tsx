@@ -258,7 +258,7 @@ const ShowcasePcView = ({ data }: { data: ICardData | undefined }) => {
                     <Stack direction={'row'} spacing={'0.5rem'}>
                       <TagIcon />
                       <Typography color={'text.alternative'}>
-                        기술스택
+                        관련 태그
                       </Typography>
 
                       {data.skill.map((skill, index) => (

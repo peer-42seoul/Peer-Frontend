@@ -123,7 +123,7 @@ const Options = ({
       >
         <Grid item xs={12}>
           <TagAutoComplete
-            title={'기술스택'}
+            title={'관련 태그'}
             tagList={listData || []}
             datas={tagData}
             setData={setTagData}
