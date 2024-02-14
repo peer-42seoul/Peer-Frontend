@@ -53,7 +53,7 @@ export interface ITeam {
 }
 
 export enum EInterviewType {
-  CLOSE = 'close',
+  CLOSE = 'CLOSE',
   OPEN = 'OPEN',
   RATIO = 'RATIO',
   CHECK = 'CHECK',
@@ -70,7 +70,7 @@ export interface IInterview {
   question: string
   answer: string
   type: EInterviewType
-  optionList: CloseQuestionList | RatioQuestionList | CheckQuestionList | null
+  option: CloseQuestionList | RatioQuestionList | CheckQuestionList | null
 }
 
 export interface IApply {
