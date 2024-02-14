@@ -17,7 +17,13 @@ import useAxiosWithAuth from '@/api/config'
 import Tutorial from '@/components/Tutorial'
 import RecruitPageTutorial from '@/components/tutorialContent/RecruitPageTutorial'
 
-const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
+const RecruitDetailPage = ({
+  data,
+  id,
+}: {
+  data?: IPostDetail
+  id: string
+}) => {
   const [isClient, setIsClient] = useState(false)
   const [content, setCotent] = useState<IPostDetail | undefined>(data)
   const router = useRouter()
