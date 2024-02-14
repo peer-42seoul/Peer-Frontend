@@ -18,10 +18,23 @@ const ShowcaseGenerationPage = ({ params }: { params: { id: string } }) => {
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )
-
+  console.log('에러', error?.response.data.message)
   if (isLoading) return <CuCircularProgress color={'secondary'} />
   if (error)
-    return <Typography color={'error'}>에러가 발생했습니다.</Typography>
+    return (
+      <Typography
+        sx={{
+          margin: '0 auto',
+          height: '100%',
+          display: 'flex',
+          alignContent: 'center',
+          justifyContent: 'center',
+        }}
+        color={'error'}
+      >
+        {error?.response.data.message}
+      </Typography>
+    )
 
   return (
     <Stack
