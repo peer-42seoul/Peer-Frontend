@@ -20,14 +20,12 @@ const pcBase = {
   padding: '1rem 1.25rem',
   borderRadius: '0.75rem',
   maxWidth: '32.5rem',
-  wordBreak: 'break-all',
 }
 
 const mobileBase = {
   padding: '0.75rem',
   borderRadius: '0.75rem',
   maxWidth: '70%',
-  wordBreak: 'break-all',
 }
 
 const ownerBase = {
