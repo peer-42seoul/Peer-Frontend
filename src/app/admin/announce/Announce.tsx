@@ -720,7 +720,11 @@ const Announce = () => {
               </Button>
             ) : null}
             {writeMode === 'view' ? (
-              <Button variant={'contained'} onClick={() => onHandleEdit()}>
+              <Button
+                variant={'contained'}
+                onClick={() => onHandleEdit()}
+                disabled={getValues('announcementStatus') !== '예약' ? true : false}
+              >
                 수정
               </Button>
             ) : writeMode === 'edit' ? (
