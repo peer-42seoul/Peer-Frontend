@@ -92,7 +92,10 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
               >
                 <Stack direction={'row'} display={'flex'} alignItems={'center'}>
                   <Typography fontWeight="bold">팀원 목록</Typography>
-                  <Tutorial content={<TeamMemberTutorial />} />
+                  <Tutorial
+                    title={'팀원 목록'}
+                    content={<TeamMemberTutorial />}
+                  />
                 </Stack>
                 <Button
                   disabled={
@@ -111,11 +114,14 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
                 teamStatus={teams.team.status}
                 team={teams.member}
                 teamId={teams.team.id}
-                jobs={teams.job}
               />
             </Card>
           ) : (
-            <ApplicantList close={closeApplicant} teamId={teams.team.id} />
+            <ApplicantList
+              mutate={mutate}
+              close={closeApplicant}
+              teamId={teams.team.id}
+            />
           )}
         </>
       ) : (

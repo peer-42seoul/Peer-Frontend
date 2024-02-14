@@ -10,3 +10,8 @@ export const mobileNavBar: SxProps = {
   width: '100%',
   height: 'content-fit',
 }
+
+export const tabletNavBar: SxProps = {
+  width: '70%',
+  height: 'content-fit',
+}
