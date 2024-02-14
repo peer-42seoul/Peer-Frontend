@@ -101,7 +101,6 @@ const SkillAutocomplete = ({
         tagList.find((skill) => newValue === skill.name) as ISkill,
       )
     })
-    console.log(newSkillList)
     setSkillList(newSkillList)
     if (trigger) trigger('tagList')
   }

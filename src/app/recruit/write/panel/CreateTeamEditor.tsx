@@ -503,7 +503,7 @@ const CreateTeamEditor = ({
 
             {/* 태그 추가 */}
             <FieldWithLabel
-              label="기술 스택"
+              label="관련 태그"
               labelIcon={
                 <Icon.TagIcon
                   sx={{ ...style.iconStyleBase, color: 'text.normal' }}
@@ -511,7 +511,7 @@ const CreateTeamEditor = ({
               }
               endIconButton={
                 <Tutorial
-                  title="기술 스택 추가 방법"
+                  title="관련 태그 추가 방법"
                   content={<SkillsTutorial />}
                 />
               }

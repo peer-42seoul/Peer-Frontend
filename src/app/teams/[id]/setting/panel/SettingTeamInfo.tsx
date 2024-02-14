@@ -128,22 +128,19 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
       )
       .then((res) => {
         if (res.status == 200) {
-          console.log('서버에 저장 완료')
           mutate()
           openToast({
             severity: 'success',
             message: '팀 정보 수정이 완료되었습니다.',
           })
         } else {
-          console.log('서버에 저장 실패')
           openToast({
             severity: 'error',
             message: '팀 정보 수정에 실패하였습니다.',
           })
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         openToast({
           severity: 'error',
           message: '팀 정보 수정에 실패하였습니다.',
@@ -214,12 +211,14 @@ const SettingTeamJobs = ({ team, mutate }: ISettingTeamJobs) => {
                   teamActivity={operationForm}
                   control={control}
                 />
-                <SettingTeamLocation
-                  teamStatus={status}
-                  teamLocation={region}
-                  teamActivity={operationForm}
-                  control={control}
-                />
+                {team.operationForm !== TeamOperationForm.ONLINE && (
+                  <SettingTeamLocation
+                    teamStatus={status}
+                    teamLocation={region}
+                    teamActivity={operationForm}
+                    control={control}
+                  />
+                )}
               </Stack>
             </Stack>
           </Box>

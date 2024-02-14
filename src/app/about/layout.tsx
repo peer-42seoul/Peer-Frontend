@@ -50,8 +50,6 @@ const AboutPage = (props: AboutPageProps) => {
   const { boardType } = useAboutLayout()
   const { isPc, isTablet } = useMedia()
 
-  console.log(isPc)
-
   if (isPc) {
     return (
       <Stack mx={isTablet ? '4rem' : '8rem'} my={'1rem'}>
