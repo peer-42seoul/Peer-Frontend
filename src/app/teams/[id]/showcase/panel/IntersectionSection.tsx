@@ -65,11 +65,18 @@ const IntersectionSection = ({
     }
   }
 
-  const deleteShowcase = () => {
-    axiosWithAuth.delete(
-      `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/${showcaseId}`,
-    )
-    closeModal()
+  const deleteShowcase = async () => {
+    try {
+      await axiosWithAuth.delete(
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/${showcaseId}`,
+      )
+      closeModal()
+    } catch (error: any) {
+      openToast({
+        severity: 'error',
+        message: '삭제에 실패하였습니다. 다시 시도해주세요.',
+      })
+    }
   }
 
   return (

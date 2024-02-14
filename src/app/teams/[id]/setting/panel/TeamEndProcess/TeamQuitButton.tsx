@@ -18,49 +18,42 @@ const TeamQuitButton = ({ teamId, teamStatus }: ITeamQuitButton) => {
   const axiosWithAuth = useAxiosWithAuth()
 
   const quitTeam = () => {
-    console.log('exit team')
     axiosWithAuth
       .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/quit`, {
         teamId: teamId,
       })
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
           openToast({
             severity: 'success',
             message: '팀을 나갔습니다.',
           })
           router.push('/team-list')
         } else if (res.status === 401) {
-          console.log(res)
           router.push('/login')
           openToast({
             severity: 'error',
             message: '잘못된 접근입니다.',
           })
         } else if (res.status === 404) {
-          console.log(res)
           openToast({
             severity: 'error',
             message: '팀이 존재하지 않습니다.',
           })
         } else if (res.status === 409) {
-          console.log(res)
           openToast({
             severity: 'error',
             message:
               '혼자 남았을 경우 팀을 나갈 수 없습니다. 해산절차를 진행해주세요.',
           })
         } else {
-          console.log(res)
           openToast({
             severity: 'error',
             message: '팀 나가기에 실패하였습니다.',
           })
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         openToast({
           severity: 'error',
           message: '팀 나가기에 실패하였습니다.',

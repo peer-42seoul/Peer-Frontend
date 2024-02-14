@@ -69,7 +69,7 @@ const Comment = ({ data, postId }: CommentProps) => {
       }
     }
   }
-  console.log('userId:,', data)
+
   return (
     <>
       <Stack sx={style.commentListContainer}>

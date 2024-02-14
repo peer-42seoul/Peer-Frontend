@@ -51,7 +51,7 @@ interface ISetupMember {
 // }
 
 const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
-  const { isPc } = useMedia()
+  const { isPc, isTablet } = useMedia()
   const { isOpen, closeModal, openModal } = useModal()
   // const {
   //   isOpen: isChangeOpen,
@@ -222,7 +222,7 @@ const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
               component="div"
               key={index}
               item
-              xs={isPc ? 3 : 6}
+              xs={isPc && !isTablet ? 3 : 6}
               textAlign="center"
             >
               <Box
@@ -270,7 +270,10 @@ const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
                 </Typography>
                 <Stack direction="row" sx={{ justifyContent: 'center' }}>
                   {canChangeLeader ? (
-                    <>
+                    <Stack
+                      direction={isPc && !isTablet ? 'row' : 'column'}
+                      alignItems={'center'}
+                    >
                       <Typography variant="Body2">리더 권한</Typography>
                       <Switch
                         disabled={
@@ -282,7 +285,7 @@ const SettingTeamMember = ({ team, teamId, teamStatus }: ISetupMember) => {
                           member.role === TeamGrant.LEADER ? true : false
                         }
                       />
-                    </>
+                    </Stack>
                   ) : (
                     <br />
                   )}

@@ -119,7 +119,6 @@ const SignUp = () => {
         })
         .catch((error) => {
           setEmailSendStatus('error')
-          console.log(error)
           if (error.response.data.message) {
             openToast({
               severity: 'error',

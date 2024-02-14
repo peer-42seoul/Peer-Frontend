@@ -59,7 +59,6 @@ function PostCard({
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
           setFavorite(!favorite)
         }
       })
@@ -70,7 +69,6 @@ function PostCard({
       .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/like/${postId}`)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
           if (liked === false) {
             setIsLiked(true)
             setLikeNum(likeNum + 1)

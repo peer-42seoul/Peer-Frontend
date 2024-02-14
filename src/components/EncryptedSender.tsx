@@ -99,7 +99,6 @@ const EncryptedSender = ({
       if (onSuccess) onSuccess()
       if (setIsLoading) setIsLoading(false)
     } catch (e: any) {
-      console.log(e)
       if (onError) {
         onError(e?.response?.data?.message ?? '알 수 없는 오류가 발생했습니다.')
       }

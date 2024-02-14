@@ -25,6 +25,8 @@ export const cardMediaStyleBase: SxProps = {
   maxHeight: '15.6875rem',
   width: ['calc(90svh * 328 / 800)', 'calc(80svh * 328 /800)'],
   height: ['calc(90svh * 251 / 800)', 'calc(80svh * 251 /800)'],
+  p: 0,
+  boxSizing: 'border-box',
 }
 
 export const cardAuthorAvatarStyleBase: SxProps = {

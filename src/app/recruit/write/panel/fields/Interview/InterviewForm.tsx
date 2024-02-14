@@ -60,7 +60,6 @@ const InterviewForm = ({
     }
     trigger('interviewList').then(() => {
       if (Object.keys(errors).length) {
-        console.log(errors)
         openToast({
           message: '질문과 답변을 모두 작성해주세요.',
           severity: 'error',
