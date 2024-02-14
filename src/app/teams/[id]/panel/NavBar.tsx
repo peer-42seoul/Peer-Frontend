@@ -187,7 +187,7 @@ const TeamSidebar = ({ id }: { id: string }) => {
     <Box sx={isPc ? navStyle.pcNavBar : navStyle.mobileNavBar}>
       <CuNavBar
         getTabValue={getTabValue}
-        title={'나의 팀들'}
+        title={'나의 팀'}
         tabData={[
           {
             label: '메인',
