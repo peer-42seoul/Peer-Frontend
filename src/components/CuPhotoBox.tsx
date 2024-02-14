@@ -1,6 +1,7 @@
+'use client'
 import { Box } from '@mui/material'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 
 interface ICuPhotoBoxProps {
   onClick?: () => void
@@ -19,6 +20,7 @@ const CuPhotoBox = ({
   objectStyle = 'cover',
   onClick,
 }: ICuPhotoBoxProps) => {
+  const [error, setError] = useState(false)
   return (
     <Box
       onClick={onClick}
@@ -26,9 +28,12 @@ const CuPhotoBox = ({
         ...style,
         position: 'relative',
         margin: 0,
+        backgroundColor: '#ffffff',
+        border: '1px solid',
+        borderColor: 'line.alternative',
       }}
     >
-      {src && (
+      {src && !error && (
         <Image
           src={src}
           alt={alt}
@@ -36,6 +41,7 @@ const CuPhotoBox = ({
           style={{ objectFit: objectStyle }}
           sizes="100%"
           priority={priorityOption}
+          onError={() => setError(true)}
         />
       )}
     </Box>
