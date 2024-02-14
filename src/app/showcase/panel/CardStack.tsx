@@ -94,8 +94,9 @@ const CardStack = ({
                 animate={{
                   scale: i === cardList.length - 1 ? 1 : 0.8,
                   opacity: i === cardList.length - 1 ? 1 : 0,
+                  y: 0,
                 }}
-                exit={{ opacity: 0 }}
+                exit={{ opacity: 0, y: -500 }}
                 drag
                 dragSnapToOrigin
                 whileDrag={{ scale: 1.2 }}
