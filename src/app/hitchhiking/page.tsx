@@ -65,6 +65,7 @@ const Hitchhiking = () => {
   }
 
   const addCard = () => {
+    if (draggedCardList.length === 0) return
     setCardList((prev: IPostCardHitchhiking[]) => {
       prev.push(draggedCardList[draggedCardList.length - 1])
       if (cardList.length > 1) prev[prev.length - 2].hasBeenRemoved = false

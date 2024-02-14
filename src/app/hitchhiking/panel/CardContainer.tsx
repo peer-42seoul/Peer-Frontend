@@ -104,6 +104,7 @@ const CardContainer = ({
             cardList={cardList}
             removeCard={removeCard}
             isProject={isProject}
+            addCard={addCard}
           />
         ) : (
           <Typography variant="CaptionEmphasis">{message}</Typography>

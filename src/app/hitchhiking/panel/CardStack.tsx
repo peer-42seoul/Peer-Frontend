@@ -18,10 +18,12 @@ const CardStack = ({
   cardList,
   removeCard,
   isProject,
+  addCard,
 }: {
   cardList: Array<IPostCardHitchhiking>
   removeCard: (recruit_id: number) => void
   isProject: boolean
+  addCard?: () => void
 }) => {
   const [dragged, setDragged] = useState(false)
 
@@ -36,7 +38,9 @@ const CardStack = ({
       checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
     ) {
       setDragged(false)
-
+      if (addCard) {
+        addCard()
+      }
       return
     }
     removeCard(recruit_id)
@@ -101,14 +105,17 @@ const CardStack = ({
                 }}
                 drag
                 dragSnapToOrigin
-                whileDrag={{ scale: 1.2 }}
-                dragElastic={1}
+                dragElastic={0.5}
                 dragConstraints={{
-                  left: 0,
+                  top: 0,
                   right: 0,
+                  left: 0,
                   bottom: 0,
                 }}
-                dragTransition={{ bounceStiffness: 250, bounceDamping: 50 }}
+                dragTransition={{
+                  bounceStiffness: 250,
+                  bounceDamping: 50,
+                }}
                 onDragStart={() => {
                   setDragged(true)
                 }}
