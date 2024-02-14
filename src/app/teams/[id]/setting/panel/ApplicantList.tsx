@@ -158,7 +158,10 @@ const ApplicantList = ({
         >
           <Stack direction="row" alignItems="center">
             <Typography fontWeight="bold">신청 대기자</Typography>
-            <Tutorial content={<TeamApplicantTutorial />} />
+            <Tutorial
+              title={'신청 대기자 보기'}
+              content={<TeamApplicantTutorial />}
+            />
           </Stack>
           <IconButton onClick={close} size="small">
             <CloseIcon />
@@ -179,9 +182,15 @@ const ApplicantList = ({
         justifyContent="space-between"
         p={2}
       >
-        <Typography fontWeight="bold">
-          신청 대기자 {index + 1} / {members.length}
-        </Typography>
+        <Stack direction="row" alignItems="center">
+          <Typography fontWeight="bold">
+            신청 대기자 {index + 1} / {members.length}
+          </Typography>
+          <Tutorial
+            title={'신청 대기자 보기'}
+            content={<TeamApplicantTutorial />}
+          />
+        </Stack>
         <Button onClick={close} size="small">
           리스트로 돌아가기
         </Button>

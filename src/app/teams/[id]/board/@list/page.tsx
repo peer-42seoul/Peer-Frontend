@@ -77,7 +77,10 @@ const TeamBoard = ({ params }: { params: { id: string } }) => {
                 >
                   <Box>
                     <BoardDropdown boardData={boardList} />
-                    <Tutorial content={<TeamBoardTutorial />} />
+                    <Tutorial
+                      title={'팀 게시판'}
+                      content={<TeamBoardTutorial />}
+                    />
                   </Box>
                   <Stack direction={'row'} spacing={'0.5rem'}>
                     <IconButtonContainer

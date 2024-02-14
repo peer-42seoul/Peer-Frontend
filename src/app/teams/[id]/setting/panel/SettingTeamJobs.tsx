@@ -136,7 +136,7 @@ const SettingTeamJobs = ({ teamId, jobList, teamStatus }: Props) => {
       <Stack spacing={2}>
         <Stack direction={'row'} display={'flex'} alignItems={'center'}>
           <Typography fontWeight="bold">역할 추가</Typography>
-          <Tutorial content={<TeamJobsTutorial />} />
+          <Tutorial title={'역할 추가'} content={<TeamJobsTutorial />} />
         </Stack>
         <Card
           sx={{
