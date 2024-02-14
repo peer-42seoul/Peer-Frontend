@@ -11,6 +11,7 @@ import { ICardData } from './panel/types'
 import useAuthStore from '@/states/useAuthStore'
 import CardContainer from './panel/CardContainer'
 import ShowcasePCLayout from './panel/ShowcasePc/ShowcasePcLayout'
+import useToast from '@/states/useToast'
 
 const Showcase = () => {
   const [page, setPage] = useState<number>(1)
@@ -25,6 +26,8 @@ const Showcase = () => {
       ? (url: string) => axiosWithAuth.get(url).then((res) => res.data)
       : defaultGetFetcher,
   )
+
+  const { openToast } = useToast()
 
   useEffect(() => {
     if (!isLoading && data?.content) {
@@ -50,7 +53,13 @@ const Showcase = () => {
   }
 
   const addCard = () => {
-    if (draggedCardList.length === 0) return
+    if (draggedCardList.length === 0) {
+      openToast({
+        message: '되돌아 갈 수 있는 마지막 카드예요.',
+        severity: 'info',
+      })
+      return
+    }
     setCardList((prev: ICardData[]) => {
       prev.push(draggedCardList[draggedCardList.length - 1])
       if (cardList.length > 1) prev[prev.length - 2].hasBeenRemoved = false
