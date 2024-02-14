@@ -9,7 +9,7 @@ interface Props extends IToastEditorProps {
 }
 
 const ToastEditorAdmin = dynamic(
-  () => import('./ToastUIEditor'), // ToastEditor 컴포넌트의 경로
+  () => import('./ToastUIEditorAdmin'), // ToastEditor 컴포넌트의 경로
   { ssr: false }, // 서버 사이드 렌더링 비활성화
 )
 
