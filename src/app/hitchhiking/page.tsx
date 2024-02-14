@@ -54,14 +54,21 @@ const Hitchhiking = () => {
   }, [isLoading, data?.content])
 
   const removeCard = (recruitId: number) => {
-    setDraggedCardList((prev: IPostCardHitchhiking[]) => {
-      prev.push(cardList[cardList.length - 1])
-      return prev
-    })
-    draggedCardList[draggedCardList.length - 1].hasBeenRemoved = true
-    setCardList((prev: IPostCardHitchhiking[]) => {
-      return prev.filter((card) => card.recruitId !== recruitId)
-    })
+    if (cardList.length > 1) {
+      setDraggedCardList((prev: IPostCardHitchhiking[]) => {
+        prev.push(cardList[cardList.length - 1])
+        return prev
+      })
+      draggedCardList[draggedCardList.length - 1].hasBeenRemoved = true
+      setCardList((prev: IPostCardHitchhiking[]) => {
+        return prev.filter((card) => card.recruitId !== recruitId)
+      })
+    } else if (cardList.length === 1) {
+      openToast({
+        message: '넘길 수 있는 마지막 카드예요.',
+        severity: 'info',
+      })
+    }
     if (cardList.length === 2) {
       setPage((prev) => (!data?.last ? prev + 1 : prev))
     }
