@@ -39,14 +39,21 @@ const Showcase = () => {
   }, [isLoading, data?.content])
 
   const removeCard = (recruit_id: number) => {
-    setDraggedCardList((prev: ICardData[]) => {
-      prev.push(cardList[cardList.length - 1])
-      return prev
-    })
-    draggedCardList[draggedCardList.length - 1].hasBeenRemoved = true
-    setCardList((prev: ICardData[]) => {
-      return prev.filter((card) => card.id !== recruit_id)
-    })
+    if (cardList.length > 1) {
+      setDraggedCardList((prev: ICardData[]) => {
+        prev.push(cardList[cardList.length - 1])
+        return prev
+      })
+      draggedCardList[draggedCardList.length - 1].hasBeenRemoved = true
+      setCardList((prev: ICardData[]) => {
+        return prev.filter((card) => card.id !== recruit_id)
+      })
+    } else if (cardList.length === 1) {
+      openToast({
+        message: '넘길 수 있는 마지막 카드에요.',
+        severity: 'info',
+      })
+    }
     if (cardList.length === 2) {
       setPage((prev) => (!data?.last ? prev + 1 : prev))
     }

@@ -50,12 +50,12 @@ const AlertCard = ({ alert, handleDelete }: IAlertCard) => {
           flex={8}
         >
           <Typography
-            variant="body1"
+            variant="Body2"
             sx={{
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               display: '-webkit-box',
-              WebkitLineClamp: '1',
+              WebkitLineClamp: '2',
               WebkitBoxOrient: 'vertical',
             }}
           >

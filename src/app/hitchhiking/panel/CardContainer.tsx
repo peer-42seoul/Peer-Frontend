@@ -137,7 +137,7 @@ const CardContainer = ({
           <IconButton
             sx={style.buttonStyle}
             onClick={() => removeCard(cardList[cardList.length - 1]?.recruitId)}
-            disabled={cardList.length === 0}
+            disabled={cardList.length === 1}
           >
             <ChevronRight
               sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}

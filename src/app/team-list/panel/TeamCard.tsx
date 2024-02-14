@@ -77,7 +77,7 @@ const TeamCard = ({ team }: ITeamCard) => {
 
   const handleRecruit = () => {
     if (team.isApproved) return
-    router.push(`/recruit/${team.id}`)
+    router.push(`/recruit/${team.id}?type=${team.type}`)
   }
 
   return (
