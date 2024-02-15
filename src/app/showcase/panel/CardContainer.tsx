@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import useMedia from '@/hook/useMedia'
 import { IconButton, Stack, Typography } from '@mui/material'
 import * as containerStyle from './CardContainer.style'
@@ -16,12 +16,14 @@ const CardContainer = ({
   message,
   addCard,
   addDisabled,
+  mutate,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
   message: string
   addCard?: () => void
   addDisabled?: boolean
+  mutate: Dispatch<SetStateAction<ICardData[]>>
 }) => {
   const { isPc, isTablet } = useMedia()
   return (
@@ -62,6 +64,7 @@ const CardContainer = ({
             cardList={cardList}
             removeCard={removeCard}
             addCard={addCard}
+            mutate={mutate}
           />
         ) : (
           <Typography variant="CaptionEmphasis">{message}</Typography>

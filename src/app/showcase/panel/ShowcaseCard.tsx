@@ -15,7 +15,13 @@ import {
   Box,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import DropdownMenu from '@/components/DropdownMenu'
 import * as style from './ShowcaseCard.style'
 import { ICardData } from '@/app/showcase/panel/types'
@@ -237,11 +243,13 @@ const ShowcaseCard = ({
   data,
   dragged,
   setDragged,
+  mutate,
 }: {
   data: ICardData
   sx?: SxProps
   dragged: boolean
   setDragged: React.Dispatch<React.SetStateAction<boolean>>
+  mutate: Dispatch<SetStateAction<ICardData[]>>
 }) => {
   const [isFlipped, setIsFlipped] = useState(false)
   const [currentDomain, setCurrentDomain] = useState('')
@@ -285,6 +293,7 @@ const ShowcaseCard = ({
           transform: 'translate(-50%, 0)',
         }}
         onClick={handleMouseUp}
+        mutate={mutate}
       />
       <ShowcaseCardBack
         postId={data.id}

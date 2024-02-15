@@ -31,13 +31,20 @@ function PostCard({
   liked,
   isFavorite,
   onClick,
+  mutate,
 }: IPostCardShowcase) {
   const ref = React.useRef<HTMLDivElement>(null)
   const [currentCardWidth, setCurrentCardWidth] = useState<number>(0)
-  const [favorite, setFavorite] = useState<boolean>(isFavorite)
-  const [likeNum, setLikeNum] = useState<number>(like)
-  const [isLiked, setIsLiked] = useState<boolean>(liked)
+  const [favorite, setFavorite] = useState<boolean>(false)
+  const [likeNum, setLikeNum] = useState<number>(0)
+  const [isLiked, setIsLiked] = useState<boolean>(false)
   const axiosWithAuth = useAxiosWithAuth()
+
+  useEffect(() => {
+    setFavorite(isFavorite)
+    setLikeNum(like)
+    setIsLiked(liked)
+  }, [like, liked, isFavorite])
 
   useEffect(() => {
     if (ref.current) {
@@ -59,28 +66,58 @@ function PostCard({
       )
       .then((res) => {
         if (res.status === 200) {
-          setFavorite(!favorite)
+          mutate((prev) => {
+            return prev.map((card) => {
+              if (card.id === postId) {
+                return {
+                  ...card,
+                  favorite: !favorite,
+                }
+              }
+              return card
+            })
+          })
         }
       })
       .catch(() => {})
-  }, [setFavorite, axiosWithAuth])
+  }, [favorite, setFavorite, mutate])
 
   const clickLike = useCallback(() => {
     axiosWithAuth
       .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/like/${postId}`)
       .then((res) => {
         if (res.status === 200) {
-          if (liked === false) {
-            setIsLiked(true)
-            setLikeNum(likeNum + 1)
+          if (isLiked === false) {
+            mutate((prev) => {
+              return prev.map((card) => {
+                if (card.id === postId) {
+                  return {
+                    ...card,
+                    like: likeNum + 1,
+                    liked: !isLiked,
+                  }
+                }
+                return card
+              })
+            })
           } else {
-            setIsLiked(false)
-            setLikeNum(likeNum - 1)
+            mutate((prev) => {
+              return prev.map((card) => {
+                if (card.id === postId) {
+                  return {
+                    ...card,
+                    like: likeNum - 1,
+                    liked: !isLiked,
+                  }
+                }
+                return card
+              })
+            })
           }
         }
       })
       .catch(() => {})
-  }, [setIsLiked, setLikeNum, axiosWithAuth])
+  }, [isLiked, likeNum, setLikeNum, setIsLiked])
 
   return (
     <Card

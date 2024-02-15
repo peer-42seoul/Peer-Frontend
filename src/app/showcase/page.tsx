@@ -107,6 +107,7 @@ const Showcase = () => {
           message={message}
           addCard={addCard}
           addDisabled={draggedCardList.length === 0}
+          mutate={setCardList}
         />
       </Stack>
     )
@@ -118,6 +119,7 @@ const Showcase = () => {
       removeCard={removeCard}
       message={message}
       addCard={addCard}
+      mutate={setCardList}
     />
   )
 }

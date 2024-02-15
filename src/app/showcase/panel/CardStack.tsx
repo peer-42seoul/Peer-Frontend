@@ -1,7 +1,7 @@
 'use client'
 
 import { Box } from '@mui/material'
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import * as style from './ShowcaseCard.style'
 import { ICardData } from '@/app/showcase/panel/types'
@@ -18,10 +18,12 @@ const CardStack = ({
   cardList,
   removeCard,
   addCard,
+  mutate,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
   addCard?: () => void
+  mutate: Dispatch<SetStateAction<ICardData[]>>
 }) => {
   const [dragged, setDragged] = useState(false)
 
@@ -119,6 +121,7 @@ const CardStack = ({
                   data={card}
                   dragged={dragged}
                   setDragged={setDragged}
+                  mutate={mutate}
                 />
               </motion.div>
             )
