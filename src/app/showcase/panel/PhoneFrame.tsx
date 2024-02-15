@@ -6,11 +6,13 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
     <Stack alignItems={'center'} justifyContent={'center'}>
       <Box
         position={'relative'}
-        component={'img'}
-        src="/images/iPhoneMock.svg"
         sx={{
-          width: '22.5rem',
+          width: '17rem',
           height: '40rem',
+          borderColor: 'text.normal',
+          borderStyle: 'solid',
+          borderWidth: 2,
+          borderRadius: '3rem',
         }}
       />
       <Stack
@@ -24,7 +26,7 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
             src={imageUrl}
             sx={{
               width: '16rem',
-              height: '40rem',
+              height: '20rem',
               objectFit: 'contain',
             }}
           />
@@ -32,8 +34,9 @@ const PhoneFrame = ({ imageUrl }: { imageUrl: string | undefined }) => {
           <Box
             display={'flex'}
             sx={{
-              width: '22.5rem',
+              width: '20rem',
               height: '40rem',
+              objectFit: 'contain',
             }}
             alignItems={'center'}
             justifyContent={'center'}

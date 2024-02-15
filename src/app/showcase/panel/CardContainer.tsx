@@ -1,36 +1,39 @@
 'use client'
+
 import React from 'react'
 import useMedia from '@/hook/useMedia'
-import { Stack, Typography } from '@mui/material'
-import * as cardStyle from './ShowcaseCard.style'
+import { IconButton, Stack, Typography } from '@mui/material'
 import * as containerStyle from './CardContainer.style'
+import * as style from '../showcase.style'
 import CardStack from './CardStack'
 import { ICardData } from '@/app/showcase/panel/types'
 import { BetaIcon } from '@/components/BetaBadge'
+import { ChevronLeft, ChevronRight } from '@/icons'
 
 const CardContainer = ({
   cardList,
   removeCard,
   message,
   addCard,
+  addDisabled,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
   message: string
   addCard?: () => void
+  addDisabled?: boolean
 }) => {
-  const { isPc } = useMedia()
+  const { isPc, isTablet } = useMedia()
   return (
     <Stack
       justifyContent={'center'}
       alignItems={'center'}
       sx={
-        isPc
+        isPc && !isTablet
           ? containerStyle.cardContainerPCStyle
           : containerStyle.cardContainerMobileStyle
       }
       direction={'column'}
-      spacing={'2rem'}
     >
       <Stack
         direction={'row'}
@@ -48,8 +51,10 @@ const CardContainer = ({
         justifyContent={'center'}
         alignItems={'center'}
         sx={{
-          ...(isPc ? cardStyle.cardPcSize : cardStyle.cardMobileSize),
+          mb: '0.875rem',
           position: 'relative',
+          zIndex: 100,
+          flexGrow: [1, 0],
         }}
       >
         {!message ? (
@@ -60,6 +65,35 @@ const CardContainer = ({
           />
         ) : (
           <Typography variant="CaptionEmphasis">{message}</Typography>
+        )}
+      </Stack>
+      <Stack
+        direction={'row'}
+        width={'30%'}
+        display={'flex'}
+        justifyContent={'space-between'}
+      >
+        {isTablet && isPc && (
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={addCard}
+            disabled={!!addDisabled}
+          >
+            <ChevronLeft
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
+        )}
+        {isTablet && isPc && (
+          <IconButton
+            sx={style.buttonStyle}
+            onClick={() => removeCard(cardList[cardList.length - 1]?.id)}
+            disabled={cardList.length === 1}
+          >
+            <ChevronRight
+              sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
+            />
+          </IconButton>
         )}
       </Stack>
     </Stack>

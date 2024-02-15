@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardMedia,
   IconButton,
   Stack,
   Typography,
@@ -18,6 +17,7 @@ import { IShowcaseTag } from './types'
 import useAxiosWithAuth from '@/api/config'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 function PostCard({
   postId,
@@ -62,6 +62,7 @@ function PostCard({
           setFavorite(!favorite)
         }
       })
+      .catch(() => {})
   }, [setFavorite, axiosWithAuth])
 
   const clickLike = useCallback(() => {
@@ -78,6 +79,7 @@ function PostCard({
           }
         }
       })
+      .catch(() => {})
   }, [setIsLiked, setLikeNum, axiosWithAuth])
 
   return (
@@ -89,17 +91,15 @@ function PostCard({
         backfaceVisibility: 'hidden',
       }}
       ref={ref}
-      onClick={onClick}
     >
-      <CardMedia
-        component="img"
-        image={image ? image : '/icons/52.png'}
-        alt="post thumbnail"
-        sx={{
-          ...style.cardMediaStyleBase,
-          height: (currentCardWidth * 251) / 328,
-        }}
-      />
+      <CardContent sx={style.cardMediaStyleBase} onClick={onClick}>
+        <CuPhotoBox
+          src={image ? image : '/icons/52.png'}
+          alt="post thumbnail"
+          style={{ width: '100%', height: '100%', boxSizing: 'border-box' }}
+        />
+      </CardContent>
+
       <Stack
         sx={{ p: '1rem', pt: '0.75rem' }}
         spacing={'15px'}
@@ -160,6 +160,7 @@ function PostCard({
             height: (currentCardWidth * 190) / 328,
             boxSizing: 'border-box',
           }}
+          onClick={onClick}
         >
           <CardContent sx={{ p: 0 }}>
             <Typography

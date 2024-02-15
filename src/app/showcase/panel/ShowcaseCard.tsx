@@ -12,23 +12,23 @@ import {
   CircularProgress,
   CardActionArea,
   Avatar,
+  Box,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import DropdownMenu from '@/components/DropdownMenu'
-import useMedia from '@/hook/useMedia'
 import * as style from './ShowcaseCard.style'
 import { ICardData } from '@/app/showcase/panel/types'
 import PostCard from './PostCard'
 import ShareMenuItem from '@/components/dropdownMenu/ShareMenuItem'
 import ReportMenuItem from '@/components/dropdownMenu/ReportMenuItem'
+import DynamicToastViewer from '@/components/DynamicToastViewer'
 
 const ShowcaseCardBack = ({
   postId,
   sx,
   onClick,
   content,
-  cardWidth,
   title,
   name,
   image,
@@ -41,21 +41,53 @@ const ShowcaseCardBack = ({
   image: string | null
   name: string
   content: string
-  cardWidth: number
   currentDomain: string
 }) => {
+  const [lineCount, setLineCount] = useState({
+    title: 1,
+    content: 1,
+  })
   const router = useRouter()
-  const { isPc } = useMedia()
+  const card = useRef<HTMLDivElement>(null)
   const [currentPageUrl, setCurrentPageUrl] = useState('')
 
-  //window is not defined 에러 방지
+  useEffect(() => {
+    setLineCount({
+      title: getLineCount(46, 22.5, 2),
+      content: getLineCount(191, 18, 8),
+    })
+  }, [card])
+
   useEffect(() => {
     setCurrentPageUrl(window.location.href)
+
+    const handleResize = () => {
+      if (card.current) {
+        setLineCount({
+          title: getLineCount(46, 22.5, 2),
+          content: getLineCount(191, 18, 8),
+        })
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
-  const getLineCount = (originHeight: number, lineHeight: number) => {
-    const lineCount = Math.floor((cardWidth * originHeight) / 328 / lineHeight)
-    return lineCount ? lineCount : 1
+  const getLineCount = (
+    originHeight: number,
+    lineHeight: number,
+    maxLine: number,
+  ) => {
+    const removeCount = card.current?.clientHeight ?? 0 < 441 ? 2 : 1
+    const lineCount = Math.floor(
+      ((card.current?.clientHeight ?? 0) * originHeight) / lineHeight / 441,
+    )
+    if (lineCount > maxLine) return maxLine
+    else if (lineCount < 1 + removeCount) return 1
+    else return lineCount - removeCount
   }
 
   const handleSeeAll = (e: React.MouseEvent) => {
@@ -71,6 +103,7 @@ const ShowcaseCardBack = ({
         backfaceVisibility: 'hidden',
         padding: '1rem',
       }}
+      ref={card}
     >
       {content ? (
         <Stack
@@ -102,9 +135,9 @@ const ShowcaseCardBack = ({
               <DropdownMenu>
                 <ShareMenuItem
                   title={title}
-                  url={currentPageUrl}
-                  content={content}
-                  message={currentPageUrl}
+                  url={`${currentPageUrl}/showcase/detail/${postId}`}
+                  content={'피어에서 맘에 드는 프로젝트를 공유해보세요!'}
+                  message={`피어에서 맘에 드는 프로젝트를 공유해보세요! ${currentPageUrl}/showcase/detail/${postId}`}
                 />
 
                 <ReportMenuItem targetId={postId} />
@@ -118,10 +151,7 @@ const ShowcaseCardBack = ({
                 color={'text.normal'}
                 sx={{
                   ...style.cardTitleStyleBase,
-                  height: isPc ? '46px' : getLineCount(46, 22.5) * 22.5,
-                  WebkitLineClamp: isPc
-                    ? 2
-                    : getLineCount(46, 22.5) /* 라인수 */,
+                  WebkitLineClamp: lineCount.title,
                 }}
               >
                 {title}
@@ -137,30 +167,38 @@ const ShowcaseCardBack = ({
             }}
             onClick={onClick}
           >
-            <Typography
-              variant="Caption"
-              color={'text.alternative'}
-              // ref={containerRef}
-              sx={{
-                ...style.cardContentStyleBase,
-                height: isPc ? '11.25rem' : getLineCount(180, 18) * 18,
-                WebkitLineClamp: isPc ? 10 : getLineCount(180, 18) /* 라인수 */,
-              }}
-            >
-              {content.split('\n').map((line) => {
-                return (
-                  <>
-                    {line}
-                    <br />
-                  </>
-                )
-              })}
-            </Typography>
+            <Box width={1} height={'fit-content'}>
+              <DynamicToastViewer
+                initialValue={content}
+                typographySx={{
+                  fontSize: '0.75rem',
+                  color: 'text.alternative',
+                  margin: 0,
+                  lineHeight: '1.125rem',
+                  marginBlockStart: '0',
+                  marginBlockEnd: '0',
+                  marginTop: 0,
+                }}
+                sx={{
+                  ...style.cardContentStyleBase,
+                  WebkitLineClamp: lineCount.content,
+                  '& .toastui-editor-contents > h1:first-of-type': {
+                    marginTop: 0,
+                  },
+                  '.toastui-editor-contents h1': {
+                    paddingBottom: 0,
+                  },
+                  '.toastui-editor-contents h2': {
+                    paddingBottom: 0,
+                  },
+                }}
+              />
+            </Box>
           </CardContent>
           <CardContent sx={{ padding: 0 }} onClick={onClick}>
             <Stack direction={'row'} spacing={'0.5rem'}>
               <Avatar
-                src={image ? image : '/icons/52.png'}
+                src={image ? image : ''}
                 sx={{ width: '1.5rem', height: '1.5rem' }}
               />
               <Typography color={'text.alternative'} width={'11rem'}>
@@ -199,7 +237,6 @@ const ShowcaseCard = ({
   data,
   dragged,
   setDragged,
-  sx,
 }: {
   data: ICardData
   sx?: SxProps
@@ -207,30 +244,11 @@ const ShowcaseCard = ({
   setDragged: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const [isFlipped, setIsFlipped] = useState(false)
-  const [cardWidth, setCardWidth] = useState(0)
   const [currentDomain, setCurrentDomain] = useState('')
-  const { isPc } = useMedia()
 
   useEffect(() => {
     // 현재 도메인 설정
     setCurrentDomain(window.location.origin)
-
-    // 카드 너비 설정
-    setCardWidth(
-      isPc ? window.innerWidth * 0.9 : (window.innerHeight * 0.8 * 328) / 800,
-    )
-    const handleResize = () => {
-      const newCardWidth = isPc
-        ? window.innerWidth * 0.9
-        : (window.innerHeight * 0.8 * 328) / 800
-      setCardWidth(newCardWidth)
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
   }, [])
 
   const handleMouseUp = (e: React.MouseEvent) => {
@@ -262,23 +280,21 @@ const ShowcaseCard = ({
         like={data.like}
         liked={data.liked}
         sx={{
-          ...sx,
+          ...style.cardStyleBase,
           backfaceVisibility: 'hidden',
           transform: 'translate(-50%, 0)',
-          width: isPc ? '90%' : '90vw',
         }}
         onClick={handleMouseUp}
       />
       <ShowcaseCardBack
         postId={data.id}
-        sx={sx}
+        sx={style.cardStyleBase}
         onClick={handleMouseUp}
         flipped={isFlipped}
         title={data.name}
         image={data.image}
         name={data.name}
         content={data.description}
-        cardWidth={cardWidth}
         currentDomain={currentDomain}
       />
     </div>
