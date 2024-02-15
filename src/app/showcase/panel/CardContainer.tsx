@@ -76,7 +76,7 @@ const CardContainer = ({
         display={'flex'}
         justifyContent={'space-between'}
       >
-        {isTablet && isPc && (
+        <>
           <IconButton
             sx={style.buttonStyle}
             onClick={addCard}
@@ -86,8 +86,6 @@ const CardContainer = ({
               sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
             />
           </IconButton>
-        )}
-        {isTablet && isPc && (
           <IconButton
             sx={style.buttonStyle}
             onClick={() => removeCard(cardList[cardList.length - 1]?.id)}
@@ -97,7 +95,7 @@ const CardContainer = ({
               sx={{ ...style.buttonIconStyle, color: 'text.alternative' }}
             />
           </IconButton>
-        )}
+        </>
       </Stack>
     </Stack>
   )

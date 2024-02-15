@@ -98,27 +98,13 @@ const Showcase = () => {
     )
   }
 
-  if (isTablet) {
-    return (
-      <Stack>
-        <CardContainer
-          cardList={cardList}
-          removeCard={removeCard}
-          message={message}
-          addCard={addCard}
-          addDisabled={draggedCardList.length === 0}
-          mutate={setCardList}
-        />
-      </Stack>
-    )
-  }
-
   return (
     <CardContainer
       cardList={cardList}
       removeCard={removeCard}
       message={message}
       addCard={addCard}
+      addDisabled={draggedCardList.length === 0}
       mutate={setCardList}
     />
   )
