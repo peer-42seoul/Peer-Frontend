@@ -6,6 +6,8 @@ import CuModal from '../CuModal'
 import DynamicToastViewer from '../DynamicToastViewer'
 import * as style from './DetailPanel.style'
 
+type TBoardType = 'NOTICE' | 'BOARD'
+
 interface IChildrenProps {
   children: React.ReactNode
 }
@@ -18,10 +20,12 @@ interface IDetailContentContainerProps {
 }
 
 interface IDetailPageProps extends IChildrenProps {
+  boardType: TBoardType
   handleGoBack: () => void
 }
 
 interface IStatusMessageProps {
+  boardType: TBoardType
   message: string
   onClickEditButton?: () => void
   author: boolean
@@ -34,7 +38,16 @@ interface IDetailContentProps {
   content: string
 }
 
-export const DetailPage = ({ children, handleGoBack }: IDetailPageProps) => {
+const title: Record<TBoardType, string> = {
+  NOTICE: '공지사항',
+  BOARD: '게시글',
+}
+
+export const DetailPage = ({
+  children,
+  boardType,
+  handleGoBack,
+}: IDetailPageProps) => {
   const { isPc } = useMedia()
   if (isPc) {
     return (
@@ -46,7 +59,7 @@ export const DetailPage = ({ children, handleGoBack }: IDetailPageProps) => {
   return (
     <CuModal
       open={true}
-      title={'공지사항'}
+      title={title[boardType]}
       onClose={handleGoBack}
       mobileFullSize
     >
@@ -89,13 +102,14 @@ export const DetailContentCotainer = ({
 }
 
 export const StatusMessage = ({
+  boardType,
   message,
   onClickEditButton,
   author,
 }: IStatusMessageProps) => {
   return (
     <DetailContentCotainer
-      containerTitle={'공지사항'}
+      containerTitle={title[boardType]}
       onClickEditButton={onClickEditButton}
       author={author}
     >
