@@ -53,6 +53,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   if (!data || error)
     return (
       <StatusMessage
+        boardType={'NOTICE'}
         message={'문제가 발생했습니다.'}
         onClickEditButton={() => setNotice('EDIT', postId)}
         author={!!data?.isAuthor}
@@ -61,6 +62,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   if (isLoading)
     return (
       <StatusMessage
+        boardType={'NOTICE'}
         message={'공지사항을 불러오는 중입니다...'}
         onClickEditButton={() => setNotice('EDIT', postId)}
         author={!!data?.isAuthor}
@@ -68,7 +70,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
     )
   return (
     <>
-      <DetailPage handleGoBack={handleGoBack}>
+      <DetailPage boardType={'NOTICE'} handleGoBack={handleGoBack}>
         {isPc && (
           <CuButton
             message={'이전 페이지'}
