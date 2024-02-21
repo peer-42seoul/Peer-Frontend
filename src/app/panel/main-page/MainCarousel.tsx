@@ -1,20 +1,19 @@
 import { Box } from '@mui/material'
-import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import CuPhotoBox from '@/components/CuPhotoBox'
 
 const MainCarousel = () => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    autoplay: true,
-    autoplaySpeed: 5000,
-  }
+  // const settings = {
+  //   dots: true,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 1,
+  //   slidesToScroll: 1,
+  //   arrows: false,
+  //   autoplay: true,
+  //   autoplaySpeed: 5000,
+  // }
 
   const BoxStyle = {
     width: '100%',
@@ -22,7 +21,7 @@ const MainCarousel = () => {
   }
 
   return (
-    <Slider {...settings}>
+    // <Slider {...settings}>
       <Box sx={BoxStyle}>
         <CuPhotoBox
           src={'/images/banners/default-mobile.svg'}
@@ -31,7 +30,7 @@ const MainCarousel = () => {
           style={{ width: 300, height: 130 }}
         />
       </Box>
-    </Slider>
+    // </Slider>
   )
 }
 
