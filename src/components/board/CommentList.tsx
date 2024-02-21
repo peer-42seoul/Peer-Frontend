@@ -28,6 +28,11 @@ const Comment = ({ comment, postId }: ICommentProps) => {
   const handleEdit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
+    const content = formData.get('content') as string
+    if (!content) {
+      openToast({ severity: 'error', message: '댓글을 입력해주세요.' })
+      return
+    }
     axiosWithAuth
       .put(`/api/v1/team/post/comment/${comment.answerId}`, {
         content: formData.get('content') as string,
