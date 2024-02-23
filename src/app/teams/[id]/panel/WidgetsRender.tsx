@@ -63,12 +63,22 @@ const WidgetsRender = ({
   const isFourRow = useMediaQuery('(min-width:997px)')
 
   /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
-  const isValidLayout = useCallback((newLayout: Layout[]) => {
-    const checkX = newLayout.some((item) => item?.x + item?.w > 4)
-    if (checkX) return false
-    const checkY = newLayout.some((item) => item?.y + item?.h > 4)
-    return !checkY
-  }, [])
+  const isValidLayout = useCallback(
+    (newLayout: Layout[]) => {
+      if (isFourRow) {
+        const checkX = newLayout.some((item) => item?.x + item?.w > 4)
+        if (checkX) return false
+        const checkY = newLayout.some((item) => item?.y + item?.h > 4)
+        return !checkY
+      } else {
+        const checkX = newLayout.some((item) => item?.x + item?.w > 2)
+        if (checkX) return false
+        const checkY = newLayout.some((item) => item?.y + item?.h > 8)
+        return !checkY
+      }
+    },
+    [isFourRow],
+  )
 
   /*
    * 현재 react-grid-layout에서 전체 height를 제한하는 코드가 없음
