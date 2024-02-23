@@ -30,7 +30,6 @@ export const useInfiniteSWR = (
     if (previousPageData && previousPageData.last) {
       return null // 마지막 페이지면 null 반환 (데이터를 가져오지 않음)
     }
-    console.log(`${urlWithoutPageParam}&page=${pageIndex + 1}`)
     return `${urlWithoutPageParam}&page=${pageIndex + 1}` // 페이지 번호를 포함한 요청 URL 반환
   }
   const { data, error, isLoading, isValidating, size, setSize } =
