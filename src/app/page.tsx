@@ -21,5 +21,5 @@ export default async function Home({ searchParams }: { searchParams: any }) {
     console.error('데이터를 불러오는데 실패했습니다.')
   }
 
-  return <MainPage initData={data} />
+  return <MainPage initData={[data]} />
 }

@@ -55,7 +55,9 @@ const BoardPostList = ({
           </Fragment>
         )
       })}
-      <Box ref={targetRef}>{isLoading && '로딩중입니다...'}</Box>
+      <Box ref={targetRef} paddingY={'0.25rem'}>
+        {isLoading && '로딩중입니다...'}
+      </Box>
     </ListStack>
   )
 }

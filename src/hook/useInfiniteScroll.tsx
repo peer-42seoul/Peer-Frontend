@@ -1,12 +1,5 @@
 import { debounce } from 'lodash'
-import {
-  useState,
-  useEffect,
-  useRef,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-} from 'react'
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react'
 import useSWRInfinite from 'swr/infinite'
 import { IPagination } from '@/types/IPagination'
 
@@ -17,6 +10,7 @@ import { IPagination } from '@/types/IPagination'
  * @param urlWithoutPageParam : 페이지 번호를 제외한 api request URL
  * @example '/api?param1=1&param2=2' // page=1 은 제외합니다.
  * @param fetcher : 데이터를 가져오는 함수
+ * @param config
  * @example
  * const fetcher = (url: string) => axios.get(url).then((res) => res.data)
  * @returns { data, error, isLoading, size, setSize }
@@ -30,16 +24,20 @@ import { IPagination } from '@/types/IPagination'
 export const useInfiniteSWR = (
   urlWithoutPageParam: string,
   fetcher: (url: string) => Promise<any>,
+  config?: any,
 ) => {
   const getKey = (pageIndex: number, previousPageData: IPagination<any>) => {
     if (previousPageData && previousPageData.last) {
       return null // 마지막 페이지면 null 반환 (데이터를 가져오지 않음)
     }
+    console.log(`${urlWithoutPageParam}&page=${pageIndex + 1}`)
     return `${urlWithoutPageParam}&page=${pageIndex + 1}` // 페이지 번호를 포함한 요청 URL 반환
   }
-  const { data, error, isLoading, size, setSize } = useSWRInfinite<
-    IPagination<any>
-  >(getKey, fetcher)
+  const { data, error, isLoading, isValidating, size, setSize } =
+    useSWRInfinite<IPagination<any>>(getKey, fetcher, {
+      ...config,
+      revalidateFirstPage: false,
+    })
 
   return {
     data,
@@ -47,6 +45,7 @@ export const useInfiniteSWR = (
     isLoading,
     size,
     setSize,
+    isValidating,
   }
 }
 
@@ -54,21 +53,28 @@ export const useInfiniteSWR = (
 export const useInfiniteSWRScroll = (
   urlWithoutPageParam: string,
   fetcher: (url: string) => Promise<any>,
+  config?: any,
 ) => {
-  const { data, error, isLoading, size, setSize } = useInfiniteSWR(
-    urlWithoutPageParam,
-    fetcher,
-  )
+  const { data, error, isLoading, size, setSize, isValidating } =
+    useInfiniteSWR(urlWithoutPageParam, fetcher, config)
   const targetRef = useRef<HTMLDivElement>(null)
   const isLoadMore = !!(
     !isLoading &&
     data &&
     data[data.length - 1]?.last === false
   )
+
+  const debouncedFetchData = debounce(() => {
+    // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
+    setSize(size + 1)
+  }, 1000)
+
   useEffect(() => {
     if (!targetRef.current) return
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && isLoadMore) setSize(size + 1)
+      if (entry.isIntersecting && isLoadMore) {
+        debouncedFetchData()
+      }
     })
     const currentRef = targetRef.current
     if (currentRef) {
@@ -77,8 +83,17 @@ export const useInfiniteSWRScroll = (
     return () => {
       if (currentRef) observer.unobserve(currentRef)
     }
-  }, [targetRef, isLoadMore])
-  return { data, error, isLoading, size, setSize, targetRef }
+  }, [debouncedFetchData, targetRef])
+
+  return {
+    data,
+    error,
+    isLoading,
+    size,
+    setSize,
+    targetRef,
+    isValidating,
+  }
 }
 
 /**
@@ -129,63 +144,6 @@ export const useMessageInfiniteScroll = ({
   }, [targetRef, spinner, debouncedFetchData, isEnd])
 
   return { targetRef, scrollRef, spinner }
-}
-
-export const useInfiniteScrollHook = (
-  setPage: Dispatch<SetStateAction<number>>,
-  isLoading: boolean,
-  isEnd: boolean,
-  page: number,
-) => {
-  const [spinner, setSpinner] = useState(false)
-  const target = useRef<HTMLDivElement>(null)
-
-  /** scrollTo 스크롤 위치 조정을 위한 함수 */
-  const scrollTo = useCallback(
-    (height: number) => {
-      if (!target.current) return
-      target.current.scrollTo({ top: height })
-    },
-    [target],
-  )
-
-  useEffect(() => {
-    if (!isLoading && spinner) setSpinner(false)
-  }, [isLoading])
-
-  const debouncedFetchData = debounce(async () => {
-    // 데이터 업데이트. setSpinner을 언제 true할지 정해야.
-    setPage(page + 1)
-  }, 1000)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          if (!spinner && !isEnd) {
-            // 스피너를 표시하고 페이지 번호를 증가시킨 후 디바운스된 데이터 가져오기 함수 호출
-            // 가능한 페이지 양을 도달했다면 더이상 로딩하지 않는다.
-            setSpinner(true)
-            debouncedFetchData()
-          }
-        }
-      },
-      { threshold: 0.7 },
-    )
-
-    const currentTarget = target.current
-
-    if (currentTarget) {
-      observer.observe(currentTarget)
-    }
-
-    // 컴포넌트가 언마운트되면 IntersectionObserver 해제
-    return () => {
-      if (currentTarget) observer.unobserve(currentTarget)
-    }
-  }, [target, spinner, debouncedFetchData, page, isEnd])
-
-  return { target, spinner, scrollTo }
 }
 
 /**

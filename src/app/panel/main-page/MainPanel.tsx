@@ -43,22 +43,21 @@ const SearchOptionPanel = ({
 }
 
 interface IInfinityScrollPanel {
-  spinner: boolean
+  spinning: boolean
   target: RefObject<HTMLDivElement>
 }
 
 export const InfinityScrollPanel = ({
-  spinner,
+  spinning,
   target,
 }: IInfinityScrollPanel) => {
-  return spinner ? (
+  return spinning ? (
     <CircularProgress />
   ) : (
     <Box
       sx={{
         bottom: 0,
         height: '1vh',
-        paddingY: '0.25rem',
       }}
       ref={target}
     />

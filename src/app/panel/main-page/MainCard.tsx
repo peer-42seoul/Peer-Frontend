@@ -82,7 +82,7 @@ const MainCard = ({
               position: 'relative',
               left: '-2px',
               top: '-2px',
-              border: '2px solid',
+              // border: '2px solid', warning으로 인해 지움
               borderBottom: 'none',
               borderColor: 'background.tertiary',
               borderBottomLeftRadius: '0.75rem',

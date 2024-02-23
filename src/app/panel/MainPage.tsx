@@ -11,7 +11,7 @@ import MainProfile from './main-page/MainProfile'
 import MainShowcase from './main-page/MainShowcase'
 import MainCarousel from './main-page/MainCarousel'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
+import { useInfiniteSWRScroll } from '@/hook/useInfiniteScroll'
 import { IFavorite, IPost, ProjectType } from '@/types/IPostDetail'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
@@ -58,13 +58,12 @@ export interface IDetailOption {
   tag: string
 }
 
-const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
+const MainPage = ({ initData }: { initData: IPagination<IPost[]>[] }) => {
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
   const searchType =
     searchParams.get('type') === 'PROJECT' ? 'PROJECT' : 'STUDY'
   const router = useRouter()
-  const [page, setPage] = useState<number>(1)
   const [type, setType] = useState<ProjectType>(searchType) //'STUDY'
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [sort, setSort] = useState<ProjectSort | undefined>(undefined) //'latest'
@@ -78,12 +77,8 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     status: '',
     tag: '',
   })
-
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-  const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
-    undefined,
-  )
   const [init, setInit] = useState<boolean>(true)
   const { isTablet } = useMedia()
 
@@ -107,7 +102,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const pageSize = 6
   const option = `?type=${type ?? 'STUDY'}&sort=${
     sort ?? 'latest'
-  }&page=${page}&pageSize=${pageSize}&keyword=${keyword}&due=${
+  }&pageSize=${pageSize}&keyword=${keyword}&due=${
     dueObject[detailOption.due1]
   }&due=${dueObject[detailOption.due2]}&region1=${
     detailOption.region1
@@ -115,12 +110,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     detailOption.status
   }&tag=${detailOption.tag}`
 
-  const isInit =
-    page == 1 && !sort && detailOption.isInit && keyword == '' && init
+  const isInit = !sort && detailOption.isInit && keyword == '' && init
 
   const { data: favoriteData } = useSWR<IFavorite[]>(
     isInit && isLogin
-      ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorites` + option
+      ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorites` +
+          option +
+          '&page=1'
       : null,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
@@ -131,58 +127,24 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   }
 
   const {
-    data: newData,
-    isLoading,
+    data: datas,
     error,
-  } = useSWR<IPagination<IPost[]>>(
-    isInit
-      ? null
-      : `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit` + option,
+    isValidating,
+    isLoading,
+    setSize: setPage,
+    targetRef,
+  } = useInfiniteSWRScroll(
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit` + option,
     isLogin
       ? (url: string) =>
           axiosInstance.get(url).then((res) => {
             return res.data
           })
       : defaultGetFetcher,
-  )
-
-  const [content, setContent] = useState<IPost[] | []>(
-    initData?.content.map((v) => ({
-      ...v,
-      favorite: getFavoriteData(v.recruit_id),
-    })) ?? [],
-  )
-
-  useEffect(() => {
-    if (!newData || !newData?.content) return
-
-    //page가 1일 경우 == initData가 설정되어있을경우, 무한스크롤시 page는 무조건 2부터 시작함.
-    //따라서 page가 1일 경우에는 옵션이 달라진 것임. 고로 무조건 새로운 데이터로 setContent를 해준다.
-    if (page == 1) {
-      return setContent(newData.content)
-    }
-    //여기서부터는 무한스크롤 영역. 길이가 0이면 더해주지 않는다.
-    if (newData?.content.length == 0) return
-    //이전 데이터와 새로운 데이터를 더해준다
-    setContent([...content, ...newData.content])
-    //이전 스크롤 높이로 설정
-    setPrevScrollHeight(target.current?.scrollHeight)
-    if (target.current && prevScrollHeight)
-      scrollTo(target.current.scrollHeight - prevScrollHeight)
-  }, [newData])
-
-  const { target, spinner, scrollTo } = useInfiniteScrollHook(
-    setPage,
-    isLoading,
-    (newData?.last || initData?.last) ?? true, //isEnd
-    page,
-  )
-
-  const { target: pcTarget, spinner: pcSpinner } = useInfiniteScrollHook(
-    setPage,
-    isLoading,
-    (newData?.last || initData?.last) ?? true, //isEnd
-    page,
+    {
+      fallbackData: initData,
+      revalidateOnMount: false,
+    },
   )
 
   const handleType = useCallback(
@@ -203,27 +165,34 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       setSort('latest')
       router.replace(`?type=${value}`)
     },
-    [router],
+    [router, setPage],
   )
 
-  const handleSort = useCallback((value: ProjectSort) => {
-    setSort(value)
-    setPage(1)
-  }, [])
+  const handleSort = useCallback(
+    (value: ProjectSort) => {
+      setSort(value)
+      setPage(1)
+    },
+    [setPage],
+  )
 
-  const handleOption = useCallback((value: IDetailOption) => {
-    setDetailOption(value)
-    setPage(1)
-  }, [])
+  const handleOption = useCallback(
+    (value: IDetailOption) => {
+      setDetailOption(value)
+      setPage(1)
+    },
+    [setPage],
+  )
 
   const noContent = !isLoading
     ? error
       ? '에러 발생'
-      : content?.length == 0
+      : datas?.[0]?.content?.length == 0
         ? '데이터가 없습니다'
         : null
     : null
 
+  console.log('isLoading', isLoading)
   return (
     <>
       {/* <PushAlertBanner /> */}
@@ -278,29 +247,24 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <>
               <Stack alignItems={'center'}>
                 <Stack gap={2} width={'100%'}>
-                  {content?.map((project: IPost) => (
-                    <Box key={project.recruit_id}>
-                      <MainCard
-                        {...project}
-                        type={type}
-                        favorite={
-                          isInit
-                            ? getFavoriteData(project.recruit_id)
-                            : project.favorite
-                        }
-                        sx={cardStyle}
-                      />
-                    </Box>
-                  ))}
+                  {datas?.map(
+                    (data) =>
+                      data?.content?.map((project: IPost) => (
+                        <Box key={project.recruit_id}>
+                          <MainCard
+                            {...project}
+                            type={type}
+                            favorite={
+                              isInit
+                                ? getFavoriteData(project.recruit_id)
+                                : project.favorite
+                            }
+                            sx={cardStyle}
+                          />
+                        </Box>
+                      )),
+                  )}
                 </Stack>
-              </Stack>
-              {/* 무한 스크롤 */}
-              <Stack
-                width={'100%'}
-                justifyContent={'center'}
-                alignItems={'center'}
-              >
-                <InfinityScrollPanel target={target} spinner={spinner} />
               </Stack>
             </>
           )}
@@ -367,23 +331,31 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               ) : (
                 <>
                   <Grid container spacing={'1rem'}>
-                    {content?.map((project: IPost) => (
-                      <Grid item key={project.recruit_id} sm={12} md={6} lg={4}>
-                        <MainCard
-                          {...project}
-                          type={type}
-                          favorite={
-                            isInit
-                              ? getFavoriteData(project.recruit_id)
-                              : project.favorite
-                          }
-                          sx={cardStyle}
-                        />
-                      </Grid>
-                    ))}
+                    {datas?.map(
+                      (data) =>
+                        data?.content?.map((project: IPost) => (
+                          <Grid
+                            item
+                            key={project.recruit_id}
+                            sm={12}
+                            md={6}
+                            lg={4}
+                          >
+                            <MainCard
+                              {...project}
+                              type={type}
+                              favorite={
+                                isInit
+                                  ? getFavoriteData(project.recruit_id)
+                                  : project.favorite
+                              }
+                              sx={cardStyle}
+                            />
+                          </Grid>
+                        )),
+                    )}
                   </Grid>
                   {/* 무한 스크롤 */}
-                  <InfinityScrollPanel target={pcTarget} spinner={pcSpinner} />
                 </>
               )}
             </Stack>
@@ -397,6 +369,15 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           </Stack>
         </Container>
       </div>
+      {/* 무한 스크롤 */}
+      <Stack
+        width={'100%'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        marginY={'0.5rem'}
+      >
+        <InfinityScrollPanel target={targetRef} spinning={isValidating} />
+      </Stack>
       <PwaInstallBanner />
     </>
   )
