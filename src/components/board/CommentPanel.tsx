@@ -15,6 +15,7 @@ import { ITeamComment } from '@/types/TeamBoardTypes'
 import CuAvatar from '../CuAvatar'
 import CuButton from '../CuButton'
 import * as style from './CommentPanel.style'
+import UTCtoLocalTime from '@/utils/UTCtoLocalTime'
 
 interface IChildrenProps {
   children: React.ReactNode
@@ -222,7 +223,9 @@ export const CommentItem = ({
           <Box sx={{ paddingRight: '2.5rem' }}>
             <Typography variant={'Body2'}>{comment.content}</Typography>
             <Typography variant={'Tag'} color={'text.assistive'}>
-              {dayjs(comment.createAt).format('YYYY년 MM월 DD일 hh:mm A')}
+              {dayjs(UTCtoLocalTime(comment.createAt)).format(
+                'YYYY년 MM월 DD일 hh:mm A',
+              )}
             </Typography>
           </Box>
         )}
