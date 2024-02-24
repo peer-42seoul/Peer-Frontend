@@ -9,7 +9,7 @@ import {
   CommentItem,
 } from '@/components/board/CommentPanel'
 import useToast from '@/states/useToast'
-import { ITeamBoardComment, ITeamComment } from '@/types/TeamBoardTypes'
+import { ITeamComment } from '@/types/TeamBoardTypes'
 import CuTextModal from '../CuTextModal'
 import useModal from '@/hook/useModal'
 
@@ -29,7 +29,7 @@ const Comment = ({ comment, postId }: ICommentProps) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     axiosWithAuth
-      .put(`/api/v1/team/post/comment/${comment.answerId}`, {
+      .put(`/api/v1/team/post/comment/${comment.commentId}`, {
         content: formData.get('content') as string,
       })
       .then(() => {
@@ -44,7 +44,7 @@ const Comment = ({ comment, postId }: ICommentProps) => {
 
   const handleDelete = () => {
     axiosWithAuth
-      .delete(`/api/v1/team/post/comment/${comment.answerId}`)
+      .delete(`/api/v1/team/post/comment/${comment.commentId}`)
       .then(() => {
         openToast({ severity: 'success', message: '댓글을 삭제했습니다.' })
         mutate(`/api/v1/team/post/comment/${postId}`) // 댓글 데이터 만료
@@ -102,20 +102,11 @@ const CommentList = ({ postId }: { postId: number }) => {
   return (
     <Stack>
       <CommentContainer>
-        {data.map((comment: ITeamBoardComment) => {
-          // TODO : notice와 댓글 타입 통일 필요함....
-          const transformComment: ITeamComment = {
-            answerId: comment.commentId,
-            authorImage: comment.authorImage,
-            authorNickname: comment.authorNickname,
-            content: comment.content,
-            createdAt: comment.createdAt,
-            isAuthor: comment.isAuthor,
-          }
+        {data.map((comment: ITeamComment) => {
           return (
             <Comment
               key={comment.commentId}
-              comment={transformComment}
+              comment={comment}
               postId={postId}
             />
           )

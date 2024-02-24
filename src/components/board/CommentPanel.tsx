@@ -186,7 +186,7 @@ export const CommentItem = ({
           </Stack>
           {!isEditMode && canEdit ? (
             <CommentMoreDropdownMenu
-              handleDelete={() => handleDelete(comment.answerId)}
+              handleDelete={() => handleDelete(comment.commentId)}
               setEditMode={() => setEditMode(true)}
             />
           ) : (
@@ -222,7 +222,7 @@ export const CommentItem = ({
           <Box sx={{ paddingRight: '2.5rem' }}>
             <Typography variant={'Body2'}>{comment.content}</Typography>
             <Typography variant={'Tag'} color={'text.assistive'}>
-              {dayjs(comment.createdAt).format('YYYY년 M월 D일 h:m A')}
+              {dayjs(comment.createAt).format('YYYY년 M월 D일 h:m A')}
             </Typography>
           </Box>
         )}
