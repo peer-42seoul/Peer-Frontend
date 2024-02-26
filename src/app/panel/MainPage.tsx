@@ -135,15 +135,17 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     isLoading,
     error,
   } = useSWR<IPagination<IPost[]>>(
-    isInit
-      ? null
-      : `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit` + option,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit` + option,
     isLogin
       ? (url: string) =>
           axiosInstance.get(url).then((res) => {
             return res.data
           })
       : defaultGetFetcher,
+    {
+      fallbackData: initData,
+      revalidateOnMount: false,
+    },
   )
 
   const [content, setContent] = useState<IPost[] | []>(
@@ -172,13 +174,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
   }, [newData])
 
   const { target, spinner, scrollTo } = useInfiniteScrollHook(
-    setPage,
-    isLoading,
-    (newData?.last || initData?.last) ?? true, //isEnd
-    page,
-  )
-
-  const { target: pcTarget, spinner: pcSpinner } = useInfiniteScrollHook(
     setPage,
     isLoading,
     (newData?.last || initData?.last) ?? true, //isEnd
@@ -294,14 +289,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   ))}
                 </Stack>
               </Stack>
-              {/* 무한 스크롤 */}
-              <Stack
-                width={'100%'}
-                justifyContent={'center'}
-                alignItems={'center'}
-              >
-                <InfinityScrollPanel target={target} spinner={spinner} />
-              </Stack>
             </>
           )}
           <Box sx={floatButtonStyle}>
@@ -382,8 +369,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                       </Grid>
                     ))}
                   </Grid>
-                  {/* 무한 스크롤 */}
-                  <InfinityScrollPanel target={pcTarget} spinner={pcSpinner} />
                 </>
               )}
             </Stack>
@@ -397,6 +382,15 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
           </Stack>
         </Container>
       </div>
+      {/* 무한 스크롤 */}
+      <Stack
+        width={'100%'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        marginY={'0.5rem'}
+      >
+        <InfinityScrollPanel target={target} spinner={spinner} />
+      </Stack>
       <PwaInstallBanner />
     </>
   )
