@@ -5,6 +5,7 @@ import CuButton from '../CuButton'
 import CuModal from '../CuModal'
 import DynamicToastViewer from '../DynamicToastViewer'
 import * as style from './DetailPanel.style'
+import UTCtoLocalTime from '@/utils/UTCtoLocalTime'
 
 type TBoardType = 'NOTICE' | 'BOARD'
 
@@ -155,7 +156,9 @@ export const DetailContent = ({
       </Stack>
       <Stack spacing={'0.5rem'}>
         <ContentTitle title={'작성일'} />
-        <Content content={dayjs(createdAt).format('YYYY-MM-DD')} />
+        <Content
+          content={dayjs(UTCtoLocalTime(createdAt)).format('YYYY-MM-DD')}
+        />
       </Stack>
       <Stack spacing={'0.5rem'}>
         <ContentTitle title={'작성자'} />
