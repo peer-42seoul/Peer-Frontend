@@ -9,7 +9,7 @@ interface ISearchOptionPanel {
   openOption: boolean
   setOpenOption: (value: boolean) => void
   handleOption: (value: IDetailOption) => void
-  type: ProjectType | undefined
+  type: ProjectType
   sort: ProjectSort | undefined
   handleSort: (value: ProjectSort) => void
   isPc?: boolean
@@ -58,6 +58,7 @@ export const InfinityScrollPanel = ({
       sx={{
         bottom: 0,
         height: '1vh',
+        paddingY: '0.25rem',
       }}
       ref={target}
     />

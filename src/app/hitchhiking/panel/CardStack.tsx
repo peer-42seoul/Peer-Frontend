@@ -18,29 +18,29 @@ const CardStack = ({
   cardList,
   removeCard,
   isProject,
+  addCard,
 }: {
   cardList: Array<IPostCardHitchhiking>
   removeCard: (recruit_id: number) => void
   isProject: boolean
+  addCard?: () => void
 }) => {
   const [dragged, setDragged] = useState(false)
 
   const checkDragDirection = (x: number, y: number) => {
-    if (Math.abs(x) > Math.abs(y)) {
-      return x < 0 ? ESwipeDirection.left : ESwipeDirection.right
-    } else {
-      return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
-    }
+    return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
   }
 
   const handleDragEnd = (e: any, info: any, recruit_id: number) => {
     // COMMENT : 위로 조금만 움직였을 때 카드가 사라지지 않도록 처리
     if (
-      Math.abs(info.offset.y) < 150 ||
+      Math.abs(info.offset.y) < 50 ||
       checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
     ) {
       setDragged(false)
-
+      if (addCard) {
+        addCard()
+      }
       return
     }
     removeCard(recruit_id)
@@ -90,27 +90,42 @@ const CardStack = ({
                 initial={{
                   scale: 0.8,
                   opacity: 0,
+                  ...(card.hasBeenRemoved && {
+                    y: -500,
+                  }),
                 }}
                 animate={{
                   scale: i === cardList.length - 1 ? 1 : 0.8,
                   opacity: i === cardList.length - 1 ? 1 : 0,
+                  y: 0,
                 }}
-                exit={{ opacity: 0 }}
+                exit={{
+                  opacity: 0,
+                  y: -500,
+                }}
                 drag
                 dragSnapToOrigin
-                whileDrag={{ scale: 1.2 }}
-                dragElastic={1}
+                dragElastic={0.5}
                 dragConstraints={{
-                  left: 0,
+                  top: 0,
                   right: 0,
+                  left: 0,
                   bottom: 0,
                 }}
-                dragTransition={{ bounceStiffness: 300, bounceDamping: 50 }}
-                onDragStart={() => setDragged(true)}
+                dragTransition={{
+                  bounceStiffness: 250,
+                  bounceDamping: 50,
+                }}
+                onDragStart={() => {
+                  setDragged(true)
+                }}
                 onDragEnd={(e: any, info: any) =>
                   handleDragEnd(e, info, card.recruitId)
                 }
-                transition={{ duration: 0.3 }}
+                transition={{
+                  duration: 0.3,
+                  translateY: { ease: 'easeOut' },
+                }}
               >
                 <HitchhikingCard
                   key={card.recruitId}

@@ -1,6 +1,6 @@
 'use client'
 
-import { Typography, Stack, Container, Divider } from '@mui/material'
+import { Typography, Stack, Container, Divider, Box } from '@mui/material'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -17,8 +17,15 @@ import useAxiosWithAuth from '@/api/config'
 import Tutorial from '@/components/Tutorial'
 import RecruitPageTutorial from '@/components/tutorialContent/RecruitPageTutorial'
 
-const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
+const RecruitDetailPage = ({
+  data,
+  id,
+}: {
+  data?: IPostDetail
+  id: string
+}) => {
   const [isClient, setIsClient] = useState(false)
+  const [content, setCotent] = useState<IPostDetail | undefined>(data)
   const router = useRouter()
   const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
   const { isPc } = useMedia()
@@ -29,7 +36,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
 
   const { data: favoriteData } = useSWR<boolean>(
     isLogin
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${id}`
+      ? `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorite/${id}`
       : null,
     (url: string) => axiosInstance.get(url).then((res) => res.data),
   )
@@ -42,6 +49,7 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   useEffect(() => {
     if (data) {
       setHeaderTitle(data.teamName)
+      setCotent(data)
     }
     return () => {
       setHeaderTitle('')
@@ -49,13 +57,13 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
   }, [data])
 
   const roleList = useMemo(() => {
-    if (!data) return []
-    return data.roleList.filter((role) => role.name !== 'Leader')
-  }, [data])
+    if (!content) return []
+    return content.roleList.filter((role) => role.name !== 'Leader')
+  }, [content])
 
-  const me = nickname === data?.leader_nickname
+  const me = nickname === content?.leader_nickname
 
-  if (!data) return <Typography>데이터가 없습니다</Typography>
+  if (!content) return <Typography>데이터가 없습니다</Typography>
 
   /** PC 뷰 **/
   if (isPc) {
@@ -78,8 +86,9 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
           <RecruitQuickMenu
             recruit_id={parseInt(id)}
             favorite={favoriteData}
-            title={data?.title}
-            content={data?.content}
+            title={content?.title}
+            content={content?.content}
+            status={content?.status}
             me={me}
           />
         </Stack>
@@ -87,19 +96,32 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
         <Stack direction={'row'}>
           <Stack width={'100%'}>
             {/*이미지, 제목, 프로필 영역*/}
-            <RecruitInfo data={data} type={type} pc>
+            <RecruitInfo data={content} type={type} pc>
               {isClient && !me && (
                 <Stack display={'flex'} direction={'row'} alignItems={'center'}>
-                  <ApplyFormButton roleList={roleList} id={id} type={type} pc />
-                  <Tutorial
-                    title="지원 방법"
-                    content={<RecruitPageTutorial />}
+                  <ApplyFormButton
+                    roleList={roleList}
+                    id={id}
+                    type={type}
+                    pc
+                    data={content}
+                    status={content.status}
                   />
+                  <Box sx={{ marginTop: '2rem' }}>
+                    <Tutorial
+                      title="지원 방법"
+                      content={<RecruitPageTutorial />}
+                    />
+                  </Box>
                 </Stack>
               )}
             </RecruitInfo>
             {/* 모집 내용 */}
-            <RecruitDetailContent data={data} type={type} roleList={roleList} />
+            <RecruitDetailContent
+              data={content}
+              type={type}
+              roleList={roleList}
+            />
           </Stack>
         </Stack>
       </Container>
@@ -108,24 +130,31 @@ const RecruitDetailPage = ({ data, id }: { data: IPostDetail; id: string }) => {
 
   /** 모바일 뷰 **/
   return (
-    <Stack height={'100%'} padding={'2.5rem'}>
+    <Stack height={'100%'} padding={'2.25rem'}>
       <Stack gap={'1.5rem'} width={'100%'}>
         <Stack>
           <RecruitQuickMenu
             recruit_id={parseInt(id)}
             favorite={favoriteData}
-            title={data?.title}
-            content={data?.content}
+            title={content?.title}
+            content={content?.content}
             me={me}
+            status={content?.status}
           />
-          <RecruitInfo data={data} type={type} />
+          <RecruitInfo data={content} type={type} />
         </Stack>
         <Divider />
-        <RecruitDetailContent data={data} type={type} roleList={roleList} />
+        <RecruitDetailContent data={content} type={type} roleList={roleList} />
+        {isClient && !me && (
+          <ApplyFormButton
+            id={id}
+            type={type}
+            roleList={roleList}
+            data={content}
+            status={content.status}
+          />
+        )}
       </Stack>
-      {isClient && !me && (
-        <ApplyFormButton id={id} type={type} roleList={roleList} />
-      )}
     </Stack>
   )
 }

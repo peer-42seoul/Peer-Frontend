@@ -18,39 +18,33 @@ enum ESwipeDirection {
 const CardStack = ({
   cardList,
   removeCard,
+  addCard,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
+  addCard?: () => void
 }) => {
   const [dragged, setDragged] = useState(false)
   const { isPc } = useMedia()
 
   const checkDragDirection = (x: number, y: number) => {
-    if (Math.abs(x) > Math.abs(y)) {
-      return x < 0 ? ESwipeDirection.left : ESwipeDirection.right
-    } else {
-      return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
-    }
+    return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
   }
 
-  const handleDragEnd = (
-    e: any,
-    info: any,
-    recruit_id: number,
-    title: string,
-  ) => {
+  const handleDragEnd = (e: any, info: any, recruit_id: number) => {
     // 위로 조금만 움직였을 때 카드가 사라지지 않도록 처리
     if (
-      Math.abs(info.offset.y) < 150 ||
+      Math.abs(info.offset.y) < 100 ||
       checkDragDirection(info.offset.x, info.offset.y) !== ESwipeDirection.up
     ) {
       setDragged(false)
-
+      if (addCard) {
+        addCard()
+      }
       return
     }
     removeCard(recruit_id)
     // TODO: backend api 연결 시 콘솔 삭제 및 api 호출
-    console.log(`dislike api 호출 pathValue: ${recruit_id}, title: ${title}`)
 
     setDragged(false)
   }
@@ -100,25 +94,29 @@ const CardStack = ({
                 initial={{
                   scale: 0.8,
                   opacity: 0,
+                  ...(card.hasBeenRemoved && {
+                    y: -500,
+                  }),
                 }}
                 animate={{
                   scale: i === cardList.length - 1 ? 1 : 0.8,
                   opacity: i === cardList.length - 1 ? 1 : 0,
+                  y: 0,
                 }}
-                exit={{ opacity: 0 }}
+                exit={{ opacity: 0, y: -500 }}
                 drag
                 dragSnapToOrigin
-                whileDrag={{ scale: 1.2 }}
-                dragElastic={1}
+                dragElastic={0.5}
                 dragConstraints={{
-                  left: 0,
+                  top: 0,
                   right: 0,
+                  left: 0,
                   bottom: 0,
                 }}
-                dragTransition={{ bounceStiffness: 300, bounceDamping: 50 }}
+                dragTransition={{ bounceStiffness: 250, bounceDamping: 50 }}
                 onDragStart={() => setDragged(true)}
                 onDragEnd={(e: any, info: any) =>
-                  handleDragEnd(e, info, card.id, card.name)
+                  handleDragEnd(e, info, card.id)
                 }
                 transition={{ duration: 0.3 }}
               >

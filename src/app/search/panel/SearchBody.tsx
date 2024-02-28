@@ -13,7 +13,6 @@ import { MouseEvent, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import SearchIcon from '@mui/icons-material/Search'
-import Header from '@/app/panel/layout-panel/Header'
 
 const SearchButton = () => {
   return (
@@ -97,8 +96,7 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
       Math.max(...storedKeywords.map((key) => Number(key.split('_')[1])), 0) + 1
     const newKeywordKey = `searchWord_${newKeywordIndex}`
     localStorage.setItem(newKeywordKey, keyword)
-
-    router.push(`?keyword=${data.searchWord}`)
+    router.push(`/?keyword=${data.searchWord}&type=${type}`)
     onClose()
   }
 
@@ -113,7 +111,6 @@ export default function SearchBody({ onClose }: SearchBodyProps) {
   return (
     <>
       <Stack sx={{ m: 0, p: 0 }}>
-        {!isPc && <Header />}
         <Box sx={isPc ? StyleSeachPc : StyleSeachMobile}>
           <ToggleButtonGroup onChange={handleChanged} exclusive value={type}>
             <ToggleButton

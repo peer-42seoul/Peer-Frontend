@@ -24,18 +24,18 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="/icons/favicon.ico" />
+        <link
+          rel="shortcut icon"
+          href="/icons/favicon.ico"
+          type="image/x-icon"
+        />
+        <link rel="icon" href="/icons/favicon.ico" type="image/x-icon" />
         <link rel="manifest" href="/manifest.json" />
         {/* 사파리 설정*/}
         <link
           rel="apple-touch-icon"
           sizes="72x72"
           href="/images/icons/ios/72.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="96x96"
-          href="/images/icons/ios/96.png"
         />
         <link
           rel="apple-touch-icon"
@@ -52,7 +52,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" />
         <meta name="theme-color" content="#010456" />
       </head>
-      <body className={Pretendard.className}>
+      <body className={Pretendard.variable}>
         <AppRouterCacheProvider>
           <CuSWRConfig>
             <MuiThemeProvider>

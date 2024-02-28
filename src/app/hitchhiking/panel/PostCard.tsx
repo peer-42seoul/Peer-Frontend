@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardMedia,
   Stack,
   Typography,
   alpha,
@@ -13,6 +12,7 @@ import { ITag } from '@/types/IPostDetail'
 import { Chip } from '@mui/material'
 import CuAvatar from '@/components/CuAvatar'
 import * as style from './PostCard.style'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 function PostCard({
   authorImage,
@@ -50,12 +50,13 @@ function PostCard({
       ref={ref}
       onClick={onClick}
     >
-      <CardMedia
-        component="img"
-        image={image}
-        alt="post thumbnail"
-        sx={style.cardMediaStyleBase}
-      />
+      <CardContent sx={style.cardMediaStyleBase}>
+        <CuPhotoBox
+          src={image}
+          alt="post thumbnail"
+          style={{ width: '100%', height: '100%', boxSizing: 'border-box' }}
+        />
+      </CardContent>
       <Stack
         sx={{ p: '1rem', pt: '0.75rem' }}
         spacing={'15px'}

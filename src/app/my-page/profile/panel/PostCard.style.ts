@@ -5,6 +5,7 @@ export const cardMediaStyleBase: SxProps = {
   objectFit: 'cover',
   maxHeight: '15.6875rem',
   borderRadius: '0.75rem',
+  p: 0,
 }
 
 export const cardAuthorAvatarStyleBase: SxProps = {

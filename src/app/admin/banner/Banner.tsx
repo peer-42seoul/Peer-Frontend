@@ -21,6 +21,9 @@ import { DateTimePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import CuModal from '@/components/CuModal'
 import { idStyle, statusStyle, titleStyle } from './BannerStyles'
+import CuTextModal from '@/components/CuTextModal'
+import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 
 interface IBannerAllContent {
   bannerId: number
@@ -92,7 +95,7 @@ interface IBannerContentEdit {
 }
 
 const Banner = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
 
   const [page, setPage] = useState<number>(1)
   const totalPageVar = useRef<number>(1)
@@ -121,6 +124,15 @@ const Banner = () => {
   }
   // 백엔드 API에서는 page가 0부터 시작하므로 page - 1로 설정
 
+  const { openToast } = useToast()
+
+  const currentId = useRef<number>(-1)
+  const {
+    openModal: openRemoveModal,
+    closeModal: closeRemoveModal,
+    isOpen: isRemoveModalOpen,
+  } = useModal()
+
   const [currentReservationType, setCurrentReservationType] = useState('없음')
   const [currentBannerType, setCurrentBannerType] = useState('')
 
@@ -130,14 +142,11 @@ const Banner = () => {
     axios
       .get(`${API_URL}/api/v1/admin/banner`, {
         params,
-        // withCredentials: true,
-        // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+        withCredentials: true,
       })
       .then((res) => {
         if (isMounted) {
-          console.log('res : ', res)
           totalPageVar.current = res.data.totalPages
-          console.log(totalPageVar)
           setContent(res.data.content)
         }
       })
@@ -150,7 +159,6 @@ const Banner = () => {
   // 페이지가 바뀔 때마다 페이지 버튼의 활성화 여부를 결정
   // fifthPage 는 4번째 페이지 버튼의 활성화 여부, fourthPage 는 5번째 페이지 버튼의 활성화 여부
   useEffect(() => {
-    console.log('page render')
     if (page === totalPageVar.current) {
       setFourthPage(false)
       setFifthPage(false)
@@ -182,19 +190,13 @@ const Banner = () => {
   }
 
   const onSubmit = async (data: IBannerAllContent) => {
-    console.log('onSubmit', data)
     if (data.previewImage === '') {
       alert('이미지를 삽입해주세요')
       return
     }
     let DateFormed = ''
-    console.log(data.reservationDate)
     if (data.bannerReservationType === '예약') {
       if (data.reservationDate === null) {
-        console.log(
-          'there is no reservationDate therefore return',
-          data.reservationDate,
-        )
         return
       }
       DateFormed = formatDate(new Date(data.reservationDate))
@@ -204,7 +206,6 @@ const Banner = () => {
       }
     }
     let submitData: IBannerContentWrite
-    // if ('announcementId' in data && 'reservationDate' in data) {
     submitData = {
       bannerType: data.bannerType,
       title: data.title,
@@ -214,38 +215,37 @@ const Banner = () => {
         data.bannerReservationType === '예약' ? DateFormed : null,
       announcementUrl: data.announcementUrl,
     }
-    // } else return
     await axios
-      .post(`${API_URL}/api/v1/admin/banner`, submitData)
+      .post(`${API_URL}/api/v1/admin/banner`, submitData, {
+        withCredentials: true,
+      })
       .then(() => {
-        console.log('submit success')
         setOpen(false)
         reset()
         axios
           .get(`${API_URL}/api/v1/admin/banner`, {
             params,
-            // withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+            withCredentials: true,
           })
           .then((res) => {
             totalPageVar.current = res.data.totalPages
             setContent(res.data.content)
+            openToast({
+              message: '배너 글을 성공적으로 등록하였습니다.',
+              severity: 'success',
+            })
           })
       })
       .catch((err) => {
-        console.log('submit fail', submitData)
         alert('공지사항 등록 실패 \n사유 : ' + err)
       })
   }
 
   const onSubmitEdit = async (data: IBannerAllContent) => {
-    console.log('onSubmitEdit, given data -> ', data, data.image)
-
     let submitData: IBannerContentEdit
     let DateFormed = ''
     if (data.bannerReservationType === '예약') {
       if (data.reservationDate === null) {
-        console.log('there is no reservationDate therefore return')
         return
       }
       DateFormed = formatDate(new Date(data.reservationDate))
@@ -269,40 +269,41 @@ const Banner = () => {
     } else return
 
     await axios
-      .put(`${API_URL}/api/v1/admin/banner`, submitData)
+      .put(`${API_URL}/api/v1/admin/banner`, submitData, {
+        withCredentials: true,
+      })
       .then(() => {
-        console.log('Edit submit success', submitData)
         setOpen(false)
         reset()
         axios
           .get(`${API_URL}/api/v1/admin/banner`, {
             params,
-            // withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+            withCredentials: true,
           })
           .then((res) => {
             totalPageVar.current = res.data.totalPages
             setContent(res.data.content)
+            openToast({
+              message: '배너 글을 성공적으로 수정하였습니다.',
+              severity: 'success',
+            })
           })
       })
       .catch((err) => {
-        console.log('submit edit fail', submitData)
         alert('공지사항 수정 실패 \n사유 : ' + err)
       })
   }
 
   const onHandleEdit = async () => {
     setWriteMode('edit')
-    console.log('edit vlaues ,', getValues())
   }
 
   const onHandleView = async (id: number) => {
     setWriteMode('view')
     setOpen(true)
     await axios
-      .get(`${API_URL}/api/v1/admin/banner/${id}`)
+      .get(`${API_URL}/api/v1/admin/banner/${id}`, { withCredentials: true })
       .then((res) => {
-        console.log(res)
         setValue('bannerId', id)
         setValue('bannerStatus', res.data.bannerStatus)
         setValue('bannerType', res.data.bannerType)
@@ -324,32 +325,35 @@ const Banner = () => {
         setValue('bannerReservationType', reservationStatusValue)
       })
       .catch((err) => {
-        console.log(err)
         alert('공지사항 조회 실패 \n사유 : ' + err)
       })
   }
 
   const onHandleRunOrEnd = async (mode: string) => {
-    console.log('onHandleRunOrEnd, ', getValues('bannerId'))
     const bannerId = getValues('bannerId')
     axios
-      .post(`${API_URL}/api/v1/admin/banner/${mode}`, { bannerId })
+      .post(
+        `${API_URL}/api/v1/admin/banner/${mode}`,
+        { bannerId },
+        { withCredentials: true },
+      )
       .then(() => {
-        console.log(`${mode} success`)
         setOpen(false)
         reset()
         axios
           .get(`${API_URL}/api/v1/admin/banner`, {
             params,
-            // withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+            withCredentials: true,
           })
           .then((res) => {
             setContent(res.data.content)
+            openToast({
+              message: `배너를 ${mode}처리 하였습니다.`,
+              severity: 'success',
+            })
           })
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         alert(`공지사항 ${mode} 처리 실패`)
       })
   }
@@ -358,19 +362,27 @@ const Banner = () => {
     axios
       .delete(`${API_URL}/api/v1/admin/banner`, {
         data: { bannerId: bannerId },
+        withCredentials: true,
       })
       .then(() => {
-        console.log('delete success')
         setOpen(false)
+        alert(bannerId + '번 배너가 삭제되었습니다.')
+        closeRemoveModal()
         axios
           .get(`${API_URL}/api/v1/admin/banner`, {
             params,
-            // withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
+            withCredentials: true,
           })
           .then((res) => {
             setContent(res.data.content)
+            openToast({
+              message: '배너 글을 성공적으로 삭제하였습니다.',
+              severity: 'success',
+            })
           })
+      })
+      .catch((err) => {
+        alert('배너 삭제 실패 \n 사유: ' + err)
       })
   }
 
@@ -397,7 +409,6 @@ const Banner = () => {
                 setWriteMode('write')
                 previewImage = watch('previewImage')
                 setOpen(true)
-                console.log('date : ', getValues('date'))
                 setValue(
                   'reservationDate',
                   formatDate(new Date(Date.now() + 3600000)),
@@ -469,24 +480,19 @@ const Banner = () => {
       </Stack>
       {/* 새 글쓰기 모달 */}
       <CuModal
-        title=""
+        title={
+          writeMode === 'write'
+            ? '새 배너 쓰기'
+            : writeMode === 'edit'
+              ? '배너 수정하기'
+              : '배너 보기'
+        }
         open={open}
         onClose={() => setOpen(false)}
         mobileFullSize={false}
       >
         <Container>
-          <Typography variant={'h4'} align="center">
-            {writeMode === 'write'
-              ? '새 배너 쓰기'
-              : writeMode === 'edit'
-                ? '배너 수정하기'
-                : '배너 보기'}
-          </Typography>
-          {/* 배너 이미지 */}
-          <ImageUploadButton
-            setPreviewImage={(image: string) => setValue('previewImage', image)}
-            register={register('image')}
-          >
+          {writeMode === 'view' ? (
             <Box>
               <Image
                 src={previewImage}
@@ -495,7 +501,23 @@ const Banner = () => {
                 alt="Picture of the announcement"
               />
             </Box>
-          </ImageUploadButton>
+          ) : (
+            <ImageUploadButton
+              setPreviewImage={(image: string) =>
+                setValue('previewImage', image)
+              }
+              register={register('image')}
+            >
+              <Box>
+                <Image
+                  src={previewImage}
+                  width={currentBannerType === '작은 배너' ? 251 : 946}
+                  height={currentBannerType === '작은 배너' ? 100 : 200}
+                  alt="Picture of the announcement"
+                />
+              </Box>
+            </ImageUploadButton>
+          )}
           {/* 배너 유형 선택 */}
           <Typography variant={'Title2'}>배너 유형</Typography>
           <Stack direction={'row'} justifyContent={'space-between'}>
@@ -553,6 +575,10 @@ const Banner = () => {
             disabled={writeMode === 'view'}
             {...register('announcementUrl', {
               required: 'url은 필수 입력 항목입니다.',
+              maxLength: {
+                value: 1000,
+                message: 'URL은 1000자를 초과할 수 없습니다.',
+              },
               pattern: {
                 value:
                   /^(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})$/,
@@ -622,7 +648,7 @@ const Banner = () => {
                   )}
                   onChange={onChange}
                   ampm={false}
-                  format="YYYY-MM-DD hh:mm"
+                  format="YYYY-MM-DD HH:mm"
                   disabled={
                     writeMode === 'view' || currentReservationType !== '예약'
                   }
@@ -669,13 +695,22 @@ const Banner = () => {
             {writeMode === 'view' ? (
               <Button
                 variant={'contained'}
-                onClick={() => onHandleDelete(getValues('bannerId'))}
+                onClick={() => {
+                  currentId.current = getValues('bannerId')
+                  openRemoveModal()
+                }}
               >
                 삭제
               </Button>
             ) : null}
             {writeMode === 'view' ? (
-              <Button variant={'contained'} onClick={() => onHandleEdit()}>
+              <Button
+                variant={'contained'}
+                onClick={() => onHandleEdit()}
+                disabled={
+                  getValues('bannerStatus') !== '예약' ? true : false
+                }
+              >
                 수정
               </Button>
             ) : writeMode === 'edit' ? (
@@ -691,6 +726,20 @@ const Banner = () => {
               </Button>
             )}
           </Stack>
+          <CuTextModal
+            title="태그 삭제하기"
+            open={isRemoveModalOpen}
+            onClose={closeRemoveModal}
+            content="정말 태그를 삭제하시겠습니까?"
+            textButton={{
+              text: '취소',
+              onClick: closeRemoveModal,
+            }}
+            containedButton={{
+              text: '삭제',
+              onClick: () => onHandleDelete(currentId.current),
+            }}
+          />
         </Container>
       </CuModal>
     </Container>

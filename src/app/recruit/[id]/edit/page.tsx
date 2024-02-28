@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import CreateTeamEditor from '@/app/recruit/write/panel/CreateTeamEditor'
 import { Editor } from '@toast-ui/editor'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
@@ -12,26 +12,9 @@ import {
   fieldToForm,
   formToField,
 } from '../../write/panel/fields/Interview/handleInterviewList'
-import { IFormInterview, IRoleWrite } from '@/types/IPostDetail'
-import { ISkill } from '@/types/IUserProfile'
-
-interface IRecruitEditApiType {
-  place: string
-  image: string | null
-  title: string
-  name: string
-  due: string
-  type: string
-  region: Array<string> | null
-  link: string
-  tagList: Array<ISkill>
-  roleList: Array<IRoleWrite>
-  interviewList: Array<IFormInterview>
-  max: string | undefined
-  isAnswered: boolean
-}
 
 const Page = ({ params }: { params: { id: string } }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const { openToast, closeToast } = useToast()
   const router = useRouter()
   const editorRef = useRef<Editor | null>(null)
@@ -41,17 +24,41 @@ const Page = ({ params }: { params: { id: string } }) => {
   const type = searchParam.get('type')
 
   const axiosWithAuth = useAxiosWithAuth()
-  const {
-    data: initData,
-    isLoading,
-    error,
-  } = useSWR<IRecruitEditApiType>(
-    `/api/v1/recruit/edit/${params.id}`,
-    (url: string) => axiosWithAuth.get(url).then((res) => res.data),
+
+  const { data, isLoading, error } = useSWR<{
+    defaultValues: IRecruitWriteField
+    isAnswered: boolean
+    content: string
+  }>(`/api/v1/recruit/edit/${params.id}`, (url: string) =>
+    axiosWithAuth
+      .get(url)
+      .then((res) => res.data)
+      .then((data) => ({
+        defaultValues: {
+          place: data.place,
+          image: data.image,
+          title: data.title,
+          name: data.name,
+          due: data.due,
+          type: data.type,
+          region:
+            data.place === 'ONLINE'
+              ? { large: '', small: '' }
+              : { large: data.region1, small: data.region2 },
+          link: data.link ?? '',
+          tagList: data.tagList,
+          roleList:
+            data.type === 'PROJECT' ? data.roleList : [{ name: '', number: 0 }],
+          interviewList: formToField(data.interviewList),
+          max: data.totalNumber ? `${data.totalNumber}` : `2`,
+        },
+        isAnswered: data.isAnswered,
+        content: data.content,
+      })),
   )
 
   if (isLoading) return <CuCircularProgress color="primary" />
-  else if (error || !initData) {
+  else if (error || !data) {
     if (error?.response?.initData?.message) {
       openToast({ message: error?.response?.data?.message, severity: 'error' })
     } else {
@@ -64,27 +71,16 @@ const Page = ({ params }: { params: { id: string } }) => {
     return <></>
   }
 
-  const defaultValues: IRecruitWriteField = {
-    place: initData.place,
-    image: initData.image,
-    title: initData.title,
-    name: initData.name,
-    due: initData.due,
-    type: type || initData.type,
-    region: initData.place === 'ONLINE' ? ['', ''] : initData.region,
-    link: initData.link ?? '',
-    tagList: initData.tagList,
-    roleList:
-      initData.type === 'PROJECT'
-        ? initData.roleList
-        : [{ name: '', number: 0 }],
-    interviewList: formToField(initData.interviewList),
-    max: initData.max ? initData.max.toString() : '2',
-  }
-
   const handleSubmit = async (data: IRecruitWriteField) => {
     closeToast()
-
+    if (String(editorRef.current?.getMarkdown()).length > 20000) {
+      openToast({
+        message: '모집글 내용은 20000자 이하로 작성해주세요.',
+        severity: 'error',
+      })
+      return
+    }
+    setIsSubmitting(true)
     await axiosWithAuth
       .put(`/api/v1/recruit/${params.id}`, {
         name: data.name,
@@ -92,7 +88,10 @@ const Page = ({ params }: { params: { id: string } }) => {
         due: data.due,
         status: 'ONGOING',
         content: editorRef.current?.getMarkdown(),
-        region: data.place === 'ONLINE' ? null : data.region,
+        region:
+          data.place === 'ONLINE'
+            ? null
+            : [data.region.large, data.region.small],
         link: data.link,
         tagList: data.tagList.map((tag) => {
           return tag.tagId
@@ -100,7 +99,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         roleList: data.type === 'PROJECT' ? data.roleList : null,
         interviewList: fieldToForm(data.interviewList),
         place: data.place,
-        max: data.type === 'PROJECT' ? null : Number(data.max),
+        max: data.type === 'PROJECT' ? null : Number(data.max) - 1,
         type: data.type,
       })
       .then((res) => {
@@ -108,7 +107,12 @@ const Page = ({ params }: { params: { id: string } }) => {
           message: '모집글이 성공적으로 수정되었습니다.',
           severity: 'success',
         })
-        router.replace(`/recruit/${res.data}?type=${data.type}`)
+        // router.replace(`/recruit/${res.data}?type=${data.type}`)
+
+        //ssr시 router.push로 하면 새로운 데이터를 패칭하지 않아서 window.location.href로 대체
+        if (window)
+          window.location.href = `/recruit/${res.data}?type=${data.type}`
+        setIsSubmitting(false)
       })
       .catch((error) => {
         openToast({
@@ -122,10 +126,12 @@ const Page = ({ params }: { params: { id: string } }) => {
   return (
     <CreateTeamEditor
       editorRef={editorRef}
-      defaultValues={defaultValues}
+      defaultValues={data?.defaultValues}
       editorType="edit"
       submitHandler={handleSubmit}
-      isAnswered={initData?.isAnswered}
+      isAnswered={data.isAnswered}
+      isSubmitting={isSubmitting}
+      content={data.content}
     />
   )
 }

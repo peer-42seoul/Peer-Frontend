@@ -14,25 +14,7 @@ import useAuthStore from '@/states/useAuthStore'
 import BoxBase from '@/components/BoxBase'
 import PrivacyPolicy from './panel/PrivacyPolicy'
 import UsagePolicy from './panel/UsagePolicy'
-
-const PCSignupBox = {
-  display: 'flex',
-  position: 'relative',
-  width: '544px',
-  padding: '40px 64px',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '48px',
-}
-
-const MobileSignupBox = {
-  display: 'flex',
-  width: '100%',
-  flexDirection: 'column',
-  alignItems: 'center',
-  padding: '40px 16px',
-  gap: '24px',
-}
+import { PCLoginBox, MobileLoginBox } from '../login/login.style'
 
 const PCPaper = {
   width: 'calc(100%-16px)',
@@ -104,7 +86,7 @@ const Privacy = () => {
 
   return (
     <>
-      <BoxBase pcSx={PCSignupBox} mobileSx={MobileSignupBox}>
+      <BoxBase pcSx={PCLoginBox} mobileSx={MobileLoginBox}>
         <Typography variant="Title3Emphasis">회원가입</Typography>
         <Stack gap={'16px'}>
           <Stack>

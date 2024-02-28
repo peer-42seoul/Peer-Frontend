@@ -184,7 +184,7 @@ const ProfileBioEditor = ({
       setIsLoading(true)
       const checkIsNicknameUnique = async () => {
         axiosWithAuth
-          .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/signup/nickname`, {
+          .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/signup/nickname`, {
             nickname,
           })
           .then(() => {
@@ -200,21 +200,26 @@ const ProfileBioEditor = ({
           })
           .catch((error) => {
             setIsNicknameUnique(false)
-            if (error.data.message) {
+
+            if (error?.response.data?.message) {
               openToast({
                 severity: 'error',
-                message: error.data.message,
+                message: String(error.response.data.messages[0]).split(': ')[1],
+              })
+              setError('nickname', {
+                type: 'notUnique',
+                message: String(error.response.data.messages[0]).split(': ')[1],
               })
             } else {
               openToast({
                 severity: 'error',
                 message: '중복된 닉네임 입니다.',
               })
+              setError('nickname', {
+                type: 'notUnique',
+                message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
+              })
             }
-            setError('nickname', {
-              type: 'notUnique',
-              message: '중복된 닉네임 입니다. 다른 닉네임을 입력해주세요.',
-            })
             setIsLoading(false)
           })
       }
@@ -262,7 +267,7 @@ const ProfileBioEditor = ({
     }
     submitData.append('imageChange', imageChanged.toString().toUpperCase())
 
-    if (!isNicknameUnique) {
+    if (!isNicknameUnique && nickname !== data.nickname) {
       setError('nickname', {
         type: 'notUnique',
         message: '닉네임 중복확인이 필요합니다.',
@@ -272,7 +277,7 @@ const ProfileBioEditor = ({
     closeToast()
     await axiosWithAuth
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/introduction/edit`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/profile/introduction/edit`,
         submitData,
         {
           headers: {
@@ -304,11 +309,6 @@ const ProfileBioEditor = ({
       })
   }
 
-  function getStringByteSize(str: string) {
-    const encoder = new TextEncoder()
-    const encoded = encoder.encode(str)
-    return encoded.length
-  }
   const theme = useTheme()
   return (
     <CuModal
@@ -439,7 +439,13 @@ const ProfileBioEditor = ({
                   value: 2,
                   message: '닉네임은 최소 두 글자 이상 작성해야 합니다.',
                 },
-                validate: isValidNickname,
+                validate: {
+                  isValidNickname,
+                  pattern: (value) =>
+                    /^([가-힣a-zA-Z0-9]+)$/.test(value) ||
+                    value === '' ||
+                    '닉네임은 한글, 영문, 숫자만 입력 가능합니다.',
+                },
               }}
             />
             {/* 소개 수정 */}
@@ -467,10 +473,7 @@ const ProfileBioEditor = ({
                         color={'red.strong'}
                         sx={{ height: '0.75rem' }}
                       >
-                        {/* {errors.introduction
-                              ? errors.introduction.message // NOTE: 테스트용으로 helperText를 사용했습니다. 버그 수정 시 원상복구 요망 
-                              : field.value.length} */}
-                        {getStringByteSize(field.value)}
+                        {errors.introduction && errors.introduction.message}
                       </Typography>
                     }
                   />

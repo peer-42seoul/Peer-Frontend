@@ -18,8 +18,11 @@ import { ITag } from '@/types/IPostDetail'
 import SettingSelect from '@/app/teams/[id]/setting/panel/SettingSelect'
 import useMedia from '@/hook/useMedia'
 
-const Options = ({ setDetailOption, setOpenOption }: {
-  setDetailOption: any,
+const Options = ({
+  setDetailOption,
+  setOpenOption,
+}: {
+  setDetailOption: any
   setOpenOption?: (value: boolean) => void
 }) => {
   const { isPc } = useMedia()
@@ -33,7 +36,7 @@ const Options = ({ setDetailOption, setOpenOption }: {
     },
   })
   const { data: listData } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tag`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/tag`,
     defaultGetFetcher,
   )
   const [due, setDue] = useState<number[]>([0, 100])
@@ -80,6 +83,9 @@ const Options = ({ setDetailOption, setOpenOption }: {
       status,
       tag,
     })
+    if (!isPc && setOpenOption) {
+      setOpenOption(false)
+    }
   }
 
   const handleReset = () => {
@@ -108,16 +114,16 @@ const Options = ({ setDetailOption, setOpenOption }: {
   }
 
   return (
-    <form onSubmit={() => {
-      handleSubmit(onSubmit)
-      if (!isPc && setOpenOption) {
-        setOpenOption(false)
-      }
-    }}>
-      <Grid container spacing={2} padding={'1rem'}>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid
+        container
+        spacing={2}
+        padding={'1rem'}
+        paddingBottom={isPc ? '1rem' : '8rem'}
+      >
         <Grid item xs={12}>
           <TagAutoComplete
-            title={'기술스택'}
+            title={'관련 태그'}
             tagList={listData || []}
             datas={tagData}
             setData={setTagData}

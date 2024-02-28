@@ -34,7 +34,7 @@ const InterestsContents = ({
   const handleDefaultUnfavorite = (recruit_id: number) => () => {
     axiosInstance
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruit/favorite/${recruit_id}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit/favorite/${recruit_id}`,
       )
       .then(() => {
         setPostList((prev) =>
@@ -45,7 +45,7 @@ const InterestsContents = ({
 
   const handleShowcaseUnfavorite = (id: number) => () => {
     axiosInstance
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${id}`)
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/favorite/${id}`)
       .then(() => {
         setShowcaseList((prev) => prev.filter((post) => post.showcaseId !== id))
       })

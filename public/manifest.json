@@ -9,6 +9,7 @@
   "scope": "/",
   "theme_color": "#8936FF",
   "background_color": "#060625",
+
   "icons": [
     {
       "src": "icons/windows11/SmallTile.scale-100.png",

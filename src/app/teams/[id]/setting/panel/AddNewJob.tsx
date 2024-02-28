@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { Job, TeamStatus } from '@/app/teams/types/types'
 import useAxiosWithAuth from '@/api/config'
+import useToast from '@/states/useToast'
 
 interface NewJob {
   name: string
@@ -20,6 +21,7 @@ interface Props {
 
 const AddNewJob = ({ onNewJob, teamId, teamStatus }: Props) => {
   const axiosWithAuth = useAxiosWithAuth()
+  const { openToast } = useToast()
   const [newJob, setNewJob] = useState<NewJob>({
     name: '',
     max: 1,
@@ -37,18 +39,19 @@ const AddNewJob = ({ onNewJob, teamId, teamStatus }: Props) => {
   const handleAddJob = () => {
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/job/add/${teamId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/job/add/${teamId}`,
         newJob,
       )
       .then((res) => {
-        console.log(res)
         if (res.status === 200) {
-          console.log(res.data)
           onNewJob(res.data)
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        openToast({
+          severity: 'error',
+          message: '직업 추가에 실패했습니다.',
+        })
       })
   }
 

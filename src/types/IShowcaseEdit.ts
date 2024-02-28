@@ -7,14 +7,15 @@
 //   content: string
 // }
 export interface IMember {
-  nickname: string
+  id: string
+  nickname?: string
   isLeader?: boolean
-  role: string
-  image: string
+  role?: string
+  image?: string
 }
 
 export interface ILinkInformation {
-  id: number
+  id: string
   name: string
   link: string
 }

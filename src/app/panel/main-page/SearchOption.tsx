@@ -13,7 +13,7 @@ const SearchOption = ({
   openOption: boolean
   setOpenOption: any
   setDetailOption: any
-  type: ProjectType | undefined
+  type: ProjectType
 }) => {
   const { isPc } = useMedia()
   const typeTitle = type === 'PROJECT' ? '프로젝트' : '스터디'
@@ -29,14 +29,18 @@ const SearchOption = ({
           alignItems={'center'}
           bgcolor={openOption ? undefined : 'purple.strong'}
           borderRadius={'0.75rem'}
+          onClick={() => setOpenOption(!openOption)}
         >
-          <Typography variant="Title3" color={titleColor}>
+          <Typography
+            variant="Title3"
+            color={titleColor}
+            sx={{
+              cursor: 'pointer',
+            }}
+          >
             맞춤 {typeTitle}를 빠르게 찾아요.
           </Typography>
-          <IconButton
-            onClick={() => setOpenOption(!openOption)}
-            sx={{ color: titleColor }}
-          >
+          <IconButton sx={{ color: titleColor }}>
             {openOption ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </Stack>
@@ -55,14 +59,18 @@ const SearchOption = ({
         alignItems={'center'}
         bgcolor={'purple.strong'}
         borderRadius={'0.75rem'}
+        onClick={() => setOpenOption(!openOption)}
       >
-        <Typography variant="Body2" color={'white'}>
+        <Typography
+          variant="Body2"
+          color={'white'}
+          sx={{
+            cursor: 'pointer',
+          }}
+        >
           맞춤 {typeTitle}를 빠르게 찾아요.
         </Typography>
-        <IconButton
-          onClick={() => setOpenOption(!openOption)}
-          sx={{ color: 'white' }}
-        >
+        <IconButton sx={{ color: 'white' }}>
           {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
         </IconButton>
       </Stack>
@@ -73,18 +81,28 @@ const SearchOption = ({
         anchor={'bottom'}
       >
         <Stack padding={2} sx={{ height: '70vh' }}>
-          <Stack flexDirection={'row'} alignItems={'center'}>
-            <Typography variant="Body1" color={titleColor}>
-              맞춤 프로젝트를 빠르게 찾아요.
-            </Typography>
-            <IconButton
-              sx={{ color: titleColor }}
-              onClick={() => setOpenOption(!openOption)}
+          <Stack
+            flexDirection={'row'}
+            alignItems={'center'}
+            onClick={() => setOpenOption(!openOption)}
+          >
+            <Typography
+              variant="Body1"
+              color={titleColor}
+              sx={{
+                cursor: 'pointer',
+              }}
             >
+              맞춤 {typeTitle}를 빠르게 찾아요.
+            </Typography>
+            <IconButton sx={{ color: titleColor }}>
               {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
             </IconButton>
           </Stack>
-          <Options setDetailOption={setDetailOption} setOpenOption={setOpenOption}/>
+          <Options
+            setDetailOption={setDetailOption}
+            setOpenOption={setOpenOption}
+          />
         </Stack>
       </SwipeableDrawer>
     </Stack>

@@ -4,19 +4,23 @@ import React, { useMemo } from 'react'
 import RecruitFormModal from '@/app/recruit/[id]/panel/form/RecruitFormModal'
 import useAuthStore from '@/states/useAuthStore'
 import { useRouter } from 'next/navigation'
-import { IRole, ProjectType } from '@/types/IPostDetail'
+import { IRole, ProjectType, TPostStatus } from '@/types/IPostDetail'
 import ApplyDrawerButton from '@/app/recruit/[id]/panel/ApplyDrawerButton'
 
 const ApplyFormButton = ({
   id,
   type,
   roleList,
+  data,
   pc,
+  status,
 }: {
   id: string
   type: ProjectType
   roleList: IRole[]
+  data: any
   pc?: boolean
+  status: TPostStatus
 }) => {
   const { isLogin } = useAuthStore()
   const currentUrl = '/login?redirect=/recruit/1?type=' + type
@@ -24,10 +28,12 @@ const ApplyFormButton = ({
   const [role, setRole] = React.useState<string | null>(null)
   const [open, setOpen] = React.useState(false)
 
-  const checkIsFull = useMemo(
-    () => roleList?.every((role: IRole) => role?.current >= role?.number),
-    [roleList],
-  )
+  const checkIsFull = useMemo(() => {
+    if (status === 'DONE') return true
+    if (type === 'PROJECT')
+      return roleList?.every((role) => role.current >= role.number)
+    else return data.current >= data.totalNumber
+  }, [data, roleList, type])
 
   const handleApply = (selectedRole: string | null) => {
     if (!isLogin) router.push(currentUrl)
@@ -45,6 +51,7 @@ const ApplyFormButton = ({
           setOpen={setOpen}
           recruit_id={id}
           role={role}
+          type={type}
         />
         {type === 'PROJECT' && roleList?.length ? (
           <ApplyMenuButton
@@ -70,6 +77,7 @@ const ApplyFormButton = ({
         setOpen={setOpen}
         recruit_id={id}
         role={role}
+        type={type}
       />
       {type === 'PROJECT' && roleList?.length ? (
         <ApplyDrawerButton

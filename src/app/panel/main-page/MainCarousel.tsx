@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import Image from 'next/image'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 const MainCarousel = () => {
   const settings = {
@@ -21,36 +21,14 @@ const MainCarousel = () => {
     height: '100%',
   }
 
-  const imageProps = {
-    width: 310,
-    height: 130,
-    style: {
-      borderRadius: '0.75rem',
-      height: '7.5rem',
-    },
-  }
-
   return (
     <Slider {...settings}>
       <Box sx={BoxStyle}>
-        <Image
-          src={'/images/banners/default-banner-1.png'}
+        <CuPhotoBox
+          src={'/images/banners/default-mobile.svg'}
           alt="banner-1"
-          {...imageProps}
-        />
-      </Box>
-      <Box sx={BoxStyle}>
-        <Image
-          src={'/images/banners/default-banner-2.png'}
-          alt="banner-1"
-          {...imageProps}
-        />
-      </Box>
-      <Box sx={BoxStyle}>
-        <Image
-          src={'/images/banners/default-banner-3.png'}
-          alt="banner-1"
-          {...imageProps}
+          imgStyle={{ borderRadius: '0.75rem' }}
+          style={{ width: 300, height: 130 }}
         />
       </Box>
     </Slider>

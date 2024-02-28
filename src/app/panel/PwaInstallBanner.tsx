@@ -1,3 +1,5 @@
+'use client'
+
 import useMedia from '@/hook/useMedia'
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -12,7 +14,7 @@ declare global {
 }
 
 const PwaInstallBanner = () => {
-  const [isShowInstall, setIsShowInstall] = useState(true)
+  const [isShowInstall, setIsShowInstall] = useState(false)
   const { isPc } = useMedia()
   const [isSafari, setIsSafari] = useState(false)
   const [deferredPrompt, setDeferredPrompt] =
@@ -23,7 +25,6 @@ const PwaInstallBanner = () => {
       deferredPrompt.prompt()
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt')
           setIsShowInstall(false)
           localStorage.setItem('isShowInstall', 'false')
         } else {
@@ -31,16 +32,21 @@ const PwaInstallBanner = () => {
         }
       })
     } else {
-      console.log('not install')
+      console.log(
+        '[Error] PWA install banner is not working. Maybe already installed?',
+      )
+      setIsShowInstall(false)
     }
   }
 
   useEffect(() => {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    if (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      localStorage.getItem('isShowInstall') === 'false'
+    ) {
       setIsShowInstall(false)
-    }
-    if (localStorage.getItem('isShowInstall') === 'false') {
-      setIsShowInstall(false)
+    } else {
+      setIsShowInstall(true)
     }
 
     const isSafariBrowser =
@@ -77,10 +83,14 @@ const PwaInstallBanner = () => {
       <>
         {isShowInstall && (
           <Box
-            position={'fixed'}
-            bottom={0}
+            position={'sticky'}
+            bottom={isPc ? '0' : '76px'}
             width={'100%'}
-            sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
+            sx={{
+              backgroundColor: 'primary.main',
+              zIndex: 9999,
+              paddingBottom: 0.2,
+            }}
           >
             <Stack
               margin={1}
@@ -111,10 +121,14 @@ const PwaInstallBanner = () => {
     <>
       {isShowInstall && (
         <Box
-          position={'fixed'}
-          bottom={0}
+          position={'sticky'}
+          bottom={isPc ? '0' : '76px'}
           width={'100%'}
-          sx={{ backgroundColor: 'primary.main', zIndex: 9999 }}
+          sx={{
+            backgroundColor: 'primary.main',
+            zIndex: 9999,
+            paddingBottom: 0.2,
+          }}
         >
           <Stack margin={1}>
             <Typography color={'white'} variant="Caption">

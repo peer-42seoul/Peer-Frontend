@@ -2,16 +2,18 @@ import { MenuItem, Stack, Typography } from '@mui/material'
 import { WifiClearIcon } from '../Icons'
 import { Control, Controller } from 'react-hook-form'
 import { Select } from '@mui/material'
-import { TeamOperationForm } from '@/app/teams/types/types'
+import { TeamOperationForm, TeamStatus } from '@/app/teams/types/types'
 import { ISetupTeam } from '../SettingTeamInfo'
 import useMedia from '@/hook/useMedia'
 
 interface ISettingTeamActivity {
+  teamStatus: TeamStatus
   teamActivity: TeamOperationForm
   control: Control<ISetupTeam, any>
 }
 
 const SettingTeamActivity = ({
+  teamStatus,
   teamActivity,
   control,
 }: ISettingTeamActivity) => {
@@ -24,9 +26,9 @@ const SettingTeamActivity = ({
       mx={!isPc ? '0.5rem' : ''}
       spacing={'0.5rem'}
     >
-      <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.35rem'}>
+      <Stack direction={'row'} alignItems={'center'} spacing={'0.35rem'}>
         <WifiClearIcon />
-        <Typography>활동방식</Typography>
+        <Typography variant="Body2Emphasis">활동방식</Typography>
       </Stack>
       <Controller
         name="operationForm"
@@ -35,11 +37,12 @@ const SettingTeamActivity = ({
         render={({ field }) => (
           <Select
             size="small"
+            disabled={teamStatus === TeamStatus.COMPLETE}
             variant="outlined"
             defaultValue={teamActivity}
             sx={{
               m: 0,
-              minWidth: '8rem',
+              minWidth: '5rem',
             }}
             {...field}
           >
@@ -49,9 +52,15 @@ const SettingTeamActivity = ({
               TeamOperationForm.MIX,
             ].map((operation) => (
               <MenuItem key={operation} value={operation}>
-                {operation === TeamOperationForm.OFFLINE && '오프라인'}
-                {operation === TeamOperationForm.ONLINE && '온라인'}
-                {operation === TeamOperationForm.MIX && '온/오프라인'}
+                {operation === TeamOperationForm.OFFLINE && (
+                  <Typography variant="Body2">오프라인</Typography>
+                )}
+                {operation === TeamOperationForm.ONLINE && (
+                  <Typography variant="Body2">온라인</Typography>
+                )}
+                {operation === TeamOperationForm.MIX && (
+                  <Typography variant="Body2">온/오프라인</Typography>
+                )}
               </MenuItem>
             ))}
           </Select>

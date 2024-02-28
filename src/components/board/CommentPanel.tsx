@@ -254,6 +254,7 @@ export const CommentFormContainer = ({
           fullWidth
           name={'new-content'}
           id={'new-content'}
+          inputProps={{ maxLength: 150 }}
         />
         <IconButton sx={style.IconButton} disabled={isLoading} type={'submit'}>
           <SendIcon sx={style.SendIcon} />

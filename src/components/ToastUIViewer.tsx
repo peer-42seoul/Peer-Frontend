@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import Viewer, {
   IViewerOptions,
 } from '@toast-ui/editor/dist/toastui-editor-viewer'
@@ -15,8 +15,11 @@ const ToastViewer = ({
   initialValue = '',
   height = '30rem',
   sx,
+  typographySx,
 }: IViewerOptions) => {
   const viewerRef = useRef<HTMLDivElement>(null)
+  const theme = useTheme()
+
   useEffect(() => {
     if (!viewerRef.current) {
       return
@@ -32,18 +35,27 @@ const ToastViewer = ({
       viewer.destroy()
     }
   }, [initialValue, viewerRef])
+
   return (
     <Box
       sx={{
-        ...sx,
         fontSize: '0.9375rem',
+        backgroundColor: 'background.secondary',
+        padding: '0.5rem 1rem',
+        borderRadius: '0.5rem',
         '& .toastui-editor-contents': {
           // 글자와 관련된 태그들을 최대한 다 넣어봤습니다.
           '& span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite,  del, dfn, em,  ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, section, summary, time, mark':
             {
-              color: 'text.alternative',
+              color: 'text.normal',
+              ...(typographySx as React.CSSProperties),
             },
+          '& pre': {
+            backgroundColor:
+              theme.palette.mode === 'dark' ? '#1E1E1E' : '#FBFCFD',
+          },
         },
+        ...sx,
       }}
       ref={viewerRef}
     />

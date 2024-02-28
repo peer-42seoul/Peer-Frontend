@@ -55,7 +55,7 @@ export const avatarStyle: SxProps = {
 
 export const introductionMaxLengthStyle: SxProps = {
   position: 'absolute',
-  bottom: '3rem',
+  bottom: '1.5rem',
   right: '1.5rem',
 }
 
@@ -87,7 +87,8 @@ export const profileCardMobileStyle: SxProps = {
 }
 
 export const profileImageModalStyle: SxProps = {
-  width: '80%',
+  width: '80vw',
+  height: '80vw',
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -96,6 +97,12 @@ export const profileImageModalStyle: SxProps = {
   transform: 'translate(-50%, -50%)',
   maxWidth: '20rem',
   maxHeight: '20rem',
+}
+
+export const profileImageBoxStyle: SxProps = {
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
 }
 
 export const profileImageStyle: SxProps = {

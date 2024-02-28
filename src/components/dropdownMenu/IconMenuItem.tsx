@@ -7,10 +7,12 @@ const IconMenuItem = ({
   icon,
   text,
   action,
+  disabled,
 }: {
   icon: React.ReactNode
   text: string
   action?: () => void
+  disabled?: boolean
 }) => {
   const handleClick = () => {
     if (action) {
@@ -18,7 +20,7 @@ const IconMenuItem = ({
     }
   }
   return (
-    <MenuItem dense onClick={handleClick}>
+    <MenuItem dense onClick={handleClick} disabled={disabled}>
       <Stack
         direction={'row'}
         spacing={'0.375rem'}

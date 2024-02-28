@@ -7,14 +7,13 @@ import { Control, Controller, useFormState } from 'react-hook-form'
 import { IRecruitWriteField } from '@/types/IRecruitWriteField'
 
 interface BasicSelectProps {
-  region: string[]
+  region: { large: string; small: string }
   control: Control<IRecruitWriteField, any>
 }
 
-// 해당 컴포넌트에는 react-hook-form을 제대로 적용하지 않았습니다.
-
 export default function SelectRegion({ region, control }: BasicSelectProps) {
   const { errors } = useFormState<IRecruitWriteField>({ control })
+
   let options1 = [
     koreaDistrict.largeScaleData.map((value) => {
       return (
@@ -27,8 +26,8 @@ export default function SelectRegion({ region, control }: BasicSelectProps) {
     }),
   ]
 
-  let options2 = koreaDistrict.smallScaleData[region[0] ?? '']
-    ? koreaDistrict.smallScaleData[region[0] ?? ''].map((value) => {
+  let options2 = koreaDistrict.smallScaleData[region.large ?? '']
+    ? koreaDistrict.smallScaleData[region.large ?? ''].map((value) => {
         return (
           <MenuItem key={value} value={value}>
             <Typography variant="Body2" color={'text.normal'}>
@@ -51,12 +50,12 @@ export default function SelectRegion({ region, control }: BasicSelectProps) {
             {...field}
             sx={style.selectStyle}
             variant="outlined"
-            error={errors.region?.[0] ? true : false}
+            error={errors.region?.large ? true : false}
           >
             {options1}
           </Select>
         )}
-        name={'region.0'}
+        name={'region.large'}
         control={control}
         rules={{ required: '필수 입력 항목 입니다.' }}
       />
@@ -67,12 +66,12 @@ export default function SelectRegion({ region, control }: BasicSelectProps) {
             {...field}
             sx={style.selectStyle}
             variant="outlined"
-            error={errors.region?.[1] ? true : false}
+            error={errors.region?.small ? true : false}
           >
             {options2}
           </Select>
         )}
-        name={'region.1'}
+        name={'region.small'}
         control={control}
         rules={{ required: '필수 입력 항목 입니다.' }}
       />

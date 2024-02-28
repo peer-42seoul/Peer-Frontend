@@ -50,6 +50,7 @@ const PasswordField = ({
           pattern: '[A-Za-z0-9!@#$%^&*]*',
           type: showPassword,
         }}
+        sx={{ width: '100%' }}
         onFocus={() => {
           setShowValidating(true)
         }}
@@ -60,7 +61,11 @@ const PasswordField = ({
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
               />
-              <IconButton onClick={deletePassword} size="small">
+              <IconButton
+                onClick={deletePassword}
+                size="small"
+                sx={{ paddingY: 0 }}
+              >
                 <HighlightOffIcon sx={{ color: 'text.alternative' }} />
               </IconButton>
             </>

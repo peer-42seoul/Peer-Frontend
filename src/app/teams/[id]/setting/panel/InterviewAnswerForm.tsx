@@ -19,6 +19,7 @@ const InterviewAnswerForm = ({
   index: number
 }) => {
   const { control } = useForm()
+
   return (
     <>
       {interview.type === EInterviewType.OPEN && (
@@ -26,7 +27,7 @@ const InterviewAnswerForm = ({
       )}
       {interview.type === EInterviewType.CLOSE && (
         <CloseQuestionForm
-          optionList={interview?.optionList as CloseQuestionList}
+          optionList={interview?.option as CloseQuestionList}
           control={control}
           idx={index}
           value={interview.answer}
@@ -35,7 +36,7 @@ const InterviewAnswerForm = ({
       )}
       {interview.type === EInterviewType.RATIO && (
         <RatioQuestionForm
-          optionList={interview?.optionList as RatioQuestionList}
+          optionList={interview?.option as RatioQuestionList}
           control={control}
           idx={index}
           value={interview.answer}
@@ -44,7 +45,7 @@ const InterviewAnswerForm = ({
       )}
       {interview.type === EInterviewType.CHECK && (
         <CheckQuestionForm
-          optionList={interview?.optionList as CheckQuestionList}
+          optionList={interview?.option as CheckQuestionList}
           control={control}
           idx={index}
           disabled={true}

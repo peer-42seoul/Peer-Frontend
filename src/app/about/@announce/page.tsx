@@ -4,6 +4,7 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import useMedia from '@/hook/useMedia'
+import useAboutLayout from '@/states/useAboutLayout'
 import { IPagination } from '@/types/IPagination'
 import {
   Card,
@@ -13,7 +14,6 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { useRouter } from 'next/navigation'
 import { ChangeEvent, useState } from 'react'
 import useSWR from 'swr'
 
@@ -43,17 +43,19 @@ function formatDate(dateStr: string | null) {
 }
 
 const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
-  const router = useRouter()
+  const { setAnnounceDetail } = useAboutLayout()
+
   return (
     <CardActions
       sx={{
         boxShadow: 'none',
-        backgroundColor: 'background.tertiary',
+        backgroundColor: 'background.secondary',
         padding: '0.5rem',
+        borderRadius: '0.5rem',
       }}
     >
       <CardActionArea
-        onClick={() => router.push(`/about/detail/${id}`)}
+        onClick={() => setAnnounceDetail(id)}
         sx={{
           '.MuiCardActionArea-focusHighlight': {
             background: 'transparent',
@@ -74,7 +76,7 @@ const AnnouncePage = () => {
   const { isPc } = useMedia()
   const [page, setPage] = useState<number>(1)
   const { data, isLoading, error } = useSWR<IPagination<AnnounceCardProps[]>>(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/about/announcement?page=${page}&size=5`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/about/announcement?page=${page}&size=5`,
     defaultGetFetcher,
   )
 
@@ -87,7 +89,7 @@ const AnnouncePage = () => {
   if (error) return <NoDataDolphin message="문제가 있나봐요 ㅠㅠ" />
 
   return (
-    <Card sx={{ padding: '2rem', backgroundColor: 'background.secondary' }}>
+    <Card sx={{ padding: '2rem', backgroundColor: 'background.primary' }}>
       <Stack>
         <Typography variant="Title2">공지사항</Typography>
       </Stack>

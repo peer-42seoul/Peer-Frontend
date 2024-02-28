@@ -1,13 +1,15 @@
 'use client'
 import { useRef } from 'react'
 import { isAxiosError } from 'axios'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import { Stack, TextField, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import BackgroundBox from '@/components/BackgroundBox'
 import CuButton from '@/components/CuButton'
+import CuCircularProgress from '@/components/CuCircularProgress'
 import useMedia from '@/hook/useMedia'
 import useToast from '@/states/useToast'
+import useTeamPageState from '@/states/useTeamPageState'
 import { ITeamBoard } from '@/types/TeamBoardTypes'
 import BoardItem from './panel/BoardItem'
 import * as style from './page.style'
@@ -42,6 +44,8 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
   const { isPc } = useMedia()
   const axiosWithAuth = useAxiosWithAuth()
   const { openToast } = useToast()
+  const { resetState } = useTeamPageState()
+  const { mutate } = useSWRConfig()
 
   const { data, isLoading, error } = useSWR<ITeamBoard[]>(
     `/api/v1/team-page/simple/${teamId}`,
@@ -70,6 +74,7 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
           severity: 'success',
           message: '게시판을 추가했습니다.',
         })
+        mutate(`/api/v1/team-page/simple/${teamId}`)
       })
       .catch((e: unknown) => {
         if (isAxiosError(e)) {
@@ -78,14 +83,40 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
               severity: 'error',
               message: '이미 존재하는 게시판 이름입니다.',
             })
-            return
+          } else if (e.response?.status === 403) {
+            openToast({
+              severity: 'error',
+              message: '게시판 추가는 팀 리더만 가능합니다.',
+            })
+          } else {
+            openToast({
+              severity: 'error',
+              message: '게시판을 추가하지 못했습니다.',
+            })
           }
+        } else {
+          openToast({
+            severity: 'error',
+            message: '게시판을 추가하지 못했습니다.',
+          })
         }
-        openToast({
-          severity: 'error',
-          message: '게시판을 추가하지 못했습니다.',
-        })
       })
+  }
+
+  if (error) {
+    if (isAxiosError(error) && error.response?.status === 403) {
+      alert('게시판 관리는 팀 리더만 가능합니다')
+    } else {
+      alert('게시판 목록을 불러오지 못했습니다.')
+    }
+    resetState()
+    return null
+  }
+
+  if (!isLoading && !data) {
+    alert('게시판 목록을 불러오지 못했습니다.')
+    resetState()
+    return null
   }
 
   // 모바일에서는 게시판 관리가 불가능합니다.
@@ -97,42 +128,69 @@ const TeamBoardSetting = ({ params }: { params: { id: string } }) => {
         </Typography>
       </BackgroundBox>
     )
-  // TODO : 좀 더 구체적인 에러처리
-  if (!data || isLoading || error) return null
 
   return (
-    <BackgroundBox pcSx={{ padding: '1.5rem' }}>
-      <Stack spacing={'2rem'}>
-        <TitleStack title="게시판 추가">
-          <Stack
-            direction={'row'}
-            spacing={'0.38rem'}
-            sx={style.inputContainer}
-          >
-            <TextField
-              inputRef={textFieldRef}
-              name={'new-board-name'}
-              sx={{ flexGrow: 1 }}
-            />
-            <CuButton
-              variant={'text'}
-              action={handleCreateBoard}
-              message="추가"
-            />
+    <Stack
+      sx={{
+        boxSizing: 'border-box',
+        width: '100%',
+        padding: '2rem',
+      }}
+      spacing={'2rem'}
+    >
+      <CuButton
+        variant={'text'}
+        message={'게시판으로 돌아가기'}
+        TypographyProps={{
+          variant: 'CaptionEmphasis',
+          color: 'text.alternative',
+        }}
+        action={resetState}
+        style={{ width: 'fit-content' }}
+      />
+      <BackgroundBox pcSx={{ padding: '1.5rem' }}>
+        {isLoading ? (
+          <CuCircularProgress color="primary" />
+        ) : (
+          <Stack spacing={'2rem'}>
+            <TitleStack title="게시판 추가">
+              <Stack
+                direction={'row'}
+                spacing={'0.38rem'}
+                sx={style.inputContainer}
+              >
+                <TextField
+                  inputRef={textFieldRef}
+                  name={'new-board-name'}
+                  sx={{ flexGrow: 1 }}
+                />
+                <CuButton
+                  variant={'text'}
+                  action={handleCreateBoard}
+                  message="추가"
+                />
+              </Stack>
+            </TitleStack>
+            <TitleStack
+              title={'게시판 목록'}
+              warning={
+                '게시판 삭제시 내부 모든 글이 삭제되고 복구할 수 없어요.'
+              }
+            >
+              <Stack>
+                {data?.map((board: ITeamBoard) => (
+                  <BoardItem
+                    key={crypto.randomUUID()}
+                    board={board}
+                    teamId={teamId}
+                  />
+                ))}
+              </Stack>
+            </TitleStack>
           </Stack>
-        </TitleStack>
-        <TitleStack
-          title={'게시판 목록'}
-          warning={'게시판 삭제시 내부 모든 글이 삭제되고 복구할 수 없어요.'}
-        >
-          <Stack>
-            {data.map((board: ITeamBoard) => (
-              <BoardItem key={crypto.randomUUID()} board={board} />
-            ))}
-          </Stack>
-        </TitleStack>
-      </Stack>
-    </BackgroundBox>
+        )}
+      </BackgroundBox>
+    </Stack>
   )
 }
 

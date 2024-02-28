@@ -1,23 +1,37 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Typography, Box, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import TeamInfoContainer from './panel/TeamInfoContainer'
 // import TeamDnD from './panel/TeamDnD'
-import Image from 'next/image'
+import CuButton from '@/components/CuButton'
+import { useEffect, useState } from 'react'
+import CuCircularProgress from '@/components/CuCircularProgress'
+import ForbiddenDolphin from '@/components/WorkingDolphin'
 
 const TeamsPage = ({ params }: { params: { id: string } }) => {
+  const [isClient, setIsClient] = useState(false)
   const router = useRouter()
   const { id } = params
 
+  useEffect(() => {
+    setIsClient(true) // 모바일 환경에서 hydration을 막기 위한 변수
+  }, [])
+
+  if (!isClient) return <CuCircularProgress color="primary" />
+
   return (
-    <Box width={'100%'}>
-      <Typography
-        onClick={() => router.push('/team-list')}
-        sx={{ color: '#9B9B9B', cursor: 'pointer' }}
-      >
-        팀리스트로 돌아가기
-      </Typography>
+    <Stack spacing={'1.5rem'} width={'100%'}>
+      <CuButton
+        action={() => router.push('/team-list')}
+        message={'팀 리스트로 돌아가기'}
+        TypographyProps={{
+          color: 'text.alternative',
+          variant: 'Caption',
+        }}
+        variant="text"
+        style={{ width: 'fit-content' }}
+      />
       <TeamInfoContainer id={Number(id)} />
       {/*준비중 메세지*/}
       <Stack
@@ -25,18 +39,15 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
         height={'100%'}
         alignItems={'center'}
         justifyContent={'center'}
+        sx={{
+          borderRadius: '1rem',
+          backgroundColor: 'background.secondary',
+        }}
       >
-        <Image
-          src={'/images/dolphin.png'}
-          width={300}
-          height={200}
-          alt="고래 이미지"
-        />
-        <Typography variant="Title3">메인 팀페이지는 준비중입니다!</Typography>
-        <Typography variant="Body2">(다른 기능은 이용 가능합니다)</Typography>
+        <ForbiddenDolphin message="메인 팀페이지는 준비중입니다!" />
       </Stack>
-      {/*<TeamDnD id={id} />*/}
-    </Box>
+      {/* <TeamDnD id={id} /> */}
+    </Stack>
   )
 }
 

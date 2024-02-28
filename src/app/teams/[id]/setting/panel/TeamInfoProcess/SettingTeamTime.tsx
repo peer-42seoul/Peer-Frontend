@@ -4,13 +4,19 @@ import { Control, Controller } from 'react-hook-form'
 import { dueList } from '../SettingSelect'
 import { ISetupTeam } from '../SettingTeamInfo'
 import useMedia from '@/hook/useMedia'
+import { TeamStatus } from '@/app/teams/types/types'
 
 interface ISettingTeamTime {
+  teamStatus: TeamStatus
   teamTime: string
   control: Control<ISetupTeam, any>
 }
 
-const SettingTeamTime = ({ teamTime, control }: ISettingTeamTime) => {
+const SettingTeamTime = ({
+  teamTime,
+  control,
+  teamStatus,
+}: ISettingTeamTime) => {
   const isPc = useMedia()
   return (
     <Stack
@@ -20,9 +26,11 @@ const SettingTeamTime = ({ teamTime, control }: ISettingTeamTime) => {
       mb={'1.2rem'}
       spacing={'0.5rem'}
     >
-      <Stack direction={'row'} alignItems={'flex-start'} spacing={'0.25rem'}>
+      <Stack direction={'row'} alignItems={'center'} spacing={'0.25rem'}>
         <PieClearIcon />
-        <Typography textOverflow={'ellipsis'}>목표기간</Typography>
+        <Typography textOverflow={'ellipsis'} variant="Body2Emphasis">
+          목표기간
+        </Typography>
       </Stack>
 
       <Controller
@@ -31,18 +39,19 @@ const SettingTeamTime = ({ teamTime, control }: ISettingTeamTime) => {
         defaultValue={teamTime}
         render={({ field }) => (
           <Select
+            disabled={teamStatus === TeamStatus.COMPLETE}
             size="small"
             defaultValue={teamTime}
             variant="outlined"
             sx={{
               m: 0,
-              minWidth: '8rem',
+              minWidth: '5rem',
             }}
             {...field}
           >
             {dueList.map((dueTo) => (
               <MenuItem key={dueTo} value={dueTo}>
-                {dueTo}
+                <Typography variant="Body2">{dueTo}</Typography>
               </MenuItem>
             ))}
           </Select>

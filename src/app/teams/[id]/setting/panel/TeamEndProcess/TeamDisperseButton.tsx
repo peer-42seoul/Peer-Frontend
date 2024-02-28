@@ -18,55 +18,48 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
   const axiosWithAuth = useAxiosWithAuth()
 
   const disperseTeam = () => {
-    console.log('exit team')
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/team/setting/disperse`, {
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/setting/disperse`, {
         teamId: teamId,
       })
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
           router.push('/team-list')
           openToast({
             severity: 'success',
             message: '팀이 해산되었습니다.',
           })
+          router.push('/team-list')
         } else if (res.status === 401) {
-          console.log(res)
           router.push('/login')
           openToast({
             severity: 'error',
             message: '잘못된 접근입니다.',
           })
         } else if (res.status === 403) {
-          console.log(res)
           router.push('/login')
           openToast({
             severity: 'error',
             message: '권한이 없습니다.',
           })
         } else if (res.status === 404) {
-          console.log(res)
           openToast({
             severity: 'error',
             message: '팀이 존재하지 않습니다.',
           })
         } else if (res.status === 409) {
-          console.log(res)
           openToast({
             severity: 'error',
             message: '모집을 완료 후 팀을 해산하셔야 합니다.',
           })
         } else {
-          console.log(res)
           openToast({
             severity: 'error',
             message: '팀 해산에 실패하였습니다.',
           })
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
         openToast({
           severity: 'error',
           message: '팀 해산에 실패하였습니다.',
@@ -82,7 +75,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <Typography>팀을 해산시겠습니까?</Typography>
+        <Typography variant="Body2">팀을 해산시겠습니까?</Typography>
         <Button
           disabled={
             teamStatus === TeamStatus.RECRUITING ||
@@ -93,7 +86,7 @@ const TeamDisperseButton = ({ teamId, teamStatus }: ITeamDisperseButton) => {
           variant="contained"
           onClick={openModal}
         >
-          <Typography>해산하기</Typography>
+          <Typography variant="Body2" color="#ffffff">해산하기</Typography>
         </Button>
       </Stack>
 

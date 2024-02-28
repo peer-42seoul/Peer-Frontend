@@ -27,12 +27,26 @@ const ProfileImageModal = ({
       keepMounted
       sx={{ border: 'none', outline: 'none' }}
     >
-      <Box
-        component={'img'}
-        sx={style.profileImageModalStyle}
-        alt="profile image"
-        src={profileImageUrl ? profileImageUrl : '/images/profile.jpeg'}
-      />
+      <Box sx={style.profileImageModalStyle}>
+        {/* <Box
+          sx={{
+            width: '100%',
+            height: '100%',
+            position: 'relative',
+            '& :after': {
+              content: '""',
+              display: 'block',
+              paddingBottom: '100%',
+            },
+          }}
+        > */}
+        <CuAvatar
+          alt="profile image"
+          src={profileImageUrl ?? ''}
+          sx={style.profileImageBoxStyle}
+        />
+        {/* </Box> */}
+      </Box>
     </Modal>
   )
 }

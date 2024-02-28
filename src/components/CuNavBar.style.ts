@@ -30,21 +30,23 @@ const tabBase = {
 
 const selectedTab = {
   '&.Mui-selected': {
-    backgroundColor: ['purple.tinted', 'background.tertiary'],
+    backgroundColor: 'purple.tinted',
     '& span': {
-      color: ['purple.strong', 'text.normal'],
+      color: 'purple.normal',
     },
     '& svg': {
-      fill: (theme: Theme) => theme.palette.purple.strong,
+      fill: (theme: Theme) => theme.palette.purple.normal,
     },
   },
 }
 
 const disabledTab = {
   '&.Mui-disabled': {
-    color: 'text.disable',
     backgroundColor: 'transparent',
     border: 'none',
+    '& span': {
+      color: 'text.disable',
+    },
     '& svg': {
       fill: (theme: Theme) => theme.palette.text.disable,
     },
@@ -58,15 +60,15 @@ export const pcTab: SxProps = {
   width: '100%',
   padding: '0 1.5rem',
   margin: '0.25rem 0',
-  '& span': {
-    color: 'text.assistive',
-  },
   ...tabBase,
   ...selectedTab,
   ...disabledTab,
+  '& span': {
+    color: 'text.assistive',
+  },
 }
 
-export const newTab = {
+export const tabWithBadge = {
   padding: '0 1.5rem 0 4.06rem',
 }
 
@@ -93,20 +95,33 @@ export const iconBoxBase = {
   },
 }
 
-export const newTextBadge = {
+const textBadge = {
   display: 'float',
   marginLeft: '1rem !important', // stack의 spacing을 덮어씌우기 위해 !important 사용
-  color: 'yellow.strong',
+}
+
+export const disabledTextBadge = {
+  ...textBadge,
+  color: (theme: Theme) => theme.palette.text.disable + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+}
+
+export const newTextBadge = {
+  ...textBadge,
+  color: (theme: Theme) => theme.palette.yellow.strong + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
+}
+
+export const soonTextBadge = {
+  ...textBadge,
+  color: (theme: Theme) => theme.palette.text.disable + ' !important', // 버튼 테마 설정을 덮어씌우기 위해 !important 사용
 }
 
 const BADGE_TRANSLATE = 'translate(130%, -50%)'
 
-export const newBadge = {
+export const badgeBase = {
   '& .MuiBadge-badge': {
     width: '3px',
     minWidth: '3px', // mui 기본 설정 디자인 오버라이딩
     height: '3px',
-    backgroundColor: (theme: Theme) => theme.palette.yellow.strong,
     // mui 기본 설정 디자인 오버라이딩
     transform: `scale(1) ${BADGE_TRANSLATE}`,
     WebkitTransform: `scale(1) ${BADGE_TRANSLATE}`,
@@ -118,5 +133,29 @@ export const newBadge = {
       msTransform: `scale(0) ${BADGE_TRANSLATE}`,
       MozTransform: `scale(0) ${BADGE_TRANSLATE}`,
     },
+  },
+}
+
+export const newBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: 'yellow.strong',
+  },
+}
+
+export const betaBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: 'red.strong',
+  },
+}
+
+export const soonBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: 'text.disable',
+  },
+}
+
+export const disabledBadge = {
+  '& .MuiBadge-badge': {
+    backgroundColor: 'text.disable',
   },
 }

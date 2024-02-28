@@ -15,7 +15,7 @@ const SkillInput = ({ skills }: ISkillProps) => {
     <Stack spacing={'0.75rem'} sx={style.skillInputViewer}>
       <LabelWithIcon
         svgIcon={<TagIcon sx={style.IconStyle} />}
-        message="기술 스택"
+        message="관련 태그"
         color="text.alternative"
       />
       <Stack spacing={'0.75rem'} py={1} direction={'row'} useFlexGap>

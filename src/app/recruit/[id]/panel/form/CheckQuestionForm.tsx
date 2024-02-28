@@ -26,7 +26,8 @@ const CheckQuestionForm = ({
               label={label}
               control={control}
               key={index}
-              value={value?.includes(label) ? label : undefined}
+              variant={'Body1'}
+              value={value?.includes(index.toString()) ? 'true' : undefined}
             />
           )
         })}

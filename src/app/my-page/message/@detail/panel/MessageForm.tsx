@@ -19,6 +19,10 @@ import * as style from './MessageForm.style'
 const MAX_LENGTH = 300
 
 interface IMessageFormProps {
+  messageSendState: {
+    isMessageSending: boolean
+    setIsMessageSending: (value: boolean) => void
+  }
   targetId: number
   updateTarget?: Dispatch<SetStateAction<IMessageTargetUser | undefined>>
   addNewMessage: (newMessage: IMessage) => void
@@ -29,6 +33,7 @@ interface IMessageFormProps {
 const BorderlessTextField = styled(CuTextField)(style.removeBorder)
 
 const MessageForm = ({
+  messageSendState,
   targetId,
   updateTarget,
   addNewMessage,
@@ -53,6 +58,7 @@ const MessageForm = ({
   ) => {
     e.preventDefault()
     e.stopPropagation()
+    messageSendState.setIsMessageSending(true)
     try {
       if (!content) {
         openToast({
@@ -98,6 +104,7 @@ const MessageForm = ({
         })
       }
     } finally {
+      messageSendState.setIsMessageSending(false)
       handleClose && handleClose()
     }
   }
@@ -123,18 +130,29 @@ const MessageForm = ({
                 id="message"
                 multiline
                 value={content}
-                placeholder="내용을 입력하세요"
+                placeholder={
+                  disabled ? '채팅방이 삭제되었습니다' : '내용을 입력하세요'
+                }
                 onChange={(e) =>
                   setContent(e.target.value.slice(0, MAX_LENGTH))
                 }
                 onKeyDown={handleKeyDown}
                 disabled={disabled}
+                sx={{
+                  '.MuiOutlinedInput-root.Mui-disabled': {
+                    opacity: 1,
+                  },
+                }}
               />
               <Typography color={'text.assistive'} sx={style.messageLength}>
                 {content.length} / {MAX_LENGTH}
               </Typography>
             </Stack>
-            <IconButton type="submit" sx={style.pcSendButton}>
+            <IconButton
+              disabled={messageSendState.isMessageSending || disabled}
+              type="submit"
+              sx={style.pcSendButton}
+            >
               <SendIcon />
             </IconButton>
           </Stack>

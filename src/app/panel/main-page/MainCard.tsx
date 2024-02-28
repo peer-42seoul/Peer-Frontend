@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardMedia,
   Chip,
   Typography,
   Stack,
@@ -15,6 +14,7 @@ import OthersProfile from '../OthersProfile'
 import TagChip from '@/components/TagChip'
 import FavoriteButton from '@/components/FavoriteButton'
 import { ChipStyle } from '@/app/panel/main-page/MainCard.style'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 const MainCard = ({
   title,
@@ -41,21 +41,68 @@ const MainCard = ({
         : '모집완료'
 
   return (
-    <Card sx={sx}>
+    <Card
+      sx={{
+        borderRadius: '0.75rem',
+        borderWidth: '2px',
+        borderStyle: 'solid',
+        borderColor: 'background.tertiary',
+        boxShadow: 'none',
+        ...sx,
+      }}
+    >
       <Link
         href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
         style={{ textDecoration: 'none' }}
       >
         <Box sx={{ position: 'relative' }}>
-          <CardMedia
+          {/* <CardMedia
             component="img"
             height="194"
             image={image}
             alt="userImage"
+            sx={{
+              position: 'relative',
+              left: '-2px',
+              top: '-2px',
+              border: '2px solid',
+              borderColor: 'background.tertiary',
+              borderBottomLeftRadius: '0.75rem',
+              borderBottomRightRadius: '0.75rem',
+              filter:
+                statusLabel === '모집완료'
+                  ? 'grayscale(150%) brightness(0.7)'
+                  : '',
+            }}
+          /> */}
+          <CuPhotoBox
+            style={{
+              width: '100%',
+              height: '194px',
+              position: 'relative',
+              left: '-2px',
+              top: '-2px',
+              border: '2px solid',
+              borderBottom: 'none',
+              borderColor: 'background.tertiary',
+              borderBottomLeftRadius: '0.75rem',
+              borderBottomRightRadius: '0.75rem',
+              filter:
+                statusLabel === '모집완료'
+                  ? 'grayscale(150%) brightness(0.7)'
+                  : '',
+            }}
+            src={image}
+            alt="userImage"
           />
           {status && (
             <Chip
-              label={<Typography variant="Tag">{statusLabel}</Typography>}
+              label={
+                <Typography color={'white'} variant="Tag">
+                  {statusLabel}
+                </Typography>
+              }
+              color={statusLabel === '모집중' ? 'green' : 'error'}
               sx={ChipStyle}
               size="medium"
             />
@@ -84,7 +131,17 @@ const MainCard = ({
           />
         }
         title={
-          <Typography variant="Body2" color="text.alternative">
+          <Typography
+            variant="Body2"
+            color="text.alternative"
+            sx={{
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {user_nickname}
           </Typography>
         }
@@ -103,7 +160,7 @@ const MainCard = ({
         >
           <Typography
             variant="Body1"
-            color="text.secondary"
+            color="text.normal"
             sx={{
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -120,7 +177,7 @@ const MainCard = ({
             mt={1}
             direction={'row'}
             sx={{
-              height: `${1.5 * tagMaxLine + 0.5}rem`,
+              height: `${1.5 * tagMaxLine + 0.25}rem`,
               overflow: 'auto',
               flexWrap: 'wrap',
               '&::-webkit-scrollbar': {

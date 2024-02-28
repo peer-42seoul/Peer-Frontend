@@ -54,27 +54,27 @@ export const useDarkMode = create<DarkModeState>((set, get) => {
         darkMode: EDisplayMode.light,
         useSystemTheme: false,
       }))
-    } else if (mode === 'dark') {
-      set(() => ({
-        theme: darkTheme,
-        darkMode: EDisplayMode.dark,
-        useSystemTheme: false,
-      }))
-    } else {
+    } else if (mode === 'system') {
       set(() => ({
         theme: getSystemTheme() === EDisplayMode.light ? lightTheme : darkTheme,
         darkMode: getSystemTheme(),
         useSystemTheme: true,
       }))
+    } else {
+      set(() => ({
+        theme: darkTheme,
+        darkMode: EDisplayMode.dark,
+        useSystemTheme: false,
+      }))
       if (mode === null) {
-        LocalStorage.setItem('mode', EDisplayMode.system)
+        LocalStorage.setItem('mode', EDisplayMode.dark)
       }
     }
   }
 
   return {
     darkMode: EDisplayMode.dark,
-    useSystemTheme: true,
+    useSystemTheme: false,
     theme: darkTheme,
     isLightMode,
     toggleDarkMode,

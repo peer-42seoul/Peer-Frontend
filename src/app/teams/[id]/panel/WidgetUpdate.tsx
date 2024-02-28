@@ -42,19 +42,18 @@ const WidgetUpdate = ({
       }
       if (isCreate) {
         await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/create`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/dnd-main/create`,
           teamWidgetInfo,
         )
       } else
         await axiosInstance.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/update`,
+          `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/dnd-main/update`,
           teamWidgetInfo,
         )
       alert('저장되었습니다.')
       setModalOpen(false)
       setEdit(false)
     } catch (e) {
-      console.log('e', e)
       alert('저장에 실패하였습니다.')
     }
   }, [teamId, layouts, isCreate, axiosInstance, setEdit])
@@ -74,7 +73,7 @@ const WidgetUpdate = ({
           text: '취소',
           onClick: () => setModalOpen(false),
         }}
-        content={'팀 페이지를 저장하시겠습니까?'}
+        content={'팀페이지를 저장하시겠습니까?'}
       />
       <BrowserView>
         {/* 팀페이지 수정 버튼 */}

@@ -90,9 +90,7 @@ const EditModalContent = ({
         .then((res) => {
           scheduleData.eventId = res.data // eventId를 받아옴
         })
-        .catch((e) => {
-          console.error(e)
-        })
+        .catch(() => {})
         .finally(() => {
           // TODO : 위젯 업데이트
           openToast({

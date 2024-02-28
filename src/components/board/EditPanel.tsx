@@ -39,7 +39,7 @@ export const EditPage = ({ title, children, handleGoBack }: IEditPageProps) => {
   const { isPc } = useMedia()
   if (isPc)
     return (
-      <Stack spacing={'1.5rem'}>
+      <Stack spacing={'1.5rem'} width={'100%'}>
         <Typography variant="Body2Emphasis" color="text.strong">
           {title}
         </Typography>

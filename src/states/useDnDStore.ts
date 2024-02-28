@@ -53,7 +53,7 @@ const useDnDStore = create<IStoreDnDState>((set) => {
         //요청
         axios
           .post(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/v1/dnd-main/update`,
+            `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/dnd-main/update`,
             {
               teamId: state.teamId,
               type: 'team',
@@ -65,8 +65,7 @@ const useDnDStore = create<IStoreDnDState>((set) => {
             alert('수정되었습니다.')
             return { storedWidgets: updatedWidgets }
           })
-          .catch((err) => {
-            console.log(err)
+          .catch(() => {
             alert('수정에 실패하였습니다.')
           })
         return state

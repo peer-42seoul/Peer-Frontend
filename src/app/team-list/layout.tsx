@@ -1,12 +1,17 @@
 'use client'
 
-import useMedia from '@/hook/useMedia'
-import { Stack } from '@mui/material'
+import { Container, Stack, Box, Typography } from '@mui/material'
 import { ReactNode, useEffect } from 'react'
+import ForceTutorial from '@/components/ForceTutorial'
+import { TeamListTutorial } from '@/components/tutorialContent/TeamListTutorial'
+import useShowTeams from '@/states/useShowTeams'
+import { TeamStatus } from '@/app/teams/types/types'
+
 import Sidebar from './panel/Sidebar'
+import * as style from '@/components/NavBarLayout.style'
 
 const TeamsLayout = ({ children }: { children: ReactNode }) => {
-  const { isPc, isTablet } = useMedia()
+  const { showTeams } = useShowTeams()
 
   useEffect(() => {
     let vh = window.innerHeight * 0.01
@@ -14,22 +19,35 @@ const TeamsLayout = ({ children }: { children: ReactNode }) => {
   }, [])
 
   return (
-    <Stack
-      display="flex"
-      padding={'0.5rem'}
-      spacing={'1rem'}
-      px={isPc && !isTablet ? '10.5rem' : '1.5rem'}
-      height={'81.5vh'}
-    >
+    <Container sx={style.container}>
       <Stack
-        spacing={'2.5rem'}
-        direction={isPc ? 'row' : 'column'}
-        height={'100%'}
+        justifyContent={'space-between'}
+        direction={['column', 'row']}
+        sx={style.stack}
       >
         <Sidebar />
-        {children}
+        <Stack sx={style.contentBox}>
+          <Stack direction={'row'}>
+            <Typography fontWeight={'bold'} my={'1rem'}>
+              {showTeams === TeamStatus.RECRUITING
+                ? '모집 중'
+                : showTeams === TeamStatus.COMPLETE
+                  ? '진행 완료'
+                  : showTeams === TeamStatus.ONGOING
+                    ? '진행 중'
+                    : '모집 완료'}
+            </Typography>
+            <ForceTutorial
+              title={'나의 팀 확인하기'}
+              content={<TeamListTutorial />}
+            />
+          </Stack>
+          <Box key={showTeams} className="layout-container">
+            {children}
+          </Box>
+        </Stack>
       </Stack>
-    </Stack>
+    </Container>
   )
 }
 

@@ -5,6 +5,10 @@ import { Box } from '@mui/system'
 import { Button, Container, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import NewTag from './panel/NewTag'
+import { fetchTags } from '../panel/AdminAxios'
+import CuTextModal from '@/components/CuTextModal'
+import useModal from '@/hook/useModal'
+import useToast from '@/states/useToast'
 
 interface content {
   tagId: number
@@ -20,42 +24,31 @@ const alignCenter = {
   alignItems: 'center',
 }
 
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '80%',
-  height: '80%',
-  bgcolor: 'background.secondary',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  overflowY: 'scroll',
-}
-
 const Tag = () => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_CSR_API
   const [content, setContent] = useState<content[]>([])
   const [tagId, setTagId] = useState<number>(0)
   const [tagName, setTagName] = useState<string>('')
   const [tagColor, setTagColor] = useState<string>('#000000')
   const [open, setOpen] = useState<boolean>(false)
   const writeMode = useRef<string>('')
+  const currentId = useRef<number>(-1)
+
+  const { openToast } = useToast()
+
+  const {
+    openModal: openRemoveModal,
+    closeModal: closeRemoveModal,
+    isOpen: isRemoveModalOpen,
+  } = useModal()
+
   useEffect(() => {
-    axios
-      .get(`${API_URL}/api/v1/tag`, {
-        // withCredentials: true,
-        // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
-      })
-      .then((res) => {
-        console.log(res)
-        setContent(res.data)
-      })
+    fetchTags()
+      .then((data) => setContent(data))
+      .catch((err) => alert('배너를 불러오는 데 실패했습니다.' + err))
   }, [])
 
   const onHandleEdit = (tagId: number) => {
-    console.log(tagId)
     writeMode.current = 'edit'
     const tagid = content.find((item) => item.tagId === tagId)?.tagId
     const tagname = content.find((item) => item.tagId === tagId)?.name
@@ -67,61 +60,62 @@ const Tag = () => {
   }
 
   const onHandleRemove = (tagId: number) => {
-    console.log(tagId)
     axios
-      .delete(`${API_URL}/api/v1/admin/tag`, { data: { tagId: tagId } })
+      .delete(`${API_URL}/api/v1/admin/tag`, {
+        data: { tagId: tagId },
+        withCredentials: true,
+      })
       .then(() => {
-        alert(tagId + '번 태그가 삭제되었습니다.')
-        axios
-          .get(`${API_URL}/api/v1/tag`, {
-            // withCredentials: true,
-            // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
-          })
-          .then((res) => {
-            setContent(res.data)
-          })
+        closeRemoveModal()
+        openToast({
+          message: '태그가 성공적으로 삭제되었습니다.',
+          severity: 'success',
+        })
+        fetchTags().then((data) => setContent(data))
+      })
+      .catch((err) => {
+        alert('태그 삭제 실패 \n 사유: ' + err)
       })
   }
 
   const onHandleSubmit = () => {
-    console.log('submit')
     if (writeMode.current === 'write') {
       axios
-        .post(`${API_URL}/api/v1/admin/tag`, {
-          name: tagName,
-          color: tagColor,
-        })
-        .then((res) => {
-          alert('새로운 태그가 등록되었습니다.')
-          axios
-            .get(`${API_URL}/api/v1/tag`, {
-              // withCredentials: true,
-              // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
-            })
-            .then(() => {
-              setContent(res.data)
-            })
+        .post(
+          `${API_URL}/api/v1/admin/tag`,
+          {
+            name: tagName,
+            color: tagColor,
+          },
+          { withCredentials: true },
+        )
+        .then(() => {
+          openToast({
+            message: '태그가 성공적으로 등록되었습니다.',
+            severity: 'success',
+          })
+          fetchTags().then((data) => setContent(data))
         })
         .catch(() => {
           alert('태그 등록에 실패하였습니다.')
         })
     } else {
       axios
-        .put(`${API_URL}/api/v1/admin/tag`, {
-          tagId: tagId,
-          name: tagName,
-          color: tagColor,
-        })
+        .put(
+          `${API_URL}/api/v1/admin/tag`,
+          {
+            tagId: tagId,
+            name: tagName,
+            color: tagColor,
+          },
+          { withCredentials: true },
+        )
         .then(() => {
-          alert('태그가 수정되었습니다.')
-          axios
-            .get(`${API_URL}/api/v1/tag`, {
-              // withCredentials: true,
-              // peer-test 도메인에서만 httpOnly sameSite 쿠키를 전달받을 수 있으므로 로컬에서 테스트 할 동안 임시로 주석처리
-            })
-            .then((res) => {
-              setContent(res.data)
-            })
+          openToast({
+            message: '태그가 성공적으로 수정되었습니다.',
+            severity: 'success',
+          })
+          fetchTags().then((data) => setContent(data))
         })
         .catch(() => {
           alert('태그 수정에 실패하였습니다.')
@@ -194,7 +188,12 @@ const Tag = () => {
                       수정
                     </Typography>
                   </Button>
-                  <Button onClick={() => onHandleRemove(item.tagId)}>
+                  <Button
+                    onClick={() => {
+                      currentId.current = item.tagId
+                      openRemoveModal()
+                    }}
+                  >
                     <Typography variant={'Body1'} sx={alignCenter}>
                       삭제
                     </Typography>
@@ -213,9 +212,22 @@ const Tag = () => {
             tagColor={tagColor}
             setTagColor={setTagColor}
             onHandleSubmit={onHandleSubmit}
-            style={style}
           />
         </Stack>
+        <CuTextModal
+          title="태그 삭제하기"
+          open={isRemoveModalOpen}
+          onClose={closeRemoveModal}
+          content="정말 태그를 삭제하시겠습니까?"
+          textButton={{
+            text: '취소',
+            onClick: closeRemoveModal,
+          }}
+          containedButton={{
+            text: '삭제',
+            onClick: () => onHandleRemove(currentId.current),
+          }}
+        />
       </Container>
     </>
   )

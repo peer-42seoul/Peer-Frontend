@@ -28,7 +28,13 @@ import useAuthStore from '@/states/useAuthStore'
  * - 오른쪽 아이콘 (있을 수도 있고 없을 수도 있음)
  */
 
-const Header = ({ pathname }: { pathname?: string }) => {
+const Header = ({
+  pathname,
+  backAction,
+}: {
+  pathname?: string
+  backAction?: () => void
+}) => {
   const theme = useTheme()
   const mobileHeader = {
     ...style.mobileHeader,
@@ -39,12 +45,14 @@ const Header = ({ pathname }: { pathname?: string }) => {
   const [title, setTitle] = useState('')
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') ?? ''
+  const type = searchParams.get('type') ?? 'STUDY'
   const regex = /^\/recruit\/\d+\/edit$/
 
   useEffect(() => {
     if (!pathname) return setTitle('')
     if (pathname === '/') {
-      setTitle('메인')
+      if (keyword !== '') setTitle('검색 결과')
+      else setTitle('메인')
     } else if (pathname.startsWith('/login')) {
       setTitle('로그인')
     } else if (pathname === '/recruit/write') {
@@ -54,7 +62,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
     } else if (pathname.startsWith('/team-list')) {
       if (!isLogin) {
         router.push('/login?redirect=/team-list')
-      } else setTitle('팀페이지')
+      } else setTitle('나의 팀')
     } else if (pathname.startsWith('/my-page')) {
       if (!isLogin) {
         router.push('/login?redirect=/my-page')
@@ -62,16 +70,19 @@ const Header = ({ pathname }: { pathname?: string }) => {
     } else {
       setTitle('')
     }
-  }, [pathname])
+  }, [keyword, pathname])
   const { headerTitle } = useHeaderStore()
 
   // 타이틀만 보여주고 싶은 경우 (뒤로 가기 버튼이 보이지 않았으면 하는 경우)
-  const onlyTitle = title === '마이페이지' || title === '팀페이지'
+  const onlyTitle =
+    pathname?.startsWith('/my-page') ||
+    pathname?.startsWith('/team-list') ||
+    pathname?.startsWith('/login')
 
   return (
     <AppBar position="fixed" sx={mobileHeader}>
       <Toolbar disableGutters sx={style.mobileHeaderToolbar}>
-        {title === '메인' && keyword === '' ? (
+        {pathname === '/' && keyword === '' ? (
           <Stack sx={style.mobileHeaderStack}>
             <AlertIcon />
             <Box sx={style.mobileHeaderTitle}>
@@ -88,7 +99,12 @@ const Header = ({ pathname }: { pathname?: string }) => {
         ) : (
           <Stack sx={style.mobileHeaderStack}>
             <IconButton
-              onClick={() => router.back()}
+              onClick={() => {
+                if (backAction) backAction()
+                else if (pathname === '/' && keyword !== '') {
+                  router.replace(`?type=${type}`)
+                } else router.back()
+              }}
               sx={{
                 visibility: onlyTitle ? 'hidden' : 'visible',
               }}
@@ -96,7 +112,7 @@ const Header = ({ pathname }: { pathname?: string }) => {
               <BackIcon />
             </IconButton>
             <Box sx={style.mobileHeaderTitle}>
-              {/* headerTitle이 있는 경우: 페이지안에서 header를 설정하는 경우 (ex 모집글뷰, 팀페이지) */}
+              {/* headerTitle이 있는 경우: 페이지안에서 header를 설정하는 경우 (ex 모집글뷰, 나의 팀) */}
               <Typography fontSize={'0.8125rem'} fontWeight={700}>
                 {headerTitle === '' ? title : headerTitle}
               </Typography>

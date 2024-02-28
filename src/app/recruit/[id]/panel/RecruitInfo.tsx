@@ -23,6 +23,7 @@ const RecruitInfo = ({ data, type, children, pc }: RecruitInfoProps) => {
         <Stack direction={'row'} gap={4} marginBottom={6}>
           <RecruitImage
             image={data?.image}
+            maxWidth={'40vw'}
             width={'18.5rem'}
             height={'12.5rem'}
           />

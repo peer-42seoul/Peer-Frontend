@@ -1,7 +1,6 @@
 import {
   Box,
   Card,
-  CardActionArea,
   CardContent,
   CardHeader,
   CardMedia,
@@ -56,11 +55,10 @@ function PostCard({
   const clickFavorite = useCallback(() => {
     axiosWithAuth
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/favorite/${postId}`,
+        `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/favorite/${postId}`,
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
           setFavorite(!favorite)
         }
       })
@@ -68,10 +66,9 @@ function PostCard({
 
   const clickLike = useCallback(() => {
     axiosWithAuth
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/showcase/like/${postId}`)
+      .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/like/${postId}`)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res)
           if (liked === false) {
             setIsLiked(true)
             setLikeNum(likeNum + 1)
@@ -92,7 +89,7 @@ function PostCard({
         backfaceVisibility: 'hidden',
       }}
       ref={ref}
-      // onClick={onClick}
+      onClick={onClick}
     >
       <CardMedia
         component="img"
@@ -157,53 +154,52 @@ function PostCard({
           }
           sx={{ p: 0 }}
         />
-        <CardActionArea onClick={onClick}>
-          <Box
-            sx={{
-              height: (currentCardWidth * 190) / 328,
-              boxSizing: 'border-box',
-            }}
-          >
-            <CardContent sx={{ p: 0 }}>
-              <Typography
-                variant="Body1"
-                color="text.normal"
-                sx={{
-                  ...style.cardTitleStyleBase,
-                  height: getLineCount(46, 22.5) * 22.5,
-                  WebkitLineClamp: getLineCount(46, 22.5),
-                }}
-              >
-                {title}
-              </Typography>
-            </CardContent>
-            <CardContent sx={{ p: 0 }}>
-              <Stack
-                gap={1}
-                direction={'row'}
-                sx={{
-                  overflow: 'hidden',
-                  height: getLineCount(46, 22.5) * 20 + 8,
-                }}
-              >
-                {tagList?.map(({ name, color }: IShowcaseTag, idx: number) => {
-                  return (
-                    <Chip
-                      label={<Typography variant="Tag">{name}</Typography>}
-                      size="small"
-                      key={idx}
-                      style={{
-                        backgroundColor: alpha(color, 0.3),
-                        borderRadius: 2,
-                        height: '1.25rem',
-                      }}
-                    />
-                  )
-                })}
-              </Stack>
-            </CardContent>
-          </Box>
-        </CardActionArea>
+
+        <Box
+          sx={{
+            height: (currentCardWidth * 190) / 328,
+            boxSizing: 'border-box',
+          }}
+        >
+          <CardContent sx={{ p: 0 }}>
+            <Typography
+              variant="Body1"
+              color="text.normal"
+              sx={{
+                ...style.cardTitleStyleBase,
+                height: getLineCount(46, 22.5) * 22.5,
+                WebkitLineClamp: getLineCount(46, 22.5),
+              }}
+            >
+              {title}
+            </Typography>
+          </CardContent>
+          <CardContent sx={{ p: 0 }}>
+            <Stack
+              gap={1}
+              direction={'row'}
+              sx={{
+                overflow: 'hidden',
+                height: getLineCount(46, 22.5) * 20 + 8,
+              }}
+            >
+              {tagList?.map(({ name, color }: IShowcaseTag, idx: number) => {
+                return (
+                  <Chip
+                    label={<Typography variant="Tag">{name}</Typography>}
+                    size="small"
+                    key={idx}
+                    style={{
+                      backgroundColor: alpha(color, 0.3),
+                      borderRadius: 2,
+                      height: '1.25rem',
+                    }}
+                  />
+                )
+              })}
+            </Stack>
+          </CardContent>
+        </Box>
       </Stack>
     </Card>
   )

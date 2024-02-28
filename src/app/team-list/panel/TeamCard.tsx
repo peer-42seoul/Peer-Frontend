@@ -1,18 +1,26 @@
 import { Box, Card, CardActionArea, Stack, Typography } from '@mui/material'
 import { ITeamInfo } from '../page'
 import { useRouter } from 'next/navigation'
-import { TeamOperationForm } from '@/app/teams/types/types'
+import { TeamOperationForm, TeamStatus } from '@/app/teams/types/types'
 import useMedia from '@/hook/useMedia'
 import { GeoIcon, TargetIcon, WifiIcon } from './Icons'
 
 const TeamType = (type: string) => {
   return (
-    <Box width={60} sx={{ margin: 0, backgroundColor: 'background.tertiary' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        margin: 0,
+        backgroundColor: 'background.tertiary',
+        borderRadius: '0.25rem',
+        padding: '0.25rem 0.5rem',
+        alignItems: 'center',
+      }}
+    >
       <Typography
         textAlign={'center'}
         color={type === 'STUDY' ? 'yellow.strong' : 'green.strong'}
         fontWeight={'bold'}
-        height={'fit-content'}
       >
         {type === 'STUDY' ? '스터디' : '프로젝트'}
       </Typography>
@@ -30,10 +38,17 @@ const ApproveChip = ({
   const isLeader = job === 'L' ? 'LEADER' : 'MEMBER'
   return (
     <Box
-      width={80}
       sx={{
         margin: 0,
-        backgroundColor: isApproved ? 'text.alternative' : 'red.strong',
+        backgroundColor: !isApproved
+          ? 'red.strong'
+          : isLeader === 'LEADER'
+            ? (theme) => theme.palette.purple.main
+            : (theme) => theme.palette.pink.main,
+        borderRadius: '0.25rem',
+        padding: '0.25rem 0.5rem',
+        height: 'fit-content',
+        alignItems: 'center',
       }}
     >
       <Typography textAlign={'center'} color={'white'} fontWeight={'bold'}>
@@ -43,9 +58,27 @@ const ApproveChip = ({
   )
 }
 
-const TeamCard = ({ team }: { team: ITeamInfo }) => {
+interface ITeamCard {
+  team: ITeamInfo
+}
+
+const TeamCard = ({ team }: ITeamCard) => {
   const { isPc } = useMedia()
   const router = useRouter()
+
+  if (team.isApproved === false && team.status !== TeamStatus.RECRUITING) {
+    return <></>
+  }
+
+  const handleTeam = () => {
+    if (!team.isApproved) return
+    router.push(`/teams/${team.id}`)
+  }
+
+  const handleRecruit = () => {
+    if (team.isApproved) return
+    router.push(`/recruit/${team.id}?type=${team.type}`)
+  }
 
   return (
     <Card
@@ -57,16 +90,17 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
         boxShadow: 'none',
         borderRadius: '1.5rem',
         backgroundColor: 'background.secondary',
+        backgroundImage: 'none',
       }}
     >
       <CardActionArea
-        disabled={!team.isApproved}
+        // disabled={!team.isApproved}
         sx={{
           '.MuiCardActionArea-focusHighlight': {
             background: 'transparent',
           },
         }}
-        onClick={() => router.push(`/teams/${team.id}`)}
+        onClick={team.isApproved ? handleTeam : handleRecruit}
       >
         <Stack
           direction={isPc ? 'row' : 'column'}
@@ -74,10 +108,19 @@ const TeamCard = ({ team }: { team: ITeamInfo }) => {
           my={'0.5rem'}
           justifyContent={'space-between'}
         >
-          <Stack direction={'row'} spacing={'0.5rem'}>
+          <Stack direction={'row'} spacing={'0.5rem'} alignItems={'center'}>
             {TeamType(team.type)}
             <Typography
-              sx={isPc ? undefined : { height: '4rem', overflow: 'hidden' }}
+              sx={
+                isPc
+                  ? undefined
+                  : {
+                      display: 'center',
+                      height: '4rem',
+                      overflow: 'hidden',
+                      alignItems: 'center',
+                    }
+              }
             >
               {team.name}
             </Typography>

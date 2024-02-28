@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useState } from 'react'
-import { Box, InputBase } from '@mui/material'
+import { Box, TextField } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import useModal from '@/hook/useModal'
 import { IMessageListData, IMessageTarget } from '@/types/IMessage'
@@ -27,6 +27,7 @@ const NewMessageForm = ({
   const axiosInstance = useAxiosWithAuth()
   const { isOpen: modalOpen, openModal, closeModal } = useModal()
   const { openToast } = useToast()
+  const [isMessageSending, setIsMessageSending] = useState(false)
 
   const messageSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -51,6 +52,7 @@ const NewMessageForm = ({
   const sendMessage = useCallback(
     async (targetId?: number, content?: string) => {
       try {
+        setIsMessageSending(true)
         if (!targetId || !content) throw new Error()
         const reqBody: IMessageData = {
           targetId: targetId,
@@ -70,6 +72,8 @@ const NewMessageForm = ({
           severity: 'error',
           message: '쪽지 보내기에 실패했습니다. 다시 시도해주세요.',
         })
+      } finally {
+        setIsMessageSending(false)
       }
     },
     [],
@@ -79,12 +83,17 @@ const NewMessageForm = ({
     <>
       <form onSubmit={messageSubmitHandler} id={'new-message-form'}>
         <Box sx={style.form}>
-          <InputBase
+          <TextField
+            multiline
             fullWidth
             placeholder="내용을 입력하세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
             sx={style.input}
+            inputProps={{
+              minLength: 2,
+              maxLength: 300,
+            }}
           />
         </Box>
       </form>
@@ -97,6 +106,7 @@ const NewMessageForm = ({
           onClick: () => {
             sendMessage(userInfo?.targetId, content)
           },
+          isLoading: isMessageSending,
         }}
         textButton={{
           text: '취소',

@@ -27,7 +27,10 @@ const MobileNav = () => {
   useEffect(() => {
     if (pathname === '/') {
       setValue('home')
-    } else if (pathname.startsWith('/team-list')) {
+    } else if (
+      pathname.startsWith('/team-list') ||
+      pathname.startsWith('/teams')
+    ) {
       setValue('team-list')
     } else if (pathname.startsWith('/hitchhiking')) {
       setValue('hitchhiking')
@@ -36,7 +39,7 @@ const MobileNav = () => {
       else setValue('my-page')
     } else if (pathname.startsWith('/showcase')) {
       setValue('showcase')
-    } else if (pathname.startsWith('/login')) {
+    } else {
       setValue('')
     }
   }, [pathname])
@@ -90,7 +93,7 @@ const MobileNav = () => {
         />
         <BottomNavigationAction
           sx={bottomNavStyle}
-          label={<Typography fontSize={'0.6875rem'}>팀페이지</Typography>}
+          label={<Typography fontSize={'0.6875rem'}>나의 팀</Typography>}
           value={'team-list'}
           onClick={() => {
             router.push('/team-list')

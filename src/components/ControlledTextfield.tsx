@@ -13,12 +13,17 @@ const ControlledTextfield = <T extends FieldValues>(props: TProps<T>) => {
 
   return (
     <TextField
+      autoComplete="off"
       variant="outlined"
       {...field}
       {...(props as TextFieldProps)}
+      onChange={(e) => {
+        field.onChange(e)
+        props.onChange && props.onChange(e)
+      }}
       onBlur={(e) => {
-        props.onBlur && props.onBlur(e)
         field.onBlur()
+        props.onBlur && props.onBlur(e)
       }}
     />
   )

@@ -42,6 +42,7 @@ const DisplaySetting = () => {
               inputProps={{ 'aria-label': `라이트/다크모드 토글` }}
               uncheckedtrackimage="/images/sign_moon.svg"
               checkedtrackimage="/images/sign_sun.svg"
+              disabled={useSystemTheme}
             />
           }
           label={
@@ -51,7 +52,6 @@ const DisplaySetting = () => {
               sx={{
                 marginRight: '16px',
                 marginLeft: '0',
-                // textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
               }}
             >
               라이트/ 다크 모드
