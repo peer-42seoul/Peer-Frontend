@@ -186,7 +186,7 @@ const ApplicantList = ({
 
   return (
     <Card
-      sx={{ p: 3, borderRadius: '1rem', height: '20rem', overflow: 'auto' }}
+      sx={{ p: 3, borderRadius: '1rem', height: '30rem', overflow: 'auto' }}
     >
       <Stack
         direction="row"
@@ -243,14 +243,24 @@ const ApplicantList = ({
 
       <Stack p={2} ref={scrollRef}>
         <Typography fontWeight="bold">인터뷰 답변</Typography>
-        <Stack borderRadius={2} p={2} height={'100%'}>
+        <Stack borderRadius={2} p={2} height={'100%'} spacing={'1rem'}>
           {!member && <Typography>신청한 사람이 없습니다.</Typography>}
           {member && member.answers ? (
             member.answers.map((interview, index) => (
-              <Stack key={index} m={1}>
-                <Typography>{interview.question}</Typography>
-                <FormAnswer interview={interview} index={index} />
-              </Stack>
+              <Card
+                key={interview.question}
+                sx={{
+                  backgroundColor: 'background.secondary',
+                  padding: '1rem',
+                }}
+              >
+                <Stack spacing={'0.5rem'}>
+                  <Typography variant="Body1Emphasis">
+                    {interview.question}
+                  </Typography>
+                  <FormAnswer interview={interview} index={index} />
+                </Stack>
+              </Card>
             ))
           ) : (
             <Typography>인터뷰가 없습니다.</Typography>
