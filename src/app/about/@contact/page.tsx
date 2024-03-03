@@ -179,7 +179,10 @@ const ContactPage = () => {
                 }}
                 {...register('text', {
                   required: '필수 입력 내용입니다.',
-                  maxLength: 300,
+                  maxLength: {
+                    value: 1000,
+                    message: '1000자 이내로 입력해주세요.',
+                  },
                   minLength: {
                     value: 1,
                     message: '1글자 이상 입력해주세요.',
