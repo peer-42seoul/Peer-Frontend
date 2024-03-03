@@ -1,6 +1,13 @@
 'use client'
 
-import { Container, Box, Grid, Stack, Typography } from '@mui/material'
+import {
+  Container,
+  Box,
+  Grid,
+  Stack,
+  Typography,
+  Pagination,
+} from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import FloatEditButton from './main-page/FloatEditButton'
 import MainCard from './main-page/MainCard'
@@ -11,7 +18,6 @@ import MainProfile from './main-page/MainProfile'
 import MainShowcase from './main-page/MainShowcase'
 import MainCarousel from './main-page/MainCarousel'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useInfiniteScrollHook } from '@/hook/useInfiniteScroll'
 import { IFavorite, IPost, ProjectType } from '@/types/IPostDetail'
 import useAuthStore from '@/states/useAuthStore'
 import useAxiosWithAuth from '@/api/config'
@@ -29,9 +35,7 @@ import {
   floatButtonStyle,
   sideMenuStyle,
 } from '@/app/panel/main-page/Mainpage.style'
-import SearchOptionPanel, {
-  InfinityScrollPanel,
-} from '@/app/panel/main-page/MainPanel'
+import SearchOptionPanel from '@/app/panel/main-page/MainPanel'
 import SelectSort from '@/app/panel/main-page/SelectSort'
 import useMedia from '@/hook/useMedia'
 
@@ -81,9 +85,6 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   const { isLogin } = useAuthStore()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
-  const [prevScrollHeight, setPrevScrollHeight] = useState<number | undefined>(
-    undefined,
-  )
   const [init, setInit] = useState<boolean>(true)
   const { isTablet } = useMedia()
 
@@ -130,59 +131,18 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     return res?.favorite
   }
 
-  const {
-    data: newData,
-    isLoading,
-    error,
-  } = useSWR<IPagination<IPost[]>>(
-    isInit
-      ? null
-      : `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit` + option,
+  const { data, isLoading, error } = useSWR<IPagination<IPost[]>>(
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/recruit` + option,
     isLogin
       ? (url: string) =>
           axiosInstance.get(url).then((res) => {
             return res.data
           })
       : defaultGetFetcher,
-  )
-
-  const [content, setContent] = useState<IPost[] | []>(
-    initData?.content.map((v) => ({
-      ...v,
-      favorite: getFavoriteData(v.recruit_id),
-    })) ?? [],
-  )
-
-  useEffect(() => {
-    if (!newData || !newData?.content) return
-
-    //page가 1일 경우 == initData가 설정되어있을경우, 무한스크롤시 page는 무조건 2부터 시작함.
-    //따라서 page가 1일 경우에는 옵션이 달라진 것임. 고로 무조건 새로운 데이터로 setContent를 해준다.
-    if (page == 1) {
-      return setContent(newData.content)
-    }
-    //여기서부터는 무한스크롤 영역. 길이가 0이면 더해주지 않는다.
-    if (newData?.content.length == 0) return
-    //이전 데이터와 새로운 데이터를 더해준다
-    setContent([...content, ...newData.content])
-    //이전 스크롤 높이로 설정
-    setPrevScrollHeight(target.current?.scrollHeight)
-    if (target.current && prevScrollHeight)
-      scrollTo(target.current.scrollHeight - prevScrollHeight)
-  }, [newData])
-
-  const { target, spinner, scrollTo } = useInfiniteScrollHook(
-    setPage,
-    isLoading,
-    (newData?.last || initData?.last) ?? true, //isEnd
-    page,
-  )
-
-  const { target: pcTarget, spinner: pcSpinner } = useInfiniteScrollHook(
-    setPage,
-    isLoading,
-    (newData?.last || initData?.last) ?? true, //isEnd
-    page,
+    {
+      fallbackData: initData,
+      keepPreviousData: true,
+    },
   )
 
   const handleType = useCallback(
@@ -216,10 +176,14 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
     setPage(1)
   }, [])
 
+  const handleChangePage = (_: any, newPage: number) => {
+    setPage(newPage)
+  }
+
   const noContent = !isLoading
     ? error
       ? '에러 발생'
-      : content?.length == 0
+      : data?.content?.length == 0
         ? '데이터가 없습니다'
         : null
     : null
@@ -229,7 +193,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* <PushAlertBanner /> */}
       {/* mobile view */}
       <div className="mobile-layout">
-        <Container sx={{ ...containerStyle, paddingBottom: '1.25rem' }}>
+        <Container sx={{ ...containerStyle, paddingBottom: '2rem' }}>
           {keyword === '' ? (
             <>
               <Box width={'100%'}>
@@ -278,7 +242,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <>
               <Stack alignItems={'center'}>
                 <Stack gap={2} width={'100%'}>
-                  {content?.map((project: IPost) => (
+                  {data?.content?.map((project: IPost) => (
                     <Box key={project.recruit_id}>
                       <MainCard
                         {...project}
@@ -294,13 +258,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   ))}
                 </Stack>
               </Stack>
-              {/* 무한 스크롤 */}
-              <Stack
-                width={'100%'}
-                justifyContent={'center'}
-                alignItems={'center'}
-              >
-                <InfinityScrollPanel target={target} spinner={spinner} />
+              <Stack alignItems={'center'} mt={'1rem'}>
+                <Pagination
+                  count={data?.totalPages}
+                  page={page}
+                  onChange={handleChangePage}
+                  siblingCount={0}
+                />
               </Stack>
             </>
           )}
@@ -367,7 +331,7 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               ) : (
                 <>
                   <Grid container spacing={'1rem'}>
-                    {content?.map((project: IPost) => (
+                    {data?.content?.map((project: IPost) => (
                       <Grid item key={project.recruit_id} sm={12} md={6} lg={4}>
                         <MainCard
                           {...project}
@@ -382,10 +346,15 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                       </Grid>
                     ))}
                   </Grid>
-                  {/* 무한 스크롤 */}
-                  <InfinityScrollPanel target={pcTarget} spinner={pcSpinner} />
                 </>
               )}
+              <Stack alignItems={'center'} mt={'1rem'}>
+                <Pagination
+                  count={data?.totalPages}
+                  page={page}
+                  onChange={handleChangePage}
+                />
+              </Stack>
             </Stack>
             {!isTablet && (
               <Stack sx={sideMenuStyle}>
