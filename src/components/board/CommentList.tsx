@@ -35,7 +35,7 @@ const Comment = ({ comment, postId }: ICommentProps) => {
     }
     axiosWithAuth
       .put(`/api/v1/team/post/comment/${comment.commentId}`, {
-        content: formData.get('content') as string,
+        content,
       })
       .then(() => {
         openToast({ severity: 'success', message: '댓글을 수정했습니다.' })
