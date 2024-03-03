@@ -42,24 +42,15 @@ export interface ITeamNoticeDetail extends ITeamNoticeBase {
   content: string
   isAuthor: boolean
 }
-
-export interface ITeamBoardComment {
+export interface ITeamComment {
   commentId: number
   authorImage: string
   authorNickname: string
   content: string
-  createdAt: Date
+  createAt: Date
+  authorId: number
   isAuthor: boolean
 }
-export interface ITeamComment {
-  answerId: number
-  authorImage: string
-  authorNickname: string
-  content: string
-  createdAt: Date
-  isAuthor: boolean
-}
-
 export interface IEditFormType {
   teamId: string
   postId?: number
