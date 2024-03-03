@@ -1,6 +1,7 @@
 import { SxProps } from '@mui/material'
 import { ITag } from './IPostDetail'
-import { IShowcaseTag } from '@/app/showcase/panel/types'
+import { ICardData, IShowcaseTag } from '@/app/showcase/panel/types'
+import { Dispatch, SetStateAction } from 'react'
 
 export interface IPostCard {
   authorImage: string // 글 작성자 프로필 이미지
@@ -36,6 +37,7 @@ export interface IPostCardShowcase {
   liked: boolean
   sx?: SxProps
   onClick?: (e: React.MouseEvent) => void
+  mutate: Dispatch<SetStateAction<ICardData[]>>
 }
 
 export interface IHitchhikingCardBack {

@@ -1,10 +1,9 @@
 'use client'
 
 import { Box } from '@mui/material'
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import * as style from './ShowcaseCard.style'
-import useMedia from '@/hook/useMedia'
 import { ICardData } from '@/app/showcase/panel/types'
 import { ShowcaseCard } from './ShowcaseCard'
 
@@ -19,13 +18,14 @@ const CardStack = ({
   cardList,
   removeCard,
   addCard,
+  mutate,
 }: {
   cardList: Array<ICardData>
   removeCard: (recruit_id: number) => void
   addCard?: () => void
+  mutate: Dispatch<SetStateAction<ICardData[]>>
 }) => {
   const [dragged, setDragged] = useState(false)
-  const { isPc } = useMedia()
 
   const checkDragDirection = (x: number, y: number) => {
     return y < 0 ? ESwipeDirection.up : ESwipeDirection.down
@@ -51,10 +51,7 @@ const CardStack = ({
 
   return (
     <>
-      <Box
-        position={'relative'}
-        sx={isPc ? style.cardPcSize : style.cardMobileSize}
-      >
+      <Box position={'relative'} sx={style.cardSize}>
         <motion.div
           animate={{
             opacity: cardList.length > 1 ? 1 : 0,
@@ -65,7 +62,7 @@ const CardStack = ({
         >
           <Box
             sx={{
-              ...(isPc ? style.cardPcSize : style.cardMobileSize),
+              ...style.cardSize,
               backgroundColor: 'text.assistive',
             }}
           />
@@ -80,7 +77,7 @@ const CardStack = ({
         >
           <Box
             sx={{
-              ...(isPc ? style.cardPcSize : style.cardMobileSize),
+              ...style.cardSize,
               backgroundColor: 'text.assistive',
             }}
           />
@@ -122,9 +119,9 @@ const CardStack = ({
               >
                 <ShowcaseCard
                   data={card}
-                  sx={isPc ? style.cardPcStyleBase : style.cardMobileStyleBase}
                   dragged={dragged}
                   setDragged={setDragged}
+                  mutate={mutate}
                 />
               </motion.div>
             )
