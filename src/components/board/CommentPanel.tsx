@@ -220,7 +220,7 @@ export const CommentItem = ({
             </Stack>
           </form>
         ) : (
-          <Box sx={{ paddingRight: '2.5rem' }}>
+          <Box sx={{ paddingRight: '2.5rem', wordBreak: 'break-all' }}>
             <Typography variant={'Body2'}>{comment.content}</Typography>
             <Typography variant={'Tag'} color={'text.assistive'}>
               {dayjs(UTCtoLocalTime(comment.createAt)).format(
