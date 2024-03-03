@@ -20,11 +20,17 @@ export const CommentForm = ({ postId, teamId }: ICommentFormProps) => {
     e.preventDefault()
     setIsLoading(true)
     const formData = new FormData(e.currentTarget)
+    const content = formData.get('new-content') as string
+    if (!content) {
+      setIsLoading(false)
+      openToast({ severity: 'error', message: '댓글을 입력해주세요.' })
+      return
+    }
     axiosWithAuth
       .post('/api/v1/team/post/comment/', {
         teamId: teamId,
         postId: postId,
-        content: formData.get('new-content') as string,
+        content,
       })
       .then(() => {
         setIsLoading(false)
