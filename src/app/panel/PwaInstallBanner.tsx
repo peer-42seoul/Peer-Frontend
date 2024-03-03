@@ -93,11 +93,13 @@ const PwaInstallBanner = () => {
             }}
           >
             <Stack
+              padding={1}
               margin={1}
               direction={'row'}
               justifyContent={'space-between'}
+              alignItems={'center'}
             >
-              <Typography color={'white'} variant="Caption">
+              <Typography color={'white'} variant="Body1">
                 사용하시는 브라우저는 PWA 기능을 사용하기 위해서는{' '}
                 <IosShareIcon fontSize="small" />
                 [공유하기 버튼]을 눌러서 [홈 화면에 추가]를 해주셔야 합니다.
@@ -126,23 +128,32 @@ const PwaInstallBanner = () => {
           width={'100%'}
           sx={{
             backgroundColor: 'primary.main',
-            zIndex: 9999,
+            zIndex: 400,
             paddingBottom: 0.2,
           }}
         >
-          <Stack margin={1}>
-            <Typography color={'white'} variant="Caption">
+          <Stack margin={1} padding={1} spacing={'1rem'}>
+            <Typography color={'white'} variant="Body1">
               사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
               {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
             </Typography>
-            <Stack direction="row">
-              <Button onClick={handleInstall}>
-                <Typography color={'white'} variant="Caption">
+            <Stack
+              direction="row"
+              alignItems={'center'}
+              display={'flex'}
+              flexDirection={isPc ? 'row' : 'row-reverse'}
+            >
+              <Button
+                variant={'contained'}
+                color="secondary"
+                onClick={handleInstall}
+              >
+                <Typography color={'white'} variant="Body1">
                   설치
                 </Typography>
               </Button>
               <Button onClick={() => setIsShowInstall(false)}>
-                <Typography color={'white'} variant="Caption">
+                <Typography color={'white'} variant="Body1">
                   다음에
                 </Typography>
               </Button>
@@ -152,7 +163,7 @@ const PwaInstallBanner = () => {
                   localStorage.setItem('isShowInstall', 'false')
                 }}
               >
-                <Typography color={'white'} variant="Caption">
+                <Typography color={'white'} variant="Body1">
                   닫기
                 </Typography>
               </Button>

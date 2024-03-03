@@ -56,6 +56,7 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   if (!data || error)
     return (
       <StatusMessage
+        boardType={'BOARD'}
         message={'문제가 발생했습니다.'}
         onClickEditButton={() => setBoard('LIST', boardId, postId)}
         author={!!data?.isAuthor}
@@ -64,6 +65,7 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
   if (isLoading)
     return (
       <StatusMessage
+        boardType={'BOARD'}
         message={'게시글을 불러오는 중입니다...'}
         onClickEditButton={() => setBoard('LIST', boardId, postId)}
         author={!!data?.isAuthor}
@@ -71,7 +73,7 @@ const TeamBoardPostView = ({ params }: { params: { id: string } }) => {
     )
   return (
     <>
-      <DetailPage handleGoBack={handleGoBack}>
+      <DetailPage boardType={'BOARD'} handleGoBack={handleGoBack}>
         {isPc && (
           <CuButton
             message={'이전 페이지'}

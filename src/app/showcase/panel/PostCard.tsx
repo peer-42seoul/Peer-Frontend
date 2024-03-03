@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardMedia,
   IconButton,
   Stack,
   Typography,
@@ -18,6 +17,7 @@ import { IShowcaseTag } from './types'
 import useAxiosWithAuth from '@/api/config'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
+import CuPhotoBox from '@/components/CuPhotoBox'
 
 function PostCard({
   postId,
@@ -31,13 +31,20 @@ function PostCard({
   liked,
   isFavorite,
   onClick,
+  mutate,
 }: IPostCardShowcase) {
   const ref = React.useRef<HTMLDivElement>(null)
   const [currentCardWidth, setCurrentCardWidth] = useState<number>(0)
-  const [favorite, setFavorite] = useState<boolean>(isFavorite)
-  const [likeNum, setLikeNum] = useState<number>(like)
-  const [isLiked, setIsLiked] = useState<boolean>(liked)
+  const [favorite, setFavorite] = useState<boolean>(false)
+  const [likeNum, setLikeNum] = useState<number>(0)
+  const [isLiked, setIsLiked] = useState<boolean>(false)
   const axiosWithAuth = useAxiosWithAuth()
+
+  useEffect(() => {
+    setFavorite(isFavorite)
+    setLikeNum(like)
+    setIsLiked(liked)
+  }, [like, liked, isFavorite])
 
   useEffect(() => {
     if (ref.current) {
@@ -59,26 +66,58 @@ function PostCard({
       )
       .then((res) => {
         if (res.status === 200) {
-          setFavorite(!favorite)
+          mutate((prev) => {
+            return prev.map((card) => {
+              if (card.id === postId) {
+                return {
+                  ...card,
+                  favorite: !favorite,
+                }
+              }
+              return card
+            })
+          })
         }
       })
-  }, [setFavorite, axiosWithAuth])
+      .catch(() => {})
+  }, [favorite, setFavorite, mutate])
 
   const clickLike = useCallback(() => {
     axiosWithAuth
       .post(`${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/like/${postId}`)
       .then((res) => {
         if (res.status === 200) {
-          if (liked === false) {
-            setIsLiked(true)
-            setLikeNum(likeNum + 1)
+          if (isLiked === false) {
+            mutate((prev) => {
+              return prev.map((card) => {
+                if (card.id === postId) {
+                  return {
+                    ...card,
+                    like: likeNum + 1,
+                    liked: !isLiked,
+                  }
+                }
+                return card
+              })
+            })
           } else {
-            setIsLiked(false)
-            setLikeNum(likeNum - 1)
+            mutate((prev) => {
+              return prev.map((card) => {
+                if (card.id === postId) {
+                  return {
+                    ...card,
+                    like: likeNum - 1,
+                    liked: !isLiked,
+                  }
+                }
+                return card
+              })
+            })
           }
         }
       })
-  }, [setIsLiked, setLikeNum, axiosWithAuth])
+      .catch(() => {})
+  }, [isLiked, likeNum, setLikeNum, setIsLiked])
 
   return (
     <Card
@@ -89,17 +128,15 @@ function PostCard({
         backfaceVisibility: 'hidden',
       }}
       ref={ref}
-      onClick={onClick}
     >
-      <CardMedia
-        component="img"
-        image={image ? image : '/icons/52.png'}
-        alt="post thumbnail"
-        sx={{
-          ...style.cardMediaStyleBase,
-          height: (currentCardWidth * 251) / 328,
-        }}
-      />
+      <CardContent sx={style.cardMediaStyleBase} onClick={onClick}>
+        <CuPhotoBox
+          src={image ? image : '/icons/52.png'}
+          alt="post thumbnail"
+          style={{ width: '100%', height: '100%', boxSizing: 'border-box' }}
+        />
+      </CardContent>
+
       <Stack
         sx={{ p: '1rem', pt: '0.75rem' }}
         spacing={'15px'}
@@ -160,6 +197,7 @@ function PostCard({
             height: (currentCardWidth * 190) / 328,
             boxSizing: 'border-box',
           }}
+          onClick={onClick}
         >
           <CardContent sx={{ p: 0 }}>
             <Typography

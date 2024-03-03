@@ -17,7 +17,7 @@ const Showcase = () => {
   const [page, setPage] = useState<number>(1)
   const [cardList, setCardList] = useState<Array<ICardData>>([])
   const [draggedCardList, setDraggedCardList] = useState<ICardData[]>([])
-  const { isPc } = useMedia()
+  const { isPc, isTablet } = useMedia()
   const { isLogin } = useAuthStore()
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IPagination<ICardData[]>>(
@@ -85,7 +85,7 @@ const Showcase = () => {
   else if (isLoading && !cardList.length) message = '로딩중'
   else if (error) message = '에러 발생'
 
-  if (isPc) {
+  if (isPc && !isTablet) {
     return (
       <Stack
         height={'100%'}
@@ -97,12 +97,15 @@ const Showcase = () => {
       </Stack>
     )
   }
+
   return (
     <CardContainer
       cardList={cardList}
       removeCard={removeCard}
       message={message}
       addCard={addCard}
+      addDisabled={draggedCardList.length === 0}
+      mutate={setCardList}
     />
   )
 }

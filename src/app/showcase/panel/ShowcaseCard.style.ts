@@ -1,24 +1,16 @@
 import { SxProps } from '@mui/material'
 
-export const cardSizeBase: SxProps = {
+export const cardSize: SxProps = {
+  boxSizing: 'border-box',
   maxHeight: '441px',
   maxWidth: '20.5rem',
   borderRadius: '0.75rem',
-}
-
-export const cardPcSize: SxProps = {
-  ...cardSizeBase,
-  width: 'calc(80svh * 328 /800)',
-  height: 'calc(80svh * 441 /800)',
-}
-
-export const cardMobileSize: SxProps = {
-  ...cardSizeBase,
-  width: '90vw',
-  height: 'calc(90vw * 441 / 328)',
+  width: ['calc(90svh * 328 / 800)', 'calc(80svh * 328 /800)'],
+  height: ['calc(90svh * 441 / 800)', 'calc(80svh * 441 /800)'],
 }
 
 export const cardStyleBase: SxProps = {
+  ...cardSize,
   backgroundColor: 'background.primary',
   borderWidth: '2px',
   borderColor: 'line.base',
@@ -26,19 +18,7 @@ export const cardStyleBase: SxProps = {
   position: 'absolute',
   top: '50%',
   left: '50%',
-  boxSizing: 'border-box',
 }
-
-export const cardPcStyleBase: SxProps = {
-  ...cardStyleBase,
-  ...cardPcSize,
-}
-
-export const cardMobileStyleBase: SxProps = {
-  ...cardStyleBase,
-  ...cardMobileSize,
-}
-
 export const cardTitleStyleBase: SxProps = {
   width: '100%',
   overflow: 'hidden',
@@ -59,14 +39,22 @@ export const cardChipStyleBase: SxProps = {
   },
 }
 
+export const cardHeaderStyleBase: SxProps = {
+  height: '2.5rem',
+  width: '100%',
+}
+
 export const cardContentStyleBase: SxProps = {
   width: '100%',
   overflow: 'hidden',
-  maxHeight: '11.25rem',
+  height: '7rem',
   lineHeight: '1.125rem',
   textOverflow: 'ellipsis',
   WebkitBoxOrient: 'vertical',
   display: '-webkit-box',
+  flex: '1 0 auto',
+  padding: 0,
+  backgroundColor: 'transparent',
 }
 
 export const cardMoreButtonStyle: SxProps = {
