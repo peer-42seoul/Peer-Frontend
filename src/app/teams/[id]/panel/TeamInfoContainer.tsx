@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 import { useEffect } from 'react'
-import { Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import useAxiosWithAuth from '@/api/config'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import CuAvatar from '@/components/CuAvatar'
@@ -48,7 +48,7 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
 
   return (
     <>
-      <Stack direction={'row'} spacing={'1rem'} >
+      <Stack direction={'row'} spacing={'1rem'}>
         {isLoading || !data ? (
           <CuCircularProgress color={'primary'} />
         ) : (
@@ -71,7 +71,12 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
               <Stack>
                 <IconInfo type="DATE" text={data.createdAt} />
                 <IconInfo type="LEADER" text={data.leaderName} />
-                <IconInfo type="MEMBER" text={data.memberCount.toString()} />
+                <Stack direction={'row'} spacing={'0.5rem'}>
+                  <IconInfo type="MEMBER" text={data.memberCount.toString()} />
+                  <Button>
+                    <Typography variant="Caption">멤버 보기</Typography>
+                  </Button>
+                </Stack>
               </Stack>
             </Stack>
           </>
