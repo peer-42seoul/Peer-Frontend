@@ -1,4 +1,4 @@
-import { Avatar, Box, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Button, Stack, Typography, useTheme } from '@mui/material'
 import LinkButton from '@/app/recruit/[id]/panel/LinkButton'
 import React from 'react'
 import { IPostDetail, ProjectType } from '@/types/IPostDetail'
@@ -8,6 +8,8 @@ import {
   TypeChip,
 } from '@/app/recruit/[id]/panel/RecruitInfoElement'
 import OthersProfile from '@/app/panel/OthersProfile'
+import Link from 'next/link'
+import * as style from '../../../my-page/profile/panel/Profile.style'
 
 interface RecruitInfoProps {
   data: IPostDetail
@@ -16,6 +18,36 @@ interface RecruitInfoProps {
   pc?: boolean
 }
 
+const ProfileLink = ({ href }: any) => {
+  const theme = useTheme()
+  console.log('props: ', href)
+  return (
+    <Stack direction={'row'} spacing={0.5} alignItems={'center'}>
+      <Avatar
+        key={href}
+        src={`https://www.google.com/s2/favicons?domain=${href}`}
+        sx={style.faviconStyle}
+        variant="square"
+      >
+        {href}
+      </Avatar>
+      <Link
+        href={
+          href.startsWith('http://') || href.startsWith('https://')
+            ? href
+            : `//${href}`
+        }
+        style={{
+          textDecorationColor: theme.palette.text.normal,
+        }}
+      >
+        <Typography variant={'Caption'} color={'text.strong'}>
+          {href}
+        </Typography>
+      </Link>
+    </Stack>
+  )
+}
 const RecruitInfo = ({ data, type, children, pc }: RecruitInfoProps) => {
   if (pc)
     return (
@@ -41,6 +73,7 @@ const RecruitInfo = ({ data, type, children, pc }: RecruitInfoProps) => {
               </OthersProfile>
               <Typography variant={'Body2'}>{data?.teamName}</Typography>
               <LinkButton href={data?.link} variant={'contained'} />
+              {/* <ProfileLink href={data?.link} /> */}
             </Stack>
             {/*지원 버튼*/}
             {children}
