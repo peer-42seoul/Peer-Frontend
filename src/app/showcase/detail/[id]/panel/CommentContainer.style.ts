@@ -20,6 +20,9 @@ export const commentListContainer = {
   alignItems: 'center',
 }
 
+export const isEditContainer = {
+  width: '100%',
+}
 export const commenterInfo = {
   display: 'flex',
   marginBottom: '0.25rem',
@@ -29,7 +32,7 @@ export const commenterInfo = {
 
 export const iconContainer = {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   alignItems: 'center',
   gap: '0.5rem',
 }
