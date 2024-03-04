@@ -121,13 +121,11 @@ const Comment = ({ data, postId }: CommentProps) => {
       }
     }
   }
-  // commentPanel 만들어 쓰기
   return (
     <>
       <Stack sx={style.commentListContainer}>
         <Box sx={style.isEditContainer}>
           <Box sx={style.commenterInfo}>
-            {/* TODO : OthersProfile 컴포넌트로 감싸기 */}
             <OthersProfile
               userId={data.authorId.toString()}
               name={data.authorNickname}
