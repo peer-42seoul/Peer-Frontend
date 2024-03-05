@@ -22,7 +22,55 @@ const customBreakpoints = {
   xl: 1536,
 }
 
-export const darkTheme = createTheme({
+const customRed = {
+  main: '#FF5833',
+  strong: '#FF5833',
+  normal: '#FF6D4D',
+  alternative: '#FF7D61',
+  tinted: '#FF6D4D33',
+}
+
+const customBlue = {
+  main: '#3A5DCF',
+  strong: '#3A5DCF',
+  normal: '#4E6ED4',
+  alternative: '#6681DB',
+  tinted: '#4E6ED433',
+}
+
+const customPurple = {
+  main: '#6F62FE',
+  strong: '#6F62FE',
+  normal: '#877CFE',
+  alternative: '#A39BFD',
+  tinted: '#877CFE33',
+}
+
+const customGreen = {
+  main: '#489B08',
+  strong: '#489B08',
+  normal: '#53B309',
+  alternative: '#61CD0E',
+  tinted: '#53B30933',
+}
+
+const customYellow = {
+  main: '#FFA805',
+  strong: '#FFA805',
+  normal: '#FFB01F',
+  alternative: '#FDBC44',
+  tinted: '#FFB01F33',
+}
+
+const customPink = {
+  main: '#C44ECA',
+  strong: '#C44ECA',
+  normal: '#CB62D0',
+  alternative: '#D581D9',
+  tinted: '#CB62D033',
+}
+
+const darkTheme = createTheme({
   breakpoints: {
     values: customBreakpoints,
   },
@@ -65,7 +113,7 @@ export const darkTheme = createTheme({
   },
 })
 
-export const lightTheme = createTheme({
+const lightTheme = createTheme({
   breakpoints: {
     values: customBreakpoints,
   },
@@ -107,3 +155,63 @@ export const lightTheme = createTheme({
     },
   },
 })
+
+if (darkTheme.palette) {
+  darkTheme.palette.red = darkTheme.palette.augmentColor({
+    color: customRed,
+    name: 'red',
+  })
+  darkTheme.palette.blue = darkTheme.palette.augmentColor({
+    color: customBlue,
+    name: 'blue',
+  })
+  darkTheme.palette.purple = darkTheme.palette.augmentColor({
+    color: customPurple,
+    name: 'purple',
+  })
+  darkTheme.palette.green = darkTheme.palette.augmentColor({
+    color: customGreen,
+    name: 'green',
+  })
+  darkTheme.palette.yellow = darkTheme.palette.augmentColor({
+    color: customYellow,
+    name: 'yellow',
+  })
+  darkTheme.palette.pink = darkTheme.palette.augmentColor({
+    color: customPink,
+    name: 'pink',
+  })
+
+  darkTheme.palette.primary = darkTheme.palette.purple
+}
+
+if (lightTheme.palette) {
+  lightTheme.palette.red = lightTheme.palette.augmentColor({
+    color: customRed,
+    name: 'red',
+  })
+  lightTheme.palette.blue = lightTheme.palette.augmentColor({
+    color: customBlue,
+    name: 'blue',
+  })
+  lightTheme.palette.purple = lightTheme.palette.augmentColor({
+    color: customPurple,
+    name: 'purple',
+  })
+  lightTheme.palette.green = lightTheme.palette.augmentColor({
+    color: customGreen,
+    name: 'green',
+  })
+  lightTheme.palette.yellow = lightTheme.palette.augmentColor({
+    color: customYellow,
+    name: 'yellow',
+  })
+  lightTheme.palette.pink = lightTheme.palette.augmentColor({
+    color: customPink,
+    name: 'pink',
+  })
+
+  lightTheme.palette.primary = lightTheme.palette.purple
+}
+
+export { lightTheme, darkTheme }
