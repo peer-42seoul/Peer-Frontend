@@ -11,10 +11,10 @@ export default meta
 
 type Story = StoryObj<typeof CuAvatar>
 
-export const Basic: Story = {}
-
 export const Primary: Story = {
   args: {
     src: 'https://picsum.photos/32',
   },
 }
+
+export const Fallback: Story = {}
