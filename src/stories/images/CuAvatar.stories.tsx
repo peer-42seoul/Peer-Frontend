@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import CuAvatar from '../components/CuAvatar'
+import CuAvatar from '../../components/CuAvatar'
 // import { AvatarProps } from '@mui/material'
 
 const meta: Meta<typeof CuAvatar> = {
