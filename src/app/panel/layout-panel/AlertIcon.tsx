@@ -120,6 +120,7 @@ const AlertIcon = () => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const accessToken = useAuthStore.getState().accessToken
 
   const { target, spinner } = useInfiniteScroll({
     setPage,
@@ -131,8 +132,10 @@ const AlertIcon = () => {
   })
 
   useEffect(() => {
-    isNewAlarm(isLogin)
-  }, [pathname, searchParams, isLogin, isNewAlarm])
+    if (accessToken) {
+      isNewAlarm(isLogin, accessToken)
+    }
+  }, [pathname, searchParams, isLogin, isNewAlarm, accessToken])
 
   useEffect(() => {
     if (isDrawerOpen) {
