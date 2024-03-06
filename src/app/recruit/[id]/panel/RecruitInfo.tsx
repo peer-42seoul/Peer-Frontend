@@ -39,7 +39,11 @@ const RecruitInfo = ({ data, type, children, pc }: RecruitInfoProps) => {
               >
                 <Avatar alt="avatar" src={data?.leader_image} sizes={'small'} />
               </OthersProfile>
-              <Typography variant={'Body2'}>{data?.teamName}</Typography>
+              <Typography variant={'Body2'}>
+                {data?.leader_nickname
+                  ? data.leader_nickname
+                  : '존재하지 않는 유저'}
+              </Typography>
               <LinkButton href={data?.link} variant={'contained'} />
             </Stack>
             {/*지원 버튼*/}
@@ -73,7 +77,11 @@ const RecruitInfo = ({ data, type, children, pc }: RecruitInfoProps) => {
             >
               <Avatar alt="avatar" src={data?.leader_image} sizes={'small'} />
             </OthersProfile>
-            <Typography variant={'Body2'}>{data?.teamName}</Typography>
+            <Typography variant={'Body2'}>
+              {data?.leader_nickname
+                ? data.leader_nickname
+                : '존재하지 않는 유저'}
+            </Typography>
           </Stack>
           <LinkButton href={data?.link} variant={'contained'} />
         </Stack>
