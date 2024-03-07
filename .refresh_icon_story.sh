@@ -28,7 +28,7 @@ do
 
   type Story = StoryObj<typeof $icon>
 
-  export const Default: Story = {}" > "./stories/icons/$icon.stories.ts"
+  export const Default: Story = {}" > "./stories/icons/$icon.stories.tsx"
 done
 
 # Get sub directories
@@ -58,6 +58,6 @@ do
 
     type Story = StoryObj<typeof $icon>
 
-    export const Default: Story = {}" > "./stories/icons/$sub_dir/$icon.stories.ts"
+    export const Default: Story = {}" > "./stories/icons/$sub_dir/$icon.stories.tsx"
   done
 done
