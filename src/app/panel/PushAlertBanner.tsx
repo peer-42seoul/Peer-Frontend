@@ -6,11 +6,13 @@ import { AxiosInstance } from 'axios'
 import { useEffect, useState } from 'react'
 import { initializeApp } from 'firebase/app'
 import { getMessaging, onMessage, getToken } from 'firebase/messaging'
+import { EDeviceType } from '@/types/DeviceTypes'
 
 const PushAlertBanner = () => {
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const [isShowPush, setIsShowPush] = useState<boolean>(false)
   const [isScroll, setIsScroll] = useState<number>(1)
+  const [userAgent, setUserAgent] = useState<EDeviceType>(EDeviceType.OTHER)
 
   const handlePushFCM = () => {
     const firebaseConfig = initializeApp({
@@ -76,6 +78,22 @@ const PushAlertBanner = () => {
     setIsScroll(window.scrollY)
   }
 
+  // 유저의 기기 정보를 가져오는 부분: 알림 부분 참고
+  useEffect(() => {
+    if (navigator.userAgent.match(/(iPhone|iPod)/)) {
+      setUserAgent(EDeviceType.IPHONE)
+    } else if (navigator.userAgent.match(/android|Android/)) {
+      setUserAgent(EDeviceType.ANDROID)
+    } else if (navigator.userAgent.match(/mac|Mac/)) {
+      setUserAgent(EDeviceType.MACOS)
+    } else if (navigator.userAgent.match(/windows|Windows/)) {
+      setUserAgent(EDeviceType.WINDOWS)
+    } else {
+      setUserAgent(EDeviceType.OTHER)
+    }
+  }, [])
+
+  // PWA 알림 배너 노출 여부를 지정
   useEffect(() => {
     if (localStorage && localStorage.getItem('isShowPush') === 'false') {
       setIsShowPush(false)
@@ -107,6 +125,7 @@ const PushAlertBanner = () => {
               사용하시는 브라우저는 알림 기능을 사용할 수 있습니다.
               사용하시겠습니까?
             </Typography>
+            {userAgent}
             <Stack direction="row">
               <Button onClick={handlePush}>
                 <Typography color={'white'} variant="Caption">
