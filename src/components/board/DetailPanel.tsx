@@ -84,7 +84,9 @@ export const DetailContentCotainer = ({
   return (
     <Stack sx={isPc ? style.DetailContent : undefined} spacing={'2rem'}>
       <Stack direction={'row'} justifyContent={'space-between'}>
-        <Typography>{isPc ? containerTitle : ''}</Typography>
+        <Typography variant={'Body1Emphasis'}>
+          {isPc ? containerTitle : ''}
+        </Typography>
         {author && (
           <CuButton
             message={'수정'}
