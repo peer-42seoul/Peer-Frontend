@@ -75,7 +75,6 @@ const Comment = ({ data, postId }: CommentProps) => {
       <Stack sx={style.commentListContainer}>
         <Box>
           <Box sx={style.commenterInfo}>
-            {/* TODO : OthersProfile 컴포넌트로 감싸기 */}
             <OthersProfile
               userId={data.authorId.toString()}
               name={data.authorNickname}
