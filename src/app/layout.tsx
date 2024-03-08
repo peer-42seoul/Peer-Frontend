@@ -11,7 +11,7 @@ import DataPickerProvider from './DataPickerProvider'
 
 const webMetadata = {
   title: 'peer',
-  description: 'peer는 함께 성장할 동료들을 만날 수 있는 곳입니다.',
+  description: '동료를 찾기 위한 가장 빠른 선택',
   url: 'https://peer-study.co.kr/',
   image: 'images/og-image.png',
 }
