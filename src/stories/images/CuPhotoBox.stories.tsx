@@ -7,7 +7,7 @@ const meta: Meta<typeof CuPhotoBox> = {
   decorators: [
     (Story: any) => {
       return (
-        <div style={{ margin: '3em', width: '10rem', height: '15rem' }}>
+        <div style={{ margin: '3em', width: '15rem', height: '10rem' }}>
           <Story />
         </div>
       )
@@ -21,14 +21,14 @@ type Story = StoryObj<typeof CuPhotoBox>
 
 export const Default: Story = {
   args: {
-    src: 'https://picsum.photos/200/300',
+    src: 'https://picsum.photos/300/200',
     alt: 'Image',
   },
 }
 
 export const Fallback: Story = {
   args: {
-    src: '',
+    src: 'not found image url',
     alt: 'Image',
   },
 }
