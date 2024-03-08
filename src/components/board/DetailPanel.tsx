@@ -127,7 +127,7 @@ export const StatusMessage = ({
 
 const ContentTitle = ({ title }: { title: string }) => {
   return (
-    <Typography color={'text.strong'} variant={'CaptionEmphasis'}>
+    <Typography color={'text.strong'} variant={'Body2Emphasis'}>
       {title}
     </Typography>
   )
@@ -135,7 +135,7 @@ const ContentTitle = ({ title }: { title: string }) => {
 
 const Content = ({ content }: { content: string }) => {
   return (
-    <Typography color={'text.alternative'} variant={'Body2'}>
+    <Typography color={'text.alternative'} variant={'Body1'}>
       {content}
     </Typography>
   )
