@@ -24,6 +24,13 @@ export const CommentWriter = ({
     event.preventDefault()
 
     try {
+      if (!content) {
+        openToast({
+          severity: 'error',
+          message: '댓글을 작성해주세요.',
+        })
+        return
+      }
       await axiosWithAuth.post(
         `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/comment`,
         {
