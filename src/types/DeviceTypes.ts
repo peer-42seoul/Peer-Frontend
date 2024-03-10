@@ -1,7 +1,7 @@
 export enum EDeviceType {
-  IPHONE = 'iPhone',
+  IPHONE = 'iOS',
   ANDROID = 'android',
-  MACOS = 'mac',
-  WINDOWS = 'windows',
-  OTHER = 'other',
+  MACOS = 'Mac',
+  WINDOWS = 'Windows',
+  OTHER = 'Other',
 }

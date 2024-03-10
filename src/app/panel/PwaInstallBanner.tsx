@@ -135,7 +135,7 @@ const PwaInstallBanner = () => {
           <Stack margin={1} padding={1} spacing={'1rem'}>
             <Typography color={'white'} variant="Body1">
               사용하시는 브라우저는 PWA 기능을 사용할 수 있습니다.{' '}
-              {isPc ? '데스크탑' : '모바일'}에 설치하시겠습니까?
+              설치하시겠습니까?
             </Typography>
             <Stack
               direction="row"

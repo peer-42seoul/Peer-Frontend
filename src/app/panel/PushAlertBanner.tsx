@@ -7,12 +7,15 @@ import { useEffect, useState } from 'react'
 import { initializeApp } from 'firebase/app'
 import { getMessaging, onMessage, getToken } from 'firebase/messaging'
 import { EDeviceType } from '@/types/DeviceTypes'
+import useToast from '@/states/useToast'
+import useMedia from '@/hook/useMedia'
 
 const PushAlertBanner = () => {
+  const { isPc } = useMedia()
   const axiosInstance: AxiosInstance = useAxiosWithAuth()
   const [isShowPush, setIsShowPush] = useState<boolean>(false)
-  const [isScroll, setIsScroll] = useState<number>(1)
   const [userAgent, setUserAgent] = useState<EDeviceType>(EDeviceType.OTHER)
+  const { openToast } = useToast()
 
   const handlePushFCM = () => {
     const firebaseConfig = initializeApp({
@@ -33,16 +36,23 @@ const PushAlertBanner = () => {
       .then((currentToken: any) => {
         if (currentToken) {
           axiosInstance
-            .post(
-              `${process.env.NEXT_PUBLIC_NEXT_PUBLIC_CSR_API}:8082/alarm/send-push`,
+            .put(
+              `${process.env.NEXT_PUBLIC_NEXT_PUBLIC_CSR_API}/api/v1/noti-pwa/spring/subscription`,
               {
-                token: currentToken,
-                title: '푸시 알림 테스트',
-                message: '푸시 알림 테스트 메시지입니다.',
+                firebaseToken: currentToken,
+                deviceInfo: userAgent,
               },
             )
             .then(() => {
               console.log('푸시 알림 전송 성공')
+              // 배너 아예 안보이기
+              setIsShowPush(false)
+              localStorage.setItem('isShowPush', 'false')
+            })
+            .catch(() => {
+              console.log('푸시 알림 전송 실패')
+              // 배너 일시적으로 가리기
+              setIsShowPush(false)
             })
         } else {
           console.log(
@@ -51,11 +61,17 @@ const PushAlertBanner = () => {
         }
       })
       .catch(() => {
-        console.log('An error occurred while retrieving token. ')
+        console.log('An error occurred while retrieving token.')
+        // 배너 일시적으로 가리기
+        setIsShowPush(false)
+        openToast({
+          message: '푸시 알림을 사용할 수 없습니다. 잠시후 다시 시도해주세요.',
+          severity: 'error',
+        })
       })
 
     onMessage(messaging, () => {
-      console.log('Message received. ')
+      console.log('Message received.')
     })
   }
 
@@ -65,17 +81,11 @@ const PushAlertBanner = () => {
         if (permission === 'granted') {
           console.log('Notification permission granted.')
           handlePushFCM()
-          setIsShowPush(false)
-          localStorage.setItem('isShowPush', 'false')
         } else {
           console.log('Unable to get permission to notify.')
         }
       })
     }
-  }
-
-  const handleScroll = () => {
-    setIsScroll(window.scrollY)
   }
 
   // 유저의 기기 정보를 가져오는 부분: 알림 부분 참고
@@ -100,12 +110,6 @@ const PushAlertBanner = () => {
     } else {
       setIsShowPush(true)
     }
-
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
   }, [setIsShowPush])
 
   return (
@@ -113,21 +117,29 @@ const PushAlertBanner = () => {
       {isShowPush && (
         <Box
           position={'sticky'}
-          top={isScroll ? 0 : 57}
+          top={56}
           width={'100%'}
           sx={{
             backgroundColor: 'primary.main',
             zIndex: 3000,
           }}
         >
-          <Stack margin={1}>
-            <Typography color={'white'} variant="Caption">
+          <Stack padding={'0.5rem'} spacing={'1rem'}>
+            <Typography color={'white'} variant="Body1">
               사용하시는 브라우저는 알림 기능을 사용할 수 있습니다.
               사용하시겠습니까?
             </Typography>
-            {userAgent}
-            <Stack direction="row">
-              <Button onClick={handlePush}>
+            <Stack
+              direction="row"
+              alignItems={'center'}
+              display={'flex'}
+              flexDirection={isPc ? 'row' : 'row-reverse'}
+            >
+              <Button
+                onClick={handlePush}
+                variant={'contained'}
+                color="secondary"
+              >
                 <Typography color={'white'} variant="Caption">
                   네
                 </Typography>
