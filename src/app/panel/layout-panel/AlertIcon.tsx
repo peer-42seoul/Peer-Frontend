@@ -204,9 +204,7 @@ const AlertIcon = () => {
           />
         </Badge>
       </IconButton>
-      {/* <CuModal open={isOpen} onClose={closeModal} title="잠깐!">
-        <ForbiddenDolphin message="알림 기능은 조금만 기다려주세요!!" />
-      </CuModal> */}
+
       <Drawer
         PaperProps={{
           sx: {
@@ -229,7 +227,6 @@ const AlertIcon = () => {
             height: '100dvh',
             pt: 7,
             backgroundColor: 'background.primary',
-            // overflowY: 'auto',
           }}
         >
           <Stack direction={'row'} mb={'0.25rem'}>
