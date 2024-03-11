@@ -75,7 +75,6 @@ const Comment = ({ data, postId }: CommentProps) => {
       <Stack sx={style.commentListContainer}>
         <Box>
           <Box sx={style.commenterInfo}>
-            {/* TODO : OthersProfile 컴포넌트로 감싸기 */}
             <OthersProfile
               userId={data.authorId.toString()}
               name={data.authorNickname}
@@ -86,14 +85,14 @@ const Comment = ({ data, postId }: CommentProps) => {
                 sx={style.avatarStyle}
               />
             </OthersProfile>
-            <Typography variant="Caption" color={'text.alternative'}>
+            <Typography variant="Body2" color={'text.alternative'}>
               {data.authorNickname}
             </Typography>
           </Box>
-          <Typography variant="Body2" color={'text.normal'}>
+          <Typography variant="Body1" color={'text.normal'}>
             {data.content}
           </Typography>
-          <Typography variant="Tag" color={'text.assistive'}>
+          <Typography variant="Caption" color={'text.assistive'}>
             {data.createAt
               .split('T')[0]
               .replace(/-/g, '월 ')
