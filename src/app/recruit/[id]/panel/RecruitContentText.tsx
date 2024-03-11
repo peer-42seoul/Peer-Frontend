@@ -20,12 +20,12 @@ const RecruitContentText = ({
       >
         {icon}
       </Stack>
-      <Typography color={'text.strong'} variant="Body2Emphasis">
+      <Typography color={'text.strong'} variant="CaptionEmphasis">
         {label}
       </Typography>
     </Stack>
     {content && (
-      <Typography variant={'Body1'} color={'text.alternative'}>
+      <Typography variant={'Body2'} color={'text.alternative'}>
         {content}
       </Typography>
     )}
