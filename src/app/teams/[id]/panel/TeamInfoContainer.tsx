@@ -27,67 +27,13 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
     `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/main/${id}`,
     (url: string) => axiosInstance(url).then((res) => res.data),
   )
-  // // 팀원의 정보를 불러오는 API 호출 -> 추후 API 통합이 필요
-  // const { data: memberData, isLoading: memberIsLoading } = useSWR<
-  //   Array<ITeamMemberInfo>
-  // >(
-  //   `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/main/member/${id}`,
-  //   (url: string) => axiosInstance(url).then((res) => res.data),
-  // )
-
-  // 테스트용 데이터
-  const mockData: Array<ITeamMemberInfo> = [
-    {
-      id: 1,
-      name: '테스트1',
-      role: 'LEADER',
-    },
-    {
-      id: 2,
-      name: '테스트2',
-      role: 'MEMBER',
-    },
-    {
-      id: 3,
-      name: '테스트3',
-      role: 'MEMBER',
-    },
-    {
-      id: 4,
-      name: '테스트4',
-      role: 'MEMBER',
-    },
-    {
-      id: 5,
-      name: '테스트5',
-      role: 'MEMBER',
-    },
-    {
-      id: 6,
-      name: '테스트6',
-      role: 'MEMBER',
-    },
-    {
-      id: 7,
-      name: '테스트7',
-      role: 'MEMBER',
-    },
-    {
-      id: 8,
-      name: '테스트8',
-      role: 'MEMBER',
-    },
-    {
-      id: 9,
-      name: '테스트9',
-      role: 'MEMBER',
-    },
-    {
-      id: 10,
-      name: '테스트10테스트10테스트10테스트10테스트10테스트10',
-      role: 'MEMBER',
-    },
-  ]
+  // 팀원의 정보를 불러오는 API 호출 -> 추후 API 통합이 필요
+  const { data: memberData, isLoading: memberIsLoading } = useSWR<
+    Array<ITeamMemberInfo>
+  >(
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/team/main/member/${id}`,
+    (url: string) => axiosInstance(url).then((res) => res.data),
+  )
 
   const { setHeaderTitle } = useHeaderStore()
   const router = useRouter()
@@ -112,7 +58,7 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
     return <CuCircularProgress color={'primary'} />
   }
 
-  if (!isLoading && !data) {
+  if (!isLoading && !data && !memberIsLoading && !memberData) {
     alert('팀 페이지에 접근할 수 없습니다.')
     router.push('/team-list')
     return <CuCircularProgress color={'primary'} />
@@ -145,11 +91,12 @@ const TeamInfoContainer = ({ id }: { id: number }) => {
                 <IconInfo type="LEADER" text={data.leaderName} />
                 <Stack direction={'row'} spacing={'0.5rem'}>
                   <IconInfo type="MEMBER" text={data.memberCount.toString()} />
-                  {isPc ? (
-                    <TeamMemberListPc members={mockData} />
-                  ) : (
-                    <TeamMemberListMobile members={mockData} />
-                  )}
+                  {memberData &&
+                    (isPc ? (
+                      <TeamMemberListPc members={memberData} />
+                    ) : (
+                      <TeamMemberListMobile members={memberData} />
+                    ))}
                 </Stack>
               </Stack>
             </Stack>
