@@ -3,8 +3,8 @@
 import { defaultGetFetcher } from '@/api/fetchers'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import DynamicToastViewer from '@/components/DynamicToastViewer'
-import useAboutLayout from '@/states/useAboutLayout'
 import { Avatar, Button, Card, Stack, Typography } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 
 interface AnnounceDailProp {
@@ -33,10 +33,10 @@ function formatDate(dateStr: string | null) {
   return formattedDate
 }
 
-const DetailPage = () => {
-  const { setBoard, announceDetailId } = useAboutLayout()
+const DetailPage = ({ params }: { params: { id: string } }) => {
+  const router = useRouter()
   const { data, isLoading, error } = useSWR<AnnounceDailProp>(
-    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/about/announcement/${announceDetailId}`,
+    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/about/announcement/${params.id}`,
     defaultGetFetcher,
   )
 
@@ -49,7 +49,7 @@ const DetailPage = () => {
       <Stack>
         <Button
           sx={{ width: 'fit-content' }}
-          onClick={() => setBoard('ANNOUNCE')}
+          onClick={() => router.push('/about/announce')}
         >
           목록으로
         </Button>
