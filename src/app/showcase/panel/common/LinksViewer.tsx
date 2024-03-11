@@ -43,7 +43,7 @@ const LinksViewer = ({ links }: IlinksProps) => {
               key={crypto.randomUUID()}
               component="a"
               color={'text.normal'}
-              variant="Body1"
+              variant="Body2"
               href={convertLink(link.link)}
               target="_blank"
               rel="noreferrer"

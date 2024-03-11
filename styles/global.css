@@ -1,6 +1,7 @@
 /* pretendard variable 폰트 */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
+
 html,
 body {
   width: 100%;
@@ -44,58 +45,4 @@ body * {
 }
 .no-scroll::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
-}
-
-/* 토스트 에디터 기본 스타일링 */
-.toastui-editor-contents {
-  /* 값 참조 : https://mui.com/material-ui/customization/default-theme/?expand-path=$.typography */
-  h1 {
-    /* mui typography h3 */
-    font-weight: 400 !important;
-    font-size: 3rem !important;
-    line-height: 1.167 !important;
-    letter-spacing: 0em !important;
-  }
-  h2 {
-    /* mui typography h4 */
-    font-weight: 400 !important;
-    font-size: 2.125rem !important;
-    line-height: 1.235 !important;
-    letter-spacing: 0.00735em !important;
-  }
-  h3 {
-    /* mui typography h5 */
-    font-weight: 400 !important;
-    font-size: 1.5rem !important;
-    line-height: 1.334 !important;
-    letter-spacing: 0em !important;
-  }
-  h4 {
-    /* mui typography h6 */
-    font-weight: 400 !important;
-    font-size: 1.25rem !important;
-    line-height: 1.6 !important;
-    letter-spacing: 0.0075em !important;
-  }
-  h5 {
-    /* mui typography subtitle1 */
-    font-weight: 400 !important;
-    font-size: 1rem !important;
-    line-height: 1.75 !important;
-    letter-spacing: 0.00938em !important;
-  }
-  h6 {
-    /* mui typography subtitle2 */
-    font-weight: 500 !important;
-    font-size: 0.875rem !important;
-    line-height: 1.57 !important;
-    letter-spacing: 0.00714em !important;
-  }
-  p {
-    /* mui typography body2  */
-    font-weight: 400 !important;
-    font-size: 0.875rem !important;
-    line-height: 1.43 !important;
-    letter-spacing: 0.01071em !important;
-  }
 }
