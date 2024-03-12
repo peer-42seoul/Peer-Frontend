@@ -1,11 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react'
-  import { LinkIcon } from '@/icons'
+import { LinkIcon } from '@/icons'
 
-  const meta: Meta<typeof LinkIcon> = {
-    component: LinkIcon,
-  }
-  export default meta
+const meta: Meta<typeof LinkIcon> = {
+  component: LinkIcon,
+}
+export default meta
 
-  type Story = StoryObj<typeof LinkIcon>
+type Story = StoryObj<typeof LinkIcon>
 
-  export const Default: Story = {}
+export const Default: Story = {
+  args: {
+    sx: { color: 'text.strong' },
+  },
+}
