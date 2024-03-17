@@ -16,6 +16,7 @@ import SetupInfo from './panel/SettingTeamInfo'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import Tutorial from '@/components/Tutorial'
 import TeamMemberTutorial from '@/components/tutorialContent/TeamMemberTutorial'
+import CuModal from '@/components/CuModal'
 
 export interface IMyInfo {
   userId: string
@@ -75,57 +76,62 @@ const TeamsSetupPage = ({ params }: { params: { id: string } }) => {
               teamStatus={teams.team.status}
             />
           )} */}
-          {!showApplicant ? (
-            <Card
-              sx={{
-                borderRadius: '1rem',
-                p: '1.5rem',
-                height: '20rem',
-                backgroundColor: 'background.secondary',
-                backgroundImage: 'none',
-              }}
+
+          <Card
+            sx={{
+              borderRadius: '1rem',
+              p: '1.5rem',
+              height: '20rem',
+              backgroundColor: 'background.secondary',
+              backgroundImage: 'none',
+            }}
+          >
+            <Stack
+              direction={'row'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              mb={3}
             >
-              <Stack
-                direction={'row'}
-                justifyContent={'space-between'}
-                alignItems={'center'}
-                mb={3}
-              >
-                <Stack direction={'row'} display={'flex'} alignItems={'center'}>
-                  <Typography fontWeight="bold">팀원 목록</Typography>
-                  <Tutorial
-                    title={'팀원 목록'}
-                    content={<TeamMemberTutorial />}
-                  />
-                </Stack>
-                <Button
-                  disabled={
-                    teams.team.status === TeamStatus.COMPLETE ? true : false
-                  }
-                  onClick={openApplicant}
-                  sx={{ width: '9rem' }}
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                >
-                  <Typography color={'white'} variant="Body1">
-                    신청 대기자 보기
-                  </Typography>
-                </Button>
+              <Stack direction={'row'} display={'flex'} alignItems={'center'}>
+                <Typography fontWeight="bold">팀원 목록</Typography>
+                <Tutorial
+                  title={'팀원 목록'}
+                  content={<TeamMemberTutorial />}
+                />
               </Stack>
-              <SetupMember
-                teamStatus={teams.team.status}
-                team={teams.member}
-                teamId={teams.team.id}
-              />
-            </Card>
-          ) : (
+              <Button
+                disabled={
+                  teams.team.status === TeamStatus.COMPLETE ? true : false
+                }
+                onClick={openApplicant}
+                sx={{ width: '9rem' }}
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
+                <Typography color={'white'} variant="Body1">
+                  신청 대기자 보기
+                </Typography>
+              </Button>
+            </Stack>
+            <SetupMember
+              teamStatus={teams.team.status}
+              team={teams.member}
+              teamId={teams.team.id}
+            />
+          </Card>
+          <CuModal
+            title="신청 대기자 목록"
+            mobileFullSize={true}
+            open={showApplicant}
+            onClose={closeApplicant}
+          >
             <ApplicantList
               mutate={mutate}
               close={closeApplicant}
               teamId={teams.team.id}
             />
-          )}
+          </CuModal>
         </>
       ) : (
         <CuCircularProgress color="primary" />

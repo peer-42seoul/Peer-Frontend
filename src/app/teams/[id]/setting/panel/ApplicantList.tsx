@@ -19,6 +19,7 @@ import Tutorial from '@/components/Tutorial'
 import TeamApplicantTutorial from '@/components/tutorialContent/TeamApplicantTutorial'
 import useToast from '@/states/useToast'
 import CuCircularProgress from '@/components/CuCircularProgress'
+import useMedia from '@/hook/useMedia'
 
 const ApplicantList = ({
   mutate,
@@ -29,6 +30,7 @@ const ApplicantList = ({
   close: () => void
   teamId: string
 }) => {
+  const { isPc } = useMedia()
   const [index, setIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
   const axiosWithAuth = useAxiosWithAuth()
@@ -64,8 +66,6 @@ const ApplicantList = ({
           setMembers(res.data)
           if (index > 0) {
             setIndex(index - 1)
-          } else {
-            close()
           }
           mutate()
           openToast({
@@ -103,8 +103,6 @@ const ApplicantList = ({
 
           if (index > 0) {
             setIndex(index - 1)
-          } else {
-            close()
           }
           mutate()
           openToast({
@@ -186,85 +184,117 @@ const ApplicantList = ({
 
   return (
     <Card
-      sx={{ p: 3, borderRadius: '1rem', height: '30rem', overflow: 'auto' }}
+      sx={{
+        p: isPc ? 3 : 0,
+        minWidth: isPc ? '45rem' : '',
+        borderRadius: '1rem',
+        height: isPc ? '23rem' : '100%',
+      }}
     >
       <Stack
-        direction="row"
-        display="flex"
-        justifyContent="space-between"
-        p={2}
+        direction={isPc ? 'row' : 'column'}
+        display={'flex'}
+        justifyContent={'space-evenly'}
       >
-        <Stack direction="row" alignItems="center">
-          <Typography fontWeight="bold">
-            신청 대기자 {index + 1} / {members.length}
-          </Typography>
-          <Tutorial
-            title={'신청 대기자 보기'}
-            content={<TeamApplicantTutorial />}
-          />
+        <Stack width={isPc ? '20rem' : '100%'}>
+          <Stack
+            direction="row"
+            display="flex"
+            justifyContent="space-between"
+            p={2}
+          >
+            <Stack direction="row" alignItems="center">
+              <Typography fontWeight="bold">
+                신청 대기자 {index + 1} / {members.length}
+              </Typography>
+              <Tutorial
+                title={'신청 대기자 보기'}
+                content={<TeamApplicantTutorial />}
+              />
+            </Stack>
+          </Stack>
+          <Stack
+            direction={'row'}
+            display="flex"
+            justifyContent="space-between"
+            margin="auto"
+            width="80%"
+            p={isPc ? 2 : 0}
+          >
+            <IconButton
+              disabled={index === 0 ? true : false}
+              onClick={handlePrev}
+            >
+              <PrevButton />
+            </IconButton>
+            <Stack alignItems="center" spacing={1}>
+              <Stack alignItems="center" spacing={2} minHeight={'8rem'}>
+                <Avatar
+                  src={member?.image ? member.image : '/icons/ios/128.png'}
+                />
+                {member && (
+                  <Typography variant="Body1Emphasis">{member.name}</Typography>
+                )}
+              </Stack>
+              {member?.jobName && (
+                <Typography>
+                  {member.jobName == 'STUDY' ? '스터디 팀원' : member.jobName}
+                </Typography>
+              )}
+            </Stack>
+
+            <IconButton
+              disabled={index + 1 === members.length ? true : false}
+              onClick={handleNext}
+            >
+              <NextButton />
+            </IconButton>
+          </Stack>
+
+          <Stack direction="row" spacing={1} justifyContent={'center'}>
+            <Button variant="contained" color="red" onClick={handleReject}>
+              거절
+            </Button>
+            <Button variant="contained" color="green" onClick={handleAccept}>
+              승인
+            </Button>
+          </Stack>
         </Stack>
-        <Button onClick={close} size="small">
-          리스트로 돌아가기
-        </Button>
-      </Stack>
-      <Stack
-        direction="row"
-        display="flex"
-        justifyContent="space-between"
-        margin="auto"
-        width="80%"
-        p={2}
-      >
-        <IconButton disabled={index === 0 ? true : false} onClick={handlePrev}>
-          <PrevButton />
-        </IconButton>
-        <Stack alignItems="center" spacing={1}>
-          <Avatar src={member?.image ? member.image : '/icons/ios/128.png'} />
-          {member && <Typography>{member.name}</Typography>}
-          {member?.jobName && <Typography>{member.jobName}</Typography>}
-        </Stack>
-
-        <IconButton
-          disabled={index + 1 === members.length ? true : false}
-          onClick={handleNext}
-        >
-          <NextButton />
-        </IconButton>
-      </Stack>
-
-      <Stack direction="row" spacing={1} justifyContent={'center'}>
-        <Button variant="contained" color="red" onClick={handleReject}>
-          거절
-        </Button>
-        <Button variant="contained" color="green" onClick={handleAccept}>
-          승인
-        </Button>
-      </Stack>
-
-      <Stack p={2} ref={scrollRef}>
-        <Typography fontWeight="bold">인터뷰 답변</Typography>
-        <Stack borderRadius={2} p={2} height={'100%'} spacing={'1rem'}>
-          {!member && <Typography>신청한 사람이 없습니다.</Typography>}
-          {member && member.answers ? (
-            member.answers.map((interview, index) => (
-              <Card
-                key={interview.question}
-                sx={{
-                  backgroundColor: 'background.secondary',
-                  padding: '1rem',
-                }}
-              >
-                <Stack spacing={'0.5rem'}>
-                  <Typography variant="Body1Emphasis">
-                    {interview.question}
-                  </Typography>
-                  <FormAnswer interview={interview} index={index} />
-                </Stack>
-              </Card>
-            ))
-          ) : (
-            <Typography>인터뷰가 없습니다.</Typography>
-          )}
+        <Stack p={2} spacing={1}>
+          <Typography fontWeight="bold">인터뷰 답변</Typography>
+          <Stack
+            borderRadius={2}
+            p={isPc ? 2 : 0}
+            overflow={'auto'}
+            height={isPc ? '16rem' : '100%'}
+            width={isPc ? '20rem' : '100%'}
+            ref={scrollRef}
+          >
+            <Stack height={'fit-content'} spacing={'1rem'}>
+              {!member && <Typography>신청한 사람이 없습니다.</Typography>}
+              {member && member.answers ? (
+                member.answers.map((interview, index) => (
+                  <Card
+                    key={interview.question}
+                    sx={{
+                      backgroundColor: 'background.secondary',
+                      padding: '1rem',
+                      height: 'fit-content',
+                    }}
+                  >
+                    <Stack spacing={'0.5rem'}>
+                      <Typography variant="Body1Emphasis">
+                        {interview.question}
+                      </Typography>
+                      <FormAnswer interview={interview} index={index} />
+                    </Stack>
+                  </Card>
+                ))
+              ) : (
+                <Typography>인터뷰가 없습니다.</Typography>
+              )}
+            </Stack>
+          </Stack>
         </Stack>
       </Stack>
     </Card>
