@@ -290,7 +290,7 @@ const AlertIcon = () => {
               </Stack>
 
               <Box sx={{ overflowY: 'auto', height: '75svh' }}>
-                <Stack height={'fit-content'}>
+                <Stack height={'fit-content'} padding={'0.15rem'}>
                   {alarms.length === 0 ? (
                     <NoDataDolphin
                       backgroundColor="transparent"
