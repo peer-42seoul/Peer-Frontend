@@ -3,6 +3,7 @@ import KakaoIcon from '../../../../../public/icons/public/kakaoIcon.svg'
 import GoogleIcon from '../../../../../public/icons/public/googleIcon.svg'
 import SlackIcon from '../../../../../public/icons/public/slackIcon.svg'
 import DiscordIcon from '../../../../../public/icons/public/discordIcon.svg'
+import MessageIcon from '../../../../../public/icons/public/messageIcon.svg'
 
 import React from 'react'
 import {
@@ -13,7 +14,6 @@ import {
   styled,
   tooltipClasses,
 } from '@mui/material'
-import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined'
 import * as style from './LinkButton.style'
 
 interface IIconProps {
@@ -47,7 +47,7 @@ const ResponsiveIcon = ({ link, variant }: IIconProps) => {
     } else if (link.includes('discord')) {
       return DiscordIcon
     } else {
-      return InsertLinkOutlinedIcon
+      return MessageIcon
     }
   }
   const Icon = iconHnadler(link)
@@ -56,6 +56,8 @@ const ResponsiveIcon = ({ link, variant }: IIconProps) => {
     <Button
       variant={variant}
       href={convertLink(link)}
+      target="_blank"
+      rel="noopener noreferrer" // 보안을 위한 속성을 추가했습니다.
       sx={style.button}
       disabled={!link}
     >

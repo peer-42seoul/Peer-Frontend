@@ -38,6 +38,7 @@ import {
 import SearchOptionPanel from '@/app/panel/main-page/MainPanel'
 import SelectSort from '@/app/panel/main-page/SelectSort'
 import useMedia from '@/hook/useMedia'
+import Footer from './main-page/Footer'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -258,20 +259,28 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   ))}
                 </Stack>
               </Stack>
-              <Stack alignItems={'center'} mt={'1rem'}>
+              {/* <Stack alignItems={'center'} mt={'1rem'}>
                 <Pagination
                   count={data?.totalPages}
                   page={page}
                   onChange={handleChangePage}
                   siblingCount={0}
                 />
-              </Stack>
+              </Stack> */}
             </>
           )}
           <Box sx={floatButtonStyle}>
             <FloatEditButton />
           </Box>
+          <Stack alignItems={'center'} mt={'1rem'} mb={'1rem'}>
+            <Pagination
+              count={data?.totalPages}
+              page={page}
+              onChange={handleChangePage}
+            />
+          </Stack>
         </Container>
+        <Footer />
       </div>
 
       {/* pc view */}
@@ -348,13 +357,13 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   </Grid>
                 </>
               )}
-              <Stack alignItems={'center'} mt={'1rem'}>
+              {/* <Stack alignItems={'center'} mt={'1rem'} mb={'1rem'}>
                 <Pagination
                   count={data?.totalPages}
                   page={page}
                   onChange={handleChangePage}
                 />
-              </Stack>
+              </Stack> */}
             </Stack>
             {!isTablet && (
               <Stack sx={sideMenuStyle}>
@@ -364,7 +373,15 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
               </Stack>
             )}
           </Stack>
+          <Stack alignItems={'center'} mt={'1rem'} mb={'1rem'}>
+            <Pagination
+              count={data?.totalPages}
+              page={page}
+              onChange={handleChangePage}
+            />
+          </Stack>
         </Container>
+        <Footer />
       </div>
       <PwaInstallBanner />
     </>
