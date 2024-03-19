@@ -5,6 +5,7 @@ import { IPagination } from '@/types/IPagination'
 import PwaInstallBanner from './PwaInstallBanner'
 import MainMobileView from '@/app/panel/main-page/MainMobileView'
 import MainPcView from '@/app/panel/main-page/MainPcView'
+import Footer from '@/app/panel/main-page/Footer'
 
 export interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -25,10 +26,12 @@ const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
       {/* mobile view */}
       <div className="mobile-layout">
         <MainMobileView initData={initData} />
+        <Footer />
       </div>
       {/* pc view */}
       <div className="pc-layout">
         <MainPcView initData={initData} />
+        <Footer />
       </div>
       <PwaInstallBanner />
     </>

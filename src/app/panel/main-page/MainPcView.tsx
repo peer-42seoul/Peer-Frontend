@@ -110,13 +110,6 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
               </Grid>
             </>
           )}
-          <Stack alignItems={'center'} mt={'1rem'}>
-            <Pagination
-              count={data?.totalPages}
-              page={page}
-              onChange={handleChangePage}
-            />
-          </Stack>
         </Stack>
         {!isTablet && (
           <Stack sx={sideMenuStyle}>
@@ -125,6 +118,13 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <MainCarousel />
           </Stack>
         )}
+      </Stack>
+      <Stack alignItems={'center'} my={'1rem'}>
+        <Pagination
+          count={data?.totalPages}
+          page={page}
+          onChange={handleChangePage}
+        />
       </Stack>
     </Container>
   )
