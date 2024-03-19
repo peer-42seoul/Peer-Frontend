@@ -8,10 +8,18 @@ import { Pretendard } from './panel/font'
 import ToastNotification from './panel/layout-panel/ToastNotification'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 import DataPickerProvider from './DataPickerProvider'
+import GoogleAnalytics from '@/utils/gtag'
+
+const webMetadata = {
+  title: 'peer',
+  description: '동료를 찾기 위한 가장 빠른 선택',
+  url: 'https://peer-study.co.kr/',
+  image: 'images/og-image.png',
+}
 
 export const metadata: Metadata = {
-  title: 'peer',
-  description: 'This is a website of the peer, by the peer, for the peer.',
+  title: webMetadata.title,
+  description: webMetadata.description,
 }
 
 // 개선 필요, 레이아웃 쉬프트 현상 고쳐야함
@@ -51,8 +59,26 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" />
         <meta name="theme-color" content="#010456" />
+        {/* Html meta tag */}
+        <title>{webMetadata.title}</title>
+        <meta name="description" content={webMetadata.description} />
+        {/* Facebook meta tag */}
+        <meta property="og:title" content={webMetadata.title} />
+        <meta property="og:description" content={webMetadata.description} />
+        <meta property="og:image" content={webMetadata.image} />
+        <meta property="og:url" content={webMetadata.url} />
+        <meta property="og:type" content="website" />
+        {/* Twitter meta tag */}
+        <meta name="twitter:title" content={webMetadata.title} />
+        <meta name="twitter:description" content={webMetadata.description} />
+        <meta name="twitter:image" content={webMetadata.image} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content={webMetadata.url} />
       </head>
       <body className={Pretendard.variable}>
+        {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
+          <GoogleAnalytics ga_id={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
+        ) : null}
         <AppRouterCacheProvider>
           <CuSWRConfig>
             <MuiThemeProvider>

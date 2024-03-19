@@ -20,10 +20,8 @@ const RecruitDetailContent = ({
   return (
     <Stack gap={'1.5rem'}>
       <RecruitContentText
-        label="작성자"
-        content={
-          data?.leader_nickname ? data.leader_nickname : '존재하지 않는 유저'
-        }
+        label="팀명"
+        content={data?.teamName}
         icon={<PersonOutlineOutlinedIcon />}
       />
       <RecruitContentText
