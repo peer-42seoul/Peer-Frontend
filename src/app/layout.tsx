@@ -8,6 +8,7 @@ import { Pretendard } from './panel/font'
 import ToastNotification from './panel/layout-panel/ToastNotification'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 import DataPickerProvider from './DataPickerProvider'
+import GoogleAnalytics from '@/utils/gtag'
 
 const webMetadata = {
   title: 'peer',
@@ -75,6 +76,9 @@ export default function RootLayout({
         <meta property="twitter:domain" content={webMetadata.url} />
       </head>
       <body className={Pretendard.variable}>
+        {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
+          <GoogleAnalytics ga_id={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
+        ) : null}
         <AppRouterCacheProvider>
           <CuSWRConfig>
             <MuiThemeProvider>
