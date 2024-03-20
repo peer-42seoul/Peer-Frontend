@@ -18,7 +18,7 @@ const LabelWithIcon = ({
       sx={{ width: '100%', height: '1.5rem' }}
     >
       {svgIcon}
-      <Typography variant={'CaptionEmphasis'} color={color}>
+      <Typography variant={'Body2Emphasis'} color={color}>
         {message}
       </Typography>
     </Stack>
