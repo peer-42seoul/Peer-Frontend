@@ -3,19 +3,11 @@ import { IconButton, Stack, SwipeableDrawer, Typography } from '@mui/material'
 import Options from './Options'
 import useMedia from '@/hook/useMedia'
 import { ProjectType } from '@/types/IPostDetail'
+import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
 
-const SearchOption = ({
-  openOption,
-  setOpenOption,
-  setDetailOption,
-  type,
-}: {
-  openOption: boolean
-  setOpenOption: any
-  setDetailOption: any
-  type: ProjectType
-}) => {
+const SearchOption = ({ type }: { type: ProjectType }) => {
   const { isPc } = useMedia()
+  const { openOption, setOpenOption } = useMainOptionsStore()
   const typeTitle = type === 'PROJECT' ? '프로젝트' : '스터디'
   const titleColor = openOption ? 'purple.strong' : 'white'
 
@@ -44,9 +36,7 @@ const SearchOption = ({
             {openOption ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </Stack>
-        <Stack>
-          {openOption && <Options setDetailOption={setDetailOption} />}
-        </Stack>
+        <Stack>{openOption && <Options />}</Stack>
       </Stack>
     )
 
@@ -99,10 +89,7 @@ const SearchOption = ({
               {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
             </IconButton>
           </Stack>
-          <Options
-            setDetailOption={setDetailOption}
-            setOpenOption={setOpenOption}
-          />
+          <Options setOpenOption={setOpenOption} />
         </Stack>
       </SwipeableDrawer>
     </Stack>

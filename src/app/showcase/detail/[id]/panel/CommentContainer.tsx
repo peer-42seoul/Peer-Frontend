@@ -112,7 +112,7 @@ const Comment = ({ data, postId }: CommentProps) => {
                 sx={style.avatarStyle}
               />
             </OthersProfile>
-            <Typography variant="Caption" color={'text.alternative'}>
+            <Typography variant="Body2" color={'text.alternative'}>
               {data.authorNickname}
             </Typography>
           </Box>

@@ -22,8 +22,7 @@ export interface IAlarm {
 
 interface IStoreAlarmState {
   isNew: boolean
-
-  isNewAlarm: (isLogin: boolean) => void
+  isNewAlarm: (isLogin: boolean, accessToken: string) => void
   checkNewAlarm: () => void
   alarms: IAlarm[]
   resetAlarms: () => void
@@ -37,7 +36,7 @@ const useAlarmStorage = create<IStoreAlarmState>((set) => {
 
   return {
     isNew: false,
-    isNewAlarm: (isLogin: boolean) => {
+    isNewAlarm: (isLogin: boolean, accessToken: string) => {
       if (!isLogin) {
         return
       }

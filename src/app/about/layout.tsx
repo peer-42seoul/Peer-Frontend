@@ -1,8 +1,8 @@
 'use client'
 
 import useMedia from '@/hook/useMedia'
-import useAboutLayout from '@/states/useAboutLayout'
 import { Button, ButtonGroup, Stack, Typography, styled } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import { ReactNode } from 'react'
 
 const StyledButtonGroup = styled(ButtonGroup)({
@@ -12,22 +12,30 @@ const StyledButtonGroup = styled(ButtonGroup)({
 })
 
 const Sidebar = () => {
+  const router = useRouter()
   const { isPc } = useMedia()
-  const { setBoard } = useAboutLayout()
 
   return (
     <Stack alignItems={!isPc ? 'center' : ''}>
       <Typography variant="Title1Emphasis">About Us</Typography>
       <StyledButtonGroup variant="text" orientation="vertical" fullWidth>
-        <Button onClick={() => setBoard('PEER')}>
+        <Button onClick={() => router.push('/about')}>
           Peer는 어떤 커뮤니티인가
         </Button>
-        <Button onClick={() => setBoard('MIND')}>Peer 철학 & 비전</Button>
-        <Button onClick={() => setBoard('ANNOUNCE')}>공지사항</Button>
-        <Button onClick={() => setBoard('DICTIONARY')}>Peer 개발백서</Button>
-        <Button onClick={() => setBoard('CONTACT')}>Contact us</Button>
-        <Button onClick={() => setBoard('PERSONAL')}>개인정보 보호 방침</Button>
-        <Button onClick={() => setBoard('SERVICE')}>
+        <Button onClick={() => router.push('/about/mind')}>
+          Peer 철학 & 비전
+        </Button>
+        <Button onClick={() => router.push('/about/announce')}>공지사항</Button>
+        <Button onClick={() => router.push('/about/dictionary')}>
+          Peer 개발백서
+        </Button>
+        <Button onClick={() => router.push('/about/contact')}>
+          Contact us
+        </Button>
+        <Button onClick={() => router.push('/about/personal')}>
+          개인정보 보호 방침
+        </Button>
+        <Button onClick={() => router.push('/about/service')}>
           통합 서비스 이용약관
         </Button>
       </StyledButtonGroup>
@@ -35,19 +43,7 @@ const Sidebar = () => {
   )
 }
 
-interface AboutPageProps {
-  contact: ReactNode
-  personal: ReactNode
-  announce: ReactNode
-  mind: ReactNode
-  dictionary: ReactNode
-  service: ReactNode
-  peer: ReactNode
-  detail: ReactNode
-}
-
-const AboutPage = (props: AboutPageProps) => {
-  const { boardType } = useAboutLayout()
+const AboutPage = ({ children }: { children: ReactNode }) => {
   const { isPc, isTablet } = useMedia()
 
   if (isPc) {
@@ -57,16 +53,7 @@ const AboutPage = (props: AboutPageProps) => {
           <Stack flex={1}>
             <Sidebar />
           </Stack>
-          <Stack flex={3}>
-            {boardType === 'PEER' && props.peer}
-            {boardType === 'MIND' && props.mind}
-            {boardType === 'ANNOUNCE' && props.announce}
-            {boardType === 'DICTIONARY' && props.dictionary}
-            {boardType === 'CONTACT' && props.contact}
-            {boardType === 'PERSONAL' && props.personal}
-            {boardType === 'SERVICE' && props.service}
-            {boardType === 'ANNOUNCE_DETAIL' && props.detail}
-          </Stack>
+          <Stack flex={3}>{children}</Stack>
         </Stack>
       </Stack>
     )
@@ -74,16 +61,7 @@ const AboutPage = (props: AboutPageProps) => {
 
   return (
     <Stack spacing={'2rem'}>
-      <Stack>
-        {boardType === 'PEER' && props.peer}
-        {boardType === 'MIND' && props.mind}
-        {boardType === 'ANNOUNCE' && props.announce}
-        {boardType === 'DICTIONARY' && props.dictionary}
-        {boardType === 'CONTACT' && props.contact}
-        {boardType === 'PERSONAL' && props.personal}
-        {boardType === 'SERVICE' && props.service}
-        {boardType === 'ANNOUNCE_DETAIL' && props.detail}
-      </Stack>
+      <Stack>{children}</Stack>
       <Sidebar />
     </Stack>
   )

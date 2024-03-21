@@ -23,6 +23,7 @@
     "@mui/x-date-pickers": "^6.19.2",
     "@next/eslint-plugin-next": "^13.4.19",
     "@toast-ui/editor": "^3.2.2",
+    "@types/gtag.js": "^0.0.19",
     "@types/lodash": "^4.14.199",
     "@types/node": "20.5.3",
     "@types/react": "18.2.21",

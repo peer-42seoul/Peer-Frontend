@@ -120,6 +120,7 @@ const AlertIcon = () => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const accessToken = useAuthStore.getState().accessToken
 
   const { target, spinner } = useInfiniteScroll({
     setPage,
@@ -131,8 +132,10 @@ const AlertIcon = () => {
   })
 
   useEffect(() => {
-    isNewAlarm(isLogin)
-  }, [pathname, searchParams, isLogin, isNewAlarm])
+    if (accessToken) {
+      isNewAlarm(isLogin, accessToken)
+    }
+  }, [pathname, searchParams, isLogin, isNewAlarm, accessToken])
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -201,9 +204,7 @@ const AlertIcon = () => {
           />
         </Badge>
       </IconButton>
-      {/* <CuModal open={isOpen} onClose={closeModal} title="잠깐!">
-        <ForbiddenDolphin message="알림 기능은 조금만 기다려주세요!!" />
-      </CuModal> */}
+
       <Drawer
         PaperProps={{
           sx: {
@@ -226,7 +227,6 @@ const AlertIcon = () => {
             height: '100dvh',
             pt: 7,
             backgroundColor: 'background.primary',
-            // overflowY: 'auto',
           }}
         >
           <Stack direction={'row'} mb={'0.25rem'}>
@@ -290,7 +290,7 @@ const AlertIcon = () => {
               </Stack>
 
               <Box sx={{ overflowY: 'auto', height: '75svh' }}>
-                <Stack height={'fit-content'}>
+                <Stack height={'fit-content'} padding={'0.15rem'}>
                   {alarms.length === 0 ? (
                     <NoDataDolphin
                       backgroundColor="transparent"

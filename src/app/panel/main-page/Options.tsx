@@ -17,15 +17,15 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import { ITag } from '@/types/IPostDetail'
 import SettingSelect from '@/app/teams/[id]/setting/panel/SettingSelect'
 import useMedia from '@/hook/useMedia'
+import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
 
 const Options = ({
-  setDetailOption,
   setOpenOption,
 }: {
-  setDetailOption: any
   setOpenOption?: (value: boolean) => void
 }) => {
   const { isPc } = useMedia()
+  const { setDetailOptions } = useMainOptionsStore()
   const { handleSubmit, control, reset } = useForm({
     defaultValues: {
       placeOnline: false,
@@ -74,7 +74,7 @@ const Options = ({
 
     const tag = tagData.length ? tagData.map((tag) => tag.name).join(',') : ''
     //제출할 때는 숫자로 들어옴
-    setDetailOption({
+    setDetailOptions({
       due1: due[0],
       due2: due[1],
       region1: parentLocation === '선택안함' ? '' : parentLocation,
@@ -94,7 +94,7 @@ const Options = ({
     setTagData([])
     setLocation('')
     setParentLocation('')
-    setDetailOption({
+    setDetailOptions({
       due1: 0,
       due2: 100,
       region1: '',

@@ -40,15 +40,16 @@ const MemberInformation = ({ member }: { member: IMember }) => {
         />
       )}
 
-      <Typography variant={'Body2'} sx={{ color: 'text.normal' }}>
+      <Typography variant={'Body1'} sx={{ color: 'text.normal' }}>
         {/* /탈퇴한 유저의 경우 image = null, nickname = 탈퇴한 유저, role = null */}
         {member.nickname ?? '탈퇴한 유저'}
       </Typography>
-      {member.isLeader && (
+      {/* NOTE : member 데이터에 isLeader라는 데이터가 없어 보임. */}
+      {/* {member.isLeader && (
         <Typography variant={'Body2'} sx={{ color: 'purple.strong' }}>
           리더
         </Typography>
-      )}
+      )} */}
       <Typography variant={'CaptionEmphasis'} sx={{ color: 'purple.strong' }}>
         {member.role}
       </Typography>

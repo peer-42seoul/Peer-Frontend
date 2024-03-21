@@ -11,6 +11,7 @@ import {
 import { SystemIcon, TeamIcon, MessageIcon } from './Icons'
 import { CloseIcon } from '@/icons'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 interface IAlertCard {
   alert: IAlarm
@@ -23,7 +24,7 @@ const AlertCard = ({ alert, handleDelete }: IAlertCard) => {
     <Card
       sx={{
         m: 2,
-        height: '4rem',
+        height: '6.5rem',
         display: 'flex',
         alignItems: 'center',
       }}
@@ -31,16 +32,14 @@ const AlertCard = ({ alert, handleDelete }: IAlertCard) => {
     >
       <CardActionArea
         sx={{
-          height: '4rem',
+          height: '6.3rem',
           display: 'flex',
           alignItems: 'center',
         }}
         onClick={() => router.push(alert.redirectUrl)}
       >
         <Stack p={'0.5rem'} flex={1}>
-          {alert.type === AlarmType.SYSTEM && <SystemIcon fontSize="large" />}
-          {alert.type === AlarmType.TEAM && <TeamIcon fontSize="large" />}
-          {alert.type === AlarmType.MESSAGE && <MessageIcon fontSize="large" />}
+          <Image src={alert.iconUrl} alt={alert.type} width={50} height={50} />
         </Stack>
         <Stack
           direction={'row'}
@@ -49,18 +48,31 @@ const AlertCard = ({ alert, handleDelete }: IAlertCard) => {
           alignItems={'center'}
           flex={8}
         >
-          <Typography
-            variant="Body2"
-            sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: '2',
-              WebkitBoxOrient: 'vertical',
-            }}
-          >
-            {alert.body}
-          </Typography>
+          <Stack display={'flex'}>
+            <Stack>
+              {alert.type === AlarmType.SYSTEM && <SystemIcon />}
+              {alert.type === AlarmType.TEAM && <TeamIcon />}
+              {alert.type === AlarmType.MESSAGE && <MessageIcon />}
+            </Stack>
+            <Stack
+              minHeight={'4rem'}
+              justifyContent={'center'}
+              alignItems={'center'}
+            >
+              <Typography
+                variant="Body2"
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: '3',
+                  WebkitBoxOrient: 'vertical',
+                }}
+              >
+                {alert.body}
+              </Typography>
+            </Stack>
+          </Stack>
         </Stack>
       </CardActionArea>
       <Stack flex={1}>
