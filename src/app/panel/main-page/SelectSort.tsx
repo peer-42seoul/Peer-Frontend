@@ -1,13 +1,10 @@
 import { MenuItem, Typography } from '@mui/material'
-import { ProjectSort } from '../MainPage'
 import CuSelect from '@/components/CuSelect'
+import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
 
-interface ISelectSortProps {
-  sort: ProjectSort | undefined
-  setSort: (value: ProjectSort) => void
-}
+const SelectSort = () => {
+  const { sort, setSort } = useMainOptionsStore()
 
-const SelectSort = ({ sort, setSort }: ISelectSortProps) => {
   return (
     <CuSelect value={sort ?? 'latest'} setValue={setSort}>
       <MenuItem value={'latest'}>

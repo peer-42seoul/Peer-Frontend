@@ -27,9 +27,12 @@ const CuPhotoBox = ({
     <Box
       onClick={onClick}
       style={{
+        width: '100%', // style에 width를 지정하지 않으면 이미지가 보이지 않음
+        height: '100%', // style에 height를 지정하지 않으면 이미지가 보이지 않음
         ...style,
         position: 'relative',
         margin: 0,
+        borderRadius: '0.5rem',
         ...(error && {
           backgroundColor: '#ffffff',
           border: '1px solid',
@@ -42,7 +45,11 @@ const CuPhotoBox = ({
           src={src}
           alt={alt}
           fill
-          style={{ ...imgStyle, objectFit: objectStyle }}
+          style={{
+            borderRadius: '0.5rem', // 모서리 둥굴게를 원하지 않으면 imgStyle에 borderRadius를 undefined로 설정
+            ...imgStyle,
+            objectFit: objectStyle,
+          }}
           sizes="100%"
           priority={priorityOption}
           onError={() => setError(true)}

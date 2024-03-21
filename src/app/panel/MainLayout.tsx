@@ -62,7 +62,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       {isPc ? (
         <div className="pc-layout">
           <PcNav />
-          <Box sx={{ marginY: '64px' }}>{children}</Box>
+          <Box sx={{ marginTop: '64px' }}>{children}</Box>
         </div>
       ) : (
         <div className="mobile-layout">

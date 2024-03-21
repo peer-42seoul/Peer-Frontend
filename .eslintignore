@@ -1,0 +1,3 @@
+**/*.storybook.ts
+**/*.storybook.tsx
+*.d.ts

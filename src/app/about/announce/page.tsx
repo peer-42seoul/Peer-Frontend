@@ -4,7 +4,6 @@ import { defaultGetFetcher } from '@/api/fetchers'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import useMedia from '@/hook/useMedia'
-import useAboutLayout from '@/states/useAboutLayout'
 import { IPagination } from '@/types/IPagination'
 import {
   Card,
@@ -14,6 +13,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import { ChangeEvent, useState } from 'react'
 import useSWR from 'swr'
 
@@ -43,7 +43,7 @@ function formatDate(dateStr: string | null) {
 }
 
 const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
-  const { setAnnounceDetail } = useAboutLayout()
+  const router = useRouter()
 
   return (
     <CardActions
@@ -55,7 +55,7 @@ const AnnounceCard = ({ title, writer, date, id }: AnnounceCardProps) => {
       }}
     >
       <CardActionArea
-        onClick={() => setAnnounceDetail(id)}
+        onClick={() => router.push(`/about/announce/${id}`)}
         sx={{
           '.MuiCardActionArea-focusHighlight': {
             background: 'transparent',

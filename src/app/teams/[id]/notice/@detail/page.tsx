@@ -50,15 +50,7 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
   }
 
   if (postId === undefined) return null
-  if (!data || error)
-    return (
-      <StatusMessage
-        boardType={'NOTICE'}
-        message={'문제가 발생했습니다.'}
-        onClickEditButton={() => setNotice('EDIT', postId)}
-        author={!!data?.isAuthor}
-      />
-    )
+
   if (isLoading)
     return (
       <StatusMessage
@@ -68,6 +60,17 @@ const TeamNoticeView = ({ params }: { params: { id: string } }) => {
         author={!!data?.isAuthor}
       />
     )
+
+  if (!data || error)
+    return (
+      <StatusMessage
+        boardType={'NOTICE'}
+        message={'문제가 발생했습니다.'}
+        onClickEditButton={() => setNotice('EDIT', postId)}
+        author={!!data?.isAuthor}
+      />
+    )
+
   return (
     <>
       <DetailPage boardType={'NOTICE'} handleGoBack={handleGoBack}>
