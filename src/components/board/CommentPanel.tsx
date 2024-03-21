@@ -181,7 +181,7 @@ export const CommentItem = ({
             sx={{ flex: '1 0 0' }}
           >
             <CuAvatar sx={style.Avatar} src={comment.authorImage} />
-            <Typography color={'text.alternative'} variant={'Body2'}>
+            <Typography color={'text.alternative'} variant={'Caption'}>
               {comment.authorNickname}
             </Typography>
           </Stack>
@@ -221,8 +221,8 @@ export const CommentItem = ({
           </form>
         ) : (
           <Box sx={{ paddingRight: '2.5rem', wordBreak: 'break-all' }}>
-            <Typography variant={'Body1'}>{comment.content}</Typography>
-            <Typography variant={'Caption'} color={'text.assistive'}>
+            <Typography variant={'Body2'}>{comment.content}</Typography>
+            <Typography variant={'Tag'} color={'text.assistive'}>
               {dayjs(UTCtoLocalTime(comment.createAt)).format(
                 'YYYY년 MM월 DD일 hh:mm A',
               )}

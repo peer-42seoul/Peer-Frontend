@@ -102,6 +102,7 @@ const Comment = ({ data, postId }: CommentProps) => {
       <Stack sx={style.commentListContainer}>
         <Box sx={style.isEditContainer}>
           <Box sx={style.commenterInfo}>
+            {/* TODO : OthersProfile 컴포넌트로 감싸기 */}
             <OthersProfile
               userId={data.authorId.toString()}
               name={data.authorNickname}
@@ -112,7 +113,7 @@ const Comment = ({ data, postId }: CommentProps) => {
                 sx={style.avatarStyle}
               />
             </OthersProfile>
-            <Typography variant="Body2" color={'text.alternative'}>
+            <Typography variant="Caption" color={'text.alternative'}>
               {data.authorNickname}
             </Typography>
           </Box>

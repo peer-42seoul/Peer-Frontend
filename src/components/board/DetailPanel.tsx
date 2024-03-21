@@ -84,9 +84,7 @@ export const DetailContentCotainer = ({
   return (
     <Stack sx={isPc ? style.DetailContent : undefined} spacing={'2rem'}>
       <Stack direction={'row'} justifyContent={'space-between'}>
-        <Typography variant={'Body1Emphasis'}>
-          {isPc ? containerTitle : ''}
-        </Typography>
+        <Typography>{isPc ? containerTitle : ''}</Typography>
         {author && (
           <CuButton
             message={'수정'}
@@ -129,7 +127,7 @@ export const StatusMessage = ({
 
 const ContentTitle = ({ title }: { title: string }) => {
   return (
-    <Typography color={'text.strong'} variant={'Body2Emphasis'}>
+    <Typography color={'text.strong'} variant={'CaptionEmphasis'}>
       {title}
     </Typography>
   )
@@ -137,7 +135,7 @@ const ContentTitle = ({ title }: { title: string }) => {
 
 const Content = ({ content }: { content: string }) => {
   return (
-    <Typography color={'text.alternative'} variant={'Body1'}>
+    <Typography color={'text.alternative'} variant={'Body2'}>
       {content}
     </Typography>
   )
