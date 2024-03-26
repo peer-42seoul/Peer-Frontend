@@ -70,12 +70,16 @@ const SkillsEditor = ({
         endIconButton={
           <Tutorial title="스킬 추가 방법" content={<SkillsTutorial />} />
         }
+        sx={{
+          width: '100%',
+        }}
       >
         <SkillAutocomplete
           skillList={selected}
           setSkillList={setSelected}
           type="SKILL"
           placeholder="스킬을 입력해주세요"
+          autocompleteSx={{ width: '100%' }}
         />
       </FieldWithLabel>
     </CuModal>
