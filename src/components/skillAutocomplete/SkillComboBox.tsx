@@ -5,7 +5,7 @@ import {
   SxProps,
   TextField,
 } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ControllerRenderProps, UseFormTrigger } from 'react-hook-form'
 import { convertNonAlphabeticToHex } from '@/utils/convertNonAlpbabetToHex'
 import { getUniqueArray } from '@/utils/getUniqueArray'
@@ -36,21 +36,27 @@ const SkillComboBox = ({
 }) => {
   const [text, setText] = useState('') // 검색 텍스트
 
-  const timeOutRef = useRef(TIMEOUT)
   const [isLoading, setIsLoading] = useState(false)
+  const [timeout, setTimeout] = useState(TIMEOUT)
 
   const axiosWithAuth = useAxiosWithAuth()
 
   useEffect(() => {
     const countdown = setInterval(() => {
-      timeOutRef.current -= TIMEOUT / 5
-    }, TIMEOUT / 5)
+      setTimeout((prev) => {
+        if (prev === 0) {
+          return prev
+        } else {
+          return prev - TIMEOUT / 2
+        }
+      })
+    }, TIMEOUT / 2)
 
     return () => clearInterval(countdown)
   }, [])
 
   useEffect(() => {
-    if (timeOutRef.current === 0 && text !== '' && isLoading) {
+    if (timeout === 0 && text !== '' && isLoading) {
       axiosWithAuth
         .get(
           `${
@@ -64,8 +70,11 @@ const SkillComboBox = ({
         .catch(() => {
           setIsLoading(false)
         })
+        .finally(() => {
+          setTimeout(TIMEOUT)
+        })
     }
-  }, [timeOutRef.current])
+  }, [timeout])
 
   const handleTextFieldChange = (e: any) => {
     setText(e.target.value)
@@ -75,7 +84,7 @@ const SkillComboBox = ({
     } else if (isLoading === false) {
       setIsLoading(true)
     }
-    timeOutRef.current = TIMEOUT
+    setTimeout(TIMEOUT)
   }
 
   const handleInput = (_: any, value: string[]) => {
@@ -133,7 +142,7 @@ const SkillComboBox = ({
                     }}
                   />
                 ) : null}
-                {params.InputProps.endAdornment}
+                {/* {params.InputProps.endAdornment} */}
               </>
             ),
           }}
