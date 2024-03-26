@@ -55,7 +55,6 @@ const SkillAutocomplete = ({
         flexWrap={'wrap'}
         justifyContent={'flex-start'}
         alignItems={'center'}
-        maxWidth={'26rem'}
       >
         <Stack
           direction={'row'}
