@@ -8,7 +8,12 @@ import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
 const SearchOption = ({ type }: { type: ProjectType }) => {
   const { isPc } = useMedia()
   const { openOption, setOpenOption } = useMainOptionsStore()
-  const typeTitle = type === 'PROJECT' ? '프로젝트' : '스터디'
+  const typeTitles: { [key in ProjectType]: string } = {
+    STUDY: '스터디',
+    PROJECT: '프로젝트',
+    ALL: '전체',
+  }
+  const typeTitle = typeTitles[type]
   const titleColor = openOption ? 'purple.strong' : 'white'
 
   if (isPc)

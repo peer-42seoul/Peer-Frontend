@@ -1,6 +1,6 @@
 import { SxProps } from '@mui/material'
 
-export type ProjectType = 'STUDY' | 'PROJECT'
+export type ProjectType = 'STUDY' | 'PROJECT' | 'ALL'
 
 export interface ITag {
   tagId: number
