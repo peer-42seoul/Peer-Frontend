@@ -1,21 +1,9 @@
 importScripts(
-  'https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js',
+  'https://www.gstatic.com/firebasejs/9.14.0/firebase-app-compat.js',
 )
-
-// 1. 서비스 워커 설치 및 등록
-
-self.addEventListener('install', (event) => {
-  // 서비스 워커 설치
-  console.log('[Service Worker] Install')
-  self.skipWaiting()
-})
-
-self.addEventListener('activate', (event) => {
-  // 서비스 워커 활성화
-  console.log('[Service Worker] Activate')
-})
-
-// 2. 푸시 메시지 수신 및 알림 표시
+importScripts(
+  'https://www.gstatic.com/firebasejs/9.14.0/firebase-messaging-compat.js',
+)
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCVBmOaZ34Loogn8Ig7SFXTfO10IEThLOw',
@@ -37,14 +25,15 @@ messaging.onBackgroundMessage((payload) => {
     payload,
   )
   // Customize notification here
-  const notificationTitle = payload.notification.title
+  const notificationTitle = 'Background Message Title'
   const notificationOptions = {
-    body: payload.notification.body,
-    icon: '/icons/ios/192.png',
-    link: '/', // 추후 변경
+    body: 'Background Message body.',
+    icon: '/images/icons/icon-72x72.png',
   }
 
-  self.registration.showNotification(notificationTitle, notificationOptions)
+  payload.waitUntil(
+    registration.showNotification(notificationTitle, notificationOptions),
+  )
 })
 
 self.addEventListener('push', (event) => {
@@ -53,11 +42,14 @@ self.addEventListener('push', (event) => {
   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
   const data = event.data.json().notification
 
+  console.log('send result', data) // 디버그용
   const title = data.title
+
   const options = {
+    title: data.title,
     body: data.body,
-    icon: '/icons/ios/192.png',
-    link: '/', // 추후 변경
+    icon: '/images/icons/icon-192x192.png',
+    link: data.link, // 추후 변경
   }
 
   event.waitUntil(registration.showNotification(title, options))
@@ -66,9 +58,8 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   // 알림 클릭
   console.log('[Service Worker] Notification click Received.')
+  console.log('event', event.notification.data) // 디버그용
   event.notification.close()
   // 터치하면 리다이렉션
   event.waitUntil(clients.openWindow(event.notification.data.link))
 })
-
-// 3. 프리 캐싱
