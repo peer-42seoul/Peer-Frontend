@@ -6,7 +6,6 @@ import ShowcaseViewer from './panel/ShowcaseViewer'
 import { IShowcaseViewerFields } from '@/types/IShowcaseEdit'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import useSWR from 'swr'
-// import { defaultGetFetcher } from '@/api/fetchers'
 import CommentContainer from './panel/CommentContainer'
 import useAxiosWithAuth from '@/api/config'
 
@@ -30,7 +29,9 @@ const ShowcaseDetailPage = ({ params }: { params: { id: number } }) => {
   return (
     data && (
       <Stack gap={'2rem'}>
+        {/* 쇼케이스 상세 페이지 */}
         <ShowcaseViewer data={data} postId={params.id} />
+        {/* 쇼케이스 상세 댓글 */}
         <CommentContainer postId={params.id} />
       </Stack>
     )
