@@ -20,6 +20,7 @@ export const CommentWriter = ({
   const onChangeContent = (event: ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value)
   }
+
   const submitContent = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
@@ -68,7 +69,7 @@ export const CommentWriter = ({
   }
 
   return (
-    <Container sx={style.writerWrapper}>
+    <Container component={'article'} sx={style.writerWrapper}>
       <Stack sx={style.writerContainer}>
         <form onSubmit={submitContent} style={style.writerForm}>
           <Stack sx={style.writerInputContainer}>

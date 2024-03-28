@@ -9,7 +9,7 @@ import { CommentProps } from '@/types/IComment'
 import { Box, Stack, TextField, Typography } from '@mui/material'
 import * as style from './CommentContainer.style'
 
-const CommentInput = ({ data, postId }: CommentProps) => {
+const CommentItem = ({ data, postId }: CommentProps) => {
   const { closeModal, openModal, isOpen } = useModal()
   const {
     isEdit,
@@ -25,7 +25,7 @@ const CommentInput = ({ data, postId }: CommentProps) => {
 
   return (
     <>
-      <Stack sx={style.commentListContainer}>
+      <Stack component={'article'} sx={style.commentListContainer}>
         <Box sx={style.isEditContainer}>
           <Box sx={style.commenterInfo}>
             <OthersProfile
@@ -113,4 +113,4 @@ const CommentInput = ({ data, postId }: CommentProps) => {
   )
 }
 
-export default CommentInput
+export default CommentItem

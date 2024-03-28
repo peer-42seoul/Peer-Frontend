@@ -28,7 +28,7 @@ const ShowcaseDetailPage = ({ params }: { params: { id: number } }) => {
 
   return (
     data && (
-      <Stack gap={'2rem'}>
+      <Stack component={'main'} gap={'2rem'}>
         {/* 쇼케이스 상세 페이지 */}
         <ShowcaseViewer data={data} postId={params.id} />
         {/* 쇼케이스 상세 댓글 */}

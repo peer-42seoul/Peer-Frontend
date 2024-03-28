@@ -6,7 +6,7 @@ import React from 'react'
 import useSWR, { mutate } from 'swr'
 import { CommentWriter } from './CommentWriter'
 import * as style from './CommentContainer.style'
-import CommentInput from './\bCommentInput'
+import CommentItem from './CommentItem'
 
 const CommentContainer = ({ postId }: IPostId) => {
   const axiosWithAuth = useAxiosWithAuth()
@@ -41,7 +41,7 @@ const CommentContainer = ({ postId }: IPostId) => {
   }
   return (
     <>
-      <Container sx={style.containerWrapper}>
+      <Container component={'section'} sx={style.containerWrapper}>
         <Stack sx={style.CommentContainer}>
           <Typography
             variant={'Title3'}
@@ -50,10 +50,10 @@ const CommentContainer = ({ postId }: IPostId) => {
           >
             댓글
           </Typography>
-          <Stack gap={'1rem'}>
+          <Stack component={'section'} gap={'1rem'}>
             {/* 댓글 내용 */}
             {data?.map((comment: IComment) => (
-              <CommentInput
+              <CommentItem
                 key={comment.commentId}
                 data={comment}
                 postId={postId}

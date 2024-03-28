@@ -38,7 +38,11 @@ const CoverImage = ({ image }: { image: string }) => {
 
 const InformationViewer = ({ data }: any) => {
   return (
-    <Stack spacing={'0.5rem'} sx={style.InformationViewer}>
+    <Stack
+      component={'section'}
+      spacing={'0.5rem'}
+      sx={style.InformationViewer}
+    >
       <StartEndDateViewer start={data?.start} end={data?.end} />
       <SkillInput skills={data?.skills} />
       <TeamMembers members={data?.member} />
@@ -49,7 +53,7 @@ const InformationViewer = ({ data }: any) => {
 
 const ContentViewer = ({ content }: { content: string }) => {
   return (
-    <Stack sx={{ gap: '0.75rem' }}>
+    <Stack component={'section'} sx={{ gap: '0.75rem' }}>
       <LabelWithIcon
         svgIcon={<FileIcon sx={Style.IconStyle} />}
         message="내용"
@@ -65,15 +69,17 @@ const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
   return (
     <>
       {isPc ? (
+        // Pc와 모바일의 레이아웃 구조가 달라서 isPc 에 따라서 레이아웃을 다르게 설정
         <Container sx={style.pcViewer}>
-          <Stack>
+          <Stack component={'section'}>
             <TeamName
               teamName={data?.name}
               author={data.author}
               postId={postId}
               editMode={false}
             />
-            <Stack sx={style.InformationViewerBox}>
+            {/* 쇼케이스 게시 정보 */}
+            <Stack component={'section'} sx={style.InformationViewerBox}>
               <InformationViewer data={data} />
               <Stack
                 spacing={'0.5rem'}
@@ -85,11 +91,14 @@ const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
               </Stack>
             </Stack>
           </Stack>
+          {/* 쇼케이스 게시물 뷰어*/}
           <ContentViewer content={data?.content} />
         </Container>
       ) : (
-        <Container sx={style.mobileViewer}>
+        <Container component={'main'} sx={style.mobileViewer}>
+          {/* 모바일에서는 이미지가 위로 올라가도록 설정. */}
           <Stack
+            component={'section'}
             spacing={'0.5rem'}
             display={'flex'}
             width={'100%'}
@@ -103,7 +112,9 @@ const ShowcaseViewer = ({ data, postId }: IShowcaseViewerProps) => {
             />
             <CoverImage image={data.image} />
           </Stack>
+          {/* 쇼케이스 게시 정보 */}
           <InformationViewer data={data} />
+          {/* 쇼케이스 게시물 뷰어*/}
           <ContentViewer content={data?.content} />
         </Container>
       )}
