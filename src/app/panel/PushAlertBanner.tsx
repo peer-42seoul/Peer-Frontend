@@ -37,7 +37,7 @@ const PushAlertBanner = () => {
         if (currentToken) {
           axiosInstance
             .put(
-              `${process.env.NEXT_PUBLIC_NEXT_PUBLIC_CSR_API}/api/v1/noti-pwa/spring/subscription`,
+              `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/noti-pwa/spring/subscription`,
               {
                 firebaseToken: currentToken,
                 deviceInfo: userAgent,
@@ -48,9 +48,18 @@ const PushAlertBanner = () => {
               // 배너 아예 안보이기
               setIsShowPush(false)
               localStorage.setItem('isShowPush', 'false')
+              openToast({
+                message: '푸시 알림을 성공적으로 설정했습니다.',
+                severity: 'success',
+              })
             })
             .catch(() => {
               console.log('푸시 알림 전송 실패')
+              openToast({
+                message:
+                  '푸시 알림을 사용할 수 없습니다. 잠시후 다시 시도해주세요.',
+                severity: 'error',
+              })
               // 배너 일시적으로 가리기
               setIsShowPush(false)
             })
