@@ -1,5 +1,5 @@
 import CuTextModal from '@/components/CuTextModal'
-import { Box, Stack } from '@mui/material'
+import { Box, Stack, useMediaQuery } from '@mui/material'
 import { BrowserView } from 'react-device-detect'
 import CuButton from '@/components/CuButton'
 import React, { useCallback, useState } from 'react'
@@ -25,6 +25,7 @@ const WidgetUpdate = ({
   const [modalOpen, setModalOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
   const { teamId } = useDnDStore()
+  const isOverMobile = useMediaQuery('(min-width:480px)')
 
   /* 변경된 팀페이지 위젯 request */
   const handleSave = useCallback(async () => {
@@ -75,41 +76,43 @@ const WidgetUpdate = ({
         }}
         content={'팀페이지를 저장하시겠습니까?'}
       />
-      <BrowserView>
-        {/* 팀페이지 수정 버튼 */}
-        <Stack
-          alignItems={'center'}
-          direction={'row'}
-          spacing={1}
-          justifyContent={'flex-end'}
-        >
-          {edit && (
+      {isOverMobile && (
+        <BrowserView>
+          {/* 팀페이지 수정 버튼 */}
+          <Stack
+            alignItems={'center'}
+            direction={'row'}
+            spacing={1}
+            justifyContent={'flex-end'}
+          >
+            {edit && (
+              <CuButton
+                TypographyProps={{
+                  variant: 'Body2Emphasis',
+                }}
+                message={'취소'}
+                action={() => {
+                  // 취소 시 최초의 widget 상태로 되돌림
+                  cancelAction()
+                  setEdit(!edit)
+                }}
+                variant={'outlined'}
+              />
+            )}
             <CuButton
+              message={edit ? '저장' : '팀페이지 수정'}
               TypographyProps={{
                 variant: 'Body2Emphasis',
               }}
-              message={'취소'}
               action={() => {
-                // 취소 시 최초의 widget 상태로 되돌림
-                cancelAction()
+                if (edit) return setModalOpen(true)
                 setEdit(!edit)
               }}
-              variant={'outlined'}
+              variant={edit ? 'contained' : 'text'}
             />
-          )}
-          <CuButton
-            message={edit ? '저장' : '팀페이지 수정'}
-            TypographyProps={{
-              variant: 'Body2Emphasis',
-            }}
-            action={() => {
-              if (edit) return setModalOpen(true)
-              setEdit(!edit)
-            }}
-            variant={edit ? 'contained' : 'text'}
-          />
-        </Stack>
-      </BrowserView>
+          </Stack>
+        </BrowserView>
+      )}
     </Box>
   )
 }

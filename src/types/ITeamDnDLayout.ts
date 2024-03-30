@@ -38,11 +38,11 @@ export interface IWidget {
 
 export type WidgetType =
   | 'notice'
-  | 'board'
-  | 'calender'
-  | 'attendance'
+  // | 'board'
+  // | 'calender'
+  // | 'attendance'
   | 'text'
   | 'image'
-  | 'linkTable'
+// | 'linkTable'
 
 export type SizeType = 'S' | 'M' | 'L'

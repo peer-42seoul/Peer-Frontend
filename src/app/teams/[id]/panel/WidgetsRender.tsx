@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, IconButton, useMediaQuery } from '@mui/material'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Layout } from 'react-grid-layout'
 import {
   ITeamDnDLayout,
@@ -12,7 +12,8 @@ import {
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import WidgetUpdate from '@/app/teams/[id]/panel/WidgetUpdate'
 import SelectedWidget from './SelectedWidget'
-import { Responsive as ResponsiveGridLayout } from 'react-grid-layout'
+import { Responsive, WidthProvider } from 'react-grid-layout'
+const ResponsiveGridLayout = WidthProvider(Responsive)
 
 interface IWidgetsRenderProps {
   data: ITeamDnDLayout | undefined
@@ -59,16 +60,18 @@ const WidgetsRender = ({
   const [layouts, setLayouts] = useState<IWidget[]>(setInitLayouts)
   // const [prevLayouts, setPrevLayouts] = useState<IWidget[] | null>(null)
 
-  /* tablet 보다 크면 4개, 작으면 2개 */
-  const isFourRow = useMediaQuery('(min-width:997px)')
+  // const [colNum, setColNum] = useMediaQuery('(min-width:778px)') ? 4 : 2
+  const [colNum, setColNum] = useState(
+    useMediaQuery('(min-width:778px)') ? 4 : 2,
+  )
 
   /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
-  const isValidLayout = useCallback((newLayout: Layout[]) => {
-    const checkX = newLayout.some((item) => item?.x + item?.w > 4)
-    if (checkX) return false
-    const checkY = newLayout.some((item) => item?.y + item?.h > 4)
-    return !checkY
-  }, [])
+  // const isValidLayout = useCallback((newLayout: Layout[]) => {
+  //   const checkX = newLayout.some((item) => item?.x + item?.w > 4)
+  //   if (checkX) return false
+  //   const checkY = newLayout.some((item) => item?.y + item?.h > 4)
+  //   return !checkY
+  // }, [])
 
   /*
    * 현재 react-grid-layout에서 전체 height를 제한하는 코드가 없음
@@ -83,21 +86,35 @@ const WidgetsRender = ({
   // }, [prevLayouts])
 
   /* 윈도우 resize시 위젯 다시 렌더링 */
-  useEffect(() => {
-    const handleResize = () => {
-      setLayouts((prev) => (prev ? [...prev] : []))
-    }
-    window.addEventListener('resize', handleResize)
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     //   console.log(
+  //     //     'layoutRef?.current?.clientWidth',
+  //     //     layoutRef?.current?.clientWidth,
+  //     //   )
+  //     //   console.log(
+  //     //     'edit && (layoutRef?.current?.clientWidth ?? 0 <= 777)',
+  //     //     edit,
+  //     //     layoutRef?.current?.clientWidth,
+  //     //     layoutRef?.current?.clientWidth ?? 0 <= 777,
+  //     //     edit && (layoutRef?.current?.clientWidth ?? 0 <= 777),
+  //     //   )
+  //     //   if (edit && (layoutRef?.current?.clientWidth ?? 0 <= 777))
+  //     //     alert('팀 페이지 수정은 해당 크기에서는 불가능합니다.')
+  //
+  //     setLayouts((prev) => (prev ? [...prev] : []))
+  //   }
+  //   window.addEventListener('resize', handleResize)
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize)
+  //   }
+  // }, [])
 
   /* 드롭 시 호출 */
   const onDrop = useCallback(
     (layout: Layout[], layoutItem: Layout) => {
       if (!edit) return
-      if (!isValidLayout(layout)) return
+      // if (!isValidLayout(layout)) return
       const res = {
         key: index,
         grid: {
@@ -114,7 +131,7 @@ const WidgetsRender = ({
       setLayouts(layouts ? [...layouts, res] : [res])
       setIndex(index + 1)
     },
-    [edit, isValidLayout, index, type, size, layouts],
+    [edit, index, type, size, layouts],
   )
 
   // /* 레이아웃이 변경될때마다 호출 */
@@ -154,8 +171,8 @@ const WidgetsRender = ({
   const widgetWidth = useMemo(() => {
     const width = layoutRef?.current?.clientWidth
     if (!width) return 0
-    return isFourRow ? width / 4 : width / 2
-  }, [isFourRow, layoutRef?.current?.clientWidth])
+    return width / colNum
+  }, [colNum, layoutRef?.current?.clientWidth])
 
   // const widgetHeight = useMemo(() => {
   //   const height = layoutRef?.current?.clientHeight
@@ -163,7 +180,7 @@ const WidgetsRender = ({
   //   return isFourRow ? height / 4 : height / 8
   // }, [isFourRow, layoutRef?.current?.clientHeight])
 
-  const cols = { lg: 4, md: 4, sm: 4, xs: 4, xxs: 2 }
+  const cols = edit ? { xs: 4, xxs: 4 } : { xs: 4, xxs: 2 }
 
   return (
     <Box>
@@ -179,7 +196,13 @@ const WidgetsRender = ({
       {/* react-grid-layout 영역 */}
       <Box bgcolor="background.secondary" ref={layoutRef} width={'100%'}>
         <ResponsiveGridLayout
-          width={isFourRow ? widgetWidth * 4 : widgetWidth * 2}
+          breakpoints={{ xs: 634, xxs: 0 }}
+          onBreakpointChange={(_, newCols) => {
+            //col의 크기가 달라졌다면?
+            // if (edit && colNum == 4 && newCols == 2) {
+            // }
+            setColNum(newCols)
+          }}
           className="layout"
           margin={[12, 12]}
           cols={cols}
@@ -191,7 +214,7 @@ const WidgetsRender = ({
           isResizable={false}
           droppingItem={droppingItem}
           style={{
-            height: isFourRow ? 4 * widgetWidth + 100 : 8 * widgetWidth + 100,
+            height: colNum * widgetWidth + 100,
             borderRadius: '5px',
             minWidth: '20rem',
           }}

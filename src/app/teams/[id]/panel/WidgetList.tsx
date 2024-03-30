@@ -47,12 +47,12 @@ const WidgetList = ({
 
   const typeList: WidgetType[] = [
     'notice',
-    'board',
-    'calender',
-    'attendance',
+    // 'board',
+    // 'calender',
+    // 'attendance',
     'text',
     'image',
-    'linkTable',
+    // 'linkTable',
   ]
 
   /* drag 시작 시 호출 */
