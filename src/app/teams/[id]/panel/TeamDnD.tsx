@@ -13,6 +13,7 @@ import useDnDStore from '@/states/useDnDStore'
 import { useParams } from 'next/navigation'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import NoDataDolphin from '@/components/NoDataDolphin'
+import useMedia from '@/hook/useMedia'
 
 export const sizeRatio = {
   S: { w: 1, h: 1 },
@@ -22,6 +23,7 @@ export const sizeRatio = {
 
 const TeamDnD = ({ id }: { id: string }) => {
   const { setStoredWidgets, setTeamId } = useDnDStore()
+  const { isOverTablet } = useMedia()
   const [edit, setEdit] = useState(false)
   const [type, setType] = useState<WidgetType>('text')
   const [droppingItem, setDroppingItem] = useState<
@@ -79,7 +81,7 @@ const TeamDnD = ({ id }: { id: string }) => {
         setEdit={setEdit}
       >
         {/*툴 박스 리스트*/}
-        {edit && (
+        {edit && isOverTablet && (
           <WidgetList
             setIsDropping={setIsDropping}
             setType={setType}

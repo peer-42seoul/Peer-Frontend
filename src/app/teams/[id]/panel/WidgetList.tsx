@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography, useMediaQuery } from '@mui/material'
 import { SizeType, WidgetType } from '@/types/ITeamDnDLayout'
 import { useCallback, useState } from 'react'
 import { sizeRatio } from '@/app/teams/[id]/panel/TeamDnD'
@@ -33,7 +33,7 @@ const WidgetList = ({
   setSize,
   setDroppingItem,
 }: ITeamDnDWidgetListProps) => {
-  const { isPc, isTablet } = useMedia()
+  const { isPc, isOverTablet } = useMedia()
   /* 툴 박스의 사이즈 관리 */
   const [toolSize, setToolSize] = useState<IToolSizeType>({
     notice: 'S',
@@ -58,6 +58,7 @@ const WidgetList = ({
   /* drag 시작 시 호출 */
   const onDragStart = useCallback(
     (e: any, wgType: WidgetType) => {
+      console.log('onDragStart')
       setIsDropping(true)
       setType(wgType)
       setSize(toolSize[wgType] ?? 'S')
@@ -76,7 +77,7 @@ const WidgetList = ({
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: isTablet ? 2 : isPc ? 3 : 1,
+    slidesToShow: isPc ? 3 : isOverTablet ? 2 : 1,
     slidesToScroll: 1,
   }
 
@@ -160,6 +161,7 @@ const WidgetList = ({
                       unselectable="on"
                       onDragStart={(e) => onDragStart(e, typeValue)}
                       onDragEnd={() => {
+                        console.log('onDragEnd')
                         setIsDropping(false)
                       }}
                     >

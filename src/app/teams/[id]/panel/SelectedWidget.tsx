@@ -6,6 +6,7 @@ import BoardWidget from '@/app/teams/[id]/panel/widgets/BoardWidget'
 // import TmpAttendWidget from '@/app/teams/[id]/panel/widgets/TmpAttendWidget'
 import TextWidget from '@/app/teams/[id]/panel/widgets/TextWidget'
 import ImageWidget from '@/app/teams/[id]/panel/widgets/ImageWidget'
+import { Typography } from '@mui/material'
 // import TmpLinkWidget from '@/app/teams/[id]/panel/widgets/TmpLinkWidget'
 
 /* widget 가져오기 */

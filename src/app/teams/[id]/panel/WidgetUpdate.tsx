@@ -6,6 +6,7 @@ import React, { useCallback, useState } from 'react'
 import useAxiosWithAuth from '@/api/config'
 import { IWidget } from '@/types/ITeamDnDLayout'
 import useDnDStore from '@/states/useDnDStore'
+import useMedia from '@/hook/useMedia'
 
 interface IWidgetUpdateProps {
   edit: boolean
@@ -25,7 +26,7 @@ const WidgetUpdate = ({
   const [modalOpen, setModalOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
   const { teamId } = useDnDStore()
-  const isOverMobile = useMediaQuery('(min-width:480px)')
+  const { isOverTablet } = useMedia()
 
   /* 변경된 팀페이지 위젯 request */
   const handleSave = useCallback(async () => {
@@ -76,7 +77,7 @@ const WidgetUpdate = ({
         }}
         content={'팀페이지를 저장하시겠습니까?'}
       />
-      {isOverMobile && (
+      {isOverTablet && (
         <BrowserView>
           {/* 팀페이지 수정 버튼 */}
           <Stack
