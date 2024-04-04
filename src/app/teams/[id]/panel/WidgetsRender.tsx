@@ -2,7 +2,7 @@
 
 import { Box, IconButton, Stack, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Layout } from 'react-grid-layout'
+import { Layout, Responsive, WidthProvider } from 'react-grid-layout'
 import {
   ITeamDnDLayout,
   IWidget,
@@ -12,7 +12,6 @@ import {
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import WidgetUpdate from '@/app/teams/[id]/panel/WidgetUpdate'
 import SelectedWidget from './SelectedWidget'
-import { Responsive, WidthProvider } from 'react-grid-layout'
 import useMedia from '@/hook/useMedia'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
@@ -43,7 +42,7 @@ const WidgetsRender = ({
   const layoutRef = useRef<HTMLInputElement | null>(null)
 
   /* 초기 layout값을 만드는 함수 */
-  const setInitLayouts: IWidget[] = useMemo(() => {
+  const initLayouts: IWidget[] = useMemo(() => {
     if (!data) return []
     return data?.widgets?.map((widget, index) => {
       const res = {
@@ -59,16 +58,16 @@ const WidgetsRender = ({
     })
   }, [data])
 
-  const [layouts, setLayouts] = useState<IWidget[]>(setInitLayouts)
-  const [prevLayouts, setPrevLayouts] = useState<IWidget[]>(layouts)
-  const prevLayoutsRef = useRef<IWidget[]>([])
+  const cols = edit ? { xs: 4, xxs: 4 } : { xs: 4, xxs: 2 }
   const { isOverTablet } = useMedia()
   const colNum = isOverTablet ? 4 : 2
+  const prevLayoutsRef = useRef<IWidget[]>([])
+  const currentLayoutRef = useRef<IWidget[]>(initLayouts)
+  const [renderLayouts, setRenderLayouts] = useState<IWidget[]>([])
 
+  const noEdit = edit && colNum === 2
   /* 지정된 레이아웃에서 벗어나지 않았는지 확인 */
   const isValidLayout = useCallback((newLayout: Layout[] | IWidget[]) => {
-    // const checkX = newLayout.some((item) => item?.x + item?.w > 4)
-    // if (checkX) return false
     const checkY = newLayout.some(
       (item) =>
         ('grid' in item ? item?.grid?.y + item?.grid?.h : item?.y + item?.h) >
@@ -83,47 +82,26 @@ const WidgetsRender = ({
    * 그러나 onLayoutChange시에는 react-grid-layout에서 자동으로 아이템을 넣는 방식이기 때문에 제한 불가능
    * 따라서 최대 높이를 제한하기 위해 위젯이 추가될 때마다 height를 계산하여 height가 제한 값을 넘은 경우 다시 재조정해줘야함
    */
+  //
   // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLayouts(prevLayouts)
-  //   }, 50)
-  // }, [prevLayouts])
+  //   console.log('layouts1', layouts)
+  //   if (layouts && edit && !isDropping && !isValidLayout(layouts)) {
+  //     console.log('!isValidLayout')
+  //     setTimeout(() => {
+  //       setLayouts(prevLayoutsRef.current)
+  //     }, 50)
+  //   }
+  // }, [layouts])
+
+  // useEffect(() => {
+  //   if (colNum == 4) setLayouts((prev) => [...prev])
+  // }, [colNum])
 
   useEffect(() => {
-    console.log('layouts1', layouts)
-    if (layouts && !isDropping && !isValidLayout(layouts)) {
-      console.log('!isValidLayout')
-      console.log('prevLayouts', prevLayouts)
-      setTimeout(() => {
-        setLayouts(prevLayoutsRef.current)
-      }, 50)
-    }
-  }, [layouts])
-
-  /* 윈도우 resize시 위젯 다시 렌더링 */
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     //   console.log(
-  //     //     'layoutRef?.current?.clientWidth',
-  //     //     layoutRef?.current?.clientWidth,
-  //     //   )
-  //     //   console.log(
-  //     //     'edit && (layoutRef?.current?.clientWidth ?? 0 <= 777)',
-  //     //     edit,
-  //     //     layoutRef?.current?.clientWidth,
-  //     //     layoutRef?.current?.clientWidth ?? 0 <= 777,
-  //     //     edit && (layoutRef?.current?.clientWidth ?? 0 <= 777),
-  //     //   )
-  //     //   if (edit && (layoutRef?.current?.clientWidth ?? 0 <= 777))
-  //     //     alert('팀 페이지 수정은 해당 크기에서는 불가능합니다.')
-  //
-  //     setLayouts((prev) => (prev ? [...prev] : []))
-  //   }
-  //   window.addEventListener('resize', handleResize)
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize)
-  //   }
-  // }, [])
+    //colNum이 4면 그대로 렌더링
+    if (colNum == 4) setRenderLayouts(currentLayoutRef.current)
+    else setRenderLayouts(mLayouts)
+  }, [colNum])
 
   /* 드롭 시 호출 */
   const onDrop = useCallback(
@@ -144,56 +122,42 @@ const WidgetsRender = ({
         updatedAt: new Date(),
         data: undefined,
       }
-      setLayouts(layouts ? [...layouts, res] : [res])
+      currentLayoutRef.current = [...currentLayoutRef.current, res]
       setIndex(index + 1)
     },
-    [edit, isValidLayout, index, type, size, layouts],
+    [edit, isValidLayout, index, type, size],
   )
 
   // /* 레이아웃이 변경될때마다 호출 */
   const onLayoutChange = useCallback(
     (currentLayout: Layout[]) => {
-      console.log('onLayoutChange', currentLayout)
       //드롭중일 경우 이미 onDrop에서 처리하고 있으므로 처리x
       if (isDropping) return
 
       const updatedCurrentWidget: IWidget[] = currentLayout.map(
         (grid: Layout, i: number) => ({
-          ...layouts[i],
+          ...currentLayoutRef.current[i],
           grid,
           updatedAt: new Date(),
         }),
       )
-      //범위 충족했다면?
-      // setPrevLayouts(layouts)
-      prevLayoutsRef.current = [...layouts]
-      setPrevLayouts([...layouts])
-      // const prevLayout = [...layouts]
-      setLayouts(updatedCurrentWidget)
-      //레이아웃 범위를 넘어갈 시? 이전 레이아웃으로 복구
-      // if (!isValidLayout(currentLayout)) {
-      // console.log('isValidLayout')
-      // setLayouts(prevLayoutsRef.current)
-      // console.log('prevLayouts', prevLayout)
-      // setPrevLayouts(prevLayout)
-      // setLayouts(prevLayout)
-      // setPrevLayouts(layouts)
-      // }
 
-      // setToolbox({
-      //   ...toolbox,
-      //   [currentBreakpoint]: updatedCurrentWidget,
-      // })
+      // ref 안의 값을 확인했을때 mLayout 값이면 set 안함
+      if ((layoutRef.current?.clientWidth ?? 0) > 492) {
+        prevLayoutsRef.current = [...currentLayoutRef.current]
+        currentLayoutRef.current = updatedCurrentWidget
+      }
     },
-    [isDropping, isValidLayout, layouts, prevLayouts],
+    [isDropping],
   )
 
   const removeWidget = useCallback(
     (idx: string) => {
-      const newLayouts = layouts.filter((widget) => widget?.grid?.i !== idx)
-      setLayouts(newLayouts)
+      currentLayoutRef.current = currentLayoutRef.current.filter(
+        (widget) => widget?.grid?.i !== idx,
+      )
     },
-    [layouts],
+    [currentLayoutRef.current],
   )
 
   /* 위젯 너비 계산 */
@@ -209,13 +173,10 @@ const WidgetsRender = ({
     return colNum == 4 ? width / 4 : width / 2
   }, [colNum, layoutRef?.current?.clientWidth])
 
-  const cols = edit ? { xs: 4, xxs: 4 } : { xs: 4, xxs: 2 }
-  const noEdit = edit && colNum === 2
-
   //좌표를 오름차순으로 정렬
   //x좌표가 1을 초과하는 경우 (4x4 그리드에서 2x2로 변경할 때) x좌표를 0으로 변경하고 y좌표를 +1 변경)
   const mLayouts = useMemo(() => {
-    return layouts?.map((layout) => {
+    return currentLayoutRef.current?.map((layout) => {
       if (layout.grid.x > 1) {
         return {
           ...layout,
@@ -228,17 +189,18 @@ const WidgetsRender = ({
       }
       return layout
     })
-  }, [layouts])
+  }, [])
 
-  console.log('colNum', colNum)
   return (
     <Box>
       <WidgetUpdate
-        layouts={layouts}
+        layouts={renderLayouts}
         setEdit={setEdit}
         edit={edit}
         isCreate={!data}
-        cancelAction={() => setLayouts(setInitLayouts)}
+        cancelAction={() => {
+          currentLayoutRef.current = initLayouts
+        }}
       />
       {/*toolbox 영역*/}
       {children}
@@ -247,7 +209,7 @@ const WidgetsRender = ({
         {noEdit ? (
           <Stack
             width={'100%'}
-            height={colNum * widgetWidth + 100}
+            height={400}
             alignItems={'center'}
             justifyContent={'center'}
           >
@@ -258,23 +220,18 @@ const WidgetsRender = ({
         ) : (
           <ResponsiveGridLayout
             breakpoints={{ xs: 492, xxs: 0 }}
-            // onBreakpointChange={(_, newCols) => {
-            //   //col의 크기가 달라졌다면?
-            //   // if (edit && colNum == 4 && newCols == 2) {
-            //   // }
-            //   setColNum(newCols)
-            // }}
-
+            layouts={{
+              xs: currentLayoutRef.current?.map((l) => ({ ...l.grid })),
+              xxs: mLayouts.map((l) => ({ ...l.grid })),
+            }}
             maxRows={colNum === 4 ? 4 : 8}
             className="layout"
             margin={[12, 12]}
             cols={cols}
-            // cols={isFourRow ? 4 : 2} //그리드의 열 수. pc면 4, 모바일이면 2
             rowHeight={widgetHeight} //그리드 항목의 높이
             onDrop={onDrop}
             isDroppable={true} //true면 draggable={true}인 요소를 드래그 가능
             onLayoutChange={onLayoutChange}
-            // onDrag={onDrag}
             isResizable={false}
             droppingItem={droppingItem}
             style={{
@@ -284,7 +241,7 @@ const WidgetsRender = ({
             }}
             draggableCancel=".MuiButtonBase-root, .MuiModal-root"
           >
-            {(colNum == 2 ? mLayouts : layouts)?.map(
+            {renderLayouts?.map(
               ({ grid, type, size: wgSize, data: wgData, key }) => {
                 return (
                   <Box
