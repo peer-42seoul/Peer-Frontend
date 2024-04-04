@@ -22,9 +22,8 @@ export const sizeRatio = {
 }
 
 const TeamDnD = ({ id }: { id: string }) => {
-  const { setStoredWidgets, setTeamId } = useDnDStore()
+  const { setStoredWidgets, setTeamId, edit } = useDnDStore()
   const { isOverTablet } = useMedia()
-  const [edit, setEdit] = useState(false)
   const [type, setType] = useState<WidgetType>('text')
   const [droppingItem, setDroppingItem] = useState<
     ReactGridLayout.CoreProps['droppingItem']
@@ -77,8 +76,6 @@ const TeamDnD = ({ id }: { id: string }) => {
         size={size}
         isDropping={isDropping}
         droppingItem={droppingItem}
-        edit={edit}
-        setEdit={setEdit}
       >
         {/*툴 박스 리스트*/}
         {edit && isOverTablet && (

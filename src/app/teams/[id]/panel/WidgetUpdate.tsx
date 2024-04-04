@@ -1,5 +1,5 @@
 import CuTextModal from '@/components/CuTextModal'
-import { Box, Stack, useMediaQuery } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import { BrowserView } from 'react-device-detect'
 import CuButton from '@/components/CuButton'
 import React, { useCallback, useState } from 'react'
@@ -9,23 +9,19 @@ import useDnDStore from '@/states/useDnDStore'
 import useMedia from '@/hook/useMedia'
 
 interface IWidgetUpdateProps {
-  edit: boolean
-  setEdit: (edit: boolean) => void
   layouts: IWidget[]
   isCreate: boolean
   cancelAction: () => void
 }
 
 const WidgetUpdate = ({
-  edit,
-  setEdit,
   layouts,
   isCreate,
   cancelAction,
 }: IWidgetUpdateProps) => {
   const [modalOpen, setModalOpen] = useState(false)
   const axiosInstance = useAxiosWithAuth()
-  const { teamId } = useDnDStore()
+  const { teamId, edit, setEdit } = useDnDStore()
   const { isOverTablet } = useMedia()
 
   /* 변경된 팀페이지 위젯 request */

@@ -13,6 +13,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 import WidgetUpdate from '@/app/teams/[id]/panel/WidgetUpdate'
 import SelectedWidget from './SelectedWidget'
 import useMedia from '@/hook/useMedia'
+import useDnDStore from '@/states/useDnDStore'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
@@ -22,8 +23,6 @@ interface IWidgetsRenderProps {
   size: SizeType
   isDropping: boolean
   droppingItem: ReactGridLayout.CoreProps['droppingItem']
-  edit: boolean
-  setEdit: (edit: boolean) => void
   children?: React.ReactNode
 }
 
@@ -34,10 +33,9 @@ const WidgetsRender = ({
   size,
   isDropping,
   droppingItem,
-  edit,
-  setEdit,
   children,
 }: IWidgetsRenderProps) => {
+  const { edit } = useDnDStore()
   const [index, setIndex] = useState(0)
   const layoutRef = useRef<HTMLInputElement | null>(null)
 
@@ -83,24 +81,27 @@ const WidgetsRender = ({
    * 따라서 최대 높이를 제한하기 위해 위젯이 추가될 때마다 height를 계산하여 height가 제한 값을 넘은 경우 다시 재조정해줘야함
    */
   //
-  // useEffect(() => {
-  //   console.log('layouts1', layouts)
-  //   if (layouts && edit && !isDropping && !isValidLayout(layouts)) {
-  //     console.log('!isValidLayout')
-  //     setTimeout(() => {
-  //       setLayouts(prevLayoutsRef.current)
-  //     }, 50)
-  //   }
-  // }, [layouts])
-
-  // useEffect(() => {
-  //   if (colNum == 4) setLayouts((prev) => [...prev])
-  // }, [colNum])
+  useEffect(() => {
+    if (
+      currentLayoutRef.current &&
+      edit &&
+      !isDropping &&
+      !isValidLayout(currentLayoutRef.current)
+    ) {
+      setTimeout(() => {
+        setRenderLayouts(prevLayoutsRef.current)
+      }, 50)
+    }
+  }, [renderLayouts])
 
   useEffect(() => {
-    //colNum이 4면 그대로 렌더링
-    if (colNum == 4) setRenderLayouts(currentLayoutRef.current)
-    else setRenderLayouts(mLayouts)
+    //colNum이 4면 그대로 렌더링, 2면 모바일 렌더링
+    if (colNum == 4) {
+      //만약 변경된 레이아웃이 유효하지 않다면 이전 레이아웃으로 변경
+      if (!isValidLayout(currentLayoutRef.current))
+        setRenderLayouts(prevLayoutsRef.current)
+      else setRenderLayouts(currentLayoutRef.current)
+    } else setRenderLayouts(mLayouts)
   }, [colNum])
 
   /* 드롭 시 호출 */
@@ -123,6 +124,7 @@ const WidgetsRender = ({
         data: undefined,
       }
       currentLayoutRef.current = [...currentLayoutRef.current, res]
+      setRenderLayouts([...currentLayoutRef.current])
       setIndex(index + 1)
     },
     [edit, isValidLayout, index, type, size],
@@ -146,19 +148,18 @@ const WidgetsRender = ({
       if ((layoutRef.current?.clientWidth ?? 0) > 492) {
         prevLayoutsRef.current = [...currentLayoutRef.current]
         currentLayoutRef.current = updatedCurrentWidget
+        setRenderLayouts([...currentLayoutRef.current])
       }
     },
     [isDropping],
   )
 
-  const removeWidget = useCallback(
-    (idx: string) => {
-      currentLayoutRef.current = currentLayoutRef.current.filter(
-        (widget) => widget?.grid?.i !== idx,
-      )
-    },
-    [currentLayoutRef.current],
-  )
+  const removeWidget = useCallback((idx: string) => {
+    currentLayoutRef.current = currentLayoutRef.current.filter(
+      (widget) => widget?.grid?.i !== idx,
+    )
+    setRenderLayouts([...currentLayoutRef.current])
+  }, [])
 
   /* 위젯 너비 계산 */
   const widgetWidth = useMemo(() => {
@@ -195,8 +196,6 @@ const WidgetsRender = ({
     <Box>
       <WidgetUpdate
         layouts={renderLayouts}
-        setEdit={setEdit}
-        edit={edit}
         isCreate={!data}
         cancelAction={() => {
           currentLayoutRef.current = initLayouts
@@ -235,7 +234,7 @@ const WidgetsRender = ({
             isResizable={false}
             droppingItem={droppingItem}
             style={{
-              height: (16 / colNum) * widgetWidth + 100,
+              height: (16 / colNum) * widgetWidth + 120,
               borderRadius: '5px',
               minWidth: '20rem',
             }}
