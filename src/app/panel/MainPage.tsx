@@ -21,7 +21,6 @@ export interface BeforeInstallPromptEvent extends Event {
 export type ProjectSort = 'latest' | 'hit'
 
 const MainPage = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  console.log('MainPage', initData)
   return (
     <>
       <PushAlertBanner />
