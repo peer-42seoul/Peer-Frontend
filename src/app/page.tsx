@@ -1,9 +1,13 @@
 import MainPage from './panel/MainPage'
 import axios from 'axios'
+import { getCookies } from 'cookies-next'
+import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Home({ searchParams }: { searchParams: any }) {
+  const cookie = getCookies({ cookies })
+
   let data
   try {
     const response = await axios.get(
@@ -13,6 +17,7 @@ export default async function Home({ searchParams }: { searchParams: any }) {
       {
         headers: {
           'Cache-Control': 'no-store',
+          Authorization: `Bearer ${cookie?.accessToken}`,
         },
       },
     )

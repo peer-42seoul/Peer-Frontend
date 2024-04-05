@@ -27,15 +27,13 @@ import { IPagination } from '@/types/IPagination'
 import useMainOptions from '@/hook/main-page/useMainOptions'
 import useMainCards from '@/hook/main-page/useMainCards'
 import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
-import useFavoriteList from '@/hook/main-page/useFavoriteList'
 import useMedia from '@/hook/useMedia'
 
 const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  const { isInit, handleSort, handleType, handleChangePage, queryKeyword } =
+  const { handleSort, handleType, handleChangePage, queryKeyword } =
     useMainOptions()
   const { data, noContent } = useMainCards(initData)
   const { page, type, sort } = useMainOptionsStore()
-  const { getFavoriteData } = useFavoriteList()
   const { isTablet } = useMedia()
 
   return (
@@ -98,11 +96,11 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
                     <MainCard
                       {...project}
                       type={type}
-                      favorite={
-                        isInit
-                          ? getFavoriteData(project.recruit_id)
-                          : project.favorite
-                      }
+                      // favorite={
+                      //   isInit
+                      //     ? getFavoriteData(project.recruit_id)
+                      //     : project.favorite
+                      // }
                       sx={cardStyle}
                     />
                   </Grid>
@@ -119,7 +117,7 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
           </Stack>
         )}
       </Stack>
-      <Stack alignItems={'center'}  my={'1rem'}>
+      <Stack alignItems={'center'} my={'1rem'}>
         <Pagination
           count={data?.totalPages}
           page={page}

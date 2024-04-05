@@ -22,6 +22,7 @@ const useMainCards = (initData: IPagination<IPost[]>) => {
     {
       fallbackData: initData,
       keepPreviousData: true,
+      revalidateOnMount: false,
     },
   )
 

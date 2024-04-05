@@ -16,14 +16,12 @@ import { IPagination } from '@/types/IPagination'
 import useMainOptions from '@/hook/main-page/useMainOptions'
 import useMainCards from '@/hook/main-page/useMainCards'
 import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
-import useFavoriteList from '@/hook/main-page/useFavoriteList'
 
 const MainMobileView = ({ initData }: { initData: IPagination<IPost[]> }) => {
-  const { isInit, handleSort, handleType, handleChangePage, queryKeyword } =
+  const { handleSort, handleType, handleChangePage, queryKeyword } =
     useMainOptions()
   const { data, noContent } = useMainCards(initData)
   const { page, type, sort } = useMainOptionsStore()
-  const { getFavoriteData } = useFavoriteList()
 
   return (
     <Container sx={{ ...containerStyle, paddingBottom: '2rem' }}>
@@ -70,16 +68,7 @@ const MainMobileView = ({ initData }: { initData: IPagination<IPost[]> }) => {
             <Stack gap={2} width={'100%'}>
               {data?.content?.map((project: IPost) => (
                 <Box key={project.recruit_id}>
-                  <MainCard
-                    {...project}
-                    type={type}
-                    favorite={
-                      isInit
-                        ? getFavoriteData(project.recruit_id)
-                        : project.favorite
-                    }
-                    sx={cardStyle}
-                  />
+                  <MainCard {...project} type={type} sx={cardStyle} />
                 </Box>
               ))}
             </Stack>

@@ -46,9 +46,6 @@ const useMainOptions = () => {
     detailOption.status
   }&tag=${detailOption.tag}`
 
-  const isInit =
-    page == 1 && !sort && detailOption.isInit && queryKeyword == '' && init
-
   useEffect(() => {
     if (queryKeyword !== '') {
       setType(searchType)
@@ -100,7 +97,6 @@ const useMainOptions = () => {
 
   return {
     optionsQuery,
-    isInit,
     handleSort,
     handleType,
     handleChangePage,
