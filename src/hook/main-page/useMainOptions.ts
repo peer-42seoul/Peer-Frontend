@@ -72,7 +72,15 @@ const useMainOptions = () => {
       setSort('latest')
       router.replace(`?type=${value}`)
     },
-    [router],
+    [
+      detailOption,
+      router,
+      setDetailOptions,
+      setInit,
+      setPage,
+      setSort,
+      setType,
+    ],
   )
 
   const handleSort = useCallback(
