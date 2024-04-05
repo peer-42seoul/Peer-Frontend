@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography, useMediaQuery } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { SizeType, WidgetType } from '@/types/ITeamDnDLayout'
 import { useCallback, useState } from 'react'
 import { sizeRatio } from '@/app/teams/[id]/panel/TeamDnD'
