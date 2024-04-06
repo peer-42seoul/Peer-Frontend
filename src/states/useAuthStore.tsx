@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import LocalStorage from './localStorage'
 import axios from 'axios'
 import useNicknameStore from './useNicknameStore'
+import { deleteCookie, setCookie } from 'cookies-next'
 
 interface IAuthStore {
   isLogin: boolean
@@ -24,6 +25,7 @@ const useAuthStore = create<IAuthStore>((set) => {
     login: (accessToken) => {
       const authDataToSave = { accessToken }
       LocalStorage.setItem('authData', JSON.stringify(authDataToSave))
+      setCookie('accessToken', accessToken, { httpOnly: true, secure: true })
       axios
         .get(`${API_URL}/api/v1/profile`, {
           headers: {
@@ -54,6 +56,7 @@ const useAuthStore = create<IAuthStore>((set) => {
           })
       }
       LocalStorage.removeItem('authData')
+      deleteCookie('accessToken')
       set(() => ({
         isLogin: false,
         accessToken: null,

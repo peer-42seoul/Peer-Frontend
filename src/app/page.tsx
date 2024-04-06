@@ -17,7 +17,9 @@ export default async function Home({ searchParams }: { searchParams: any }) {
       {
         headers: {
           'Cache-Control': 'no-store',
-          Authorization: `Bearer ${cookie?.accessToken}`,
+          Authorization: cookie?.accessToken
+            ? `Bearer ${cookie.accessToken}`
+            : undefined,
         },
       },
     )
