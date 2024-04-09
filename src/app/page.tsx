@@ -7,6 +7,18 @@ import PwaInstallBanner from '@/app/panel/PwaInstallBanner'
 
 export const dynamic = 'force-dynamic'
 
+export interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[]
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed'
+    platform: string
+  }>
+
+  prompt(): Promise<void>
+}
+
+export type ProjectSort = 'latest' | 'hit'
+
 export default async function Home({ searchParams }: { searchParams: any }) {
   let data
   try {
