@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import * as style from './Footer.style'
 import { Box, List, ListItem, Typography } from '@mui/material'

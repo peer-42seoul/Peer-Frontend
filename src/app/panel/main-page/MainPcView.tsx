@@ -1,3 +1,5 @@
+'use client'
+
 import {
   cardStyle,
   containerStyle,
@@ -119,7 +121,7 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
           </Stack>
         )}
       </Stack>
-      <Stack alignItems={'center'}  my={'1rem'}>
+      <Stack alignItems={'center'} my={'1rem'}>
         <Pagination
           count={data?.totalPages}
           page={page}
