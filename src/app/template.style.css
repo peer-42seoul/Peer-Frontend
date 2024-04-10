@@ -11,4 +11,7 @@
 
 .layout-container {
   animation: fadeInUp 0.4s ease-out forwards;
+  transition:
+          color 0.1s ease,
+          background-color 0.3s ease; /* Apply transition to all children */
 }

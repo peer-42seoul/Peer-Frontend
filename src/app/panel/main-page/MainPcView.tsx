@@ -28,7 +28,6 @@ import useMainOptions from '@/hook/main-page/useMainOptions'
 import useMainCards from '@/hook/main-page/useMainCards'
 import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
 import useFavoriteList from '@/hook/main-page/useFavoriteList'
-import useMedia from '@/hook/useMedia'
 
 const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { isInit, handleSort, handleType, handleChangePage, queryKeyword } =
@@ -36,7 +35,6 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { data, noContent } = useMainCards(initData)
   const { page, type, sort } = useMainOptionsStore()
   const { getFavoriteData } = useFavoriteList()
-  const { isTablet } = useMedia()
 
   return (
     <Container sx={containerStyle}>
@@ -111,15 +109,13 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
             </>
           )}
         </Stack>
-        {!isTablet && (
-          <Stack sx={sideMenuStyle}>
-            <MainProfile />
-            <MainShowcase />
-            <MainCarousel />
-          </Stack>
-        )}
+        <Stack sx={sideMenuStyle} className={'side-layout'}>
+          <MainProfile />
+          <MainShowcase />
+          <MainCarousel />
+        </Stack>
       </Stack>
-      <Stack alignItems={'center'}  my={'1rem'}>
+      <Stack alignItems={'center'} my={'1rem'}>
         <Pagination
           count={data?.totalPages}
           page={page}

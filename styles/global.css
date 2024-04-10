@@ -12,11 +12,7 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-body * {
-  transition:
-    color 0.1s ease,
-    background-color 0.3s ease; /* Apply transition to all children */
-}
+
 
 @media (min-width: 0px) {
   .mobile-layout {
@@ -26,6 +22,10 @@ body * {
   .pc-layout {
     display: none;
   }
+
+  .side-layout {
+    display: none;
+  };
 }
 
 @media (min-width: 481px) {
@@ -37,7 +37,27 @@ body * {
     display: flex;
     flex-direction: column;
   }
+
+  .side-layout {
+    display: none;
+  }
 }
+
+@media (min-width: 701px) {
+  .mobile-layout {
+    display: none;
+  }
+
+  .pc-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .side-layout {
+    display: block;
+  }
+}
+
 
 .no-scroll {
   -ms-overflow-style: none; /* IE, Edge */
