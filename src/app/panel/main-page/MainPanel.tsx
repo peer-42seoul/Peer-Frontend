@@ -1,8 +1,7 @@
 import SearchOption from '@/app/panel/main-page/SearchOption'
 import { Grid, Stack } from '@mui/material'
 import SelectSort from '@/app/panel/main-page/SelectSort'
-import { ProjectType } from '@/types/IPostDetail'
-import { ProjectSort } from '@/app/panel/MainPage'
+import { ProjectSort, ProjectType } from '@/types/IPostDetail'
 
 interface ISearchOptionPanel {
   type: ProjectType
@@ -24,28 +23,5 @@ const SearchOptionPanel = ({ type, isPc }: ISearchOptionPanel) => {
     </>
   )
 }
-
-// interface IInfinityScrollPanel {
-//   spinner: boolean
-//   target: RefObject<HTMLDivElement>
-// }
-//
-// export const InfinityScrollPanel = ({
-//   spinner,
-//   target,
-// }: IInfinityScrollPanel) => {
-//   return spinner ? (
-//     <CircularProgress />
-//   ) : (
-//     <Box
-//       sx={{
-//         bottom: 0,
-//         height: '1vh',
-//         paddingY: '0.25rem',
-//       }}
-//       ref={target}
-//     />
-//   )
-// }
 
 export default SearchOptionPanel

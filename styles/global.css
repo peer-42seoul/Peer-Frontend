@@ -28,11 +28,11 @@ body::-webkit-scrollbar {
   };
 }
 
-@media (min-width: 481px) {
+@media (min-width: 480px) and (max-width: 700px) {
   .mobile-layout {
-    display: none;
+    display: flex;
+    flex-direction: column;
   }
-
   .pc-layout {
     display: flex;
     flex-direction: column;
@@ -54,7 +54,8 @@ body::-webkit-scrollbar {
   }
 
   .side-layout {
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
 }
 
