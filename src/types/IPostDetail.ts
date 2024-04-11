@@ -1,6 +1,7 @@
 import { SxProps } from '@mui/material'
 
 export type ProjectType = 'STUDY' | 'PROJECT'
+export type ProjectSort = 'latest' | 'hit'
 
 export interface ITag {
   tagId: number

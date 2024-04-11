@@ -1,3 +1,5 @@
+'use client'
+
 import {
   cardStyle,
   containerStyle,
@@ -13,9 +15,7 @@ import {
 } from '@mui/material'
 import MainBanner from '@/app/panel/main-page/MainBanner'
 import SelectType from '@/app/panel/main-page/SelectType'
-import Tutorial from '@/components/Tutorial'
 import { MainPageTutorial } from '@/components/tutorialContent/MainPageTutorial'
-import SearchOptionPanel from '@/app/panel/main-page/MainPanel'
 import SelectSort from '@/app/panel/main-page/SelectSort'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import { IPost } from '@/types/IPostDetail'
@@ -28,7 +28,12 @@ import useMainOptions from '@/hook/main-page/useMainOptions'
 import useMainCards from '@/hook/main-page/useMainCards'
 import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
 import useFavoriteList from '@/hook/main-page/useFavoriteList'
-import useMedia from '@/hook/useMedia'
+import dynamic from 'next/dynamic'
+import SearchOptionPanel from '@/app/panel/main-page/MainPanel'
+
+const DynamicTutorial = dynamic(() => import('@/components/Tutorial'), {
+  loading: () => <></>,
+})
 
 const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { isInit, handleSort, handleType, handleChangePage, queryKeyword } =
@@ -36,7 +41,6 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { data, noContent } = useMainCards(initData)
   const { page, type, sort } = useMainOptionsStore()
   const { getFavoriteData } = useFavoriteList()
-  const { isTablet } = useMedia()
 
   return (
     <Container sx={containerStyle}>
@@ -49,7 +53,7 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
               </Box>
               <Stack direction={'row'} justifyContent={'space-between'}>
                 <SelectType type={type} setType={handleType} />
-                <Tutorial
+                <DynamicTutorial
                   title={'프로젝트 검색'}
                   content={<MainPageTutorial />}
                 />
@@ -111,15 +115,13 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
             </>
           )}
         </Stack>
-        {!isTablet && (
-          <Stack sx={sideMenuStyle}>
-            <MainProfile />
-            <MainShowcase />
-            <MainCarousel />
-          </Stack>
-        )}
+        <Stack sx={sideMenuStyle} className={'side-layout'}>
+          <MainProfile />
+          <MainShowcase />
+          <MainCarousel />
+        </Stack>
       </Stack>
-      <Stack alignItems={'center'}  my={'1rem'}>
+      <Stack alignItems={'center'} my={'1rem'}>
         <Pagination
           count={data?.totalPages}
           page={page}

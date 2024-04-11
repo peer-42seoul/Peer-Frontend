@@ -4,6 +4,7 @@ export const sideMenuStyle: SxProps = {
   maxWidth: '19.25rem',
   height: '100%',
   gap: '1rem',
+  width: '100%',
 }
 
 export const cardStyle: SxProps = {

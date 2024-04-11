@@ -10,11 +10,15 @@ import {
   Stack,
 } from '@mui/material'
 import Link from 'next/link'
-import OthersProfile from '../OthersProfile'
 import TagChip from '@/components/TagChip'
 import FavoriteButton from '@/components/FavoriteButton'
 import { ChipStyle } from '@/app/panel/main-page/MainCard.style'
 import CuPhotoBox from '@/components/CuPhotoBox'
+import dynamic from 'next/dynamic'
+
+const DynamicOtherProfile = dynamic(() => import('@/app/panel/OthersProfile'), {
+  loading: () => <></>,
+})
 
 const MainCard = ({
   title,
@@ -111,7 +115,7 @@ const MainCard = ({
       </Link>
       <CardHeader
         avatar={
-          <OthersProfile userId={user_id} name={user_nickname}>
+          <DynamicOtherProfile userId={user_id} name={user_nickname}>
             <Avatar
               aria-label="profile"
               src={user_thumbnail}
@@ -120,7 +124,7 @@ const MainCard = ({
                 height: '2rem',
               }}
             />
-          </OthersProfile>
+          </DynamicOtherProfile>
         }
         action={
           <FavoriteButton
