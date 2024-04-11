@@ -46,7 +46,7 @@ export const CommentWriter = ({
         case 401: {
           openToast({
             severity: 'error',
-            message: '401',
+            message: '로그인 이후 이용해주세요.',
           })
           break
         }
@@ -60,7 +60,7 @@ export const CommentWriter = ({
         case 404: {
           openToast({
             severity: 'error',
-            message: '404',
+            message: '404 에러가 발생했습니다.',
           })
           break
         }
@@ -81,7 +81,11 @@ export const CommentWriter = ({
               style={style.writerInput}
               inputProps={{ maxLength: 150 }}
             />
-            <IconButton type="submit" style={style.writerButton}>
+            <IconButton
+              type="submit"
+              style={style.writerButton}
+              aria-label="작성 완료"
+            >
               <SendIcon />
             </IconButton>
           </Stack>

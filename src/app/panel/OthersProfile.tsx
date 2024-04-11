@@ -65,6 +65,7 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
             color: 'inherit',
           }}
           onClick={handleClick}
+          aria-label="프로필 보기"
         >
           {children}
         </Button>
@@ -83,9 +84,15 @@ const OthersProfile = ({ name, userId, children }: IOthersProfile) => {
           <Typography sx={{ p: 1 }}>{name}</Typography>
           {nickname !== name ? (
             <>
-              <Button onClick={goOthersProfile}>프로필 보기</Button>
-              <Button onClick={messageOpen}>쪽지 보내기</Button>
-              <Button onClick={reportOpen}>신고하기</Button>
+              <Button onClick={goOthersProfile} aria-label="프로필 보기">
+                프로필 보기
+              </Button>
+              <Button onClick={messageOpen} aria-label="쪽지 보내기">
+                쪽지 보내기
+              </Button>
+              <Button onClick={reportOpen} aria-label="신고하기">
+                신고하기
+              </Button>
             </>
           ) : (
             <Button onClick={goMypage}>마이페이지</Button>

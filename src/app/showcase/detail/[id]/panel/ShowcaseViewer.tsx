@@ -1,3 +1,5 @@
+'use client'
+
 import { Container, Stack } from '@mui/material'
 import React from 'react'
 import TeamName from '../../../panel/common/TeamName'
