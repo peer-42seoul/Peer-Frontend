@@ -5,7 +5,6 @@ const useMainOptionsStore = create<IMainOptionsStore>((set) => {
   return {
     page: 1,
     sort: 'latest',
-    // type: 'STUDY',
     type: 'ALL',
     init: true,
     detailOption: {

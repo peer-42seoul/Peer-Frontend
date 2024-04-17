@@ -35,7 +35,9 @@ const SearchOption = ({ type }: { type: ProjectType }) => {
               cursor: 'pointer',
             }}
           >
-            맞춤 {typeTitle}를 빠르게 찾아요.
+            {type === 'ALL'
+              ? '스터디와 프로젝트를 빠르게 찾아요.'
+              : `맞춤 ${typeTitle}를 빠르게 찾아요.`}
           </Typography>
           <IconButton sx={{ color: titleColor }}>
             {openOption ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
@@ -63,7 +65,9 @@ const SearchOption = ({ type }: { type: ProjectType }) => {
             cursor: 'pointer',
           }}
         >
-          맞춤 {typeTitle}를 빠르게 찾아요.
+          {type === 'ALL'
+            ? '스터디와 프로젝트를 빠르게 찾아요.'
+            : `맞춤 ${typeTitle}를 빠르게 찾아요.`}
         </Typography>
         <IconButton sx={{ color: 'white' }}>
           {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
@@ -88,7 +92,9 @@ const SearchOption = ({ type }: { type: ProjectType }) => {
                 cursor: 'pointer',
               }}
             >
-              맞춤 {typeTitle}를 빠르게 찾아요.
+              {type === 'ALL'
+                ? '스터디와 프로젝트를 빠르게 찾아요.'
+                : `맞춤 ${typeTitle}를 빠르게 찾아요.`}
             </Typography>
             <IconButton sx={{ color: titleColor }}>
               {openOption ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
