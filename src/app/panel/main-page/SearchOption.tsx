@@ -1,9 +1,9 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import { IconButton, Stack, SwipeableDrawer, Typography } from '@mui/material'
-import Options from './Options'
 import useMedia from '@/hook/useMedia'
 import { ProjectType } from '@/types/IPostDetail'
 import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
+import Options from '@/app/panel/main-page/Options'
 
 const SearchOption = ({ type }: { type: ProjectType }) => {
   const { isPc } = useMedia()

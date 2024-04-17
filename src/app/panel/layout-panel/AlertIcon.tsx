@@ -14,15 +14,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 
 // 알림탭 관련
 
-import {
-  Badge,
-  Button,
-  Drawer,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-} from '@mui/material'
+import { Badge, Button, Stack, Tab, Tabs, Typography } from '@mui/material'
 import {
   Dispatch,
   SetStateAction,
@@ -40,6 +32,11 @@ import { useRouter } from 'next/navigation'
 import useAlarmStorage, { IAlarm } from '@/states/useAlarmStorage'
 import AlertCard from './alert-panel/AlertCard'
 import { debounce } from 'lodash'
+import dynamic from 'next/dynamic'
+
+const DynamicDrawer = dynamic(() => import('@mui/material/Drawer'), {
+  loading: () => <></>,
+})
 
 const useInfiniteScroll = ({
   setPage,
@@ -204,8 +201,7 @@ const AlertIcon = () => {
           />
         </Badge>
       </IconButton>
-
-      <Drawer
+      <DynamicDrawer
         PaperProps={{
           sx: {
             height: '100%',
@@ -315,7 +311,7 @@ const AlertIcon = () => {
             </Stack>
           )}
         </Box>
-      </Drawer>
+      </DynamicDrawer>
     </>
   )
 }
