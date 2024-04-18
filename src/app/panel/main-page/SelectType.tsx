@@ -14,6 +14,16 @@ const SelectType = ({
   return (
     <Stack flexDirection={'row'} gap={'0.75rem'} alignItems={'center'}>
       <Typography
+        color={type === 'ALL' ? 'text.strong' : 'text.assistive'}
+        variant={'Title1'}
+        onClick={() => {
+          setType('ALL')
+        }}
+        sx={{ cursor: 'pointer', transition: 'color 0.5s ease' }}
+      >
+        전체
+      </Typography>
+      <Typography
         color={type === 'STUDY' ? 'text.strong' : 'text.assistive'}
         variant={'Title1'}
         onClick={() => {

@@ -1,5 +1,4 @@
-import { ProjectType } from '@/types/IPostDetail'
-import { ProjectSort } from '@/app/panel/MainPage'
+import { ProjectSort, ProjectType } from '@/types/IPostDetail'
 
 export interface IDetailOption {
   due1: number

@@ -1,3 +1,5 @@
+'use client'
+
 import {
   cardStyle,
   containerStyle,
@@ -6,7 +8,6 @@ import {
 import { Box, Container, Pagination, Stack, Typography } from '@mui/material'
 import MainBanner from '@/app/panel/main-page/MainBanner'
 import SelectType from '@/app/panel/main-page/SelectType'
-import SearchOptionPanel from '@/app/panel/main-page/MainPanel'
 import SelectSort from '@/app/panel/main-page/SelectSort'
 import NoDataDolphin from '@/components/NoDataDolphin'
 import { IPost } from '@/types/IPostDetail'
@@ -14,9 +15,10 @@ import MainCard from '@/app/panel/main-page/MainCard'
 import FloatEditButton from '@/app/panel/main-page/FloatEditButton'
 import { IPagination } from '@/types/IPagination'
 import useMainOptions from '@/hook/main-page/useMainOptions'
-import useMainCards from '@/hook/main-page/useMainCards'
 import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
 import useFavoriteList from '@/hook/main-page/useFavoriteList'
+import SearchOptionPanel from '@/app/panel/main-page/MainPanel'
+import useMainCards from '@/hook/main-page/useMainCards'
 
 const MainMobileView = ({ initData }: { initData: IPagination<IPost[]> }) => {
   const { isInit, handleSort, handleType, handleChangePage, queryKeyword } =

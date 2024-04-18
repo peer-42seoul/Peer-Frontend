@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import RecruitDetailPage from '@/app/recruit/[id]/panel/RecruitDetailPage'
+import NextSeo from '@/components/NextSeo'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,5 +25,17 @@ export default async function RecruitDetailIndex({
     // console.error(e)
   }
 
-  return <RecruitDetailPage data={data} id={params.id} />
+  const webMetadata = {
+    title: data?.title,
+    description: data?.content,
+    url: `https://peer-study.co.kr/`,
+    image: data?.image,
+  }
+
+  return (
+    <>
+      <NextSeo webMetadata={webMetadata} />
+      <RecruitDetailPage data={data} id={params.id} />
+    </>
+  )
 }

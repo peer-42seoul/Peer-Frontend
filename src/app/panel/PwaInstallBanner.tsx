@@ -3,9 +3,9 @@
 import useMedia from '@/hook/useMedia'
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { BeforeInstallPromptEvent } from './MainPage'
 import IosShareIcon from '@mui/icons-material/IosShare'
 import CloseIcon from '@mui/icons-material/Close'
+import { BeforeInstallPromptEvent } from '@/app/page'
 
 declare global {
   interface Window {

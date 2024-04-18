@@ -20,6 +20,7 @@ export const CommentWriter = ({
   const onChangeContent = (event: ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value)
   }
+
   const submitContent = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
@@ -45,7 +46,7 @@ export const CommentWriter = ({
         case 401: {
           openToast({
             severity: 'error',
-            message: '401',
+            message: '로그인 이후 이용해주세요.',
           })
           break
         }
@@ -59,7 +60,7 @@ export const CommentWriter = ({
         case 404: {
           openToast({
             severity: 'error',
-            message: '404',
+            message: '404 에러가 발생했습니다.',
           })
           break
         }
@@ -68,7 +69,7 @@ export const CommentWriter = ({
   }
 
   return (
-    <Container sx={style.writerWrapper}>
+    <Container component={'article'} sx={style.writerWrapper}>
       <Stack sx={style.writerContainer}>
         <form onSubmit={submitContent} style={style.writerForm}>
           <Stack sx={style.writerInputContainer}>
@@ -80,7 +81,11 @@ export const CommentWriter = ({
               style={style.writerInput}
               inputProps={{ maxLength: 150 }}
             />
-            <IconButton type="submit" style={style.writerButton}>
+            <IconButton
+              type="submit"
+              style={style.writerButton}
+              aria-label="작성 완료"
+            >
               <SendIcon />
             </IconButton>
           </Stack>

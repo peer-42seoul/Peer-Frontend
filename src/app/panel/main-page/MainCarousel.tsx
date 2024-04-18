@@ -26,6 +26,7 @@ const MainCarousel = () => {
       <CuPhotoBox
         src={'/images/banners/default-mobile.svg'}
         alt="banner-1"
+        priorityOption={true}
         imgStyle={{ borderRadius: '0.75rem' }}
         style={{ width: 300, height: 130 }}
       />
