@@ -33,7 +33,7 @@ const WidgetList = ({
   setSize,
   setDroppingItem,
 }: ITeamDnDWidgetListProps) => {
-  const { isPc, isTablet } = useMedia()
+  const { isPc, isOverTablet } = useMedia()
   /* 툴 박스의 사이즈 관리 */
   const [toolSize, setToolSize] = useState<IToolSizeType>({
     notice: 'S',
@@ -47,12 +47,12 @@ const WidgetList = ({
 
   const typeList: WidgetType[] = [
     'notice',
-    'board',
-    'calender',
-    'attendance',
+    // 'board',
+    // 'calender',
+    // 'attendance',
     'text',
     'image',
-    'linkTable',
+    // 'linkTable',
   ]
 
   /* drag 시작 시 호출 */
@@ -76,7 +76,7 @@ const WidgetList = ({
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: isTablet ? 2 : isPc ? 3 : 1,
+    slidesToShow: isPc ? 3 : isOverTablet ? 2 : 1,
     slidesToScroll: 1,
   }
 

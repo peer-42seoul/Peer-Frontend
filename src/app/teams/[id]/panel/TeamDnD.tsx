@@ -13,6 +13,7 @@ import useDnDStore from '@/states/useDnDStore'
 import { useParams } from 'next/navigation'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import NoDataDolphin from '@/components/NoDataDolphin'
+import useMedia from '@/hook/useMedia'
 
 export const sizeRatio = {
   S: { w: 1, h: 1 },
@@ -21,8 +22,8 @@ export const sizeRatio = {
 }
 
 const TeamDnD = ({ id }: { id: string }) => {
-  const { setStoredWidgets, setTeamId } = useDnDStore()
-  const [edit, setEdit] = useState(false)
+  const { setStoredWidgets, setTeamId, edit } = useDnDStore()
+  const { isOverTablet } = useMedia()
   const [type, setType] = useState<WidgetType>('text')
   const [droppingItem, setDroppingItem] = useState<
     ReactGridLayout.CoreProps['droppingItem']
@@ -75,11 +76,9 @@ const TeamDnD = ({ id }: { id: string }) => {
         size={size}
         isDropping={isDropping}
         droppingItem={droppingItem}
-        edit={edit}
-        setEdit={setEdit}
       >
         {/*툴 박스 리스트*/}
-        {edit && (
+        {edit && isOverTablet && (
           <WidgetList
             setIsDropping={setIsDropping}
             setType={setType}

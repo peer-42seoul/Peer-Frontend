@@ -4,6 +4,8 @@ import axios from 'axios'
 import useAuthStore from '@/states/useAuthStore'
 
 interface IStoreDnDState {
+  edit: boolean
+  setEdit: (edit: boolean) => void
   teamId: number | undefined
   setTeamId: (teamId: number | undefined) => void
   storedWidgets: IWidget[] | undefined
@@ -23,6 +25,8 @@ const useDnDStore = create<IStoreDnDState>((set) => {
 
   return {
     // DnD 업데이트
+    edit: false,
+    setEdit: (edit: boolean) => set(() => ({ edit })),
     teamId: undefined,
     setTeamId: (teamId: number | undefined) => set(() => ({ teamId })),
     storedWidgets: [],
