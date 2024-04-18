@@ -1,4 +1,5 @@
 'use client'
+
 import useAxiosWithAuth from '@/api/config'
 import CuCircularProgress from '@/components/CuCircularProgress'
 import { IComment, IPostId } from '@/types/IComment'
@@ -9,10 +10,10 @@ import { CommentWriter } from './CommentWriter'
 import * as style from './CommentContainer.style'
 import CommentItem from './CommentItem'
 
-const CommentContainer = ({ postId }: IPostId) => {
+export const CommentContainer = ({ postId }: IPostId) => {
   const axiosWithAuth = useAxiosWithAuth()
   const { data, isLoading, error } = useSWR<IComment[]>(
-    `${process.env.NEXT_PUBLIC_CSR_API}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
+    `${process.env.NEXT_rPUBLIC_CSR_API}/api/v1/showcase/comment/${postId}?page=1&pageSize=3`,
     (url: string) => axiosWithAuth.get(url).then((res) => res.data),
     { shouldRetryOnError: false },
   )
@@ -68,5 +69,3 @@ const CommentContainer = ({ postId }: IPostId) => {
     </>
   )
 }
-
-export default CommentContainer
