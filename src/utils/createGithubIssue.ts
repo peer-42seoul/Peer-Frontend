@@ -15,16 +15,16 @@ const generateIssueBody = ({
   title,
   userName,
   content,
-  // link,
+  link,
 }: githubIssueData) => {
   const sliceContent = content.slice(0, 20) + '...'
-  return `**${title}**
+  return `## ${title}
 
   작성자: ${userName}
 
   ${sliceContent}
 
-  🔗 [모집글 바로가기](https://www.naver.com/)
+  🔗 [모집글 바로가기](http://localhost:3000/${link})
   `
 }
 
