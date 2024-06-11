@@ -8,6 +8,7 @@ import { ITag } from '@/types/IPostDetail'
 import useToast from '@/states/useToast'
 import { useRouter } from 'next/navigation'
 import { fieldToForm } from './panel/fields/Interview/handleInterviewList'
+import { createGithubIssue } from '@/utils/createGithubIssue'
 
 const Page = () => {
   const editorRef = useRef<Editor | null>(null)
@@ -68,8 +69,16 @@ const Page = () => {
           message: '모집글이 성공적으로 등록되었습니다.',
           severity: 'success',
         })
+        const recruitUrl = `/recruit/${res.data}?type=${data.type}`
+        createGithubIssue({
+          title: data.title,
+          userName: data.name,
+          content: editorRef.current?.getMarkdown() ?? '',
+          link: recruitUrl,
+        })
         setIsSubmitting(false)
-        router.push(`/recruit/${res.data}?type=${data.type}`)
+
+        router.push(recruitUrl)
       })
       .catch((error) => {
         openToast({
