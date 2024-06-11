@@ -19,12 +19,13 @@ const generateIssueBody = ({
 }: githubIssueData) => {
   const sliceContent = content.slice(0, 20) + '...'
   return `## ${title}
-    작성자: ${userName}
 
-    ${sliceContent}
+  작성자: ${userName}
 
-    🔗 [모집글 바로가기](${link})
-    `
+  ${sliceContent}
+
+  🔗 [모집글 바로가기](${link})
+  `
 }
 
 export const createGithubIssue = async ({
