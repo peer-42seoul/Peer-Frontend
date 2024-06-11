@@ -42,8 +42,8 @@ export const createGithubIssue = async ({
       title,
       body,
     })
-    console.info('GitHub 이슈를 성공적으로 생성했습니다.')
   } catch (error) {
+    // 이슈 생성에 실패했을 때 에러 처리 논의 필요함.
     console.error(error)
   }
 }
