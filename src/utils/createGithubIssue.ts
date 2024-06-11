@@ -24,7 +24,7 @@ const generateIssueBody = ({
 
   ${sliceContent}
 
-  🔗 [모집글 바로가기](http://localhost:3000/${link})
+  🔗 [모집글 바로가기](http://127.0.0.1${link})
   `
 }
 
