@@ -17,7 +17,7 @@ const generateIssueBody = ({
   content,
   link,
 }: githubIssueData) => {
-  const sliceContent = content.slice(0, 20) + '...'
+  const sliceContent = content.slice(0, 20)
   return `## ${title}
 
   작성자: ${userName}
