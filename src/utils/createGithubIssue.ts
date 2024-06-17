@@ -31,7 +31,7 @@ const generateIssueBody = ({
     type === 'STUDY' ? '스터디' : '프로젝트'
   } 모집글이 올라왔어요 😊
 
-  🔗 [모집글 바로가기](${BASE_URL}${link})
+  🔗 [자세한 내용은 peer에서!](${BASE_URL}${link})
   
   👤 ${userName}
 
