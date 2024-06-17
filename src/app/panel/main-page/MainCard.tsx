@@ -37,6 +37,8 @@ const MainCard = ({
   titleMaxLine = 2,
   tagMaxLine = 2,
 }: IMainCard) => {
+  //글 생성일, 인원
+
   const statusLabel =
     status === 'ONGOING'
       ? '모집중'

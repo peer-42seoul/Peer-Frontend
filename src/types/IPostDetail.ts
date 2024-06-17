@@ -60,6 +60,7 @@ export interface IPostDetail {
   current?: number
   favorite: boolean
   teamName: string
+  updatedAt: string
 }
 
 export interface IFormInterview {
