@@ -25,6 +25,8 @@ const generateIssueBody = ({
   type,
   tagList,
 }: githubIssueBodyProps) => {
+  const imageRegex = /!\[.*?\]\(.*?\)/g
+  const removedImageContent = content.replaceAll(imageRegex, '')
   return ` # 새 ${
     type === 'STUDY' ? '스터디' : '프로젝트'
   } 모집글이 올라왔어요 😊
@@ -37,7 +39,7 @@ const generateIssueBody = ({
 
   ---
 
-  ${content}
+  ${removedImageContent}
 
   `
 }
@@ -50,7 +52,13 @@ export const createGithubIssue = async ({
   type,
   tagList,
 }: githubIssueData) => {
-  const body = generateIssueBody({ userName, content, link, type, tagList })
+  const body = generateIssueBody({
+    userName,
+    content,
+    link,
+    type,
+    tagList,
+  })
   try {
     await octokit.rest.issues.create({
       owner: 'peer-42seoul',
