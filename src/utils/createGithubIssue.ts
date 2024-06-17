@@ -1,6 +1,6 @@
 import { Octokit } from 'octokit'
 
-const BASE_URL = 'http://127.0.0.1' // 배포 시에는 실제 URL로 변경
+const BASE_URL = 'http://127.0.0.1:3000' // 배포 시에는 실제 URL로 변경
 
 const octokit = new Octokit({
   auth: process.env.NEXT_PUBLIC_GITHUB_TOKEN,
