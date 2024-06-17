@@ -1,5 +1,7 @@
 import { Octokit } from 'octokit'
 
+const BASE_URL = 'http://127.0.0.1' // 배포 시에는 실제 URL로 변경
+
 const octokit = new Octokit({
   auth: process.env.NEXT_PUBLIC_GITHUB_TOKEN,
 })
@@ -18,13 +20,19 @@ const generateIssueBody = ({
   link,
 }: githubIssueData) => {
   const sliceContent = content.slice(0, 20)
-  return `## ${title}
+  return ` # 새 글이 올라왔어요😊
+  
+  ## ${title}
 
   작성자: ${userName}
 
+  ---
+
   ${sliceContent}
 
-  🔗 [모집글 바로가기](http://127.0.0.1${link})
+  ---
+
+  🔗 [모집글 바로가기](${BASE_URL}${link})
   `
 }
 
