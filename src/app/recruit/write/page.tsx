@@ -9,6 +9,7 @@ import useToast from '@/states/useToast'
 import { useRouter } from 'next/navigation'
 import { fieldToForm } from './panel/fields/Interview/handleInterviewList'
 import { createGithubIssue } from '@/utils/createGithubIssue'
+import useNicknameStore from '@/states/useNicknameStore'
 
 const Page = () => {
   const editorRef = useRef<Editor | null>(null)
@@ -17,6 +18,7 @@ const Page = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { openToast, closeToast } = useToast()
+  const { nickname } = useNicknameStore()
 
   const defaultValues: IRecruitWriteField = {
     place: '',
@@ -72,9 +74,11 @@ const Page = () => {
         const recruitUrl = `/recruit/${res.data}?type=${data.type}`
         createGithubIssue({
           title: data.title,
-          userName: data.name,
+          userName: nickname ?? '익명의 사용자',
           content: editorRef.current?.getMarkdown() ?? '',
           link: recruitUrl,
+          type: data.type,
+          tagList: data.tagList,
         })
         setIsSubmitting(false)
 

@@ -1,3 +1,4 @@
+import { ISkill } from '@/types/IUserProfile'
 import { Octokit } from 'octokit'
 
 const BASE_URL = 'http://127.0.0.1:3000' // 배포 시에는 실제 URL로 변경
@@ -11,28 +12,33 @@ type githubIssueData = {
   userName: string
   content: string
   link: string
+  type: string
+  tagList: Array<ISkill>
 }
 
+type githubIssueBodyProps = Omit<githubIssueData, 'title'>
+
 const generateIssueBody = ({
-  title,
   userName,
   content,
   link,
-}: githubIssueData) => {
-  const sliceContent = content.slice(0, 20)
-  return ` # 새 글이 올라왔어요😊
-  
-  ## ${title}
-
-  작성자: ${userName}
-
-  ---
-
-  ${sliceContent}
-
-  ---
+  type,
+  tagList,
+}: githubIssueBodyProps) => {
+  return ` # 새 ${
+    type === 'STUDY' ? '스터디' : '프로젝트'
+  } 모집글이 올라왔어요 😊
 
   🔗 [모집글 바로가기](${BASE_URL}${link})
+  
+  👤 ${userName}
+
+  ${tagList.length > 0 ? '🏷️ ' + tagList.map((tag) => tag.name).join(', ') : ''}
+
+  ---
+
+  ${content}
+
   `
 }
 
@@ -41,8 +47,10 @@ export const createGithubIssue = async ({
   userName,
   content,
   link,
+  type,
+  tagList,
 }: githubIssueData) => {
-  const body = generateIssueBody({ title, userName, content, link })
+  const body = generateIssueBody({ userName, content, link, type, tagList })
   try {
     await octokit.rest.issues.create({
       owner: 'peer-42seoul',
