@@ -27,6 +27,8 @@ export interface IMainCard {
   sx?: SxProps
   titleMaxLine?: number
   tagMaxLine?: number
+  createdAt?: string
+  member?: number
 }
 
 export interface IPost {
@@ -42,6 +44,7 @@ export interface IPost {
 }
 
 export interface IPostDetail {
+  type: ProjectType
   title: string
   status: TPostStatus
   due: string
@@ -60,6 +63,8 @@ export interface IPostDetail {
   current?: number
   favorite: boolean
   teamName: string
+  updatedAt: string
+  createdAt: string
 }
 
 export interface IFormInterview {

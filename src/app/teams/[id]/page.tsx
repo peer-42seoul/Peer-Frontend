@@ -3,11 +3,10 @@
 import { useRouter } from 'next/navigation'
 import { Stack } from '@mui/material'
 import TeamInfoContainer from './panel/TeamInfoContainer'
-// import TeamDnD from './panel/TeamDnD'
 import CuButton from '@/components/CuButton'
 import { useEffect, useState } from 'react'
 import CuCircularProgress from '@/components/CuCircularProgress'
-import TeamDnD from '@/app/teams/[id]/panel/TeamDnD'
+import NoDataDolphin from '@/components/NoDataDolphin'
 
 const TeamsPage = ({ params }: { params: { id: string } }) => {
   const [isClient, setIsClient] = useState(false)
@@ -33,7 +32,19 @@ const TeamsPage = ({ params }: { params: { id: string } }) => {
         style={{ width: 'fit-content' }}
       />
       <TeamInfoContainer id={Number(id)} />
-      <TeamDnD id={id} />
+      <Stack
+        width={'100%'}
+        height={'100%'}
+        alignItems={'center'}
+        justifyContent={'center'}
+        sx={{
+          borderRadius: '1rem',
+          backgroundColor: 'background.secondary',
+        }}
+      >
+        <NoDataDolphin message="메인 팀페이지는 준비중입니다!" />
+      </Stack>
+      {/*<TeamDnD id={id} />*/}
     </Stack>
   )
 }
