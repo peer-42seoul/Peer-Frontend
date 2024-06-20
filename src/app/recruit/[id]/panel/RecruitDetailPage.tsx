@@ -1,9 +1,9 @@
 'use client'
 
 import { Typography, Stack, Container, Divider, Box } from '@mui/material'
-import { IPostDetail, ProjectType } from '@/types/IPostDetail'
+import { IPostDetail } from '@/types/IPostDetail'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import useMedia from '@/hook/useMedia'
 import RecruitQuickMenu from '@/app/recruit/[id]/panel/RecruitQuickMenu'
 import RecruitInfo from './RecruitInfo'
@@ -27,7 +27,7 @@ const RecruitDetailPage = ({
   const [isClient, setIsClient] = useState(false)
   const [content, setCotent] = useState<IPostDetail | undefined>(data)
   const router = useRouter()
-  const type = (useSearchParams().get('type') as ProjectType) ?? 'PROJECT'
+  const type = data?.type ?? 'PROJECT'
   const { isPc } = useMedia()
   const { setHeaderTitle } = useHeaderStore()
   const { nickname } = UseNicknameStore()

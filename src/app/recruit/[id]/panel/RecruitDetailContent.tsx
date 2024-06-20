@@ -105,7 +105,7 @@ const RecruitDetailContent = ({
         <RecruitContentText
           label="작성일"
           icon={<DateRangeIcon fontSize={'small'} />}
-          content={dayjs(data?.updatedAt).format('YYYY-MM-DD HH:mm')}
+          content={dayjs(data?.createdAt).format('YYYY-MM-DD HH:mm')}
         />
       </Grid>
       <Stack marginY={'1.5rem'}>
