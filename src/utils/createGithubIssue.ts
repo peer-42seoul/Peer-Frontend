@@ -1,7 +1,7 @@
 import { ISkill } from '@/types/IUserProfile'
 import { Octokit } from 'octokit'
 
-const BASE_URL = 'http://127.0.0.1:3000' // 배포 시에는 실제 URL로 변경
+const BASE_URL = 'https://www.peer-study.co.kr'
 
 /**
  * TS, Octokit 버전에 따라 타입 에러가 발생하는 경우가 있음
