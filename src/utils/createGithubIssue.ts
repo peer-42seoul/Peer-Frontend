@@ -3,6 +3,13 @@ import { Octokit } from 'octokit'
 
 const BASE_URL = 'http://127.0.0.1:3000' // 배포 시에는 실제 URL로 변경
 
+/**
+ * TS, Octokit 버전에 따라 타입 에러가 발생하는 경우가 있음
+ * 직접적으로 사용하는 기능에서 발생한 사례는 없지만 참고하면 좋을 것 같아서 남깁니다.
+ * octokit/octokit.js#2439 : string 타입 오류
+ * octokit/octokit.js#1624 : v17 오류
+ * octokit/octokit.js#2598 : import 에러
+ */
 const octokit = new Octokit({
   auth: process.env.NEXT_PUBLIC_GITHUB_TOKEN,
 })
