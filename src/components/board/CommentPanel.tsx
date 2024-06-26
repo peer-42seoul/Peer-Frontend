@@ -114,7 +114,11 @@ export const CommentMoreDropdownMenu = ({
   }
   return (
     <>
-      <IconButton sx={style.IconButton} onClick={handleOpen}>
+      <IconButton
+        sx={style.IconButton}
+        onClick={handleOpen}
+        aria-label="댓글 옵션 버튼"
+      >
         <MoreHorizontalIcon sx={style.Icon} />
       </IconButton>
       <Menu

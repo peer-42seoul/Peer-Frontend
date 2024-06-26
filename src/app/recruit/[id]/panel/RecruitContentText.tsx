@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material'
+import { Grid, Stack, Typography } from '@mui/material'
 
 const RecruitContentText = ({
   label,
@@ -11,26 +11,28 @@ const RecruitContentText = ({
   children?: React.ReactNode
   icon?: React.ReactNode
 }) => (
-  <Stack gap={'0.5rem'}>
-    <Stack direction={'row'} gap={'0.5rem'} alignItems={'center'}>
-      <Stack
-        sx={{ color: 'text.normal', width: '1rem', height: '1rem' }}
-        alignItems={'center'}
-        justifyContent={'center'}
-      >
-        {icon}
+  <Grid xs={6}>
+    <Stack gap={'0.5rem'}>
+      <Stack direction={'row'} gap={'0.5rem'} alignItems={'center'}>
+        <Stack
+          sx={{ color: 'text.normal', width: '1rem', height: '1rem' }}
+          alignItems={'center'}
+          justifyContent={'center'}
+        >
+          {icon}
+        </Stack>
+        <Typography color={'text.strong'} variant="CaptionEmphasis">
+          {label}
+        </Typography>
       </Stack>
-      <Typography color={'text.strong'} variant="CaptionEmphasis">
-        {label}
-      </Typography>
+      {content && (
+        <Typography variant={'Body2'} color={'text.alternative'}>
+          {content}
+        </Typography>
+      )}
+      {children && children}
     </Stack>
-    {content && (
-      <Typography variant={'Body2'} color={'text.alternative'}>
-        {content}
-      </Typography>
-    )}
-    {children && children}
-  </Stack>
+  </Grid>
 )
 
 export default RecruitContentText

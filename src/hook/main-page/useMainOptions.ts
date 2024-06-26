@@ -1,7 +1,6 @@
 import useMainOptionsStore from '@/states/main-page/useMainOptionsStore'
 import { useCallback, useEffect } from 'react'
-import { ProjectType } from '@/types/IPostDetail'
-import { ProjectSort } from '@/app/panel/MainPage'
+import { ProjectSort, ProjectType } from '@/types/IPostDetail'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { IDetailOption } from '@/types/IMainOptions'
 

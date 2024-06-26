@@ -1,10 +1,11 @@
 'use client'
 
-import { useMediaQuery, IconButton, Modal, Box } from '@mui/material'
+import { useMediaQuery, IconButton, Box } from '@mui/material'
 import useModal from '@/hook/useModal'
 import SearchBody from '../../search/panel/SearchBody'
 import { SearchIcon } from '@/icons'
 import Header from '@/app/panel/layout-panel/Header'
+import dynamic from 'next/dynamic'
 
 const StyleMobileSearch = {
   position: 'absolute' as 'absolute',
@@ -22,6 +23,10 @@ const StylePcSearch = {
   boxShadow: 24,
 }
 
+const DynamicModal = dynamic(() => import('@mui/material/Modal'), {
+  loading: () => <></>,
+})
+
 const SearchPc = () => {
   const { isOpen, openModal, closeModal } = useModal()
   return (
@@ -30,7 +35,7 @@ const SearchPc = () => {
         <SearchIcon sx={{ color: 'text.alternative' }} />
       </IconButton>
       {/* NOTE : 기본 모달과 형태가 달라 CuModal을 사용하지 않았습니다. */}
-      <Modal
+      <DynamicModal
         open={isOpen}
         onClose={closeModal}
         aria-labelledby="modal-title"
@@ -39,7 +44,7 @@ const SearchPc = () => {
         <Box sx={StylePcSearch}>
           <SearchBody onClose={closeModal} />
         </Box>
-      </Modal>
+      </DynamicModal>
     </>
   )
 }
@@ -52,7 +57,7 @@ const SearchMobile = () => {
         <SearchIcon sx={{ color: 'text.normal' }} />
       </IconButton>
       {/* NOTE : 기본 모달과 형태가 달라 CuModal을 사용하지 않았습니다. */}
-      <Modal
+      <DynamicModal
         open={isOpen}
         onClose={closeModal}
         aria-labelledby="modal-title"
@@ -62,7 +67,7 @@ const SearchMobile = () => {
           <Header backAction={closeModal} />
           <SearchBody onClose={closeModal} />
         </Box>
-      </Modal>
+      </DynamicModal>
     </>
   )
 }

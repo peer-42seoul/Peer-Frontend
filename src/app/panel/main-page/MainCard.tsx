@@ -10,11 +10,16 @@ import {
   Stack,
 } from '@mui/material'
 import Link from 'next/link'
-import OthersProfile from '../OthersProfile'
 import TagChip from '@/components/TagChip'
 import FavoriteButton from '@/components/FavoriteButton'
 import { ChipStyle } from '@/app/panel/main-page/MainCard.style'
 import CuPhotoBox from '@/components/CuPhotoBox'
+import dynamic from 'next/dynamic'
+import dayjs from 'dayjs'
+
+const DynamicOtherProfile = dynamic(() => import('@/app/panel/OthersProfile'), {
+  loading: () => <></>,
+})
 
 const MainCard = ({
   title,
@@ -32,7 +37,11 @@ const MainCard = ({
   sx,
   titleMaxLine = 2,
   tagMaxLine = 2,
+  createdAt,
+  member,
 }: IMainCard) => {
+  //글 생성일, 인원
+
   const statusLabel =
     status === 'ONGOING'
       ? '모집중'
@@ -78,7 +87,7 @@ const MainCard = ({
           <CuPhotoBox
             style={{
               width: '100%',
-              height: '194px',
+              height: '160px',
               position: 'relative',
               left: '-2px',
               top: '-2px',
@@ -111,7 +120,7 @@ const MainCard = ({
       </Link>
       <CardHeader
         avatar={
-          <OthersProfile userId={user_id} name={user_nickname}>
+          <DynamicOtherProfile userId={user_id} name={user_nickname}>
             <Avatar
               aria-label="profile"
               src={user_thumbnail}
@@ -120,13 +129,13 @@ const MainCard = ({
                 height: '2rem',
               }}
             />
-          </OthersProfile>
+          </DynamicOtherProfile>
         }
         action={
           <FavoriteButton
             recruit_id={recruit_id}
             favorite={favorite}
-            redirect_url={`/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
+            redirect_url={`/recruit/${recruit_id}`}
             onFavorite={onFavorite}
           />
         }
@@ -147,7 +156,7 @@ const MainCard = ({
         }
       />
       <Link
-        href={href ?? `/recruit/${recruit_id}?type=${type ?? 'STUDY'}`}
+        href={href ?? `/recruit/${recruit_id}`}
         style={{ textDecoration: 'none' }}
       >
         <CardContent
@@ -172,6 +181,16 @@ const MainCard = ({
           >
             {title}
           </Typography>
+
+          <Stack justifyContent={'space-between'} direction={'row'} mt={0.5}>
+            <Typography variant="Body2" color="text.alternative">
+              {dayjs(createdAt).format('YYYY-MM-DD')}
+            </Typography>
+            <Typography variant="Body2" color="text.alternative">
+              {member}명
+            </Typography>
+          </Stack>
+
           <Stack
             gap={'0.25rem'}
             mt={1}

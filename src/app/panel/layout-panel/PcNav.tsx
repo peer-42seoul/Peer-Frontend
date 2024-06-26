@@ -78,6 +78,7 @@ const PcNav = () => {
               onClick={() => {
                 router.push('/')
               }}
+              aria-label="peer-logo"
             >
               <PeerLogo sx={{ width: 50, height: 50, color: 'text.normal' }} />
             </IconButton>

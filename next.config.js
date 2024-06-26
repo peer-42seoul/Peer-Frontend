@@ -21,6 +21,7 @@ const nextConfig = withPWA({
     ignoreDuringBuilds: true,
   },
   images: {
+    formats: ['image/avif', 'image/webp'],
     domains: [
       'picsum.photos',
       'source.unsplash.com',
@@ -54,6 +55,10 @@ const runtimeCaching = {
     }),
   ],
 }
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: true,
+})
 
 module.exports = nextConfig
 
