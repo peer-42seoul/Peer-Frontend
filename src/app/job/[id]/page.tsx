@@ -19,10 +19,37 @@ const JobDetailPage = ({ params }: { params: { id: string } }) => {
   const { id } = params
 
   const data: IJobDetail = {
-    title: 'title',
-    writer: 'writer',
+    title: '7월 1주차 채용 공고',
+    writer: 'jujeon',
     createdAt: new Date(),
-    content: 'content',
+    content: `# This is a Title
+
+This is a paragraph of text. You can write multiple lines of text here and it will stay together in the formatted document.
+
+## Here's a Subheading
+
+You can use asterisks (*) or underscores (_) to create italic text like this. 
+
+**Bold text** can be created with two asterisks (**) or two underscores (__).
+
+We can also include lists:
+
+* Bullet point 1
+* Bullet point 2
+  * Nested bullet point
+
+And numbered lists:
+
+1. Numbered item 1
+2. Numbered item 2
+
+Here's a link to [Wikipedia](wikipedia.org). 
+
+You can also add an image using the following syntax:
+
+!["Alt text for the image"](path/to/the/image.jpg)
+
+**Note:** This is just a basic example, and there are many other formatting options available in Markdown. `,
   }
 
   const router = useRouter()
