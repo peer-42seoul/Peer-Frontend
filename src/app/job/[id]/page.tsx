@@ -1,5 +1,6 @@
 'use client'
 
+import HitsCounter from '@/components/HitsCounter'
 import {
   DetailContent,
   DetailContentCotainer,
@@ -14,7 +15,9 @@ export interface IJobDetail {
   content: string // 글 내용
 }
 
-const JobDetailPage = () => {
+const JobDetailPage = ({ params }: { params: { id: string } }) => {
+  const { id } = params
+
   const data: IJobDetail = {
     title: 'title',
     writer: 'writer',
@@ -43,6 +46,8 @@ const JobDetailPage = () => {
           content={data.content}
         />
       </DetailContentCotainer>
+      {/* TODO: https://www.peer-study.co.kr/ 로 수정 필요함 */}
+      <HitsCounter targetUrl={`http://localhost:3000/job/${id}`} />
     </DetailPage>
   )
 }
