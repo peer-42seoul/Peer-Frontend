@@ -62,7 +62,7 @@ You can also add an image using the following syntax:
       }}
     >
       <DetailContentCotainer
-        containerTitle="이번 주의 채용 공고"
+        containerTitle="채용 공고"
         onClickEditButton={() => {}}
         author={false}
       >
