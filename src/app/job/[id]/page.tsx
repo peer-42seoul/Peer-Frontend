@@ -1,14 +1,17 @@
 'use client'
 
 import useAxiosWithAuth from '@/api/config'
+import CuCircularProgress from '@/components/CuCircularProgress'
 import HitsCounter from '@/components/HitsCounter'
 import {
   DetailContent,
   DetailContentCotainer,
   DetailPage,
 } from '@/components/board/DetailPanel'
+import useToast from '@/states/useToast'
 import UTCtoLocalTime from '@/utils/UTCtoLocalTime'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import useSWR from 'swr'
 
 export interface IJobDetail {
@@ -26,9 +29,19 @@ const JobDetailPage = ({ params }: { params: { id: string } }) => {
     `/api/v1/job/${params.id}`,
     async (url: string) => axiosWithAuth.get(url).then((res) => res.data),
   )
+  const { openToast } = useToast()
+  useEffect(() => {
+    if (!data && !isLoading) {
+      openToast({
+        severity: 'error',
+        message: '게시글을 불러오는 데 실패했습니다.',
+      })
+      router.push('/job')
+    }
+  }, [data, isLoading, openToast, router])
 
-  if (isLoading) return <div>Loading...</div>
-  if (!data) return <div>데이터가 없습니다.</div>
+  if (isLoading) return <CuCircularProgress color="primary" />
+  if (!data) return null
 
   return (
     <DetailPage
