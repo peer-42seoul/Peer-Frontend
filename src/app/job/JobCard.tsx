@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, Stack, Typography } from '@mui/material'
 import Link from 'next/link'
 
 import { IJob } from '@/types/IJob'
+import dayjs from 'dayjs'
 
 const JobCard = ({ title, writerName, createdAt, id }: IJob) => {
   return (
@@ -14,26 +15,6 @@ const JobCard = ({ title, writerName, createdAt, id }: IJob) => {
         boxShadow: 'none',
       }}
     >
-      <Link href={`/job/${id}`} style={{ textDecoration: 'none' }}>
-        {/*<Box sx={{ position: 'relative' }}>*/}
-        {/*  <CuPhotoBox*/}
-        {/*    style={{*/}
-        {/*      width: '100%',*/}
-        {/*      height: '160px',*/}
-        {/*      position: 'relative',*/}
-        {/*      left: '-2px',*/}
-        {/*      top: '-2px',*/}
-        {/*      border: '2px solid',*/}
-        {/*      borderBottom: 'none',*/}
-        {/*      borderColor: 'background.tertiary',*/}
-        {/*      borderBottomLeftRadius: '0.75rem',*/}
-        {/*      borderBottomRightRadius: '0.75rem',*/}
-        {/*    }}*/}
-        {/*    src={undefined}*/}
-        {/*    alt="userImage"*/}
-        {/*  />*/}
-        {/*</Box>*/}
-      </Link>
       <CardHeader
         title={
           <Typography
@@ -74,7 +55,7 @@ const JobCard = ({ title, writerName, createdAt, id }: IJob) => {
               {title}
             </Typography>
             <Typography variant="Body2" color="text.alternative">
-              {createdAt}
+              {dayjs(createdAt).format('YYYY-MM-DD')}
             </Typography>
           </Stack>
         </CardContent>
