@@ -49,8 +49,9 @@ const JobDetailPage = ({ params }: { params: { id: string } }) => {
           content={data.content}
         />
       </DetailContentCotainer>
-      {/* TODO: https://www.peer-study.co.kr/ 로 수정 필요함 */}
-      <HitsCounter targetUrl={`http://localhost:3000/job/${params.id}`} />
+      <HitsCounter
+        targetUrl={`https://www.peer-study.co.kr/job/${params.id}`}
+      />
     </DetailPage>
   )
 }
