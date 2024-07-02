@@ -4,7 +4,3 @@ export interface IJob {
   createdAt: string
   id: number
 }
-
-export interface IJobDetail extends IJob {
-  content: string
-}
