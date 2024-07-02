@@ -1,6 +1,12 @@
 'use client'
 
-import { Container, Grid, Stack, Typography } from '@mui/material'
+import {
+  CircularProgress,
+  Container,
+  Grid,
+  Stack,
+  Typography,
+} from '@mui/material'
 import { containerStyle } from '@/app/panel/main-page/Mainpage.style'
 
 import NoDataDolphin from '@/components/NoDataDolphin'
@@ -10,6 +16,7 @@ import { IJob } from '@/types/IJob'
 import JobCard from '@/app/job/JobCard'
 import useSWR from 'swr'
 import { defaultGetFetcher } from '@/api/fetchers'
+import { Suspense } from 'react'
 
 const JobInfo = () => {
   const { data, isLoading, error } = useSWR<IPagination<IJob[]>>(
@@ -32,27 +39,29 @@ const JobInfo = () => {
         </Typography>
       </Stack>
       <Stack direction={'row'} spacing={4}>
-        {noContent ? (
-          <Stack
-            width={'100%'}
-            height={'100%'}
-            justifyContent={'center'}
-            alignItems={'center'}
-          >
-            <NoDataDolphin
-              message={'데이터가 없습니다.'}
-              backgroundColor={'background.primary'}
-            />
-          </Stack>
-        ) : (
-          <Grid container spacing={'1rem'}>
-            {data?.content?.map((job: IJob) => (
-              <Grid item key={job.id} sm={12} md={6} lg={4}>
-                <JobCard {...job} />
-              </Grid>
-            ))}
-          </Grid>
-        )}
+        <Suspense fallback={<CircularProgress />}>
+          {noContent ? (
+            <Stack
+              width={'100%'}
+              height={'100%'}
+              justifyContent={'center'}
+              alignItems={'center'}
+            >
+              <NoDataDolphin
+                message={noContent}
+                backgroundColor={'background.primary'}
+              />
+            </Stack>
+          ) : (
+            <Grid container spacing={'1rem'}>
+              {data?.content?.map((job: IJob) => (
+                <Grid item key={job.id} sm={12} md={6} lg={4}>
+                  <JobCard {...job} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Suspense>
       </Stack>
     </Container>
   )

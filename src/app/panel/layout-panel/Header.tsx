@@ -67,6 +67,8 @@ const Header = ({
       if (!isLogin) {
         router.push('/login?redirect=/my-page')
       } else setTitle('마이페이지')
+    } else if (pathname.startsWith('/job')) {
+      setTitle('채용공고')
     } else {
       setTitle('')
     }
