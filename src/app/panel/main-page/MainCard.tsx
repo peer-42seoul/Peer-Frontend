@@ -16,6 +16,8 @@ import { ChipStyle } from '@/app/panel/main-page/MainCard.style'
 import CuPhotoBox from '@/components/CuPhotoBox'
 import dynamic from 'next/dynamic'
 import dayjs from 'dayjs'
+import { TypeChip } from '@/app/recruit/[id]/panel/RecruitInfoElement'
+import React from 'react'
 
 const DynamicOtherProfile = dynamic(() => import('@/app/panel/OthersProfile'), {
   loading: () => <></>,
@@ -181,13 +183,10 @@ const MainCard = ({
           >
             {title}
           </Typography>
-
-          <Stack justifyContent={'space-between'} direction={'row'} mt={0.5}>
+          <Stack direction={'row'} mt={0.5} alignItems={'center'} gap={1}>
+            <TypeChip type={type} />
             <Typography variant="Body2" color="text.alternative">
-              {dayjs(createdAt).format('YYYY-MM-DD')}
-            </Typography>
-            <Typography variant="Body2" color="text.alternative">
-              {member}명
+              {dayjs(createdAt).format('YYYY-MM-DD')} · {member}명
             </Typography>
           </Stack>
 

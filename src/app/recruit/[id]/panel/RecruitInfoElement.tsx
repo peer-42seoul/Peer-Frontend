@@ -28,7 +28,7 @@ export const TypeChip = ({ type }: { type: ProjectType }) => {
   return (
     <Chip
       label={type === 'STUDY' ? '스터디' : '프로젝트'}
-      size="medium"
+      size={'small'}
       sx={{
         backgroundColor: 'background.tertiary',
         borderRadius: 2,

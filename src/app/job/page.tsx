@@ -33,8 +33,8 @@ const JobInfo = () => {
 
   return (
     <Container sx={containerStyle}>
-      <Stack mt={'1rem'} mb={'0.5rem'} spacing={4}>
-        <Typography variant={'Title1'} color={'text.strong'}>
+      <Stack mb={'0.5rem'} spacing={4}>
+        <Typography color={'text.strong'} variant={'Title1'}>
           채용 공고
         </Typography>
       </Stack>

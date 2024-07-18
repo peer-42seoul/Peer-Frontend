@@ -101,7 +101,6 @@ const MainPcView = ({ initData }: { initData: IPagination<IPost[]> }) => {
                   <Grid item key={project.recruit_id} sm={12} md={6} lg={4}>
                     <MainCard
                       {...project}
-                      type={type}
                       favorite={
                         isInit
                           ? getFavoriteData(project.recruit_id)
