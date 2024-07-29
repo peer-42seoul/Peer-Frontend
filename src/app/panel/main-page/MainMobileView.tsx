@@ -74,7 +74,6 @@ const MainMobileView = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 <Box key={project.recruit_id}>
                   <MainCard
                     {...project}
-                    type={type}
                     favorite={
                       isInit
                         ? getFavoriteData(project.recruit_id)
