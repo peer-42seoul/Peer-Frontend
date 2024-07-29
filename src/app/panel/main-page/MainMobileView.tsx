@@ -29,7 +29,7 @@ const MainMobileView = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   return (
     <Container sx={{ ...containerStyle, paddingBottom: '2rem' }}>
-      {queryKeyword === '' ? (
+      {queryKeyword == '' ? (
         <>
           <Box width={'100%'}>
             <MainBanner />
