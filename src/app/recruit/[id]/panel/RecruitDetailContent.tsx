@@ -40,14 +40,14 @@ const RecruitDetailContent = ({
               <Typography
                 variant={'Body2'}
                 color={'text.alternative'}
-              >{`${data?.current}/${data?.totalNumber} 명`}</Typography>
+              >{`${data?.totalNumber} 명`}</Typography>
             ) : (
-              roleList?.map(({ name, number, current }, idx: number) => (
+              roleList?.map(({ name, number }, idx: number) => (
                 <Typography
                   variant={'Body2'}
                   color={'text.alternative'}
                   key={idx}
-                >{`${name} ${current}/${number} 명`}</Typography>
+                >{`${name} ${number} 명`}</Typography>
               ))
             )}
           </Stack>
