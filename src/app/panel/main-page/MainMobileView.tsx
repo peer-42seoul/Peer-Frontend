@@ -29,7 +29,7 @@ const MainMobileView = ({ initData }: { initData: IPagination<IPost[]> }) => {
 
   return (
     <Container sx={{ ...containerStyle, paddingBottom: '2rem' }}>
-      {queryKeyword == '' ? (
+      {queryKeyword === '' ? (
         <>
           <Box width={'100%'}>
             <MainBanner />
@@ -74,6 +74,7 @@ const MainMobileView = ({ initData }: { initData: IPagination<IPost[]> }) => {
                 <Box key={project.recruit_id}>
                   <MainCard
                     {...project}
+                    type={type}
                     favorite={
                       isInit
                         ? getFavoriteData(project.recruit_id)
