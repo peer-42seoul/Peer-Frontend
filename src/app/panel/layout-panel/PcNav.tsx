@@ -136,38 +136,8 @@ const PcNav = () => {
               }}
               sx={navStyle}
             />
-            {/*<BottomNavigationAction*/}
-            {/*  value={'showcase'}*/}
-            {/*  label={*/}
-            {/*    <Stack*/}
-            {/*      direction={'row'}*/}
-            {/*      alignItems={'center'}*/}
-            {/*      spacing={'0.15rem'}*/}
-            {/*    >*/}
-            {/*      <Typography*/}
-            {/*        color={value === 'showcase' ? 'primary' : 'text.normal'}*/}
-            {/*        variant="Caption"*/}
-            {/*      >*/}
-            {/*        쇼케이스*/}
-            {/*      </Typography>*/}
-            {/*      <BetaIcon*/}
-            {/*        style={{*/}
-            {/*          position: 'relative',*/}
-            {/*          top: '-0.5rem',*/}
-            {/*        }}*/}
-            {/*      />*/}
-            {/*    </Stack>*/}
-            {/*  }*/}
-            {/*  onClick={() => {*/}
-            {/*    router.push('/showcase')*/}
-            {/*  }}*/}
-            {/*  sx={{*/}
-            {/*    ...navStyle,*/}
-            {/*    wordBreak: 'keep-all',*/}
-            {/*  }}*/}
-            {/*/>*/}
             <BottomNavigationAction
-              value={'job'}
+              value={'showcase'}
               label={
                 <Stack
                   direction={'row'}
@@ -175,10 +145,10 @@ const PcNav = () => {
                   spacing={'0.15rem'}
                 >
                   <Typography
-                    color={value === 'job' ? 'primary' : 'text.normal'}
+                    color={value === 'showcase' ? 'primary' : 'text.normal'}
                     variant="Caption"
                   >
-                    채용공고
+                    쇼케이스
                   </Typography>
                   <BetaIcon
                     style={{
@@ -189,7 +159,7 @@ const PcNav = () => {
                 </Stack>
               }
               onClick={() => {
-                router.push('/job')
+                router.push('/showcase')
               }}
               sx={{
                 ...navStyle,

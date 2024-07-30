@@ -67,8 +67,6 @@ const Header = ({
       if (!isLogin) {
         router.push('/login?redirect=/my-page')
       } else setTitle('마이페이지')
-    } else if (pathname == '/job') {
-      setTitle('채용공고')
     } else {
       setTitle('')
     }
@@ -79,8 +77,7 @@ const Header = ({
   const onlyTitle =
     pathname?.startsWith('/my-page') ||
     pathname?.startsWith('/team-list') ||
-    pathname?.startsWith('/login') ||
-    pathname?.startsWith('/job')
+    pathname?.startsWith('/login')
 
   return (
     <AppBar position="fixed" sx={mobileHeader}>

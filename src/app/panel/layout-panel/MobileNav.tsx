@@ -39,8 +39,6 @@ const MobileNav = () => {
       else setValue('my-page')
     } else if (pathname.startsWith('/showcase')) {
       setValue('showcase')
-    } else if (pathname.startsWith('/job')) {
-      setValue('job')
     } else {
       setValue('')
     }
@@ -84,21 +82,12 @@ const MobileNav = () => {
             router.push('/hitchhiking')
           }}
         />
-        {/*<BottomNavigationAction*/}
-        {/*  sx={bottomNavStyle}*/}
-        {/*  label={<Typography fontSize={'0.6875rem'}>쇼케이스</Typography>}*/}
-        {/*  value={'showcase'}*/}
-        {/*  onClick={() => {*/}
-        {/*    router.push('/showcase')*/}
-        {/*  }}*/}
-        {/*  icon={<ShowcaseIcon />}*/}
-        {/*/>*/}
         <BottomNavigationAction
           sx={bottomNavStyle}
-          label={<Typography fontSize={'0.6875rem'}>채용공고</Typography>}
-          value={'job'}
+          label={<Typography fontSize={'0.6875rem'}>쇼케이스</Typography>}
+          value={'showcase'}
           onClick={() => {
-            router.push('/job')
+            router.push('/showcase')
           }}
           icon={<ShowcaseIcon />}
         />
