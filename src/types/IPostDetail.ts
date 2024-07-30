@@ -41,7 +41,6 @@ export interface IPost {
   status: string
   tagList: ITag[]
   favorite: boolean | undefined
-  type: ProjectType
 }
 
 export interface IPostDetail {
