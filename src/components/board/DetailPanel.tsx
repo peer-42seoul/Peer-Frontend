@@ -7,7 +7,7 @@ import DynamicToastViewer from '../DynamicToastViewer'
 import * as style from './DetailPanel.style'
 import UTCtoLocalTime from '@/utils/UTCtoLocalTime'
 
-type TBoardType = 'NOTICE' | 'BOARD'
+type TBoardType = 'NOTICE' | 'BOARD' | 'JOB'
 
 interface IChildrenProps {
   children: React.ReactNode
@@ -42,6 +42,7 @@ interface IDetailContentProps {
 const title: Record<TBoardType, string> = {
   NOTICE: '공지사항',
   BOARD: '게시글',
+  JOB: '채용공고',
 }
 
 export const DetailPage = ({
