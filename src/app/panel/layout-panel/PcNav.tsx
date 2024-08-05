@@ -27,7 +27,7 @@ import { navContainerStyle, navStyle } from '@/app/panel/layout-panel/Nav.style'
 
 const PcNav = () => {
   const [value, setValue] = useState<
-    'home' | 'hitchhiking' | 'team-list' | 'showcase'
+    'home' | 'hitchhiking' | 'team-list' | 'showcase' | 'job'
   >('home')
   const { isTablet } = useMedia()
   const pathname = usePathname()
