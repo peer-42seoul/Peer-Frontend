@@ -66,8 +66,7 @@ export const createGithubIssue = async ({
     type,
     tagList,
   })
-  // FIXME : 테스트용
-  console.log(process.env.NEXT_PUBLIC_GITHUB_TOKEN)
+
   try {
     await octokit.rest.issues.create({
       owner: 'peer-42seoul',
